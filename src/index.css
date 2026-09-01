@@ -1,0 +1,250 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif: "Newsreader", "Fraunces", Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  
+  --color-moss-deep: #071A10;
+  --color-forest-earthy: #0D2818;
+  --color-amber-warm: #78350F;
+  --color-gold-spark: #F59E0B;
+  --color-cream-warm: #FEF3C7;
+  --color-offwhite-crisp: #E2E8F0;
+  --color-emerald-spark: #4ADE80;
+
+  --color-emerald-50: #f0fdf4;
+  --color-emerald-100: #dcfce7;
+  --color-emerald-200: #bbf7d0;
+  --color-emerald-300: #86efac;
+  --color-emerald-400: #4ade80;
+  --color-emerald-500: #22c55e;
+  --color-emerald-600: #16a34a;
+  --color-emerald-700: #15803d;
+  --color-emerald-800: #166534;
+  --color-emerald-900: #14532d;
+  --color-emerald-950: #071A10;
+
+  --color-amber-50: #fffbeb;
+  --color-amber-100: #fef3c7;
+  --color-amber-200: #fde68a;
+  --color-amber-300: #fcd34d;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+  --color-amber-700: #b45309;
+  --color-amber-800: #92400e;
+  --color-amber-900: #78350f;
+  --color-amber-950: #451a03;
+
+  --color-terracotta-50: #fff8f3;
+  --color-terracotta-100: #ffeedd;
+  --color-terracotta-200: #ffd7b5;
+  --color-terracotta-300: #fcae7c;
+  --color-terracotta-400: #f57d42;
+  --color-terracotta-500: #dc5c23;
+  --color-terracotta-600: #b94218;
+  --color-terracotta-700: #933113;
+  --color-terracotta-800: #782a15;
+  --color-terracotta-900: #622516;
+  --color-terracotta-950: #361009;
+
+  --color-earth-50: #fdfcfb;
+  --color-earth-100: #f5f2ed;
+  --color-earth-200: #e7e0d5;
+  --color-earth-300: #d3c7b5;
+  --color-earth-400: #b9a78e;
+  --color-earth-500: #a18b6e;
+  --color-earth-600: #826e56;
+  --color-earth-700: #6a5a47;
+  --color-earth-800: #55483a;
+  --color-earth-900: #463c31;
+  --color-earth-950: #25201a;
+}
+
+@layer base {
+  body {
+    @apply text-slate-200 antialiased font-sans leading-relaxed;
+    background-color: #05130B;
+    background-image: 
+      radial-gradient(circle at 15% 10%, rgba(20, 83, 45, 0.42) 0%, transparent 45%),
+      radial-gradient(circle at 85% 20%, rgba(217, 119, 6, 0.18) 0%, transparent 40%),
+      radial-gradient(circle at 50% 75%, rgba(13, 40, 24, 0.55) 0%, transparent 55%),
+      linear-gradient(180deg, #05130B 0%, #081C11 40%, #0D2818 70%, #040E08 100%);
+    background-attachment: fixed;
+    letter-spacing: -0.011em;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.025em;
+    font-family: var(--font-serif);
+  }
+
+  h1 {
+    letter-spacing: -0.035em;
+  }
+
+  p {
+    @apply leading-relaxed;
+  }
+}
+
+.serif {
+  font-family: var(--font-serif);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
+}
+
+/* Warm Field Guide Display Title */
+.field-title {
+  font-family: var(--font-serif);
+  letter-spacing: -0.025em;
+}
+
+/* Tactile Monospace Telemetry & Instrument Readouts */
+.data-readout,
+.font-mono-data {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum" on, "zero" on;
+  letter-spacing: -0.02em;
+}
+
+/* Field Guide Eyebrows and Status Badges */
+.eyebrow-badge {
+  @apply uppercase text-xs font-mono text-amber-400/90 tracking-widest font-black;
+}
+
+/* Field Guide Background Textures & Vignettes */
+.bg-warm-organic-canvas {
+  background: 
+    radial-gradient(circle at 20% 15%, rgba(20, 83, 45, 0.45) 0%, transparent 55%),
+    radial-gradient(circle at 80% 30%, rgba(120, 53, 15, 0.25) 0%, transparent 50%),
+    radial-gradient(circle at 50% 85%, rgba(13, 40, 24, 0.7) 0%, transparent 65%),
+    linear-gradient(180deg, #071A10 0%, #0D2818 50%, #05130B 100%);
+}
+
+.bg-sanctuary-gradient {
+  background: linear-gradient(180deg, #05130B 0%, #0D2818 50%, #040E08 100%);
+}
+
+.bg-sanctuary-radial {
+  background: radial-gradient(ellipse at 50% 20%, #0D2818 0%, #071A10 60%, #040E08 100%);
+}
+
+/* Subtle Organic Topo & Noise Vignette Pattern */
+.bg-topo-vignette {
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.04) 0%, transparent 60%),
+    radial-gradient(#1e3a29 1px, transparent 1px);
+  background-size: 100% 100%, 24px 24px;
+}
+
+/* Tactile Field Guide Paper / Noise Texture */
+.field-noise-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
+/* Tactile Warm Organic Glassmorphism Surfaces & Layering */
+.glass-surface,
+.card-standard {
+  @apply bg-slate-950/40 backdrop-blur-xl border border-white/[0.08] text-slate-100 shadow-2xl shadow-black/40 transition-all duration-300 ease-out;
+}
+
+.glass-surface-amber,
+.card-featured {
+  @apply bg-gradient-to-b from-amber-500/[0.08] to-slate-950/60 backdrop-blur-2xl border border-amber-500/30 text-slate-100 shadow-xl shadow-amber-900/10 transition-all duration-300 ease-out;
+}
+
+.card-hover-sleek {
+  @apply hover:border-amber-500/40 hover:bg-slate-950/60 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 ease-out;
+}
+
+/* Ambient Lighting & Subtle Radial Glows */
+.ambient-glow-amber {
+  @apply relative overflow-hidden before:absolute before:-top-12 before:-left-12 before:w-64 before:h-64 before:bg-amber-500/10 before:rounded-full before:blur-3xl before:pointer-events-none;
+}
+
+.ambient-glow-emerald {
+  @apply relative overflow-hidden before:absolute before:-bottom-12 before:-right-12 before:w-64 before:h-64 before:bg-emerald-500/10 before:rounded-full before:blur-3xl before:pointer-events-none;
+}
+
+.ambient-glow-dual {
+  @apply relative overflow-hidden before:absolute before:-top-16 before:-left-16 before:w-72 before:h-72 before:bg-amber-500/10 before:rounded-full before:blur-3xl before:pointer-events-none after:absolute after:-bottom-16 after:-right-16 after:w-72 after:h-72 after:bg-emerald-500/10 after:rounded-full after:blur-3xl after:pointer-events-none;
+}
+
+/* Text Gradient Styling: Sleek Metallic-Gold & Radiant Cream */
+.text-metallic-gold,
+.hero-gradient-text {
+  @apply bg-gradient-to-r from-amber-100 via-amber-200 to-amber-400 bg-clip-text text-transparent;
+}
+
+.text-metallic-gold-subtle {
+  @apply bg-gradient-to-r from-amber-200 via-amber-300 to-amber-500 bg-clip-text text-transparent;
+}
+
+.text-emerald-radiant {
+  @apply bg-gradient-to-r from-emerald-200 via-emerald-300 to-teal-400 bg-clip-text text-transparent;
+}
+
+.instrument-panel {
+  @apply bg-slate-950/50 backdrop-blur-xl border border-amber-500/20 text-slate-100 shadow-2xl shadow-black/40 transition-all duration-300 ease-out;
+}
+
+.instrument-panel-hover {
+  @apply hover:border-amber-500/40 hover:bg-slate-950/70 hover:shadow-[0_12px_40px_rgba(0,0,0,0.5)] hover:-translate-y-0.5 transition-all duration-300 ease-out;
+}
+
+.instrument-panel-accent {
+  @apply backdrop-blur-xl bg-emerald-950/80 border border-amber-500/30 text-white shadow-xl;
+}
+
+.glass {
+  @apply bg-slate-950/40 backdrop-blur-xl border border-white/[0.08] shadow-2xl shadow-black/40;
+}
+
+.glass-dark {
+  @apply bg-[#0D2818]/85 backdrop-blur-xl border border-amber-500/20 shadow-[0_12px_40px_rgba(0,0,0,0.45)];
+}
+
+.glass-muted {
+  @apply bg-slate-950/30 backdrop-blur-md border border-white/[0.06] shadow-lg;
+}
+
+.card-hover {
+  @apply hover:border-amber-500/40 hover:bg-slate-950/60 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 ease-out;
+}
+
+/* Primary Action Buttons: Terracotta Amber */
+.btn-terracotta-amber {
+  @apply bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-5 py-3 rounded-2xl shadow-[0_8px_25px_rgba(245,158,11,0.35)] active:scale-95 transition-all duration-200;
+}
+
+/* Subtle gold foil border accent */
+.border-gold-subtle {
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+/* Custom Scrollbars */
+.custom-scrollbar::-webkit-scrollbar,
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+.custom-scrollbar::-webkit-scrollbar-track,
+::-webkit-scrollbar-track {
+  background: rgba(5, 19, 11, 0.6);
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb {
+  background: rgba(20, 83, 45, 0.5);
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 158, 11, 0.6);
+}
+

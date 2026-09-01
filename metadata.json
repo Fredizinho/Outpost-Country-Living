@@ -1,0 +1,6 @@
+{
+  "name": "OUTPOST: COUNTRY LIVING",
+  "description": "Comprehensive Malawi country living blueprint and self-reliance guide, featuring interactive territorial GIS scouting, agro-climatic zoning, off-grid resource calculators, seasonal almanac, and rural homesteading skills.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

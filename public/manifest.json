@@ -1,0 +1,16 @@
+{
+  "short_name": "Outpost",
+  "name": "Outpost Living Sanctuary Guide",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#142118",
+  "theme_color": "#064e3b",
+  "display": "standalone"
+}
