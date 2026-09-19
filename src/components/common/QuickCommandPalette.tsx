@@ -149,15 +149,26 @@ const COMMAND_REGISTRY: CommandItem[] = [
     path: '/account',
     icon: User,
     keywords: ['account', 'profile', 'backup', 'export', 'restore', 'sync', 'offline', 'settings']
+  },
+  {
+    id: 'homestead-ai-advisor',
+    title: 'Homestead AI Sanctuary Advisor',
+    category: 'Account & Tools',
+    subtitle: 'Ask AI questions on land scouting, water borehole sizing, Katondo soil & seasons',
+    path: '#advisor',
+    icon: Sparkles,
+    keywords: ['ai', 'advisor', 'gemini', 'ask', 'question', 'help', 'counsel', 'assistant', 'bot', 'chat'],
+    shortcut: 'A'
   }
 ];
 
 export interface QuickCommandPaletteProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenAdvisor?: () => void;
 }
 
-export function QuickCommandPalette({ isOpen, onClose }: QuickCommandPaletteProps) {
+export function QuickCommandPalette({ isOpen, onClose, onOpenAdvisor }: QuickCommandPaletteProps) {
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -214,6 +225,11 @@ export function QuickCommandPalette({ isOpen, onClose }: QuickCommandPaletteProp
   }, [isOpen, filteredResults, selectedIndex]);
 
   const handleSelect = (item: CommandItem) => {
+    if (item.id === 'homestead-ai-advisor') {
+      onClose();
+      onOpenAdvisor?.();
+      return;
+    }
     navigate(item.path);
     onClose();
   };

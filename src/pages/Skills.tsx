@@ -75,11 +75,11 @@ export default function Skills() {
       </header>
 
       {/* Seasonal & Category Filter Controls */}
-      <div className="flex flex-col gap-4 bg-[#FDFBF7] p-6 rounded-[2.5rem] border border-[#E6DFD1] shadow-xs">
+      <div className="flex flex-col gap-4 backdrop-blur-xl bg-slate-950/70 p-6 md:p-8 rounded-[2.5rem] border border-amber-500/25 shadow-[0_12px_40px_rgba(0,0,0,0.4)]">
         {/* Seasonal Tag Filter */}
-        <div className="flex flex-col gap-2">
-          <span className="text-[10px] font-black uppercase tracking-widest text-amber-900 flex items-center gap-1.5">
-            <Calendar size={13} className="text-amber-700" /> Filter by Seasonal Actionability:
+        <div className="flex flex-col gap-2.5">
+          <span className="text-[10px] font-mono font-black uppercase tracking-widest text-amber-300 flex items-center gap-1.5">
+            <Calendar size={13} className="text-amber-400" /> Filter by Seasonal Actionability:
           </span>
           <div className="flex flex-wrap gap-2">
             {seasons.map((season) => (
@@ -87,10 +87,10 @@ export default function Skills() {
                 key={season}
                 onClick={() => setSelectedSeason(season)}
                 className={cn(
-                  "px-4 py-2 rounded-2xl text-xs font-black uppercase tracking-wider transition-all shadow-xs active:scale-95 flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-800",
+                  "px-4 py-2 rounded-2xl text-xs font-mono font-bold uppercase tracking-wider transition-all shadow-xs active:scale-95 flex items-center gap-1.5 border cursor-pointer",
                   selectedSeason === season
-                    ? "bg-amber-700 text-white shadow-md border border-amber-800"
-                    : "bg-white text-amber-950 hover:bg-slate-50 border border-amber-200/80"
+                    ? "bg-amber-500 text-slate-950 shadow-[0_4px_20px_rgba(245,158,11,0.3)] border-amber-300 font-black"
+                    : "bg-white/5 text-emerald-100 hover:bg-white/10 border-white/10 hover:border-amber-500/30"
                 )}
               >
                 {season === 'All' ? '🗓️ All Seasons' : season}
@@ -100,8 +100,8 @@ export default function Skills() {
         </div>
 
         {/* Category Filter Chips */}
-        <div className="flex flex-col gap-2 pt-2 border-t border-[#E6DFD1]">
-          <span className="text-[10px] font-black uppercase tracking-widest text-emerald-950">
+        <div className="flex flex-col gap-2.5 pt-3 border-t border-amber-500/15">
+          <span className="text-[10px] font-mono font-black uppercase tracking-widest text-emerald-300">
             Filter by Skill Domain:
           </span>
           <div className="flex flex-wrap gap-2">
@@ -110,10 +110,10 @@ export default function Skills() {
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
                 className={cn(
-                  "px-4 py-2 rounded-2xl text-xs font-black uppercase tracking-wider transition-all shadow-xs active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-800",
+                  "px-4 py-2 rounded-2xl text-xs font-mono font-bold uppercase tracking-wider transition-all shadow-xs active:scale-95 border cursor-pointer",
                   selectedCategory === cat
-                    ? "bg-emerald-950 text-white shadow-md border border-emerald-900"
-                    : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-300"
+                    ? "bg-emerald-600 text-white shadow-[0_4px_20px_rgba(16,185,129,0.3)] border-emerald-400 font-black"
+                    : "bg-white/5 text-slate-300 hover:bg-white/10 border-white/10 hover:text-white"
                 )}
               >
                 {cat}
@@ -124,12 +124,12 @@ export default function Skills() {
       </div>
 
       {/* Results Count Banner */}
-      <div className="flex items-center justify-between text-xs font-bold text-slate-500 px-2">
-        <span>Showing {filteredSkills.length} of {skills.length} homestead skills</span>
+      <div className="flex items-center justify-between text-xs font-mono font-bold text-slate-400 px-2">
+        <span>Showing <strong className="text-amber-400">{filteredSkills.length}</strong> of {skills.length} homestead skills</span>
         {(selectedCategory !== 'All' || selectedSeason !== 'All') && (
           <button
             onClick={() => { setSelectedCategory('All'); setSelectedSeason('All'); }}
-            className="text-amber-800 hover:text-amber-950 underline font-black uppercase text-[10px]"
+            className="text-amber-400 hover:text-amber-300 underline font-mono font-black uppercase text-[10px] cursor-pointer"
           >
             Reset Filters
           </button>

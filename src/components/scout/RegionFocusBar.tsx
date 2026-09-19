@@ -28,6 +28,8 @@ interface RegionFocusBarProps {
   activeLayerCount: number;
   isOffline?: boolean;
   onOpenOfflineModal?: () => void;
+  isAutoHidden?: boolean;
+  onWakeUp?: () => void;
 }
 
 export function RegionFocusBar({
@@ -48,7 +50,9 @@ export function RegionFocusBar({
   onOpenLayersDeck,
   activeLayerCount,
   isOffline = false,
-  onOpenOfflineModal
+  onOpenOfflineModal,
+  isAutoHidden = false,
+  onWakeUp
 }: RegionFocusBarProps) {
   // State for retractable menu: expanded vs retracted
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -68,7 +72,14 @@ export function RegionFocusBar({
   }, [activeFocusRegion]);
 
   return (
-    <div className="flex flex-col gap-2 w-full max-w-7xl mx-auto pointer-events-auto transition-all" id="region-focus-bar-root">
+    <div 
+      onMouseEnter={() => onWakeUp?.()}
+      className={cn(
+        "flex flex-col gap-2 w-full max-w-7xl mx-auto pointer-events-auto transition-all duration-300",
+        isAutoHidden && !isExpanded ? "opacity-25 hover:opacity-100 focus-within:opacity-100" : "opacity-100"
+      )} 
+      id="region-focus-bar-root"
+    >
       
       {/* ========================================================================= */}
       {/* 1. RETRACTABLE FLOATING HUD DOCK (COMPACT BY DEFAULT, EXPANDS ON CLICK)  */}
@@ -90,11 +101,11 @@ export function RegionFocusBar({
               )}
               title={isExpanded ? "Click to close controls" : "Click to expand region controls"}
             >
-              <Compass size={14} className={isExpanded ? "text-slate-950 animate-spin-slow" : "text-amber-400"} />
+              <Compass size={14} className={isExpanded ? "text-slate-950" : "text-amber-400"} />
               <span className="font-bold tracking-tight">
                 {activeDistrict ? `${activeDistrict.name} District` : currentRegionSpec.label}
               </span>
-              {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} className="animate-bounce" />}
+              {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
             </button>
 
             {/* Quick Status Tag */}
@@ -311,11 +322,10 @@ export function RegionFocusBar({
               </div>
 
               {/* Bottom Retract Bar Button */}
-              <div className="flex items-center justify-between pt-1 border-t border-white/5 text-[11px] font-mono text-slate-400">
-                <span>Tip: Click on any district on the map to center and view its climate and soil details.</span>
+              <div className="flex items-center justify-end pt-1 border-t border-white/5 text-[11px] font-mono">
                 <button
                   onClick={() => setIsExpanded(false)}
-                  className="text-amber-400 hover:text-amber-300 flex items-center gap-1 font-bold cursor-pointer underline"
+                  className="text-amber-400 hover:text-amber-300 flex items-center gap-1 font-bold cursor-pointer"
                 >
                   <span>Close Menu</span>
                   <ChevronUp size={13} />

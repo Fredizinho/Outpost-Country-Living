@@ -4,7 +4,8 @@ import {
   X, Globe, MapPin, Target, Sparkles, Thermometer, Droplets, 
   Sprout, Mountain, Sun, ShieldCheck, ArrowRight, Copy, Check,
   Bookmark, BookmarkCheck, ExternalLink, Filter, Layers, Compass,
-  AlertTriangle, Waves, Zap, HeartHandshake, ChevronRight, FileText
+  AlertTriangle, Waves, Zap, HeartHandshake, ChevronRight, FileText,
+  Minimize2, Maximize2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -17,6 +18,8 @@ import { ScoutParcelFeature, ScoutParcelProperties } from '@/data/scoutGeoJSON';
 export interface ScoutTelemetryDrawerProps {
   isOpen: boolean;
   onClose: () => void;
+  isMinimized?: boolean;
+  onToggleMinimize?: (minimized: boolean) => void;
   // Context
   activeFocusRegion: FocusRegionId;
   selectedRegion: RegionalClimateZone;
@@ -43,6 +46,8 @@ export interface ScoutTelemetryDrawerProps {
 export function ScoutTelemetryDrawer({
   isOpen,
   onClose,
+  isMinimized: propIsMinimized,
+  onToggleMinimize,
   activeFocusRegion,
   selectedRegion,
   activeDistrict,
@@ -65,6 +70,14 @@ export function ScoutTelemetryDrawer({
 }: ScoutTelemetryDrawerProps) {
   const [drawerTab, setDrawerTab] = useState<'dossier' | 'parcels' | 'soil' | 'layers'>('dossier');
   const [parcelSearch, setParcelSearch] = useState('');
+  const [internalMinimized, setInternalMinimized] = useState<boolean>(false);
+
+  const isMinimized = propIsMinimized !== undefined ? propIsMinimized : internalMinimized;
+
+  const setMinimizedState = (minimized: boolean) => {
+    setInternalMinimized(minimized);
+    onToggleMinimize?.(minimized);
+  };
 
   if (!isOpen) return null;
 
@@ -83,19 +96,77 @@ export function ScoutTelemetryDrawer({
     );
   });
 
+  // -------------------------------------------------------------
+  // COMPACT BOTTOM RIBBON (When browsing map points or minimized)
+  // -------------------------------------------------------------
+  if (isMinimized) {
+    return (
+      <motion.div
+        initial={{ y: 24, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 24, opacity: 0 }}
+        transition={{ duration: 0.18 }}
+        className="absolute bottom-3 left-3 right-3 sm:left-auto sm:right-16 z-30 bg-slate-950/95 backdrop-blur-2xl text-white rounded-2xl p-2.5 sm:px-4 sm:py-2.5 shadow-2xl border border-amber-500/50 flex items-center justify-between gap-3 pointer-events-auto max-w-lg"
+        id="scout-telemetry-bottom-ribbon"
+      >
+        <div className="flex items-center gap-2.5 overflow-hidden">
+          <div className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
+            <Compass size={16} />
+          </div>
+          <div className="flex flex-col truncate">
+            <div className="flex items-center gap-2">
+              <span className="serif text-xs font-bold text-white truncate">
+                {activeDistrict ? `${activeDistrict.name} Overview` : currentRegionSpec.label}
+              </span>
+              <span className="text-[9px] font-mono bg-amber-500/20 text-amber-300 px-1.5 py-0.2 rounded border border-amber-500/40 shrink-0">
+                {activeDistrict ? `Grade ${activeDistrict.feasibilityGrade}` : currentRegionSpec.badge}
+              </span>
+            </div>
+            <span className="text-[10px] font-mono text-slate-400 truncate">
+              {activeDistrict 
+                ? `${activeDistrict.rainfallAnnualMm}mm/yr • pH ${activeDistrict.soilPh}` 
+                : `${displayedParcels.length} verified research stations`}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-1.5 shrink-0">
+          <button
+            onClick={() => setMinimizedState(false)}
+            className="px-2.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow transition-all"
+            title="Expand Full Telemetry Sheet"
+          >
+            <Maximize2 size={12} />
+            <span className="hidden sm:inline">Expand Sheet</span>
+          </button>
+          <button
+            onClick={onClose}
+            className="w-7 h-7 rounded-lg bg-slate-900 border border-white/10 text-slate-400 hover:text-white flex items-center justify-center transition-all cursor-pointer"
+            title="Close"
+          >
+            <X size={13} />
+          </button>
+        </div>
+      </motion.div>
+    );
+  }
+
+  // -------------------------------------------------------------
+  // COLLAPSIBLE FLOATING SHEET (Elevated card, not edge-to-edge)
+  // -------------------------------------------------------------
   return (
     <motion.aside
       initial={{ x: '100%', opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: '100%', opacity: 0 }}
       transition={{ type: 'spring', damping: 28, stiffness: 280 }}
-      className="absolute right-0 top-0 h-full w-full sm:w-[460px] lg:w-[500px] z-30 bg-slate-950/95 backdrop-blur-2xl text-white rounded-none sm:rounded-l-3xl p-5 shadow-2xl border-l border-white/10 flex flex-col gap-4 overflow-hidden pointer-events-auto"
+      className="absolute right-3 top-3 bottom-3 w-[calc(100%-1.5rem)] sm:w-[440px] lg:w-[480px] max-h-[calc(100%-1.5rem)] z-30 bg-slate-950/95 backdrop-blur-2xl text-white rounded-3xl p-4 sm:p-5 shadow-2xl border border-white/20 flex flex-col gap-3.5 overflow-hidden pointer-events-auto"
       id="scout-telemetry-drawer-root"
     >
       {/* 1. DRAWER TOP HEADER */}
       <div className="flex items-center justify-between border-b border-white/10 pb-3 shrink-0">
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500/20 to-emerald-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500/20 to-emerald-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
             <Compass size={18} />
           </div>
           <div>
@@ -108,13 +179,22 @@ export function ScoutTelemetryDrawer({
           </div>
         </div>
 
-        <button
-          onClick={onClose}
-          className="w-8 h-8 rounded-full bg-slate-900 border border-white/10 text-slate-400 hover:text-white flex items-center justify-center transition-all cursor-pointer"
-          title="Close Drawer"
-        >
-          <X size={15} />
-        </button>
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => setMinimizedState(true)}
+            className="w-8 h-8 rounded-full bg-slate-900 border border-white/10 text-slate-400 hover:text-amber-300 flex items-center justify-center transition-all cursor-pointer"
+            title="Minimize to Bottom Ribbon"
+          >
+            <Minimize2 size={14} />
+          </button>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-full bg-slate-900 border border-white/10 text-slate-400 hover:text-white flex items-center justify-center transition-all cursor-pointer"
+            title="Close Drawer"
+          >
+            <X size={15} />
+          </button>
+        </div>
       </div>
 
       {/* 2. DRAWER NAVIGATION TABS */}

@@ -59,8 +59,10 @@ function AnimatedAppRoutes() {
           {/* Secondary route aliases */}
           <Route path="/regions" element={<RegionalMap />} />
           <Route path="/scout-map" element={<ScoutMapPage />} />
+          <Route path="/map" element={<ScoutMapPage />} />
           <Route path="/regions/:id" element={<RegionDetail />} />
           <Route path="/seasons" element={<SeasonalGuide />} />
+          <Route path="/almanac" element={<SeasonalGuide />} />
           <Route path="/skills" element={<Skills />} />
           <Route path="/skills/:id" element={<SkillDetail />} />
           <Route path="/calculators" element={<Calculators />} />

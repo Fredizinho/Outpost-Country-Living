@@ -7,27 +7,102 @@ import {
 import { SOIL_SCIENCE_KNOWLEDGE_BASE, evaluateSoilSample, SoilSampleInput, SoilEvaluationResult } from '@/data/soilScienceData';
 import { cn } from '@/lib/utils';
 
+interface AgroSoilBenchmark {
+  id: string;
+  name: string;
+  station: string;
+  district: string;
+  input: SoilSampleInput;
+}
+
+const MALAWI_AGRO_SOIL_BENCHMARKS: AgroSoilBenchmark[] = [
+  {
+    id: 'dedza-bembeke',
+    name: 'Dedza (Bembeke Latosol)',
+    station: 'Bembeke Substation',
+    district: 'Dedza',
+    input: {
+      ph: 6.2,
+      organicMatterPct: 3.8,
+      soilTexture: 'Deep Red Latosol (Katondo)',
+      earthwormsPerSpade: 8,
+      slopePct: 3,
+      hasLegumesOrCoverCrop: true,
+      hasVetiverHedges: true,
+      usesChemicalPoisons: false
+    }
+  },
+  {
+    id: 'lilongwe-chitedze',
+    name: 'Lilongwe (Chitedze Ferruginous)',
+    station: 'Chitedze Research Station',
+    district: 'Lilongwe',
+    input: {
+      ph: 5.9,
+      organicMatterPct: 2.8,
+      soilTexture: 'Ferruginous Sandy Clay Loam',
+      earthwormsPerSpade: 5,
+      slopePct: 2,
+      hasLegumesOrCoverCrop: true,
+      hasVetiverHedges: true,
+      usesChemicalPoisons: false
+    }
+  },
+  {
+    id: 'chikwawa-kasinthula',
+    name: 'Lower Shire (Kasinthula Alluvial)',
+    station: 'Kasinthula Research Station',
+    district: 'Chikwawa',
+    input: {
+      ph: 6.8,
+      organicMatterPct: 1.9,
+      soilTexture: 'Alluvial Vertisol',
+      earthwormsPerSpade: 3,
+      slopePct: 1,
+      hasLegumesOrCoverCrop: false,
+      hasVetiverHedges: false,
+      usesChemicalPoisons: false
+    }
+  },
+  {
+    id: 'thyolo-bvumbwe',
+    name: 'Shire Highlands (Bvumbwe Nitisol)',
+    station: 'Bvumbwe Research Station',
+    district: 'Thyolo',
+    input: {
+      ph: 5.6,
+      organicMatterPct: 4.2,
+      soilTexture: 'Humic Nitisol (Red Clay)',
+      earthwormsPerSpade: 10,
+      slopePct: 6,
+      hasLegumesOrCoverCrop: true,
+      hasVetiverHedges: true,
+      usesChemicalPoisons: false
+    }
+  }
+];
+
 export function SoilScienceGuide() {
   const [activeTab, setActiveTab] = useState<'principles' | 'evaluator'>('principles');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [expandedTopicId, setExpandedTopicId] = useState<string | null>(null);
+  const [activeBenchmarkId, setActiveBenchmarkId] = useState<string>('dedza-bembeke');
 
-  // Evaluator State
-  const [sampleInput, setSampleInput] = useState<SoilSampleInput>({
-    ph: 6.2,
-    organicMatterPct: 3.8,
-    soilTexture: 'Deep Red Latosol (Katondo)',
-    earthwormsPerSpade: 8,
-    slopePct: 3,
-    hasLegumesOrCoverCrop: true,
-    hasVetiverHedges: true,
-    usesChemicalPoisons: false
-  });
+  // Real Field Soil Test Input State
+  const [fieldTestInput, setFieldTestInput] = useState<SoilSampleInput>(
+    MALAWI_AGRO_SOIL_BENCHMARKS[0].input
+  );
 
-  const [evaluation, setEvaluation] = useState<SoilEvaluationResult>(() => evaluateSoilSample(sampleInput));
+  const [evaluation, setEvaluation] = useState<SoilEvaluationResult>(() => evaluateSoilSample(fieldTestInput));
+
+  const handleSelectBenchmark = (benchmark: AgroSoilBenchmark) => {
+    setActiveBenchmarkId(benchmark.id);
+    setFieldTestInput(benchmark.input);
+    setEvaluation(evaluateSoilSample(benchmark.input));
+  };
 
   const handleRunEvaluation = () => {
-    setEvaluation(evaluateSoilSample(sampleInput));
+    setEvaluation(evaluateSoilSample(fieldTestInput));
   };
 
   const categories = ['All', 'Soil Biology & Humus', 'Soil Chemistry', 'Adventist Edenic Stewardship', 'Malawian Soil Types', 'Erosion & Conservation'];
@@ -276,15 +351,44 @@ export function SoilScienceGuide() {
         </div>
       )}
 
-      {/* Tab 2: Interactive Soil Sample Evaluator */}
+      {/* Tab 2: Interactive Soil Health Evaluator */}
       {activeTab === 'evaluator' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Inputs Column */}
           <div className="lg:col-span-6 bg-slate-950 p-6 rounded-3xl border border-slate-800 flex flex-col gap-5">
-            <h4 className="serif text-xl font-bold text-white flex items-center gap-2">
-              <FlaskConical size={20} className="text-amber-400" />
-              Field Soil Sample Input Evaluator
-            </h4>
+            <div>
+              <h4 className="serif text-xl font-bold text-white flex items-center gap-2">
+                <FlaskConical size={20} className="text-amber-400" />
+                Soil Lab & Field Test Diagnostic Tool
+              </h4>
+              <p className="text-xs text-slate-400 mt-1">
+                Enter your farm's physical soil test results or load verified research station benchmarks:
+              </p>
+            </div>
+
+            {/* Verified Research Station Benchmark Selectors */}
+            <div className="flex flex-col gap-2">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+                Load Verified Research Station Benchmark:
+              </span>
+              <div className="grid grid-cols-2 gap-2">
+                {MALAWI_AGRO_SOIL_BENCHMARKS.map((b) => (
+                  <button
+                    key={b.id}
+                    onClick={() => handleSelectBenchmark(b)}
+                    className={cn(
+                      "p-2.5 rounded-xl border text-left flex flex-col transition-all cursor-pointer",
+                      activeBenchmarkId === b.id
+                        ? "bg-amber-500/20 border-amber-500 text-amber-200 shadow-sm"
+                        : "bg-slate-900 border-white/5 text-slate-300 hover:border-white/20 hover:bg-slate-800/80"
+                    )}
+                  >
+                    <span className="text-xs font-bold font-mono">{b.name}</span>
+                    <span className="text-[10px] text-slate-400 truncate">{b.station}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
 
             {/* pH Slider */}
             <div className="flex flex-col gap-2 bg-slate-900 p-4 rounded-2xl border border-slate-800">
@@ -292,9 +396,9 @@ export function SoilScienceGuide() {
                 <span className="text-slate-300">Soil pH Level (0.01M CaCl2 or Water Test):</span>
                 <span className={cn(
                   "px-2.5 py-0.5 rounded-md text-xs font-black",
-                  sampleInput.ph >= 6.0 && sampleInput.ph <= 6.8 ? "bg-emerald-900 text-amber-300" : "bg-amber-900 text-amber-200"
+                  fieldTestInput.ph >= 6.0 && fieldTestInput.ph <= 6.8 ? "bg-emerald-900 text-amber-300" : "bg-amber-900 text-amber-200"
                 )}>
-                  pH {sampleInput.ph.toFixed(1)}
+                  pH {fieldTestInput.ph.toFixed(1)}
                 </span>
               </div>
               <input
@@ -302,8 +406,12 @@ export function SoilScienceGuide() {
                 min="4.5"
                 max="8.5"
                 step="0.1"
-                value={sampleInput.ph}
-                onChange={(e) => setSampleInput(prev => ({ ...prev, ph: parseFloat(e.target.value) }))}
+                value={fieldTestInput.ph}
+                onChange={(e) => {
+                  setActiveBenchmarkId('');
+                  const ph = parseFloat(e.target.value);
+                  setFieldTestInput(prev => ({ ...prev, ph }));
+                }}
                 className="w-full accent-emerald-500 h-2 bg-slate-800 rounded-lg cursor-pointer"
               />
               <div className="flex justify-between text-[10px] text-slate-500 uppercase tracking-wider font-semibold">
@@ -318,7 +426,7 @@ export function SoilScienceGuide() {
               <div className="flex justify-between items-center text-xs font-bold">
                 <span className="text-slate-300">Soil Organic Matter (Humus Target ≥ 3.5%):</span>
                 <span className="bg-emerald-950 text-emerald-300 px-2.5 py-0.5 rounded-md text-xs font-black border border-emerald-800">
-                  {sampleInput.organicMatterPct.toFixed(1)}% SOM
+                  {fieldTestInput.organicMatterPct.toFixed(1)}% SOM
                 </span>
               </div>
               <input
@@ -326,8 +434,12 @@ export function SoilScienceGuide() {
                 min="0.5"
                 max="6.0"
                 step="0.1"
-                value={sampleInput.organicMatterPct}
-                onChange={(e) => setSampleInput(prev => ({ ...prev, organicMatterPct: parseFloat(e.target.value) }))}
+                value={fieldTestInput.organicMatterPct}
+                onChange={(e) => {
+                  setActiveBenchmarkId('');
+                  const organicMatterPct = parseFloat(e.target.value);
+                  setFieldTestInput(prev => ({ ...prev, organicMatterPct }));
+                }}
                 className="w-full accent-emerald-500 h-2 bg-slate-800 rounded-lg cursor-pointer"
               />
             </div>
@@ -337,7 +449,7 @@ export function SoilScienceGuide() {
               <div className="flex justify-between items-center text-xs font-bold">
                 <span className="text-slate-300">Earthworms per 30cm Spade Sample:</span>
                 <span className="bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded-md text-xs font-black border border-amber-500/30">
-                  {sampleInput.earthwormsPerSpade} Worms
+                  {fieldTestInput.earthwormsPerSpade} Worms
                 </span>
               </div>
               <input
@@ -345,8 +457,12 @@ export function SoilScienceGuide() {
                 min="0"
                 max="20"
                 step="1"
-                value={sampleInput.earthwormsPerSpade}
-                onChange={(e) => setSampleInput(prev => ({ ...prev, earthwormsPerSpade: parseInt(e.target.value) }))}
+                value={fieldTestInput.earthwormsPerSpade}
+                onChange={(e) => {
+                  setActiveBenchmarkId('');
+                  const earthwormsPerSpade = parseInt(e.target.value);
+                  setFieldTestInput(prev => ({ ...prev, earthwormsPerSpade }));
+                }}
                 className="w-full accent-amber-500 h-2 bg-slate-800 rounded-lg cursor-pointer"
               />
             </div>
@@ -356,7 +472,7 @@ export function SoilScienceGuide() {
               <div className="flex justify-between items-center text-xs font-bold">
                 <span className="text-slate-300">Terrain Slope Angle (%):</span>
                 <span className="bg-slate-800 text-slate-200 px-2.5 py-0.5 rounded-md text-xs font-black">
-                  {sampleInput.slopePct}% Slope
+                  {fieldTestInput.slopePct}% Slope
                 </span>
               </div>
               <input
@@ -364,8 +480,12 @@ export function SoilScienceGuide() {
                 min="0"
                 max="25"
                 step="1"
-                value={sampleInput.slopePct}
-                onChange={(e) => setSampleInput(prev => ({ ...prev, slopePct: parseInt(e.target.value) }))}
+                value={fieldTestInput.slopePct}
+                onChange={(e) => {
+                  setActiveBenchmarkId('');
+                  const slopePct = parseInt(e.target.value);
+                  setFieldTestInput(prev => ({ ...prev, slopePct }));
+                }}
                 className="w-full accent-slate-400 h-2 bg-slate-800 rounded-lg cursor-pointer"
               />
             </div>
@@ -376,8 +496,11 @@ export function SoilScienceGuide() {
                 <span>Integrated Legumes & Cover Cropping (Velvet Bean/Soya)?</span>
                 <input
                   type="checkbox"
-                  checked={sampleInput.hasLegumesOrCoverCrop}
-                  onChange={(e) => setSampleInput(prev => ({ ...prev, hasLegumesOrCoverCrop: e.target.checked }))}
+                  checked={fieldTestInput.hasLegumesOrCoverCrop}
+                  onChange={(e) => {
+                    setActiveBenchmarkId('');
+                    setFieldTestInput(prev => ({ ...prev, hasLegumesOrCoverCrop: e.target.checked }));
+                  }}
                   className="w-5 h-5 accent-emerald-500 rounded"
                 />
               </label>
@@ -386,8 +509,11 @@ export function SoilScienceGuide() {
                 <span>Vetiver Grass Hedges Along Contours?</span>
                 <input
                   type="checkbox"
-                  checked={sampleInput.hasVetiverHedges}
-                  onChange={(e) => setSampleInput(prev => ({ ...prev, hasVetiverHedges: e.target.checked }))}
+                  checked={fieldTestInput.hasVetiverHedges}
+                  onChange={(e) => {
+                    setActiveBenchmarkId('');
+                    setFieldTestInput(prev => ({ ...prev, hasVetiverHedges: e.target.checked }));
+                  }}
                   className="w-5 h-5 accent-emerald-500 rounded"
                 />
               </label>
@@ -396,8 +522,11 @@ export function SoilScienceGuide() {
                 <span className="text-rose-300">History of Synthetic Herbicide/Chemical Burn?</span>
                 <input
                   type="checkbox"
-                  checked={sampleInput.usesChemicalPoisons}
-                  onChange={(e) => setSampleInput(prev => ({ ...prev, usesChemicalPoisons: e.target.checked }))}
+                  checked={fieldTestInput.usesChemicalPoisons}
+                  onChange={(e) => {
+                    setActiveBenchmarkId('');
+                    setFieldTestInput(prev => ({ ...prev, usesChemicalPoisons: e.target.checked }));
+                  }}
                   className="w-5 h-5 accent-rose-500 rounded"
                 />
               </label>

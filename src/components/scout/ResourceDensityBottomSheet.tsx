@@ -17,6 +17,8 @@ export interface ResourceDensityBottomSheetProps {
   selectedDistrictName?: string;
   onSelectDistrict?: (districtId: string) => void;
   onSelectDistrictByName?: (districtName: string) => void;
+  defaultExpanded?: boolean;
+  isStandalone?: boolean;
 }
 
 type MetricTab = 'population' | 'water' | 'solar';
@@ -26,9 +28,11 @@ export function ResourceDensityBottomSheet({
   activeDistrict,
   selectedDistrictName,
   onSelectDistrict,
-  onSelectDistrictByName
+  onSelectDistrictByName,
+  defaultExpanded = false,
+  isStandalone = false
 }: ResourceDensityBottomSheetProps) {
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [isExpanded, setIsExpanded] = useState<boolean>(defaultExpanded || isStandalone);
   const [activeTab, setActiveTab] = useState<MetricTab>('population');
   const [selectedRegion, setSelectedRegion] = useState<RegionFilter>('All');
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
@@ -77,7 +81,10 @@ export function ResourceDensityBottomSheet({
       {/* ------------------------------------------------------------- */}
       {/* 1. COLLAPSED DOCK / PEEK BAR                                  */}
       {/* ------------------------------------------------------------- */}
-      <div className="bg-slate-950/95 backdrop-blur-2xl border-t border-x border-white/15 rounded-t-2xl shadow-2xl text-white">
+      <div className={cn(
+        "bg-slate-950/95 backdrop-blur-2xl text-white shadow-2xl transition-all",
+        isStandalone ? "border border-white/15 rounded-3xl" : "border-t border-x border-white/15 rounded-t-2xl"
+      )}>
         <div className="p-3 sm:px-5 flex items-center justify-between gap-3">
           
           {/* Left: Expand Trigger & Live Summary */}

@@ -39,6 +39,7 @@ import { OutpostLogo } from './OutpostLogo';
 export interface NavigationProps {
   onOpenCitations?: () => void;
   onOpenSearch?: () => void;
+  onOpenAdvisor?: () => void;
 }
 
 interface NavItem {
@@ -60,7 +61,8 @@ interface NavGroup {
 
 export function Navigation({
   onOpenCitations,
-  onOpenSearch
+  onOpenSearch,
+  onOpenAdvisor
 }: NavigationProps) {
   const { user } = useAuth();
   const location = useLocation();
@@ -69,43 +71,8 @@ export function Navigation({
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [drawerSearch, setDrawerSearch] = useState('');
-  
-  // Auto-hide when not hovered state
-  const [isMenuPinned, setIsMenuPinned] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('outpost_nav_pinned') === 'true';
-    }
-    return false;
-  });
-  const [isNavHovered, setIsNavHovered] = useState(false);
-  const [isMouseNearTop, setIsMouseNearTop] = useState(false);
 
   const drawerRef = useRef<HTMLDivElement>(null);
-  const navContainerRef = useRef<HTMLDivElement>(null);
-
-  // Track mouse proximity to screen top to reveal navigation effortlessly
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (e.clientY <= 65) {
-        setIsMouseNearTop(true);
-      } else {
-        setIsMouseNearTop(false);
-      }
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
-  const togglePin = () => {
-    setIsMenuPinned(prev => {
-      const next = !prev;
-      localStorage.setItem('outpost_nav_pinned', String(next));
-      return next;
-    });
-  };
-
-  const isNavVisible = isMenuPinned || isNavHovered || isMouseNearTop || isDrawerOpen;
 
   // Online / offline listeners
   useEffect(() => {
@@ -119,13 +86,9 @@ export function Navigation({
     };
   }, []);
 
-  // Keyboard shortcut (Cmd/Ctrl + K to toggle menu, Escape to close)
+  // Keyboard shortcut (Escape to close drawer)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        setIsDrawerOpen(prev => !prev);
-      }
       if (e.key === 'Escape' && isDrawerOpen) {
         e.preventDefault();
         setIsDrawerOpen(false);
@@ -141,15 +104,15 @@ export function Navigation({
     setDrawerSearch('');
   }, [location.pathname]);
 
-  // Primary Quick-Jump Pill Tabs
+  // Primary High-Impact Navigation Tabs with clear, intuitive labels
   const primaryPills = [
-    { label: 'Land Scout Map', path: '/scout-map', icon: Compass, isHighlighted: true },
-    { label: 'Districts & Land', path: '/where', icon: MapPin },
-    { label: 'Farming Calendar', path: '/seasons', icon: Calendar },
-    { label: 'Homestead Skills', path: '/skills', icon: Hammer },
+    { label: 'Land & Districts', path: '/where', icon: MapPin },
+    { label: 'GPS Map', path: '/scout-map', icon: Compass, isHighlighted: true },
+    { label: 'Crops & Soil', path: '/what', icon: Sprout },
+    { label: 'Seasonal Almanac', path: '/seasons', icon: Calendar },
     { label: 'Calculators', path: '/calculators', icon: Calculator },
-    { label: 'Move Roadmap', path: '/tracker', icon: Sparkles },
-    { label: 'The Vision', path: '/vision', icon: BookOpen },
+    { label: 'Skills Manual', path: '/skills', icon: Hammer },
+    { label: 'Homestead Guide', path: '/how', icon: BookOpen },
   ];
 
   // 4 Organized Navigation Drawer Groups with Authentic, Simplified Terms
@@ -305,203 +268,127 @@ export function Navigation({
   return (
     <>
       {/* ========================================================================= */}
-      {/* TOP HOVER DETECTION ZONE                                                  */}
+      {/* 1. PERMANENT FIXED MODERN TOP HEADER BAR                                  */}
       {/* ========================================================================= */}
-      <div 
-        className="fixed top-0 left-0 right-0 h-16 z-50 pointer-events-auto"
-        onMouseEnter={() => setIsNavHovered(true)}
-        onMouseLeave={() => setIsNavHovered(false)}
+      <header 
+        id="outpost-main-header"
+        className="fixed top-0 left-0 right-0 z-50 h-16 bg-[#071A10]/95 backdrop-blur-xl border-b border-white/10 px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4 shadow-xl select-none"
+        aria-label="Primary Sanctuary Navigation"
       >
-        {/* ========================================================================= */}
-        {/* 1. COLLAPSED MINI-TRIGGER (Shown when top menu is hidden)                 */}
-        {/* ========================================================================= */}
-        <div 
-          className={cn(
-            "fixed top-1 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 pointer-events-auto flex items-center gap-2",
-            isNavVisible ? "opacity-0 -translate-y-8 pointer-events-none" : "opacity-100 translate-y-0"
-          )}
-        >
-          <button
-            onClick={() => setIsNavHovered(true)}
-            className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-950/85 backdrop-blur-md border border-amber-500/40 text-amber-300 hover:text-white shadow-xl shadow-black/80 text-xs font-mono font-bold hover:scale-105 transition-all cursor-pointer group"
-            title="Hover or click to reveal top navigation menu"
+        {/* LEFT SIDE: LOGO MARK */}
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <Link 
+            to="/" 
+            className="flex items-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 rounded-xl"
+            title="OUTPOST: COUNTRY LIVING • Malawi Blueprint"
           >
-            <ChevronDown size={14} className="text-amber-400 group-hover:translate-y-0.5 transition-transform" />
-            <span>Navigation Menu</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          </button>
+            <OutpostLogo size="md" />
+          </Link>
         </div>
 
-        {/* ========================================================================= */}
-        {/* 2. FLOATING GLASS MAIN MENU BAR (Auto-hides when not hovered)              */}
-        {/* ========================================================================= */}
-        <nav 
-          id="outpost-floating-nav"
-          ref={navContainerRef}
-          onMouseEnter={() => setIsNavHovered(true)}
-          onMouseLeave={() => setIsNavHovered(false)}
-          className={cn(
-            "fixed top-3 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-7xl rounded-2xl bg-slate-950/90 backdrop-blur-xl border border-white/10 px-3 sm:px-5 py-2.5 sm:py-3 shadow-2xl shadow-black/80 flex items-center justify-between gap-2 sm:gap-4 transition-all duration-300 select-none",
-            isNavVisible ? "translate-y-0 opacity-100 pointer-events-auto" : "-translate-y-24 opacity-0 pointer-events-none"
-          )}
-          aria-label="Primary Sanctuary Navigation"
-        >
-          {/* LEFT SIDE: LOGO MARK */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            <Link 
-              to="/" 
-              className="flex items-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 rounded-xl"
-              title="OUTPOST: COUNTRY LIVING • Malawi Blueprint"
-            >
-              <OutpostLogo size="md" />
-            </Link>
-          </div>
+        {/* CENTER: QUICK-JUMP PILL TABS */}
+        <nav className="hidden lg:flex items-center gap-1 p-1 bg-slate-900/80 backdrop-blur-md rounded-xl border border-white/10">
+          {primaryPills.map((pill) => {
+            const Icon = pill.icon;
+            const isActive = location.pathname === pill.path || 
+              (pill.path !== '/' && location.pathname.startsWith(pill.path));
 
-          {/* CENTER: QUICK-JUMP PILL TABS */}
-          <div className="hidden lg:flex items-center gap-1.5 p-1 bg-slate-900/70 backdrop-blur-md rounded-xl border border-white/10">
-            {primaryPills.map((pill) => {
-              const Icon = pill.icon;
-              const isActive = location.pathname === pill.path || 
-                (pill.path !== '/' && location.pathname.startsWith(pill.path));
-
-              return (
-                <NavLink
-                  key={pill.path}
-                  to={pill.path}
-                  className={cn(
-                    "relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold tracking-tight transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400",
-                    isActive
-                      ? "bg-gradient-to-r from-amber-500/20 to-emerald-500/20 text-amber-300 border border-amber-500/40 shadow-xs shadow-amber-500/10 font-black"
-                      : pill.isHighlighted
-                        ? "text-amber-300 hover:text-amber-200 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30"
-                        : "text-slate-300 hover:text-white hover:bg-white/5 border border-transparent"
-                  )}
-                >
-                  <Icon 
-                    size={14} 
-                    className={cn(
-                      "transition-colors", 
-                      isActive ? "text-amber-400" : pill.isHighlighted ? "text-amber-400" : "text-slate-400 group-hover:text-slate-200"
-                    )} 
-                  />
-                  <span>{pill.label}</span>
-                  {isActive && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse ml-0.5" />
-                  )}
-                </NavLink>
-              );
-            })}
-          </div>
-
-          {/* RIGHT SIDE: PIN CONTROLS, TELEMETRY & MENU TRIGGER */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            {/* Pin / Unpin Auto-hide Toggle Button */}
-            <button
-              onClick={togglePin}
-              className={cn(
-                "hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-[11px] font-mono transition-colors cursor-pointer",
-                isMenuPinned 
-                  ? "bg-amber-500/20 border-amber-500/40 text-amber-300" 
-                  : "bg-white/5 border-white/10 text-slate-400 hover:text-slate-200"
-              )}
-              title={isMenuPinned ? "Top menu is pinned visible. Click to enable auto-hide." : "Top menu auto-hides when not hovered. Click to pin permanently."}
-            >
-              {isMenuPinned ? <Pin size={13} className="text-amber-400" /> : <PinOff size={13} />}
-              <span className="text-[10px]">{isMenuPinned ? 'Pinned' : 'Auto-hide'}</span>
-            </button>
-
-            {/* Telemetry Micro-Pill */}
-            <div 
-              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/60 backdrop-blur-md border border-white/10 text-[11px] font-mono text-slate-300 shadow-inner"
-              title="Malawi Coordinates: Dedza (13.2543° S, 34.3015° E)"
-            >
-              <div className="flex items-center gap-1.5">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-                </span>
-                <span className="font-bold text-emerald-400">GPS Live</span>
-              </div>
-
-              <span className="text-white/20">|</span>
-
-              <div className="flex items-center gap-1.5">
-                {isOffline ? (
-                  <>
-                    <WifiOff size={12} className="text-amber-400 shrink-0" />
-                    <span className="text-amber-300 font-medium">Offline</span>
-                  </>
-                ) : (
-                  <>
-                    <CheckCircle2 size={12} className="text-emerald-400 shrink-0" />
-                    <span className="text-slate-200 font-medium">Synced</span>
-                  </>
+            return (
+              <NavLink
+                key={pill.path}
+                to={pill.path}
+                className={cn(
+                  "relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold tracking-tight transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400",
+                  isActive
+                    ? "bg-gradient-to-r from-amber-500/20 to-emerald-500/20 text-amber-300 border border-amber-500/40 shadow-xs shadow-amber-500/10 font-black"
+                    : pill.isHighlighted
+                      ? "text-amber-300 hover:text-amber-200 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30"
+                      : "text-slate-300 hover:text-white hover:bg-white/5 border border-transparent"
                 )}
-              </div>
-            </div>
-
-            {/* Quick Search Palette Button */}
-            {onOpenSearch && (
-              <button
-                onClick={onOpenSearch}
-                className="hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-mono font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 cursor-pointer"
-                title="Search Guides & Maps (Press ⌘K or /)"
               >
-                <Search size={13} className="text-amber-400" />
-                <span className="text-[10px] font-bold uppercase tracking-wider hidden xl:inline">Search</span>
-                <kbd className="text-[9px] px-1 py-0.2 rounded bg-black/40 text-slate-400 border border-white/10">⌘K</kbd>
-              </button>
-            )}
-
-            {/* Quick Citations Modal Button */}
-            {onOpenCitations && (
-              <button
-                onClick={onOpenCitations}
-                className="hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-amber-300 border border-white/10 text-xs font-mono font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
-                title="View Malawi Meteorological Services & FAO Sources"
-              >
-                <ShieldCheck size={14} className="text-amber-400" />
-                <span className="text-[10px] font-bold uppercase tracking-wider hidden xl:inline">Sources</span>
-              </button>
-            )}
-
-            {/* Collapsible Menu Trigger Button */}
-            <button
-              id="outpost-drawer-toggle"
-              onClick={() => setIsDrawerOpen(prev => !prev)}
-              className={cn(
-                "flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-mono font-black uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 cursor-pointer shadow-md",
-                isDrawerOpen
-                  ? "bg-amber-500 text-slate-950 border border-amber-300 shadow-amber-500/30 scale-[1.02]"
-                  : "bg-white/10 hover:bg-white/15 text-amber-200 hover:text-white border border-white/15 hover:border-amber-400/40"
-              )}
-              aria-expanded={isDrawerOpen}
-              aria-controls="outpost-collapsible-drawer"
-              aria-label={isDrawerOpen ? "Close Outpost Menu Drawer" : "Open Outpost Menu Drawer"}
-            >
-              {isDrawerOpen ? (
-                <>
-                  <X size={16} className="text-slate-950" />
-                  <span>Close</span>
-                </>
-              ) : (
-                <>
-                  <Menu size={16} className="text-amber-400" />
-                  <span className="hidden xs:inline">Menu</span>
-                </>
-              )}
-              <kbd className={cn(
-                "hidden sm:inline-block px-1.5 py-0.5 rounded text-[9px] font-mono font-bold tracking-tight border",
-                isDrawerOpen 
-                  ? "bg-slate-950/20 text-slate-950 border-slate-950/30" 
-                  : "bg-black/40 text-slate-400 border-white/10"
-              )}>
-                ⌘K
-              </kbd>
-            </button>
-          </div>
+                <Icon 
+                  size={14} 
+                  className={cn(
+                    "transition-colors", 
+                    isActive ? "text-amber-400" : pill.isHighlighted ? "text-amber-400" : "text-slate-400 group-hover:text-slate-200"
+                  )} 
+                />
+                <span>{pill.label}</span>
+                {isActive && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse ml-0.5" />
+                )}
+              </NavLink>
+            );
+          })}
         </nav>
-      </div>
+
+        {/* RIGHT SIDE: AI ADVISOR, SEARCH & MENU TRIGGER */}
+        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+          {/* Quick AI Advisor Modal Button */}
+          {onOpenAdvisor && (
+            <button
+              onClick={onOpenAdvisor}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 hover:text-white border border-amber-500/30 text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 cursor-pointer shadow-xs"
+              title="Ask Outpost AI Sanctuary Advisor (Gemini 3.8)"
+            >
+              <Sparkles size={14} className="text-amber-400 animate-pulse" />
+              <span className="text-xs uppercase tracking-wider font-extrabold hidden sm:inline">AI Advisor</span>
+            </button>
+          )}
+
+          {/* Quick Search Palette Button */}
+          {onOpenSearch && (
+            <button
+              onClick={onOpenSearch}
+              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-mono font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 cursor-pointer"
+              title="Search Guides & Maps (Press ⌘K or /)"
+            >
+              <Search size={14} className="text-amber-400" />
+              <span className="text-xs font-bold uppercase tracking-wider hidden md:inline">Search</span>
+              <kbd className="hidden sm:inline-block text-[9px] px-1 py-0.2 rounded bg-black/40 text-slate-400 border border-white/10">⌘K</kbd>
+            </button>
+          )}
+
+          {/* Quick Citations Modal Button */}
+          {onOpenCitations && (
+            <button
+              onClick={onOpenCitations}
+              className="hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-amber-300/90 hover:text-amber-200 border border-white/10 text-xs font-mono font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+              title="View Malawi Meteorological Services & FAO Sources"
+            >
+              <ShieldCheck size={14} className="text-amber-400" />
+              <span className="text-[10px] font-bold uppercase tracking-wider">Sources</span>
+            </button>
+          )}
+
+          {/* Collapsible Menu Trigger Button */}
+          <button
+            id="outpost-drawer-toggle"
+            onClick={() => setIsDrawerOpen(prev => !prev)}
+            className={cn(
+              "flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-mono font-black uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 cursor-pointer shadow-md",
+              isDrawerOpen
+                ? "bg-amber-500 text-slate-950 border border-amber-300 shadow-amber-500/30 scale-[1.02]"
+                : "bg-white/10 hover:bg-white/15 text-amber-200 hover:text-white border border-white/15 hover:border-amber-400/40"
+            )}
+            aria-expanded={isDrawerOpen}
+            aria-controls="outpost-collapsible-drawer"
+            aria-label={isDrawerOpen ? "Close Outpost Menu Drawer" : "Open Outpost Menu Drawer"}
+          >
+            {isDrawerOpen ? (
+              <>
+                <X size={16} className="text-slate-950" />
+                <span>Close</span>
+              </>
+            ) : (
+              <>
+                <Menu size={16} className="text-amber-400" />
+                <span className="text-xs">Directory</span>
+              </>
+            )}
+          </button>
+        </div>
+      </header>
 
       {/* ========================================================================= */}
       {/* 3. SLEEK COLLAPSIBLE DRAWER PANEL & BACKDROP OVERLAY                     */}
@@ -572,6 +459,32 @@ export function Navigation({
                     </button>
                   )}
                 </div>
+
+                {/* AI Sanctuary Advisor Quick Action Card */}
+                {onOpenAdvisor && (
+                  <button
+                    onClick={() => {
+                      setIsDrawerOpen(false);
+                      onOpenAdvisor();
+                    }}
+                    className="p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/15 via-emerald-950/40 to-slate-900 border border-amber-500/30 hover:border-amber-400 text-left transition-all group flex items-center justify-between gap-3 shadow-md cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0 group-hover:scale-105 transition-transform">
+                        <Sparkles size={18} />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-xs font-mono font-black uppercase tracking-wider text-[#FAF8F5] group-hover:text-amber-200">
+                          AI Homestead Advisor
+                        </span>
+                        <span className="text-[10px] font-mono text-emerald-200/70">
+                          Ask Gemini 3.8 on soil, solar & water
+                        </span>
+                      </div>
+                    </div>
+                    <span className="text-xs font-mono text-amber-400 group-hover:translate-x-0.5 transition-transform">→</span>
+                  </button>
+                )}
 
                 {/* 4 Categorized Navigation Groups */}
                 <div className="flex flex-col gap-6">

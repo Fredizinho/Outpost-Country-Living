@@ -220,32 +220,32 @@ export default function Tracker() {
       </section>
 
       {/* Header Overview Card */}
-      <header className="flex flex-col gap-6 text-center bg-[#FDFBF7] rounded-[2.5rem] p-8 md:p-10 border border-[#E6DFD1] shadow-xs">
+      <header className="flex flex-col gap-6 text-center backdrop-blur-xl bg-slate-950/80 rounded-[2.5rem] p-8 md:p-10 border border-amber-500/25 shadow-[0_12px_40px_rgba(0,0,0,0.4)]">
         <div className="flex items-center justify-center gap-2">
-          <span className="text-amber-800 font-extrabold uppercase text-[10px] tracking-[0.25em]">
+          <span className="text-amber-400 font-mono font-extrabold uppercase text-[10px] tracking-[0.25em]">
             Migration Field Ledger
           </span>
-          <span className="bg-emerald-950/5 text-emerald-950 text-[9px] font-black uppercase px-2.5 py-0.5 rounded-full border border-emerald-950/20 flex items-center gap-1">
+          <span className="bg-emerald-950 text-emerald-300 text-[9px] font-mono font-bold uppercase px-2.5 py-0.5 rounded-full border border-emerald-500/30 flex items-center gap-1">
             <HardDrive size={10} /> Saved Offline
           </span>
         </div>
 
-        <h2 className="serif text-4xl md:text-5xl font-bold text-emerald-950">The Exodus Journey</h2>
-        <p className="text-slate-700 max-w-xl mx-auto font-medium text-sm leading-relaxed">
+        <h2 className="serif text-4xl md:text-5xl font-extrabold text-[#FAF8F5]">The Exodus Journey</h2>
+        <p className="text-emerald-100/70 max-w-xl mx-auto font-medium text-sm leading-relaxed">
           Step-by-step milestone checklist customized for {user?.district || 'Dedza'} land conditions, budget, and household size.
         </p>
         
         {/* Overall Progress Bar */}
-        <div className="mt-4 max-w-xl mx-auto w-full">
-          <div className="flex justify-between text-[10px] font-black uppercase tracking-[0.2em] text-emerald-950 mb-2">
+        <div className="mt-2 max-w-xl mx-auto w-full">
+          <div className="flex justify-between text-[10px] font-mono font-black uppercase tracking-[0.2em] text-slate-300 mb-2">
             <span>Overall Migration Progress</span>
-            <span className="text-amber-800 font-extrabold">{Math.round(overallProgress)}% ({totalCompleted}/{totalTasks})</span>
+            <span className="text-amber-400 font-extrabold">{Math.round(overallProgress)}% ({totalCompleted}/{totalTasks})</span>
           </div>
-          <div className="h-3 w-full bg-emerald-950/10 rounded-full overflow-hidden p-[2px] shadow-inner">
+          <div className="h-3 w-full bg-slate-900 rounded-full overflow-hidden p-[2px] border border-white/10 shadow-inner">
             <motion.div 
               initial={{ width: 0 }}
               animate={{ width: `${overallProgress}%` }}
-              className="h-full bg-gradient-to-r from-emerald-950 via-amber-600 to-terracotta-700 rounded-full shadow-xs"
+              className="h-full bg-gradient-to-r from-emerald-500 via-amber-500 to-amber-400 rounded-full shadow-xs"
             />
           </div>
         </div>
@@ -253,13 +253,13 @@ export default function Tracker() {
         <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
           <button
             onClick={handleExportRoadmap}
-            className="bg-emerald-950 hover:bg-emerald-900 text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider shadow-md transition-all flex items-center gap-1.5 active:scale-95 border border-emerald-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-800"
+            className="bg-amber-500 hover:bg-amber-400 text-slate-950 px-5 py-2.5 rounded-xl text-xs font-mono font-black uppercase tracking-wider shadow-md transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer"
           >
-            <Download size={14} className="text-amber-400" /> Export Roadmap
+            <Download size={14} /> Export Roadmap
           </button>
           <button
             onClick={handleResetTracker}
-            className="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-800"
+            className="bg-white/5 hover:bg-white/10 text-emerald-200 border border-amber-500/30 px-4 py-2.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <RotateCcw size={14} /> Re-Generate Roadmap
           </button>
@@ -267,14 +267,14 @@ export default function Tracker() {
       </header>
 
       {/* Cross-Module Homestead Readiness Ledger */}
-      <section className="bg-gradient-to-br from-emerald-950 via-slate-900 to-amber-950 p-6 md:p-8 rounded-[2.5rem] border border-amber-500/30 text-white shadow-xl flex flex-col gap-6">
+      <section className="bg-gradient-to-br from-emerald-950 via-slate-950 to-[#05130B] p-6 md:p-8 rounded-[2.5rem] border border-amber-500/30 text-white shadow-2xl flex flex-col gap-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
           <div>
             <span className="text-[10px] font-mono font-black uppercase tracking-widest text-amber-400 flex items-center gap-1.5">
               <Activity size={13} className="text-amber-400" />
               Overall Preparedness Score
             </span>
-            <h3 className="serif text-2xl font-bold text-[#FAF8F5]">
+            <h3 className="serif text-2xl sm:text-3xl font-bold text-[#FAF8F5]">
               Total Homestead Readiness: {readinessBreakdown.totalScorePct}%
             </h3>
             <p className="text-xs text-emerald-200/80 font-medium mt-0.5">
@@ -284,7 +284,7 @@ export default function Tracker() {
 
           <Link
             to="/almanac"
-            className="bg-amber-500 hover:bg-amber-400 text-slate-950 px-4 py-2 rounded-xl text-xs font-mono font-black uppercase tracking-wider flex items-center gap-1.5 self-start sm:self-auto transition-all shadow-sm"
+            className="bg-amber-500 hover:bg-amber-400 text-slate-950 px-4 py-2.5 rounded-xl text-xs font-mono font-black uppercase tracking-wider flex items-center gap-1.5 self-start sm:self-auto transition-all shadow-sm cursor-pointer"
           >
             <span>Seasonal Tasks Engine</span>
             <ArrowRight size={13} />
@@ -293,7 +293,7 @@ export default function Tracker() {
 
         {/* 4 Pillars Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div className="bg-black/30 p-3.5 rounded-2xl border border-white/10 flex flex-col justify-between gap-2">
+          <div className="bg-slate-950/60 p-4 rounded-2xl border border-white/10 flex flex-col justify-between gap-2 shadow-inner">
             <span className="text-[9px] font-mono uppercase tracking-wider text-slate-400">1. Exodus Roadmap (35%)</span>
             <div className="flex items-baseline justify-between">
               <span className="text-lg font-mono font-extrabold text-amber-300">{readinessBreakdown.breakdown.exodusScorePct}%</span>
@@ -304,7 +304,7 @@ export default function Tracker() {
             </div>
           </div>
 
-          <div className="bg-black/30 p-3.5 rounded-2xl border border-white/10 flex flex-col justify-between gap-2">
+          <div className="bg-slate-950/60 p-4 rounded-2xl border border-white/10 flex flex-col justify-between gap-2 shadow-inner">
             <span className="text-[9px] font-mono uppercase tracking-wider text-slate-400">2. Field Skills (25%)</span>
             <div className="flex items-baseline justify-between">
               <span className="text-lg font-mono font-extrabold text-emerald-300">{readinessBreakdown.breakdown.skillsMasteryPct}%</span>
@@ -315,7 +315,7 @@ export default function Tracker() {
             </div>
           </div>
 
-          <div className="bg-black/30 p-3.5 rounded-2xl border border-white/10 flex flex-col justify-between gap-2">
+          <div className="bg-slate-950/60 p-4 rounded-2xl border border-white/10 flex flex-col justify-between gap-2 shadow-inner">
             <span className="text-[9px] font-mono uppercase tracking-wider text-slate-400">3. Seasonal Actions (25%)</span>
             <div className="flex items-baseline justify-between">
               <span className="text-lg font-mono font-extrabold text-sky-300">{readinessBreakdown.breakdown.seasonalActionPct}%</span>
@@ -326,14 +326,14 @@ export default function Tracker() {
             </div>
           </div>
 
-          <div className="bg-black/30 p-3.5 rounded-2xl border border-white/10 flex flex-col justify-between gap-2">
+          <div className="bg-slate-950/60 p-4 rounded-2xl border border-white/10 flex flex-col justify-between gap-2 shadow-inner">
             <span className="text-[9px] font-mono uppercase tracking-wider text-slate-400">4. Land Readiness (15%)</span>
             <div className="flex items-baseline justify-between">
-              <span className="text-lg font-mono font-extrabold text-yellow-300">{readinessBreakdown.breakdown.landReadinessPct}%</span>
-              <Link to="/scout-map" className="text-[9px] text-yellow-400 hover:underline">Land Map</Link>
+              <span className="text-lg font-mono font-extrabold text-amber-200">{readinessBreakdown.breakdown.landReadinessPct}%</span>
+              <Link to="/scout-map" className="text-[9px] text-amber-300 hover:underline">Land Map</Link>
             </div>
             <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
-              <div className="h-full bg-yellow-400 rounded-full" style={{ width: `${readinessBreakdown.breakdown.landReadinessPct}%` }} />
+              <div className="h-full bg-amber-400 rounded-full" style={{ width: `${readinessBreakdown.breakdown.landReadinessPct}%` }} />
             </div>
           </div>
         </div>
@@ -351,24 +351,24 @@ export default function Tracker() {
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-[#FDFBF7] rounded-[2.5rem] border border-[#E6DFD1] shadow-xs overflow-hidden"
+              className="backdrop-blur-xl bg-slate-950/70 rounded-[2.5rem] border border-amber-500/25 shadow-[0_12px_40px_rgba(0,0,0,0.4)] overflow-hidden"
             >
               <div className="p-8 md:p-10 flex flex-col md:flex-row gap-8">
                 <div className="flex-1 flex flex-col gap-6">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-start gap-5">
-                      <div className="w-14 h-14 rounded-2xl bg-emerald-950 text-amber-300 flex items-center justify-center shrink-0 shadow-sm border border-emerald-900">
+                      <div className="w-14 h-14 rounded-2xl bg-emerald-950/80 text-amber-400 border border-emerald-500/30 flex items-center justify-center shrink-0 shadow-inner">
                         <Icon size={28} />
                       </div>
                       <div>
-                        <h3 className="serif text-2xl font-bold text-emerald-950">{step.title}</h3>
-                        <p className="text-sm text-slate-600 font-medium mt-1">{step.description}</p>
+                        <h3 className="serif text-2xl font-bold text-[#FAF8F5]">{step.title}</h3>
+                        <p className="text-sm text-slate-300 font-medium mt-1 leading-relaxed">{step.description}</p>
                       </div>
                     </div>
 
                     <button
                       onClick={() => setActiveAddingStep(isAdding ? null : step.id)}
-                      className="bg-emerald-100 hover:bg-emerald-200 text-emerald-800 text-[10px] font-black uppercase px-3 py-1.5 rounded-xl transition-all flex items-center gap-1 shrink-0"
+                      className="bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-[10px] font-mono font-black uppercase px-3 py-1.5 rounded-xl transition-all flex items-center gap-1 shrink-0 cursor-pointer"
                     >
                       <Plus size={12} /> Add Milestone
                     </button>
@@ -376,25 +376,25 @@ export default function Tracker() {
 
                   {/* Form to add custom task */}
                   {isAdding && (
-                    <div className="bg-white/90 p-4 rounded-2xl border border-emerald-200 shadow-inner flex flex-col sm:flex-row gap-2">
+                    <div className="bg-slate-900/90 p-4 rounded-2xl border border-amber-500/30 shadow-inner flex flex-col sm:flex-row gap-2">
                       <input
                         type="text"
                         placeholder="e.g. Purchase solar freezer or inspect water well..."
                         value={newTaskInput[step.id] || ''}
                         onChange={(e) => setNewTaskInput({ ...newTaskInput, [step.id]: e.target.value })}
                         onKeyDown={(e) => e.key === 'Enter' && handleAddCustomTask(step.id)}
-                        className="flex-1 bg-white px-4 py-2 rounded-xl border text-xs font-medium focus:outline-none focus:ring-2 ring-emerald-500"
+                        className="flex-1 bg-slate-950 text-white placeholder:text-slate-500 px-4 py-2 rounded-xl border border-white/10 text-xs font-medium focus:outline-none focus:ring-2 ring-amber-400"
                       />
                       <div className="flex gap-2">
                         <button
                           onClick={() => handleAddCustomTask(step.id)}
-                          className="bg-emerald-800 text-white px-4 py-2 rounded-xl text-xs font-bold uppercase shadow-sm hover:bg-emerald-700"
+                          className="bg-amber-500 text-slate-950 px-4 py-2 rounded-xl text-xs font-mono font-bold uppercase shadow-sm hover:bg-amber-400 cursor-pointer"
                         >
                           Save
                         </button>
                         <button
                           onClick={() => setActiveAddingStep(null)}
-                          className="bg-slate-200 text-slate-600 px-3 py-2 rounded-xl text-xs font-bold uppercase hover:bg-slate-300"
+                          className="bg-white/10 text-slate-300 px-3 py-2 rounded-xl text-xs font-mono font-bold uppercase hover:bg-white/20 cursor-pointer"
                         >
                           Cancel
                         </button>
@@ -410,27 +410,27 @@ export default function Tracker() {
                         className={cn(
                           "flex items-center justify-between gap-4 p-4 rounded-2xl transition-all border group",
                           task.completed 
-                            ? "bg-emerald-50/70 text-emerald-800 border-emerald-200" 
-                            : "bg-white/50 text-slate-700 border-white/60 hover:bg-white"
+                            ? "bg-emerald-950/50 text-emerald-300 border-emerald-500/30" 
+                            : "bg-slate-900/40 text-slate-200 border-white/5 hover:border-amber-500/30 hover:bg-slate-900/70"
                         )}
                       >
                         <button
                           onClick={() => toggleSubtask(step.id, task.id)}
-                          className="flex items-center gap-3.5 flex-1 text-left"
+                          className="flex items-center gap-3.5 flex-1 text-left cursor-pointer"
                         >
                           {task.completed ? (
-                            <CheckCircle2 size={20} className="shrink-0 text-emerald-600" />
+                            <CheckCircle2 size={20} className="shrink-0 text-emerald-400" />
                           ) : (
-                            <Circle size={20} className="shrink-0 text-slate-400 group-hover:text-emerald-500" />
+                            <Circle size={20} className="shrink-0 text-slate-500 group-hover:text-amber-400" />
                           )}
-                          <span className={cn("text-xs font-bold uppercase tracking-wide", task.completed && "line-through opacity-60")}>
+                          <span className={cn("text-xs font-mono font-bold uppercase tracking-wide", task.completed && "line-through opacity-50")}>
                             {task.label}
                           </span>
                         </button>
 
                         <button
                           onClick={() => handleDeleteSubtask(step.id, task.id)}
-                          className="text-slate-300 hover:text-rose-600 transition-colors p-1"
+                          className="text-slate-500 hover:text-rose-400 transition-colors p-1 cursor-pointer"
                           title="Delete milestone task"
                         >
                           <Trash2 size={14} />
@@ -441,7 +441,7 @@ export default function Tracker() {
                 </div>
 
                 {/* Step Progress Radial Gauge */}
-                <div className="md:w-40 flex md:flex-col items-center justify-center gap-6 border-t md:border-t-0 md:border-l border-white/40 pt-8 md:pt-0">
+                <div className="md:w-40 flex md:flex-col items-center justify-center gap-6 border-t md:border-t-0 md:border-l border-white/10 pt-8 md:pt-0">
                   <div className="relative w-24 h-24 flex items-center justify-center">
                     <svg className="w-full h-full transform -rotate-90">
                       <circle
@@ -451,7 +451,7 @@ export default function Tracker() {
                         stroke="currentColor"
                         strokeWidth="6"
                         fill="transparent"
-                        className="text-emerald-100/50"
+                        className="text-slate-800"
                       />
                       <motion.circle
                         cx="48"
@@ -464,16 +464,16 @@ export default function Tracker() {
                         animate={{ strokeDashoffset: 264 - (calculateProgress(step) / 100 * 264) }}
                         fill="transparent"
                         strokeLinecap="round"
-                        className="text-emerald-700"
+                        className="text-amber-400"
                       />
                     </svg>
-                    <span className="absolute text-sm font-black text-emerald-900">
+                    <span className="absolute text-sm font-mono font-black text-amber-300">
                       {Math.round(calculateProgress(step))}%
                     </span>
                   </div>
                   <div className="flex flex-col items-center gap-1">
-                    <span className="text-[10px] uppercase tracking-[0.2em] font-black text-emerald-800/40">Step {index + 1}</span>
-                    <span className="text-[9px] font-bold text-emerald-600 uppercase">Phase {index === 0 ? 'I' : index === 1 ? 'II' : 'III'}</span>
+                    <span className="text-[10px] font-mono uppercase tracking-[0.2em] font-black text-slate-400">Step {index + 1}</span>
+                    <span className="text-[9px] font-mono font-bold text-amber-400 uppercase">Phase {index === 0 ? 'I' : index === 1 ? 'II' : 'III'}</span>
                   </div>
                 </div>
               </div>

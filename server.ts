@@ -132,7 +132,8 @@ app.post('/api/advisor', async (req, res) => {
     const ai = getAIClient();
     
     if (ai) {
-      const systemInstruction = `You are the Outpost Living AI Sanctuary Advisor.
+      try {
+        const systemInstruction = `You are the Outpost Living AI Sanctuary Advisor.
 You specialize in helping families relocate from cities to self-sustaining country homesteads and sanctuaries in Malawi and Southern/East Africa.
 Your knowledge covers:
 - Land scouting, soil evaluation (red latosols, dambos, alluvial soils), water security (gravity-fed springs, boreholes, rainwater harvesting) across Malawi districts (Dedza, Mzimba, Mulanje, Zomba, Lilongwe, Mzuzu, Thyolo, etc.).
@@ -142,49 +143,58 @@ Your knowledge covers:
 
 Provide encouraging, practical, well-formatted markdown responses with actionable steps and local context.`;
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-3.6-flash',
-        contents: [
-          { role: 'user', parts: [{ text: `${systemInstruction}\n\nUser Question: ${message}` }] }
-        ]
-      });
+        const response = await ai.models.generateContent({
+          model: 'gemini-3.8-flash',
+          contents: [
+            { role: 'user', parts: [{ text: `${systemInstruction}\n\nUser Question: ${message}` }] }
+          ]
+        });
 
-      const reply = response.text || "I recommend evaluating local water access and soil structure before establishing permanent beds.";
-      return res.json({ reply });
-    } else {
-      // Intelligent fallback knowledge engine when GEMINI_API_KEY is not configured
-      const lower = message.toLowerCase();
-      let reply = "I am your Outpost Living Advisor. Here is guidance based on regional sanctuary principles:\n\n";
-
-      if (lower.includes('water') || lower.includes('well') || lower.includes('borehole') || lower.includes('rain')) {
-        reply += "### 💧 Water Security in Malawi\n" +
-          "- **Perennial Streams & Springs**: Priority #1 when scouting land in districts like Dedza, Mulanje, or Zomba. Look for year-round gravity flow.\n" +
-          "- **Borehole Depth**: In central plateaus (Lilongwe, Kasungu), water tables average 25-40m. Solar submerged pumps (DC 24V/48V) are ideal.\n" +
-          "- **Rain Catchment**: A 100sqm iron roof in Malawi can catch over 80,000 liters during the Nov-Mar rainy season. Install 5,000L tanks with leaf strainers.";
-      } else if (lower.includes('soil') || lower.includes('crop') || lower.includes('maize') || lower.includes('crop') || lower.includes('farm') || lower.includes('plant')) {
-        reply += "### 🌱 Soil & Crop Management\n" +
-          "- **Highland Zones (Dedza, Mzimba)**: Excellent for Irish potatoes, beans, macadamia, and stone fruits.\n" +
-          "- **Soil Building**: Heavy red latosol soils benefit from double-digging or broadforking without inversion, mixed with compost and biochar.\n" +
-          "- **Intercropping**: Plant maize together with nitrogen-fixing beans (chimbamba) and pumpkin cover crops (mkhwani) to preserve soil moisture.";
-      } else if (lower.includes('solar') || lower.includes('power') || lower.includes('battery') || lower.includes('electricity')) {
-        reply += "### ☀️ Off-Grid Power\n" +
-          "- **Sunlight Potential**: Malawi averages 7.5 to 9 peak sun hours daily.\n" +
-          "- **Recommended Setup**: 1.5kW to 3kW Solar Array paired with a 24V or 48V 100Ah LiFePO4 battery bank and a 3kVA Pure Sine Wave Inverter.\n" +
-          "- **Priority Loads**: DC water pump, efficient chest fridge, LED lighting, and seed dehydration fans.";
-      } else if (lower.includes('land') || lower.includes('district') || lower.includes('dedza') || lower.includes('mzimba') || lower.includes('mulanje')) {
-        reply += "### 📍 Regional Land Scouting\n" +
-          "- **Dedza & Ntcheu**: Cool climate, 1400m altitude, high rainfall, volcanic loam. Prime for seed production.\n" +
-          "- **Mzimba & Viphya**: High plateau with deep soils, vast space for timber and livestock.\n" +
-          "- **Mulanje & Thyolo**: High rainfall, deep red clay-loam, excellent for fruit orchards and tea/coffee agroforestry.";
-      } else {
-        reply += "### 🌿 Country Exodus Principles\n" +
-          "1. **Secure Land & Perennial Water**: Establish water before building heavy structures.\n" +
-          "2. **Store Essential Grains & Seeds**: Maintain at least 12 months of staple food and heirloom seeds.\n" +
-          "3. **Learn Practical Hand Skills**: Broadforking, seed saving, solar drying, and masonry with local compressed earth blocks.";
+        const reply = response.text || "I recommend evaluating local water access and soil structure before establishing permanent beds.";
+        return res.json({ reply });
+      } catch (geminiError: any) {
+        console.warn('Gemini API call failed, falling back to regional knowledge engine:', geminiError?.message || geminiError);
+        // Fall through to the intelligent fallback knowledge engine below
       }
-
-      return res.json({ reply });
     }
+
+    // Intelligent fallback knowledge engine when GEMINI_API_KEY is not configured or unavailable
+    const lower = message.toLowerCase();
+    let reply = "I am your Outpost Living Advisor. Here is guidance based on regional sanctuary principles:\n\n";
+
+    if (lower.includes('water') || lower.includes('well') || lower.includes('borehole') || lower.includes('rain')) {
+      reply += "### 💧 Water Security in Malawi\n" +
+        "- **Perennial Streams & Springs**: Priority #1 when scouting land in districts like Dedza, Mulanje, or Zomba. Look for year-round gravity flow.\n" +
+        "- **Borehole Depth**: In central plateaus (Lilongwe, Kasungu), water tables average 25-40m. Solar submerged pumps (DC 24V/48V) are ideal.\n" +
+        "- **Rain Catchment**: A 100sqm iron roof in Malawi can catch over 80,000 liters during the Nov-Mar rainy season. Install 5,000L tanks with leaf strainers.";
+    } else if (lower.includes('soil') || lower.includes('crop') || lower.includes('maize') || lower.includes('potato') || lower.includes('farm') || lower.includes('plant')) {
+      reply += "### 🌱 Soil & Crop Management in Malawi\n" +
+        "- **Highland Zones (Dedza, Mzimba, Zomba)**: Cool climate ideal for Irish potatoes (*Mbatata zizungu*), beans (*Nyemba*), macadamia, and stone fruits.\n" +
+        "- **Soil Building**: Heavy red *Katondo* latosols benefit immensely from deep mulching with vetiver grass, compost, and biochar without inverting subsoil.\n" +
+        "- **Intercropping**: Plant maize (*Chimanga*) together with nitrogen-fixing beans (*Chimbamba*) and pumpkin ground cover (*Nkhwani*) to lock in soil moisture.";
+    } else if (lower.includes('solar') || lower.includes('power') || lower.includes('battery') || lower.includes('electricity')) {
+      reply += "### ☀️ Off-Grid Solar Power in Malawi\n" +
+        "- **Sunlight Potential**: Malawi averages 7.5 to 9 peak sun hours daily, ranking among the world's best solar resources.\n" +
+        "- **Recommended Setup**: 1.5kW to 3kW Solar Array paired with a 24V or 48V 100Ah LiFePO4 battery bank and a 3kVA Pure Sine Wave Inverter.\n" +
+        "- **Priority Loads**: DC submersible borehole pump, efficient DC chest freezer, LED security lighting, and seed dehydration fans.";
+    } else if (lower.includes('land') || lower.includes('district') || lower.includes('dedza') || lower.includes('mzimba') || lower.includes('mulanje') || lower.includes('zomba')) {
+      reply += "### 📍 Regional Land Scouting in Malawi\n" +
+        "- **Dedza & Ntcheu**: Cool climate, 1,400m - 1,800m altitude, high rainfall, rich volcanic-origin loam. Prime for seed production and potatoes.\n" +
+        "- **Mzimba & Viphya**: High plateau with deep soils, vast space for timber agroforestry, livestock, and grains.\n" +
+        "- **Mulanje & Thyolo**: High precipitation, deep red clay-loam, excellent for perennial gravity water, fruit orchards, and tea/coffee agroforestry.";
+    } else if (lower.includes('law') || lower.includes('customary') || lower.includes('chief') || lower.includes('mfumu') || lower.includes('title')) {
+      reply += "### 📜 Customary Land Protocols in Malawi\n" +
+        "1. **Village Headman (*Mfumu ya Mudzi*)**: Present customary introduction (*Chikhalidwe*) and define boundaries (*Malire*).\n" +
+        "2. **Group Village Headman (GVH) & Traditional Authority (TA)**: Validate that the parcel has no existing family disputes.\n" +
+        "3. **Village Land Committee (VLC)**: Register the land under the Customary Land Act of 2016 for Customary Estate Certificate conversion.";
+    } else {
+      reply += "### 🌿 Country Exodus Principles\n" +
+        "1. **Secure Land & Perennial Water**: Establish gravity water or borehole before building heavy structures.\n" +
+        "2. **Store Essential Grains & Seeds**: Maintain at least 12 months of staple food and heirloom seeds (*Chimanga cha Makolo*).\n" +
+        "3. **Learn Practical Hand Skills**: Broadforking, seed saving, solar food drying (*Mfutso*), and compressed earth block masonry.";
+    }
+
+    return res.json({ reply });
   } catch (error: any) {
     console.error('AI Advisor Error:', error);
     res.status(500).json({ error: 'Failed to generate advice. Please try again.' });

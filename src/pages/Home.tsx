@@ -2,25 +2,17 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Sun, CloudRain, Thermometer, Wind, Compass, MapPin, Calculator, 
-  CheckCircle2, Circle, Sprout, Leaf, ArrowRight, Share2, Sparkles, 
-  BookOpen, Clock, Activity, ShieldCheck, RefreshCw, Layers, HardDrive, 
-  Search, ChevronRight, Zap, Droplets, ExternalLink, BookmarkCheck, Play,
-  Check, FileText, Mountain, Utensils, Calendar, Award, AlertTriangle, Globe, 
-  Waves, Battery, Sliders, HeartPulse, ArrowUpRight, Hammer, TreePine, 
-  SlidersHorizontal, CheckSquare, Eye
+  CheckCircle2, Sprout, ArrowRight, Share2, Sparkles, 
+  BookOpen, Droplets, Calendar, Hammer, 
+  SlidersHorizontal, Search, Check, ChevronRight, Zap, ShieldCheck
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { DEVOTIONAL_QUOTES } from '@/data/content';
 import { useAuth } from '@/contexts/AuthContext';
-import { SoilStrataBlueprint } from '@/components/home/SoilStrataBlueprint';
-import { HomesteadHeroArtwork } from '@/components/home/HomesteadHeroArtwork';
-import { DUMMY_SCOUT_GEOJSON } from '@/data/scoutGeoJSON';
-import { REGIONS_LIST, HOMESTEAD_SKILLS } from '@/data/skillsAndSeasons';
 import { COUNTRY_IMAGES } from '@/assets/images';
-import { SeasonalAlmanacBar } from '@/components/common/SeasonalAlmanacBar';
-import { WhyCountryLivingFeaturette } from '@/components/home/WhyCountryLivingFeaturette';
-import { getStoredTrackerData, saveStoredTrackerData } from '@/lib/offlineStorage';
+import { getStoredTrackerData } from '@/lib/offlineStorage';
 import { cn } from '@/lib/utils';
+import { HomesteadAdvisorModal } from '@/components/advisor/HomesteadAdvisorModal';
 
 // Regional Weather & Telemetry Datasets for Malawi Operations
 const REGIONAL_WEATHER_DATA: { [key: string]: {
@@ -31,8 +23,6 @@ const REGIONAL_WEATHER_DATA: { [key: string]: {
   humidity: string;
   wind: string;
   solarIrradiance: string;
-  soilTemp: string;
-  rainForecast: string;
   groundwaterDepth: string;
   primaryCrops: string[];
   soilType: string;
@@ -46,12 +36,10 @@ const REGIONAL_WEATHER_DATA: { [key: string]: {
     humidity: '64%',
     wind: '14 km/h ESE',
     solarIrradiance: '5.8 kWh/m²',
-    soilTemp: '18°C',
-    rainForecast: '15% (Dry Window)',
     groundwaterDepth: '15 - 35m',
     primaryCrops: ['Irish Potatoes', 'Apples & Peaches', 'Soybeans', 'Temperate Veggies'],
     soilType: 'Katondo Ferruginous Clay-Loam (pH 5.8 - 6.4)',
-    advice: 'Optimal temperature window for Katondo trench composting and ridge (misozi) building before rain onset.'
+    advice: 'Optimal temperature window for Katondo trench composting and ridge building before rain onset.'
   },
   'Lilongwe': {
     name: 'Lilongwe Central Plain',
@@ -61,8 +49,6 @@ const REGIONAL_WEATHER_DATA: { [key: string]: {
     humidity: '50%',
     wind: '10 km/h SE',
     solarIrradiance: '6.5 kWh/m²',
-    soilTemp: '22°C',
-    rainForecast: '5% (Clear)',
     groundwaterDepth: '25 - 45m',
     primaryCrops: ['Maize', 'Groundnuts', 'Sunflower', 'Cowpeas'],
     soilType: 'Sandy Clay Loam (pH 6.0 - 6.5)',
@@ -72,12 +58,10 @@ const REGIONAL_WEATHER_DATA: { [key: string]: {
     name: 'Zomba Plateau & Basin',
     elevation: '1,400m - 2,087m',
     temp: '23°C',
-    condition: 'Humid Breeze & Plateau Mist',
+    condition: 'Plateau Mist & Perennial Springs',
     humidity: '72%',
     wind: '16 km/h NE',
     solarIrradiance: '5.9 kWh/m²',
-    soilTemp: '19°C',
-    rainForecast: '30% (Chiperoni Mist)',
     groundwaterDepth: '10 - 25m',
     primaryCrops: ['Macadamia', 'Arabica Coffee', 'Citrus', 'Perennial Herbs'],
     soilType: 'Humic Latosols (pH 5.4 - 6.0)',
@@ -91,8 +75,6 @@ const REGIONAL_WEATHER_DATA: { [key: string]: {
     humidity: '48%',
     wind: '12 km/h S',
     solarIrradiance: '6.8 kWh/m²',
-    soilTemp: '21°C',
-    rainForecast: '0% (Peak Solar)',
     groundwaterDepth: '18 - 40m',
     primaryCrops: ['Hass Avocados', 'Bananas', 'Beans', 'Pine / Cedar Timber'],
     soilType: 'Deep Red Sandy Loam (pH 5.6 - 6.2)',
@@ -106,8 +88,6 @@ const REGIONAL_WEATHER_DATA: { [key: string]: {
     humidity: '58%',
     wind: '8 km/h E',
     solarIrradiance: '7.1 kWh/m²',
-    soilTemp: '26°C',
-    rainForecast: '0% (Dry)',
     groundwaterDepth: '6 - 18m (Shallow Aquifer)',
     primaryCrops: ['Mangoes', 'Papaya', 'Rice', 'Cassava & Sugarcane'],
     soilType: 'Alluvial Loams & Dambo Clays (pH 6.5 - 7.2)',
@@ -119,116 +99,60 @@ export default function Home() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  // Active quick console tab: 'districts' | 'sizer' | 'seasons' | 'advisor'
+  const [activeTab, setActiveTab] = useState<'districts' | 'sizer' | 'seasons' | 'advisor'>('districts');
+  
   // Selected District for Live Weather & Micro-Climate Telemetry
   const [selectedDistrict, setSelectedDistrict] = useState<string>(user?.district || 'Dedza');
   const currentWeather = REGIONAL_WEATHER_DATA[selectedDistrict] || REGIONAL_WEATHER_DATA['Dedza'];
 
   // Devotional state
-  const [devotional, setDevotional] = useState(DEVOTIONAL_QUOTES[0]);
+  const [devotionalIndex, setDevotionalIndex] = useState(0);
+  const devotional = DEVOTIONAL_QUOTES[devotionalIndex % DEVOTIONAL_QUOTES.length];
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
-  // Tracker Progress State (Pushed to bottom of page)
-  const [trackerSteps, setTrackerSteps] = useState<any[]>([]);
-  const [completedCount, setCompletedCount] = useState<number>(0);
-  const [totalCount, setTotalCount] = useState<number>(9);
-  const [nextTask, setNextTask] = useState<{ stepId: string; subtaskId: string; label: string; stepTitle: string } | null>(null);
+  // AI Advisor Modal trigger
+  const [isAdvisorModalOpen, setIsAdvisorModalOpen] = useState(false);
 
   // Rapid Sizing Tool State (Interactive Solar Water Calculator)
   const [calcDepth, setCalcDepth] = useState<number>(35); // meters
   const [calcDemand, setCalcDemand] = useState<number>(3000); // L/day
 
-  // Active Agro-Zone Card Tab
-  const [activeZoneTab, setActiveZoneTab] = useState<string>('Dedza');
+  // Tracker Progress State
+  const [completedCount, setCompletedCount] = useState<number>(0);
+  const [totalCount, setTotalCount] = useState<number>(9);
 
-  // Load Tracker & Saved Specs
+  // Search input state for fast jump
+  const [searchQuery, setSearchQuery] = useState('');
+
   useEffect(() => {
-    // Quote calculation
+    // Quote calculation by day of year
     const dayOfYear = Math.floor((new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
-    setDevotional(DEVOTIONAL_QUOTES[dayOfYear % DEVOTIONAL_QUOTES.length]);
+    setDevotionalIndex(dayOfYear % DEVOTIONAL_QUOTES.length);
 
     // Read real exodus tracker progress
     try {
       const parsed = getStoredTrackerData();
       if (parsed && Array.isArray(parsed)) {
-        setTrackerSteps(parsed);
-        
         let done = 0;
         let total = 0;
-        let foundNext: any = null;
-
         parsed.forEach((step: any) => {
           step.subtasks?.forEach((sub: any) => {
             total++;
-            if (sub.completed) {
-              done++;
-            } else if (!foundNext) {
-              foundNext = {
-                stepId: step.id,
-                subtaskId: sub.id,
-                label: sub.label,
-                stepTitle: step.title
-              };
-            }
+            if (sub.completed) done++;
           });
         });
-
         setCompletedCount(done);
         setTotalCount(total || 9);
-        setNextTask(foundNext);
       }
     } catch (e) {
-      console.warn('Could not read exodus tracker state:', e);
+      console.warn('Could not read tracker data:', e);
     }
   }, []);
 
-  // Toggle subtask directly in Exodus Ledger
-  const handleToggleSubtask = (stepId: string, subtaskId: string) => {
-    if (trackerSteps.length === 0) return;
-
-    const updatedSteps = trackerSteps.map((step: any) => {
-      if (step.id === stepId) {
-        return {
-          ...step,
-          subtasks: step.subtasks.map((sub: any) => 
-            sub.id === subtaskId ? { ...sub, completed: !sub.completed } : sub
-          )
-        };
-      }
-      return step;
-    });
-
-    setTrackerSteps(updatedSteps);
-    saveStoredTrackerData(updatedSteps);
-
-    // Recalculate
-    let done = 0;
-    let total = 0;
-    let foundNext: any = null;
-
-    updatedSteps.forEach((step: any) => {
-      step.subtasks?.forEach((sub: any) => {
-        total++;
-        if (sub.completed) {
-          done++;
-        } else if (!foundNext) {
-          foundNext = {
-            stepId: step.id,
-            subtaskId: sub.id,
-            label: sub.label,
-            stepTitle: step.title
-          };
-        }
-      });
-    });
-
-    setCompletedCount(done);
-    setTotalCount(total || 9);
-    setNextTask(foundNext);
-
-    setToastMessage('Exodus Ledger milestone updated!');
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 2500);
+  const handleNextDevotional = () => {
+    setDevotionalIndex(prev => prev + 1);
   };
 
   const shareDevotional = () => {
@@ -240,15 +164,38 @@ export default function Home() {
         url: window.location.href,
       }).catch(() => {
         navigator.clipboard.writeText(text);
-        setToastMessage('Copied devotional quote to clipboard');
+        setToastMessage('Copied reflection to clipboard');
         setShowToast(true);
-        setTimeout(() => setShowToast(false), 3000);
+        setTimeout(() => setShowToast(false), 2500);
       });
     } else {
       navigator.clipboard.writeText(text);
-      setToastMessage('Copied devotional quote to clipboard');
+      setToastMessage('Copied reflection to clipboard');
       setShowToast(true);
-      setTimeout(() => setShowToast(false), 3000);
+      setTimeout(() => setShowToast(false), 2500);
+    }
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+    const q = searchQuery.toLowerCase();
+    if (q.includes('map') || q.includes('gps') || q.includes('scout')) {
+      navigate('/scout-map');
+    } else if (q.includes('where') || q.includes('district') || q.includes('land')) {
+      navigate('/where');
+    } else if (q.includes('crop') || q.includes('soil') || q.includes('maize') || q.includes('plant')) {
+      navigate('/what');
+    } else if (q.includes('season') || q.includes('almanac') || q.includes('rain') || q.includes('calendar')) {
+      navigate('/seasons');
+    } else if (q.includes('calc') || q.includes('solar') || q.includes('borehole') || q.includes('pump') || q.includes('water')) {
+      navigate('/calculators');
+    } else if (q.includes('skill') || q.includes('compost') || q.includes('build')) {
+      navigate('/skills');
+    } else if (q.includes('guide') || q.includes('how') || q.includes('customary') || q.includes('tracker')) {
+      navigate('/how');
+    } else {
+      setIsAdvisorModalOpen(true);
     }
   };
 
@@ -269,8 +216,41 @@ export default function Home() {
 
   const progressPct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
+  // Detect current season in Malawi
+  const currentMonth = new Date().getMonth() + 1; // 1-12
+  const seasonInfo = useMemo(() => {
+    if (currentMonth >= 11 || currentMonth <= 3) {
+      return {
+        name: 'Nyengo ya Mvula (Rainy Season)',
+        window: 'November to March',
+        status: 'Active Rainy Season',
+        color: 'text-emerald-400',
+        bg: 'bg-emerald-500/10 border-emerald-500/30',
+        focus: 'Active growth phase. Manage weed pressure, apply fermented Katondo manure tea, and monitor contour bunds (misozi) for water pooling.'
+      };
+    } else if (currentMonth >= 4 && currentMonth <= 8) {
+      return {
+        name: 'Nyengo ya Mpepo (Cool Dry Season)',
+        window: 'April to August',
+        status: 'Harvest & Winter Dambo Planting',
+        color: 'text-sky-400',
+        bg: 'bg-sky-500/10 border-sky-500/30',
+        focus: 'Staple grain drying, granary aeration, and planting off-season winter vegetables in wetlands (madambo) or with drip irrigation.'
+      };
+    } else {
+      return {
+        name: 'Nyengo ya Chirimwe (Hot Dry Season)',
+        window: 'September to October',
+        status: 'Land Preparation & Swale Digging',
+        color: 'text-amber-400',
+        bg: 'bg-amber-500/10 border-amber-500/30',
+        focus: 'Peak season for digging compost trenches, establishing tree planting pits, reinforcing borehole solar arrays, and gathering mulch.'
+      };
+    }
+  }, [currentMonth]);
+
   return (
-    <div className="flex flex-col gap-14 sm:gap-18 md:gap-22 pb-24 text-slate-100 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-4">
+    <div className="flex flex-col gap-10 sm:gap-14 md:gap-16 pb-20 text-slate-100 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2">
       
       {/* Toast Notification */}
       <AnimatePresence>
@@ -288,741 +268,707 @@ export default function Home() {
       </AnimatePresence>
 
       {/* ========================================================================= */}
-      {/* 1. HERO BANNER: RICH TYPOGRAPHY "OUTPOST: COUNTRY LIVING"                 */}
+      {/* 1. CALM, HIGH-IMPACT HERO & FAST DIRECTORY SEARCH                          */}
       {/* ========================================================================= */}
       <section 
-        className="relative rounded-[2.5rem] p-6 sm:p-10 md:p-14 lg:p-16 border border-amber-500/30 shadow-[0_30px_70px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col gap-8 bg-cover bg-center"
+        className="relative rounded-3xl p-6 sm:p-10 md:p-12 border border-white/10 shadow-2xl overflow-hidden flex flex-col gap-6 bg-cover bg-center"
         style={{
-          backgroundImage: `linear-gradient(to bottom, rgba(4, 29, 16, 0.90), rgba(7, 24, 14, 0.85), rgba(4, 29, 16, 0.96)), url(${COUNTRY_IMAGES.mountainVista})`
+          backgroundImage: `linear-gradient(to bottom, rgba(4, 25, 14, 0.94), rgba(6, 20, 12, 0.92), rgba(4, 25, 14, 0.98)), url(${COUNTRY_IMAGES.mountainVista})`
         }}
       >
-        {/* Ambient Top Glow Orbs */}
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/2 -left-24 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col gap-6 max-w-4xl">
+        <div className="relative z-10 flex flex-col gap-5 max-w-3xl">
           
           {/* Header Badges */}
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-            <span className="bg-gradient-to-r from-amber-500/20 to-amber-600/20 text-amber-300 border border-amber-500/40 px-3.5 py-1 rounded-full font-mono font-black uppercase text-[10px] sm:text-xs tracking-[0.2em] flex items-center gap-2 shadow-xs">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="bg-amber-500/20 text-amber-300 border border-amber-500/40 px-3 py-1 rounded-full font-mono font-black uppercase text-[11px] tracking-widest flex items-center gap-1.5">
               <Compass size={13} className="text-amber-400" />
-              <span>MALAWI SANCTUARY & SELF-RELIANCE MATRIX</span>
+              <span>MALAWI HOMESTEAD & SANCTUARY TOOLKIT</span>
             </span>
-            <span className="bg-emerald-950/80 text-emerald-300 border border-emerald-500/30 px-3 py-1 rounded-full font-mono font-bold uppercase text-[10px] tracking-wider flex items-center gap-1.5">
+            <span className="bg-emerald-950/80 text-emerald-300 border border-emerald-500/30 px-2.5 py-1 rounded-full font-mono font-bold uppercase text-[11px] tracking-wider flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               <span>28 Districts • Offline GIS Ready</span>
             </span>
           </div>
 
-          {/* Bold Editorial Title: OUTPOST: COUNTRY LIVING */}
-          <div className="flex flex-col gap-2">
-            <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-[#FAF8F5] leading-[0.98] tracking-tight">
-              <span className="bg-gradient-to-r from-amber-100 via-amber-200 to-amber-400 bg-clip-text text-transparent drop-shadow-sm">
-                OUTPOST:
-              </span> <br />
-              <span className="italic font-normal bg-gradient-to-r from-amber-200 via-amber-300 to-amber-500 bg-clip-text text-transparent">
-                COUNTRY LIVING.
-              </span>
+          {/* Clean Editorial Title */}
+          <div className="flex flex-col gap-1.5">
+            <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl font-black text-[#FAF8F5] leading-tight tracking-tight">
+              OUTPOST: <span className="italic font-normal text-amber-300">COUNTRY LIVING</span>
             </h1>
-            <p className="text-amber-300/90 font-mono text-xs sm:text-sm font-bold uppercase tracking-[0.25em] mt-1">
-              Field Blueprint for Highland Sanctuary, Agro-Forestry & City Exodus
+            <p className="text-emerald-100/90 text-sm sm:text-base md:text-lg font-medium leading-relaxed mt-1">
+              A comprehensive field manual & engineering toolkit for scouting customary land, dimensioning off-grid solar & water, planting Katondo food forests, and building self-reliant homesteads across Malawi.
             </p>
           </div>
 
-          {/* Subtitle & Value Proposition */}
-          <p className="text-emerald-100/90 text-sm sm:text-base md:text-lg font-medium max-w-3xl leading-relaxed">
-            Your definitive field manual for scouting customary & freehold land, sizing solar boreholes, engineering gravity-fed water cisterns, cultivating Katondo food forests, and executing your rural homestead in Malawi.
-          </p>
+          {/* Fast Search & Command Bar */}
+          <form onSubmit={handleSearchSubmit} className="relative w-full max-w-xl mt-1">
+            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search districts, solar tools, crops, or skills..."
+              className="w-full pl-11 pr-24 py-3 sm:py-3.5 rounded-2xl bg-slate-950/80 border border-white/20 text-sm text-white placeholder-slate-400 font-sans focus:outline-none focus:ring-2 focus:ring-amber-400 transition-all shadow-inner"
+            />
+            <button
+              type="submit"
+              className="absolute right-2 top-1/2 -translate-y-1/2 px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono font-bold text-xs uppercase tracking-wider transition-colors"
+            >
+              Explore
+            </button>
+          </form>
 
-          {/* Primary Action Buttons */}
-          <div className="flex flex-wrap items-center gap-3.5 pt-2">
+          {/* Quick-Jump Shortcut Pills */}
+          <div className="flex flex-wrap items-center gap-2 pt-1">
             <Link
               to="/where"
-              className="bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black px-6 py-3.5 sm:py-4 rounded-2xl text-xs sm:text-sm uppercase tracking-wider transition-all shadow-[0_10px_30px_rgba(245,158,11,0.4)] flex items-center gap-2.5 active:scale-95 border border-amber-300 font-mono group"
+              className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-mono font-medium transition-colors flex items-center gap-1.5"
             >
-              <Compass size={18} className="text-slate-950 group-hover:rotate-45 transition-transform" />
-              <span>Launch Land Scouting</span>
-              <ArrowRight size={16} className="text-slate-950 group-hover:translate-x-1 transition-transform" />
+              <MapPin size={12} className="text-amber-400" />
+              <span>28 Districts</span>
             </Link>
-
             <Link
-              to="/skills"
-              className="bg-white/10 hover:bg-white/15 text-amber-200 hover:text-white border border-amber-500/40 hover:border-amber-400 font-bold px-5 py-3.5 sm:py-4 rounded-2xl text-xs sm:text-sm uppercase tracking-wider transition-all backdrop-blur-md flex items-center gap-2 active:scale-95 font-mono"
+              to="/scout-map"
+              className="px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 hover:text-white border border-amber-500/30 text-xs font-mono font-bold transition-colors flex items-center gap-1.5"
             >
-              <Hammer size={16} className="text-amber-400" />
-              <span>25 Masterclass Skills</span>
+              <Compass size={12} className="text-amber-400" />
+              <span>GPS Scout Map</span>
             </Link>
-
             <Link
               to="/calculators"
-              className="bg-white/5 hover:bg-white/10 text-slate-200 hover:text-white border border-white/15 hover:border-amber-400/40 font-bold px-5 py-3.5 sm:py-4 rounded-2xl text-xs sm:text-sm uppercase tracking-wider transition-all backdrop-blur-md flex items-center gap-2 active:scale-95 font-mono"
+              className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-mono font-medium transition-colors flex items-center gap-1.5"
             >
-              <Calculator size={16} className="text-sky-400" />
-              <span>Off-Grid Sizing Math</span>
+              <Calculator size={12} className="text-sky-400" />
+              <span>Solar & Water Sizers</span>
             </Link>
-          </div>
-        </div>
-
-        {/* Live District Telemetry Quick Bar */}
-        <div className="relative z-10 pt-5 border-t border-amber-500/25 flex flex-col gap-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-2 text-xs font-mono font-black uppercase tracking-wider text-amber-300">
-              <Sun size={15} className="text-amber-400" />
-              <span>District Micro-Climate & Solar Telemetry:</span>
-            </div>
-
-            {/* District Quick Selector Buttons */}
-            <div className="flex flex-wrap items-center gap-1.5">
-              {Object.keys(REGIONAL_WEATHER_DATA).map((dist) => (
-                <button
-                  key={dist}
-                  type="button"
-                  onClick={() => setSelectedDistrict(dist)}
-                  className={cn(
-                    "px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer border active:scale-95",
-                    selectedDistrict === dist
-                      ? "bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-black border-amber-200 shadow-[0_4px_15px_rgba(245,158,11,0.4)]"
-                      : "bg-slate-950/70 text-slate-300 hover:text-white hover:bg-slate-900 border-white/[0.08] backdrop-blur-md"
-                  )}
-                >
-                  {dist}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Metrics Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
-            <div className="bg-slate-950/85 backdrop-blur-xl p-3.5 rounded-2xl border border-white/[0.08] flex flex-col shadow-lg">
-              <span className="text-[9px] font-mono uppercase text-slate-400 flex items-center gap-1">
-                <Thermometer size={11} className="text-amber-400" /> Ambient Temp
-              </span>
-              <span className="text-base font-bold font-mono text-slate-100 mt-1">{currentWeather.temp}</span>
-              <span className="text-[10px] text-slate-400 font-mono truncate">{currentWeather.condition}</span>
-            </div>
-
-            <div className="bg-slate-950/85 backdrop-blur-xl p-3.5 rounded-2xl border border-white/[0.08] flex flex-col shadow-lg">
-              <span className="text-[9px] font-mono uppercase text-slate-400 flex items-center gap-1">
-                <Sun size={11} className="text-amber-400" /> Solar Irradiance
-              </span>
-              <span className="text-base font-bold font-mono text-amber-300 mt-1">{currentWeather.solarIrradiance}</span>
-              <span className="text-[10px] text-emerald-400 font-mono">High Yield Hours</span>
-            </div>
-
-            <div className="bg-slate-950/85 backdrop-blur-xl p-3.5 rounded-2xl border border-white/[0.08] flex flex-col shadow-lg">
-              <span className="text-[9px] font-mono uppercase text-slate-400 flex items-center gap-1">
-                <Droplets size={11} className="text-sky-400" /> Water Table
-              </span>
-              <span className="text-base font-bold font-mono text-sky-300 mt-1">{currentWeather.groundwaterDepth}</span>
-              <span className="text-[10px] text-slate-400 font-mono">Borehole Feasible</span>
-            </div>
-
-            <div className="bg-slate-950/85 backdrop-blur-xl p-3.5 rounded-2xl border border-white/[0.08] flex flex-col shadow-lg">
-              <span className="text-[9px] font-mono uppercase text-slate-400 flex items-center gap-1">
-                <Wind size={11} className="text-slate-300" /> Soil & Wind
-              </span>
-              <span className="text-base font-bold font-mono text-slate-100 mt-1">{currentWeather.soilTemp} Soil</span>
-              <span className="text-[10px] text-slate-400 font-mono truncate">{currentWeather.wind}</span>
-            </div>
-
-            <div className="bg-slate-950/85 backdrop-blur-xl p-3.5 rounded-2xl border border-amber-500/20 flex flex-col col-span-2 shadow-lg">
-              <span className="text-[9px] font-mono uppercase text-amber-400 font-bold flex items-center gap-1">
-                <Sprout size={11} className="text-amber-400" /> Agronomic Window
-              </span>
-              <p className="text-[11px] text-emerald-100/90 font-medium line-clamp-2 mt-1 leading-relaxed">
-                {currentWeather.advice}
-              </p>
-            </div>
-          </div>
-        </div>
-
-      </section>
-
-      {/* ========================================================================= */}
-      {/* 2. REPLACED MALAWI HIGHLAND HOMESTEAD ARCHETYPE: HIGH-RES PHOTOGRAPHY     */}
-      {/* ========================================================================= */}
-      <section className="flex flex-col gap-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-amber-500/20 pb-3">
-          <div className="flex flex-col">
-            <span className="text-[10px] font-mono font-black uppercase tracking-[0.25em] text-amber-400">
-              01 • VISUAL ARCHETYPE BLUEPRINT
-            </span>
-            <h2 className="serif text-2xl sm:text-3xl font-extrabold text-[#FAF8F5] tracking-tight">
-              Malawi Highland Homestead Archetype
-            </h2>
-          </div>
-          <span className="text-xs font-mono text-emerald-300/80">
-            Interactive Map Markers
-          </span>
-        </div>
-
-        {/* High-Resolution Photo Card with Hotspot Overlays */}
-        <HomesteadHeroArtwork />
-      </section>
-
-      {/* ========================================================================= */}
-      {/* 3. SHOWCASE BEST FEATURES OF OUTPOST (5 INTERACTIVE TILES)                */}
-      {/* ========================================================================= */}
-      <section className="flex flex-col gap-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-amber-500/20 pb-3">
-          <div className="flex flex-col">
-            <span className="text-[10px] font-mono font-black uppercase tracking-[0.25em] text-amber-400">
-              02 • CORE APP CAPABILITIES
-            </span>
-            <h2 className="serif text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#FAF8F5] tracking-tight">
-              Explore Best Features & Field Modules
-            </h2>
-          </div>
-          <span className="hidden sm:inline text-xs font-mono text-emerald-300/80">
-            Select any module to launch
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          
-          {/* Pathway 1: Land Scouting Matrix */}
-          <Link
-            to="/where"
-            className="group relative h-88 rounded-3xl overflow-hidden border border-amber-500/30 hover:border-amber-400 shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-end p-5 text-white"
-          >
-            <div 
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-              style={{ backgroundImage: `url(${COUNTRY_IMAGES.mountainVista})` }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#041d10] via-[#041d10]/80 to-transparent" />
-            <div className="relative z-10 flex flex-col gap-2">
-              <span className="bg-amber-500 text-slate-950 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-black uppercase tracking-wider w-fit">
-                Land & Map Guide
-              </span>
-              <h3 className="serif text-2xl font-bold text-white group-hover:text-amber-300 transition-colors">
-                Land Scouting Matrix
-              </h3>
-              <p className="text-xs text-emerald-100/90 line-clamp-2 leading-relaxed">
-                Explore all 28 Malawi districts, fertile highlands, river basins, and customary village land acquisition steps.
-              </p>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-amber-300 mt-2 font-mono group-hover:translate-x-1.5 transition-transform">
-                <span>Explore Land Guide</span> <ArrowRight size={14} />
-              </div>
-            </div>
-          </Link>
-
-          {/* Pathway 2: Permaculture & 25 Masterclass Skills */}
-          <Link
-            to="/skills"
-            className="group relative h-88 rounded-3xl overflow-hidden border border-amber-500/30 hover:border-amber-400 shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-end p-5 text-white"
-          >
-            <div 
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-              style={{ backgroundImage: `url(${COUNTRY_IMAGES.permacultureGarden})` }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#041d10] via-[#041d10]/80 to-transparent" />
-            <div className="relative z-10 flex flex-col gap-2">
-              <span className="bg-emerald-500 text-slate-950 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-black uppercase tracking-wider w-fit">
-                Agrarian Mastery
-              </span>
-              <h3 className="serif text-2xl font-bold text-white group-hover:text-amber-300 transition-colors">
-                25 Field Skills Manual
-              </h3>
-              <p className="text-xs text-emerald-100/90 line-clamp-2 leading-relaxed">
-                Bio-intensive raised beds, Katondo compost, vetiver swales, heirloom seed saving, and multi-story orchard guilds.
-              </p>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-amber-300 mt-2 font-mono group-hover:translate-x-1.5 transition-transform">
-                <span>Explore 25 Skills</span> <ArrowRight size={14} />
-              </div>
-            </div>
-          </Link>
-
-          {/* Pathway 3: Off-Grid Engineering Sizers */}
-          <Link
-            to="/calculators"
-            className="group relative h-88 rounded-3xl overflow-hidden border border-amber-500/30 hover:border-amber-400 shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-end p-5 text-white"
-          >
-            <div 
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-              style={{ backgroundImage: `url(${COUNTRY_IMAGES.offgridHomesteadWater})` }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#041d10] via-[#041d10]/80 to-transparent" />
-            <div className="relative z-10 flex flex-col gap-2">
-              <span className="bg-sky-500 text-slate-950 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-black uppercase tracking-wider w-fit">
-                Engineering Sizers
-              </span>
-              <h3 className="serif text-2xl font-bold text-white group-hover:text-amber-300 transition-colors">
-                Off-Grid Calculators
-              </h3>
-              <p className="text-xs text-emerald-100/90 line-clamp-2 leading-relaxed">
-                Solar borehole pumping math, gravity water catchment, battery banks, and brick masonry shelter blueprints.
-              </p>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-amber-300 mt-2 font-mono group-hover:translate-x-1.5 transition-transform">
-                <span>Run Sizing Math</span> <ArrowRight size={14} />
-              </div>
-            </div>
-          </Link>
-
-          {/* Pathway 4: Seasonal Agronomic Almanac */}
-          <Link
-            to="/seasons"
-            className="group relative h-88 rounded-3xl overflow-hidden border border-amber-500/30 hover:border-amber-400 shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-end p-5 text-white"
-          >
-            <div 
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-              style={{ backgroundImage: `url(${COUNTRY_IMAGES.homesteadHighlands})` }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#041d10] via-[#041d10]/80 to-transparent" />
-            <div className="relative z-10 flex flex-col gap-2">
-              <span className="bg-amber-400 text-slate-950 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-black uppercase tracking-wider w-fit">
-                Agronomic Radar
-              </span>
-              <h3 className="serif text-2xl font-bold text-white group-hover:text-amber-300 transition-colors">
-                Seasonal Almanac
-              </h3>
-              <p className="text-xs text-emerald-100/90 line-clamp-2 leading-relaxed">
-                Rainfall onset calendars, Dimba winter cultivation cycles, frost protection alerts, and regional planting schedules.
-              </p>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-amber-300 mt-2 font-mono group-hover:translate-x-1.5 transition-transform">
-                <span>Open Almanac</span> <ArrowRight size={14} />
-              </div>
-            </div>
-          </Link>
-
-        </div>
-      </section>
-
-      {/* ========================================================================= */}
-      {/* 4. MAP SCOUT DIRECT LAUNCHPAD                                             */}
-      {/* ========================================================================= */}
-      <section className="relative overflow-hidden rounded-3xl border border-amber-500/30 bg-gradient-to-br from-[#061e12] via-[#04140b] to-[#020a06] p-6 sm:p-8 shadow-2xl">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
-        
-        <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-          <div className="max-w-2xl flex flex-col gap-2">
-            <div className="flex items-center gap-2">
-              <span className="bg-amber-500/20 text-amber-300 border border-amber-500/40 px-3 py-1 rounded-full text-[10px] font-mono font-black uppercase tracking-wider flex items-center gap-1.5">
-                <Compass size={12} className="text-amber-400" /> Full GIS Land Matrix
-              </span>
-              <span className="text-[11px] font-mono text-emerald-400 font-bold">
-                28 Districts • Satellite & Topo
-              </span>
-            </div>
-
-            <h2 className="serif text-2xl sm:text-3xl font-extrabold text-[#FAF8F5] tracking-tight">
-              Tactical Malawi Land & Parcel Scout
-            </h2>
-
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
-              Inspect shallow groundwater aquifers, high-altitude frost envelopes, Katondo soil strata, and surveyed customary acreage with decluttering layer switches and instant GPS telemetry.
-            </p>
-
-            {/* Quick Regional Filters */}
-            <div className="flex flex-wrap items-center gap-2 pt-2">
-              <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Fast Jumps:</span>
-              <Link
-                to="/where?region=northern-plateau"
-                className="px-3 py-1 rounded-xl bg-slate-900/90 hover:bg-amber-500/20 text-slate-200 hover:text-amber-300 text-xs font-mono font-bold border border-white/10 transition-colors"
-              >
-                Nyika & Viphya (North)
-              </Link>
-              <Link
-                to="/where?region=central-highlands"
-                className="px-3 py-1 rounded-xl bg-slate-900/90 hover:bg-amber-500/20 text-slate-200 hover:text-amber-300 text-xs font-mono font-bold border border-white/10 transition-colors"
-              >
-                Dedza & Linthipe (Central)
-              </Link>
-              <Link
-                to="/where?region=southern-massifs"
-                className="px-3 py-1 rounded-xl bg-slate-900/90 hover:bg-amber-500/20 text-slate-200 hover:text-amber-300 text-xs font-mono font-bold border border-white/10 transition-colors"
-              >
-                Mulanje & Shire (South)
-              </Link>
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-center lg:items-end gap-3 w-full lg:w-auto shrink-0">
-            <Link
-              to="/where"
-              className="bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black px-6 py-4 rounded-2xl text-xs sm:text-sm uppercase tracking-wider transition-all shadow-[0_10px_25px_rgba(245,158,11,0.35)] flex items-center justify-center gap-2.5 active:scale-95 border border-amber-300 font-mono group text-center"
-            >
-              <Compass size={18} className="text-slate-950 group-hover:rotate-45 transition-transform" />
-              <span>Open Main Map Scout</span>
-              <ArrowRight size={16} className="text-slate-950 group-hover:translate-x-1 transition-transform" />
-            </Link>
-
-            <span className="text-[10px] font-mono text-center lg:text-right text-slate-400">
-              Interactive Leaflet GIS with Custom Layer Toggles
-            </span>
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================================= */}
-      {/* 5. HOMESTEAD OPERATIONS CONSOLE (INTERACTIVE SIZERS & AGRO-ZONES)         */}
-      {/* ========================================================================= */}
-      <section className="flex flex-col gap-6">
-        <div className="flex flex-col gap-1 border-b border-amber-500/20 pb-3">
-          <span className="text-[10px] font-mono font-black uppercase tracking-[0.25em] text-amber-400">
-            03 • TACTICAL HOMESTEAD TOOLS
-          </span>
-          <h2 className="serif text-2xl sm:text-3xl font-extrabold text-[#FAF8F5] tracking-tight">
-            Live Engineering & Agronomic Console
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          
-          {/* TOOL 1: Interactive Solar Borehole Rapid Sizer (lg:col-span-6) */}
-          <div className="lg:col-span-6 rounded-3xl p-6 sm:p-8 border border-white/10 bg-[#06180E]/90 backdrop-blur-xl flex flex-col justify-between gap-6 shadow-2xl relative overflow-hidden">
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-black uppercase tracking-widest text-amber-400">
-                  RAPID SIZING MATH
-                </span>
-                <span className="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase">
-                  OFFLINE READY
-                </span>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 shrink-0">
-                  <Zap size={22} />
-                </div>
-                <div>
-                  <h3 className="serif text-xl sm:text-2xl font-bold text-white">
-                    Solar Borehole Sizing Tool
-                  </h3>
-                  <p className="text-xs text-slate-400 font-sans">
-                    Estimate required PV wattage and pump output instantly
-                  </p>
-                </div>
-              </div>
-
-              {/* Dynamic Sizing Sliders / Toggles */}
-              <div className="bg-slate-950/70 p-4 rounded-2xl border border-white/10 flex flex-col gap-4">
-                
-                {/* Depth Toggle */}
-                <div className="flex flex-col gap-1.5">
-                  <div className="flex justify-between items-center text-xs font-mono">
-                    <span className="text-slate-300">Borehole Depth (Head):</span>
-                    <span className="text-amber-300 font-bold">{calcDepth} meters</span>
-                  </div>
-                  <div className="grid grid-cols-4 gap-1.5 bg-slate-900/90 p-1 rounded-xl border border-white/5">
-                    {[20, 35, 50, 70].map((d) => (
-                      <button
-                        key={d}
-                        type="button"
-                        onClick={() => setCalcDepth(d)}
-                        className={cn(
-                          "py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer",
-                          calcDepth === d
-                            ? "bg-amber-500 text-slate-950 font-black shadow-sm"
-                            : "text-slate-400 hover:text-white hover:bg-white/5"
-                        )}
-                      >
-                        {d}m
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Daily Water Demand Toggle */}
-                <div className="flex flex-col gap-1.5">
-                  <div className="flex justify-between items-center text-xs font-mono">
-                    <span className="text-slate-300">Daily Water Demand:</span>
-                    <span className="text-sky-300 font-bold">{calcDemand.toLocaleString()} L/day</span>
-                  </div>
-                  <div className="grid grid-cols-4 gap-1.5 bg-slate-900/90 p-1 rounded-xl border border-white/5">
-                    {[1500, 3000, 5000, 10000].map((liters) => (
-                      <button
-                        key={liters}
-                        type="button"
-                        onClick={() => setCalcDemand(liters)}
-                        className={cn(
-                          "py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer",
-                          calcDemand === liters
-                            ? "bg-sky-500 text-slate-950 font-black shadow-sm"
-                            : "text-slate-400 hover:text-white hover:bg-white/5"
-                        )}
-                      >
-                        {liters >= 1000 ? `${liters / 1000}kL` : `${liters}L`}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Result Specs Box */}
-                <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/10">
-                  <div className="bg-slate-900/80 p-2.5 rounded-xl border border-white/5 flex flex-col">
-                    <span className="text-[9px] font-mono uppercase text-slate-400">Total Array</span>
-                    <span className="text-sm font-black font-mono text-amber-300 mt-0.5">{calculatedWattage}W</span>
-                    <span className="text-[9px] font-mono text-slate-400">Solar Power</span>
-                  </div>
-
-                  <div className="bg-slate-900/80 p-2.5 rounded-xl border border-white/5 flex flex-col">
-                    <span className="text-[9px] font-mono uppercase text-slate-400">200W Panels</span>
-                    <span className="text-sm font-black font-mono text-emerald-300 mt-0.5">{calculatedPanels} Panels</span>
-                    <span className="text-[9px] font-mono text-slate-400">Mono-PERC</span>
-                  </div>
-
-                  <div className="bg-slate-900/80 p-2.5 rounded-xl border border-white/5 flex flex-col">
-                    <span className="text-[9px] font-mono uppercase text-slate-400">Flow Rate</span>
-                    <span className="text-sm font-black font-mono text-sky-300 mt-0.5">{calculatedPumpRate} L/min</span>
-                    <span className="text-[9px] font-mono text-slate-400">5hr Solar Day</span>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-            <Link
-              to="/calculators"
-              className="bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 font-bold px-5 py-3 rounded-2xl text-xs uppercase tracking-wider transition-all flex items-center justify-between border border-amber-500/40 font-mono"
-            >
-              <span>Open Full Engineering Calculators</span>
-              <ArrowRight size={16} className="text-amber-400" />
-            </Link>
-          </div>
-
-          {/* TOOL 2: Agro-Climatic Zone Comparison Explorer (lg:col-span-6) */}
-          <div className="lg:col-span-6 rounded-3xl p-6 sm:p-8 border border-white/10 bg-[#06180E]/90 backdrop-blur-xl flex flex-col justify-between gap-6 shadow-2xl relative overflow-hidden">
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-black uppercase tracking-widest text-emerald-400">
-                  MALAWI AGRO-ECOLOGY
-                </span>
-                <span className="bg-emerald-950 text-emerald-300 border border-emerald-500/30 px-2.5 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase">
-                  DCCMS & FAO
-                </span>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shrink-0">
-                  <Layers size={22} />
-                </div>
-                <div>
-                  <h3 className="serif text-xl sm:text-2xl font-bold text-white">
-                    Regional Agro-Climatic Matrix
-                  </h3>
-                  <p className="text-xs text-slate-400 font-sans">
-                    Pedology, companion crops, and elevation benchmarks
-                  </p>
-                </div>
-              </div>
-
-              {/* Zone Tab Selector */}
-              <div className="flex flex-wrap gap-1.5 bg-slate-950/70 p-1.5 rounded-2xl border border-white/10">
-                {Object.keys(REGIONAL_WEATHER_DATA).map((distKey) => (
-                  <button
-                    key={distKey}
-                    type="button"
-                    onClick={() => setActiveZoneTab(distKey)}
-                    className={cn(
-                      "px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer",
-                      activeZoneTab === distKey
-                        ? "bg-emerald-600 text-white font-black shadow-sm"
-                        : "text-slate-400 hover:text-white hover:bg-white/5"
-                    )}
-                  >
-                    {distKey}
-                  </button>
-                ))}
-              </div>
-
-              {/* Active Zone Detail Card */}
-              {(() => {
-                const zone = REGIONAL_WEATHER_DATA[activeZoneTab];
-                return (
-                  <div className="bg-slate-950/70 p-4 rounded-2xl border border-white/10 flex flex-col gap-3">
-                    <div className="flex justify-between items-center text-xs font-mono border-b border-white/10 pb-2">
-                      <span className="text-amber-300 font-black">{zone.name}</span>
-                      <span className="text-slate-300">{zone.elevation}</span>
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                      <span className="text-[10px] font-mono uppercase text-slate-400">Soil Classification:</span>
-                      <span className="text-xs font-bold text-emerald-300 font-mono">{zone.soilType}</span>
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                      <span className="text-[10px] font-mono uppercase text-slate-400">Recommended Staple & Orchard Guilds:</span>
-                      <div className="flex flex-wrap gap-1.5 mt-1">
-                        {zone.primaryCrops.map((crop, idx) => (
-                          <span 
-                            key={idx}
-                            className="bg-emerald-950/60 text-emerald-200 border border-emerald-500/30 px-2.5 py-0.5 rounded-lg text-[10px] font-mono font-semibold"
-                          >
-                            {crop}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })()}
-            </div>
-
-            <Link
-              to="/where"
-              className="bg-emerald-900/40 hover:bg-emerald-900/60 text-emerald-200 font-bold px-5 py-3 rounded-2xl text-xs uppercase tracking-wider transition-all flex items-center justify-between border border-emerald-500/40 font-mono"
-            >
-              <span>Explore Full Land Matrix & Customary Acts</span>
-              <ArrowRight size={16} className="text-emerald-400" />
-            </Link>
-          </div>
-
-        </div>
-      </section>
-
-      {/* ========================================================================= */}
-      {/* 6. SIGNATURE KATONDO SOIL & WATER STRATA BLUEPRINT                        */}
-      {/* ========================================================================= */}
-      <section className="pt-2">
-        <SoilStrataBlueprint />
-      </section>
-
-      {/* ========================================================================= */}
-      {/* 7. WHY COUNTRY LIVING: THEOLOGICAL & PRACTICAL PHILOSOPHY                 */}
-      {/* ========================================================================= */}
-      <section className="pt-2">
-        <WhyCountryLivingFeaturette />
-      </section>
-
-      {/* ========================================================================= */}
-      {/* 8. PUSHED TO LAST: THE EXODUS RELOCATION LEDGER (9-PHASE ROADMAP)         */}
-      {/* ========================================================================= */}
-      <section className="flex flex-col gap-6 pt-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-amber-500/30 pb-4">
-          <div className="flex flex-col gap-1">
-            <span className="text-[10px] font-mono font-black uppercase tracking-[0.25em] text-amber-400">
-              04 • FINAL MILESTONE ROADMAP
-            </span>
-            <h2 className="serif text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#FAF8F5] tracking-tight">
-              The Exodus Relocation Ledger
-            </h2>
-            <p className="text-xs sm:text-sm text-emerald-100/80 font-sans">
-              9-phase structured checklist from city exit to permanent highland sanctuary establishment
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 px-3.5 py-1.5 rounded-full">
-              {completedCount} of {totalCount} Steps ({progressPct}%)
-            </span>
-            <Link
-              to="/tracker"
-              className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 transition-all shadow-md active:scale-95"
-            >
-              <span>Full Ledger</span>
-              <ChevronRight size={14} />
-            </Link>
-          </div>
-        </div>
-
-        {/* Big Progress Bar */}
-        <div className="h-4 w-full bg-slate-950 rounded-full overflow-hidden p-[2px] border border-amber-500/30 shadow-inner">
-          <div 
-            className="h-full bg-gradient-to-r from-emerald-500 via-amber-400 to-amber-500 rounded-full transition-all duration-700 shadow-md" 
-            style={{ width: `${progressPct}%` }}
-          />
-        </div>
-
-        {/* Milestone Steps Interactive Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {trackerSteps.slice(0, 3).map((step: any, idx: number) => (
-            <div 
-              key={step.id || idx}
-              className="bg-slate-950/80 backdrop-blur-xl border border-white/10 rounded-2xl p-5 flex flex-col justify-between gap-4 shadow-xl"
-            >
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-amber-400 font-bold uppercase tracking-wider">Phase 0{idx + 1}</span>
-                  <span className="text-slate-400 text-[10px]">
-                    {step.subtasks?.filter((s: any) => s.completed).length || 0} / {step.subtasks?.length || 0}
-                  </span>
-                </div>
-                <h4 className="serif text-base font-bold text-white">
-                  {step.title}
-                </h4>
-                <p className="text-xs text-slate-300 line-clamp-2">
-                  {step.description}
-                </p>
-
-                {/* Subtask Checkboxes */}
-                <div className="flex flex-col gap-2 pt-2 border-t border-white/10">
-                  {step.subtasks?.slice(0, 3).map((sub: any) => (
-                    <button
-                      key={sub.id}
-                      type="button"
-                      onClick={() => handleToggleSubtask(step.id, sub.id)}
-                      className={cn(
-                        "text-left text-xs p-2 rounded-xl border transition-all flex items-start gap-2.5 cursor-pointer font-sans",
-                        sub.completed
-                          ? "bg-emerald-950/40 text-emerald-300 border-emerald-500/30 line-through opacity-80"
-                          : "bg-slate-900 text-slate-200 border-white/5 hover:border-amber-400/40"
-                      )}
-                    >
-                      <div className={cn(
-                        "w-4 h-4 rounded-md border flex items-center justify-center shrink-0 mt-0.5 transition-colors",
-                        sub.completed 
-                          ? "bg-emerald-500 border-emerald-400 text-slate-950" 
-                          : "border-slate-500 bg-slate-800"
-                      )}>
-                        {sub.completed && <Check size={12} className="stroke-[3]" />}
-                      </div>
-                      <span className="line-clamp-2 leading-tight">{sub.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <Link
-                to="/tracker"
-                className="text-xs font-mono text-amber-300 hover:text-amber-200 flex items-center gap-1 mt-1 underline underline-offset-4"
-              >
-                <span>View all subtasks in Phase 0{idx + 1}</span>
-                <ChevronRight size={12} />
-              </Link>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ========================================================================= */}
-      {/* 9. DAILY DEVOTIONAL & SPIRITUAL SANCTUARY ANCHOR                          */}
-      {/* ========================================================================= */}
-      <section 
-        className="relative text-white p-6 sm:p-8 md:p-10 rounded-[2.25rem] border border-amber-500/30 shadow-[0_20px_50px_rgba(0,0,0,0.4)] flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden bg-cover bg-center"
-        style={{
-          backgroundImage: `linear-gradient(to right, rgba(4, 29, 16, 0.96), rgba(7, 24, 14, 0.90), rgba(4, 29, 16, 0.96)), url(${COUNTRY_IMAGES.homesteadHighlands})`
-        }}
-      >
-        <div className="flex flex-col gap-3 text-left w-full relative z-10">
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-2">
-              <BookOpen size={16} className="text-amber-400 shrink-0" />
-              <span className="text-amber-300 uppercase tracking-[0.2em] text-[10px] font-mono font-black bg-amber-500/20 border border-amber-500/30 px-3.5 py-1 rounded-full">
-                Daily Devotional • {devotional.theme}
-              </span>
-            </div>
-
-            <button 
+            <button
               type="button"
-              onClick={shareDevotional}
-              className="p-2.5 rounded-xl bg-black/50 hover:bg-amber-500 hover:text-slate-950 text-amber-300 transition-all border border-amber-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 cursor-pointer shrink-0"
-              title="Share Devotional Counsel"
+              onClick={() => setIsAdvisorModalOpen(true)}
+              className="px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 hover:text-white border border-emerald-500/30 text-xs font-mono font-bold transition-colors flex items-center gap-1.5 cursor-pointer"
             >
-              <Share2 size={16} />
+              <Sparkles size={12} className="text-emerald-400" />
+              <span>Ask AI Advisor</span>
             </button>
           </div>
 
-          {/* Elegant Callout Block */}
-          <div className="border-l-3 border-amber-400 bg-amber-500/10 p-5 rounded-r-2xl mt-1">
-            <blockquote className="font-serif text-base sm:text-lg italic text-amber-100/95 leading-relaxed">
-              "{devotional.text}"
-            </blockquote>
-            <cite className="not-italic text-xs uppercase tracking-wider text-amber-400/90 mt-3 font-mono font-black block">
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 2. THE 4 PRIMARY FUNCTIONAL GATEWAYS (High-Clarity Core Pillars)           */}
+      {/* ========================================================================= */}
+      <section className="flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col">
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-white">
+              Homestead Gateways
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400 font-sans">
+              Choose your focus area to access maps, field manuals, and engineering calculators
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+          
+          {/* Pillar 1: Land Scouting */}
+          <div className="bg-slate-900/70 backdrop-blur-xl border border-white/10 hover:border-amber-400/50 rounded-2xl p-5 sm:p-6 flex flex-col justify-between gap-5 transition-all group shadow-lg">
+            <div className="flex flex-col gap-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <MapPin size={20} />
+              </div>
+              <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-amber-400">
+                Land & Geography
+              </span>
+              <h3 className="font-serif text-xl font-bold text-white group-hover:text-amber-300 transition-colors">
+                District & Land Scouting
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                Evaluate all 28 Malawi districts by water depth, rainfall, soil fertility, and customary land acquisition procedures under Village Headmen.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-2 pt-2 border-t border-white/10 font-mono text-xs">
+              <Link
+                to="/where"
+                className="flex items-center justify-between py-1.5 text-amber-300 hover:text-white font-bold group/link"
+              >
+                <span>District Comparison Matrix</span>
+                <ChevronRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
+              </Link>
+              <Link
+                to="/scout-map"
+                className="flex items-center justify-between py-1.5 text-slate-400 hover:text-amber-200"
+              >
+                <span>Interactive GPS Map</span>
+                <Compass size={14} className="text-amber-400" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Pillar 2: Crops & Seasons */}
+          <div className="bg-slate-900/70 backdrop-blur-xl border border-white/10 hover:border-emerald-400/50 rounded-2xl p-5 sm:p-6 flex flex-col justify-between gap-5 transition-all group shadow-lg">
+            <div className="flex flex-col gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Sprout size={20} />
+              </div>
+              <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-emerald-400">
+                Agronomy & Seasons
+              </span>
+              <h3 className="font-serif text-xl font-bold text-white group-hover:text-emerald-300 transition-colors">
+                Crops & Seasonal Almanac
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                Malawian staple crops (*Chimanga*, *Nyemba*, *Mbatata*), permaculture companion guilds, and month-by-month planting cycles.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-2 pt-2 border-t border-white/10 font-mono text-xs">
+              <Link
+                to="/seasons"
+                className="flex items-center justify-between py-1.5 text-emerald-300 hover:text-white font-bold group/link"
+              >
+                <span>12-Month Farming Almanac</span>
+                <ChevronRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
+              </Link>
+              <Link
+                to="/what"
+                className="flex items-center justify-between py-1.5 text-slate-400 hover:text-emerald-200"
+              >
+                <span>Malawi Crop & Soil Guide</span>
+                <Calendar size={14} className="text-emerald-400" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Pillar 3: Calculators */}
+          <div className="bg-slate-900/70 backdrop-blur-xl border border-white/10 hover:border-sky-400/50 rounded-2xl p-5 sm:p-6 flex flex-col justify-between gap-5 transition-all group shadow-lg">
+            <div className="flex flex-col gap-3">
+              <div className="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/30 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Calculator size={20} />
+              </div>
+              <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-sky-400">
+                Engineering Tools
+              </span>
+              <h3 className="font-serif text-xl font-bold text-white group-hover:text-sky-300 transition-colors">
+                Off-Grid Calculators
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                Accurate mathematical dimensioning for solar borehole pumps, rooftop rainwater cisterns, solar battery banks, and stabilized bricks.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-2 pt-2 border-t border-white/10 font-mono text-xs">
+              <Link
+                to="/calculators"
+                className="flex items-center justify-between py-1.5 text-sky-300 hover:text-white font-bold group/link"
+              >
+                <span>Solar Borehole & Water Sizers</span>
+                <ChevronRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
+              </Link>
+              <Link
+                to="/calculators"
+                className="flex items-center justify-between py-1.5 text-slate-400 hover:text-sky-200"
+              >
+                <span>Battery & Brick Calculators</span>
+                <Zap size={14} className="text-sky-400" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Pillar 4: Practical Skills */}
+          <div className="bg-slate-900/70 backdrop-blur-xl border border-white/10 hover:border-amber-400/50 rounded-2xl p-5 sm:p-6 flex flex-col justify-between gap-5 transition-all group shadow-lg">
+            <div className="flex flex-col gap-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Hammer size={20} />
+              </div>
+              <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-amber-400">
+                Field Manuals
+              </span>
+              <h3 className="font-serif text-xl font-bold text-white group-hover:text-amber-300 transition-colors">
+                25 Homestead Skills
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                Hands-on guides for trench composting, gravity plumbing, food dehydration, seed saving, and executing the 3-stage relocation roadmap.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-2 pt-2 border-t border-white/10 font-mono text-xs">
+              <Link
+                to="/skills"
+                className="flex items-center justify-between py-1.5 text-amber-300 hover:text-white font-bold group/link"
+              >
+                <span>25 Practical Masterclasses</span>
+                <ChevronRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
+              </Link>
+              <Link
+                to="/how"
+                className="flex items-center justify-between py-1.5 text-slate-400 hover:text-amber-200"
+              >
+                <span>3-Stage Relocation Guide</span>
+                <BookOpen size={14} className="text-amber-400" />
+              </Link>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 3. INTERACTIVE QUICK-START CONSOLE (Tabbed, focused, zero clutter)         */}
+      {/* ========================================================================= */}
+      <section className="bg-slate-950/80 border border-white/10 rounded-3xl p-5 sm:p-7 shadow-2xl flex flex-col gap-6">
+        
+        {/* Console Header & Tabs */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+          <div className="flex items-center gap-2">
+            <SlidersHorizontal size={18} className="text-amber-400" />
+            <span className="font-serif text-lg sm:text-xl font-bold text-white">
+              Quick Homestead Console
+            </span>
+          </div>
+
+          <div className="flex items-center gap-1.5 p-1 bg-slate-900 rounded-xl border border-white/10 overflow-x-auto custom-scrollbar">
+            <button
+              onClick={() => setActiveTab('districts')}
+              className={cn(
+                "px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all whitespace-nowrap cursor-pointer",
+                activeTab === 'districts'
+                  ? "bg-amber-500 text-slate-950 shadow-sm font-black"
+                  : "text-slate-300 hover:text-white hover:bg-white/5"
+              )}
+            >
+              🗺️ Districts
+            </button>
+            <button
+              onClick={() => setActiveTab('sizer')}
+              className={cn(
+                "px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all whitespace-nowrap cursor-pointer",
+                activeTab === 'sizer'
+                  ? "bg-amber-500 text-slate-950 shadow-sm font-black"
+                  : "text-slate-300 hover:text-white hover:bg-white/5"
+              )}
+            >
+              ⚡ Borehole Sizer
+            </button>
+            <button
+              onClick={() => setActiveTab('seasons')}
+              className={cn(
+                "px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all whitespace-nowrap cursor-pointer",
+                activeTab === 'seasons'
+                  ? "bg-amber-500 text-slate-950 shadow-sm font-black"
+                  : "text-slate-300 hover:text-white hover:bg-white/5"
+              )}
+            >
+              📅 Season Guide
+            </button>
+            <button
+              onClick={() => setActiveTab('advisor')}
+              className={cn(
+                "px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all whitespace-nowrap cursor-pointer",
+                activeTab === 'advisor'
+                  ? "bg-amber-500 text-slate-950 shadow-sm font-black"
+                  : "text-slate-300 hover:text-white hover:bg-white/5"
+              )}
+            >
+              ✨ Ask AI
+            </button>
+          </div>
+        </div>
+
+        {/* TAB 1: DISTRICTS PREVIEW */}
+        {activeTab === 'districts' && (
+          <div className="flex flex-col gap-5">
+            {/* District Selector Pills */}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-mono text-slate-400 mr-1">Select District:</span>
+              {Object.keys(REGIONAL_WEATHER_DATA).map((distKey) => (
+                <button
+                  key={distKey}
+                  onClick={() => setSelectedDistrict(distKey)}
+                  className={cn(
+                    "px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer border",
+                    selectedDistrict === distKey
+                      ? "bg-amber-500/20 text-amber-300 border-amber-500/50 shadow-xs"
+                      : "bg-slate-900 text-slate-300 border-white/10 hover:border-white/20"
+                  )}
+                >
+                  {distKey}
+                </button>
+              ))}
+            </div>
+
+            {/* Selected District Telemetry Card */}
+            <div className="bg-slate-900/90 rounded-2xl p-5 border border-white/10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="flex flex-col gap-1">
+                <span className="text-[11px] font-mono text-slate-400">Location & Elevation</span>
+                <span className="font-serif text-lg font-bold text-white">{currentWeather.name}</span>
+                <span className="text-xs font-mono text-amber-300">{currentWeather.elevation}</span>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <span className="text-[11px] font-mono text-slate-400">Groundwater Depth</span>
+                <span className="font-serif text-lg font-bold text-emerald-400">{currentWeather.groundwaterDepth}</span>
+                <span className="text-xs font-mono text-slate-300">Aquifer Potential: High</span>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <span className="text-[11px] font-mono text-slate-400">Soil Character</span>
+                <span className="text-xs font-sans text-slate-200 font-medium leading-tight">{currentWeather.soilType}</span>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <span className="text-[11px] font-mono text-slate-400">Top Crops</span>
+                <span className="text-xs font-sans text-amber-200 font-medium leading-tight">
+                  {currentWeather.primaryCrops.join(', ')}
+                </span>
+              </div>
+            </div>
+
+            {/* Agronomic Advice Callout */}
+            <div className="bg-emerald-950/30 border border-emerald-500/30 p-4 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-start gap-2.5">
+                <Sprout size={16} className="text-emerald-400 shrink-0 mt-0.5" />
+                <p className="text-xs text-emerald-100 font-sans leading-relaxed">
+                  <strong className="text-emerald-300">Seasonal Advice:</strong> {currentWeather.advice}
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <Link
+                  to="/scout-map"
+                  className="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono text-xs font-bold transition-colors inline-flex items-center gap-1"
+                >
+                  <span>Scout on Map</span>
+                  <ArrowRight size={13} />
+                </Link>
+                <Link
+                  to="/where"
+                  className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 font-mono text-xs transition-colors"
+                >
+                  All 28 Districts
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 2: RAPID BOREHOLE SIZER */}
+        {activeTab === 'sizer' && (
+          <div className="flex flex-col gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              
+              {/* Sliders Box */}
+              <div className="flex flex-col gap-5 bg-slate-900/80 p-5 rounded-2xl border border-white/10">
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className="text-slate-300 font-bold">Borehole Depth (Meters):</span>
+                    <span className="text-amber-300 font-black text-sm">{calcDepth} m</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="10"
+                    max="100"
+                    step="5"
+                    value={calcDepth}
+                    onChange={(e) => setCalcDepth(Number(e.target.value))}
+                    className="w-full accent-amber-500 cursor-pointer"
+                  />
+                  <div className="flex justify-between text-[10px] font-mono text-slate-500">
+                    <span>10m (Dambo shallow)</span>
+                    <span>50m (Plateau avg)</span>
+                    <span>100m (Highland deep)</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className="text-slate-300 font-bold">Daily Water Demand (Liters):</span>
+                    <span className="text-emerald-300 font-black text-sm">{calcDemand.toLocaleString()} L/day</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="500"
+                    max="10000"
+                    step="500"
+                    value={calcDemand}
+                    onChange={(e) => setCalcDemand(Number(e.target.value))}
+                    className="w-full accent-emerald-500 cursor-pointer"
+                  />
+                  <div className="flex justify-between text-[10px] font-mono text-slate-500">
+                    <span>500L (Cottage)</span>
+                    <span>3,000L (Homestead)</span>
+                    <span>10,000L (Farm & Orchard)</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Instant Output Card */}
+              <div className="bg-gradient-to-br from-amber-500/10 via-slate-900 to-slate-900 p-5 rounded-2xl border border-amber-500/30 flex flex-col justify-between gap-4">
+                <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                  <div className="flex items-center gap-2">
+                    <Zap size={16} className="text-amber-400" />
+                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-white">
+                      Solar PV Dimensioning Result
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                    5 Peak Sun Hours
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-3 gap-3 text-center">
+                  <div className="bg-slate-950/60 p-3 rounded-xl border border-white/10">
+                    <span className="text-[10px] font-mono text-slate-400 block">Required Solar</span>
+                    <span className="font-mono text-lg sm:text-xl font-black text-amber-300">{calculatedWattage} W</span>
+                  </div>
+                  <div className="bg-slate-950/60 p-3 rounded-xl border border-white/10">
+                    <span className="text-[10px] font-mono text-slate-400 block">Panels (200W)</span>
+                    <span className="font-mono text-lg sm:text-xl font-black text-emerald-400">{calculatedPanels} pcs</span>
+                  </div>
+                  <div className="bg-slate-950/60 p-3 rounded-xl border border-white/10">
+                    <span className="text-[10px] font-mono text-slate-400 block">Flow Rate</span>
+                    <span className="font-mono text-lg sm:text-xl font-black text-sky-400">{calculatedPumpRate} L/m</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-2">
+                  <span className="text-xs font-sans text-slate-300">
+                    Need cistern sizing or battery math?
+                  </span>
+                  <Link
+                    to="/calculators"
+                    className="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono text-xs font-bold transition-colors inline-flex items-center gap-1"
+                  >
+                    <span>Full Calculators Suite</span>
+                    <ArrowRight size={13} />
+                  </Link>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        )}
+
+        {/* TAB 3: SEASON GUIDE */}
+        {activeTab === 'seasons' && (
+          <div className="flex flex-col gap-4">
+            <div className={cn("p-5 rounded-2xl border flex flex-col gap-3", seasonInfo.bg)}>
+              <div className="flex items-center justify-between">
+                <span className={cn("text-xs font-mono font-bold uppercase tracking-widest", seasonInfo.color)}>
+                  {seasonInfo.status}
+                </span>
+                <span className="text-xs font-mono text-slate-400 bg-black/40 px-2.5 py-1 rounded-full border border-white/10">
+                  {seasonInfo.window}
+                </span>
+              </div>
+
+              <h3 className="font-serif text-2xl font-bold text-white">
+                {seasonInfo.name}
+              </h3>
+
+              <p className="text-sm text-slate-200 leading-relaxed font-sans">
+                {seasonInfo.focus}
+              </p>
+            </div>
+
+            <div className="flex items-center justify-between p-4 bg-slate-900 rounded-xl border border-white/10">
+              <span className="text-xs font-mono text-slate-300">
+                Explore month-by-month Malawi planting dates, rainfall statistics, and harvesting windows:
+              </span>
+              <Link
+                to="/seasons"
+                className="px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono text-xs font-bold transition-colors inline-flex items-center gap-1 shrink-0"
+              >
+                <span>View Full Almanac</span>
+                <ChevronRight size={14} />
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 4: ASK AI ADVISOR */}
+        {activeTab === 'advisor' && (
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-mono text-slate-400">
+                Select a high-value question or ask anything about country living in Malawi:
+              </span>
+              <button
+                onClick={() => setIsAdvisorModalOpen(true)}
+                className="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm"
+              >
+                <Sparkles size={14} />
+                <span>Open Chat Assistant</span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-sans text-xs">
+              <button
+                onClick={() => setIsAdvisorModalOpen(true)}
+                className="p-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-left border border-white/10 hover:border-amber-400/50 transition-all group flex items-start justify-between gap-3 cursor-pointer"
+              >
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-white group-hover:text-amber-300">
+                    Which districts have perennial spring water?
+                  </span>
+                  <span className="text-slate-400 text-[11px]">
+                    Guidance on high-elevation gravity flow springs in Dedza, Zomba, and Rumphi.
+                  </span>
+                </div>
+                <ChevronRight size={14} className="text-slate-400 group-hover:text-amber-400 shrink-0 mt-0.5" />
+              </button>
+
+              <button
+                onClick={() => setIsAdvisorModalOpen(true)}
+                className="p-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-left border border-white/10 hover:border-amber-400/50 transition-all group flex items-start justify-between gap-3 cursor-pointer"
+              >
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-white group-hover:text-amber-300">
+                    How do I register customary land in Malawi?
+                  </span>
+                  <span className="text-slate-400 text-[11px]">
+                    Steps under the Customary Land Act with Village Land Committees.
+                  </span>
+                </div>
+                <ChevronRight size={14} className="text-slate-400 group-hover:text-amber-400 shrink-0 mt-0.5" />
+              </button>
+
+              <button
+                onClick={() => setIsAdvisorModalOpen(true)}
+                className="p-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-left border border-white/10 hover:border-amber-400/50 transition-all group flex items-start justify-between gap-3 cursor-pointer"
+              >
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-white group-hover:text-amber-300">
+                    How to amend red Katondo clay without chemicals?
+                  </span>
+                  <span className="text-slate-400 text-[11px]">
+                    Compost trenches, biochar, vetiver grass, and green manure crops.
+                  </span>
+                </div>
+                <ChevronRight size={14} className="text-slate-400 group-hover:text-amber-400 shrink-0 mt-0.5" />
+              </button>
+
+              <button
+                onClick={() => setIsAdvisorModalOpen(true)}
+                className="p-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-left border border-white/10 hover:border-amber-400/50 transition-all group flex items-start justify-between gap-3 cursor-pointer"
+              >
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-white group-hover:text-amber-300">
+                    How many solar panels for a 50m borehole pump?
+                  </span>
+                  <span className="text-slate-400 text-[11px]">
+                    Submersible DC pump sizing, inverter selection, and head losses.
+                  </span>
+                </div>
+                <ChevronRight size={14} className="text-slate-400 group-hover:text-amber-400 shrink-0 mt-0.5" />
+              </button>
+            </div>
+          </div>
+        )}
+
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 4. HOMESTEAD TRANSITION PROGRESS BAR (Clean & Compact)                     */}
+      {/* ========================================================================= */}
+      <section className="bg-slate-950/60 border border-white/10 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 size={16} className="text-emerald-400" />
+            <span className="font-serif text-base font-bold text-white">
+              Exodus Readiness Ledger
+            </span>
+          </div>
+          <p className="text-xs text-slate-400 font-sans">
+            Track your 9-phase transition from urban dependence to rural self-reliance
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <div className="flex flex-col text-right">
+            <span className="text-xs font-mono font-bold text-amber-300">
+              {completedCount} / {totalCount} Steps ({progressPct}%)
+            </span>
+            <div className="w-36 sm:w-44 h-2 bg-slate-800 rounded-full overflow-hidden mt-1 border border-white/10">
+              <div 
+                className="h-full bg-gradient-to-r from-emerald-500 to-amber-400 rounded-full transition-all duration-500"
+                style={{ width: `${progressPct}%` }}
+              />
+            </div>
+          </div>
+
+          <Link
+            to="/tracker"
+            className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 hover:text-white border border-white/10 text-xs font-mono font-bold transition-colors inline-flex items-center gap-1"
+          >
+            <span>Open Checklist</span>
+            <ChevronRight size={14} />
+          </Link>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 5. SPIRITUAL SANCTUARY & DEVOTIONAL REFLECTION CARD                        */}
+      {/* ========================================================================= */}
+      <section 
+        className="relative text-white p-6 sm:p-8 rounded-3xl border border-amber-500/25 shadow-xl flex flex-col gap-4 overflow-hidden bg-cover bg-center"
+        style={{
+          backgroundImage: `linear-gradient(to right, rgba(4, 25, 14, 0.96), rgba(6, 20, 12, 0.90), rgba(4, 25, 14, 0.96)), url(${COUNTRY_IMAGES.homesteadHighlands})`
+        }}
+      >
+        <div className="relative z-10 flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <BookOpen size={16} className="text-amber-400" />
+              <span className="text-amber-300 uppercase tracking-widest text-[10px] font-mono font-bold bg-amber-500/20 border border-amber-500/30 px-3 py-0.5 rounded-full">
+                Daily Sanctuary Devotional • {devotional.theme}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button 
+                type="button"
+                onClick={handleNextDevotional}
+                className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-mono transition-colors cursor-pointer"
+                title="Next Daily Reflection"
+              >
+                Next Quote
+              </button>
+              <button 
+                type="button"
+                onClick={shareDevotional}
+                className="p-1.5 rounded-lg bg-white/5 hover:bg-amber-500 hover:text-slate-950 text-amber-300 transition-colors border border-amber-500/30 cursor-pointer"
+                title="Share Reflection"
+              >
+                <Share2 size={14} />
+              </button>
+            </div>
+          </div>
+
+          <blockquote className="font-serif text-base sm:text-lg italic text-amber-100/95 leading-relaxed pl-3 border-l-2 border-amber-400 my-1">
+            "{devotional.text}"
+          </blockquote>
+
+          <div className="flex items-center justify-between pt-1">
+            <cite className="not-italic text-xs font-mono text-amber-400/90 font-bold">
               — {devotional.source}
             </cite>
+            <Link
+              to="/vision"
+              className="text-xs font-mono text-emerald-300 hover:text-emerald-200 underline underline-offset-4"
+            >
+              Read Full Vision Blueprint →
+            </Link>
           </div>
         </div>
       </section>
+
+      {/* Embedded Advisor Modal Trigger */}
+      <HomesteadAdvisorModal
+        isOpen={isAdvisorModalOpen}
+        onClose={() => setIsAdvisorModalOpen(false)}
+      />
 
     </div>
   );

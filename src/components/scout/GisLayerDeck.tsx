@@ -24,6 +24,8 @@ export interface GisLayerDeckProps {
   setShowSoilPhLayer: (val: boolean) => void;
   showElevationLayer: boolean;
   setShowElevationLayer: (val: boolean) => void;
+  showContourLines?: boolean;
+  setShowContourLines?: (val: boolean) => void;
   showEscarpments: boolean;
   setShowEscarpments: (val: boolean) => void;
   showCatchmentBasins: boolean;
@@ -32,6 +34,8 @@ export interface GisLayerDeckProps {
   setShowRivers: (val: boolean) => void;
   showDistrictBoundaries: boolean;
   setShowDistrictBoundaries: (val: boolean) => void;
+  showCustomaryBoundaries?: boolean;
+  setShowCustomaryBoundaries?: (val: boolean) => void;
   showParcelBoundary: boolean;
   setShowParcelBoundary: (val: boolean) => void;
   // Presets
@@ -54,6 +58,8 @@ export function GisLayerDeck({
   setShowSoilPhLayer,
   showElevationLayer,
   setShowElevationLayer,
+  showContourLines,
+  setShowContourLines,
   showEscarpments,
   setShowEscarpments,
   showCatchmentBasins,
@@ -62,6 +68,8 @@ export function GisLayerDeck({
   setShowRivers,
   showDistrictBoundaries,
   setShowDistrictBoundaries,
+  showCustomaryBoundaries,
+  setShowCustomaryBoundaries,
   showParcelBoundary,
   setShowParcelBoundary,
   onApplyPreset,
@@ -71,9 +79,10 @@ export function GisLayerDeck({
   if (!isOpen) return null;
 
   const basemaps: { id: TileLayerType; label: string; desc: string; icon: string }[] = [
+    { id: 'dark', label: 'Dark GIS Vector', desc: 'CartoDB Dark Matter for maximum vector contrast', icon: '🌑' },
     { id: 'satellite', label: 'Satellite HD', desc: 'Detailed satellite aerial imagery', icon: '🛰️' },
-    { id: 'terrain', label: '3D Terrain', desc: 'Topographic hills, contours & elevation', icon: '🗺️' },
     { id: 'hybrid', label: 'Hybrid View', desc: 'Satellite with high-contrast boundaries & roads', icon: '📍' },
+    { id: 'terrain', label: '3D Terrain', desc: 'Topographic hills, contours & elevation', icon: '🗺️' },
     { id: 'standard', label: 'Clear Map', desc: 'Clean vector map showing towns and roads', icon: '🧭' },
     { id: 'offline-vector', label: 'Offline Vector', desc: '100% on-device map (works with no internet)', icon: '📶' },
   ];
@@ -153,17 +162,35 @@ export function GisLayerDeck({
     },
     {
       id: 'districts',
-      name: '28 District Boundaries',
-      desc: 'Official borders and Boma centers for all 28 districts across Malawi',
-      color: '#a855f7',
+      name: '28 District Boundaries (Cyan Glow)',
+      desc: 'High-contrast cyan glowing borders and Boma centers for all 28 districts',
+      color: '#06b6d4',
       icon: Compass,
       active: showDistrictBoundaries,
       toggle: () => setShowDistrictBoundaries(!showDistrictBoundaries)
     },
     {
+      id: 'customary',
+      name: 'Customary T/A Boundaries (Malire)',
+      desc: 'Dashed amber lines marking Traditional Authority customary custodianship',
+      color: '#f59e0b',
+      icon: ShieldCheck,
+      active: !!showCustomaryBoundaries,
+      toggle: () => setShowCustomaryBoundaries && setShowCustomaryBoundaries(!showCustomaryBoundaries)
+    },
+    {
+      id: 'contours',
+      name: 'Elevation Contours & Dambo Vectors',
+      desc: '10m–50m contour intervals distinguishing valley dambos vs frost-free highland ridges',
+      color: '#10b981',
+      icon: Mountain,
+      active: !!showContourLines,
+      toggle: () => setShowContourLines && setShowContourLines(!showContourLines)
+    },
+    {
       id: 'parcels',
-      name: 'Available Land Parcels',
-      desc: 'Surveyed homestead plots with water source notes and verified customary tenure',
+      name: 'Surveyed Agricultural Parcels',
+      desc: 'Emerald polygons with white borders, water status, and dynamic clustering',
       color: '#10b981',
       icon: MapPin,
       active: showParcelBoundary,

@@ -1,6 +1,7 @@
-import { Sprout, Users, Hammer, HeartPulse, CheckCircle2, Circle } from 'lucide-react';
+import { Sprout, Users, Hammer, HeartPulse, CheckCircle2, Circle, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { getStoredMasteredSkills, saveStoredMasteredSkills } from '@/lib/offlineStorage';
 
 const MASTERY_SKILLS = [
@@ -30,85 +31,98 @@ export default function How() {
   const toggleSkill = (id: string) => {
     setMasteredIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
   };
+  
   const skills = [
-    { title: 'Gardening', icon: Sprout, color: 'text-emerald-700', desc: 'Growing staple Chimanga, Chinangwa, legumes (Ntedza/Nzama), and leafy greens (Mpiru/Nkhwani).' },
-    { title: 'Preservation', icon: Hammer, color: 'text-emerald-700', desc: 'Solar drying of green relish into Mfutso, and Nkhokwe granary ash preservation.' },
-    { title: 'Handicrafts', icon: Users, color: 'text-emerald-700', desc: 'Skills for rural income: carpentry, tailoring, or digital remote work.' },
-    { title: 'Health', icon: HeartPulse, color: 'text-emerald-700', desc: 'Hydrotherapy and the use of local herbs like Galuwinki (Garlic), Aloe, and Moringa.' },
+    { title: 'Gardening & Soil Cultivation', icon: Sprout, path: '/what', desc: 'Growing staple Chimanga, Chinangwa, protein legumes (Ntedza/Nzama), and mineral-rich green relishes (Mpiru/Nkhwani).' },
+    { title: 'Food Preservation & Solar Drying', icon: Hammer, path: '/skills', desc: 'Solar drying of green vegetables into Mfutso, airtight seed saving, and Nkhokwe granary ash preservation.' },
+    { title: 'Rural Crafts & Homestead Trades', icon: Users, path: '/skills', desc: 'Self-sufficient trades for rural independence: carpentry, solar electrics, masonry, and remote digital productivity.' },
+    { title: 'Natural Health & Hydrotherapy', icon: HeartPulse, path: '/vision', desc: 'Hydrotherapy treatments and the application of natural local herbs like Galuwinki (Garlic), Aloe vera, and Moringa.' },
   ];
 
   return (
     <div className="px-6 md:px-12 py-10 max-w-6xl mx-auto flex flex-col gap-12">
-      <header className="flex flex-col gap-4 text-center items-center">
-        <h2 className="serif text-4xl md:text-5xl font-bold text-emerald-950">How to Thrive</h2>
-        <p className="text-slate-600 max-w-xl text-lg font-medium italic underline underline-offset-8 decoration-emerald-200">
+      <header className="flex flex-col gap-3 text-center items-center">
+        <span className="text-amber-400 text-[10px] font-mono font-black uppercase tracking-[0.2em] bg-amber-500/15 border border-amber-500/30 px-3.5 py-1 rounded-full">
+          Homestead Education & Mastery
+        </span>
+        <h2 className="serif text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#FAF8F5]">How to Thrive</h2>
+        <p className="text-emerald-100/80 max-w-xl text-base sm:text-lg font-medium italic underline underline-offset-8 decoration-amber-500/40">
           "The culture of the soil is the A, B, and C of the education which we should give."
         </p>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {skills.map((skill, i) => (
-          <div key={i} className="bg-white/40 backdrop-blur-md p-10 rounded-[3rem] flex flex-col gap-6 border border-white/60 shadow-xl card-hover group">
-            <div className="w-16 h-16 rounded-3xl bg-emerald-100 flex items-center justify-center text-emerald-700 group-hover:scale-110 transition-transform">
-              <skill.icon size={32} />
+          <div 
+            key={i} 
+            className="backdrop-blur-xl bg-slate-950/70 p-8 sm:p-10 rounded-[2.5rem] flex flex-col gap-5 border border-amber-500/25 shadow-[0_12px_40px_rgba(0,0,0,0.4)] card-hover group hover:border-amber-500/50 hover:bg-slate-950/90 transition-all duration-300"
+          >
+            <div className="w-14 h-14 rounded-2xl bg-emerald-950/80 border border-emerald-500/30 flex items-center justify-center text-amber-400 group-hover:scale-110 group-hover:border-amber-400/50 transition-all shadow-inner">
+              <skill.icon size={28} />
             </div>
             <div className="flex flex-col gap-2">
-              <h3 className="serif text-3xl font-bold text-emerald-950">{skill.title}</h3>
-              <p className="text-lg text-slate-600 font-medium leading-relaxed opacity-80">{skill.desc}</p>
+              <h3 className="serif text-2xl font-bold text-[#FAF8F5] group-hover:text-amber-200 transition-colors">{skill.title}</h3>
+              <p className="text-sm text-slate-300 font-medium leading-relaxed">{skill.desc}</p>
             </div>
-            <button className="mt-4 w-fit bg-white/60 hover:bg-white text-emerald-900 border border-white/80 px-8 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all shadow-md active:scale-95">
-              Explore Guide
-            </button>
+            <Link 
+              to={skill.path}
+              className="mt-auto w-fit bg-amber-500/20 hover:bg-amber-500 text-amber-300 hover:text-slate-950 border border-amber-500/30 px-5 py-2.5 rounded-xl text-xs font-mono font-black uppercase tracking-wider transition-all shadow-md flex items-center gap-2 cursor-pointer"
+            >
+              <span>Explore Guide</span>
+              <ArrowRight size={13} />
+            </Link>
           </div>
         ))}
       </div>
 
-      <section className="bg-white/40 backdrop-blur-md border border-white/60 p-8 md:p-12 rounded-[3rem] shadow-xl flex flex-col gap-10">
+      <section className="backdrop-blur-xl bg-slate-950/80 border border-amber-500/25 p-8 md:p-12 rounded-[3rem] shadow-[0_20px_60px_rgba(0,0,0,0.5)] flex flex-col gap-10">
         <div className="flex flex-col gap-2 items-center text-center">
-          <h3 className="serif text-3xl font-bold text-emerald-950 italic">Malawi Seasonal Guide</h3>
-          <p className="text-sm text-slate-500 font-medium">Practical stewardship aligned with the Malawian agricultural cycle.</p>
+          <span className="text-[10px] font-mono font-bold uppercase text-amber-300 tracking-widest">Agro-Ecological Seasons</span>
+          <h3 className="serif text-3xl md:text-4xl font-bold text-[#FAF8F5]">Malawi Seasonal Guide</h3>
+          <p className="text-sm text-emerald-100/70 font-medium max-w-lg">Practical stewardship aligned with the cyclical rainfall and farming seasons of Malawi.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <SeasonCard 
-            season="Rainy (Nov-Mar)" 
-            color="text-emerald-600" 
+            season="Rainy Season (Mvula: Nov-Mar)" 
+            color="text-emerald-400" 
             items={['Chimanga (Maize)', 'Nyemba (Beans)', 'Nandolo (Pigeon Pea)', 'Nkhwani (Pumpkin Leaves)']} 
-            advice="Plant with the first effective rains on 75cm ridges. Focus on early weeding and applying organic compost in planting stations."
+            advice="Plant with the first effective soaking rains on 75cm ridges. Focus on early weeding and applying mature compost directly in planting stations."
             event="National Tree Planting Month"
           />
           <SeasonCard 
-            season="Harvest (Apr-Jun)" 
-            color="text-amber-600" 
-            items={['Soya (Soybeans)', 'Mbambaira (Sweet Potato)', 'Ntedza (Groundnuts)', 'Kachebere (Irish Potato)']} 
-            advice="Harvest when crops reach physiological maturity. Ensure grains are dried on racks before storage in ventilated Nkhokwe granaries."
+            season="Harvest Season (Kukolola: Apr-Jun)" 
+            color="text-amber-400" 
+            items={['Soya (Soybeans)', 'Mbatata (Sweet Potato)', 'Ntedza (Groundnuts)', 'Mbatata ya Chizungu (Irish Potato)']} 
+            advice="Harvest when crops reach full physiological maturity. Ensure grains are dried thoroughly on raised racks before storage in ventilated Nkhokwe granaries."
             event="Harvest Thanksgiving Gatherings"
           />
           <SeasonCard 
-            season="Dry/Cold (Jul-Aug)" 
-            color="text-emerald-800" 
-            items={['Mpiru (African Mustard)', 'Sobola (Red Onion)', 'Galuwinki (Garlic)', 'Dimba Wetlands']} 
-            advice="Utilize 'Dambo / Dimba' (wetland) treadle irrigation. Use residual moisture for vegetable beds. Protect young seedlings from highland frosts."
-            event="Umhlangano Cultural Festivals"
+            season="Cold Season (Mpepo: Jul-Aug)" 
+            color="text-sky-400" 
+            items={['Mpiru (African Mustard)', 'Anyezi (Red Onion)', 'Galuwinki (Garlic)', 'Dambo / Dimba Wetlands']} 
+            advice="Utilize 'Dambo / Dimba' wetlands and treadle pump irrigation. Use residual valley moisture for vegetable beds. Protect tender seedlings from cold plateau drafts."
+            event="Winter Wheat & Green Relish Season"
           />
           <SeasonCard 
-            season="Dry/Hot (Sep-Oct)" 
-            color="text-slate-500" 
-            items={['Land Prep (Misozi)', 'Nthochi (Banana Pits)', 'Manga (Mango Mulch)', 'Chitedze Cover Crop']} 
-            advice="Clear fields and prepare planting stations (mupando). Mulch perennial crops like Manga and Avokado to preserve soil moisture during heat."
-            event="Mlakho Wa Alhomwe Celebration"
+            season="Hot Dry Season (Chirimwe: Sep-Oct)" 
+            color="text-amber-300" 
+            items={['Land Prep (Kupalira Misozi)', 'Nthochi (Banana Pits)', 'Manga (Mango Mulch)', 'Chitedze Cover Crop']} 
+            advice="Clear fields and prepare planting stations (mupando). Mulch perennial orchards heavily (Manga & Avokado) to conserve deep subsoil moisture."
+            event="Homestead Dry Season Building"
           />
         </div>
       </section>
 
-      <section className="bg-emerald-900/90 backdrop-blur-md p-10 md:p-12 rounded-[3.5rem] text-white border border-emerald-800 shadow-2xl">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-12">
-          <div className="flex flex-col gap-3 text-center md:text-left">
-            <h3 className="serif text-4xl font-bold">Skills Mastery</h3>
-            <p className="text-emerald-100/60 font-medium max-w-md">Track your journey in acquiring the practical skills needed for self-reliance.</p>
+      <section className="bg-gradient-to-br from-[#071F13] via-slate-950 to-[#041209] backdrop-blur-2xl p-8 sm:p-12 rounded-[3.5rem] text-white border border-amber-500/30 shadow-2xl relative overflow-hidden">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-10">
+          <div className="flex flex-col gap-2 text-center md:text-left">
+            <span className="text-amber-400 text-[10px] font-mono font-black uppercase tracking-widest">Self-Reliance Tracker</span>
+            <h3 className="serif text-3xl sm:text-4xl font-bold text-[#FAF8F5]">Homestead Skills Mastery</h3>
+            <p className="text-emerald-100/70 font-medium text-sm sm:text-base max-w-md">Track your progress acquiring the practical off-grid competencies required for country independence.</p>
           </div>
-          <div className="bg-white/10 px-6 py-3 rounded-2xl border border-white/10">
-            <span className="text-2xl font-bold text-emerald-400">{masteredIds.length}</span>
-            <span className="text-emerald-100/40 text-[10px] font-black uppercase tracking-widest ml-2">Skills Mastered</span>
+          <div className="bg-slate-950/80 px-6 py-3.5 rounded-2xl border border-amber-500/30 shadow-md flex items-center gap-3">
+            <span className="text-3xl font-extrabold text-amber-400 font-mono">{masteredIds.length}</span>
+            <span className="text-emerald-200/80 text-[10px] font-mono font-black uppercase tracking-wider">Skills<br />Mastered</span>
           </div>
         </div>
 
@@ -118,20 +132,20 @@ export default function How() {
               key={skill.id}
               onClick={() => toggleSkill(skill.id)}
               className={cn(
-                "flex items-center justify-between p-6 rounded-[2rem] border transition-all active:scale-95 text-left",
+                "flex items-center justify-between p-5 rounded-[1.75rem] border transition-all active:scale-95 text-left cursor-pointer shadow-xs",
                 masteredIds.includes(skill.id) 
-                  ? "bg-emerald-800 border-emerald-400/30 text-white" 
-                  : "bg-white/5 border-white/10 text-emerald-100/60 hover:bg-white/10"
+                  ? "bg-emerald-950/90 border-emerald-400/50 text-white shadow-[0_0_15px_rgba(16,185,129,0.15)]" 
+                  : "bg-slate-950/60 border-white/10 text-slate-300 hover:bg-slate-900 hover:text-white hover:border-amber-500/30"
               )}
             >
               <div className="flex flex-col gap-1">
-                <span className="text-[9px] font-black uppercase tracking-widest opacity-40">{skill.category}</span>
-                <span className="font-bold tracking-tight">{skill.title}</span>
+                <span className="text-[9px] font-mono font-black uppercase tracking-widest text-amber-400/80">{skill.category}</span>
+                <span className="font-bold text-sm tracking-tight text-slate-100">{skill.title}</span>
               </div>
               {masteredIds.includes(skill.id) ? (
-                <CheckCircle2 size={24} className="text-emerald-400" />
+                <CheckCircle2 size={22} className="text-emerald-400 shrink-0 ml-2" />
               ) : (
-                <Circle size={24} className="opacity-20" />
+                <Circle size={22} className="text-slate-600 shrink-0 ml-2" />
               )}
             </button>
           ))}
@@ -143,30 +157,32 @@ export default function How() {
 
 function SeasonCard({ season, color, items, advice, event }: any) {
   return (
-    <div className="p-8 rounded-[2.5rem] bg-white/30 border border-white/40 flex flex-col gap-6 shadow-sm hover:bg-white/50 transition-colors">
+    <div className="p-7 rounded-[2.25rem] bg-slate-950/70 border border-amber-500/20 flex flex-col gap-5 shadow-inner hover:border-amber-500/40 transition-colors">
       <div className="flex justify-between items-center">
-        <span className={cn("text-[10px] font-black uppercase tracking-[0.2em]", color)}>{season}</span>
-        <div className="h-px bg-emerald-100 flex-1 ml-4" />
+        <span className={cn("text-[10px] font-mono font-black uppercase tracking-[0.15em]", color)}>{season}</span>
+        <div className="h-px bg-amber-500/20 flex-1 ml-4" />
       </div>
       
       <div className="flex flex-col gap-4">
         <div>
-          <span className="text-[9px] font-black uppercase text-slate-400 tracking-widest block mb-2">Core Crops</span>
+          <span className="text-[9px] font-mono font-black uppercase text-slate-400 tracking-widest block mb-2">Core Crops</span>
           <div className="flex flex-wrap gap-2">
             {items.map((item: string) => (
-              <span key={item} className="text-sm font-bold text-emerald-900 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100/50">{item}</span>
+              <span key={item} className="text-xs font-bold text-emerald-200 bg-emerald-950/70 px-3 py-1 rounded-xl border border-emerald-500/30 font-mono">
+                {item}
+              </span>
             ))}
           </div>
         </div>
 
         <div>
-          <span className="text-[9px] font-black uppercase text-slate-400 tracking-widest block mb-1">Stewardship Advice</span>
-          <p className="text-xs text-slate-600 font-medium leading-relaxed italic">{advice}</p>
+          <span className="text-[9px] font-mono font-black uppercase text-amber-400/80 tracking-widest block mb-1">Stewardship Advice</span>
+          <p className="text-xs text-slate-300 font-medium leading-relaxed italic">{advice}</p>
         </div>
 
-        <div className="pt-4 border-t border-white/40 flex flex-col gap-1">
-          <span className="text-[9px] font-black uppercase text-emerald-800/40 tracking-widest">Community Context</span>
-          <span className="text-xs font-bold text-emerald-900">{event}</span>
+        <div className="pt-3 border-t border-white/10 flex flex-col gap-1">
+          <span className="text-[9px] font-mono font-black uppercase text-emerald-400/60 tracking-widest">Community Context</span>
+          <span className="text-xs font-bold text-slate-200">{event}</span>
         </div>
       </div>
     </div>

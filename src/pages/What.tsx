@@ -63,34 +63,42 @@ export default function What() {
 
   return (
     <div className="px-6 md:px-12 py-10 max-w-6xl mx-auto flex flex-col gap-12">
-      <header className="flex flex-col gap-4">
+      <header className="flex flex-col gap-3">
         <div className="flex items-center gap-3">
-          <Package className="text-emerald-700" size={32} />
-          <h2 className="serif text-4xl md:text-5xl font-bold text-emerald-950">
-            The Essentials
-          </h2>
+          <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-md">
+            <Package size={26} />
+          </div>
+          <div>
+            <span className="text-[10px] font-mono uppercase tracking-widest font-black text-amber-300">Homestead Infrastructure</span>
+            <h2 className="serif text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#FAF8F5]">
+              The Essentials & Farm Infrastructure
+            </h2>
+          </div>
         </div>
-        <p className="text-slate-600 max-w-2xl text-lg font-medium">
-          Building the infrastructure of a self-sustaining home requires intentional stewardship of resources. Click any essential block for deep-dive guidance.
+        <p className="text-emerald-100/80 max-w-3xl text-sm sm:text-base font-medium leading-relaxed">
+          Building the infrastructure of a self-sustaining home requires intentional stewardship of resources. Click any essential pillar below to inspect detailed field specifications.
         </p>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {essentials.map((item) => (
           <div 
             key={item.id} 
             onClick={() => setSelectedEssential(item)}
-            className="bg-white/40 backdrop-blur-md p-8 rounded-[2.5rem] border border-white/60 shadow-xl flex flex-col gap-5 card-hover cursor-pointer group"
+            className="backdrop-blur-xl bg-slate-950/70 p-7 rounded-[2.25rem] border border-amber-500/25 shadow-[0_12px_40px_rgba(0,0,0,0.4)] flex flex-col gap-4 card-hover cursor-pointer group hover:border-amber-500/50 hover:bg-slate-950/90 transition-all duration-300"
           >
-            <div className="w-14 h-14 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-700 shadow-sm group-hover:scale-110 transition-transform">
-              <item.icon size={28} />
+            <div className="w-12 h-12 rounded-2xl bg-emerald-950/80 border border-emerald-500/30 flex items-center justify-center text-amber-400 shadow-inner group-hover:scale-110 group-hover:border-amber-400/50 transition-all">
+              <item.icon size={24} />
             </div>
-            <div className="flex justify-between items-center">
-              <h3 className="serif text-2xl font-bold text-emerald-950">{item.title}</h3>
-              <Info size={16} className="text-emerald-600 opacity-60 group-hover:opacity-100" />
+            <div className="flex justify-between items-start gap-2">
+              <h3 className="serif text-xl font-bold text-[#FAF8F5] group-hover:text-amber-200 transition-colors">{item.title}</h3>
+              <Info size={16} className="text-amber-400/70 shrink-0 group-hover:text-amber-400 transition-colors mt-1" />
             </div>
-            <p className="text-sm text-slate-600 leading-relaxed font-medium">{item.desc}</p>
-            <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider mt-auto underline decoration-emerald-300">Read Specs →</span>
+            <p className="text-xs text-slate-300 leading-relaxed font-medium">{item.desc}</p>
+            <span className="text-[10px] font-mono font-bold uppercase text-amber-300 tracking-wider mt-auto flex items-center gap-1 group-hover:text-amber-200">
+              <span>Read Specs</span>
+              <span>→</span>
+            </span>
           </div>
         ))}
       </div>
@@ -99,44 +107,46 @@ export default function What() {
       <MalawiCropExplorer />
 
       {/* Country Pantry Section */}
-      <section className="bg-emerald-900/90 backdrop-blur-md rounded-[3rem] p-8 md:p-12 text-white flex flex-col md:flex-row gap-12 items-center border border-emerald-800 shadow-2xl overflow-hidden relative">
+      <section className="bg-gradient-to-br from-[#071F13] via-slate-950 to-[#041209] backdrop-blur-2xl rounded-[3rem] p-8 md:p-12 text-white flex flex-col md:flex-row gap-10 items-center border border-amber-500/30 shadow-[0_20px_60px_rgba(0,0,0,0.6)] overflow-hidden relative">
+        <div className="absolute top-0 right-0 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+
         <div className="flex-1 flex flex-col gap-6 relative z-10 w-full">
           <div>
-            <span className="text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em]">Pantry Stock Checklist</span>
-            <h3 className="serif text-3xl md:text-4xl font-bold mt-1">The Country Pantry</h3>
-            <p className="text-emerald-100/70 font-medium text-base leading-relaxed max-w-lg mt-2">
-              A guide to storing food, based on inspired counsel to "preserve as much food as possible." Click items to mark off your stock!
+            <span className="text-amber-400 text-[10px] font-mono font-black uppercase tracking-[0.2em] bg-amber-500/15 border border-amber-500/30 px-3 py-1 rounded-full">Pantry Stock Checklist</span>
+            <h3 className="serif text-3xl md:text-4xl font-bold mt-2 text-[#FAF8F5]">The Country Pantry & Food Granary</h3>
+            <p className="text-emerald-100/80 font-medium text-sm sm:text-base leading-relaxed max-w-lg mt-2">
+              A guide to preserving and storing staple harvests, based on inspired counsel to "preserve as much food as possible." Click items to track your off-grid stock!
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-bold uppercase tracking-wider text-emerald-200">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono font-bold uppercase tracking-wider text-emerald-200">
             {pantryItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => togglePantryItem(item.id)}
                 className={cn(
-                  "flex items-center gap-3 p-3.5 rounded-2xl border transition-all text-left active:scale-98",
+                  "flex items-center gap-3 p-3.5 rounded-2xl border transition-all text-left active:scale-98 cursor-pointer shadow-xs",
                   item.checked 
-                    ? "bg-emerald-800/80 border-emerald-500 text-emerald-100" 
-                    : "bg-white/10 border-white/15 text-emerald-200 hover:bg-white/15"
+                    ? "bg-emerald-950/90 border-emerald-400/50 text-emerald-100 shadow-[0_0_15px_rgba(16,185,129,0.15)]" 
+                    : "bg-slate-950/70 border-white/10 text-slate-300 hover:bg-slate-900 hover:text-white"
                 )}
               >
-                {item.checked ? <CheckCircle2 size={18} className="text-emerald-400 shrink-0" /> : <Circle size={18} className="text-emerald-400/50 shrink-0" />}
-                <span className={cn(item.checked && "line-through opacity-75")}>{item.label}</span>
+                {item.checked ? <CheckCircle2 size={18} className="text-emerald-400 shrink-0" /> : <Circle size={18} className="text-slate-500 shrink-0" />}
+                <span className={cn(item.checked && "line-through opacity-75 text-emerald-300")}>{item.label}</span>
               </button>
             ))}
           </div>
         </div>
 
-        <div className="w-full md:w-1/3 bg-white/10 backdrop-blur-xl p-8 md:p-10 rounded-[2.5rem] border border-white/20 shadow-inner group transition-all hover:bg-white/15 shrink-0">
-          <h4 className="serif text-xl font-bold mb-4 opacity-90 italic underline underline-offset-8 decoration-emerald-500/50">Pro Stewardship</h4>
-          <p className="text-sm opacity-90 leading-relaxed font-medium">
-            "Buy tools that last a lifetime. In the country, your tools are your lifeline. Prefer forged steel and wooden handles over plastic."
+        <div className="w-full md:w-1/3 bg-slate-950/80 backdrop-blur-xl p-7 md:p-8 rounded-[2.5rem] border border-amber-500/25 shadow-xl group transition-all shrink-0">
+          <h4 className="serif text-xl font-bold mb-3 text-amber-200 italic underline underline-offset-8 decoration-amber-500/40">Pro Stewardship</h4>
+          <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium">
+            "Buy tools that last a lifetime. In the country, your tools are your lifeline. Prefer forged steel and seasoned hardwood handles over cheap metal."
           </p>
-          <div className="mt-6 flex justify-between items-center">
-             <span className="text-[10px] uppercase font-bold text-emerald-300">Malawi Quality Standard</span>
-             <div className="w-8 h-8 rounded-full bg-emerald-800/50 flex items-center justify-center border border-white/10">
-                <Shield size={14} className="text-emerald-300" />
+          <div className="mt-6 flex justify-between items-center pt-4 border-t border-amber-500/20">
+             <span className="text-[10px] uppercase font-mono font-bold text-amber-300">Malawi Quality Standard</span>
+             <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center border border-amber-500/30">
+                <Shield size={14} className="text-amber-400" />
              </div>
           </div>
         </div>
@@ -145,44 +155,45 @@ export default function What() {
       {/* Essential Detail Modal */}
       <AnimatePresence>
         {selectedEssential && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-emerald-950/60 backdrop-blur-md">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/75 backdrop-blur-md">
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-white rounded-[3rem] p-8 md:p-10 max-w-lg w-full shadow-2xl border border-emerald-100 flex flex-col gap-6 relative"
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-[#071F13] rounded-[3rem] p-8 md:p-10 max-w-lg w-full shadow-2xl border border-amber-500/40 flex flex-col gap-6 relative text-white"
             >
               <button 
                 onClick={() => setSelectedEssential(null)}
-                className="absolute top-6 right-6 p-2 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200"
+                className="absolute top-6 right-6 p-2 rounded-full bg-white/10 text-slate-300 hover:bg-white/20 hover:text-white transition-colors cursor-pointer"
               >
                 <X size={20} />
               </button>
 
-              <div className="flex items-center gap-4 text-emerald-800">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center">
-                  <selectedEssential.icon size={28} />
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/35 flex items-center justify-center text-amber-400">
+                  <selectedEssential.icon size={26} />
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase font-black tracking-widest text-emerald-600">Building Details</span>
-                  <h3 className="serif text-2xl font-bold text-emerald-950">{selectedEssential.title} Guide</h3>
+                  <span className="text-[10px] uppercase font-mono font-black tracking-widest text-amber-300">Field Specification</span>
+                  <h3 className="serif text-2xl font-bold text-[#FAF8F5]">{selectedEssential.title}</h3>
                 </div>
               </div>
 
-              <div className="flex flex-col gap-3">
-                <p className="text-slate-700 text-sm font-semibold leading-relaxed">
+              <div className="flex flex-col gap-4">
+                <p className="text-slate-200 text-sm font-medium leading-relaxed">
                   {selectedEssential.desc}
                 </p>
-                <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 text-xs text-emerald-900 leading-relaxed font-medium">
-                  <strong>Practical Application:</strong> {selectedEssential.details}
+                <div className="p-4 bg-slate-950/80 rounded-2xl border border-amber-500/25 text-xs text-emerald-100 leading-relaxed font-medium">
+                  <strong className="text-amber-300 block mb-1 font-mono uppercase text-[10px] tracking-wider">Practical Field Application:</strong> 
+                  {selectedEssential.details}
                 </div>
               </div>
 
               <button 
                 onClick={() => setSelectedEssential(null)}
-                className="bg-emerald-800 text-white py-3.5 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-md"
+                className="bg-amber-500 hover:bg-amber-400 text-slate-950 py-3.5 rounded-2xl font-mono font-black text-xs uppercase tracking-widest transition-all shadow-[0_4px_20px_rgba(245,158,11,0.35)] cursor-pointer"
               >
-                Close Details
+                Close Specification
               </button>
             </motion.div>
           </div>

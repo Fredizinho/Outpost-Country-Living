@@ -7,16 +7,18 @@ import {
   Layers, CheckCircle2, Navigation, Bookmark, 
   Copy, Check, X, Compass, Grid, Sparkles, 
   Mountain, Trees, Activity, Waves, AlertTriangle, Target,
-  ChevronRight, Sliders, Eye, Calendar, ArrowUpRight, Sprout,
+  ChevronRight, Sliders, Eye, EyeOff, Calendar, ArrowUpRight, Sprout,
   Globe, Sun, ChevronDown, ChevronUp, ArrowRight, BookOpen, Clock, HardDrive,
   FileText, Satellite, Map, Route, Thermometer, Snowflake, Flame, CloudRain,
-  Wifi, WifiOff, Download, Maximize2
+  Wifi, WifiOff, Download, Maximize2, Minimize2
 } from 'lucide-react';
 import { getTelemetryForDistrict, DistrictSeasonalTelemetry } from '@/data/actionableAlmanacData';
 import { getDistrictClimateData, DistrictClimateData } from '@/data/climateTelemetryData';
 import { useMapFilters } from '@/hooks/useMapFilters';
 import { MapFilterDrawer } from './MapFilterDrawer';
 import { RegionFocusBar } from './RegionFocusBar';
+import { UnifiedMapHud } from './UnifiedMapHud';
+import { CompactRegionPicker } from './CompactRegionPicker';
 import { GisLayerDeck } from './GisLayerDeck';
 import { ScoutTelemetryDrawer } from './ScoutTelemetryDrawer';
 import { OfflineMapModal } from './OfflineMapModal';
@@ -51,6 +53,10 @@ import {
   MALAWI_HIGHWAYS, 
   MALAWI_CITIES_AND_BOMAS 
 } from '@/data/malawiVectorBasemapData';
+import { MALAWI_ELEVATION_CONTOURS } from '@/data/malawiContourData';
+import { MALAWI_CUSTOMARY_BOUNDARIES } from '@/data/malawiCustomaryBoundaries';
+import { MapLegend } from './MapLegend';
+import { MapCompassAndScale } from './MapCompassAndScale';
 import { isForceOfflineActive, isCacheStorageAvailable } from '@/lib/offlineTileManager';
 import { cn } from '@/lib/utils';
 import { getStoredBookmarkedParcels, saveStoredBookmarkedParcels } from '@/lib/offlineStorage';
@@ -131,7 +137,11 @@ export interface ScoutingMapProps {
   initialSearchQuery?: string;
   initialRegionId?: string;
   initialFocusRegion?: FocusRegionId;
+  initialViewMode?: 'map' | 'list';
+  isAutoHideProp?: boolean;
+  onMapInteract?: () => void;
   onNavigateSoilScience?: () => void;
+  onNavigateComparison?: () => void;
 }
 
 export type TileLayerType = 'satellite' | 'hybrid' | 'terrain' | 'standard' | 'offline-vector';
@@ -141,10 +151,57 @@ export function ScoutingMap({
   initialSearchQuery, 
   initialRegionId,
   initialFocusRegion = 'all',
-  onNavigateSoilScience 
+  initialViewMode = 'map',
+  isAutoHideProp,
+  onMapInteract,
+  onNavigateSoilScience,
+  onNavigateComparison
 }: ScoutingMapProps = {}) {
   // Dual-mode state: Regional Overview vs Parcel Detail
   const [activeMode, setActiveMode] = useState<'regional' | 'parcels'>(initialMode);
+
+  // Auto-hide overlays for immediate visual feedback on the map
+  const [isAutoHideActive, setIsAutoHideActive] = useState<boolean>(isAutoHideProp ?? true);
+  const [isDetailsAutoHidden, setIsDetailsAutoHidden] = useState<boolean>(false);
+  const [isSpotlightMinimized, setIsSpotlightMinimized] = useState<boolean>(false);
+  const [isDrawerMinimized, setIsDrawerMinimized] = useState<boolean>(false);
+
+  const onMapInteractRef = useRef(onMapInteract);
+  useEffect(() => {
+    onMapInteractRef.current = onMapInteract;
+  }, [onMapInteract]);
+
+  const isAutoHideActiveRef = useRef(isAutoHideActive);
+  useEffect(() => {
+    isAutoHideActiveRef.current = isAutoHideActive;
+  }, [isAutoHideActive]);
+
+  useEffect(() => {
+    if (isAutoHideProp !== undefined) {
+      setIsAutoHideActive(isAutoHideProp);
+    }
+  }, [isAutoHideProp]);
+
+  // Idle timer to auto-hide extra details
+  const idleTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const wakeUpControls = useCallback(() => {
+    setIsDetailsAutoHidden(false);
+    if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+    if (isAutoHideActiveRef.current) {
+      idleTimerRef.current = setTimeout(() => {
+        if (isAutoHideActiveRef.current) {
+          setIsDetailsAutoHidden(true);
+        }
+      }, 5000);
+    }
+  }, []);
+
+  const triggerAutoHide = useCallback(() => {
+    if (isAutoHideActiveRef.current) {
+      setIsDetailsAutoHidden(true);
+    }
+  }, []);
 
   // Active Geographic Focus Region: 'all' | 'north' | 'central' | 'south'
   const [activeFocusRegion, setActiveFocusRegion] = useState<FocusRegionId>(initialFocusRegion);
@@ -181,12 +238,12 @@ export function ScoutingMap({
     }
   }, [initialSearchQuery, setFilters]);
 
-  // Sidebar / Drawer Open State
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  // Sidebar / Drawer Open State (default false for clean, spacious map)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [isLayersDeckOpen, setIsLayersDeckOpen] = useState(false);
   const [activeParcel, setActiveParcel] = useState<ScoutParcelProperties | null>(null);
-  const [viewMode, setViewMode] = useState<'map' | 'list'>('map');
+  const [viewMode, setViewMode] = useState<'map' | 'list'>(initialViewMode);
   const [tileStyle, setTileStyle] = useState<TileLayerType>('satellite');
   
   // Toggleable Map Overlays State
@@ -480,6 +537,19 @@ export function ScoutingMap({
       setLiveCursorCoords(null);
     });
 
+    // Auto-hide overlays during active map pan / zoom for unobstructed visual feedback
+    const onMapMove = () => {
+      if (isAutoHideActiveRef.current) {
+        setIsDetailsAutoHidden(true);
+      }
+      onMapInteractRef.current?.();
+      setIsDrawerMinimized(true);
+    };
+
+    map.on('movestart', onMapMove);
+    map.on('zoomstart', onMapMove);
+    map.on('dragstart', onMapMove);
+
     mapInstanceRef.current = map;
 
     // Trigger initial fit bounds for maximum wide display
@@ -490,6 +560,9 @@ export function ScoutingMap({
     }, 200);
 
     return () => {
+      map.off('movestart', onMapMove);
+      map.off('zoomstart', onMapMove);
+      map.off('dragstart', onMapMove);
       map.remove();
       mapInstanceRef.current = null;
     };
@@ -976,6 +1049,7 @@ export function ScoutingMap({
       marker.on('click', () => {
         setActiveParcel(p);
         setIsSidebarOpen(true);
+        setIsDrawerMinimized(true);
         mapInstanceRef.current?.flyTo([lat, lng], 13, { duration: 1.2 });
       });
 
@@ -1046,52 +1120,74 @@ export function ScoutingMap({
   }, [activeDistrict]);
 
   return (
-    <div className="w-full h-[calc(100vh-3.2rem)] min-h-[820px] relative rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl border border-white/10 bg-slate-950 flex flex-col" id="scouting-map-root">
+    <div className="w-full h-[calc(100vh-6.5rem)] min-h-[620px] relative rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl border border-white/10 bg-slate-950 flex flex-col" id="scouting-map-root">
       
       {/* ------------------------------------------------------------- */}
-      {/* 1. TOP FLOATING RETRACTABLE CONTROLS                          */}
+      {/* 1. COMPACT TOP-LEFT REGION PICKER & UNIFIED FLOATING HUD      */}
       {/* ------------------------------------------------------------- */}
       {viewMode === 'map' && (
-        <div className="absolute top-3 left-3 right-3 z-20 pointer-events-none flex flex-col gap-2 max-w-7xl mx-auto">
-          <RegionFocusBar
+        <>
+          {/* Top-Left Compact Region & District Picker */}
+          <CompactRegionPicker
             activeFocusRegion={activeFocusRegion}
             onSelectRegion={handleFocusRegion}
             activeDistrict={activeDistrict}
             onSelectDistrict={handleFocusDistrict}
             activeMode={activeMode}
             onToggleMode={setActiveMode}
+            isAutoHidden={isDetailsAutoHidden}
+            onWakeUp={wakeUpControls}
+          />
+
+          {/* Top-Right Unified Map HUD (Search, Layers, Filters, Declutter, Zoom, Reset, Auto-hide) */}
+          <UnifiedMapHud
             searchQuery={filters.searchQuery}
             onSearchChange={(q) => setFilters(prev => ({ ...prev, searchQuery: q }))}
-            viewMode={viewMode}
-            onToggleViewMode={() => setViewMode(viewMode === 'map' ? 'list' : 'map')}
-            isSidebarOpen={isSidebarOpen}
-            onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-            isDecluttered={isDecluttered}
-            onToggleDeclutter={handleToggleDeclutter}
             onOpenLayersDeck={() => setIsLayersDeckOpen(true)}
             activeLayerCount={activeLayerCount}
+            isDecluttered={isDecluttered}
+            onToggleDeclutter={handleToggleDeclutter}
+            onOpenFilters={() => setIsFilterDrawerOpen(true)}
+            activeFilterCount={activeFilterCount}
+            isSidebarOpen={isSidebarOpen}
+            onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+            onZoomIn={handleZoomIn}
+            onZoomOut={handleZoomOut}
+            onResetMapView={handleResetMapView}
+            activeDistrict={activeDistrict}
+            onFocusDistrict={handleFocusDistrict}
+            isAutoHideActive={isAutoHideActive}
+            onToggleAutoHide={() => {
+              setIsAutoHideActive(prev => {
+                const next = !prev;
+                if (!next) setIsDetailsAutoHidden(false);
+                return next;
+              });
+            }}
+            isDetailsAutoHidden={isDetailsAutoHidden}
+            onWakeUp={wakeUpControls}
+            viewMode={viewMode}
+            onToggleViewMode={() => setViewMode(viewMode === 'map' ? 'list' : 'map')}
             isOffline={!isOnlineState || isForceOfflineState || tileStyle === 'offline-vector'}
             onOpenOfflineModal={() => setIsOfflineModalOpen(true)}
           />
 
-          {/* Offline Active Alert Ribbon */}
-          {(!isOnlineState || isForceOfflineState || tileStyle === 'offline-vector') && (
-            <div className="bg-amber-950/90 border border-amber-500/50 backdrop-blur-md px-3.5 py-1.5 rounded-xl shadow-lg flex items-center justify-between pointer-events-auto text-xs text-amber-200">
-              <div className="flex items-center gap-2 font-mono">
-                <WifiOff size={13} className="text-amber-400 animate-pulse" />
-                <span>
-                  <strong>Offline Map Active:</strong> All 28 districts, roads, and rivers ready on your device.
-                </span>
-              </div>
+          {/* Offline Status Notice (Discreet pill below picker) */}
+          {(!isOnlineState || isForceOfflineState || tileStyle === 'offline-vector') && !isDetailsAutoHidden && (
+            <div className="absolute top-16 left-3 z-20 bg-amber-950/90 border border-amber-500/50 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-lg flex items-center gap-2 pointer-events-auto text-xs text-amber-200">
+              <WifiOff size={13} className="text-amber-400 animate-pulse" />
+              <span className="font-mono text-[11px]">
+                <strong>Offline Vector Map:</strong> 28 districts available offline
+              </span>
               <button
                 onClick={() => setIsOfflineModalOpen(true)}
-                className="underline text-[11px] text-amber-300 hover:text-white font-mono cursor-pointer"
+                className="underline text-[10px] text-amber-300 hover:text-white font-mono cursor-pointer ml-1"
               >
-                Offline Settings
+                Settings
               </button>
             </div>
           )}
-        </div>
+        </>
       )}
 
       {/* ------------------------------------------------------------- */}
@@ -1102,97 +1198,221 @@ export function ScoutingMap({
           {/* Leaflet DOM Canvas container */}
           <div ref={mapContainerRef} className="w-full h-full z-0 bg-slate-950" />
 
-          {/* Left Floating Action Buttons: Re-Center & Reset View */}
-          <div className="absolute top-20 sm:top-24 left-3 z-20 flex flex-col gap-2 pointer-events-auto max-w-[240px]">
-            {activeDistrict && (
-              <button
-                onClick={() => handleFocusDistrict(activeDistrict)}
-                className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 px-3 py-1.5 rounded-xl font-mono font-black text-xs uppercase tracking-wider shadow-2xl border-2 border-amber-300 flex items-center gap-1.5 active:scale-95 transition-all cursor-pointer ring-4 ring-amber-500/20"
-                title={`Re-center camera on ${activeDistrict.name} District`}
-              >
-                <Target size={14} className="text-slate-950 animate-pulse shrink-0" />
-                <span className="truncate">Center {activeDistrict.name}</span>
-              </button>
-            )}
-
-            <button
-              onClick={handleResetMapView}
-              className="bg-slate-950/85 hover:bg-slate-900 text-slate-200 hover:text-white px-3 py-1.5 rounded-xl font-mono font-bold text-xs uppercase tracking-wider shadow-2xl border border-white/20 flex items-center gap-1.5 active:scale-95 transition-all cursor-pointer backdrop-blur-md"
-              title="Reset viewport to entire Malawi national overview"
-            >
-              <Globe size={13} className="text-emerald-400 shrink-0" />
-              <span>National Overview</span>
-            </button>
-          </div>
-
-          {/* Zoom Buttons (Right side) */}
-          <div className="absolute right-3 top-20 sm:top-24 z-20 flex flex-col gap-1.5 pointer-events-auto">
-            <button
-              onClick={handleZoomIn}
-              className="w-10 h-10 bg-slate-950/90 hover:bg-slate-900 text-white border border-white/20 rounded-xl shadow-2xl flex items-center justify-center font-bold text-lg active:scale-95 transition-all cursor-pointer backdrop-blur-md"
-              title="Zoom In"
-            >
-              +
-            </button>
-            <button
-              onClick={handleZoomOut}
-              className="w-10 h-10 bg-slate-950/90 hover:bg-slate-900 text-white border border-white/20 rounded-xl shadow-2xl flex items-center justify-center font-bold text-lg active:scale-95 transition-all cursor-pointer backdrop-blur-md"
-              title="Zoom Out"
-            >
-              -
-            </button>
-          </div>
-
-          {/* Collapsible Resource & Population Density Bottom-Sheet Overlay */}
-          <div className="absolute bottom-16 sm:bottom-16 left-3 right-3 z-30 pointer-events-none flex justify-center">
-            <div className="pointer-events-auto w-full max-w-4xl">
-              <ResourceDensityBottomSheet
-                selectedDistrictName={activeDistrict?.name}
-                onSelectDistrictByName={(dName) => {
-                  const d = getDistrictByIdOrName(dName);
-                  if (d) handleFocusDistrict(d);
-                }}
-              />
-            </div>
-          </div>
-
-          {/* Bottom Telemetry HUD Dock (Live Cursor Coordinates + District Profile) */}
-          <div className="absolute bottom-3 left-3 right-3 z-20 pointer-events-none flex items-end justify-between gap-3">
+          {/* Bottom Floating Spotlight Card & Telemetry Pill */}
+          <div className="absolute bottom-3 left-3 right-3 z-20 pointer-events-none flex flex-col sm:flex-row items-end justify-between gap-3">
             
-            {/* Bottom Left: District Telemetry Card */}
-            <div className="pointer-events-auto max-w-md hidden sm:flex flex-col gap-2">
-              <div className="bg-slate-950/90 backdrop-blur-xl border border-white/15 p-3 rounded-2xl shadow-2xl flex flex-col gap-2 text-white">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-xs font-bold font-mono text-amber-300">
-                      {activeDistrict ? `${activeDistrict.name} District` : MALAWI_REGIONAL_BOUNDS[activeFocusRegion].label}
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-mono bg-white/10 px-2 py-0.5 rounded-md text-slate-300">
-                    {activeDistrict ? `Grade ${activeDistrict.feasibilityGrade}` : MALAWI_REGIONAL_BOUNDS[activeFocusRegion].badge}
-                  </span>
-                </div>
+            {/* Center-Left Contextual Spotlight Card */}
+            <div 
+              onMouseEnter={wakeUpControls}
+              className={cn(
+                "pointer-events-auto w-full max-w-lg transition-all duration-300",
+                isDetailsAutoHidden && !isSpotlightMinimized ? "opacity-35 hover:opacity-100" : "opacity-100"
+              )}
+            >
+              <AnimatePresence>
+                {activeParcel ? (
+                  isSpotlightMinimized ? (
+                    <motion.div
+                      key="parcel-minimized"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      className="bg-slate-950/95 backdrop-blur-xl border border-emerald-500/40 px-3 py-1.5 rounded-xl shadow-xl flex items-center justify-between gap-2 text-white"
+                    >
+                      <div className="flex items-center gap-2 text-xs font-mono truncate">
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                        <span className="text-emerald-300 font-bold truncate">{activeParcel.title}</span>
+                        <span className="text-slate-400 shrink-0">({activeParcel.acres} ac • {activeParcel.district})</span>
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <button 
+                          onClick={() => setIsSpotlightMinimized(false)}
+                          className="text-[11px] font-mono text-emerald-400 hover:text-emerald-300 px-2 py-0.5 rounded bg-white/5 hover:bg-white/10"
+                        >
+                          Expand
+                        </button>
+                        <button onClick={() => setActiveParcel(null)} className="text-slate-400 hover:text-white p-1">
+                          <X size={12} />
+                        </button>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    /* Active Parcel Spotlight */
+                    <motion.div
+                      key="parcel-spotlight"
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 15 }}
+                      className="bg-slate-950/95 backdrop-blur-xl border border-emerald-500/40 p-3.5 sm:p-4 rounded-2xl shadow-2xl flex flex-col gap-2 text-white"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-full font-bold uppercase">
+                              {activeParcel.district} District
+                            </span>
+                            <span className="text-[10px] font-mono text-slate-400">
+                              {activeParcel.acres} Acres
+                            </span>
+                          </div>
+                          <h4 className="serif text-base sm:text-lg font-bold text-white leading-tight mt-1">
+                            {activeParcel.title}
+                          </h4>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => setIsSpotlightMinimized(true)}
+                            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+                            title="Minimize details"
+                          >
+                            <Minimize2 size={13} />
+                          </button>
+                          <button
+                            onClick={() => setActiveParcel(null)}
+                            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+                            title="Dismiss"
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+                      </div>
 
-                <div className="grid grid-cols-3 gap-2 text-[10px] font-mono pt-1 border-t border-white/10">
-                  <div>
-                    <span className="text-slate-400 block">Rainfall</span>
-                    <span className="font-bold text-sky-300">{activeDistrict ? `${activeDistrict.rainfallAnnualMm}mm` : '800-1400mm'}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 block">Soil pH</span>
-                    <span className="font-bold text-emerald-300">{activeDistrict ? activeDistrict.soilPh : 'pH 6.0 - 6.5'}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 block">Well Depth</span>
-                    <span className="font-bold text-amber-300">{activeDistrict ? activeDistrict.aquiferDepth.split('(')[0] : '15 - 35m'}</span>
-                  </div>
-                </div>
-              </div>
+                      <div className="grid grid-cols-3 gap-2 text-[11px] font-mono py-1 border-y border-white/10 text-slate-300">
+                        <div>
+                          <span className="text-slate-500 text-[9px] block">Water Reliability</span>
+                          <span className="text-sky-300 font-bold truncate block">{activeParcel.waterReliability.split('(')[0]}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-500 text-[9px] block">Soil Profile</span>
+                          <span className="text-emerald-300 font-bold truncate block">{activeParcel.soilProfile.split(',')[0]}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-500 text-[9px] block">Land Tenure</span>
+                          <span className="text-amber-300 font-bold truncate block">{activeParcel.landTenure}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 pt-0.5">
+                        <button
+                          onClick={() => setIsSidebarOpen(true)}
+                          className="flex-1 py-1.5 px-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono font-bold text-xs flex items-center justify-center gap-1.5 shadow transition-all cursor-pointer"
+                        >
+                          <FileText size={13} />
+                          <span>Inspect Full Station Dossier</span>
+                          <ChevronRight size={13} />
+                        </button>
+                      </div>
+                    </motion.div>
+                  )
+                ) : activeDistrict ? (
+                  isSpotlightMinimized ? (
+                    <motion.div
+                      key="district-minimized"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      className="bg-slate-950/95 backdrop-blur-xl border border-amber-500/40 px-3 py-1.5 rounded-xl shadow-xl flex items-center justify-between gap-2 text-white"
+                    >
+                      <div className="flex items-center gap-2 text-xs font-mono truncate">
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                        <span className="text-amber-300 font-bold">{activeDistrict.name} District</span>
+                        <span className="text-slate-400 shrink-0">({activeDistrict.rainfallAnnualMm}mm/yr • Grade {activeDistrict.feasibilityGrade})</span>
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <button 
+                          onClick={() => setIsSpotlightMinimized(false)}
+                          className="text-[11px] font-mono text-amber-400 hover:text-amber-300 px-2 py-0.5 rounded bg-white/5 hover:bg-white/10"
+                        >
+                          Expand
+                        </button>
+                        <button onClick={() => setActiveDistrict(null)} className="text-slate-400 hover:text-white p-1">
+                          <X size={12} />
+                        </button>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    /* Active District Spotlight */
+                    <motion.div
+                      key="district-spotlight"
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 15 }}
+                      className="bg-slate-950/95 backdrop-blur-xl border border-amber-500/40 p-3.5 sm:p-4 rounded-2xl shadow-2xl flex flex-col gap-2 text-white"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                            <span className="serif text-base sm:text-lg font-bold text-amber-300">
+                              {activeDistrict.name} District
+                            </span>
+                            <span className="text-[10px] font-mono bg-white/10 text-slate-300 px-2 py-0.5 rounded-full border border-white/10">
+                              Grade {activeDistrict.feasibilityGrade}
+                            </span>
+                            <span className="text-[10px] font-mono text-slate-400 hidden sm:inline">
+                              {activeDistrict.region} Region
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => setIsSpotlightMinimized(true)}
+                            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+                            title="Minimize details"
+                          >
+                            <Minimize2 size={13} />
+                          </button>
+                          <button
+                            onClick={() => setActiveDistrict(null)}
+                            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+                            title="Dismiss Spotlight"
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-2 text-[11px] font-mono py-1 border-y border-white/10 text-slate-300">
+                        <div>
+                          <span className="text-slate-500 text-[9px] block">Rainfall</span>
+                          <span className="text-sky-300 font-bold">{activeDistrict.rainfallAnnualMm}mm/yr</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-500 text-[9px] block">Soil & pH</span>
+                          <span className="text-emerald-300 font-bold truncate block">{activeDistrict.soilPh}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-500 text-[9px] block">Aquifer Depth</span>
+                          <span className="text-amber-300 font-bold truncate block">{activeDistrict.aquiferDepth.split('(')[0]}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 pt-0.5">
+                        <button
+                          onClick={() => setIsSidebarOpen(true)}
+                          className="flex-1 py-1.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono font-bold text-xs flex items-center justify-center gap-1.5 shadow transition-all cursor-pointer"
+                        >
+                          <Sliders size={13} />
+                          <span>District Intel & Telemetry</span>
+                          <ChevronRight size={13} />
+                        </button>
+                        <button
+                          onClick={() => handleFocusDistrict(activeDistrict)}
+                          className="py-1.5 px-3 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 font-mono text-xs flex items-center gap-1 transition-all cursor-pointer"
+                          title="Center map on district"
+                        >
+                          <Target size={12} className="text-amber-400" />
+                          <span className="hidden sm:inline">Re-Center</span>
+                        </button>
+                      </div>
+                    </motion.div>
+                  )
+                ) : null}
+              </AnimatePresence>
             </div>
 
-            {/* Bottom Right: Live GPS Coordinate Ticker */}
-            <div className="pointer-events-auto bg-slate-950/90 backdrop-blur-xl border border-white/15 px-3 py-1.5 rounded-xl shadow-xl flex items-center gap-3 text-[11px] font-mono text-slate-300 ml-auto">
+            {/* Bottom Right: Live GPS Coordinate Ticker & Active Tile Mode */}
+            <div className="pointer-events-auto bg-slate-950/85 backdrop-blur-md border border-white/15 px-3 py-1.5 rounded-xl shadow-xl flex items-center gap-2.5 text-[11px] font-mono text-slate-300 ml-auto shrink-0">
               <div className="flex items-center gap-1.5">
                 <Navigation size={12} className="text-amber-400 rotate-45" />
                 <span>
@@ -1202,8 +1422,8 @@ export function ScoutingMap({
                 </span>
               </div>
               <span className="text-slate-600">|</span>
-              <span className="text-emerald-400 font-bold hidden md:inline">
-                {tileStyle === 'offline-vector' ? 'Offline Map' : tileStyle.toUpperCase()}
+              <span className="text-emerald-400 font-semibold hidden md:inline">
+                {tileStyle === 'offline-vector' ? 'Offline Vector' : tileStyle.toUpperCase()}
               </span>
             </div>
 
@@ -1274,6 +1494,8 @@ export function ScoutingMap({
       <ScoutTelemetryDrawer
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
+        isMinimized={isDrawerMinimized}
+        onToggleMinimize={setIsDrawerMinimized}
         activeFocusRegion={activeFocusRegion}
         selectedRegion={selectedRegion}
         activeDistrict={activeDistrict}
@@ -1281,6 +1503,7 @@ export function ScoutingMap({
         activeParcel={activeParcel}
         onSelectParcel={(p) => {
           setActiveParcel(p);
+          setIsDrawerMinimized(true);
           const feat = filteredFeatures.find(f => f.properties.id === p.id);
           if (feat && mapInstanceRef.current) {
             const [lng, lat] = feat.geometry.coordinates;

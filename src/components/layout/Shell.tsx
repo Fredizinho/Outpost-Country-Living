@@ -4,10 +4,12 @@ import { ShieldCheck, Compass, MapPin, Sparkles, Navigation as NavIcon, Search }
 import { CitationsModal } from './CitationsModal';
 import { Header } from '../common/Header';
 import { QuickCommandPalette } from '../common/QuickCommandPalette';
+import { HomesteadAdvisorModal } from '../advisor/HomesteadAdvisorModal';
 
 export function Shell({ children }: { children: ReactNode }) {
   const [showCitationsModal, setShowCitationsModal] = useState(false);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const [isAdvisorOpen, setIsAdvisorOpen] = useState(false);
   const location = useLocation();
 
   const isScoutMapRoute = location.pathname === '/scout-map';
@@ -44,6 +46,7 @@ export function Shell({ children }: { children: ReactNode }) {
       <Header
         onOpenCitations={() => setShowCitationsModal(true)}
         onOpenSearch={() => setIsCommandPaletteOpen(true)}
+        onOpenAdvisor={() => setIsAdvisorOpen(true)}
       />
 
       {/* Main Workspace Body: Full Fluid Canvas */}
@@ -71,56 +74,34 @@ export function Shell({ children }: { children: ReactNode }) {
       </div>
 
       {/* ========================================================================= */}
-      {/* GLOBAL FLOATING GPS SCOUT MAP ACTION BUTTON                               */}
-      {/* Prominently placed & easily accessible anywhere across the entire app      */}
+      {/* GLOBAL FLOATING AI SANCTUARY ADVISOR BUTTON                               */}
+      {/* Sleek, minimal, accessible everywhere without blocking page content       */}
       {/* ========================================================================= */}
-      <div className="fixed bottom-5 right-5 z-40 flex items-center gap-2 pointer-events-auto">
+      <div className="fixed bottom-6 right-6 z-40 flex items-center gap-2 pointer-events-auto">
         <button
-          onClick={() => setIsCommandPaletteOpen(true)}
-          className="hidden sm:flex items-center gap-2 px-3.5 py-3 rounded-full bg-slate-950/90 hover:bg-slate-900 text-slate-300 hover:text-white border border-white/15 hover:border-amber-400/50 shadow-2xl backdrop-blur-xl transition-all cursor-pointer group"
-          title="Open Quick Search & Command Palette (Press ⌘K or /)"
-        >
-          <Search size={16} className="text-amber-400 group-hover:scale-110 transition-transform" />
-          <span className="text-xs font-mono font-bold">Search</span>
-          <kbd className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/10 text-slate-400 border border-white/10">⌘K</kbd>
-        </button>
-
-        <Link
-          to="/scout-map"
-          id="global-floating-gps-scout-btn"
-          className={`group flex items-center gap-2.5 px-4 py-3 rounded-full shadow-2xl transition-all duration-300 cursor-pointer border backdrop-blur-xl ${
-            isScoutMapRoute
-              ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black border-amber-300 shadow-amber-500/30 scale-105 ring-4 ring-amber-400/20'
-              : 'bg-slate-950/90 hover:bg-slate-900 text-amber-300 hover:text-white border-amber-500/40 hover:border-amber-400 shadow-black/80 hover:scale-105 ring-2 ring-emerald-500/20'
-          }`}
-          title="Open Interactive GPS Land & District Scout Map"
+          onClick={() => setIsAdvisorOpen(true)}
+          className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-slate-950/90 hover:bg-slate-900 text-amber-300 hover:text-white border border-amber-500/40 hover:border-amber-300 shadow-2xl shadow-black/80 backdrop-blur-xl transition-all hover:scale-105 cursor-pointer group"
+          title="Ask Outpost AI Homestead Advisor (Gemini 3.8)"
         >
           <div className="relative flex items-center justify-center">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
-            <Compass size={20} className={`shrink-0 ${isScoutMapRoute ? 'text-slate-950' : 'text-amber-400 group-hover:rotate-45 transition-transform'}`} />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-60" />
+            <Sparkles size={16} className="text-amber-400 group-hover:rotate-12 transition-transform" />
           </div>
-
-          <div className="flex flex-col text-left">
-            <span className="text-xs font-mono font-black uppercase tracking-wider leading-none">
-              {isScoutMapRoute ? 'GPS Map Active' : 'GPS Scout Map'}
-            </span>
-            <span className={`text-[9px] font-mono leading-tight ${isScoutMapRoute ? 'text-slate-900' : 'text-slate-400'}`}>
-              28 Districts • Land Finder
-            </span>
-          </div>
-
-          <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-full ${
-            isScoutMapRoute ? 'bg-slate-950/20 text-slate-950' : 'bg-emerald-950 text-emerald-300 border border-emerald-500/40'
-          }`}>
-            GIS
-          </span>
-        </Link>
+          <span className="text-xs font-mono font-black uppercase tracking-wider">AI Advisor</span>
+        </button>
       </div>
 
       {/* Quick Command Palette Modal */}
       <QuickCommandPalette
         isOpen={isCommandPaletteOpen}
         onClose={() => setIsCommandPaletteOpen(false)}
+        onOpenAdvisor={() => setIsAdvisorOpen(true)}
+      />
+
+      {/* AI Sanctuary Advisor Modal */}
+      <HomesteadAdvisorModal
+        isOpen={isAdvisorOpen}
+        onClose={() => setIsAdvisorOpen(false)}
       />
 
       {/* Citations Audit Modal */}

@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { DUMMY_SCOUT_GEOJSON, ScoutGeoJSONCollection, ScoutParcelFeature } from '@/data/scoutGeoJSON';
+import { VERIFIED_MALAWI_AGRO_SITES, ScoutGeoJSONCollection, ScoutParcelFeature } from '@/data/scoutGeoJSON';
 import { getStoredMapGeoJSONCache, saveStoredMapGeoJSONCache } from '@/lib/offlineStorage';
 
 export interface FilterState {
@@ -54,12 +54,16 @@ export function useMapFilters() {
     try {
       const cached = getStoredMapGeoJSONCache<ScoutGeoJSONCollection>();
       if (cached && cached.features && cached.features.length > 0) {
-        return cached;
+        // Invalidate legacy mock parcels that had fake land- IDs
+        const hasLegacyMock = cached.features.some(f => f.properties.id.startsWith('land-'));
+        if (!hasLegacyMock) {
+          return cached;
+        }
       }
     } catch (err) {
-      console.warn('Failed to load cached GeoJSON, falling back to dummy dataset:', err);
+      console.warn('Failed to load cached GeoJSON, using verified dataset:', err);
     }
-    return DUMMY_SCOUT_GEOJSON;
+    return VERIFIED_MALAWI_AGRO_SITES;
   });
 
   const [isOfflineCached, setIsOfflineCached] = useState(false);
