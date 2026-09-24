@@ -35,11 +35,11 @@ const STRATA_LAYERS: StrataLayer[] = [
     summary: 'The living, dark surface soil full of earthworms, beneficial microbes, and broken-down leaves. This is where seeds sprout and plant roots absorb daily nutrients.',
     adventistStewardship: 'The earth has energy concealed within her... Those who cultivate the soil will find that it yields treasures. Keeping thick mulch on the ground preserves natural soil life.',
     recommendedAction: 'Cover soil with 10cm of dry grass mulch to protect against hot sun and heavy rain; avoid harsh chemicals that kill earthworms.',
-    compatibleCrops: ['Sweet Potatoes (Mbathata)', 'Maize & Pigeon Peas (Nandolo)', 'Relish Vegetables (Nkhwani)', 'Tomatoes & Greens']
+    compatibleCrops: ['Sweet Potatoes', 'Maize & Pigeon Peas', 'Garden Greens & Relish', 'Tomatoes & Vegetables']
   },
   {
     id: 'latosol',
-    name: '02. Red Clay Subsoil (Katondo)',
+    name: '02. Red Loam & Clay Subsoil',
     depth: '25 - 120 cm',
     colorBg: 'bg-amber-950/90 text-amber-100',
     borderColor: 'border-amber-500/50',
@@ -48,10 +48,10 @@ const STRATA_LAYERS: StrataLayer[] = [
     ph: '5.8 - 6.4',
     humus: '1.8% - 2.5%',
     cec: 'Good Hold',
-    summary: 'The deep red African clay soil (Katondo). It stores deep water during the dry season and firmly anchors the roots of fruit trees and perennial crops.',
+    summary: 'The deep red nutrient-rich clay subsoil. It stores deep water during the dry season and firmly anchors the roots of fruit trees and perennial crops.',
     adventistStewardship: 'Deep-rooting fruit trees draw minerals up from deep in the soil, giving your family strong, nutrient-rich food.',
     recommendedAction: 'Plant Vetiver grass along slope contour lines to stop heavy rain from washing away soil; mix in compost when planting tree seedlings.',
-    compatibleCrops: ['Macadamia Trees', 'Avocados & Mangoes (Mitengo ya Chipatso)', 'Vetiver Grass', 'Cassava (Chinangwa)']
+    compatibleCrops: ['Macadamia Trees', 'Avocados & Mangoes', 'Vetiver Grass', 'Cassava & Yams']
   },
   {
     id: 'bedrock',

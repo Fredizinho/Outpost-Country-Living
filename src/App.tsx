@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { AnimatePresence, motion } from 'motion/react';
 import { Shell } from './components/layout/Shell';
 import { AuthProvider } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { lazyWithRetry } from './lib/lazyWithRetry';
 import Home from './pages/Home';
@@ -21,6 +22,11 @@ const Skills = lazyWithRetry(() => import('./pages/Skills'));
 const SkillDetail = lazyWithRetry(() => import('./pages/SkillDetail'));
 const Calculators = lazyWithRetry(() => import('./pages/Calculators'));
 const ScoutMapPage = lazyWithRetry(() => import('./pages/ScoutMapPage'));
+const PropertyEvaluator = lazyWithRetry(() => import('./pages/PropertyEvaluator'));
+const Blueprints = lazyWithRetry(() => import('./pages/Blueprints'));
+const Community = lazyWithRetry(() => import('./pages/Community'));
+const Devotional = lazyWithRetry(() => import('./pages/Devotional'));
+const Agriculture = lazyWithRetry(() => import('./pages/Agriculture'));
 const NotFound = lazyWithRetry(() => import('./pages/NotFound'));
 
 function PageFallback() {
@@ -66,6 +72,15 @@ function AnimatedAppRoutes() {
           <Route path="/skills" element={<Skills />} />
           <Route path="/skills/:id" element={<SkillDetail />} />
           <Route path="/calculators" element={<Calculators />} />
+          <Route path="/suitability" element={<PropertyEvaluator />} />
+          <Route path="/property-evaluator" element={<PropertyEvaluator />} />
+          <Route path="/blueprints" element={<Blueprints />} />
+          <Route path="/community" element={<Community />} />
+          <Route path="/directory" element={<Community />} />
+          <Route path="/devotional" element={<Devotional />} />
+          <Route path="/devotionals" element={<Devotional />} />
+          <Route path="/agriculture" element={<Agriculture />} />
+          <Route path="/edenic-farming" element={<Agriculture />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.div>
@@ -76,15 +91,17 @@ function AnimatedAppRoutes() {
 export default function App() {
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <Router>
-          <Shell>
-            <Suspense fallback={<PageFallback />}>
-              <AnimatedAppRoutes />
-            </Suspense>
-          </Shell>
-        </Router>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <Router>
+            <Shell>
+              <Suspense fallback={<PageFallback />}>
+                <AnimatedAppRoutes />
+              </Suspense>
+            </Shell>
+          </Router>
+        </AuthProvider>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 }

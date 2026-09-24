@@ -7,6 +7,8 @@ import { getStoredLandChecklist, saveStoredLandChecklist } from '@/lib/offlineSt
 import { Link } from 'react-router-dom';
 import { RegionalWeatherWidget } from '@/components/weather/RegionalWeatherWidget';
 import { COUNTRY_IMAGES } from '@/assets/images';
+import { LandReadinessCards } from '@/components/outpost/LandReadinessCards';
+import { PropertySuitabilityCalculator } from '@/components/outpost/PropertySuitabilityCalculator';
 
 interface ChecklistState {
   completedIds: string[];
@@ -148,22 +150,22 @@ Generated from OUTPOST: Country Living Matrix
       {/* ------------------------------------------------------------- */}
       {/* SECTION 1: ESSENTIAL FUNCTION - DISTRICT & ZONE ANALYZER      */}
       {/* ------------------------------------------------------------- */}
-      <section className="backdrop-blur-md bg-white/5 text-white p-6 sm:p-8 md:p-10 rounded-[2.5rem] flex flex-col gap-6 relative overflow-hidden shadow-2xl border border-amber-500/25">
+      <section className="bg-white/95 text-stone-900 p-6 sm:p-8 md:p-10 rounded-3xl flex flex-col gap-6 relative shadow-xs border border-stone-200">
         <div className="relative z-10 flex flex-col gap-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-amber-500/20 pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-200 pb-4">
             <div>
-              <span className="text-amber-300 text-[10px] font-mono font-black uppercase tracking-[0.2em] flex items-center gap-1.5">
-                <Search size={12} className="text-amber-400" />
+              <span className="text-emerald-900 text-[11px] font-sans font-bold uppercase tracking-wider flex items-center gap-1.5">
+                <Search size={12} className="text-emerald-700" />
                 01 • DISTRICT FINDER
               </span>
-              <h2 className="serif text-2xl sm:text-3xl font-bold mt-1 text-[#FAF8F5]">Farming Zone & District Checker</h2>
-              <p className="text-emerald-100/80 mt-1 text-xs sm:text-sm font-medium">Search any district in Malawi to check soil acidity, well water depth, rainfall, and farming conditions.</p>
+              <h2 className="serif text-2xl sm:text-3xl font-bold mt-1 text-stone-900">Farming Zone & District Checker</h2>
+              <p className="text-stone-600 mt-1 text-xs sm:text-sm font-medium">Search any district in Malawi to check soil acidity, well water depth, rainfall, and farming conditions.</p>
             </div>
             <Link
               to="/scout-map"
-              className="self-start sm:self-auto bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/40 font-mono text-xs font-bold uppercase px-4 py-2.5 rounded-xl transition-all flex items-center gap-2"
+              className="self-start sm:self-auto bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 font-sans text-xs font-semibold uppercase px-4 py-2.5 rounded-xl transition-all flex items-center gap-2"
             >
-              <Compass size={14} className="text-amber-400" /> View on Map
+              <Compass size={14} className="text-emerald-800" /> View on Map
             </Link>
           </div>
 
@@ -174,10 +176,10 @@ Generated from OUTPOST: Country Living Matrix
                 key={dist}
                 onClick={() => handleDistrictSearch(dist)}
                 className={cn(
-                  "px-3.5 py-1.5 rounded-xl text-[10px] font-mono font-bold uppercase tracking-wider transition-all border cursor-pointer",
+                  "px-3.5 py-1.5 rounded-xl text-[11px] font-sans font-semibold uppercase tracking-wider transition-all border cursor-pointer",
                   analyzedDistrict?.name.toLowerCase().includes(dist.toLowerCase())
-                    ? "bg-amber-500 border-amber-300 text-slate-950 shadow-md font-black"
-                    : "bg-white/5 border-amber-500/20 text-emerald-200 hover:bg-white/10 hover:text-white"
+                    ? "bg-emerald-900 border-emerald-950 text-white shadow-xs font-bold"
+                    : "bg-stone-100 border-stone-300 text-stone-700 hover:bg-stone-200 hover:text-stone-900"
                 )}
               >
                 {dist}
@@ -187,13 +189,13 @@ Generated from OUTPOST: Country Living Matrix
 
           <div className="flex gap-3">
             <div className="relative w-full">
-              <Search className="absolute left-4 top-4 text-amber-400" size={18} />
+              <Search className="absolute left-4 top-4 text-emerald-800" size={18} />
               <input 
                 type="text" 
                 value={districtQuery}
                 onChange={(e) => handleDistrictSearch(e.target.value)}
                 placeholder="Type Malawi District name e.g. Dedza, Mzimba, Mulanje, Zomba, Salima..." 
-                className="bg-black/40 border border-amber-500/30 rounded-2xl pl-12 pr-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 w-full placeholder:text-slate-400 text-white font-medium font-mono"
+                className="bg-white border border-stone-300 rounded-2xl pl-12 pr-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-800 w-full placeholder:text-stone-400 text-stone-900 font-medium font-sans shadow-xs"
               />
             </div>
           </div>
@@ -203,13 +205,13 @@ Generated from OUTPOST: Country Living Matrix
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-slate-950/80 backdrop-blur-md border border-amber-500/30 p-6 rounded-3xl flex flex-col gap-5 shadow-2xl"
+              className="bg-[#0B2517] border border-emerald-800 p-6 sm:p-8 rounded-3xl flex flex-col gap-5 shadow-xl text-white"
             >
-              <div className="flex justify-between items-start border-b border-white/10 pb-4">
+              <div className="flex justify-between items-start border-b border-emerald-800 pb-4">
                 <div>
                   <div className="flex items-center gap-2">
                     <h3 className="serif text-2xl sm:text-3xl font-bold text-white">{analyzedDistrict.name}</h3>
-                    <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md">
+                    <span className="bg-emerald-800/80 text-emerald-200 border border-emerald-600/60 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md">
                       {analyzedDistrict.region} Region
                     </span>
                   </div>
@@ -218,80 +220,80 @@ Generated from OUTPOST: Country Living Matrix
                   </p>
                 </div>
                 <div className="flex flex-col items-end">
-                  <span className="text-[9px] uppercase font-black tracking-widest text-emerald-300/80 font-mono">Outpost Score</span>
-                  <span className="text-3xl font-black text-emerald-400 font-mono">{analyzedDistrict.suitabilityScore}<span className="text-sm font-normal text-white/50">/10</span></span>
+                  <span className="text-[10px] uppercase font-bold tracking-widest text-emerald-300 font-sans">Outpost Score</span>
+                  <span className="text-3xl font-bold text-amber-300 font-sans">{analyzedDistrict.suitabilityScore}<span className="text-sm font-normal text-white/60">/10</span></span>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-black/30 p-4 rounded-2xl border border-white/10 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-[#06180E] p-4 rounded-2xl border border-emerald-900 text-xs">
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-[9px] uppercase font-black text-emerald-300/70 font-mono">Altitude & Rain</span>
+                  <span className="text-[10px] uppercase font-bold text-emerald-300/80 font-sans">Altitude & Rain</span>
                   <span className="font-bold text-white">{analyzedDistrict.altitude}</span>
-                  <span className="text-[10px] text-emerald-200">{analyzedDistrict.rainfall}</span>
+                  <span className="text-[11px] text-emerald-200">{analyzedDistrict.rainfall}</span>
                 </div>
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-[9px] uppercase font-black text-emerald-300/70 font-mono">Soil Type & Acidity (pH)</span>
+                  <span className="text-[10px] uppercase font-bold text-emerald-300/80 font-sans">Soil Type & Acidity (pH)</span>
                   <span className="font-bold text-white">{analyzedDistrict.soil}</span>
-                  <span className="text-[10px] text-emerald-200">{analyzedDistrict.soilPh}</span>
+                  <span className="text-[11px] text-emerald-200">{analyzedDistrict.soilPh}</span>
                 </div>
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-[9px] uppercase font-black text-emerald-300/70 font-mono">Well & Borehole Water Depth</span>
+                  <span className="text-[10px] uppercase font-bold text-emerald-300/80 font-sans">Well & Borehole Water Depth</span>
                   <span className="font-bold text-white">{analyzedDistrict.groundwaterDepthM}</span>
-                  <span className="text-[10px] text-emerald-200">Good Water Recharge</span>
+                  <span className="text-[11px] text-emerald-200">Good Water Recharge</span>
                 </div>
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-[9px] uppercase font-black text-amber-300/80 font-mono">Estimated Land Cost</span>
-                  <span className="font-extrabold text-amber-300">{analyzedDistrict.landCostBallpark}</span>
-                  <span className="text-[9px] text-white/60">Village / Customary Land</span>
+                  <span className="text-[10px] uppercase font-bold text-amber-300 font-sans">Estimated Land Cost</span>
+                  <span className="font-bold text-amber-300">{analyzedDistrict.landCostBallpark}</span>
+                  <span className="text-[10px] text-stone-300">Village / Customary Land</span>
                 </div>
               </div>
 
-              <div className="bg-emerald-950/70 p-3.5 rounded-2xl border border-emerald-800 text-xs flex flex-col gap-1.5">
-                <span className="text-[9px] font-black uppercase tracking-wider text-emerald-300 flex items-center gap-1 font-mono">
-                  <MapPin size={11} className="text-amber-400" /> Underground Water & Well Profile:
+              <div className="bg-emerald-950/80 p-3.5 rounded-2xl border border-emerald-800 text-xs flex flex-col gap-1.5">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-300 flex items-center gap-1 font-sans">
+                  <MapPin size={11} className="text-amber-300" /> Underground Water & Well Profile:
                 </span>
-                <p className="text-emerald-100/90 leading-relaxed font-normal">
+                <p className="text-emerald-100 leading-relaxed font-normal">
                   {analyzedDistrict.hydrogeologyNote}
                 </p>
               </div>
 
               <div>
-                <span className="text-[9px] uppercase font-black text-emerald-300/70 block mb-1.5 font-mono">Recommended Crops</span>
+                <span className="text-[10px] uppercase font-bold text-emerald-300/80 block mb-1.5 font-sans">Recommended Crops</span>
                 <div className="flex flex-wrap gap-1.5">
                   {analyzedDistrict.bestCrops.map(crop => (
-                    <span key={crop} className="bg-emerald-500/20 border border-emerald-400/30 text-emerald-100 px-3 py-1 rounded-xl text-xs font-bold">
+                    <span key={crop} className="bg-emerald-800/80 border border-emerald-600/60 text-emerald-100 px-3 py-1 rounded-xl text-xs font-semibold">
                       {crop}
                     </span>
                   ))}
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
-                <p className="text-xs text-emerald-100/90 leading-relaxed italic max-w-xl">
+              <div className="pt-3 border-t border-emerald-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+                <p className="text-xs text-emerald-100 leading-relaxed italic max-w-xl">
                   "{analyzedDistrict.outpostStrategy}"
                 </p>
                 <div className="flex flex-wrap items-center gap-2 shrink-0">
                   <button
                     onClick={handleCopyDossier}
                     className={cn(
-                      "px-3 py-1.5 rounded-xl text-[10px] font-mono font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 border cursor-pointer active:scale-95",
+                      "px-3 py-1.5 rounded-xl text-[10px] font-sans font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 border cursor-pointer active:scale-95",
                       hasCopiedDossier
-                        ? "bg-emerald-600 border-emerald-400 text-white"
-                        : "bg-white/10 hover:bg-white/20 text-amber-200 border-amber-500/30"
+                        ? "bg-emerald-700 border-emerald-500 text-white"
+                        : "bg-white/10 hover:bg-white/20 text-amber-200 border-white/20"
                     )}
                   >
-                    {hasCopiedDossier ? <CheckCircle2 size={12} className="text-emerald-300" /> : <Copy size={12} className="text-amber-400" />}
+                    {hasCopiedDossier ? <CheckCircle2 size={12} className="text-white" /> : <Copy size={12} className="text-amber-300" />}
                     {hasCopiedDossier ? 'Report Copied!' : 'Copy Summary'}
                   </button>
 
                   <Link
                     to={`/calculators?tab=solar&district=${analyzedDistrict.name.toLowerCase()}`}
-                    className="bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 px-3 py-1.5 rounded-xl text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all"
+                    className="bg-amber-500/25 hover:bg-amber-500/35 text-amber-200 border border-amber-400/40 px-3 py-1.5 rounded-xl text-[10px] font-sans font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all"
                   >
                     <Calculator size={12} /> Size Solar Pump
                   </Link>
 
-                  <span className="text-[9px] font-mono text-emerald-400/80 bg-black/40 px-2 py-1 rounded-md border border-white/5 shrink-0">
+                  <span className="text-[10px] font-sans text-emerald-300 bg-black/40 px-2 py-1 rounded-md border border-emerald-800 shrink-0">
                     Ref: {analyzedDistrict.dccmsSourceRef}
                   </span>
                 </div>
@@ -300,29 +302,29 @@ Generated from OUTPOST: Country Living Matrix
           )}
 
           {/* Customary Land Act (2016) Legal Registration Roadmap */}
-          <div className="bg-slate-950/80 p-6 rounded-3xl border border-emerald-800/80 flex flex-col gap-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-800/60 pb-3">
+          <div className="bg-stone-50 p-6 rounded-3xl border border-stone-200 flex flex-col gap-4 text-stone-900">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-200 pb-3">
               <div className="flex items-center gap-2">
-                <FileText className="text-amber-400" size={20} />
-                <h3 className="serif text-lg sm:text-xl font-bold text-white">Malawi Customary Land Act (2016) Acquisition Guide</h3>
+                <FileText className="text-emerald-800" size={20} />
+                <h3 className="serif text-lg sm:text-xl font-bold text-stone-900">Malawi Customary Land Act (2016) Acquisition Guide</h3>
               </div>
-              <span className="bg-amber-500/20 text-amber-300 border border-amber-400/40 text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-lg font-mono self-start sm:self-auto">
+              <span className="bg-emerald-100 text-emerald-900 border border-emerald-300 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg font-sans self-start sm:self-auto">
                 Official Statutory Process
               </span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <div className="bg-slate-900 p-3.5 rounded-2xl border border-slate-800 flex flex-col gap-1 text-xs">
-                <span className="text-amber-400 font-black text-[10px] uppercase font-mono">Step 1: T/A & GVH Consent</span>
-                <p className="text-slate-300 leading-snug">Meet Village Headman & Traditional Authority (TA) to verify customary land allocation and agree on boundaries.</p>
+              <div className="bg-white p-3.5 rounded-2xl border border-stone-200 flex flex-col gap-1 text-xs">
+                <span className="text-emerald-900 font-bold text-[11px] uppercase font-sans">Step 1: T/A & GVH Consent</span>
+                <p className="text-stone-600 leading-snug">Meet Village Headman & Traditional Authority (TA) to verify customary land allocation and agree on boundaries.</p>
               </div>
-              <div className="bg-slate-900 p-3.5 rounded-2xl border border-slate-800 flex flex-col gap-1 text-xs">
-                <span className="text-amber-400 font-black text-[10px] uppercase font-mono">Step 2: Customary Land Committee</span>
-                <p className="text-slate-300 leading-snug">File application with District Customary Land Committee (CLC) for beacon demarcation and GPS boundary mapping.</p>
+              <div className="bg-white p-3.5 rounded-2xl border border-stone-200 flex flex-col gap-1 text-xs">
+                <span className="text-emerald-900 font-bold text-[11px] uppercase font-sans">Step 2: Customary Land Committee</span>
+                <p className="text-stone-600 leading-snug">File application with District Customary Land Committee (CLC) for beacon demarcation and GPS boundary mapping.</p>
               </div>
-              <div className="bg-slate-900 p-3.5 rounded-2xl border border-slate-800 flex flex-col gap-1 text-xs">
-                <span className="text-amber-400 font-black text-[10px] uppercase font-mono">Step 3: Customary Estate Cert.</span>
-                <p className="text-slate-300 leading-snug">Receive Certificate of Customary Estate issued under Section 22 of Land Act 2016, giving perpetual private ownership rights.</p>
+              <div className="bg-white p-3.5 rounded-2xl border border-stone-200 flex flex-col gap-1 text-xs">
+                <span className="text-emerald-900 font-bold text-[11px] uppercase font-sans">Step 3: Customary Estate Cert.</span>
+                <p className="text-stone-600 leading-snug">Receive Certificate of Customary Estate issued under Section 22 of Land Act 2016, giving perpetual private ownership rights.</p>
               </div>
             </div>
           </div>
@@ -330,53 +332,67 @@ Generated from OUTPOST: Country Living Matrix
       </section>
 
       {/* ------------------------------------------------------------- */}
-      {/* SECTION 2: REGIONAL WEATHER & MICROCLIMATE FORECAST           */}
+      {/* SECTION 2: SIMPLIFIED DISTRICT READINESS CARDS                */}
+      {/* ------------------------------------------------------------- */}
+      <section>
+        <LandReadinessCards />
+      </section>
+
+      {/* ------------------------------------------------------------- */}
+      {/* SECTION 3: ELLEN WHITE PROPERTY SUITABILITY CALCULATOR        */}
+      {/* ------------------------------------------------------------- */}
+      <section>
+        <PropertySuitabilityCalculator />
+      </section>
+
+      {/* ------------------------------------------------------------- */}
+      {/* SECTION 4: REGIONAL WEATHER & MICROCLIMATE FORECAST           */}
       {/* ------------------------------------------------------------- */}
       <section>
         <RegionalWeatherWidget />
       </section>
 
       {/* ------------------------------------------------------------- */}
-      {/* SECTION 3: INTERACTIVE LAND EVALUATION CHECKLIST & ADVICE     */}
+      {/* SECTION 5: INTERACTIVE LAND EVALUATION CHECKLIST & ADVICE     */}
       {/* ------------------------------------------------------------- */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 flex flex-col gap-8">
-          <section className="backdrop-blur-md bg-white/5 p-6 sm:p-8 md:p-10 rounded-[2.5rem] border border-amber-500/25 shadow-2xl flex flex-col gap-6 text-white">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-amber-500/20 pb-4">
+          <section className="bg-white/95 p-6 sm:p-8 md:p-10 rounded-3xl border border-stone-200 shadow-xs flex flex-col gap-6 text-stone-900">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-200 pb-4">
               <div>
-                <span className="text-[10px] font-mono font-black uppercase tracking-widest text-amber-300">Sanctuary Reconnaissance</span>
-                <h3 className="serif text-2xl sm:text-3xl font-bold text-[#FAF8F5]">Land Evaluation Checklist</h3>
+                <span className="text-[11px] font-sans font-bold uppercase tracking-wider text-emerald-900">Sanctuary Reconnaissance</span>
+                <h3 className="serif text-2xl sm:text-3xl font-bold text-stone-900">Land Evaluation Checklist</h3>
               </div>
-              <span className="text-[10px] font-mono font-black uppercase text-amber-300 bg-amber-500/20 border border-amber-500/30 px-3 py-1 rounded-full font-mono self-start sm:self-auto">
+              <span className="text-[11px] font-sans font-bold uppercase text-emerald-900 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full self-start sm:self-auto">
                 {state.completedIds.length} / {LAND_CHECKLIST_DATA.length} Verified
               </span>
             </div>
 
             <div className="flex flex-col gap-6">
               {LAND_CHECKLIST_DATA.map((item) => (
-                <div key={item.id} className="group flex flex-col gap-4 p-4 rounded-2xl bg-white/[0.02] border border-amber-500/10 hover:border-amber-500/30 transition-all">
+                <div key={item.id} className="group flex flex-col gap-4 p-4 rounded-2xl bg-stone-50 border border-stone-200 hover:border-emerald-600/40 transition-all">
                   <div className="flex gap-4 items-start">
                     <button 
                       onClick={() => toggleComplete(item.id)}
                       className={cn(
-                        "shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all shadow-sm active:scale-90 border cursor-pointer",
+                        "shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all shadow-xs active:scale-90 border cursor-pointer",
                         state.completedIds.includes(item.id) 
-                          ? "bg-amber-500 border-amber-300 text-slate-950" 
-                          : "bg-white/5 border-amber-500/20 text-emerald-300 hover:text-amber-300"
+                          ? "bg-emerald-800 border-emerald-900 text-white" 
+                          : "bg-white border-stone-300 text-stone-400 hover:text-emerald-800"
                       )}
                     >
                       {state.completedIds.includes(item.id) ? <CheckCircle2 size={22} className="stroke-[2.5]" /> : <Circle size={22} />}
                     </button>
                     <div className="flex-1">
                       <div className="flex items-center gap-3">
-                        <h4 className={cn("font-bold text-slate-100 text-base sm:text-lg transition-all", state.completedIds.includes(item.id) && "opacity-50 line-through")}>
+                        <h4 className={cn("font-bold text-stone-900 text-base sm:text-lg transition-all", state.completedIds.includes(item.id) && "opacity-50 line-through")}>
                           {item.label}
                         </h4>
-                        <span className="text-[9px] font-mono font-black uppercase tracking-widest text-amber-300/80 bg-amber-500/15 border border-amber-500/25 px-2 py-0.5 rounded-md">
+                        <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-emerald-900 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded-md">
                           {item.category}
                         </span>
                       </div>
-                      <p className="text-xs sm:text-sm text-emerald-100/70 mt-1 leading-relaxed font-medium">{item.description}</p>
+                      <p className="text-xs sm:text-sm text-stone-600 mt-1 leading-relaxed font-medium">{item.description}</p>
                     </div>
                   </div>
 
@@ -387,9 +403,9 @@ Generated from OUTPOST: Country Living Matrix
                         value={state.notes[item.id] || ''}
                         onChange={(e) => updateNote(item.id, e.target.value)}
                         placeholder="Add field notes, GPS coordinates, chief contact, or survey observations..."
-                        className="w-full bg-black/30 border border-amber-500/15 rounded-xl p-3 text-xs font-mono text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400 placeholder:text-slate-500 min-h-[70px] resize-none transition-all"
+                        className="w-full bg-white border border-stone-300 rounded-xl p-3 text-xs font-sans text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-800 placeholder:text-stone-400 min-h-[70px] resize-none transition-all shadow-xs"
                       />
-                      <div className="absolute top-3 right-3 text-amber-400/30 pointer-events-none transition-opacity group-hover/note:opacity-100 opacity-0 md:opacity-100">
+                      <div className="absolute top-3 right-3 text-stone-400 pointer-events-none transition-opacity group-hover/note:opacity-100 opacity-0 md:opacity-100">
                         <PencilLine size={14} />
                       </div>
                     </div>
@@ -401,19 +417,19 @@ Generated from OUTPOST: Country Living Matrix
         </div>
 
         <aside className="flex flex-col gap-6">
-          <div className="backdrop-blur-md bg-white/5 p-6 sm:p-8 rounded-[2.5rem] border border-amber-500/25 shadow-xl text-white">
-            <span className="text-[10px] font-mono font-black uppercase tracking-widest text-amber-300 block mb-2">Guiding Light</span>
-            <h4 className="serif text-xl font-bold mb-3 italic text-[#FAF8F5]">The "Outpost" Principle</h4>
-            <p className="text-xs sm:text-sm text-emerald-100/80 leading-relaxed font-medium">
+          <div className="bg-[#0B2517] p-6 sm:p-8 rounded-3xl border border-emerald-800 shadow-md text-white">
+            <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-amber-300 block mb-2">Guiding Light</span>
+            <h4 className="serif text-xl font-bold mb-3 italic text-white">The "Outpost" Principle</h4>
+            <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed font-medium">
               EGW advised that while we move to the country, we should be close enough to cities to do medical missionary work and evangelism, but far enough that the local environment doesn't poison our children's minds.
             </p>
           </div>
           
-          <div className="backdrop-blur-md bg-white/5 p-6 sm:p-8 rounded-[2.5rem] border border-amber-500/25 shadow-lg flex flex-col gap-4 text-white">
-            <span className="text-[10px] font-mono font-black uppercase tracking-widest text-amber-300">Field Guides</span>
-            <h4 className="serif text-xl font-bold text-[#FAF8F5]">Interactive Scouting Tips</h4>
-            <p className="text-xs text-emerald-100/70 font-medium">Click any tip for practical advice on scouting land in Malawi:</p>
-            <ul className="text-xs text-slate-200 flex flex-col gap-2.5 font-bold uppercase tracking-wide">
+          <div className="bg-white/95 p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs flex flex-col gap-4 text-stone-900">
+            <span className="text-[11px] font-sans font-bold uppercase tracking-wider text-emerald-900">Field Guides</span>
+            <h4 className="serif text-xl font-bold text-stone-900">Interactive Scouting Tips</h4>
+            <p className="text-xs text-stone-600 font-medium">Click any tip for practical advice on scouting land in Malawi:</p>
+            <ul className="text-xs text-stone-700 flex flex-col gap-2.5 font-bold uppercase tracking-wide">
               {[
                 { id: 'drainage', title: 'Check Rain Drainage', desc: 'Ensure land is elevated enough to avoid flash flooding during peak rains (December - February).' },
                 { id: 'water', title: 'Verify Water Table', desc: 'Locate year-round dambos, perennial streams, or consult local drillers for borehole depth.' },
@@ -422,10 +438,10 @@ Generated from OUTPOST: Country Living Matrix
                 <button
                   key={tip.id}
                   onClick={() => setActiveTipModal(tip.id)}
-                  className="flex items-center justify-between p-3 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors border border-amber-500/15 text-left text-xs text-slate-100 group cursor-pointer"
+                  className="flex items-center justify-between p-3 rounded-2xl bg-stone-50 hover:bg-stone-100 transition-colors border border-stone-200 text-left text-xs text-stone-800 group cursor-pointer"
                 >
-                  <span className="font-mono text-[11px]">• {tip.title}</span>
-                  <ChevronRight size={15} className="text-amber-400 transition-transform group-hover:translate-x-1" />
+                  <span className="font-sans text-[12px] font-semibold">• {tip.title}</span>
+                  <ChevronRight size={15} className="text-emerald-800 transition-transform group-hover:translate-x-1" />
                 </button>
               ))}
             </ul>
@@ -436,15 +452,15 @@ Generated from OUTPOST: Country Living Matrix
       {/* ------------------------------------------------------------- */}
       {/* SECTION 4: REGIONAL MATRIX & CARTOGRAPHY EXPLORER             */}
       {/* ------------------------------------------------------------- */}
-      <section className="backdrop-blur-md bg-white/5 text-white rounded-[2.5rem] p-6 sm:p-8 md:p-12 shadow-2xl relative overflow-hidden border border-amber-500/25">
+      <section className="bg-white/95 text-stone-900 rounded-3xl p-6 sm:p-8 md:p-12 shadow-xs relative overflow-hidden border border-stone-200">
         <div className="flex flex-col lg:flex-row gap-12 relative z-10">
           <div className="flex-1 flex flex-col gap-6">
             <div className="flex flex-col gap-1">
-              <span className="text-[10px] font-mono font-black uppercase tracking-[0.25em] text-amber-300">
+              <span className="text-[11px] font-sans font-bold uppercase tracking-wider text-emerald-900">
                 04 • REGIONAL CARTOGRAPHY & AGRO-ECOLOGY
               </span>
-              <h3 className="serif text-3xl font-bold">Regional Scouting Matrix</h3>
-              <p className="text-emerald-100/70 font-medium leading-relaxed text-xs sm:text-sm">
+              <h3 className="serif text-3xl font-bold text-stone-900">Regional Scouting Matrix</h3>
+              <p className="text-stone-600 font-medium leading-relaxed text-xs sm:text-sm">
                 Malawi offers diverse microclimates across its Northern, Central, and Southern plateaus. Filter by region below to explore zone protocols and crop profiles.
               </p>
             </div>
@@ -455,10 +471,10 @@ Generated from OUTPOST: Country Living Matrix
                   key={reg}
                   onClick={() => setSelectedRegion(selectedRegion === reg ? null : reg)}
                   className={cn(
-                    "px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border cursor-pointer",
+                    "px-6 py-3 rounded-2xl text-[11px] font-sans font-bold uppercase tracking-wider transition-all border cursor-pointer",
                     selectedRegion === reg 
-                      ? "bg-emerald-500 border-emerald-400 text-white shadow-lg scale-105" 
-                      : "bg-white/5 border-white/10 text-emerald-100/60 hover:bg-white/10"
+                      ? "bg-emerald-900 border-emerald-950 text-white shadow-xs scale-102" 
+                      : "bg-stone-100 border-stone-300 text-stone-700 hover:bg-stone-200 hover:text-stone-900"
                   )}
                 >
                   {reg} Region
@@ -480,10 +496,10 @@ Generated from OUTPOST: Country Living Matrix
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.3, ease: 'easeInOut' }}
                       className={cn(
-                        "bg-slate-950/40 backdrop-blur-xl rounded-3xl border transition-all duration-300 ease-in-out overflow-hidden cursor-pointer",
+                        "rounded-2xl border transition-all duration-300 ease-in-out overflow-hidden cursor-pointer",
                         isExpanded 
-                          ? "border-amber-500/60 bg-slate-950/70 ring-2 ring-amber-500/20 shadow-2xl" 
-                          : "border-white/10 hover:border-amber-500/30 hover:bg-slate-950/50"
+                          ? "border-emerald-800 bg-white ring-2 ring-emerald-800/20 shadow-md" 
+                          : "bg-stone-50 border-stone-200 hover:border-emerald-600/40 hover:bg-stone-100/70"
                       )}
                       onClick={() => setExpandedZoneId(isExpanded ? null : zone.id)}
                     >
@@ -492,23 +508,23 @@ Generated from OUTPOST: Country Living Matrix
                         <div className="flex justify-between items-start gap-3">
                           <div>
                             <div className="flex items-center gap-2 mb-1">
-                              <span className="font-mono text-[10px] font-bold uppercase text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">
+                              <span className="font-sans text-[10px] font-bold uppercase text-emerald-900 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
                                 {zone.region} Region
                               </span>
                             </div>
-                            <h4 className="font-serif text-amber-200 text-lg sm:text-xl font-semibold">{zone.name}</h4>
+                            <h4 className="serif text-stone-900 text-lg sm:text-xl font-bold">{zone.name}</h4>
                           </div>
 
                           <div className="flex items-center gap-2 shrink-0">
                             {/* Right-aligned micro badge */}
-                            <span className="font-mono text-[10px] text-amber-400/80 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                            <span className="font-sans text-[10px] font-semibold text-stone-600 bg-stone-100 px-2 py-0.5 rounded border border-stone-200">
                               {zone.climate}
                             </span>
                             <div className={cn(
                               "p-1.5 rounded-xl border transition-all duration-300 ease-in-out",
                               isExpanded 
-                                ? "bg-amber-500 text-slate-950 border-amber-400" 
-                                : "bg-slate-900 text-slate-400 border-white/10"
+                                ? "bg-emerald-800 text-white border-emerald-900" 
+                                : "bg-white text-stone-600 border-stone-200"
                             )}>
                               <ChevronDown 
                                 size={16} 
@@ -521,14 +537,14 @@ Generated from OUTPOST: Country Living Matrix
                           </div>
                         </div>
                         
-                        <p className="text-xs text-slate-300 font-medium leading-relaxed">
+                        <p className="text-xs text-stone-600 font-medium leading-relaxed">
                           {zone.suitability}
                         </p>
 
                         {/* Crops summary badges */}
                         <div className="flex flex-wrap gap-1.5 mt-0.5">
                           {zone.crops.map(crop => (
-                            <span key={crop} className="bg-emerald-950/70 px-2.5 py-0.5 rounded-lg text-[9px] font-mono font-bold uppercase tracking-wider border border-emerald-700/50 text-emerald-200">
+                            <span key={crop} className="bg-emerald-50 px-2.5 py-0.5 rounded-lg text-[10px] font-sans font-semibold uppercase tracking-wider border border-emerald-200 text-emerald-900">
                               {crop}
                             </span>
                           ))}
@@ -542,41 +558,41 @@ Generated from OUTPOST: Country Living Matrix
                               animate={{ opacity: 1, height: 'auto' }}
                               exit={{ opacity: 0, height: 0 }}
                               transition={{ duration: 0.3, ease: 'easeInOut' }}
-                              className="border-t border-white/10 pt-4 mt-2 flex flex-col gap-4 overflow-hidden"
+                              className="border-t border-stone-200 pt-4 mt-2 flex flex-col gap-4 overflow-hidden"
                             >
                               {/* 2-Column Concise Layout */}
                               <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
                                 
                                 {/* Left Column: Bulleted Core Steps & Protocols */}
                                 <div className="md:col-span-7 flex flex-col gap-2.5">
-                                  <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
-                                    <span className="font-serif text-amber-200 text-xs font-semibold flex items-center gap-1.5">
-                                      <Sparkles size={13} className="text-amber-400" />
+                                  <div className="flex items-center justify-between border-b border-stone-200 pb-1.5">
+                                    <span className="serif text-stone-900 text-xs font-semibold flex items-center gap-1.5">
+                                      <Sparkles size={13} className="text-emerald-800" />
                                       Key Field Steps
                                     </span>
-                                    <span className="font-mono text-[9px] text-emerald-400/80 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">
+                                    <span className="font-sans text-[10px] font-semibold text-emerald-900 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
                                       Land Guide
                                     </span>
                                   </div>
 
                                   <ul className="flex flex-col gap-2 text-xs">
-                                    <li className="flex items-start gap-2 bg-slate-900/80 p-2.5 rounded-xl border border-white/5">
-                                      <span className="w-4 h-4 rounded bg-amber-500/20 text-amber-300 font-mono text-[9px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                                    <li className="flex items-start gap-2 bg-stone-50 p-2.5 rounded-xl border border-stone-200">
+                                      <span className="w-4 h-4 rounded bg-emerald-100 text-emerald-900 font-sans text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
                                         1
                                       </span>
                                       <div>
-                                        <strong className="text-amber-300 font-semibold">Outpost Scouting Strategy:</strong>
-                                        <span className="text-slate-300 ml-1 leading-relaxed">Establish gravity-fed water intake and cold-hardy orchards in high elevations.</span>
+                                        <strong className="text-stone-900 font-semibold">Outpost Scouting Strategy:</strong>
+                                        <span className="text-stone-600 ml-1 leading-relaxed">Establish gravity-fed water intake and cold-hardy orchards in high elevations.</span>
                                       </div>
                                     </li>
 
-                                    <li className="flex items-start gap-2 bg-slate-900/80 p-2.5 rounded-xl border border-white/5">
-                                      <span className="w-4 h-4 rounded bg-amber-500/20 text-amber-300 font-mono text-[9px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                                    <li className="flex items-start gap-2 bg-stone-50 p-2.5 rounded-xl border border-stone-200">
+                                      <span className="w-4 h-4 rounded bg-emerald-100 text-emerald-900 font-sans text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
                                         2
                                       </span>
                                       <div>
-                                        <strong className="text-amber-300 font-semibold">Microclimate Shielding:</strong>
-                                        <span className="text-slate-300 ml-1 leading-relaxed">Elevation provides natural vector buffering against lowland heat stress and malaria zones.</span>
+                                        <strong className="text-stone-900 font-semibold">Microclimate Shielding:</strong>
+                                        <span className="text-stone-600 ml-1 leading-relaxed">Elevation provides natural vector buffering against lowland heat stress and malaria zones.</span>
                                       </div>
                                     </li>
                                   </ul>
@@ -584,40 +600,40 @@ Generated from OUTPOST: Country Living Matrix
 
                                 {/* Right Column: Required Equipment & Metrics in font-mono */}
                                 <div className="md:col-span-5 flex flex-col gap-2.5">
-                                  <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
-                                    <span className="font-serif text-amber-200 text-xs font-semibold flex items-center gap-1.5">
-                                      <Wrench size={13} className="text-amber-400" />
+                                  <div className="flex items-center justify-between border-b border-stone-200 pb-1.5">
+                                    <span className="serif text-stone-900 text-xs font-semibold flex items-center gap-1.5">
+                                      <Wrench size={13} className="text-emerald-800" />
                                       Key Details
                                     </span>
-                                    <span className="font-mono text-[9px] text-amber-400/80 bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20">
+                                    <span className="font-sans text-[10px] font-semibold text-stone-600 bg-stone-100 px-1.5 py-0.5 rounded border border-stone-200">
                                       Field Details
                                     </span>
                                   </div>
 
-                                  <div className="flex flex-col gap-2 font-mono text-xs">
-                                    <div className="bg-slate-900/80 p-2 rounded-xl border border-white/10">
-                                      <span className="text-[9px] uppercase text-slate-400 block font-bold">Target Zone</span>
-                                      <span className="text-emerald-300 font-bold text-[11px]">{zone.region} Plateau</span>
+                                  <div className="flex flex-col gap-2 text-xs">
+                                    <div className="bg-stone-50 p-2 rounded-xl border border-stone-200">
+                                      <span className="text-[10px] uppercase text-stone-500 block font-bold font-sans">Target Zone</span>
+                                      <span className="text-emerald-900 font-bold text-[11px]">{zone.region} Plateau</span>
                                     </div>
-                                    <div className="bg-slate-900/80 p-2 rounded-xl border border-white/10">
-                                      <span className="text-[9px] uppercase text-slate-400 block font-bold">Climate Classification</span>
-                                      <span className="text-amber-300 font-bold text-[11px]">{zone.climate}</span>
+                                    <div className="bg-stone-50 p-2 rounded-xl border border-stone-200">
+                                      <span className="text-[10px] uppercase text-stone-500 block font-bold font-sans">Climate Classification</span>
+                                      <span className="text-stone-800 font-bold text-[11px]">{zone.climate}</span>
                                     </div>
                                   </div>
                                 </div>
                               </div>
 
                               {/* Single High-Contrast Action Button */}
-                              <div className="pt-2 border-t border-white/10">
+                              <div className="pt-2 border-t border-stone-200">
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     handleDistrictSearch(zone.name.split(' ')[0]);
                                   }}
-                                  className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-mono font-bold text-xs uppercase tracking-wider py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md active:scale-98 cursor-pointer"
+                                  className="w-full bg-emerald-800 hover:bg-emerald-700 text-white font-sans font-bold text-xs uppercase tracking-wider py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer"
                                 >
                                   <span>Launch District Reconnaissance</span>
-                                  <ArrowUpRight size={13} className="text-slate-950" />
+                                  <ArrowUpRight size={13} className="text-white" />
                                 </button>
                               </div>
                             </motion.div>
@@ -632,74 +648,74 @@ Generated from OUTPOST: Country Living Matrix
           </div>
 
           {/* Stylized Vector Malawi Map Preview */}
-          <div className="lg:w-80 shrink-0 flex flex-col items-center gap-6 bg-white/5 rounded-[3.5rem] p-8 border border-white/10">
+          <div className="lg:w-80 shrink-0 flex flex-col items-center gap-6 bg-stone-50 rounded-3xl p-8 border border-stone-200">
             <div className="flex flex-col items-center text-center gap-1">
-              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-400">Malawi Cartography</span>
-              <span className="text-xs font-bold text-emerald-200">Select Region to Scout</span>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-900 font-sans">Malawi Cartography</span>
+              <span className="text-xs font-semibold text-stone-600">Select Region to Scout</span>
             </div>
 
             <div className="relative w-48 h-80 flex items-center justify-center">
-              <svg viewBox="0 0 200 400" className="w-full h-full drop-shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+              <svg viewBox="0 0 200 400" className="w-full h-full drop-shadow-sm">
                 {/* Northern Region */}
                 <path 
                   d="M 90 20 C 110 30, 130 60, 120 100 C 110 130, 90 140, 80 140 C 70 120, 60 80, 70 40 Z" 
-                  fill={selectedRegion === 'Northern' ? '#10b981' : '#064e3b'}
-                  stroke="#34d399"
-                  strokeWidth="2"
-                  className="transition-all duration-300 cursor-pointer hover:fill-emerald-500"
+                  fill={selectedRegion === 'Northern' ? '#064e3b' : '#a7f3d0'}
+                  stroke="#047857"
+                  strokeWidth="1.5"
+                  className="transition-all duration-300 cursor-pointer hover:fill-emerald-800"
                   onClick={() => setSelectedRegion('Northern')}
                 />
                 
                 {/* Central Region */}
                 <path 
                   d="M 80 140 C 90 140, 110 160, 120 200 C 110 240, 80 260, 70 250 C 60 220, 60 170, 80 140 Z" 
-                  fill={selectedRegion === 'Central' ? '#10b981' : '#064e3b'}
-                  stroke="#34d399"
-                  strokeWidth="2"
-                  className="transition-all duration-300 cursor-pointer hover:fill-emerald-500"
+                  fill={selectedRegion === 'Central' ? '#064e3b' : '#d1fae5'}
+                  stroke="#047857"
+                  strokeWidth="1.5"
+                  className="transition-all duration-300 cursor-pointer hover:fill-emerald-800"
                   onClick={() => setSelectedRegion('Central')}
                 />
 
                 {/* Southern Region */}
                 <path 
                   d="M 70 250 C 80 260, 110 270, 130 310 C 120 350, 90 380, 80 370 C 60 330, 50 280, 70 250 Z" 
-                  fill={selectedRegion === 'Southern' ? '#10b981' : '#064e3b'}
-                  stroke="#34d399"
-                  strokeWidth="2"
-                  className="transition-all duration-300 cursor-pointer hover:fill-emerald-500"
+                  fill={selectedRegion === 'Southern' ? '#064e3b' : '#a7f3d0'}
+                  stroke="#047857"
+                  strokeWidth="1.5"
+                  className="transition-all duration-300 cursor-pointer hover:fill-emerald-800"
                   onClick={() => setSelectedRegion('Southern')}
                 />
 
                 {/* Lake Malawi Outline */}
                 <path 
                   d="M 120 40 C 130 80, 140 150, 125 250 C 120 230, 115 120, 110 60 Z" 
-                  fill="#0284c7"
-                  opacity="0.6"
+                  fill="#38bdf8"
+                  opacity="0.7"
                 />
 
                 {/* Dynamic Region Markers with Icons */}
                 {selectedRegion === 'Northern' && (
-                  <g className="animate-bounce">
-                    <circle cx="95" cy="70" r="6" fill="#f59e0b" />
-                    <text x="110" y="75" fill="#fef3c7" fontSize="10" fontWeight="bold" fontFamily="monospace">VIPHYA</text>
+                  <g>
+                    <circle cx="95" cy="70" r="5" fill="#f59e0b" />
+                    <text x="108" y="74" fill="#064e3b" fontSize="10" fontWeight="bold" fontFamily="sans-serif">VIPHYA</text>
                   </g>
                 )}
                 {selectedRegion === 'Central' && (
-                  <g className="animate-bounce">
-                    <circle cx="90" cy="190" r="6" fill="#f59e0b" />
-                    <text x="105" y="195" fill="#fef3c7" fontSize="10" fontWeight="bold" fontFamily="monospace">DEDZA</text>
+                  <g>
+                    <circle cx="90" cy="190" r="5" fill="#f59e0b" />
+                    <text x="103" y="194" fill="#064e3b" fontSize="10" fontWeight="bold" fontFamily="sans-serif">DEDZA</text>
                   </g>
                 )}
                 {selectedRegion === 'Southern' && (
-                  <g className="animate-bounce">
-                    <circle cx="95" cy="300" r="6" fill="#f59e0b" />
-                    <text x="110" y="305" fill="#fef3c7" fontSize="10" fontWeight="bold" fontFamily="monospace">MULANJE</text>
+                  <g>
+                    <circle cx="95" cy="300" r="5" fill="#f59e0b" />
+                    <text x="108" y="304" fill="#064e3b" fontSize="10" fontWeight="bold" fontFamily="sans-serif">MULANJE</text>
                   </g>
                 )}
               </svg>
             </div>
 
-            <div className="text-[10px] text-center text-emerald-200/60 font-mono">
+            <div className="text-[11px] text-center text-stone-500 font-medium">
               Click region on map or select button above to zoom into territory.
             </div>
           </div>
@@ -717,25 +733,25 @@ Generated from OUTPOST: Country Living Matrix
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-[#091D12] text-white rounded-[2.5rem] p-8 md:p-10 max-w-lg w-full shadow-2xl border border-amber-500/30 flex flex-col gap-6 relative"
+              className="bg-[#0B2517] text-white rounded-3xl p-8 md:p-10 max-w-lg w-full shadow-2xl border border-emerald-800 flex flex-col gap-6 relative"
             >
               <button 
                 onClick={() => setActiveTipModal(null)}
-                className="absolute top-6 right-6 p-2 rounded-full bg-white/10 text-slate-300 hover:text-white"
+                className="absolute top-6 right-6 p-2 rounded-full bg-white/10 text-stone-300 hover:text-white transition-colors cursor-pointer"
               >
                 <X size={20} />
               </button>
 
               <div className="flex items-center gap-3 text-amber-300">
                 <Compass size={28} />
-                <h3 className="serif text-2xl font-bold text-[#FAF8F5]">
+                <h3 className="serif text-2xl font-bold text-white">
                   {activeTipModal === 'drainage' && 'Rain Drainage & Soil Runoff'}
                   {activeTipModal === 'water' && 'Water Table & Well Depth'}
                   {activeTipModal === 'zoning' && 'Land Title & Chief Approvals'}
                 </h3>
               </div>
 
-              <p className="text-emerald-100/90 text-sm leading-relaxed font-medium">
+              <p className="text-emerald-100 text-sm leading-relaxed font-normal">
                 {activeTipModal === 'drainage' && 'During the Malawian rainy season (Nov - Mar), low-lying areas in valleys can submerge. Choose land with gentle slopes, construct contour ridges (misozi), and plant vetiver grass to prevent soil erosion.'}
                 {activeTipModal === 'water' && 'Water is the lifeline of an outpost. Verify perennial streams or dambos that maintain water through October. If sinking a borehole, target areas with water tables under 30 meters for efficient solar pumping.'}
                 {activeTipModal === 'zoning' && 'When acquiring customary land in rural Malawi, meet with the Village Headman and Traditional Authority (TA). Ensure clear boundaries are agreed upon with neighbors and documented with official land committee receipts.'}
@@ -743,7 +759,7 @@ Generated from OUTPOST: Country Living Matrix
 
               <button 
                 onClick={() => setActiveTipModal(null)}
-                className="bg-amber-500 hover:bg-amber-400 text-slate-950 py-3.5 rounded-2xl font-mono font-black text-xs uppercase tracking-widest transition-all cursor-pointer"
+                className="bg-emerald-800 hover:bg-emerald-700 text-white border border-emerald-600/50 py-3.5 rounded-2xl font-sans font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md"
               >
                 Understood & Acknowledged
               </button>
@@ -760,45 +776,45 @@ Generated from OUTPOST: Country Living Matrix
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 30 }}
-              className="bg-[#091D12] text-white rounded-[2.5rem] p-8 md:p-12 max-w-2xl w-full shadow-2xl border border-amber-500/30 flex flex-col gap-6 relative my-8"
+              className="bg-[#0B2517] text-white rounded-3xl p-8 md:p-12 max-w-2xl w-full shadow-2xl border border-emerald-800 flex flex-col gap-6 relative my-8"
             >
               <button 
                 onClick={() => setShowSurveyModal(false)}
-                className="absolute top-8 right-8 p-3 rounded-full bg-white/10 text-slate-300 hover:text-white"
+                className="absolute top-8 right-8 p-3 rounded-full bg-white/10 text-stone-300 hover:text-white transition-colors cursor-pointer"
               >
                 <X size={20} />
               </button>
 
               <div className="flex flex-col gap-2">
-                <span className="text-amber-300 font-mono font-black uppercase text-[10px] tracking-[0.2em]">Sanctuary Scout Report</span>
-                <h3 className="serif text-3xl font-bold text-[#FAF8F5]">Malawi Land Scouting Survey</h3>
+                <span className="text-amber-300 font-sans font-bold uppercase text-[11px] tracking-wider">Sanctuary Scout Report</span>
+                <h3 className="serif text-3xl font-bold text-white">Malawi Land Scouting Survey</h3>
               </div>
 
-              <div className="flex flex-col gap-4 text-sm text-emerald-100/90 leading-relaxed font-medium">
-                <div className="p-4 bg-white/5 rounded-2xl border border-amber-500/20">
+              <div className="flex flex-col gap-4 text-sm text-stone-100 leading-relaxed font-normal">
+                <div className="p-4 bg-[#06180E] rounded-2xl border border-emerald-900">
                   <h4 className="font-bold text-amber-300 mb-1">Recommended Prime Outpost Regions</h4>
-                  <p className="text-xs leading-relaxed text-slate-200">
-                    <strong>Northern Region:</strong> Viphya Plateau & Misuku Hills (High rainfall, timber, cool climate).<br />
-                    <strong>Central Region:</strong> Dedza Highlands & Ntcheu (Fertile volcanic soil, ideal for cold crops).<br />
-                    <strong>Southern Region:</strong> Mulanje Slopes & Zomba Plateau (Abundant perennial mountain water).
+                  <p className="text-xs leading-relaxed text-stone-200">
+                    <strong className="text-white">Northern Region:</strong> Viphya Plateau & Misuku Hills (High rainfall, timber, cool climate).<br />
+                    <strong className="text-white">Central Region:</strong> Dedza Highlands & Ntcheu (Fertile volcanic soil, ideal for cold crops).<br />
+                    <strong className="text-white">Southern Region:</strong> Mulanje Slopes & Zomba Plateau (Abundant perennial mountain water).
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-4 bg-white/5 rounded-2xl border border-amber-500/15">
-                    <h5 className="font-bold text-amber-300 text-xs font-mono uppercase mb-2">Step 1: Water Security</h5>
-                    <p className="text-xs text-slate-300">Inspect dambo moisture retention, shallow well water table depth, and perennial stream gravity potential.</p>
+                  <div className="p-4 bg-[#06180E] rounded-2xl border border-emerald-900">
+                    <h5 className="font-bold text-amber-300 text-xs font-sans uppercase mb-2">Step 1: Water Security</h5>
+                    <p className="text-xs text-stone-200">Inspect dambo moisture retention, shallow well water table depth, and perennial stream gravity potential.</p>
                   </div>
-                  <div className="p-4 bg-white/5 rounded-2xl border border-amber-500/15">
-                    <h5 className="font-bold text-amber-300 text-xs font-mono uppercase mb-2">Step 2: Customary Title</h5>
-                    <p className="text-xs text-slate-300">Request formal beacon boundary surveying through Group Village Headman & District Land Registry under 2016 Act.</p>
+                  <div className="p-4 bg-[#06180E] rounded-2xl border border-emerald-900">
+                    <h5 className="font-bold text-amber-300 text-xs font-sans uppercase mb-2">Step 2: Customary Title</h5>
+                    <p className="text-xs text-stone-200">Request formal beacon boundary surveying through Group Village Headman & District Land Registry under 2016 Act.</p>
                   </div>
                 </div>
               </div>
 
               <button 
                 onClick={() => setShowSurveyModal(false)}
-                className="bg-amber-500 hover:bg-amber-400 text-slate-950 py-3.5 rounded-2xl font-mono font-black text-xs uppercase tracking-widest transition-all cursor-pointer"
+                className="bg-emerald-800 hover:bg-emerald-700 text-white border border-emerald-600/50 py-3.5 rounded-2xl font-sans font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md"
               >
                 Close Guide
               </button>

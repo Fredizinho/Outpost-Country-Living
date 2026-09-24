@@ -1,0 +1,73 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidUserProfile(data) {
+      return data.uid is string &&
+             data.uid.size() > 0 &&
+             data.uid.size() <= 128 &&
+             data.email is string &&
+             data.email.size() <= 254 &&
+             (!('displayName' in data) || (data.displayName is string && data.displayName.size() <= 120)) &&
+             (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 1024)) &&
+             (!('region' in data) || (data.region is string && data.region.size() <= 64)) &&
+             (!('district' in data) || (data.district is string && data.district.size() <= 64)) &&
+             (!('familyMembers' in data) || (data.familyMembers is number && data.familyMembers >= 0 && data.familyMembers <= 100)) &&
+             (!('householdSize' in data) || (data.householdSize is string && data.householdSize.size() <= 64)) &&
+             (!('landSizeAcres' in data) || (data.landSizeAcres is number && data.landSizeAcres >= 0 && data.landSizeAcres <= 10000)) &&
+             (!('currentSeason' in data) || (data.currentSeason is string && data.currentSeason.size() <= 64)) &&
+             (!('homesteadGoal' in data) || (data.homesteadGoal is string && data.homesteadGoal.size() <= 256)) &&
+             (!('budgetBand' in data) || (data.budgetBand is string && data.budgetBand.size() <= 128)) &&
+             (!('timeline' in data) || (data.timeline is string && data.timeline.size() <= 128)) &&
+             (!('onboardingCompleted' in data) || (data.onboardingCompleted is bool));
+    }
+
+    match /users/{userId} {
+      allow get: if isOwner(userId) && isValidId(userId);
+      allow list: if false;
+
+      allow create: if isOwner(userId) &&
+                       isValidId(userId) &&
+                       incoming().uid == request.auth.uid &&
+                       isValidUserProfile(incoming());
+
+      allow update: if isOwner(userId) &&
+                       isValidId(userId) &&
+                       incoming().uid == existing().uid &&
+                       isValidUserProfile(incoming());
+
+      allow delete: if isOwner(userId) && isValidId(userId);
+
+      match /progress/{progressId} {
+        allow get, list: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidId(progressId);
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}

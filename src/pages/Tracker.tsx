@@ -14,6 +14,7 @@ import {
   SanctuarySectionHeader, 
   SanctuaryStatBox 
 } from '@/components/ui';
+import { TransitionReadinessLedger } from '@/components/outpost/TransitionReadinessLedger';
 
 const ICON_MAP: Record<string, any> = {
   prepare: ShoppingBag,
@@ -337,6 +338,11 @@ export default function Tracker() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Spirit of Prophecy 5-Stage Transition Readiness Ledger (Pillar 1) */}
+      <section>
+        <TransitionReadinessLedger />
       </section>
 
       {/* Step Cards List */}

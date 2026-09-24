@@ -1,0 +1,114 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile containing identity and homestead preferences",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "User unique identifier matching auth.uid"
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "User display name"
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "Avatar image URL"
+        },
+        "region": {
+          "type": "string",
+          "description": "Malawi region: Northern, Central, or Southern"
+        },
+        "district": {
+          "type": "string",
+          "description": "Malawi district selection"
+        },
+        "familyMembers": {
+          "type": "number",
+          "description": "Number of family members in household"
+        },
+        "householdSize": {
+          "type": "string",
+          "description": "Household size category"
+        },
+        "landSizeAcres": {
+          "type": "number",
+          "description": "Estimated target or owned land in acres"
+        },
+        "currentSeason": {
+          "type": "string",
+          "description": "Current agricultural season"
+        },
+        "homesteadGoal": {
+          "type": "string",
+          "description": "Primary homestead calling and mission"
+        },
+        "budgetBand": {
+          "type": "string",
+          "description": "Budget category for off-grid setup"
+        },
+        "timeline": {
+          "type": "string",
+          "description": "Relocation timeline"
+        },
+        "onboardingCompleted": {
+          "type": "boolean",
+          "description": "Whether the user completed onboarding"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Account creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last profile update timestamp"
+        }
+      },
+      "required": ["uid", "email"]
+    },
+    "UserProgress": {
+      "title": "UserProgress",
+      "description": "User progress milestones, saved parcels, and checklist status",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Owning user UID"
+        },
+        "completedSubtaskIds": {
+          "type": "array",
+          "description": "IDs of completed exodus tracker subtasks"
+        },
+        "landChecklistCompletedIds": {
+          "type": "array",
+          "description": "IDs of completed land scouting checklist items"
+        },
+        "savedParcelIds": {
+          "type": "array",
+          "description": "IDs of bookmarked land parcels"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last progress update timestamp"
+        }
+      },
+      "required": ["userId"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Individual user profile and homestead settings"
+    },
+    "/users/{userId}/progress/{progressId}": {
+      "schema": "UserProgress",
+      "description": "User specific progress tracking, bookmarks, and checklist"
+    }
+  }
+}

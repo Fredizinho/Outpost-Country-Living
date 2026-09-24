@@ -438,13 +438,13 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Intermediate',
     timeToMaster: '1 Season',
     iconName: 'droughtcrops',
-    summary: 'Growing high-yield climate-resilient dryland staples—Sorghum (Mapira), Pearl Millet (Mchewere), Cassava (Chinangwa), Pigeon Pea (Nandolo), and Cowpeas (Khobwe)—using seed priming, bio-intensive spacing, and minimum soil disturbance.',
+    summary: 'Growing high-yield climate-resilient dryland staples—Sorghum, Pearl Millet, Cassava, Pigeon Peas, and Cowpeas—using seed priming, bio-intensive spacing, and minimum soil disturbance.',
     description: 'As rainfall patterns become erratic and mid-season dry spells more frequent, relying solely on water-hungry hybrid maize risks total crop failure. Modern agroecological cultivation combines drought-hardy traditional grains and deep-rooting legumes with bio-intensive planting techniques: soaking seeds (priming) before sowing, zero-till planting basins, and companion intercropping that locks in residual soil moisture.',
     steps: [
-      'Crop Selection: Choose proven drought-hardy varieties: Sorghum (Pilira 1 or Serena), Pearl Millet (Nyankhombo), Cassava (Manyokola), and Pigeon Pea (Mwaiwathualimi).',
+      'Crop Selection: Choose proven drought-hardy varieties: Sorghum, Pearl Millet, Cassava, and Pigeon Peas.',
       'Seed Priming: Soak sorghum/millet seeds in clean water or aerated compost tea for 8 hours overnight; surface dry in shade for 1 hour before sowing to accelerate germination by 48 hours.',
-      'No-Till Planting Stations (Zai Pits / Sasakawa): Dig small 15cm x 15cm planting basins spaced 75cm apart along contour lines; place 2 handfuls of rich compost in each station.',
-      'Intercropping Guilds: Intercrop 2 rows of sorghum/maize with 1 row of trailing cowpeas (khobwe) or climbing lablab beans to provide a dense living mulch canopy.',
+      'No-Till Planting Stations (Zai Pits / Bio-basins): Dig small 15cm x 15cm planting basins spaced 75cm apart along contour lines; place 2 handfuls of rich compost in each station.',
+      'Intercropping Guilds: Intercrop 2 rows of sorghum/maize with 1 row of trailing cowpeas or climbing beans to provide a dense living mulch canopy.',
       'Mulch Retention (God’s Blanket): Keep a continuous 8cm cover of dry crop residue across the soil surface to reduce evaporation by up to 70%.',
       'Thinning & Weeding: Thin seedlings to the strongest 2 plants per station at 2 weeks. Uproot weeds early before they compete for soil moisture.'
     ],

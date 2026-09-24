@@ -38,12 +38,12 @@ export default function What() {
   ];
 
   const defaultPantry = [
-    { id: 'p1', label: 'Bulk Grains (Chimanga, Mapira, Mawere, Rice)', checked: false },
-    { id: 'p2', label: 'Home-Canned & Dried Vegetables (Mfutso, Mpiru, Nkhwani)', checked: false },
-    { id: 'p3', label: 'Heirloom Non-GMO Seeds (Chimanga cha Makolo)', checked: false },
-    { id: 'p4', label: 'Natural Herbal Medicines & Garlic (Galuwinki/Adyo)', checked: false },
-    { id: 'p5', label: 'Legumes & Dried Beans (Nyemba, Chimbamba, Nandolo, Nzama)', checked: false },
-    { id: 'p6', label: 'Cold-Pressed Oils & Honey (Saniflower, Ntedza Oil)', checked: false },
+    { id: 'p1', label: 'Bulk Grains (Corn, Sorghum, Millet, Rice)', checked: false },
+    { id: 'p2', label: 'Home-Canned & Solar-Dried Vegetables (Dried Greens, Tomatoes, Squash)', checked: false },
+    { id: 'p3', label: 'Heirloom Non-GMO Seeds (Open-Pollinated Heritage Varieties)', checked: false },
+    { id: 'p4', label: 'Natural Herbal Remedies & Pure Charcoal (Garlic, Moringa, Aloe)', checked: false },
+    { id: 'p5', label: 'Protein Legumes & Dried Beans (Field Beans, Cowpeas, Pigeon Peas, Groundnuts)', checked: false },
+    { id: 'p6', label: 'Cold-Pressed Oils & Raw Honey (Sunflower Oil, Groundnut Oil, Honey)', checked: false },
   ];
 
   const [pantryItems, setPantryItems] = useState(() => {
@@ -65,17 +65,17 @@ export default function What() {
     <div className="px-6 md:px-12 py-10 max-w-6xl mx-auto flex flex-col gap-12">
       <header className="flex flex-col gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-md">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-100 border border-emerald-300 flex items-center justify-center text-emerald-800 shadow-xs">
             <Package size={26} />
           </div>
           <div>
-            <span className="text-[10px] font-mono uppercase tracking-widest font-black text-amber-300">Homestead Infrastructure</span>
-            <h2 className="serif text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#FAF8F5]">
+            <span className="text-[11px] font-sans uppercase tracking-widest font-bold text-emerald-800">Homestead Infrastructure</span>
+            <h2 className="serif text-3xl md:text-4xl lg:text-5xl font-extrabold text-stone-900">
               The Essentials & Farm Infrastructure
             </h2>
           </div>
         </div>
-        <p className="text-emerald-100/80 max-w-3xl text-sm sm:text-base font-medium leading-relaxed">
+        <p className="text-stone-600 max-w-3xl text-sm sm:text-base font-serif font-medium leading-relaxed">
           Building the infrastructure of a self-sustaining home requires intentional stewardship of resources. Click any essential pillar below to inspect detailed field specifications.
         </p>
       </header>
@@ -85,17 +85,17 @@ export default function What() {
           <div 
             key={item.id} 
             onClick={() => setSelectedEssential(item)}
-            className="backdrop-blur-xl bg-slate-950/70 p-7 rounded-[2.25rem] border border-amber-500/25 shadow-[0_12px_40px_rgba(0,0,0,0.4)] flex flex-col gap-4 card-hover cursor-pointer group hover:border-amber-500/50 hover:bg-slate-950/90 transition-all duration-300"
+            className="bg-white/95 p-7 rounded-3xl border border-stone-200 shadow-xs flex flex-col gap-4 card-hover cursor-pointer group hover:border-emerald-700/50 hover:shadow-md transition-all duration-300"
           >
-            <div className="w-12 h-12 rounded-2xl bg-emerald-950/80 border border-emerald-500/30 flex items-center justify-center text-amber-400 shadow-inner group-hover:scale-110 group-hover:border-amber-400/50 transition-all">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-800 shadow-xs group-hover:scale-105 group-hover:bg-emerald-100 transition-all">
               <item.icon size={24} />
             </div>
             <div className="flex justify-between items-start gap-2">
-              <h3 className="serif text-xl font-bold text-[#FAF8F5] group-hover:text-amber-200 transition-colors">{item.title}</h3>
-              <Info size={16} className="text-amber-400/70 shrink-0 group-hover:text-amber-400 transition-colors mt-1" />
+              <h3 className="serif text-xl font-bold text-stone-900 group-hover:text-emerald-900 transition-colors">{item.title}</h3>
+              <Info size={16} className="text-stone-400 shrink-0 group-hover:text-emerald-700 transition-colors mt-1" />
             </div>
-            <p className="text-xs text-slate-300 leading-relaxed font-medium">{item.desc}</p>
-            <span className="text-[10px] font-mono font-bold uppercase text-amber-300 tracking-wider mt-auto flex items-center gap-1 group-hover:text-amber-200">
+            <p className="text-xs text-stone-600 leading-relaxed font-medium">{item.desc}</p>
+            <span className="text-[11px] font-sans font-bold uppercase text-emerald-800 tracking-wider mt-auto flex items-center gap-1 group-hover:text-emerald-950">
               <span>Read Specs</span>
               <span>→</span>
             </span>
@@ -160,38 +160,38 @@ export default function What() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-[#071F13] rounded-[3rem] p-8 md:p-10 max-w-lg w-full shadow-2xl border border-amber-500/40 flex flex-col gap-6 relative text-white"
+              className="bg-[#0B2517] rounded-[2.5rem] p-8 md:p-10 max-w-lg w-full shadow-2xl border border-emerald-800 flex flex-col gap-6 relative text-stone-100"
             >
               <button 
                 onClick={() => setSelectedEssential(null)}
-                className="absolute top-6 right-6 p-2 rounded-full bg-white/10 text-slate-300 hover:bg-white/20 hover:text-white transition-colors cursor-pointer"
+                className="absolute top-6 right-6 p-2 rounded-full bg-white/10 text-stone-300 hover:bg-white/20 hover:text-white transition-colors cursor-pointer"
               >
                 <X size={20} />
               </button>
 
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/35 flex items-center justify-center text-amber-400">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-900/60 border border-emerald-700/60 flex items-center justify-center text-amber-300">
                   <selectedEssential.icon size={26} />
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase font-mono font-black tracking-widest text-amber-300">Field Specification</span>
-                  <h3 className="serif text-2xl font-bold text-[#FAF8F5]">{selectedEssential.title}</h3>
+                  <span className="text-[11px] uppercase font-sans font-bold tracking-wider text-amber-300">Field Specification</span>
+                  <h3 className="serif text-2xl font-bold text-white">{selectedEssential.title}</h3>
                 </div>
               </div>
 
               <div className="flex flex-col gap-4">
-                <p className="text-slate-200 text-sm font-medium leading-relaxed">
+                <p className="text-stone-200 text-sm font-medium leading-relaxed">
                   {selectedEssential.desc}
                 </p>
-                <div className="p-4 bg-slate-950/80 rounded-2xl border border-amber-500/25 text-xs text-emerald-100 leading-relaxed font-medium">
-                  <strong className="text-amber-300 block mb-1 font-mono uppercase text-[10px] tracking-wider">Practical Field Application:</strong> 
+                <div className="p-4 bg-[#06180E] rounded-2xl border border-emerald-900/80 text-xs text-emerald-100 leading-relaxed font-medium">
+                  <strong className="text-amber-300 block mb-1 font-sans uppercase text-[10px] tracking-wider">Practical Field Application:</strong> 
                   {selectedEssential.details}
                 </div>
               </div>
 
               <button 
                 onClick={() => setSelectedEssential(null)}
-                className="bg-amber-500 hover:bg-amber-400 text-slate-950 py-3.5 rounded-2xl font-mono font-black text-xs uppercase tracking-widest transition-all shadow-[0_4px_20px_rgba(245,158,11,0.35)] cursor-pointer"
+                className="bg-emerald-800 hover:bg-emerald-700 text-white border border-emerald-600/50 py-3.5 rounded-2xl font-sans font-bold text-xs uppercase tracking-wider transition-all shadow-md cursor-pointer"
               >
                 Close Specification
               </button>

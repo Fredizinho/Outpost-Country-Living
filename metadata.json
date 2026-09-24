@@ -1,6 +1,6 @@
 {
   "name": "OUTPOST: COUNTRY LIVING",
-  "description": "Comprehensive Malawi country living blueprint and self-reliance guide, featuring interactive territorial GIS scouting, agro-climatic zoning, off-grid resource calculators, seasonal almanac, and rural homesteading skills.",
+  "description": "An inspired Seventh-day Adventist country living guide and outpost sanctuary blueprint for Malawi, featuring Spirit of Prophecy counsel, daily devotionals, transition ledger, simplified land readiness cards, property suitability scoring, Edenic agriculture manuals, off-grid resource calculators, and outpost center community connections.",
   "requestFramePermissions": ["geolocation"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

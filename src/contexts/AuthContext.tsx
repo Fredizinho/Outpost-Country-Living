@@ -1,5 +1,20 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { getStoredUserProfile, saveStoredUserProfile, removeStoredUserProfile } from '@/lib/offlineStorage';
+import { 
+  auth, 
+  db, 
+  googleProvider, 
+  signInWithPopup, 
+  firebaseSignOut, 
+  onAuthStateChanged,
+  doc, 
+  getDoc, 
+  setDoc,
+  updateDoc,
+  handleFirestoreError,
+  OperationType,
+  type FirebaseUser
+} from '@/lib/firebase';
 
 export interface User {
   uid: string;
@@ -17,11 +32,17 @@ export interface User {
   timeline?: string;
   onboardingCompleted?: boolean;
   joinedAt?: string;
+  isFirebaseUser?: boolean;
 }
 
 interface AuthContextType {
   user: User | null;
+  firebaseUser: FirebaseUser | null;
+  isFirebaseAuthenticated: boolean;
   loading: boolean;
+  authError: string | null;
+  clearAuthError: () => void;
+  signInWithGoogle: () => Promise<void>;
   signIn: (details?: Partial<User>) => Promise<void>;
   signUp: (email: string, name: string, region?: string, district?: string, goal?: string) => Promise<void>;
   updateProfile: (details: Partial<User>) => Promise<void>;
@@ -32,45 +53,145 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const [authError, setAuthError] = useState<string | null>(null);
 
+  const clearAuthError = useCallback(() => setAuthError(null), []);
+
+  // Listen to Firebase Auth state
   useEffect(() => {
-    try {
-      const savedUser = getStoredUserProfile<User>();
-      if (savedUser) {
-        setUser(savedUser);
+    const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
+      setLoading(true);
+      if (fbUser) {
+        setFirebaseUser(fbUser);
+        const userDocRef = doc(db, 'users', fbUser.uid);
+        const path = `users/${fbUser.uid}`;
+
+        try {
+          let userProfile: User;
+          const userDocSnap = await getDoc(userDocRef);
+
+          if (userDocSnap.exists()) {
+            const data = userDocSnap.data() as Partial<User>;
+            userProfile = {
+              uid: fbUser.uid,
+              email: fbUser.email || data.email || 'steward@outpostliving.mw',
+              displayName: fbUser.displayName || data.displayName || 'Outpost Steward',
+              photoURL: fbUser.photoURL || data.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(fbUser.displayName || 'Steward')}`,
+              region: data.region || 'Central',
+              district: data.district || 'Dedza',
+              familyMembers: data.familyMembers ?? 4,
+              householdSize: data.householdSize || '3-5 Members',
+              landSizeAcres: data.landSizeAcres ?? 2.5,
+              currentSeason: data.currentSeason || 'Rainy Planting',
+              homesteadGoal: data.homesteadGoal || 'Self-Sufficient Organic Homestead',
+              budgetBand: data.budgetBand || 'Standard Off-Grid (MWK 500k - 2.5M)',
+              timeline: data.timeline || 'This Season (3-6 Months)',
+              onboardingCompleted: data.onboardingCompleted ?? true,
+              joinedAt: data.joinedAt || new Date().toISOString(),
+              isFirebaseUser: true,
+            };
+          } else {
+            // First time sign-in: seed user profile in Firestore
+            userProfile = {
+              uid: fbUser.uid,
+              email: fbUser.email || '',
+              displayName: fbUser.displayName || 'Country Living Steward',
+              photoURL: fbUser.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(fbUser.displayName || 'Steward')}`,
+              region: 'Central',
+              district: 'Dedza',
+              familyMembers: 4,
+              householdSize: '3-5 Members',
+              landSizeAcres: 2.5,
+              currentSeason: 'Rainy Planting',
+              homesteadGoal: 'Self-Sufficient Organic Homestead',
+              budgetBand: 'Standard Off-Grid (MWK 500k - 2.5M)',
+              timeline: 'This Season (3-6 Months)',
+              onboardingCompleted: true,
+              joinedAt: new Date().toISOString(),
+              isFirebaseUser: true,
+            };
+
+            await setDoc(userDocRef, {
+              uid: userProfile.uid,
+              email: userProfile.email,
+              displayName: userProfile.displayName,
+              photoURL: userProfile.photoURL,
+              region: userProfile.region,
+              district: userProfile.district,
+              familyMembers: userProfile.familyMembers,
+              householdSize: userProfile.householdSize,
+              landSizeAcres: userProfile.landSizeAcres,
+              currentSeason: userProfile.currentSeason,
+              homesteadGoal: userProfile.homesteadGoal,
+              budgetBand: userProfile.budgetBand,
+              timeline: userProfile.timeline,
+              onboardingCompleted: userProfile.onboardingCompleted,
+              createdAt: userProfile.joinedAt,
+              updatedAt: new Date().toISOString()
+            });
+          }
+
+          saveStoredUserProfile(userProfile);
+          setUser(userProfile);
+        } catch (error) {
+          console.error('Error fetching or creating user profile in Firestore:', error);
+          // Fallback to local profile
+          const localProfile: User = {
+            uid: fbUser.uid,
+            email: fbUser.email || 'steward@outpostliving.mw',
+            displayName: fbUser.displayName || 'Outpost Steward',
+            photoURL: fbUser.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=Steward`,
+            isFirebaseUser: true,
+          };
+          setUser(localProfile);
+          try {
+            handleFirestoreError(error, OperationType.GET, path);
+          } catch {
+            // Handled for logging
+          }
+        }
       } else {
-        // Initialize default steward profile so app has instant context
-        const initialUser: User = {
-          uid: 'user_default',
-          email: 'steward@outpostliving.mw',
-          displayName: 'Outpost Steward',
-          photoURL: `https://api.dicebear.com/7.x/avataaars/svg?seed=Steward`,
-          region: 'Central',
-          district: 'Dedza',
-          familyMembers: 4,
-          householdSize: '3-5 Members',
-          landSizeAcres: 2.5,
-          currentSeason: 'Rainy Planting',
-          homesteadGoal: 'Self-Sufficient Organic Homestead',
-          budgetBand: 'Standard Off-Grid (MWK 500k - 2.5M)',
-          timeline: 'This Season (3-6 Months)',
-          onboardingCompleted: false,
-          joinedAt: new Date().toISOString(),
-        };
-        setUser(initialUser);
+        setFirebaseUser(null);
+        // Check offline cache or set default guest profile
+        const cached = getStoredUserProfile<User>();
+        if (cached && !cached.isFirebaseUser) {
+          setUser(cached);
+        } else {
+          setUser(null);
+        }
       }
-    } catch (e) {
-      console.error('Failed to load user profile:', e);
-    }
-    setLoading(false);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
+  // Google Sign-In
+  const signInWithGoogle = async () => {
+    setAuthError(null);
+    try {
+      setLoading(true);
+      await signInWithPopup(auth, googleProvider);
+    } catch (err: any) {
+      console.error('Google Sign-In failed:', err);
+      // Don't show error if user closed the popup
+      if (err?.code !== 'auth/popup-closed-by-user') {
+        setAuthError(err?.message || 'Google Sign-In could not be completed. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Backwards-compatible manual sign-in / demo steward sign-in
   const signIn = async (details?: Partial<User>) => {
-    const defaultUser: User = {
-      uid: user?.uid || 'user_' + Math.random().toString(36).substring(2, 9),
+    setAuthError(null);
+    const guestUser: User = {
+      uid: user?.uid || 'user_guest_' + Math.random().toString(36).substring(2, 9),
       email: details?.email || user?.email || 'steward@outpostliving.mw',
-      displayName: details?.displayName || user?.displayName || 'Guest Steward',
+      displayName: details?.displayName || user?.displayName || 'Outpost Steward',
       photoURL: details?.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(details?.displayName || 'Guest')}`,
       region: details?.region || user?.region || 'Central',
       district: details?.district || user?.district || 'Dedza',
@@ -83,10 +204,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       timeline: details?.timeline || user?.timeline || 'This Season (3-6 Months)',
       onboardingCompleted: details?.onboardingCompleted ?? user?.onboardingCompleted ?? true,
       joinedAt: user?.joinedAt || new Date().toISOString(),
+      isFirebaseUser: false,
     };
 
-    saveStoredUserProfile(defaultUser);
-    setUser(defaultUser);
+    saveStoredUserProfile(guestUser);
+    setUser(guestUser);
   };
 
   const signUp = async (email: string, name: string, region?: string, district?: string, goal?: string) => {
@@ -99,6 +221,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       district: district || 'Dedza',
       homesteadGoal: goal || 'Self-Sustaining Country Outpost',
       joinedAt: new Date().toISOString(),
+      isFirebaseUser: false,
     };
 
     saveStoredUserProfile(newUser);
@@ -107,24 +230,78 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const updateProfile = async (details: Partial<User>) => {
     if (!user) return;
-    const updated = {
+    const updated: User = {
       ...user,
       ...details,
       photoURL: details.displayName 
         ? `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(details.displayName)}` 
         : user.photoURL,
     };
+
     saveStoredUserProfile(updated);
     setUser(updated);
+
+    // If authenticated with Firebase, sync directly to Firestore!
+    if (auth.currentUser && user.isFirebaseUser) {
+      const userDocRef = doc(db, 'users', auth.currentUser.uid);
+      const path = `users/${auth.currentUser.uid}`;
+      try {
+        const payload: Record<string, any> = {
+          updatedAt: new Date().toISOString()
+        };
+        if (updated.displayName !== undefined) payload.displayName = updated.displayName;
+        if (updated.photoURL !== undefined) payload.photoURL = updated.photoURL;
+        if (updated.region !== undefined) payload.region = updated.region;
+        if (updated.district !== undefined) payload.district = updated.district;
+        if (updated.familyMembers !== undefined) payload.familyMembers = updated.familyMembers;
+        if (updated.householdSize !== undefined) payload.householdSize = updated.householdSize;
+        if (updated.landSizeAcres !== undefined) payload.landSizeAcres = updated.landSizeAcres;
+        if (updated.currentSeason !== undefined) payload.currentSeason = updated.currentSeason;
+        if (updated.homesteadGoal !== undefined) payload.homesteadGoal = updated.homesteadGoal;
+        if (updated.budgetBand !== undefined) payload.budgetBand = updated.budgetBand;
+        if (updated.timeline !== undefined) payload.timeline = updated.timeline;
+        if (updated.onboardingCompleted !== undefined) payload.onboardingCompleted = updated.onboardingCompleted;
+
+        await updateDoc(userDocRef, payload);
+      } catch (err) {
+        console.error('Failed to sync profile update to Firestore:', err);
+        try {
+          handleFirestoreError(err, OperationType.UPDATE, path);
+        } catch {
+          // Handled
+        }
+      }
+    }
   };
 
   const signOut = async () => {
-    removeStoredUserProfile();
-    setUser(null);
+    try {
+      if (auth.currentUser) {
+        await firebaseSignOut(auth);
+      }
+    } catch (err) {
+      console.error('Error signing out from Firebase:', err);
+    } finally {
+      removeStoredUserProfile();
+      setUser(null);
+      setFirebaseUser(null);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signUp, updateProfile, signOut }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      firebaseUser, 
+      isFirebaseAuthenticated: !!firebaseUser,
+      loading, 
+      authError,
+      clearAuthError,
+      signInWithGoogle, 
+      signIn, 
+      signUp, 
+      updateProfile, 
+      signOut 
+    }}>
       {children}
     </AuthContext.Provider>
   );
@@ -137,4 +314,3 @@ export function useAuth() {
   }
   return context;
 }
-

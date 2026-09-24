@@ -6,12 +6,14 @@ export interface MapCompassAndScaleProps {
   currentZoom?: number;
   centerLat?: number;
   isAutoHidden?: boolean;
+  onWakeUp?: () => void;
 }
 
 export function MapCompassAndScale({ 
   currentZoom = 7.5, 
   centerLat = -13.25,
-  isAutoHidden = false 
+  isAutoHidden = false,
+  onWakeUp
 }: MapCompassAndScaleProps) {
   // Approximate kilometers represented by a fixed 70px bar at given latitude and zoom level
   // meters per pixel = 156543.03392 * cos(lat * pi / 180) / (2 ^ zoom)

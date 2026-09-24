@@ -15,7 +15,14 @@ app.use(express.json());
 let aiClient: GoogleGenAI | null = null;
 function getAIClient(): GoogleGenAI | null {
   if (!aiClient && process.env.GEMINI_API_KEY) {
-    aiClient = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    aiClient = new GoogleGenAI({
+      apiKey: process.env.GEMINI_API_KEY,
+      httpOptions: {
+        headers: {
+          'User-Agent': 'aistudio-build',
+        }
+      }
+    });
   }
   return aiClient;
 }
@@ -198,6 +205,217 @@ Provide encouraging, practical, well-formatted markdown responses with actionabl
   } catch (error: any) {
     console.error('AI Advisor Error:', error);
     res.status(500).json({ error: 'Failed to generate advice. Please try again.' });
+  }
+});
+
+// Dedicated AI Map Scout with Google Maps Grounding
+app.post('/api/scout-ai', async (req, res) => {
+  try {
+    const { 
+      prompt, 
+      district, 
+      coordinates, 
+      region, 
+      altitude, 
+      selectedAmenities, 
+      activeLayers,
+      mapBounds,
+      zoomLevel,
+      contextType = 'general',
+      layerInsightsMode = false
+    } = req.body;
+
+    if (!prompt || typeof prompt !== 'string') {
+      return res.status(400).json({ error: 'Prompt is required' });
+    }
+
+    const ai = getAIClient();
+    let lat = coordinates?.latitude ?? -14.38;
+    let lng = coordinates?.longitude ?? 34.33;
+
+    // Build context-aware prompt
+    const locationContext = district 
+      ? `Location Context: ${district}${region ? ` (${region} Region)` : ''}, Malawi. Coordinates: Lat ${lat}, Lng ${lng}.${altitude ? ` Altitude: ${altitude}.` : ''}`
+      : `Location Context: Malawi countrywide (view center Lat ${lat.toFixed(4)}, Lng ${lng.toFixed(4)}, zoom level ${zoomLevel ?? 'standard'}).`;
+
+    const amenitiesContext = selectedAmenities && selectedAmenities.length > 0
+      ? `Active District Agricultural Crops: ${selectedAmenities.join(', ')}.`
+      : '';
+
+    // Active Map Layers Analysis
+    let activeLayersContext = '';
+    if (activeLayers && typeof activeLayers === 'object') {
+      const activeList = Object.entries(activeLayers)
+        .filter(([_, active]) => Boolean(active))
+        .map(([name]) => {
+          switch (name) {
+            case 'waterSources': return '💧 Perennial Rivers & Streams (Catchments & Hydrology)';
+            case 'arableLand': return '🌱 Arable Land & Katondo Red Loam (Soil Pedology)';
+            case 'communitySettlements': return '⛪ Adventist Churches, Sanitariums & Rural Settlements';
+            case 'rainfallIsohyets': return '🌧️ Rainfall Isohyets & Precipitation Gradients';
+            case 'soilPedology': return '🧪 Soil pH & Pedology Classification';
+            case 'elevationTiers': return '⛰️ Elevation Tiers & Thermal Belts';
+            case 'catchmentBasins': return '🌊 Major Catchment Drainage Basins';
+            case 'riftEscarpments': return '⚠️ Rift Valley Escarpments & Slope Terraces';
+            case 'customaryBoundaries': return '📜 Customary T/A Boundaries (Malire & Tribal Land Tenure)';
+            case 'districtBoundaries': return '🏛️ District Administrative Boundaries';
+            default: return name;
+          }
+        });
+
+      if (activeList.length > 0) {
+        activeLayersContext = `\nActive Selected Map Layers:\n${activeList.map(l => `- ${l}`).join('\n')}\n`;
+      }
+    }
+
+    const boundsContext = mapBounds
+      ? `Current Map Bounds: North ${mapBounds.north?.toFixed(3)}, South ${mapBounds.south?.toFixed(3)}, East ${mapBounds.east?.toFixed(3)}, West ${mapBounds.west?.toFixed(3)}.`
+      : '';
+
+    const systemPrompt = `You are the Outpost Living AI Geospatial Scout & Country Living Agronomist for Malawi.
+You specialize in geospatial analysis for country living, Seventh-day Adventist outpost sanctuary scouting, permaculture design, perennial water security, road accessibility, and community hubs in Malawi.
+
+${locationContext}
+${boundsContext}
+${amenitiesContext}
+${activeLayersContext}
+
+When answering:
+1. Provide accurate geographic, microclimatic, agricultural, and infrastructural guidance for the selected area and visible map layers in Malawi.
+2. If layer insights were requested, explicitly address each ACTIVE map layer:
+   - For Water: specify perennial river intake, borehole aquifer depths (15m-60m), gravity water feed feasibility, and seasonal wetland buffer zones.
+   - For Arable Soil: analyze deep Katondo red loam vs. dambo wetland edge cultivation, pH (5.8-6.5), organic amendments, and orchard suitability.
+   - For Community & Settlements: evaluate proximity to Adventist churches/missions, rural community self-reliance networks, and peaceful distance from urban vice.
+   - For Elevation & Escarpments: assess frost-free thermal belts (1,200m - 1,600m), slope terracing, and flood safety.
+   - For Customary Malire: explain Customary Land Act procedures (Chief/T.A. allocation, Village Land Committee consent, District Land Registry conversion).
+3. If referencing specific towns, clinics, markets, churches, rivers, mountains, or bomas, mention their real local context.
+4. Structure the response clearly with markdown headers (###, ####), concise bullet points, and practical "Country Living Homestead Recommendations".`;
+
+    const fullPrompt = `${systemPrompt}\n\nUser Query: ${prompt}`;
+
+    if (ai) {
+      try {
+        // Use gemini-3.8-flash with Google Maps grounding tool
+        const response = await ai.models.generateContent({
+          model: 'gemini-3.8-flash',
+          contents: fullPrompt,
+          config: {
+            tools: [{ googleMaps: {} }],
+            toolConfig: {
+              retrievalConfig: {
+                latLng: {
+                  latitude: lat,
+                  longitude: lng,
+                }
+              }
+            }
+          }
+        });
+
+        const answer = response.text || 'No response generated from AI Scout.';
+
+        // Extract grounding chunks from response
+        const groundingSources: Array<{
+          title?: string;
+          uri: string;
+          sourceType: 'maps' | 'web';
+          snippet?: string;
+        }> = [];
+
+        const candidate = response.candidates?.[0];
+        const groundingChunks = candidate?.groundingMetadata?.groundingChunks;
+
+        if (Array.isArray(groundingChunks)) {
+          for (const chunk of groundingChunks) {
+            // Check Google Maps grounding
+            if ((chunk as any).maps) {
+              const mapsData = (chunk as any).maps;
+              if (mapsData.uri) {
+                groundingSources.push({
+                  title: mapsData.title || 'Google Maps Location',
+                  uri: mapsData.uri,
+                  sourceType: 'maps',
+                  snippet: mapsData.placeAnswerSources?.reviewSnippets?.[0] || undefined
+                });
+              }
+            } else if ((chunk as any).web) {
+              const webData = (chunk as any).web;
+              if (webData.uri) {
+                groundingSources.push({
+                  title: webData.title || 'Web Grounding Reference',
+                  uri: webData.uri,
+                  sourceType: 'web'
+                });
+              }
+            }
+          }
+        }
+
+        // Suggested follow-up map queries
+        const suggestedActions = [
+          `Inspect perennial water sources around ${district || 'this area'}`,
+          `Analyze soil fertility & arable slope suitability`,
+          `Check nearest Adventist church & health facility hubs`,
+          `Examine all-weather road access & market bomas`
+        ];
+
+        return res.json({
+          answer,
+          model: 'gemini-3.8-flash',
+          groundedWithMaps: true,
+          groundingSources,
+          suggestedActions,
+          coordinates: { latitude: lat, longitude: lng }
+        });
+      } catch (geminiError: any) {
+        console.warn('Gemini Maps Grounding failed or was blocked, falling back to regional knowledge:', geminiError?.message || geminiError);
+        // Fallback to text generation if maps grounding fails or fallback synthesis
+      }
+    }
+
+    // Fallback response with structured local geospatial intelligence
+    const targetDistrict = district || 'Dedza Highlands';
+    const fallbackAnswer = `### 🛰️ Geospatial Scout Analysis for ${targetDistrict}
+    
+**Location Coordinates**: Lat ${lat.toFixed(4)}, Lng ${lng.toFixed(4)} ${altitude ? `• Altitude: ${altitude}` : ''}
+
+#### 💧 Water Security & Hydrology
+- **Catchment Basin**: Located within the Lake Malawi / Shire River drainage network.
+- **Living Streams**: Perennial spring and gravity-fed potential is highest above 1,300m ASL.
+- **Borehole Aquifer**: Typical drilling depth ranges between 30m to 50m in plateau areas; water quality is predominantly sweet with low mineral hardness.
+
+#### 🌱 Soil & Agronomic Potential
+- **Soil Classification**: Deep *Katondo* red clay-loam soils with slightly acidic to neutral pH (6.0–6.5), rich in iron and aluminium oxides.
+- **Crop Suitability**: Optimal for Irish potatoes (*Solanum tuberosum*), legumes (soya, common beans), heirloom maize, brassicas, macadamia, and stone fruit orchards.
+- **Microclimate**: Cool night temperatures reduce pest pressure and promote root crop sweetness.
+
+#### ⛪ Community & Outpost Infrastructure
+- **Adventist Presence**: Proximity to established SDA congregations, health clinics, and rural mission centers.
+- **Market Corridors**: Feeder roads link agricultural produce to regional trading centers along main arterial highways.
+
+*Tip: For live satellite verification, toggle the Satellite Aerial layer on the Scout Map dock.*`;
+
+    return res.json({
+      answer: fallbackAnswer,
+      model: 'regional-fallback-scout',
+      groundedWithMaps: false,
+      groundingSources: [
+        {
+          title: `Google Maps: ${targetDistrict}, Malawi`,
+          uri: `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`,
+          sourceType: 'maps'
+        }
+      ],
+      suggestedActions: [
+        `Inspect perennial water sources around ${targetDistrict}`,
+        `Analyze soil fertility & arable slope suitability`,
+        `Check nearest Adventist church & health facility hubs`
+      ],
+      coordinates: { latitude: lat, longitude: lng }
+    });
+  } catch (error: any) {
+    console.error('Scout AI Error:', error);
+    return res.status(500).json({ error: 'Failed to complete Scout AI geospatial analysis' });
   }
 });
 

@@ -1,38 +1,24 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   MapPin, 
-  Calendar, 
-  Hammer, 
   Calculator, 
   Compass, 
   Menu, 
   X, 
-  ShieldCheck, 
   Sparkles, 
   User as UserIcon, 
   Sun, 
-  Droplets, 
-  WifiOff, 
-  Radio, 
+  Moon,
   BookOpen, 
-  Layers, 
-  HeartHandshake, 
-  FileText, 
-  CheckCircle2, 
   Search,
-  ChevronRight,
-  Database,
-  ArrowUpRight,
-  Sprout,
-  Trees,
-  Sliders,
-  Pin,
-  PinOff,
-  ChevronDown
+  ChevronDown,
+  LogOut,
+  Sprout
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/utils';
 import { OutpostLogo } from './OutpostLogo';
 
@@ -42,228 +28,78 @@ export interface NavigationProps {
   onOpenAdvisor?: () => void;
 }
 
-interface NavItem {
-  id: string;
-  label: string;
-  sublabel?: string;
-  path: string;
-  icon: React.ElementType;
-  badge?: string;
-  isExternal?: boolean;
-}
-
-interface NavGroup {
-  id: string;
-  title: string;
-  icon: React.ElementType;
-  items: NavItem[];
-}
-
 export function Navigation({
   onOpenCitations,
   onOpenSearch,
   onOpenAdvisor
 }: NavigationProps) {
-  const { user } = useAuth();
+  const { user, isFirebaseAuthenticated, signInWithGoogle, signOut } = useAuth();
+  const { toggleTheme, isDark } = useTheme();
   const location = useLocation();
-  const navigate = useNavigate();
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isOffline, setIsOffline] = useState(!navigator.onLine);
-  const [drawerSearch, setDrawerSearch] = useState('');
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isSigningIn, setIsSigningIn] = useState(false);
 
-  const drawerRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
-  // Online / offline listeners
+  const handleHeaderSignIn = async () => {
+    setIsSigningIn(true);
+    try {
+      await signInWithGoogle();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsSigningIn(false);
+    }
+  };
+
+  // Sync header button state with the converged Left Directory
   useEffect(() => {
-    const handleOnline = () => setIsOffline(false);
-    const handleOffline = () => setIsOffline(true);
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    const handleDirectoryState = (e: Event) => {
+      const customEvent = e as CustomEvent<{ isOpen: boolean }>;
+      if (typeof customEvent.detail?.isOpen === 'boolean') {
+        setIsDrawerOpen(customEvent.detail.isOpen);
+      }
+    };
+    window.addEventListener('outpost:directory-state-changed', handleDirectoryState);
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener('outpost:directory-state-changed', handleDirectoryState);
     };
   }, []);
 
-  // Keyboard shortcut (Escape to close drawer)
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isDrawerOpen) {
-        e.preventDefault();
-        setIsDrawerOpen(false);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isDrawerOpen]);
+  const handleToggleDirectory = () => {
+    window.dispatchEvent(new CustomEvent('outpost:toggle-left-directory'));
+  };
 
-  // Close drawer on route navigation
+  // Close user menu on route navigation
   useEffect(() => {
-    setIsDrawerOpen(false);
-    setDrawerSearch('');
+    setIsUserMenuOpen(false);
   }, [location.pathname]);
 
-  // Primary High-Impact Navigation Tabs with clear, intuitive labels
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+    if (isUserMenuOpen) {
+      document.addEventListener('mousedown', handleOutsideClick);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [isUserMenuOpen]);
+
+  // Streamlined, high-clarity primary navigation tabs
   const primaryPills = [
     { label: 'Land & Districts', path: '/where', icon: MapPin },
-    { label: 'GPS Map', path: '/scout-map', icon: Compass, isHighlighted: true },
+    { label: 'GPS Scout Map', path: '/scout-map', icon: Compass, isHighlighted: true },
     { label: 'Crops & Soil', path: '/what', icon: Sprout },
-    { label: 'Seasonal Almanac', path: '/seasons', icon: Calendar },
-    { label: 'Calculators', path: '/calculators', icon: Calculator },
-    { label: 'Skills Manual', path: '/skills', icon: Hammer },
     { label: 'Homestead Guide', path: '/how', icon: BookOpen },
+    { label: 'Calculators & Tools', path: '/calculators', icon: Calculator },
   ];
-
-  // 4 Organized Navigation Drawer Groups with Authentic, Simplified Terms
-  const navigationGroups: NavGroup[] = [
-    {
-      id: 'land-scouting',
-      title: 'Land & District Scouting',
-      icon: MapPin,
-      items: [
-        {
-          id: 'district-scout',
-          label: 'GPS Land Scout Map',
-          sublabel: 'Interactive map for all 28 Malawi districts, boundaries & parcels',
-          path: '/scout-map',
-          icon: Compass,
-          badge: 'GPS Tool'
-        },
-        {
-          id: 'land-matrix',
-          label: 'Malawi Land Matrix',
-          sublabel: 'Customary (Chikhalidwe), Leasehold & Freehold land verification',
-          path: '/where',
-          icon: MapPin,
-          badge: 'Verified'
-        },
-        {
-          id: 'agro-zones',
-          label: 'Agricultural Zones',
-          sublabel: 'Highlands (Mapiri), Lakeshore (Nyanja) & Valley farming zones',
-          path: '/regions',
-          icon: Layers
-        },
-        {
-          id: 'land-act',
-          label: 'Customary Land Guide',
-          sublabel: 'Village Land Committees, Chiefs (Mfumu) & Title conversion laws',
-          path: '/how',
-          icon: FileText
-        }
-      ]
-    },
-    {
-      id: 'operations-almanac',
-      title: 'Farming & Seasonal Almanac',
-      icon: Sprout,
-      items: [
-        {
-          id: 'seasonal-almanac',
-          label: 'Seasonal Almanac',
-          sublabel: 'Rainy Season (Mvula), Cold Season (Mpepo) & Hot Season (Chirimwe)',
-          path: '/seasons',
-          icon: Calendar,
-          badge: 'Live Cycle'
-        },
-        {
-          id: 'planting-calendar',
-          label: 'Planting & Crop Guide',
-          sublabel: 'Maize (Chimanga), Groundnuts (Ntedza), Beans (Nyemba) & Relish',
-          path: '/what',
-          icon: Sun
-        },
-        {
-          id: 'solar-water',
-          label: 'Solar & Water Calculators',
-          sublabel: 'Solar panels, rainwater tanks & borehole depth calculators',
-          path: '/calculators',
-          icon: Droplets,
-          badge: 'Offline Calc'
-        },
-        {
-          id: 'homestead-mastery',
-          label: 'Relocation Blueprint',
-          sublabel: '3-stage step-by-step transition from city to rural sanctuary',
-          path: '/how',
-          icon: BookOpen
-        }
-      ]
-    },
-    {
-      id: 'sanctuary-manuals',
-      title: 'Skills & Practical Manuals',
-      icon: Trees,
-      items: [
-        {
-          id: 'vision-philosophy',
-          label: 'Country Living Vision',
-          sublabel: 'Biblical foundation for self-reliance and country living',
-          path: '/vision',
-          icon: BookOpen
-        },
-        {
-          id: 'homestead-skills',
-          label: 'Homestead Skills Manual',
-          sublabel: '25 field guides: compost, borehole pumps, bricklaying & food storage',
-          path: '/skills',
-          icon: Hammer,
-          badge: '25 Skills'
-        },
-        {
-          id: 'emergency-protocols',
-          label: 'Community & Village Living',
-          sublabel: 'Building peaceful relations with local chiefs and neighbors',
-          path: '/how',
-          icon: HeartHandshake
-        }
-      ]
-    },
-    {
-      id: 'system-vault',
-      title: 'Progress & Settings',
-      icon: Sliders,
-      items: [
-        {
-          id: 'exodus-ledger',
-          label: 'Exodus Progress Ledger',
-          sublabel: 'Track land purchase, water setup, building & harvest milestones',
-          path: '/tracker',
-          icon: Sparkles,
-          badge: 'Milestones'
-        },
-        {
-          id: 'offline-vault',
-          label: 'Offline Data & Cache',
-          sublabel: 'Save map packs and field guides for offline use in rural areas',
-          path: '/account',
-          icon: Database,
-          badge: isOffline ? 'Offline' : 'Synced'
-        },
-        {
-          id: 'steward-account',
-          label: 'My Saved Parcels & Preferences',
-          sublabel: 'Bookmarks, soil bookmarks & district preferences',
-          path: '/account',
-          icon: UserIcon
-        }
-      ]
-    }
-  ];
-
-  // Filter drawer items by search
-  const filteredGroups = useMemo(() => {
-    if (!drawerSearch.trim()) return navigationGroups;
-    const q = drawerSearch.toLowerCase();
-    return navigationGroups.map(group => ({
-      ...group,
-      items: group.items.filter(item => 
-        item.label.toLowerCase().includes(q) ||
-        (item.sublabel && item.sublabel.toLowerCase().includes(q))
-      )
-    })).filter(group => group.items.length > 0);
-  }, [drawerSearch, navigationGroups]);
 
   return (
     <>
@@ -272,7 +108,7 @@ export function Navigation({
       {/* ========================================================================= */}
       <header 
         id="outpost-main-header"
-        className="fixed top-0 left-0 right-0 z-50 h-16 bg-[#071A10]/95 backdrop-blur-xl border-b border-white/10 px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4 shadow-xl select-none"
+        className="fixed top-0 left-0 right-0 z-50 h-16 bg-[#0B2517]/95 backdrop-blur-xl border-b border-[#14422A] px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4 shadow-md select-none"
         aria-label="Primary Sanctuary Navigation"
       >
         {/* LEFT SIDE: LOGO MARK */}
@@ -282,12 +118,12 @@ export function Navigation({
             className="flex items-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 rounded-xl"
             title="OUTPOST: COUNTRY LIVING • Malawi Blueprint"
           >
-            <OutpostLogo size="md" />
+            <OutpostLogo size="md" variant="header" />
           </Link>
         </div>
 
         {/* CENTER: QUICK-JUMP PILL TABS */}
-        <nav className="hidden lg:flex items-center gap-1 p-1 bg-slate-900/80 backdrop-blur-md rounded-xl border border-white/10">
+        <nav className="hidden lg:flex items-center gap-1.5 p-1 bg-[#06180E]/80 backdrop-blur-md rounded-xl border border-emerald-900/60">
           {primaryPills.map((pill) => {
             const Icon = pill.icon;
             const isActive = location.pathname === pill.path || 
@@ -298,19 +134,19 @@ export function Navigation({
                 key={pill.path}
                 to={pill.path}
                 className={cn(
-                  "relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold tracking-tight transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400",
+                  "relative flex items-center gap-2 px-3.5 py-2 rounded-lg text-[13px] font-sans font-semibold tracking-tight transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400",
                   isActive
-                    ? "bg-gradient-to-r from-amber-500/20 to-emerald-500/20 text-amber-300 border border-amber-500/40 shadow-xs shadow-amber-500/10 font-black"
+                    ? "bg-emerald-800/90 text-amber-200 border border-amber-400/40 shadow-xs font-bold"
                     : pill.isHighlighted
-                      ? "text-amber-300 hover:text-amber-200 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30"
-                      : "text-slate-300 hover:text-white hover:bg-white/5 border border-transparent"
+                      ? "text-amber-200 hover:text-white bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/30"
+                      : "text-emerald-100/90 hover:text-white hover:bg-white/10 border border-transparent"
                 )}
               >
                 <Icon 
-                  size={14} 
+                  size={15} 
                   className={cn(
                     "transition-colors", 
-                    isActive ? "text-amber-400" : pill.isHighlighted ? "text-amber-400" : "text-slate-400 group-hover:text-slate-200"
+                    isActive ? "text-amber-300" : pill.isHighlighted ? "text-amber-300" : "text-emerald-300/90 group-hover:text-emerald-100"
                   )} 
                 />
                 <span>{pill.label}</span>
@@ -322,291 +158,174 @@ export function Navigation({
           })}
         </nav>
 
-        {/* RIGHT SIDE: AI ADVISOR, SEARCH & MENU TRIGGER */}
+        {/* RIGHT SIDE: SEARCH, THEME TOGGLE, AI ADVISOR & CONVERGED DIRECTORY TRIGGER */}
         <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
-          {/* Quick AI Advisor Modal Button */}
-          {onOpenAdvisor && (
-            <button
-              onClick={onOpenAdvisor}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 hover:text-white border border-amber-500/30 text-xs font-mono font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 cursor-pointer shadow-xs"
-              title="Ask Outpost AI Sanctuary Advisor (Gemini 3.8)"
-            >
-              <Sparkles size={14} className="text-amber-400 animate-pulse" />
-              <span className="text-xs uppercase tracking-wider font-extrabold hidden sm:inline">AI Advisor</span>
-            </button>
-          )}
-
           {/* Quick Search Palette Button */}
           {onOpenSearch && (
             <button
               onClick={onOpenSearch}
-              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 text-xs font-mono font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-stone-200 hover:text-white border border-white/15 text-xs font-sans font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 cursor-pointer"
               title="Search Guides & Maps (Press ⌘K or /)"
+              aria-label="Search Guides and Maps"
             >
-              <Search size={14} className="text-amber-400" />
-              <span className="text-xs font-bold uppercase tracking-wider hidden md:inline">Search</span>
-              <kbd className="hidden sm:inline-block text-[9px] px-1 py-0.2 rounded bg-black/40 text-slate-400 border border-white/10">⌘K</kbd>
+              <Search size={15} className="text-amber-300" />
+              <span className="hidden md:inline">Search</span>
+              <kbd className="hidden sm:inline-block text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/40 text-stone-300 border border-white/10">⌘K</kbd>
             </button>
           )}
 
-          {/* Quick Citations Modal Button */}
-          {onOpenCitations && (
+          {/* Theme Switcher Toggle (Light Sanctuary vs Dark Evening Sanctuary) */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="flex items-center justify-center w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-amber-300 border border-white/15 transition-all cursor-pointer shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+            title={isDark ? "Switch to Daylight Sanctuary (Light Theme)" : "Switch to Evening Sanctuary (Dark Theme)"}
+            aria-label={isDark ? "Switch to Light Theme" : "Switch to Dark Theme"}
+          >
+            {isDark ? (
+              <Sun size={17} className="text-amber-300 hover:rotate-45 transition-transform" />
+            ) : (
+              <Moon size={17} className="text-amber-200 hover:-rotate-12 transition-transform" />
+            )}
+          </button>
+
+          {/* Quick AI Advisor Modal Button */}
+          {onOpenAdvisor && (
             <button
-              onClick={onOpenCitations}
-              className="hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-amber-300/90 hover:text-amber-200 border border-white/10 text-xs font-mono font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
-              title="View Malawi Meteorological Services & FAO Sources"
+              onClick={onOpenAdvisor}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 hover:text-white border border-amber-400/40 text-xs font-sans font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 cursor-pointer shadow-xs"
+              title="Ask Outpost AI Homestead Advisor (Gemini 3.8)"
             >
-              <ShieldCheck size={14} className="text-amber-400" />
-              <span className="text-[10px] font-bold uppercase tracking-wider">Sources</span>
+              <Sparkles size={15} className="text-amber-300 animate-pulse" />
+              <span className="hidden sm:inline">Advisor</span>
             </button>
           )}
 
-          {/* Collapsible Menu Trigger Button */}
+          {/* User Sign-In or Profile Pill */}
+          {user ? (
+            <div className="relative" ref={userMenuRef}>
+              <button
+                type="button"
+                onClick={() => setIsUserMenuOpen(prev => !prev)}
+                className="flex items-center gap-2 pl-1.5 pr-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-stone-100 border border-white/20 transition-all text-xs font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 cursor-pointer shadow-xs"
+                title={`Signed in as ${user.displayName || user.email}`}
+                aria-expanded={isUserMenuOpen}
+              >
+                <img 
+                  src={user.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.displayName || 'Steward')}`}
+                  alt={user.displayName || 'User Avatar'}
+                  referrerPolicy="no-referrer"
+                  className="w-6 h-6 rounded-lg object-cover bg-emerald-950 border border-amber-300/40"
+                />
+                <span className="hidden md:inline max-w-[100px] truncate text-amber-200 font-medium">
+                  {user.displayName?.split(' ')[0] || 'Steward'}
+                </span>
+                <ChevronDown size={13} className={cn("text-stone-300 transition-transform", isUserMenuOpen && "rotate-180")} />
+              </button>
+
+              <AnimatePresence>
+                {isUserMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 6, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 6, scale: 0.95 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute right-0 mt-2 w-60 rounded-2xl bg-[#081F13] border border-emerald-800/80 shadow-2xl p-2.5 flex flex-col gap-1 z-50 text-xs text-stone-200"
+                  >
+                    <div className="px-2.5 py-2 border-b border-emerald-900/60 mb-1">
+                      <p className="font-bold text-white truncate">{user.displayName || 'Country Steward'}</p>
+                      <p className="text-[11px] text-stone-400 truncate">{user.email}</p>
+                      <div className="flex items-center gap-1.5 mt-2">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-950 border border-emerald-700/60 text-emerald-300">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                          {isFirebaseAuthenticated ? 'Cloud Synced' : 'Offline Ready'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <Link
+                      to="/account"
+                      onClick={() => setIsUserMenuOpen(false)}
+                      className="flex items-center gap-2.5 px-2.5 py-2 rounded-xl hover:bg-white/10 text-stone-200 hover:text-white transition-colors"
+                    >
+                      <UserIcon size={15} className="text-amber-300" />
+                      <span>My Sanctuary Profile</span>
+                    </Link>
+
+                    <Link
+                      to="/tracker"
+                      onClick={() => setIsUserMenuOpen(false)}
+                      className="flex items-center gap-2.5 px-2.5 py-2 rounded-xl hover:bg-white/10 text-stone-200 hover:text-white transition-colors"
+                    >
+                      <Sparkles size={15} className="text-amber-300" />
+                      <span>Exodus Progress Ledger</span>
+                    </Link>
+
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        setIsUserMenuOpen(false);
+                        await signOut();
+                      }}
+                      className="flex items-center gap-2.5 px-2.5 py-2 rounded-xl hover:bg-rose-950/40 text-rose-300 hover:text-rose-200 transition-colors w-full text-left mt-1 border-t border-emerald-900/50 pt-2 cursor-pointer"
+                    >
+                      <LogOut size={14} className="text-rose-400" />
+                      <span>Sign Out</span>
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={handleHeaderSignIn}
+              disabled={isSigningIn}
+              className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 active:scale-95 text-stone-950 font-bold text-xs font-sans transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer disabled:opacity-75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
+              title="Sign in with your Google Account"
+            >
+              {isSigningIn ? (
+                <div className="w-3.5 h-3.5 border-2 border-stone-900 border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                </svg>
+              )}
+              <span>Sign In</span>
+            </button>
+          )}
+
+          {/* Converged Directory Trigger Button (Toggles Left Directory) */}
           <button
             id="outpost-drawer-toggle"
-            onClick={() => setIsDrawerOpen(prev => !prev)}
+            onClick={handleToggleDirectory}
             className={cn(
-              "flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-mono font-black uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 cursor-pointer shadow-md",
+              "flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 rounded-xl text-xs font-sans font-bold uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 cursor-pointer shadow-xs",
               isDrawerOpen
-                ? "bg-amber-500 text-slate-950 border border-amber-300 shadow-amber-500/30 scale-[1.02]"
-                : "bg-white/10 hover:bg-white/15 text-amber-200 hover:text-white border border-white/15 hover:border-amber-400/40"
+                ? "bg-amber-400 text-stone-950 border border-amber-200 shadow-amber-500/30 scale-[1.02]"
+                : "bg-white/15 hover:bg-white/20 text-amber-100 hover:text-white border border-white/20"
             )}
             aria-expanded={isDrawerOpen}
-            aria-controls="outpost-collapsible-drawer"
-            aria-label={isDrawerOpen ? "Close Outpost Menu Drawer" : "Open Outpost Menu Drawer"}
+            aria-controls="left-outpost-directory-panel"
+            aria-label={isDrawerOpen ? "Close Country Living Directory" : "Open Country Living Directory"}
           >
             {isDrawerOpen ? (
               <>
-                <X size={16} className="text-slate-950" />
+                <X size={16} className="text-stone-950" />
                 <span>Close</span>
               </>
             ) : (
               <>
-                <Menu size={16} className="text-amber-400" />
-                <span className="text-xs">Directory</span>
+                <Menu size={16} className="text-amber-300" />
+                <span>Directory</span>
               </>
             )}
           </button>
         </div>
       </header>
-
-      {/* ========================================================================= */}
-      {/* 3. SLEEK COLLAPSIBLE DRAWER PANEL & BACKDROP OVERLAY                     */}
-      {/* ========================================================================= */}
-      <AnimatePresence>
-        {isDrawerOpen && (
-          <>
-            {/* Smooth Backdrop Overlay */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={() => setIsDrawerOpen(false)}
-              className="fixed inset-0 bg-black/80 backdrop-blur-xs z-50 transition-opacity cursor-pointer"
-              aria-hidden="true"
-            />
-
-            {/* Sliding Overlay Drawer */}
-            <motion.aside
-              id="outpost-collapsible-drawer"
-              ref={drawerRef}
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 28, stiffness: 280 }}
-              className="fixed inset-y-0 right-0 w-80 sm:w-96 bg-slate-950/95 backdrop-blur-2xl border-l border-white/10 z-50 shadow-2xl p-5 sm:p-6 flex flex-col justify-between overflow-y-auto custom-scrollbar text-slate-100"
-              role="dialog"
-              aria-label="Navigation Drawer"
-              aria-modal="true"
-            >
-              {/* Top Drawer Controls */}
-              <div className="flex flex-col gap-5">
-                {/* Header Row */}
-                <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                  <OutpostLogo size="sm" />
-
-                  <div className="flex items-center gap-2">
-                    <kbd className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[10px] font-mono text-slate-400 bg-white/5 border border-white/10">
-                      Esc
-                    </kbd>
-                    <button
-                      onClick={() => setIsDrawerOpen(false)}
-                      className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
-                      aria-label="Close drawer"
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Search Quick Filter */}
-                <div className="relative">
-                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input
-                    type="text"
-                    value={drawerSearch}
-                    onChange={(e) => setDrawerSearch(e.target.value)}
-                    placeholder="Search guides, tools, districts..."
-                    className="w-full pl-9 pr-8 py-2 rounded-xl bg-slate-900/80 border border-white/10 text-xs text-white placeholder-slate-400 font-sans focus:outline-none focus:ring-2 focus:ring-amber-400/60 transition-all"
-                  />
-                  {drawerSearch && (
-                    <button
-                      onClick={() => setDrawerSearch('')}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-0.5"
-                    >
-                      <X size={12} />
-                    </button>
-                  )}
-                </div>
-
-                {/* AI Sanctuary Advisor Quick Action Card */}
-                {onOpenAdvisor && (
-                  <button
-                    onClick={() => {
-                      setIsDrawerOpen(false);
-                      onOpenAdvisor();
-                    }}
-                    className="p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/15 via-emerald-950/40 to-slate-900 border border-amber-500/30 hover:border-amber-400 text-left transition-all group flex items-center justify-between gap-3 shadow-md cursor-pointer"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0 group-hover:scale-105 transition-transform">
-                        <Sparkles size={18} />
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-xs font-mono font-black uppercase tracking-wider text-[#FAF8F5] group-hover:text-amber-200">
-                          AI Homestead Advisor
-                        </span>
-                        <span className="text-[10px] font-mono text-emerald-200/70">
-                          Ask Gemini 3.8 on soil, solar & water
-                        </span>
-                      </div>
-                    </div>
-                    <span className="text-xs font-mono text-amber-400 group-hover:translate-x-0.5 transition-transform">→</span>
-                  </button>
-                )}
-
-                {/* 4 Categorized Navigation Groups */}
-                <div className="flex flex-col gap-6">
-                  {filteredGroups.map((group) => (
-                    <div key={group.id} className="flex flex-col gap-2">
-                      {/* Group Title Header */}
-                      <div className="flex items-center gap-2 px-1">
-                        <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 w-6 h-6 flex items-center justify-center">
-                          <group.icon size={13} className="stroke-[1.75]" />
-                        </div>
-                        <h3 className="text-[11px] font-mono font-black uppercase tracking-widest text-amber-300">
-                          {group.title}
-                        </h3>
-                      </div>
-
-                      {/* Group Navigation Links */}
-                      <div className="flex flex-col gap-1">
-                        {group.items.map((item) => {
-                          const Icon = item.icon;
-                          const isActive = location.pathname === item.path;
-
-                          return (
-                            <NavLink
-                              key={item.id}
-                              to={item.path}
-                              onClick={() => setIsDrawerOpen(false)}
-                              className={cn(
-                                "group relative flex items-center justify-between p-2.5 rounded-xl transition-all duration-200 border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400",
-                                isActive
-                                  ? "bg-amber-500/15 text-amber-200 border-amber-500/40 shadow-xs shadow-amber-500/10"
-                                  : "bg-white/[0.03] hover:bg-white/[0.08] text-slate-200 border-white/5 hover:border-white/10"
-                              )}
-                            >
-                              <div className="flex items-center gap-3 min-w-0">
-                                <div className={cn(
-                                  "p-1.5 rounded-lg shrink-0 transition-colors",
-                                  isActive
-                                    ? "bg-amber-500/20 text-amber-300"
-                                    : "bg-white/5 text-slate-400 group-hover:text-amber-300"
-                                )}>
-                                  <Icon size={16} />
-                                </div>
-
-                                <div className="flex flex-col min-w-0">
-                                  <span className={cn(
-                                    "text-xs font-bold truncate leading-tight",
-                                    isActive ? "text-amber-200 font-extrabold" : "text-slate-100 group-hover:text-white"
-                                  )}>
-                                    {item.label}
-                                  </span>
-                                  {item.sublabel && (
-                                    <span className="text-[10px] text-slate-400 truncate leading-normal">
-                                      {item.sublabel}
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
-
-                              <div className="flex items-center gap-1.5 shrink-0 ml-2">
-                                {item.badge && (
-                                  <span className={cn(
-                                    "text-[9px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border",
-                                    isActive 
-                                      ? "bg-amber-500/20 text-amber-300 border-amber-500/30" 
-                                      : "bg-white/5 text-slate-400 border-white/10 group-hover:text-slate-200"
-                                  )}>
-                                    {item.badge}
-                                  </span>
-                                )}
-                                <ChevronRight size={13} className={cn(
-                                  "text-slate-400 transition-transform group-hover:translate-x-0.5",
-                                  isActive && "text-amber-400"
-                                )} />
-                              </div>
-                            </NavLink>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  ))}
-
-                  {/* Quick Action: Citations Modal Trigger */}
-                  {onOpenCitations && (
-                    <button
-                      onClick={() => {
-                        setIsDrawerOpen(false);
-                        onOpenCitations();
-                      }}
-                      className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-emerald-950/60 to-amber-950/60 hover:from-emerald-900/80 hover:to-amber-900/80 border border-amber-500/30 text-amber-200 transition-all text-xs font-mono font-bold cursor-pointer"
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <ShieldCheck size={16} className="text-amber-400 shrink-0" />
-                        <div className="text-left">
-                          <span className="block font-bold">Field Sources & Verification</span>
-                          <span className="block text-[10px] text-slate-400 font-normal">DCCMS, FAO & Inspired Agronomy</span>
-                        </div>
-                      </div>
-                      <ArrowUpRight size={14} className="text-amber-400" />
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {/* Drawer Footer Telemetry */}
-              <div className="mt-8 pt-4 border-t border-white/10 flex flex-col gap-2.5">
-                <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-slate-300 font-bold">OUTPOST ONLINE</span>
-                  </div>
-                  <span className="text-amber-300 font-bold">13.2543° S, 34.3015° E</span>
-                </div>
-
-                <div className="flex items-center justify-between text-[9px] font-mono text-slate-400">
-                  <span>DCCMS & FAO VERIFIED DATA</span>
-                  <span>MALAWI SANCTUARY</span>
-                </div>
-              </div>
-            </motion.aside>
-          </>
-        )}
-      </AnimatePresence>
     </>
   );
 }

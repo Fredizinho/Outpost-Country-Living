@@ -6,7 +6,8 @@ import {
 } from 'recharts';
 import { 
   Users, Droplets, Sun, Trees, ChevronUp, ChevronDown, 
-  Layers, Filter, ArrowUpDown, Sparkles, MapPin, Maximize2, Minimize2, Info, X
+  Layers, Filter, ArrowUpDown, Sparkles, MapPin, Maximize2, Minimize2, Info, X,
+  Sprout, CloudRain, Home as HomeIcon, Tag
 } from 'lucide-react';
 import { MALAWI_DISTRICT_RESOURCES, DistrictResourceStats } from '@/data/districtResourceData';
 import { MalawiDistrictSpec } from '@/data/malawiDistrictData';
@@ -300,13 +301,13 @@ export function ResourceDensityBottomSheet({
                           if (active && payload && payload.length) {
                             const d = payload[0].payload as DistrictResourceStats;
                             return (
-                              <div className="bg-slate-950 border border-amber-500/40 p-3 rounded-xl shadow-2xl text-xs font-mono text-white">
+                              <div className="bg-slate-950 border border-amber-500/40 p-3 rounded-xl shadow-2xl text-xs font-mono text-white space-y-1">
                                 <div className="font-bold text-amber-300 text-sm mb-1">{d.name} District ({d.region})</div>
-                                <div className="text-slate-300">👥 Density: <strong className="text-white">{d.densityPerKm2} people / km²</strong></div>
-                                <div className="text-slate-300">🏡 Total Population: <strong className="text-white">{d.population.toLocaleString()}</strong></div>
-                                <div className="text-slate-300">📐 Total Land Area: <strong className="text-white">{d.areaKm2.toLocaleString()} km²</strong></div>
-                                <div className="text-emerald-400 mt-1">🌱 Farming Land: {d.arableLandPct}% arable</div>
-                                <div className="text-amber-400">🏷️ Land Availability: {d.landSpace}</div>
+                                <div className="text-slate-300 flex items-center gap-1.5"><Users size={12} className="text-amber-400 shrink-0" /> Density: <strong className="text-white">{d.densityPerKm2} people / km²</strong></div>
+                                <div className="text-slate-300 flex items-center gap-1.5"><HomeIcon size={12} className="text-amber-400 shrink-0" /> Total Population: <strong className="text-white">{d.population.toLocaleString()}</strong></div>
+                                <div className="text-slate-300 flex items-center gap-1.5"><Maximize2 size={12} className="text-amber-400 shrink-0" /> Total Land Area: <strong className="text-white">{d.areaKm2.toLocaleString()} km²</strong></div>
+                                <div className="text-emerald-400 flex items-center gap-1.5"><Sprout size={12} className="text-emerald-400 shrink-0" /> Farming Land: {d.arableLandPct}% arable</div>
+                                <div className="text-amber-400 flex items-center gap-1.5"><Tag size={12} className="text-amber-400 shrink-0" /> Land Availability: {d.landSpace}</div>
                               </div>
                             );
                           }
@@ -350,11 +351,11 @@ export function ResourceDensityBottomSheet({
                           if (active && payload && payload.length) {
                             const d = payload[0].payload as DistrictResourceStats;
                             return (
-                              <div className="bg-slate-950 border border-sky-500/40 p-3 rounded-xl shadow-2xl text-xs font-mono text-white">
+                              <div className="bg-slate-950 border border-sky-500/40 p-3 rounded-xl shadow-2xl text-xs font-mono text-white space-y-1">
                                 <div className="font-bold text-sky-300 text-sm mb-1">{d.name} District ({d.region})</div>
-                                <div className="text-sky-300">🌧️ Annual Rainfall: <strong className="text-white">{d.rainfallMm} mm / year</strong></div>
-                                <div className="text-emerald-400">💧 Average Well Depth: <strong className="text-white">{d.aquiferDepthM} meters</strong></div>
-                                <div className="text-amber-300 mt-1">✨ Water Profile: {d.waterRating}</div>
+                                <div className="text-sky-300 flex items-center gap-1.5"><CloudRain size={12} className="text-sky-400 shrink-0" /> Annual Rainfall: <strong className="text-white">{d.rainfallMm} mm / year</strong></div>
+                                <div className="text-emerald-400 flex items-center gap-1.5"><Droplets size={12} className="text-emerald-400 shrink-0" /> Average Well Depth: <strong className="text-white">{d.aquiferDepthM} meters</strong></div>
+                                <div className="text-amber-300 flex items-center gap-1.5"><Sparkles size={12} className="text-amber-400 shrink-0" /> Water Profile: {d.waterRating}</div>
                               </div>
                             );
                           }

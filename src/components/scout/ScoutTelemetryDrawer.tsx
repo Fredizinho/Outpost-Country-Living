@@ -4,8 +4,8 @@ import {
   X, Globe, MapPin, Target, Sparkles, Thermometer, Droplets, 
   Sprout, Mountain, Sun, ShieldCheck, ArrowRight, Copy, Check,
   Bookmark, BookmarkCheck, ExternalLink, Filter, Layers, Compass,
-  AlertTriangle, Waves, Zap, HeartHandshake, ChevronRight, FileText,
-  Minimize2, Maximize2
+  AlertTriangle, Waves, Zap, HeartHandshake, ChevronRight, ChevronDown, FileText,
+  Minimize2, Maximize2, SplitSquareVertical, Printer, Moon, Bot
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -14,6 +14,8 @@ import { MalawiDistrictSpec } from '@/data/malawiDistrictData';
 import { RegionalClimateZone } from '@/data/malawiRegionalScoutData';
 import { FocusRegionId, MALAWI_REGIONAL_BOUNDS, TileLayerType } from './ScoutingMap';
 import { ScoutParcelFeature, ScoutParcelProperties } from '@/data/scoutGeoJSON';
+import { ParcelCadastralExportModal } from './ParcelCadastralExportModal';
+import { SeasonalNdviSplitModal } from './SeasonalNdviSplitModal';
 
 export interface ScoutTelemetryDrawerProps {
   isOpen: boolean;
@@ -41,6 +43,7 @@ export interface ScoutTelemetryDrawerProps {
   isDecluttered: boolean;
   onToggleDeclutter: () => void;
   onOpenLayersModal: () => void;
+  onOpenAiScout?: () => void;
 }
 
 export function ScoutTelemetryDrawer({
@@ -66,11 +69,15 @@ export function ScoutTelemetryDrawer({
   onSelectTileLayer,
   isDecluttered,
   onToggleDeclutter,
-  onOpenLayersModal
+  onOpenLayersModal,
+  onOpenAiScout
 }: ScoutTelemetryDrawerProps) {
   const [drawerTab, setDrawerTab] = useState<'dossier' | 'parcels' | 'soil' | 'layers'>('dossier');
   const [parcelSearch, setParcelSearch] = useState('');
   const [internalMinimized, setInternalMinimized] = useState<boolean>(false);
+  const [isCadastralModalOpen, setIsCadastralModalOpen] = useState<boolean>(false);
+  const [isNdviSplitModalOpen, setIsNdviSplitModalOpen] = useState<boolean>(false);
+  const [showDeepTelemetry, setShowDeepTelemetry] = useState<boolean>(false);
 
   const isMinimized = propIsMinimized !== undefined ? propIsMinimized : internalMinimized;
 
@@ -116,7 +123,7 @@ export function ScoutTelemetryDrawer({
           <div className="flex flex-col truncate">
             <div className="flex items-center gap-2">
               <span className="serif text-xs font-bold text-white truncate">
-                {activeDistrict ? `${activeDistrict.name} Overview` : currentRegionSpec.label}
+                {activeDistrict ? `${activeDistrict.name} Summary` : currentRegionSpec.label}
               </span>
               <span className="text-[9px] font-mono bg-amber-500/20 text-amber-300 px-1.5 py-0.2 rounded border border-amber-500/40 shrink-0">
                 {activeDistrict ? `Grade ${activeDistrict.feasibilityGrade}` : currentRegionSpec.badge}
@@ -124,8 +131,8 @@ export function ScoutTelemetryDrawer({
             </div>
             <span className="text-[10px] font-mono text-slate-400 truncate">
               {activeDistrict 
-                ? `${activeDistrict.rainfallAnnualMm}mm/yr • pH ${activeDistrict.soilPh}` 
-                : `${displayedParcels.length} verified research stations`}
+                ? `${activeDistrict.rainfallAnnualMm} mm/yr • Katondo (Red Clay): pH ${activeDistrict.soilPh}` 
+                : `${displayedParcels.length} surveyed stations`}
             </span>
           </div>
         </div>
@@ -134,10 +141,10 @@ export function ScoutTelemetryDrawer({
           <button
             onClick={() => setMinimizedState(false)}
             className="px-2.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow transition-all"
-            title="Expand Full Telemetry Sheet"
+            title="Expand Summary"
           >
             <Maximize2 size={12} />
-            <span className="hidden sm:inline">Expand Sheet</span>
+            <span className="hidden sm:inline">Summary</span>
           </button>
           <button
             onClick={onClose}
@@ -171,26 +178,37 @@ export function ScoutTelemetryDrawer({
           </div>
           <div>
             <h3 className="serif text-lg font-bold text-white leading-tight">
-              {activeDistrict ? `${activeDistrict.name} Overview` : `${currentRegionSpec.label}`}
+              {activeDistrict ? `${activeDistrict.name} Summary` : currentRegionSpec.label}
             </h3>
             <span className="text-[10px] font-mono text-amber-400/90 uppercase tracking-wider block">
-              {activeDistrict ? `${activeDistrict.region} Region • Suitability Grade ${activeDistrict.feasibilityGrade}` : currentRegionSpec.badge}
+              {activeDistrict ? `${activeDistrict.region} Region • Grade ${activeDistrict.feasibilityGrade}` : currentRegionSpec.badge}
             </span>
           </div>
         </div>
 
         <div className="flex items-center gap-1">
+          {onOpenAiScout && (
+            <button
+              onClick={onOpenAiScout}
+              className="px-2.5 py-1 rounded-xl bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-400/50 text-emerald-300 hover:text-white text-xs font-mono flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
+              title="Open AI Map Scout with Google Maps Grounding"
+            >
+              <Bot size={13} className="text-emerald-400" />
+              <span>AI Scout</span>
+              <Sparkles size={11} className="text-amber-400" />
+            </button>
+          )}
           <button
             onClick={() => setMinimizedState(true)}
             className="w-8 h-8 rounded-full bg-slate-900 border border-white/10 text-slate-400 hover:text-amber-300 flex items-center justify-center transition-all cursor-pointer"
-            title="Minimize to Bottom Ribbon"
+            title="Minimize to Ribbon"
           >
             <Minimize2 size={14} />
           </button>
           <button
             onClick={onClose}
             className="w-8 h-8 rounded-full bg-slate-900 border border-white/10 text-slate-400 hover:text-white flex items-center justify-center transition-all cursor-pointer"
-            title="Close Drawer"
+            title="Close"
           >
             <X size={15} />
           </button>
@@ -209,7 +227,7 @@ export function ScoutTelemetryDrawer({
           )}
         >
           <Target size={13} />
-          <span className="truncate w-full">Overview</span>
+          <span className="truncate w-full">Summary</span>
         </button>
 
         <button
@@ -248,7 +266,7 @@ export function ScoutTelemetryDrawer({
           )}
         >
           <Layers size={13} />
-          <span className="truncate w-full">Map Layers</span>
+          <span className="truncate w-full">Layers</span>
         </button>
       </div>
 
@@ -262,7 +280,7 @@ export function ScoutTelemetryDrawer({
               <div>
                 <div className="flex items-center gap-1.5 flex-wrap">
                   <span className="bg-emerald-500 text-slate-950 px-2 py-0.5 rounded font-mono font-black text-[10px] uppercase">
-                    Inspected Parcel
+                    Selected Parcel
                   </span>
                   <span className="text-xs font-mono font-bold text-amber-300">
                     {activeParcel.acres} Acres ({activeParcel.hectares} ha)
@@ -280,7 +298,7 @@ export function ScoutTelemetryDrawer({
               <button
                 onClick={() => onToggleBookmark(activeParcel.id)}
                 className="p-1.5 rounded-xl bg-slate-900 border border-white/10 hover:border-amber-400 text-amber-400 cursor-pointer"
-                title={bookmarkedIds.includes(activeParcel.id) ? "Remove Bookmark" : "Save to Bookmarks"}
+                title={bookmarkedIds.includes(activeParcel.id) ? "Remove Bookmark" : "Save Bookmark"}
               >
                 {bookmarkedIds.includes(activeParcel.id) ? <BookmarkCheck size={16} /> : <Bookmark size={16} />}
               </button>
@@ -311,23 +329,32 @@ export function ScoutTelemetryDrawer({
               </p>
             )}
 
-            <div className="flex items-center gap-2 pt-1">
-              <Link
-                to={`/calculators?tab=solar&acres=${activeParcel.acres}&district=${activeParcel.district.toLowerCase()}`}
-                className="flex-1 py-1.5 px-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-slate-950 rounded-xl text-[11px] font-mono font-bold uppercase flex items-center justify-center gap-1.5 shadow"
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              <button
+                onClick={() => setIsCadastralModalOpen(true)}
+                className="flex-1 py-1.5 px-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl text-[11px] font-mono font-bold uppercase flex items-center justify-center gap-1.5 shadow cursor-pointer transition-all"
               >
-                <Sun size={12} />
-                <span>Calculate Water & Solar</span>
-              </Link>
+                <Printer size={12} />
+                <span>Export Dossier</span>
+              </button>
+
+              <button
+                onClick={() => setIsNdviSplitModalOpen(true)}
+                className="py-1.5 px-2.5 bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/40 rounded-xl text-[11px] font-mono font-bold flex items-center justify-center gap-1 cursor-pointer transition-all"
+                title="Compare Seasons"
+              >
+                <SplitSquareVertical size={12} />
+                <span className="hidden sm:inline">Compare Seasons</span>
+              </button>
 
               {activeParcel.boundaryPolygon && activeParcel.boundaryPolygon.length > 0 && (
                 <button
                   onClick={() => onCopyCoords([activeParcel.boundaryPolygon[0][1], activeParcel.boundaryPolygon[0][0]])}
                   className="py-1.5 px-2.5 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-white/10 rounded-xl text-[11px] font-mono flex items-center justify-center gap-1 cursor-pointer"
-                  title="Copy parcel coordinates"
+                  title="Copy GPS"
                 >
                   {copiedCoords ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
-                  <span>{copiedCoords ? 'Copied' : 'GPS'}</span>
+                  <span>{copiedCoords ? 'Copied' : 'Copy GPS'}</span>
                 </button>
               )}
             </div>
@@ -335,114 +362,207 @@ export function ScoutTelemetryDrawer({
         )}
 
         {/* ========================================================= */}
-        {/* TAB 1: DISTRICT & REGIONAL DOSSIER                        */}
+        {/* TAB 1: DISTRICT & REGIONAL SUMMARY                        */}
         {/* ========================================================= */}
         {drawerTab === 'dossier' && (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3.5">
             
-            {/* Quick Summary Banner */}
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-amber-950/40 via-slate-900 to-slate-900 border border-amber-500/30 flex flex-col gap-2 shadow-lg">
+            {/* Quick Summary Card */}
+            <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-amber-500/30 flex flex-col gap-1.5 shadow-md">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold uppercase text-amber-400 tracking-wider">
-                  Farming Zone Type
+                <span className="serif text-sm font-bold text-white">
+                  {activeDistrict ? `${activeDistrict.name} District Summary` : `${currentRegionSpec.label} Summary`}
                 </span>
                 <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded text-[10px] font-mono font-bold">
                   {climateZone.thermalBeltZone}
                 </span>
               </div>
-              <p className="text-xs text-slate-200 leading-relaxed">
+              <p className="text-xs text-slate-300 leading-relaxed">
                 {activeDistrict ? activeDistrict.description : selectedRegion.metrics.description}
               </p>
             </div>
 
-            {/* Core Metrics Grid */}
-            <div className="grid grid-cols-2 gap-2.5">
+            {/* TIER 1: SCANNABLE METRICS (ALWAYS VISIBLE) */}
+            <div className="grid grid-cols-2 gap-2">
               
               {/* Elevation */}
-              <div className="bg-slate-900/90 border border-white/5 p-3 rounded-2xl flex flex-col gap-1">
+              <div className="bg-slate-900/90 border border-white/5 p-2.5 rounded-2xl flex flex-col gap-0.5">
                 <div className="flex items-center gap-1.5 text-amber-400 text-[10px] font-mono font-bold uppercase">
-                  <Mountain size={13} /> Elevation Range
+                  <Mountain size={12} /> Elevation
                 </div>
                 <div className="text-sm font-bold text-white font-mono">
                   {activeDistrict ? activeDistrict.elevationRange : selectedRegion.metrics.elevation}
                 </div>
-                <span className="text-[10px] text-slate-400">Mountain vs Valley</span>
+                <span className="text-[10px] text-slate-400">Highland ridge</span>
               </div>
 
               {/* Rainfall */}
-              <div className="bg-slate-900/90 border border-white/5 p-3 rounded-2xl flex flex-col gap-1">
+              <div className="bg-slate-900/90 border border-white/5 p-2.5 rounded-2xl flex flex-col gap-0.5">
                 <div className="flex items-center gap-1.5 text-sky-400 text-[10px] font-mono font-bold uppercase">
-                  <Droplets size={13} /> Annual Rainfall
+                  <Droplets size={12} /> Rainfall
                 </div>
                 <div className="text-sm font-bold text-white font-mono">
                   {activeDistrict ? `${activeDistrict.rainfallAnnualMm} mm/yr` : selectedRegion.metrics.rainfall}
                 </div>
-                <span className="text-[10px] text-slate-400">Nov – April rainy season</span>
+                <span className="text-[10px] text-slate-400">Nov – Apr rains</span>
               </div>
 
               {/* Temperatures */}
-              <div className="bg-slate-900/90 border border-white/5 p-3 rounded-2xl flex flex-col gap-1">
+              <div className="bg-slate-900/90 border border-white/5 p-2.5 rounded-2xl flex flex-col gap-0.5">
                 <div className="flex items-center gap-1.5 text-amber-300 text-[10px] font-mono font-bold uppercase">
-                  <Thermometer size={13} /> Temp Range
+                  <Thermometer size={12} /> Temperature
                 </div>
                 <div className="text-sm font-bold text-white font-mono">
-                  {climateZone.winterMinC}°C <span className="text-slate-500 font-normal">to</span> {climateZone.summerMaxC}°C
+                  {climateZone.winterMinC}°C – {climateZone.summerMaxC}°C
                 </div>
                 <span className="text-[10px] text-slate-400">Frost Risk: <strong className={climateZone.frostRisk === 'High' ? 'text-rose-400' : 'text-emerald-400'}>{climateZone.frostRisk}</strong></span>
               </div>
 
-              {/* Aquifer Depth */}
-              <div className="bg-slate-900/90 border border-white/5 p-3 rounded-2xl flex flex-col gap-1">
+              {/* Well Depth */}
+              <div className="bg-slate-900/90 border border-white/5 p-2.5 rounded-2xl flex flex-col gap-0.5">
                 <div className="flex items-center gap-1.5 text-teal-400 text-[10px] font-mono font-bold uppercase">
-                  <Waves size={13} /> Well Depth
+                  <Waves size={12} /> Well Depth
                 </div>
                 <div className="text-sm font-bold text-white font-mono">
-                  {activeDistrict ? activeDistrict.aquiferDepth : selectedRegion.metrics.aquiferDepth}
+                  {activeDistrict ? activeDistrict.aquiferDepth.split('(')[0].trim() : '14m – 22m'}
                 </div>
-                <span className="text-[10px] text-slate-400">Borehole success: 88%+</span>
+                <span className="text-[10px] text-emerald-400">Shallow well viable</span>
               </div>
 
-              {/* Soil pH */}
-              <div className="bg-slate-900/90 border border-white/5 p-3 rounded-2xl flex flex-col gap-1">
+              {/* Soil */}
+              <div className="bg-slate-900/90 border border-white/5 p-2.5 rounded-2xl flex flex-col gap-0.5">
                 <div className="flex items-center gap-1.5 text-emerald-400 text-[10px] font-mono font-bold uppercase">
-                  <Sprout size={13} /> Red Katondo Soil
+                  <Sprout size={12} /> Katondo (Red Clay)
                 </div>
                 <div className="text-sm font-bold text-white font-mono">
-                  {activeDistrict ? activeDistrict.soilPh : selectedRegion.metrics.soilpH}
+                  pH {activeDistrict ? activeDistrict.soilPh : '6.0–6.5'}
                 </div>
-                <span className="text-[10px] text-slate-400">Great for maize & fruit trees</span>
+                <span className="text-[10px] text-slate-400">Deep red loam</span>
               </div>
 
               {/* Solar Irradiance */}
-              <div className="bg-slate-900/90 border border-white/5 p-3 rounded-2xl flex flex-col gap-1">
+              <div className="bg-slate-900/90 border border-white/5 p-2.5 rounded-2xl flex flex-col gap-0.5">
                 <div className="flex items-center gap-1.5 text-amber-400 text-[10px] font-mono font-bold uppercase">
-                  <Sun size={13} /> Solar Sunshine
+                  <Sun size={12} /> Solar Irradiance
                 </div>
                 <div className="text-sm font-bold text-white font-mono">
-                  {climateZone.solarRadiationKwhM2Day} <span className="text-xs text-slate-400 font-normal">kWh/m²/day</span>
+                  {climateZone.solarRadiationKwhM2Day} kWh/m²/day
                 </div>
                 <span className="text-[10px] text-slate-400">Ideal for solar pumping</span>
               </div>
             </div>
 
-            {/* Recommended High-Yield Crops */}
+            {/* TIER 2: KEY INSIGHTS (ONE LINE CONCISE SUMMARIES) */}
+            {/* Recommended Crops */}
             <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-white/10 flex flex-col gap-2">
-              <span className="text-[10px] font-mono font-bold uppercase text-amber-400 flex items-center gap-1.5">
-                <Sprout size={12} /> Best Crops for this Area
-              </span>
-              <div className="flex flex-wrap gap-1.5">
-                {(activeDistrict ? activeDistrict.topCrops : selectedRegion.metrics.topCrops).map((crop, idx) => (
-                  <span
-                    key={idx}
-                    className="px-2.5 py-1 rounded-xl bg-emerald-950/80 text-emerald-300 border border-emerald-700/60 text-xs font-mono font-semibold"
-                  >
-                    {crop}
-                  </span>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono font-bold uppercase text-amber-400 flex items-center gap-1.5">
+                  <Sprout size={12} /> Recommended Crops
+                </span>
+                <span className="text-[9px] font-mono text-emerald-400">
+                  Best for maize, beans, and fruit trees
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-1.5 text-xs font-mono">
+                {[
+                  { name: 'Mbatata (Sweet Potato)', score: '98% Prime', tag: 'Dambo (Wetland) / Ridge' },
+                  { name: 'Anyenzi (Onion)', score: '94% Prime', tag: 'Alluvial Loam' },
+                  { name: 'Mtedza (Groundnut)', score: '92% Prime', tag: 'Sandy Loam' },
+                  { name: 'Nzimbe (Sugarcane)', score: '89% High', tag: 'Dambo (Wetland)' },
+                  { name: 'Macadamia', score: '96% Prime', tag: 'Highland Ridge' },
+                  { name: 'Coffee (Arabica)', score: '91% Prime', tag: 'Thermal Belt' }
+                ].map((crop, idx) => (
+                  <div key={idx} className="p-2 rounded-xl bg-slate-950/80 border border-white/5 flex items-center justify-between">
+                    <div>
+                      <div className="text-white font-bold text-[11px]">{crop.name}</div>
+                      <div className="text-[9px] text-slate-400">{crop.tag}</div>
+                    </div>
+                    <span className="text-[10px] font-bold text-emerald-400">{crop.score}</span>
+                  </div>
                 ))}
               </div>
             </div>
 
-            {/* Direct Action Jumpers */}
+            {/* Water & Well Viability */}
+            <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-white/10 flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono font-bold uppercase text-cyan-400 flex items-center gap-1.5">
+                  <Droplets size={12} /> Water Availability
+                </span>
+                <button
+                  onClick={() => setIsNdviSplitModalOpen(true)}
+                  className="text-[9px] font-mono text-cyan-300 hover:text-white bg-cyan-950/80 hover:bg-cyan-900 px-2 py-0.5 rounded border border-cyan-700/60 flex items-center gap-1 cursor-pointer transition-all"
+                >
+                  <SplitSquareVertical size={10} />
+                  <span>Compare Seasons</span>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                <div className="p-2.5 rounded-xl bg-slate-950/80 border border-cyan-900/40 flex flex-col">
+                  <span className="text-[9px] text-slate-400 uppercase">Chilimwe (Dry Season) Aquifer</span>
+                  <span className="text-sm font-bold text-sky-300">14m – 22m Depth</span>
+                  <span className="text-[9px] text-emerald-400 mt-0.5">✓ Shallow Well Viable</span>
+                </div>
+
+                <div className="p-2.5 rounded-xl bg-slate-950/80 border border-cyan-900/40 flex flex-col">
+                  <span className="text-[9px] text-slate-400 uppercase">Perennial Spring Flow</span>
+                  <span className="text-sm font-bold text-cyan-300">180 L / min</span>
+                  <span className="text-[9px] text-slate-400 mt-0.5">Gravity mountain runoff</span>
+                </div>
+              </div>
+            </div>
+
+            {/* TIER 3: DEEP TELEMETRY (HIDDEN BEHIND PROGRESSIVE DISCLOSURE) */}
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={() => setShowDeepTelemetry(!showDeepTelemetry)}
+                className="w-full py-2 px-3 rounded-xl bg-slate-900 border border-white/10 hover:border-white/20 text-slate-300 hover:text-white font-mono text-xs flex items-center justify-between transition-all cursor-pointer"
+              >
+                <span className="flex items-center gap-1.5">
+                  <Layers size={13} className="text-amber-400" />
+                  <span>{showDeepTelemetry ? 'Hide Technical Details' : 'More Technical Details'}</span>
+                </span>
+                <ChevronDown size={14} className={cn("transition-transform", showDeepTelemetry && "rotate-180")} />
+              </button>
+
+              {showDeepTelemetry && (
+                <div className="flex flex-col gap-3 pt-1">
+                  {/* Micro-Catchment & Swales */}
+                  <div className="text-[10px] text-slate-300 bg-cyan-950/30 p-2.5 rounded-xl border border-cyan-800/30 flex flex-col gap-1">
+                    <div className="font-bold text-cyan-200 flex items-center gap-1.5">
+                      <Waves size={13} className="text-cyan-400" />
+                      <span>Micro-Catchment & Swales:</span>
+                    </div>
+                    <p className="leading-relaxed">
+                      10m contours identify natural hillside runoff. Recommended installation: 
+                      200m contour swales paired with vetiver grass hedgerows to recharge sub-surface aquifers.
+                    </p>
+                  </div>
+
+                  {/* Thermal Belt Status */}
+                  <div className="p-3 rounded-2xl bg-emerald-950/30 border border-emerald-500/20 flex flex-col gap-1.5 text-xs font-mono">
+                    <span className="text-[10px] text-emerald-400 font-bold uppercase">Thermal Belt Inversion</span>
+                    <p className="text-[11px] text-slate-300 leading-relaxed font-sans">
+                      Mid-slope elevation avoids valley frost pools and ridge-top winds, providing a stable 12°C–28°C growing environment.
+                    </p>
+                  </div>
+
+                  {/* Solar Pumping & Infrastructure */}
+                  <div className="p-3 rounded-2xl bg-amber-950/30 border border-amber-500/20 flex flex-col gap-1.5 text-xs font-mono">
+                    <span className="text-[10px] text-amber-400 font-bold uppercase">Solar Pump Specifications</span>
+                    <div className="grid grid-cols-2 gap-2 text-[11px]">
+                      <div><strong className="text-white">Pump:</strong> 1.5 kW DC Submersible</div>
+                      <div><strong className="text-white">Array:</strong> 2.4 kWp PV</div>
+                      <div><strong className="text-white">Feeder Road:</strong> 2.8 km</div>
+                      <div><strong className="text-white">Grid (ESCOM):</strong> 4.2 km</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* DIRECT ACTION BUTTONS (2-3 WORDS MAX, ACTIVE VERBS) */}
             <div className="flex flex-col gap-2 pt-2 border-t border-white/10">
               <Link
                 to={`/calculators?tab=solar&district=${activeDistrict ? activeDistrict.id : 'dedza'}`}
@@ -450,7 +570,7 @@ export function ScoutTelemetryDrawer({
               >
                 <div className="flex items-center gap-2">
                   <Sun size={14} />
-                  <span>Size Borehole & Solar Pump for {activeDistrict ? activeDistrict.name : 'District'}</span>
+                  <span>Calculate Solar Pump Size</span>
                 </div>
                 <ChevronRight size={14} />
               </Link>
@@ -461,7 +581,7 @@ export function ScoutTelemetryDrawer({
               >
                 <div className="flex items-center gap-2">
                   <Sprout size={14} className="text-emerald-400" />
-                  <span>Open Seasonal Planting Calendar</span>
+                  <span>View Planting Calendar</span>
                 </div>
                 <ExternalLink size={13} />
               </Link>
@@ -472,7 +592,7 @@ export function ScoutTelemetryDrawer({
                   className="w-full py-2 px-3 rounded-xl bg-slate-900/60 hover:bg-slate-800 text-slate-300 border border-white/5 font-mono text-[11px] flex items-center justify-center gap-2 transition-all cursor-pointer"
                 >
                   {copiedCoords ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} className="text-amber-400" />}
-                  <span>{copiedCoords ? "Centroid Coordinates Copied!" : `Copy GPS Centroid: ${activeDistrict.centroid[0].toFixed(4)}, ${activeDistrict.centroid[1].toFixed(4)}`}</span>
+                  <span>{copiedCoords ? "Coordinates Copied" : "Copy GPS"}</span>
                 </button>
               )}
             </div>
@@ -599,39 +719,39 @@ export function ScoutTelemetryDrawer({
         {/* ========================================================= */}
         {drawerTab === 'soil' && (
           <div className="flex flex-col gap-3 text-xs">
-            <div className="p-4 rounded-2xl bg-slate-900/90 border border-amber-500/30 flex flex-col gap-2">
-              <h4 className="serif text-base font-bold text-amber-300 flex items-center gap-1.5">
-                <Sprout size={16} /> Katondo (Red Latosol) Pedology
+            <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-amber-500/30 flex flex-col gap-1.5">
+              <h4 className="serif text-sm font-bold text-amber-300 flex items-center gap-1.5">
+                <Sprout size={14} /> Katondo (Red Clay) Profile
               </h4>
-              <p className="text-slate-300 leading-relaxed">
-                Malawi’s deep, iron-rich ferruginous latosols (Katondo) offer excellent drainage and natural moisture retention for perennials, orchards, and grains.
+              <p className="text-slate-300 text-[11px] leading-relaxed">
+                Deep iron-rich latosol with high drainage and natural moisture retention. Best for macadamia, coffee, and maize.
               </p>
             </div>
 
-            <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-white/10 flex flex-col gap-2">
+            <div className="p-3 rounded-2xl bg-slate-900/80 border border-white/10 flex flex-col gap-1">
               <span className="text-[10px] font-mono font-bold uppercase text-emerald-400">
-                1. Natural Fertilizer Guide
+                1. Natural Soil Nutrition
               </span>
               <p className="text-slate-300 text-[11px] leading-relaxed">
-                Infuse red Katondo soil with fermented wild sunflower tea (Tithonia) to build rich soil nutrients naturally without costly chemical fertilizer.
+                Fertilize Katondo (Red Clay) with fermented wild sunflower tea (Tithonia) to build nitrogen naturally without synthetic inputs.
               </p>
             </div>
 
-            <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-white/10 flex flex-col gap-2">
+            <div className="p-3 rounded-2xl bg-slate-900/80 border border-white/10 flex flex-col gap-1">
               <span className="text-[10px] font-mono font-bold uppercase text-sky-400">
-                2. Wetland Garden (Dimba) Guide
+                2. Dambo (Wetland) & Dimba (Wetland Garden)
               </span>
               <p className="text-slate-300 text-[11px] leading-relaxed">
-                Lowland stream valleys (dambos) keep water in the soil through the dry winter months, allowing you to grow fresh vegetables year-round.
+                Dambo (Wetland) valleys retain soil moisture throughout Chilimwe (Dry Season), enabling year-round vegetable yields.
               </p>
             </div>
 
-            <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-white/10 flex flex-col gap-2">
+            <div className="p-3 rounded-2xl bg-slate-900/80 border border-white/10 flex flex-col gap-1">
               <span className="text-[10px] font-mono font-bold uppercase text-amber-400">
-                3. Village Land Ownership (Customary Land Act)
+                3. Malire (Boundary) & Land Registration
               </span>
               <p className="text-slate-300 text-[11px] leading-relaxed">
-                Under the Customary Land Act (2016), family land can be officially registered with your Traditional Authority (TA) for a 99-year legal title.
+                Customary family parcels are registered with the Traditional Authority (TA) under the Customary Land Act for long-term security.
               </p>
             </div>
           </div>
@@ -644,13 +764,13 @@ export function ScoutTelemetryDrawer({
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-mono font-bold uppercase text-amber-400">
-                Map Background Style
+                Base Map
               </span>
               <button
                 onClick={onOpenLayersModal}
-                className="text-[10px] font-mono text-emerald-400 hover:underline flex items-center gap-1"
+                className="text-[10px] font-mono text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
               >
-                <span>All Layer Controls</span>
+                <span>Layer Settings</span>
                 <ExternalLink size={10} />
               </button>
             </div>
@@ -658,32 +778,36 @@ export function ScoutTelemetryDrawer({
             {/* Basemap grid */}
             <div className="grid grid-cols-2 gap-2">
               {([
-                { id: 'satellite' as TileLayerType, label: 'Satellite HD', icon: '🛰️' },
-                { id: 'terrain' as TileLayerType, label: '3D Topo', icon: '🗺️' },
-                { id: 'hybrid' as TileLayerType, label: 'Hybrid Satellite', icon: '📍' },
-                { id: 'standard' as TileLayerType, label: 'Vector Clean', icon: '🧭' },
-              ]).map((b) => (
-                <button
-                  key={b.id}
-                  onClick={() => onSelectTileLayer(b.id)}
-                  className={cn(
-                    "p-3 rounded-2xl border transition-all text-left flex items-center gap-2 cursor-pointer",
-                    tileLayerType === b.id
-                      ? "bg-amber-500/25 border-amber-400 text-amber-200 font-bold shadow-md"
-                      : "bg-slate-900/80 border-slate-800 text-slate-300 hover:text-white"
-                  )}
-                >
-                  <span className="text-base">{b.icon}</span>
-                  <span className="text-xs font-bold">{b.label}</span>
-                </button>
-              ))}
+                { id: 'dark' as TileLayerType, label: 'GIS Dark', icon: Moon, color: 'text-stone-300' },
+                { id: 'satellite' as TileLayerType, label: 'Satellite', icon: Layers, color: 'text-emerald-400' },
+                { id: 'terrain' as TileLayerType, label: 'Terrain', icon: Mountain, color: 'text-amber-400' },
+                { id: 'hybrid' as TileLayerType, label: 'Hybrid', icon: MapPin, color: 'text-sky-400' },
+                { id: 'standard' as TileLayerType, label: 'Clean Vector', icon: Compass, color: 'text-teal-400' },
+              ]).map((b) => {
+                const BIcon = b.icon;
+                return (
+                  <button
+                    key={b.id}
+                    onClick={() => onSelectTileLayer(b.id)}
+                    className={cn(
+                      "p-3 rounded-2xl border transition-all text-left flex items-center gap-2.5 cursor-pointer",
+                      tileLayerType === b.id
+                        ? "bg-amber-500/25 border-amber-400 text-amber-200 font-bold shadow-md"
+                        : "bg-slate-900/80 border-slate-800 text-slate-300 hover:text-white"
+                    )}
+                  >
+                    <BIcon size={16} className={b.color} />
+                    <span className="text-xs font-bold">{b.label}</span>
+                  </button>
+                );
+              })}
             </div>
 
             {/* Quick Declutter Switch */}
             <div className="p-3 rounded-2xl bg-slate-900 border border-white/10 flex items-center justify-between">
               <div className="flex flex-col">
-                <span className="text-xs font-bold text-white">Declutter Mode</span>
-                <span className="text-[10px] text-slate-400">Hide textured overlays for clean vector view</span>
+                <span className="text-xs font-bold text-white">Declutter View</span>
+                <span className="text-[10px] text-slate-400">Clean vector display</span>
               </div>
               <button
                 onClick={onToggleDeclutter}
@@ -703,12 +827,27 @@ export function ScoutTelemetryDrawer({
               className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-850 text-amber-300 border border-amber-500/40 font-mono text-xs font-bold uppercase flex items-center justify-center gap-2 transition-all cursor-pointer"
             >
               <Layers size={14} />
-              <span>Open Detailed Layer Switcher</span>
+              <span>Manage Map Layers</span>
             </button>
           </div>
         )}
 
       </div>
+
+      {/* Cadastral Survey & Dossier PDF Exporter Modal */}
+      <ParcelCadastralExportModal
+        isOpen={isCadastralModalOpen}
+        onClose={() => setIsCadastralModalOpen(false)}
+        parcel={activeParcel}
+        district={activeDistrict}
+      />
+
+      {/* Seasonal NDVI Time-Series Comparison Modal */}
+      <SeasonalNdviSplitModal
+        isOpen={isNdviSplitModalOpen}
+        onClose={() => setIsNdviSplitModalOpen(false)}
+        activeDistrict={activeDistrict}
+      />
     </motion.aside>
   );
 }

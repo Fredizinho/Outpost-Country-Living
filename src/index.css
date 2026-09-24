@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-serif: "Newsreader", "Fraunces", Georgia, serif;
@@ -64,27 +66,36 @@
 
 @layer base {
   body {
-    @apply text-slate-200 antialiased font-sans leading-relaxed;
-    background-color: #05130B;
-    background-image: 
-      radial-gradient(circle at 15% 10%, rgba(20, 83, 45, 0.42) 0%, transparent 45%),
-      radial-gradient(circle at 85% 20%, rgba(217, 119, 6, 0.18) 0%, transparent 40%),
-      radial-gradient(circle at 50% 75%, rgba(13, 40, 24, 0.55) 0%, transparent 55%),
-      linear-gradient(180deg, #05130B 0%, #081C11 40%, #0D2818 70%, #040E08 100%);
+    @apply text-stone-800 dark:text-stone-100 antialiased font-sans leading-relaxed text-[15px] sm:text-base;
+    background-color: #FAF8F5;
+    background-image: linear-gradient(180deg, #FAF8F5 0%, #F8F5EE 50%, #F5F1E8 100%);
     background-attachment: fixed;
     letter-spacing: -0.011em;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  html.dark body,
+  .dark body {
+    background-color: #0A140E;
+    background-image: linear-gradient(180deg, #0A140E 0%, #0C1811 50%, #08110B 100%);
+    color: #F5F3EF;
   }
 
   h1, h2, h3, h4, h5, h6 {
     letter-spacing: -0.025em;
     font-family: var(--font-serif);
+    color: #1c1917;
+  }
+
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+    color: #F5F3EF;
   }
 
   h1 {
-    letter-spacing: -0.035em;
+    letter-spacing: -0.03em;
   }
 
   p {
@@ -113,52 +124,47 @@
 
 /* Field Guide Eyebrows and Status Badges */
 .eyebrow-badge {
-  @apply uppercase text-xs font-mono text-amber-400/90 tracking-widest font-black;
+  @apply uppercase text-xs font-mono text-emerald-800 dark:text-emerald-400 tracking-widest font-bold;
 }
 
-/* Field Guide Background Textures & Vignettes */
+/* Beautiful but Simple Background Layers */
 .bg-warm-organic-canvas {
-  background: 
-    radial-gradient(circle at 20% 15%, rgba(20, 83, 45, 0.45) 0%, transparent 55%),
-    radial-gradient(circle at 80% 30%, rgba(120, 53, 15, 0.25) 0%, transparent 50%),
-    radial-gradient(circle at 50% 85%, rgba(13, 40, 24, 0.7) 0%, transparent 65%),
-    linear-gradient(180deg, #071A10 0%, #0D2818 50%, #05130B 100%);
+  background: linear-gradient(180deg, #FAF8F5 0%, #F8F5EE 50%, #F5F1E8 100%);
+}
+
+.dark .bg-warm-organic-canvas {
+  background: linear-gradient(180deg, #0A140E 0%, #0D1C13 50%, #08120B 100%);
 }
 
 .bg-sanctuary-gradient {
-  background: linear-gradient(180deg, #05130B 0%, #0D2818 50%, #040E08 100%);
+  background: linear-gradient(180deg, #FAF8F5 0%, #F8F5EE 50%, #F5F1E8 100%);
+}
+
+.dark .bg-sanctuary-gradient {
+  background: linear-gradient(180deg, #0A140E 0%, #0D1C13 50%, #08120B 100%);
 }
 
 .bg-sanctuary-radial {
-  background: radial-gradient(ellipse at 50% 20%, #0D2818 0%, #071A10 60%, #040E08 100%);
+  background: radial-gradient(ellipse at 50% 10%, #FAF8F5 0%, #F8F5EE 60%, #F3EFE6 100%);
 }
 
-/* Subtle Organic Topo & Noise Vignette Pattern */
-.bg-topo-vignette {
-  background-image: 
-    radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.04) 0%, transparent 60%),
-    radial-gradient(#1e3a29 1px, transparent 1px);
-  background-size: 100% 100%, 24px 24px;
+.dark .bg-sanctuary-radial {
+  background: radial-gradient(ellipse at 50% 10%, #0F2016 0%, #0A140E 60%, #071009 100%);
 }
 
-/* Tactile Field Guide Paper / Noise Texture */
-.field-noise-overlay {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
-}
-
-/* Tactile Warm Organic Glassmorphism Surfaces & Layering */
+/* Tactile Warm Organic Sanctuary Surfaces & Layering */
 .glass-surface,
 .card-standard {
-  @apply bg-slate-950/40 backdrop-blur-xl border border-white/[0.08] text-slate-100 shadow-2xl shadow-black/40 transition-all duration-300 ease-out;
+  @apply bg-white/95 dark:bg-[#0E1D14]/95 backdrop-blur-md border border-stone-200/90 dark:border-emerald-900/60 text-stone-800 dark:text-stone-100 shadow-xs transition-all duration-300 ease-out;
 }
 
 .glass-surface-amber,
 .card-featured {
-  @apply bg-gradient-to-b from-amber-500/[0.08] to-slate-950/60 backdrop-blur-2xl border border-amber-500/30 text-slate-100 shadow-xl shadow-amber-900/10 transition-all duration-300 ease-out;
+  @apply bg-gradient-to-b from-amber-50/60 to-white dark:from-emerald-950/40 dark:to-[#0E1D14] backdrop-blur-md border border-amber-200/80 dark:border-amber-500/30 text-stone-900 dark:text-stone-100 shadow-xs transition-all duration-300 ease-out;
 }
 
 .card-hover-sleek {
-  @apply hover:border-amber-500/40 hover:bg-slate-950/60 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 ease-out;
+  @apply hover:border-emerald-700/50 dark:hover:border-emerald-600/60 hover:bg-white dark:hover:bg-[#112319] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 ease-out;
 }
 
 /* Ambient Lighting & Subtle Radial Glows */
@@ -174,51 +180,51 @@
   @apply relative overflow-hidden before:absolute before:-top-16 before:-left-16 before:w-72 before:h-72 before:bg-amber-500/10 before:rounded-full before:blur-3xl before:pointer-events-none after:absolute after:-bottom-16 after:-right-16 after:w-72 after:h-72 after:bg-emerald-500/10 after:rounded-full after:blur-3xl after:pointer-events-none;
 }
 
-/* Text Gradient Styling: Sleek Metallic-Gold & Radiant Cream */
+/* Text Gradient Styling */
 .text-metallic-gold,
 .hero-gradient-text {
-  @apply bg-gradient-to-r from-amber-100 via-amber-200 to-amber-400 bg-clip-text text-transparent;
-}
-
-.text-metallic-gold-subtle {
   @apply bg-gradient-to-r from-amber-200 via-amber-300 to-amber-500 bg-clip-text text-transparent;
 }
 
+.text-metallic-gold-subtle {
+  @apply bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 bg-clip-text text-transparent;
+}
+
 .text-emerald-radiant {
-  @apply bg-gradient-to-r from-emerald-200 via-emerald-300 to-teal-400 bg-clip-text text-transparent;
+  @apply bg-gradient-to-r from-emerald-300 via-emerald-400 to-teal-400 bg-clip-text text-transparent;
 }
 
 .instrument-panel {
-  @apply bg-slate-950/50 backdrop-blur-xl border border-amber-500/20 text-slate-100 shadow-2xl shadow-black/40 transition-all duration-300 ease-out;
+  @apply bg-white/95 dark:bg-[#0E1D14]/95 backdrop-blur-xl border border-stone-200/90 dark:border-emerald-800/40 text-stone-900 dark:text-stone-100 shadow-sm transition-all duration-300 ease-out;
 }
 
 .instrument-panel-hover {
-  @apply hover:border-amber-500/40 hover:bg-slate-950/70 hover:shadow-[0_12px_40px_rgba(0,0,0,0.5)] hover:-translate-y-0.5 transition-all duration-300 ease-out;
+  @apply hover:border-emerald-700/40 dark:hover:border-emerald-600/50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 ease-out;
 }
 
 .instrument-panel-accent {
-  @apply backdrop-blur-xl bg-emerald-950/80 border border-amber-500/30 text-white shadow-xl;
+  @apply backdrop-blur-xl bg-emerald-900 text-white border border-emerald-800 shadow-md;
 }
 
 .glass {
-  @apply bg-slate-950/40 backdrop-blur-xl border border-white/[0.08] shadow-2xl shadow-black/40;
+  @apply bg-white/80 dark:bg-[#0A140E]/80 backdrop-blur-xl border border-stone-200/80 dark:border-emerald-900/40 shadow-md;
 }
 
 .glass-dark {
-  @apply bg-[#0D2818]/85 backdrop-blur-xl border border-amber-500/20 shadow-[0_12px_40px_rgba(0,0,0,0.45)];
+  @apply bg-[#0D2818]/90 backdrop-blur-xl border border-emerald-800/40 shadow-lg text-white;
 }
 
 .glass-muted {
-  @apply bg-slate-950/30 backdrop-blur-md border border-white/[0.06] shadow-lg;
+  @apply bg-stone-100/80 dark:bg-[#0E1D14]/80 backdrop-blur-md border border-stone-200/60 dark:border-emerald-900/30;
 }
 
 .card-hover {
-  @apply hover:border-amber-500/40 hover:bg-slate-950/60 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 ease-out;
+  @apply hover:border-emerald-700/40 dark:hover:border-emerald-600/50 hover:shadow-md hover:-translate-y-1 transition-all duration-300 ease-out;
 }
 
-/* Primary Action Buttons: Terracotta Amber */
+/* Primary Action Buttons */
 .btn-terracotta-amber {
-  @apply bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-5 py-3 rounded-2xl shadow-[0_8px_25px_rgba(245,158,11,0.35)] active:scale-95 transition-all duration-200;
+  @apply bg-amber-600 hover:bg-amber-500 text-white font-bold px-5 py-3 rounded-2xl shadow-sm active:scale-95 transition-all duration-200;
 }
 
 /* Subtle gold foil border accent */
@@ -312,15 +318,65 @@
   margin-top: 3px;
   padding: 1px 6px;
   border-radius: 6px;
-  background: rgba(2, 6, 23, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(2, 6, 23, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   color: #f8fafc;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.02em;
   white-space: nowrap;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
   font-family: var(--font-sans);
+  pointer-events: auto;
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease;
+  transform-origin: center center;
+}
+
+/* Dynamic Collision Avoidance States */
+.district-badge-nametag.collision-hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: scale(0.7) translateY(-6px) !important;
+}
+
+.district-badge-nametag.offset-top {
+  transform: translateY(-46px) !important;
+  border-color: rgba(56, 189, 248, 0.5) !important;
+  background: rgba(2, 6, 23, 0.96) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.75) !important;
+}
+
+.district-badge-nametag.offset-right {
+  transform: translate(36px, -24px) !important;
+  border-color: rgba(56, 189, 248, 0.5) !important;
+  background: rgba(2, 6, 23, 0.96) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.75) !important;
+}
+
+.district-badge-nametag.offset-left {
+  transform: translate(-36px, -24px) !important;
+  border-color: rgba(56, 189, 248, 0.5) !important;
+  background: rgba(2, 6, 23, 0.96) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.75) !important;
+}
+
+/* Expanded Marker Badge Styles */
+.district-centroid-badge.expanded-badge {
+  width: 56px;
+  height: 56px;
+  border-color: #f59e0b !important;
+  background: rgba(15, 23, 42, 0.98) !important;
+  box-shadow: 0 0 28px rgba(245, 158, 11, 0.85), 0 0 0 4px rgba(245, 158, 11, 0.25) !important;
+  transform: scale(1.15) !important;
+  z-index: 1000 !important;
+}
+
+.district-centroid-badge.expanded-badge .district-badge-grade {
+  font-size: 13px !important;
+}
+
+.district-centroid-badge.expanded-badge .district-badge-depth {
+  font-size: 10px !important;
 }
 
 /* Dynamic Parcel Clustering Badges */
@@ -435,5 +491,64 @@
   box-shadow: 0 0 28px rgba(52, 211, 153, 0.95), 0 0 0 4px rgba(52, 211, 153, 0.3);
   transform: scale(1.25);
 }
+
+/* ==========================================================================
+   ELEVATED GIS MAP VECTOR OVERLAY STYLING (LIVING CORRIDORS & GLOWS)
+   ========================================================================== */
+
+/* Living Water Corridor Styling */
+path.river-ambient-glow {
+  filter: drop-shadow(0 0 6px rgba(6, 182, 212, 0.45));
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+path.river-core-stream {
+  filter: drop-shadow(0 0 2px rgba(224, 242, 254, 0.9));
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Customary Ancestral Boundary Malire */
+path.customary-boundary-corridor {
+  filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.4));
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Rift Valley Geological Fault Terrace */
+path.escarpment-terrace-shadow {
+  filter: drop-shadow(2px 3px 6px rgba(0, 0, 0, 0.75));
+}
+
+path.escarpment-crest-highlight {
+  filter: drop-shadow(0 0 3px rgba(254, 215, 170, 0.8));
+}
+
+/* District Boundary Corridors */
+path.district-glow-selected {
+  filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.6));
+}
+
+path.district-glow-subtle {
+  transition: stroke 0.2s ease, opacity 0.2s ease;
+}
+
+/* Gradient Shimmer for AI Insights Button */
+@keyframes gradient-x {
+  0%, 100% {
+    background-size: 200% 200%;
+    background-position: left center;
+  }
+  50% {
+    background-size: 200% 200%;
+    background-position: right center;
+  }
+}
+
+.animate-gradient-x {
+  animation: gradient-x 3s ease infinite;
+}
+
 
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
+import '@/lib/leafletSafePatch';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { motion, AnimatePresence } from 'motion/react';
@@ -9,8 +10,8 @@ import {
   Mountain, Trees, Activity, Waves, AlertTriangle, Target,
   ChevronRight, Sliders, Eye, EyeOff, Calendar, ArrowUpRight, Sprout,
   Globe, Sun, ChevronDown, ChevronUp, ArrowRight, BookOpen, Clock, HardDrive,
-  FileText, Satellite, Map, Route, Thermometer, Snowflake, Flame, CloudRain,
-  Wifi, WifiOff, Download, Maximize2, Minimize2
+  FileText, Satellite, Map as MapIcon, Route, Thermometer, Snowflake, Flame, CloudRain,
+  Wifi, WifiOff, Download, Maximize2, Minimize2, Bot
 } from 'lucide-react';
 import { getTelemetryForDistrict, DistrictSeasonalTelemetry } from '@/data/actionableAlmanacData';
 import { getDistrictClimateData, DistrictClimateData } from '@/data/climateTelemetryData';
@@ -43,6 +44,7 @@ import {
   MalawiDistrictSpec,
   getDistrictByIdOrName
 } from '@/data/malawiDistrictData';
+import { computeDistrictLabelCollisions } from './labelCollisionDetector';
 import { 
   getMalawiInverseMaskLatLngs, 
   getMalawiNationalBorderLines, 
@@ -55,6 +57,9 @@ import {
 } from '@/data/malawiVectorBasemapData';
 import { MALAWI_ELEVATION_CONTOURS } from '@/data/malawiContourData';
 import { MALAWI_CUSTOMARY_BOUNDARIES } from '@/data/malawiCustomaryBoundaries';
+import { MALAWI_COMMUNITY_SETTLEMENTS, CommunitySettlementNode } from '@/data/malawiSettlementsData';
+import { ThematicLayerControlPanel } from './ThematicLayerControlPanel';
+import { MapScoutAiDrawer } from './MapScoutAiDrawer';
 import { MapLegend } from './MapLegend';
 import { MapCompassAndScale } from './MapCompassAndScale';
 import { isForceOfflineActive, isCacheStorageAvailable } from '@/lib/offlineTileManager';
@@ -144,7 +149,7 @@ export interface ScoutingMapProps {
   onNavigateComparison?: () => void;
 }
 
-export type TileLayerType = 'satellite' | 'hybrid' | 'terrain' | 'standard' | 'offline-vector';
+export type TileLayerType = 'dark' | 'satellite' | 'hybrid' | 'terrain' | 'standard' | 'offline-vector';
 
 export function ScoutingMap({ 
   initialMode = 'regional', 
@@ -163,8 +168,10 @@ export function ScoutingMap({
   // Auto-hide overlays for immediate visual feedback on the map
   const [isAutoHideActive, setIsAutoHideActive] = useState<boolean>(isAutoHideProp ?? true);
   const [isDetailsAutoHidden, setIsDetailsAutoHidden] = useState<boolean>(false);
-  const [isSpotlightMinimized, setIsSpotlightMinimized] = useState<boolean>(false);
-  const [isDrawerMinimized, setIsDrawerMinimized] = useState<boolean>(false);
+  const [isSpotlightMinimized, setIsSpotlightMinimized] = useState<boolean>(true);
+  const [isDrawerMinimized, setIsDrawerMinimized] = useState<boolean>(true);
+  const [expandedDistrictId, setExpandedDistrictId] = useState<string | null>(null);
+  const districtMarkerMapRef = useRef<Map<string, L.Marker>>(new Map());
 
   const onMapInteractRef = useRef(onMapInteract);
   useEffect(() => {
@@ -242,20 +249,29 @@ export function ScoutingMap({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [isLayersDeckOpen, setIsLayersDeckOpen] = useState(false);
+  const [isAiScoutDrawerOpen, setIsAiScoutDrawerOpen] = useState(false);
+  const [aiScoutLayerInsightsMode, setAiScoutLayerInsightsMode] = useState(false);
   const [activeParcel, setActiveParcel] = useState<ScoutParcelProperties | null>(null);
   const [viewMode, setViewMode] = useState<'map' | 'list'>(initialViewMode);
-  const [tileStyle, setTileStyle] = useState<TileLayerType>('satellite');
+  const [tileStyle, setTileStyle] = useState<TileLayerType>('dark');
   
-  // Toggleable Map Overlays State
-  const [showClimateHeatmap, setShowClimateHeatmap] = useState(true);
-  const [showRainfallLayer, setShowRainfallLayer] = useState(true);
-  const [showSoilPhLayer, setShowSoilPhLayer] = useState(true);
+  // Toggleable Map Overlays State (Starts clean and calm to prevent clutter)
+  const [showClimateHeatmap, setShowClimateHeatmap] = useState(false);
+  const [showRainfallLayer, setShowRainfallLayer] = useState(false);
+  const [showSoilPhLayer, setShowSoilPhLayer] = useState(false);
   const [showElevationLayer, setShowElevationLayer] = useState(false);
+  const [showContourLines, setShowContourLines] = useState(false);
   const [showCatchmentBasins, setShowCatchmentBasins] = useState(false);
-  const [showEscarpments, setShowEscarpments] = useState(true);
+  const [showEscarpments, setShowEscarpments] = useState(false);
   const [showRivers, setShowRivers] = useState(true);
   const [showDistrictBoundaries, setShowDistrictBoundaries] = useState(true);
+  const [showCustomaryBoundaries, setShowCustomaryBoundaries] = useState(false);
   const [showParcelBoundary, setShowParcelBoundary] = useState(true);
+  const [showCommunitySettlements, setShowCommunitySettlements] = useState(true);
+
+  // Zoom and Map View Telemetry
+  const [currentZoom, setCurrentZoom] = useState<number>(7.25);
+  const [currentMapCenter, setCurrentMapCenter] = useState<{ lat: number; lng: number }>({ lat: -13.2543, lng: 34.3015 });
 
   // Live telemetry state on cursor movement
   const [liveCursorCoords, setLiveCursorCoords] = useState<{ lat: number; lng: number } | null>(null);
@@ -285,11 +301,15 @@ export function ScoutingMap({
   const rainfallLayerRef = useRef<L.LayerGroup | null>(null);
   const soilLayerRef = useRef<L.LayerGroup | null>(null);
   const elevationLayerRef = useRef<L.LayerGroup | null>(null);
+  const contoursLayerRef = useRef<L.LayerGroup | null>(null);
+  const customaryLayerRef = useRef<L.LayerGroup | null>(null);
   const catchmentsLayerRef = useRef<L.LayerGroup | null>(null);
   const escarpmentsLayerRef = useRef<L.LayerGroup | null>(null);
   const riversLayerRef = useRef<L.LayerGroup | null>(null);
   const boundaryLayerRef = useRef<L.LayerGroup | null>(null);
+  const settlementsLayerRef = useRef<L.LayerGroup | null>(null);
   const markersLayerRef = useRef<L.LayerGroup | null>(null);
+  const districtBadgesLayerRef = useRef<L.LayerGroup | null>(null);
   const inverseMaskLayerRef = useRef<L.LayerGroup | null>(null);
   const nationalBorderLayerRef = useRef<L.LayerGroup | null>(null);
 
@@ -308,31 +328,49 @@ export function ScoutingMap({
       }
     };
 
+    const handleOpenLayersEvent = () => {
+      setIsLayersDeckOpen(true);
+    };
+
+    const handleOpenAiInsightsEvent = () => {
+      setAiScoutLayerInsightsMode(true);
+      setIsAiScoutDrawerOpen(true);
+    };
+
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
     window.addEventListener('outpost:offline-mode-changed', handleOfflineModeChange);
+    window.addEventListener('outpost:open-layers', handleOpenLayersEvent);
+    window.addEventListener('outpost:open-ai-insights', handleOpenAiInsightsEvent);
 
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
       window.removeEventListener('outpost:offline-mode-changed', handleOfflineModeChange);
+      window.removeEventListener('outpost:open-layers', handleOpenLayersEvent);
+      window.removeEventListener('outpost:open-ai-insights', handleOpenAiInsightsEvent);
     };
   }, []);
 
   // Invalidate map size on window resize or sidebar change
   useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout> | null = null;
     const handleResize = () => {
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.invalidateSize();
+      if (mapInstanceRef.current && (mapInstanceRef.current as any)._mapPane) {
+        try {
+          mapInstanceRef.current.invalidateSize({ pan: false });
+        } catch {
+          // ignore
+        }
       }
     };
 
     window.addEventListener('resize', handleResize);
-    const timeout = setTimeout(handleResize, 350);
+    timeout = setTimeout(handleResize, 150);
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      clearTimeout(timeout);
+      if (timeout) clearTimeout(timeout);
     };
   }, [isSidebarOpen, viewMode]);
 
@@ -368,8 +406,21 @@ export function ScoutingMap({
   };
 
   // Preset Applicator
-  const handleApplyPreset = (preset: 'clean' | 'climate' | 'soil' | 'water' | 'topo' | 'all') => {
+  const handleApplyPreset = (preset: 'egw' | 'clean' | 'climate' | 'soil' | 'water' | 'topo' | 'all') => {
     switch (preset) {
+      case 'egw':
+        setShowRivers(true);
+        setShowSoilPhLayer(true);
+        setShowRainfallLayer(true);
+        setShowParcelBoundary(true);
+        setShowDistrictBoundaries(true);
+        setShowClimateHeatmap(false);
+        setShowElevationLayer(false);
+        setShowEscarpments(false);
+        setShowCatchmentBasins(false);
+        setShowContourLines(false);
+        setShowCustomaryBoundaries(false);
+        break;
       case 'clean':
         setShowClimateHeatmap(false);
         setShowRainfallLayer(false);
@@ -377,9 +428,11 @@ export function ScoutingMap({
         setShowElevationLayer(false);
         setShowEscarpments(false);
         setShowCatchmentBasins(false);
-        setShowRivers(true);
+        setShowContourLines(false);
+        setShowCustomaryBoundaries(false);
+        setShowRivers(false);
         setShowDistrictBoundaries(true);
-        setShowParcelBoundary(true);
+        setShowParcelBoundary(false);
         break;
       case 'climate':
         setShowClimateHeatmap(true);
@@ -452,6 +505,8 @@ export function ScoutingMap({
   // Tile Layer URLs & Attribution
   const getTileUrl = (style: TileLayerType) => {
     switch (style) {
+      case 'dark':
+        return 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
       case 'satellite':
       case 'hybrid':
         return 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
@@ -468,6 +523,8 @@ export function ScoutingMap({
 
   const getTileAttribution = (style: TileLayerType) => {
     switch (style) {
+      case 'dark':
+        return '&copy; OpenStreetMap contributors &copy; CARTO';
       case 'satellite':
       case 'hybrid':
         return '&copy; Esri, Maxar, Earthstar Geographics';
@@ -487,6 +544,11 @@ export function ScoutingMap({
   useEffect(() => {
     if (!mapContainerRef.current) return;
     if (mapInstanceRef.current) return;
+
+    // Clear any previous Leaflet ID on the container to prevent reuse conflicts
+    if ((mapContainerRef.current as any)._leaflet_id) {
+      delete (mapContainerRef.current as any)._leaflet_id;
+    }
 
     const defaultCentroid = MALAWI_REGIONAL_BOUNDS[activeFocusRegion]?.centroid || [-13.2543, 34.3015];
     const defaultZoom = MALAWI_REGIONAL_BOUNDS[activeFocusRegion]?.zoom || 7.25;
@@ -508,6 +570,7 @@ export function ScoutingMap({
     tileLayerRef.current = L.tileLayer(getTileUrl(tileStyle), {
       attribution: getTileAttribution(tileStyle),
       maxZoom: 18,
+      subdomains: tileStyle === 'dark' ? 'abcd' : 'abc'
     }).addTo(map);
 
     // Initialize Layer Groups in optical Z-order
@@ -517,12 +580,16 @@ export function ScoutingMap({
     rainfallLayerRef.current = L.layerGroup().addTo(map);
     soilLayerRef.current = L.layerGroup().addTo(map);
     elevationLayerRef.current = L.layerGroup().addTo(map);
+    contoursLayerRef.current = L.layerGroup().addTo(map);
     catchmentsLayerRef.current = L.layerGroup().addTo(map);
     escarpmentsLayerRef.current = L.layerGroup().addTo(map);
     riversLayerRef.current = L.layerGroup().addTo(map);
+    customaryLayerRef.current = L.layerGroup().addTo(map);
     districtsLayerRef.current = L.layerGroup().addTo(map);
     activeDistrictBeaconRef.current = L.layerGroup().addTo(map);
+    districtBadgesLayerRef.current = L.layerGroup().addTo(map);
     boundaryLayerRef.current = L.layerGroup().addTo(map);
+    settlementsLayerRef.current = L.layerGroup().addTo(map);
     markersLayerRef.current = L.layerGroup().addTo(map);
     // Inverse Mask on top of all outer borders so surrounding countries are completely clipped!
     inverseMaskLayerRef.current = L.layerGroup().addTo(map);
@@ -546,24 +613,55 @@ export function ScoutingMap({
       setIsDrawerMinimized(true);
     };
 
+    const updateViewTelemetry = () => {
+      if (!map || !(map as any)._mapPane) return;
+      try {
+        setCurrentZoom(map.getZoom());
+        const center = map.getCenter();
+        setCurrentMapCenter({ lat: center.lat, lng: center.lng });
+      } catch {
+        // ignore
+      }
+    };
+
     map.on('movestart', onMapMove);
     map.on('zoomstart', onMapMove);
     map.on('dragstart', onMapMove);
+    map.on('zoomend', updateViewTelemetry);
+    map.on('moveend', updateViewTelemetry);
 
     mapInstanceRef.current = map;
 
     // Trigger initial fit bounds for maximum wide display
-    setTimeout(() => {
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.invalidateSize();
+    let initTimer: ReturnType<typeof setTimeout> | null = setTimeout(() => {
+      if (mapInstanceRef.current && (mapInstanceRef.current as any)._mapPane) {
+        try {
+          mapInstanceRef.current.invalidateSize({ pan: false });
+          updateViewTelemetry();
+        } catch {
+          // ignore
+        }
       }
     }, 200);
 
     return () => {
+      if (initTimer) {
+        clearTimeout(initTimer);
+        initTimer = null;
+      }
       map.off('movestart', onMapMove);
       map.off('zoomstart', onMapMove);
       map.off('dragstart', onMapMove);
-      map.remove();
+      map.off('zoomend', updateViewTelemetry);
+      map.off('moveend', updateViewTelemetry);
+      try {
+        if (typeof (map as any)._stop === 'function') {
+          (map as any)._stop();
+        }
+        map.remove();
+      } catch (err) {
+        console.warn('Map cleanup safely caught:', err);
+      }
       mapInstanceRef.current = null;
     };
   }, []);
@@ -643,7 +741,10 @@ export function ScoutingMap({
 
         lakePoly.bindTooltip(`
           <div style="font-family: monospace; padding: 6px; background: #020617; color: #38bdf8; border: 1px solid #0284c7; border-radius: 8px; box-shadow: 0 8px 16px rgba(0,0,0,0.6);">
-            <div style="font-weight: 800; font-size: 12px; color: #38bdf8;">🌊 ${lake.name}</div>
+            <div style="font-weight: 800; font-size: 12px; color: #38bdf8; display: flex; items-center; gap: 4px;">
+              <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#38bdf8;margin-right:4px;"></span>
+              ${lake.name}
+            </div>
             <div style="font-size: 10px; color: #94a3b8; margin-top: 2px;">Depth: ${lake.waterDepthMeters}</div>
             <div style="font-size: 10px; color: #7dd3fc;">Surface Area: ${lake.areaKm2.toLocaleString()} km²</div>
           </div>
@@ -664,7 +765,10 @@ export function ScoutingMap({
 
         line.bindTooltip(`
           <div style="font-family: monospace; padding: 5px; background: #020617; color: #fbbf24; border: 1px solid #f59e0b; border-radius: 8px; box-shadow: 0 8px 16px rgba(0,0,0,0.6);">
-            <div style="font-weight: 800; font-size: 11px;">🛣️ ${hwy.name}</div>
+            <div style="font-weight: 800; font-size: 11px; display: flex; items-center; gap: 4px;">
+              <span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#f59e0b;margin-right:4px;"></span>
+              ${hwy.name}
+            </div>
             <div style="font-size: 9px; color: #cbd5e1; margin-top: 2px;">${hwy.connectingBomas}</div>
           </div>
         `, { sticky: true });
@@ -686,7 +790,10 @@ export function ScoutingMap({
 
         marker.bindTooltip(`
           <div style="font-family: monospace; padding: 5px; background: #020617; color: #f8fafc; border: 1px solid rgba(255,255,255,0.25); border-radius: 8px; box-shadow: 0 8px 16px rgba(0,0,0,0.6);">
-            <div style="font-weight: 800; font-size: 11px; color: #fbbf24;">📍 ${city.name}</div>
+            <div style="font-weight: 800; font-size: 11px; color: #fbbf24; display: flex; items-center; gap: 4px;">
+              <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#fbbf24;margin-right:4px;"></span>
+              ${city.name}
+            </div>
             <div style="font-size: 9px; color: #94a3b8; margin-top: 2px;">${city.category} · ${city.elevationMeters}m height</div>
             <div style="font-size: 9px; color: #34d399;">Market Day: ${city.marketDay}</div>
           </div>
@@ -723,16 +830,16 @@ export function ScoutingMap({
         <div style="font-family: monospace; padding: 8px; background: #020617; color: #f8fafc; border-radius: 10px; border: 1px solid rgba(251, 191, 36, 0.5); box-shadow: 0 12px 24px -4px rgba(0,0,0,0.7);">
           <div style="font-weight: 800; color: #fbbf24; font-size: 13px; margin-bottom: 3px;">${district.name} District</div>
           <div style="font-size: 10px; color: #93c5fd; margin-bottom: 2px;">
-            <strong>🌡️ Temp:</strong> ${climate.winterMinC}°C min to ${climate.summerMaxC}°C max
+            <span style="color:#fb7185;margin-right:4px;">●</span><strong>Temp:</strong> ${climate.winterMinC}°C min to ${climate.summerMaxC}°C max
           </div>
           <div style="font-size: 10px; color: #38bdf8; margin-bottom: 2px;">
-            <strong>🌧️ Rain:</strong> ${climate.annualRainfallMm} mm/yr (${climate.rainfallRangeMm})
+            <span style="color:#38bdf8;margin-right:4px;">●</span><strong>Rain:</strong> ${climate.annualRainfallMm} mm/yr (${climate.rainfallRangeMm})
           </div>
           <div style="font-size: 10px; color: #fbbf24; margin-bottom: 2px;">
-            <strong>☀️ Solar:</strong> ${climate.solarRadiationKwhM2Day} kWh/m²/day
+            <span style="color:#fbbf24;margin-right:4px;">●</span><strong>Solar:</strong> ${climate.solarRadiationKwhM2Day} kWh/m²/day
           </div>
           <div style="font-size: 10px; color: #cbd5e1; margin-bottom: 2px;">
-            <strong>🏔️ Zone:</strong> ${climate.agroEcologicalClassification.split('(')[0]}
+            <span style="color:#34d399;margin-right:4px;">●</span><strong>Zone:</strong> ${climate.agroEcologicalClassification.split('(')[0]}
           </div>
           <div style="font-size: 9px; color: #a7f3d0; margin-top: 4px; font-style: italic;">
             ${climate.thermalBeltZone}
@@ -869,7 +976,7 @@ export function ScoutingMap({
   }, [showCatchmentBasins]);
 
   // -------------------------------------------------------------
-  // 7. RENDER RIFT VALLEY ESCARPMENTS
+  // 7. RENDER RIFT VALLEY ESCARPMENTS (3D FAULT TERRACES)
   // -------------------------------------------------------------
   useEffect(() => {
     if (!escarpmentsLayerRef.current) return;
@@ -879,27 +986,51 @@ export function ScoutingMap({
 
     MALAWI_ESCARPMENTS.forEach((scarp) => {
       const coords = scarp.points.map(pt => [pt.lat, pt.lng] as L.LatLngTuple);
-      const polyline = L.polyline(coords, {
-        color: '#ea580c',
-        weight: 3.5,
+      
+      // Layer 1: Geological depression shadow band
+      const shadowBand = L.polyline(coords, {
+        color: '#1c1917',
+        weight: 12,
+        opacity: 0.55,
+        lineCap: 'square',
+        className: 'escarpment-terrace-shadow'
+      });
+      escarpmentsLayerRef.current?.addLayer(shadowBand);
+
+      // Layer 2: Terracotta rock face scarp
+      const scarpFace = L.polyline(coords, {
+        color: '#c2410c',
+        weight: 4.5,
         opacity: 0.9,
-        dashArray: '6, 4'
+        lineCap: 'round'
+      });
+      escarpmentsLayerRef.current?.addLayer(scarpFace);
+
+      // Layer 3: Geological crest ridge highlight line
+      const crestLine = L.polyline(coords, {
+        color: '#fed7aa',
+        weight: 1.6,
+        opacity: 0.95,
+        lineCap: 'round',
+        className: 'escarpment-crest-highlight'
       });
 
-      polyline.bindTooltip(`
-        <div style="font-family: sans-serif; padding: 6px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid #ea580c; box-shadow: 0 8px 16px rgba(0,0,0,0.5);">
-          <div style="font-weight: 800; color: #fb923c; font-size: 12px;">⚠️ ${scarp.name}</div>
-          <div style="font-size: 10px; color: #fde047; font-weight: bold; margin-top: 2px;">Drop: ${scarp.dropElevationMeters}</div>
-          <div style="font-size: 9px; color: #cbd5e1; margin-top: 2px;">${scarp.swaleDesignSpec}</div>
+      crestLine.bindTooltip(`
+        <div style="font-family: sans-serif; padding: 6px 8px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid #ea580c; box-shadow: 0 8px 16px rgba(0,0,0,0.6);">
+          <div style="font-weight: 800; color: #fb923c; font-size: 12px; display: flex; align-items: center; gap: 5px;">
+            <span>⚠️</span> ${scarp.name}
+          </div>
+          <div style="font-size: 10px; color: #fde047; font-weight: bold; margin-top: 3px;">Geological Drop: ${scarp.dropElevationMeters}</div>
+          <div style="font-size: 9px; color: #cbd5e1; margin-top: 2px;">Terracing: ${scarp.swaleDesignSpec}</div>
         </div>
       `, { sticky: true });
 
-      escarpmentsLayerRef.current?.addLayer(polyline);
+      escarpmentsLayerRef.current?.addLayer(crestLine);
     });
   }, [showEscarpments]);
 
   // -------------------------------------------------------------
-  // 8. RENDER PERENNIAL RIVERS & STREAMS
+  // 8. RENDER PERENNIAL RIVERS & STREAMS (LIVING WATER FLOW RIBBONS)
   // -------------------------------------------------------------
   useEffect(() => {
     if (!riversLayerRef.current) return;
@@ -909,73 +1040,477 @@ export function ScoutingMap({
 
     MALAWI_RIVERS.forEach((river) => {
       const coords = river.points.map(pt => [pt.lat, pt.lng] as L.LatLngTuple);
-      const polyline = L.polyline(coords, {
+      
+      // Layer 1: Ambient riparian moisture corridor halo
+      const moistureHalo = L.polyline(coords, {
+        color: '#0891b2',
+        weight: 10,
+        opacity: 0.22,
+        lineCap: 'round',
+        lineJoin: 'round',
+        className: 'river-ambient-glow'
+      });
+      riversLayerRef.current?.addLayer(moistureHalo);
+
+      // Layer 2: Main azure river flow channel
+      const waterChannel = L.polyline(coords, {
         color: '#06b6d4',
-        weight: 2.8,
-        opacity: 0.9,
+        weight: 3.8,
+        opacity: 0.85,
+        lineCap: 'round',
+        lineJoin: 'round'
+      });
+      riversLayerRef.current?.addLayer(waterChannel);
+
+      // Layer 3: Crystalline central stream highlight
+      const coreStream = L.polyline(coords, {
+        color: '#f0fdfa',
+        weight: 1.6,
+        opacity: 0.95,
+        lineCap: 'round',
+        lineJoin: 'round',
+        className: 'river-core-stream'
       });
 
-      polyline.bindTooltip(`
-        <div style="font-family: sans-serif; padding: 4px; background: #020617; color: #22d3ee; border-radius: 6px; border: 1px solid #0891b2;">
-          <div style="font-weight: 800; font-size: 11px;">💧 ${river.name}</div>
+      coreStream.bindTooltip(`
+        <div style="font-family: sans-serif; padding: 5px 8px; background: #020617; color: #22d3ee; border-radius: 8px; border: 1px solid #0891b2; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 16px rgba(6,182,212,0.35);">
+          <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#22d3ee;box-shadow:0 0 8px #22d3ee;"></span>
+          <div>
+            <div style="font-weight: 800; font-size: 11px; letter-spacing: 0.2px;">${river.name}</div>
+            <div style="font-size: 9px; color: #a5f3fc; margin-top: 1px;">Living Perennial Stream • Gravity Water Source</div>
+          </div>
         </div>
       `, { sticky: true });
 
-      riversLayerRef.current?.addLayer(polyline);
+      riversLayerRef.current?.addLayer(coreStream);
     });
   }, [showRivers]);
 
   // -------------------------------------------------------------
-  // 9. RENDER DISTRICT ADMINISTRATIVE BOUNDARIES & BEACON
+  // 9. RENDER CUSTOMARY T/A BOUNDARIES (ANCESTRAL MALIRE CORRIDORS)
   // -------------------------------------------------------------
   useEffect(() => {
-    if (!districtsLayerRef.current || !activeDistrictBeaconRef.current) return;
+    if (!customaryLayerRef.current) return;
+    customaryLayerRef.current.clearLayers();
+
+    if (!showCustomaryBoundaries) return;
+
+    MALAWI_CUSTOMARY_BOUNDARIES.forEach((ta) => {
+      const coords = ta.coordinates.map(pt => [pt[0], pt[1]] as L.LatLngTuple);
+      
+      // Layer 1: Territorial buffer corridor
+      const buffer = L.polyline(coords, {
+        color: '#b45309',
+        weight: 9,
+        opacity: 0.16,
+        lineCap: 'round',
+        lineJoin: 'round'
+      });
+      customaryLayerRef.current?.addLayer(buffer);
+
+      // Layer 2: Warm golden Malire boundary thread
+      const polyline = L.polyline(coords, {
+        color: '#f59e0b',
+        weight: 2.4,
+        opacity: 0.9,
+        dashArray: '8, 8',
+        lineCap: 'round',
+        className: 'customary-boundary-corridor'
+      });
+      customaryLayerRef.current?.addLayer(polyline);
+
+      // Layer 3: Inner fine gold stitch
+      const innerStitch = L.polyline(coords, {
+        color: '#fef08a',
+        weight: 1.1,
+        opacity: 0.95,
+        dashArray: '3, 13',
+        lineCap: 'round'
+      });
+
+      innerStitch.bindTooltip(`
+        <div style="font-family: sans-serif; padding: 6px 8px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid #f59e0b; box-shadow: 0 8px 20px rgba(0,0,0,0.6);">
+          <div style="font-size: 10px; font-weight: 800; color: #f59e0b; text-transform: uppercase; display: flex; align-items: center; gap: 4px;">
+            <span style="display:inline-block;width:7px;height:7px;border-radius:2px;background:#f59e0b;margin-right:4px;"></span>
+            Customary Malire (Ancestral Boundary)
+          </div>
+          <div style="font-weight: 800; color: #f8fafc; font-size: 12px; margin-top: 3px;">${ta.traditionalAuthority} (${ta.district} District)</div>
+          <div style="font-size: 10px; color: #cbd5e1; margin-top: 2px;">Custodianship: ${ta.chiefTitle}</div>
+          <div style="font-size: 9px; color: #34d399; font-weight: bold; margin-top: 2px;">Tenure: ${ta.tenureType} • ${ta.description}</div>
+        </div>
+      `, { sticky: true });
+
+      customaryLayerRef.current?.addLayer(innerStitch);
+    });
+  }, [showCustomaryBoundaries]);
+
+  // -------------------------------------------------------------
+  // 10. RENDER ELEVATION CONTOURS & DAMBO ALLUVIAL VECTORS
+  // -------------------------------------------------------------
+  useEffect(() => {
+    if (!contoursLayerRef.current) return;
+    contoursLayerRef.current.clearLayers();
+
+    if (!showContourLines) return;
+
+    MALAWI_ELEVATION_CONTOURS.forEach((contour) => {
+      const coords = contour.coordinates.map(pt => [pt[0], pt[1]] as L.LatLngTuple);
+      const isDambo = contour.type === 'dambo-depression';
+      const isHighland = contour.type === 'frost-free-ridge';
+      const isIndex = contour.type === 'index';
+
+      if (isHighland) {
+        // Summit ridge emerald corridor
+        const halo = L.polyline(coords, {
+          color: '#059669',
+          weight: 7,
+          opacity: 0.22,
+          lineCap: 'round'
+        });
+        contoursLayerRef.current?.addLayer(halo);
+
+        const ridge = L.polyline(coords, {
+          color: '#10b981',
+          weight: 2.4,
+          opacity: 0.9,
+          lineCap: 'round'
+        });
+        ridge.bindTooltip(`
+          <div style="font-family: sans-serif; padding: 5px 8px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid #10b981; box-shadow: 0 8px 20px rgba(0,0,0,0.6);">
+            <div style="font-weight: 800; color: #34d399; font-size: 11px;">⛰️ ${contour.name} (${contour.elevationMeters}m)</div>
+            <div style="font-size: 9px; color: #a7f3d0; margin-top: 2px;">Frost-Free Thermal Belt • ${contour.description}</div>
+          </div>
+        `, { sticky: true });
+        contoursLayerRef.current?.addLayer(ridge);
+      } else if (isDambo) {
+        // Alluvial wetland corridor
+        const buffer = L.polyline(coords, {
+          color: '#0284c7',
+          weight: 7,
+          opacity: 0.2,
+          lineCap: 'round'
+        });
+        contoursLayerRef.current?.addLayer(buffer);
+
+        const wetland = L.polyline(coords, {
+          color: '#38bdf8',
+          weight: 2.0,
+          opacity: 0.85,
+          dashArray: '5, 5',
+          lineCap: 'round'
+        });
+        wetland.bindTooltip(`
+          <div style="font-family: sans-serif; padding: 5px 8px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid #38bdf8; box-shadow: 0 8px 20px rgba(0,0,0,0.6);">
+            <div style="font-weight: 800; color: #38bdf8; font-size: 11px;">🌾 ${contour.name} (${contour.elevationMeters}m)</div>
+            <div style="font-size: 9px; color: #bae6fd; margin-top: 2px;">Alluvial Dambo Wetland • Year-Round Moisture</div>
+          </div>
+        `, { sticky: true });
+        contoursLayerRef.current?.addLayer(wetland);
+      } else {
+        const color = isIndex ? '#f59e0b' : '#64748b';
+        const polyline = L.polyline(coords, {
+          color: color,
+          weight: isIndex ? 1.8 : 1.1,
+          opacity: 0.75,
+          lineCap: 'round'
+        });
+        polyline.bindTooltip(`
+          <div style="font-family: sans-serif; padding: 5px 8px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid ${color}; box-shadow: 0 8px 20px rgba(0,0,0,0.6);">
+            <div style="font-weight: 800; color: ${color}; font-size: 11px;">${contour.name} (${contour.elevationMeters}m)</div>
+            <div style="font-size: 9px; color: #94a3b8; margin-top: 2px;">Zone: ${contour.zone} • ${contour.description}</div>
+          </div>
+        `, { sticky: true });
+        contoursLayerRef.current?.addLayer(polyline);
+      }
+    });
+  }, [showContourLines]);
+
+  // -------------------------------------------------------------
+  // 11. RENDER DISTRICT ADMINISTRATIVE BOUNDARIES & CENTROID BADGES
+  // -------------------------------------------------------------
+  useEffect(() => {
+    if (!districtsLayerRef.current || !activeDistrictBeaconRef.current || !districtBadgesLayerRef.current) return;
     districtsLayerRef.current.clearLayers();
     activeDistrictBeaconRef.current.clearLayers();
+    districtBadgesLayerRef.current.clearLayers();
+    districtMarkerMapRef.current.clear();
 
     if (!showDistrictBoundaries) return;
 
     MALAWI_DISTRICTS.forEach((district) => {
       const isSelected = activeDistrict?.name.toLowerCase() === district.name.toLowerCase();
 
-      const polygon = L.polygon(district.boundary as L.LatLngTuple[], {
-        color: isSelected ? '#f59e0b' : '#64748b',
-        weight: isSelected ? 3.2 : 1,
-        fillColor: isSelected ? '#f59e0b' : 'transparent',
-        fillOpacity: isSelected ? 0.25 : 0,
-        dashArray: isSelected ? undefined : '2, 3'
-      });
+      if (isSelected) {
+        // Radiant luminous warm amber corridor for selected district
+        const halo = L.polygon(district.boundary as L.LatLngTuple[], {
+          color: '#f59e0b',
+          weight: 7,
+          opacity: 0.35,
+          fillColor: '#f59e0b',
+          fillOpacity: 0.12,
+          className: 'district-glow-selected'
+        });
+        districtsLayerRef.current?.addLayer(halo);
 
-      polygon.on('click', () => {
-        const dSpec = getDistrictByIdOrName(district.name);
-        handleFocusDistrict(dSpec || null);
-      });
+        const core = L.polygon(district.boundary as L.LatLngTuple[], {
+          color: '#fbbf24',
+          weight: 2.5,
+          opacity: 1,
+          fillColor: 'transparent',
+          fillOpacity: 0
+        });
+        core.on('click', () => {
+          const dSpec = getDistrictByIdOrName(district.name);
+          handleFocusDistrict(dSpec || null);
+        });
+        core.bindTooltip(`
+          <div style="font-family: sans-serif; padding: 6px 8px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid #f59e0b; box-shadow: 0 8px 20px rgba(245,158,11,0.35);">
+            <div style="font-weight: 900; color: #fbbf24; font-size: 13px;">${district.name} District (Active Selection)</div>
+            <div style="font-size: 10px; color: #e2e8f0; margin-top: 2px;">Zone: ${district.region} Region • ${district.elevationRange}</div>
+            <div style="font-size: 10px; color: #34d399; font-weight: bold; margin-top: 2px;">Grade: ${district.feasibilityGrade}</div>
+            <div style="font-size: 9px; color: #38bdf8; margin-top: 1px;">Aquifer: ${district.aquiferDepth}</div>
+          </div>
+        `, { sticky: true });
+        districtsLayerRef.current?.addLayer(core);
+      } else {
+        // Clean, smooth solid slate-cyan ambient border (no jagged dashes)
+        const halo = L.polygon(district.boundary as L.LatLngTuple[], {
+          color: '#0284c7',
+          weight: 3.0,
+          opacity: 0.25,
+          fillColor: 'transparent',
+          fillOpacity: 0
+        });
+        districtsLayerRef.current?.addLayer(halo);
 
-      districtsLayerRef.current?.addLayer(polygon);
+        const polygon = L.polygon(district.boundary as L.LatLngTuple[], {
+          color: '#38bdf8',
+          weight: 1.3,
+          opacity: 0.8,
+          fillColor: 'transparent',
+          fillOpacity: 0,
+          className: 'district-glow-subtle'
+        });
+        polygon.on('click', () => {
+          const dSpec = getDistrictByIdOrName(district.name);
+          handleFocusDistrict(dSpec || null);
+        });
+        polygon.bindTooltip(`
+          <div style="font-family: sans-serif; padding: 6px 8px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid #06b6d4; box-shadow: 0 8px 20px rgba(0,0,0,0.6);">
+            <div style="font-weight: 900; color: #22d3ee; font-size: 13px;">${district.name} District</div>
+            <div style="font-size: 10px; color: #94a3b8; margin-top: 2px;">Zone: ${district.region} Region • ${district.elevationRange}</div>
+            <div style="font-size: 10px; color: #34d399; font-weight: bold; margin-top: 2px;">Grade: ${district.feasibilityGrade}</div>
+            <div style="font-size: 9px; color: #38bdf8; margin-top: 1px;">Aquifer: ${district.aquiferDepth}</div>
+          </div>
+        `, { sticky: true });
+        districtsLayerRef.current?.addLayer(polygon);
+      }
+
+      // District Centroid Badge (Water Table Depth & Agro Feasibility Grade)
+      if (district.centroid) {
+        const gradeLetter = district.feasibilityGrade ? district.feasibilityGrade.split(' ')[0] : 'A';
+        const depthText = district.aquiferDepth ? (district.aquiferDepth.match(/\d+m/)?.[0] || '15m') : '15m';
+        const isExpanded = isSelected || expandedDistrictId === district.id;
+
+        const centroidIcon = L.divIcon({
+          className: 'district-centroid-badge-container',
+          html: `
+            <div class="district-centroid-badge ${isExpanded ? 'active-district expanded-badge' : ''}" data-district-id="${district.id}">
+              <span class="district-badge-grade">${gradeLetter}</span>
+              <span class="district-badge-depth">${depthText}</span>
+            </div>
+            <div class="district-badge-nametag ${isSelected ? 'active-nametag' : ''}" data-district-id="${district.id}">${district.name}</div>
+          `,
+          iconSize: [60, 60],
+          iconAnchor: [30, 22]
+        });
+
+        const badgeMarker = L.marker(district.centroid as L.LatLngTuple, { icon: centroidIcon });
+        districtMarkerMapRef.current.set(district.id, badgeMarker);
+
+        badgeMarker.on('mouseover', () => {
+          setExpandedDistrictId(district.id);
+        });
+
+        badgeMarker.on('mouseout', () => {
+          setExpandedDistrictId(prev => prev === district.id ? null : prev);
+        });
+
+        badgeMarker.on('click', () => {
+          const dSpec = getDistrictByIdOrName(district.name);
+          handleFocusDistrict(dSpec || null);
+          setExpandedDistrictId(district.id);
+          mapInstanceRef.current?.flyTo(district.centroid as L.LatLngTuple, district.optimalZoom || 10.5, { duration: 1.2 });
+        });
+
+        districtBadgesLayerRef.current?.addLayer(badgeMarker);
+      }
 
       // If this district is selected, drop an animated beacon ring
       if (isSelected && district.centroid) {
         const beaconCircle = L.circleMarker(district.centroid as L.LatLngTuple, {
-          radius: 12,
+          radius: 14,
           color: '#f59e0b',
           weight: 3,
           fillColor: '#fbbf24',
           fillOpacity: 0.8
         });
 
-        beaconCircle.bindTooltip(`
-          <div style="font-family: monospace; font-weight: bold; padding: 4px; background: #020617; color: #fbbf24; border-radius: 6px; border: 1px solid #f59e0b;">
-            📍 Active Focus: ${district.name} District
-          </div>
-        `, { permanent: true, direction: 'top', offset: [0, -10] });
-
         activeDistrictBeaconRef.current?.addLayer(beaconCircle);
       }
     });
-  }, [showDistrictBoundaries, activeDistrict]);
+  }, [showDistrictBoundaries, activeDistrict, expandedDistrictId]);
 
   // -------------------------------------------------------------
-  // 10. RENDER SURVEYED PARCEL BOUNDARIES & MARKERS
+  // 12. RENDER COMMUNITY SETTLEMENTS & ADVENTIST MISSION HUBS
+  // -------------------------------------------------------------
+  useEffect(() => {
+    if (!settlementsLayerRef.current) return;
+    settlementsLayerRef.current.clearLayers();
+
+    if (!showCommunitySettlements) return;
+
+    MALAWI_COMMUNITY_SETTLEMENTS.forEach((settlement) => {
+      const isMission = settlement.category === 'Adventist Outpost & Mission Hub';
+      const isHighland = settlement.category === 'Highland Homestead Cluster';
+      const isAgro = settlement.category === 'Agricultural Community Settlement';
+
+      const pinColor = isMission ? '#f59e0b' : isHighland ? '#10b981' : isAgro ? '#06b6d4' : '#fb923c';
+      const bgStyle = isMission 
+        ? 'background: #78350f; border-color: #f59e0b; color: #fef3c7;' 
+        : isHighland 
+        ? 'background: #064e3b; border-color: #10b981; color: #ecfdf5;' 
+        : 'background: #164e63; border-color: #06b6d4; color: #cffafe;';
+
+      const iconEmoji = isMission ? '⛪' : isHighland ? '🏡' : isAgro ? '🌱' : '🏪';
+
+      const settlementIcon = L.divIcon({
+        className: 'community-settlement-icon-marker',
+        html: `
+          <div style="
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            border: 1.5px solid;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+            cursor: pointer;
+            transition: transform 0.2s;
+            ${bgStyle}
+          ">
+            ${iconEmoji}
+          </div>
+        `,
+        iconSize: [26, 26],
+        iconAnchor: [13, 13]
+      });
+
+      const marker = L.marker(settlement.coordinates as L.LatLngTuple, { icon: settlementIcon });
+
+      marker.bindTooltip(`
+        <div style="font-family: sans-serif; padding: 7px 9px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1.5px solid ${pinColor}; box-shadow: 0 10px 25px rgba(0,0,0,0.7); min-width: 190px;">
+          <div style="font-weight: 800; color: ${pinColor}; font-size: 12px; display: flex; align-items: center; gap: 4px;">
+            <span>${iconEmoji}</span>
+            <span>${settlement.name}</span>
+          </div>
+          <div style="font-size: 10px; color: #cbd5e1; margin-top: 2px;">
+            ${settlement.district} District • <strong>${settlement.elevationMeters}m ASL</strong>
+          </div>
+          <div style="font-size: 9px; color: #fbbf24; font-weight: 600; margin-top: 2px;">
+            ${settlement.category}
+          </div>
+          <div style="font-size: 9px; color: #94a3b8; margin-top: 3px; line-height: 1.3;">
+            ${settlement.settlementDescription}
+          </div>
+          <div style="font-size: 9px; color: #34d399; margin-top: 3px; font-weight: bold;">
+            Amenities: ${settlement.communityAmenities.slice(0, 3).join(', ')}
+          </div>
+        </div>
+      `, { sticky: true });
+
+      settlementsLayerRef.current?.addLayer(marker);
+    });
+  }, [showCommunitySettlements]);
+
+  // -------------------------------------------------------------
+  // DYNAMIC LABEL COLLISION AVOIDANCE ENGINE
+  // Detects when marker badges are expanded, and automatically offsets
+  // or hides overlapping district text labels for maximum legibility.
+  // -------------------------------------------------------------
+  const runCollisionDetection = useCallback(() => {
+    const map = mapInstanceRef.current;
+    if (!map) return;
+
+    const collisionResults = computeDistrictLabelCollisions({
+      districts: MALAWI_DISTRICTS,
+      activeDistrictId: activeDistrict?.id || null,
+      expandedDistrictId,
+      map,
+      currentZoom
+    });
+
+    collisionResults.forEach((result, districtId) => {
+      const marker = districtMarkerMapRef.current.get(districtId);
+      if (!marker) return;
+      const el = marker.getElement();
+      if (!el) return;
+
+      const badgeEl = el.querySelector('.district-centroid-badge');
+      const nametagEl = el.querySelector('.district-badge-nametag');
+
+      if (badgeEl) {
+        if (result.isExpanded) {
+          badgeEl.classList.add('expanded-badge');
+        } else {
+          badgeEl.classList.remove('expanded-badge');
+        }
+      }
+
+      if (nametagEl) {
+        nametagEl.classList.remove('collision-hidden', 'offset-top', 'offset-right', 'offset-left');
+        if (result.offsetMode === 'hidden') {
+          nametagEl.classList.add('collision-hidden');
+        } else if (result.offsetMode === 'offset-top') {
+          nametagEl.classList.add('offset-top');
+        } else if (result.offsetMode === 'offset-right') {
+          nametagEl.classList.add('offset-right');
+        } else if (result.offsetMode === 'offset-left') {
+          nametagEl.classList.add('offset-left');
+        }
+      }
+    });
+  }, [activeDistrict, expandedDistrictId, currentZoom]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      runCollisionDetection();
+    }, 80);
+    return () => clearTimeout(timer);
+  }, [runCollisionDetection, showDistrictBoundaries]);
+
+  // Dynamic collision avoidance on map zoom and pan
+  useEffect(() => {
+    const map = mapInstanceRef.current;
+    if (!map) return;
+
+    const handleMapMovement = () => {
+      runCollisionDetection();
+    };
+
+    map.on('move', handleMapMovement);
+    map.on('zoomend', handleMapMovement);
+
+    return () => {
+      map.off('move', handleMapMovement);
+      map.off('zoomend', handleMapMovement);
+    };
+  }, [runCollisionDetection]);
+
+  // -------------------------------------------------------------
+  // 12. RENDER SURVEYED PARCEL BOUNDARIES & DYNAMIC CLUSTERING
   // -------------------------------------------------------------
   useEffect(() => {
     if (!markersLayerRef.current || !boundaryLayerRef.current) return;
@@ -984,20 +1519,70 @@ export function ScoutingMap({
 
     if (!showParcelBoundary) return;
 
+    // When zoomed out (< 9), dynamically group parcels into district cluster badges
+    if (currentZoom < 9) {
+      // Group parcels by district
+      const groupedByDistrict: Record<string, ScoutParcelFeature[]> = {};
+      filteredFeatures.forEach(feat => {
+        const dist = feat.properties.district;
+        if (!groupedByDistrict[dist]) groupedByDistrict[dist] = [];
+        groupedByDistrict[dist].push(feat);
+      });
+
+      Object.entries(groupedByDistrict).forEach(([distName, feats]) => {
+        if (feats.length === 0) return;
+        // Average coordinates of parcels in this district
+        const avgLat = feats.reduce((acc, f) => acc + f.geometry.coordinates[1], 0) / feats.length;
+        const avgLng = feats.reduce((acc, f) => acc + f.geometry.coordinates[0], 0) / feats.length;
+
+        const clusterIcon = L.divIcon({
+          className: 'parcel-cluster-container',
+          html: `
+            <div class="parcel-cluster-badge">
+              <div class="cluster-glow-ring"></div>
+              <div class="cluster-count-circle">${feats.length}</div>
+              <span class="cluster-label-text">${feats.length === 1 ? '1 Parcel' : `${feats.length} Parcels`} in ${distName}</span>
+            </div>
+          `,
+          iconSize: [140, 36],
+          iconAnchor: [70, 18]
+        });
+
+        const clusterMarker = L.marker([avgLat, avgLng], { icon: clusterIcon });
+        clusterMarker.on('click', () => {
+          mapInstanceRef.current?.flyTo([avgLat, avgLng], 10.5, { duration: 1.2 });
+          const dSpec = getDistrictByIdOrName(distName);
+          if (dSpec) handleFocusDistrict(dSpec);
+        });
+
+        clusterMarker.bindTooltip(`
+          <div style="font-family: sans-serif; padding: 6px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid #10b981; box-shadow: 0 8px 16px rgba(0,0,0,0.6);">
+            <div style="font-weight: 800; color: #34d399; font-size: 12px;">${feats.length} Surveyed Agricultural Parcels</div>
+            <div style="font-size: 10px; color: #94a3b8; margin-top: 2px;">District: ${distName} • Click to expand & view plots</div>
+          </div>
+        `, { sticky: true });
+
+        markersLayerRef.current?.addLayer(clusterMarker);
+      });
+      return;
+    }
+
+    // When zoomed in (>= 9), render individual high-accuracy parcel polygons & markers
     filteredFeatures.forEach((feat) => {
       const p = feat.properties;
       const [lng, lat] = feat.geometry.coordinates;
       const isSelected = activeParcel?.id === p.id;
       const isBookmarked = bookmarkedIds.includes(p.id);
 
-      // Boundary polygon if coordinates exist
+      // Boundary polygon: Semi-transparent emerald with high-contrast white/cyan stroke
       if (p.boundaryPolygon && p.boundaryPolygon.length > 0) {
         const latLngs = p.boundaryPolygon as L.LatLngTuple[];
         const boundaryPoly = L.polygon(latLngs, {
-          color: isSelected ? '#10b981' : '#f59e0b',
-          weight: isSelected ? 3.5 : 1.8,
-          fillColor: isSelected ? '#10b981' : '#fbbf24',
-          fillOpacity: isSelected ? 0.4 : 0.18,
+          color: isSelected ? '#34d399' : '#ffffff',
+          weight: isSelected ? 3.5 : 2.0,
+          opacity: 0.95,
+          fillColor: '#10b981',
+          fillOpacity: isSelected ? 0.45 : 0.22,
           dashArray: isSelected ? undefined : '4, 4'
         });
 
@@ -1009,40 +1594,39 @@ export function ScoutingMap({
         boundaryLayerRef.current?.addLayer(boundaryPoly);
       }
 
-      // Marker icon with glowing SVG styling
+      // Individual Parcel Marker with glowing pin
+      const iconInnerSvg = isBookmarked
+        ? `<svg width="${isSelected ? '20' : '15'}" height="${isSelected ? '20' : '15'}" viewBox="0 0 24 24" fill="${isSelected ? '#022c22' : '#f59e0b'}" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
+        : `<svg width="${isSelected ? '20' : '15'}" height="${isSelected ? '20' : '15'}" viewBox="0 0 24 24" fill="none" stroke="${isSelected ? '#022c22' : '#34d399'}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>`;
+
       const customIcon = L.divIcon({
-        className: 'custom-parcel-marker',
+        className: 'parcel-pin-container',
         html: `
-          <div style="
-            width: ${isSelected ? '36px' : '28px'};
-            height: ${isSelected ? '36px' : '28px'};
-            border-radius: 9999px;
-            background: ${isSelected ? '#10b981' : '#0f172a'};
-            border: 2.5px solid ${isSelected ? '#34d399' : '#f59e0b'};
-            box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+          <div class="parcel-pin-badge ${isSelected ? 'selected' : ''}" style="
+            width: ${isSelected ? '38px' : '30px'};
+            height: ${isSelected ? '38px' : '30px'};
             display: flex;
             align-items: center;
             justify-content: center;
-            color: ${isSelected ? '#022c22' : '#fbbf24'};
-            font-weight: 900;
-            font-size: ${isSelected ? '13px' : '11px'};
-            cursor: pointer;
-            transition: all 0.25s ease;
           ">
-            ${isBookmarked ? '★' : '⌂'}
+            ${iconInnerSvg}
           </div>
         `,
-        iconSize: [isSelected ? 36 : 28, isSelected ? 36 : 28],
-        iconAnchor: [isSelected ? 18 : 14, isSelected ? 18 : 14],
+        iconSize: [isSelected ? 38 : 30, isSelected ? 38 : 30],
+        iconAnchor: [isSelected ? 19 : 15, isSelected ? 19 : 15],
       });
 
       const marker = L.marker([lat, lng], { icon: customIcon });
 
       marker.bindTooltip(`
-        <div style="font-family: sans-serif; padding: 6px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid #10b981; box-shadow: 0 8px 16px rgba(0,0,0,0.6);">
-          <div style="font-weight: 800; color: #34d399; font-size: 12px;">${p.title}</div>
-          <div style="font-size: 10px; color: #cbd5e1; margin-top: 2px;">${p.district} • <strong>${p.acres} Acres</strong></div>
-          <div style="font-size: 9px; color: #38bdf8; font-weight: bold; margin-top: 2px;">Water: ${p.waterReliability.split('(')[0]}</div>
+        <div style="font-family: sans-serif; padding: 8px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1.5px solid #10b981; box-shadow: 0 10px 25px rgba(0,0,0,0.7); min-width: 170px;">
+          <div style="font-weight: 800; color: #34d399; font-size: 13px;">${p.title}</div>
+          <div style="font-size: 10px; color: #cbd5e1; margin-top: 2px;">${p.district} • <strong>${p.acres} Acres (${p.hectares} ha)</strong></div>
+          <div style="font-size: 9px; color: #38bdf8; font-weight: bold; margin-top: 3px; display: flex; items-center; gap: 4px;">
+            <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#38bdf8;margin-right:4px;"></span>
+            Water: ${p.waterReliability.split('(')[0]}
+          </div>
+          <div style="font-size: 9px; color: #f59e0b; margin-top: 1px;">Tenure: ${p.landTenure}</div>
         </div>
       `, { sticky: true });
 
@@ -1050,12 +1634,12 @@ export function ScoutingMap({
         setActiveParcel(p);
         setIsSidebarOpen(true);
         setIsDrawerMinimized(true);
-        mapInstanceRef.current?.flyTo([lat, lng], 13, { duration: 1.2 });
+        mapInstanceRef.current?.flyTo([lat, lng], 13.5, { duration: 1.2 });
       });
 
       markersLayerRef.current?.addLayer(marker);
     });
-  }, [filteredFeatures, activeParcel, bookmarkedIds, showParcelBoundary]);
+  }, [filteredFeatures, activeParcel, bookmarkedIds, showParcelBoundary, currentZoom]);
 
   // -------------------------------------------------------------
   // CAMERA TRANSITIONS & REGION FOCUS LOGIC
@@ -1120,7 +1704,7 @@ export function ScoutingMap({
   }, [activeDistrict]);
 
   return (
-    <div className="w-full h-[calc(100vh-6.5rem)] min-h-[620px] relative rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl border border-white/10 bg-slate-950 flex flex-col" id="scouting-map-root">
+    <div className="w-full h-screen min-h-[600px] relative overflow-hidden shadow-2xl bg-slate-950 flex flex-col" id="scouting-map-root">
       
       {/* ------------------------------------------------------------- */}
       {/* 1. COMPACT TOP-LEFT REGION PICKER & UNIFIED FLOATING HUD      */}
@@ -1135,41 +1719,29 @@ export function ScoutingMap({
             onSelectDistrict={handleFocusDistrict}
             activeMode={activeMode}
             onToggleMode={setActiveMode}
+            onOpenAiScout={() => setIsAiScoutDrawerOpen(true)}
             isAutoHidden={isDetailsAutoHidden}
             onWakeUp={wakeUpControls}
           />
 
-          {/* Top-Right Unified Map HUD (Search, Layers, Filters, Declutter, Zoom, Reset, Auto-hide) */}
+          {/* Top-Right Unified Map HUD (Clean & Intuitive Controls Dock) */}
           <UnifiedMapHud
             searchQuery={filters.searchQuery}
             onSearchChange={(q) => setFilters(prev => ({ ...prev, searchQuery: q }))}
             onOpenLayersDeck={() => setIsLayersDeckOpen(true)}
             activeLayerCount={activeLayerCount}
-            isDecluttered={isDecluttered}
-            onToggleDeclutter={handleToggleDeclutter}
-            onOpenFilters={() => setIsFilterDrawerOpen(true)}
-            activeFilterCount={activeFilterCount}
-            isSidebarOpen={isSidebarOpen}
-            onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+            tileStyle={tileStyle}
+            onToggleSatelliteHybrid={() => setTileStyle(tileStyle === 'satellite' || tileStyle === 'hybrid' ? 'standard' : 'satellite')}
+            onOpenAiScout={() => setIsAiScoutDrawerOpen(true)}
+            isAiScoutOpen={isAiScoutDrawerOpen}
             onZoomIn={handleZoomIn}
             onZoomOut={handleZoomOut}
             onResetMapView={handleResetMapView}
             activeDistrict={activeDistrict}
             onFocusDistrict={handleFocusDistrict}
-            isAutoHideActive={isAutoHideActive}
-            onToggleAutoHide={() => {
-              setIsAutoHideActive(prev => {
-                const next = !prev;
-                if (!next) setIsDetailsAutoHidden(false);
-                return next;
-              });
-            }}
-            isDetailsAutoHidden={isDetailsAutoHidden}
-            onWakeUp={wakeUpControls}
-            viewMode={viewMode}
-            onToggleViewMode={() => setViewMode(viewMode === 'map' ? 'list' : 'map')}
             isOffline={!isOnlineState || isForceOfflineState || tileStyle === 'offline-vector'}
             onOpenOfflineModal={() => setIsOfflineModalOpen(true)}
+            onWakeUp={wakeUpControls}
           />
 
           {/* Offline Status Notice (Discreet pill below picker) */}
@@ -1193,12 +1765,11 @@ export function ScoutingMap({
       {/* ------------------------------------------------------------- */}
       {/* 2. MAP CANVAS VIEW OR LIST CATALOGUE VIEW                     */}
       {/* ------------------------------------------------------------- */}
-      {viewMode === 'map' ? (
-        <div className="relative w-full h-full">
-          {/* Leaflet DOM Canvas container */}
-          <div ref={mapContainerRef} className="w-full h-full z-0 bg-slate-950" />
+      <div className={cn("relative w-full h-full", viewMode !== 'map' && "hidden")}>
+        {/* Leaflet DOM Canvas container */}
+        <div ref={mapContainerRef} className="w-full h-full z-0 bg-slate-950" />
 
-          {/* Bottom Floating Spotlight Card & Telemetry Pill */}
+        {/* Bottom Floating Spotlight Card & Telemetry Pill */}
           <div className="absolute bottom-3 left-3 right-3 z-20 pointer-events-none flex flex-col sm:flex-row items-end justify-between gap-3">
             
             {/* Center-Left Contextual Spotlight Card */}
@@ -1298,8 +1869,17 @@ export function ScoutingMap({
                           className="flex-1 py-1.5 px-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono font-bold text-xs flex items-center justify-center gap-1.5 shadow transition-all cursor-pointer"
                         >
                           <FileText size={13} />
-                          <span>Inspect Full Station Dossier</span>
+                          <span>Inspect Dossier</span>
                           <ChevronRight size={13} />
+                        </button>
+                        <button
+                          onClick={() => setIsAiScoutDrawerOpen(true)}
+                          className="py-1.5 px-3 rounded-xl bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-400/50 text-emerald-300 hover:text-white font-mono text-xs flex items-center gap-1.5 transition-all cursor-pointer"
+                          title="Ask AI Scout about this station with Google Maps Grounding"
+                        >
+                          <Bot size={13} className="text-emerald-400" />
+                          <span>AI Scout</span>
+                          <Sparkles size={11} className="text-amber-400" />
                         </button>
                       </div>
                     </motion.div>
@@ -1308,45 +1888,68 @@ export function ScoutingMap({
                   isSpotlightMinimized ? (
                     <motion.div
                       key="district-minimized"
-                      initial={{ opacity: 0, y: 10 }}
+                      initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      className="bg-slate-950/95 backdrop-blur-xl border border-amber-500/40 px-3 py-1.5 rounded-xl shadow-xl flex items-center justify-between gap-2 text-white"
+                      exit={{ opacity: 0, y: 12 }}
+                      transition={{ duration: 0.2 }}
+                      className="bg-slate-950/95 backdrop-blur-2xl border border-amber-500/50 px-3.5 py-2 rounded-2xl shadow-2xl flex items-center justify-between gap-3 text-white pointer-events-auto"
+                      id="district-slim-status-bar"
                     >
-                      <div className="flex items-center gap-2 text-xs font-mono truncate">
-                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-                        <span className="text-amber-300 font-bold">{activeDistrict.name} District</span>
-                        <span className="text-slate-400 shrink-0">({activeDistrict.rainfallAnnualMm}mm/yr • Grade {activeDistrict.feasibilityGrade})</span>
+                      <div className="flex items-center gap-2.5 overflow-hidden">
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                          <Compass size={14} className="text-amber-400" />
+                        </div>
+                        <div className="flex items-center gap-2 truncate">
+                          <span className="text-amber-300 font-bold text-xs tracking-tight truncate">
+                            {activeDistrict.name} District
+                          </span>
+                          <span className="text-[10px] font-mono bg-amber-500/20 text-amber-300 border border-amber-500/40 px-1.5 py-0.5 rounded font-bold shrink-0">
+                            Grade {activeDistrict.feasibilityGrade}
+                          </span>
+                          <span className="text-slate-400 text-[11px] font-mono hidden md:inline truncate">
+                            {activeDistrict.rainfallAnnualMm}mm/yr • pH {activeDistrict.soilPh} • Aquifer: {activeDistrict.aquiferDepth.split('(')[0]}
+                          </span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-1 shrink-0">
+
+                      <div className="flex items-center gap-1.5 shrink-0">
                         <button 
                           onClick={() => setIsSpotlightMinimized(false)}
-                          className="text-[11px] font-mono text-amber-400 hover:text-amber-300 px-2 py-0.5 rounded bg-white/5 hover:bg-white/10"
+                          className="px-2.5 py-1 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono font-bold text-xs flex items-center gap-1.5 shadow transition-all cursor-pointer hover:scale-105"
+                          title="Expand Telemetry Drawer"
                         >
-                          Expand
+                          <ChevronUp size={13} />
+                          <span>Expand Drawer</span>
                         </button>
-                        <button onClick={() => setActiveDistrict(null)} className="text-slate-400 hover:text-white p-1">
-                          <X size={12} />
+                        <button 
+                          onClick={() => setActiveDistrict(null)} 
+                          className="w-6 h-6 rounded-lg text-slate-400 hover:text-white flex items-center justify-center hover:bg-white/10 transition-colors"
+                          title="Dismiss District"
+                        >
+                          <X size={13} />
                         </button>
                       </div>
                     </motion.div>
                   ) : (
-                    /* Active District Spotlight */
+                    /* Active District Spotlight (Expanded Telemetry Drawer) */
                     <motion.div
                       key="district-spotlight"
                       initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 15 }}
-                      className="bg-slate-950/95 backdrop-blur-xl border border-amber-500/40 p-3.5 sm:p-4 rounded-2xl shadow-2xl flex flex-col gap-2 text-white"
+                      transition={{ duration: 0.2 }}
+                      className="bg-slate-950/95 backdrop-blur-2xl border border-amber-500/50 p-4 rounded-3xl shadow-2xl flex flex-col gap-2.5 text-white pointer-events-auto max-w-lg"
+                      id="district-expanded-drawer"
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div>
                           <div className="flex items-center gap-2">
                             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                            <span className="serif text-base sm:text-lg font-bold text-amber-300">
+                            <span className="serif text-lg font-bold text-amber-300">
                               {activeDistrict.name} District
                             </span>
-                            <span className="text-[10px] font-mono bg-white/10 text-slate-300 px-2 py-0.5 rounded-full border border-white/10">
+                            <span className="text-[10px] font-mono bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-500/40 font-bold">
                               Grade {activeDistrict.feasibilityGrade}
                             </span>
                             <span className="text-[10px] font-mono text-slate-400 hidden sm:inline">
@@ -1354,13 +1957,14 @@ export function ScoutingMap({
                             </span>
                           </div>
                         </div>
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1.5">
                           <button
                             onClick={() => setIsSpotlightMinimized(true)}
-                            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
-                            title="Minimize details"
+                            className="px-2.5 py-1 rounded-xl bg-white/10 hover:bg-white/20 text-amber-300 hover:text-white text-xs font-mono flex items-center gap-1 transition-all cursor-pointer border border-white/10"
+                            title="Collapse to status bar"
                           >
-                            <Minimize2 size={13} />
+                            <ChevronDown size={13} />
+                            <span>Collapse</span>
                           </button>
                           <button
                             onClick={() => setActiveDistrict(null)}
@@ -1372,7 +1976,7 @@ export function ScoutingMap({
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-2 text-[11px] font-mono py-1 border-y border-white/10 text-slate-300">
+                      <div className="grid grid-cols-3 gap-2 text-[11px] font-mono py-1.5 border-y border-white/10 text-slate-300">
                         <div>
                           <span className="text-slate-500 text-[9px] block">Rainfall</span>
                           <span className="text-sky-300 font-bold">{activeDistrict.rainfallAnnualMm}mm/yr</span>
@@ -1393,8 +1997,17 @@ export function ScoutingMap({
                           className="flex-1 py-1.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono font-bold text-xs flex items-center justify-center gap-1.5 shadow transition-all cursor-pointer"
                         >
                           <Sliders size={13} />
-                          <span>District Intel & Telemetry</span>
+                          <span>District Intel</span>
                           <ChevronRight size={13} />
+                        </button>
+                        <button
+                          onClick={() => setIsAiScoutDrawerOpen(true)}
+                          className="py-1.5 px-3 rounded-xl bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-400/50 text-emerald-300 hover:text-white font-mono text-xs flex items-center gap-1.5 transition-all cursor-pointer"
+                          title="Ask AI Scout about this district with Google Maps Grounding"
+                        >
+                          <Bot size={13} className="text-emerald-400" />
+                          <span>AI Scout</span>
+                          <Sparkles size={11} className="text-amber-400" />
                         </button>
                         <button
                           onClick={() => handleFocusDistrict(activeDistrict)}
@@ -1428,9 +2041,58 @@ export function ScoutingMap({
             </div>
 
           </div>
+
+          {/* Precision Compass Rose & Dynamic Metric Scale Bar */}
+          <MapCompassAndScale 
+            currentZoom={currentZoom}
+            centerLat={currentMapCenter.lat}
+            isAutoHidden={isDetailsAutoHidden}
+            onWakeUp={wakeUpControls}
+          />
+
+          {/* Quick Thematic Map Layers UI Control Panel (Water Sources, Arable Land, Community Settlements) */}
+          <ThematicLayerControlPanel
+            waterSources={showRivers && showCatchmentBasins}
+            onToggleWaterSources={(active) => {
+              setShowRivers(active);
+              setShowCatchmentBasins(active);
+            }}
+            arableLand={showSoilPhLayer}
+            onToggleArableLand={(active) => {
+              setShowSoilPhLayer(active);
+            }}
+            communitySettlements={showCommunitySettlements}
+            onToggleCommunitySettlements={(active) => {
+              setShowCommunitySettlements(active);
+            }}
+            onOpenAdvancedLayers={() => setIsLayersDeckOpen(true)}
+            onOpenAiScout={() => {
+              setAiScoutLayerInsightsMode(false);
+              setIsAiScoutDrawerOpen(true);
+            }}
+            onGetAiInsights={() => {
+              setAiScoutLayerInsightsMode(true);
+              setIsAiScoutDrawerOpen(true);
+            }}
+            onSelectDistrictFocus={(districtName) => {
+              const dSpec = getDistrictByIdOrName(districtName);
+              if (dSpec) {
+                handleFocusDistrict(dSpec);
+              }
+            }}
+            isAutoHidden={isDetailsAutoHidden}
+            onWakeUp={wakeUpControls}
+          />
+
+          {/* Collapsible GIS Map Legend */}
+          <MapLegend 
+            isAutoHidden={isDetailsAutoHidden}
+            onWakeUp={wakeUpControls}
+          />
         </div>
-      ) : (
-        /* LIST CATALOGUE VIEW */
+
+      {/* LIST CATALOGUE VIEW */}
+      {viewMode === 'list' && (
         <div className="w-full h-full overflow-y-auto pt-24 pb-20 px-4 md:px-8 bg-slate-950">
           <div className="max-w-6xl mx-auto flex flex-col gap-6">
             <div className="flex items-center justify-between border-b border-slate-800 pb-4">
@@ -1523,6 +2185,7 @@ export function ScoutingMap({
         isDecluttered={isDecluttered}
         onToggleDeclutter={handleToggleDeclutter}
         onOpenLayersModal={() => setIsLayersDeckOpen(true)}
+        onOpenAiScout={() => setIsAiScoutDrawerOpen(true)}
       />
 
       {/* ------------------------------------------------------------- */}
@@ -1541,6 +2204,10 @@ export function ScoutingMap({
         setShowSoilPhLayer={setShowSoilPhLayer}
         showElevationLayer={showElevationLayer}
         setShowElevationLayer={setShowElevationLayer}
+        showContourLines={showContourLines}
+        setShowContourLines={setShowContourLines}
+        showCustomaryBoundaries={showCustomaryBoundaries}
+        setShowCustomaryBoundaries={setShowCustomaryBoundaries}
         showEscarpments={showEscarpments}
         setShowEscarpments={setShowEscarpments}
         showCatchmentBasins={showCatchmentBasins}
@@ -1551,6 +2218,8 @@ export function ScoutingMap({
         setShowDistrictBoundaries={setShowDistrictBoundaries}
         showParcelBoundary={showParcelBoundary}
         setShowParcelBoundary={setShowParcelBoundary}
+        showCommunitySettlements={showCommunitySettlements}
+        setShowCommunitySettlements={setShowCommunitySettlements}
         onApplyPreset={handleApplyPreset}
         isDecluttered={isDecluttered}
         onToggleDeclutter={handleToggleDeclutter}
@@ -1581,6 +2250,43 @@ export function ScoutingMap({
         activeDistrict={activeDistrict}
         onSwitchToOfflineVector={() => setTileStyle('offline-vector')}
       />
+
+      {/* ------------------------------------------------------------- */}
+      {/* 7. AI MAP SCOUT (GEMINI 3.8 FLASH + GOOGLE MAPS GROUNDING)    */}
+      {/* ------------------------------------------------------------- */}
+      <AnimatePresence>
+        {isAiScoutDrawerOpen && (
+          <MapScoutAiDrawer
+            isOpen={isAiScoutDrawerOpen}
+            onClose={() => setIsAiScoutDrawerOpen(false)}
+            activeDistrict={activeDistrict}
+            activeParcelTitle={activeParcel?.title}
+            currentCoordinates={
+              liveCursorCoords 
+                ? liveCursorCoords 
+                : activeDistrict?.centroid 
+                  ? { lat: activeDistrict.centroid[0], lng: activeDistrict.centroid[1] } 
+                  : currentMapCenter
+            }
+            onFlyToCoordinates={(lat, lng) => {
+              mapInstanceRef.current?.flyTo([lat, lng], 11, { duration: 1.2 });
+            }}
+            activeLayers={{
+              waterSources: showRivers && showCatchmentBasins,
+              arableLand: showSoilPhLayer,
+              communitySettlements: showCommunitySettlements,
+              rainfallIsohyets: showRainfallLayer,
+              elevationTiers: showElevationLayer,
+              catchmentBasins: showCatchmentBasins,
+              riftEscarpments: showEscarpments,
+              customaryBoundaries: showCustomaryBoundaries,
+              districtBoundaries: showDistrictBoundaries
+            }}
+            layerInsightsMode={aiScoutLayerInsightsMode}
+            zoomLevel={currentZoom}
+          />
+        )}
+      </AnimatePresence>
 
     </div>
   );

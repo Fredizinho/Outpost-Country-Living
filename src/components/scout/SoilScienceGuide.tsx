@@ -122,17 +122,17 @@ export function SoilScienceGuide() {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="text-[10px] font-black uppercase tracking-widest bg-emerald-900 text-emerald-300 px-2.5 py-0.5 rounded-full border border-emerald-700">
-                Textbook Soil Science & Edenic Agronomy
+                Soil Science & Agronomy
               </span>
               <span className="text-[10px] font-black uppercase tracking-widest bg-amber-500/20 text-amber-400 px-2.5 py-0.5 rounded-full border border-amber-400/40">
-                SDA Stewardship Counsel
+                Stewardship
               </span>
             </div>
             <h3 className="serif text-2xl md:text-3xl font-bold text-white">
-              Soil Science & Living Earth Stewardship
+              Soil Guide & Field Assessment
             </h3>
             <p className="text-xs text-slate-300 max-w-xl mt-0.5 leading-relaxed font-medium">
-              Integrating pedology (Brady & Weil), Malawian Katondo/Dambo classifications, and Ellen G. White's counsel on living soil restoration.
+              Manage Katondo (Red Clay) fertility, Dambo (Wetland) moisture, and organic soil biology for high-yield harvests.
             </p>
           </div>
         </div>
@@ -149,7 +149,7 @@ export function SoilScienceGuide() {
             )}
           >
             <BookOpen size={16} />
-            <span>Agronomy Reference</span>
+            <span>Soil Principles</span>
           </button>
           <button
             onClick={() => setActiveTab('evaluator')}
@@ -161,7 +161,7 @@ export function SoilScienceGuide() {
             )}
           >
             <FlaskConical size={16} />
-            <span>Soil Sample Evaluator</span>
+            <span>Evaluate Soil</span>
           </button>
         </div>
       </div>
@@ -359,17 +359,17 @@ export function SoilScienceGuide() {
             <div>
               <h4 className="serif text-xl font-bold text-white flex items-center gap-2">
                 <FlaskConical size={20} className="text-amber-400" />
-                Soil Lab & Field Test Diagnostic Tool
+                Soil Health Diagnostic
               </h4>
               <p className="text-xs text-slate-400 mt-1">
-                Enter your farm's physical soil test results or load verified research station benchmarks:
+                Enter field soil test values or select a research station benchmark:
               </p>
             </div>
 
             {/* Verified Research Station Benchmark Selectors */}
             <div className="flex flex-col gap-2">
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
-                Load Verified Research Station Benchmark:
+                Load Station Benchmark:
               </span>
               <div className="grid grid-cols-2 gap-2">
                 {MALAWI_AGRO_SOIL_BENCHMARKS.map((b) => (
@@ -534,10 +534,10 @@ export function SoilScienceGuide() {
 
             <button
               onClick={handleRunEvaluation}
-              className="mt-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-4 px-6 rounded-2xl text-xs uppercase tracking-widest shadow-xl flex items-center justify-center gap-2 transition-all min-h-[48px]"
+              className="mt-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-4 px-6 rounded-2xl text-xs uppercase tracking-widest shadow-xl flex items-center justify-center gap-2 transition-all min-h-[48px] cursor-pointer"
             >
               <FlaskConical size={18} />
-              <span>Calculate Soil Stewardship Diagnosis</span>
+              <span>Calculate Soil Health</span>
             </button>
           </div>
 

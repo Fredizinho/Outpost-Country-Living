@@ -1,5 +1,12 @@
+import { COUNTRY_IMAGES } from '@/assets/images';
+
 export interface Quote {
   id: string;
+  title?: string;
+  theme?: string;
+  image?: string;
+  imageAlt?: string;
+  historicalContext?: string;
   text: string;
   source: string;
   category: 'Mental Health' | 'Children' | 'Physical Labor' | 'Spiritual Growth' | 'Preparation' | 'Vision';
@@ -124,25 +131,89 @@ export const MALAWI_OUTPOST_ZONES: OutpostZone[] = [
 
 export const EGW_QUOTES: Quote[] = [
   {
+    id: 'prep-1',
+    title: "The Signal of the Roman Armies & Mountain Flight",
+    theme: "The Jerusalem Parallel & Mountain Sanctuary",
+    image: COUNTRY_IMAGES.jerusalemSiege,
+    imageAlt: "Historical dramatic portrayal of Roman legions surrounding Jerusalem with fortified ancient stone walls",
+    historicalContext: "In AD 66, Cestius Gallus unexpectedly withdrew Roman troops, giving obedient Christians their cue to flee to Pella without hesitation before Titus' final siege in AD 70.",
+    text: "As the siege of Jerusalem by the Roman armies was a signal for flight to the Judean Christians, so the assumption of power on the part of our nation in the decree enforcing the papal sabbath will be a warning to us. It will then be time to leave the large cities, preparatory to leaving the smaller ones for retired homes in lonely places among the mountains.",
+    source: "Country Living, p. 32",
+    category: 'Preparation'
+  },
+  {
     id: '1',
+    title: "Take Children into the Country & Cultivate the Soil",
+    theme: "Family Relocation & Productive Ground",
+    image: COUNTRY_IMAGES.mountainFlight,
+    imageAlt: "Christian pioneer family at an off-grid country homestead in a misty mountain valley with cultivated soil",
+    historicalContext: "Counsel given to families struggling in dense industrial urban centers, showing that small dwellings with ground to till yield true physical and spiritual security.",
     text: "The time has come when, as God opens the way, families should move out of the cities. The children should be taken into the country. The parents should get as suitable a place as their means will allow. Though the dwelling may be small, yet there should be land in connection with it, that may be cultivated.",
     source: "Country Living, p. 24",
     category: 'Vision'
   },
   {
-    id: '2',
-    text: "Work in the open air is beneficial to both mind and body. The cultivation of the soil is a schoolroom where we can learn lessons from the book of nature.",
-    source: "The Ministry of Healing, p. 265",
-    category: 'Physical Labor'
+    id: 'prep-2',
+    title: "Provisions & The Future Crisis of Buying and Selling",
+    theme: "Independent Homestead Food Sovereignty",
+    image: COUNTRY_IMAGES.buyingSelling,
+    imageAlt: "Homestead harvest with baskets of grains, vegetables, and fruit grown independently on country soil",
+    historicalContext: "Revelation 13 foretells economic embargoes on God's commandment-keeping remnant; raising independent provisions safeguards faith and autonomy.",
+    text: "Again and again the Lord has instructed that our people are to take their families away from the cities, into the country, where they can raise their own provisions; for in the future the problem of buying and selling will be a very serious one.",
+    source: "Country Living, p. 9",
+    category: 'Preparation'
+  },
+  {
+    id: 'prep-3',
+    title: "Judgments Impending on Large Cities",
+    theme: "The Fragility of Urban Towers",
+    image: COUNTRY_IMAGES.cityCrisis,
+    imageAlt: "Metropolis with skyscrapers under ominous storm clouds and sirens depicting impending urban crisis",
+    historicalContext: "God's judgments in fire, earthquake, and economic collapse will strike the proudest metropolitan centers, demonstrating human engineering cannot withstand His reckoning.",
+    text: "The time is near when the large cities will be visited by the judgments of God. In a little while these cities will be terribly shaken. No matter how large or how strong their buildings, no matter how many fire-proof precautions are taken, one touch of God will destroy them in a few minutes or hours.",
+    source: "Testimonies for the Church, Vol. 7, p. 83",
+    category: 'Preparation'
+  },
+  {
+    id: 'prep-4',
+    title: "A Little Piece of Land Where Flowers Grow",
+    theme: "Simplicity, Purity, and Children's Growth",
+    image: COUNTRY_IMAGES.childrenGarden,
+    imageAlt: "Children in cottage garden planting flowers and vegetables happily under morning sunshine",
+    historicalContext: "Urban exposure hardens the tender sensibilities of children; soil and blooming flora cultivate reverence, gentle curiosity, and filial love.",
+    text: "Get out of the cities as soon as possible, and purchase a little piece of land where you can have a garden, where your children can watch the flowers grow and learn from them lessons of simplicity and purity.",
+    source: "Country Living, p. 18",
+    category: 'Preparation'
   },
   {
     id: '3',
+    title: "Guarding Children from Urban Contamination",
+    theme: "Preserving Youth from Moral Corruption",
+    image: COUNTRY_IMAGES.cityNoiseContrast,
+    imageAlt: "Contrast between noisy crowded city streets and serene green mountain countryside",
+    historicalContext: "Metropolises present unending spectacles, theater, liquor, and immoral amusements that erode the conscience of youth.",
     text: "Cities are filled with temptations. We should plan our work in such a way as to keep our young people as far as possible from this contamination.",
     source: "Country Living, p. 6",
     category: 'Children'
   },
   {
+    id: '2',
+    title: "Cultivation of the Soil as God's Schoolroom",
+    theme: "Open-Air Physical Dignity",
+    image: COUNTRY_IMAGES.openAirLabor,
+    imageAlt: "Homesteader hoeing deep loamy soil in an open field under clear morning light",
+    historicalContext: "Manual labor in harmony with nature restores muscle tone, deepens respiration, and gives practical object lessons in God's creative laws.",
+    text: "Work in the open air is beneficial to both mind and body. The cultivation of the soil is a schoolroom where we can learn lessons from the book of nature.",
+    source: "The Ministry of Healing, p. 265",
+    category: 'Physical Labor'
+  },
+  {
     id: '4',
+    title: "Nature's Symbols Unlock the Word of God",
+    theme: "The Divine Character in Creation",
+    image: COUNTRY_IMAGES.natureSymbols,
+    imageAlt: "Open Bible on a rustic wooden table surrounded by wildflowers and mountain pine forest in golden sunlight",
+    historicalContext: "Every seed, vine, branch, stream, and stone was used by Christ to illustrate eternal truths; country living opens this open-air sanctuary.",
     text: "Nature's symbols are the keys that unlock the treasures of the Word. The character of God is written in the grass, the flowers, and the trees.",
     source: "Education, p. 102",
     category: 'Spiritual Growth'
@@ -150,52 +221,47 @@ export const EGW_QUOTES: Quote[] = [
   // Mental Health & Country Living Quotes
   {
     id: 'mh-1',
+    title: "Root Cause of Disease: The Ailments of the Mind",
+    theme: "Restoring Broken Life-Forces",
+    image: COUNTRY_IMAGES.peacefulMind,
+    imageAlt: "Peaceful figure resting beside tranquil mountain brook in gentle golden woodland light",
+    historicalContext: "Nine-tenths of modern physical chronic illnesses originate in chronic mental anxiety, toxic city pressure, and broken domestic tranquility.",
     text: "Sickness of the mind prevails everywhere. Nine tenths of the diseases from which men suffer have their foundation here. Perhaps some living home trouble is like a canker eating to the very soul and weakening the life-forces.",
     source: "The Ministry of Healing, p. 241",
     category: 'Mental Health'
   },
   {
     id: 'mh-2',
+    title: "Healing Medicine of Pure Air, Sunshine & Garden Exercise",
+    theme: "Restoration for the Weary Mind",
+    image: COUNTRY_IMAGES.permacultureGarden,
+    imageAlt: "Lush permaculture orchard garden with raised beds, fruit trees, and sunlit paths",
+    historicalContext: "Natural light, negative ions, aerobic exercise in planting, and fragrant botanical terpenes bring biological healing no pharmacy can match.",
     text: "The atmosphere of the country, the fresh air, the sunshine, the flowers and trees, the exercise of the garden and the field, bring health and strength to the invalid and peace to the weary mind.",
     source: "The Ministry of Healing, p. 268",
     category: 'Mental Health'
   },
   {
     id: 'mh-3',
+    title: "Health-Giving Quiet for the Nervous and Weary",
+    theme: "Sanctuary from Sensory Overload",
+    image: COUNTRY_IMAGES.malawiHomesteadSanctuary,
+    imageAlt: "Malawi highland homestead surrounded by mountains, green trees, and blue skies",
+    historicalContext: "City noise over-stimulates the sympathetic nervous system; the country acts as an acoustic and physiological haven.",
     text: "In the natural surroundings of the country, there is for the sick and suffering a health-giving power. The quiet and freedom of the country are a great benefit to those who are nervous and weary.",
     source: "The Ministry of Healing, p. 365",
     category: 'Mental Health'
   },
   {
     id: 'mh-4',
+    title: "City Clamor vs. The Rest and Healing of Nature",
+    theme: "Escaping the Artificial Life",
+    image: COUNTRY_IMAGES.homesteadHighlands,
+    imageAlt: "Panoramic view of highland homestead overlooking misty valleys and fresh green plateaus",
+    historicalContext: "The cramped, artificial routine of modern cities drains the soul; stepping into nature re-anchors our sense of identity and divine peace.",
     text: "The noise and bustle of the city, the cramped and artificial life, are a weariness and a trial to the sick and nervous. The quiet, the beauty, the freshness of nature bring rest and healing.",
     source: "Country Living, p. 14",
     category: 'Mental Health'
-  },
-  // Preparation & End-Time Country Living Quotes
-  {
-    id: 'prep-1',
-    text: "As the siege of Jerusalem by the Roman armies was a signal for flight to the Judean Christians, so the assumption of power on the part of our nation in the decree enforcing the papal sabbath will be a warning to us. It will then be time to leave the large cities, preparatory to leaving the smaller ones for retired homes in lonely places among the mountains.",
-    source: "Country Living, p. 32",
-    category: 'Preparation'
-  },
-  {
-    id: 'prep-2',
-    text: "Again and again the Lord has instructed that our people are to take their families away from the cities, into the country, where they can raise their own provisions; for in the future the problem of buying and selling will be a very serious one.",
-    source: "Country Living, p. 9",
-    category: 'Preparation'
-  },
-  {
-    id: 'prep-3',
-    text: "The time is near when the large cities will be visited by the judgments of God. In a little while these cities will be terribly shaken. No matter how large or how strong their buildings, no matter how many fire-proof precautions are taken, one touch of God will destroy them in a few minutes or hours.",
-    source: "Testimonies for the Church, Vol. 7, p. 83",
-    category: 'Preparation'
-  },
-  {
-    id: 'prep-4',
-    text: "Get out of the cities as soon as possible, and purchase a little piece of land where you can have a garden, where your children can watch the flowers grow and learn from them lessons of simplicity and purity.",
-    source: "Country Living, p. 18",
-    category: 'Preparation'
   }
 ];
 

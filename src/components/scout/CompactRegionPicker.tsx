@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Compass, ChevronDown, ChevronUp, MapPin, Globe, Check, 
-  X, Wheat, Sprout, Filter, RotateCcw
+  X, Wheat, Sprout, Filter, RotateCcw, Bot, Sparkles
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FocusRegionId, MALAWI_REGIONAL_BOUNDS } from './ScoutingMap';
@@ -15,6 +15,7 @@ export interface CompactRegionPickerProps {
   onSelectDistrict: (district: MalawiDistrictSpec | null) => void;
   activeMode: 'regional' | 'parcels';
   onToggleMode: (mode: 'regional' | 'parcels') => void;
+  onOpenAiScout?: () => void;
   isAutoHidden?: boolean;
   onWakeUp?: () => void;
 }
@@ -26,6 +27,7 @@ export function CompactRegionPicker({
   onSelectDistrict,
   activeMode,
   onToggleMode,
+  onOpenAiScout,
   isAutoHidden = false,
   onWakeUp
 }: CompactRegionPickerProps) {
@@ -64,7 +66,7 @@ export function CompactRegionPicker({
       ref={dropdownRef}
       onMouseEnter={onWakeUp}
       className={cn(
-        "absolute top-3 left-3 z-30 pointer-events-auto transition-all duration-300",
+        "absolute top-14 sm:top-15 left-3 z-30 pointer-events-auto transition-all duration-300",
         isAutoHidden && !isOpen ? "opacity-35 hover:opacity-100" : "opacity-100"
       )}
       id="compact-region-picker"
@@ -111,6 +113,21 @@ export function CompactRegionPicker({
             </>
           )}
         </button>
+
+        {/* AI Map Scout Button */}
+        {onOpenAiScout && (
+          <button
+            onClick={onOpenAiScout}
+            className="h-10 px-3 rounded-2xl font-sans text-xs font-bold transition-all flex items-center gap-1.5 border shadow-2xl backdrop-blur-2xl cursor-pointer select-none bg-gradient-to-r from-emerald-950/90 via-slate-950/90 to-emerald-900/90 text-emerald-300 border-emerald-400/50 hover:border-emerald-300 hover:text-white group"
+            title="Open AI Map Scout (Gemini 3.8 Flash + Google Maps Grounding)"
+          >
+            <div className="w-5 h-5 rounded-lg bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 group-hover:scale-105 transition-transform">
+              <Bot size={13} />
+            </div>
+            <span className="hidden xs:inline tracking-tight">AI Scout</span>
+            <Sparkles size={11} className="text-amber-400 animate-pulse" />
+          </button>
+        )}
       </div>
 
       {/* Floating Dropdown Card */}

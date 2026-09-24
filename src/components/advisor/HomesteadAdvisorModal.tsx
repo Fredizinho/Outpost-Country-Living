@@ -71,7 +71,7 @@ export function HomesteadAdvisorModal({
       {
         id: 'welcome',
         role: 'assistant',
-        content: `### 🌿 Welcome to the Outpost AI Sanctuary Advisor\n\nI am your specialized advisor for rural homesteading, off-grid self-reliance, and land stewardship across Malawi.\n\nAsk me about:\n- **Land Scouting**: Water tables, perennial streams, and soil types (Katondo, Dambo, Alluvial) across Dedza, Mzimba, Mulanje, Zomba, etc.\n- **Off-Grid Engineering**: Sizing solar PV, LiFePO4 batteries, and gravity water pipes.\n- **Agronomy & Seasonal Cycles**: Crop timing for Rainy (Mvula), Cold (Mpepo), and Hot (Chirimwe) seasons.\n- **Customary Land Law**: Protocols with Chiefs (*Mafumu*) and Village Land Committees.`,
+        content: `### Welcome to the Outpost AI Sanctuary Advisor\n\nI am your specialized advisor for rural homesteading, off-grid self-reliance, and land stewardship across Malawi.\n\nAsk me about:\n- **Land Scouting**: Water tables, perennial streams, and soil types (Red Loam, Valley Clay, Alluvial) across Dedza, Mzimba, Mulanje, Zomba, etc.\n- **Off-Grid Engineering**: Sizing solar PV, LiFePO4 batteries, and gravity water pipes.\n- **Agronomy & Seasonal Cycles**: Crop timing for the Rainy Season, Cold Season, and Hot Dry Season.\n- **Customary Land Law**: Protocols with Traditional Chiefs and Village Land Committees.`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }
     ];

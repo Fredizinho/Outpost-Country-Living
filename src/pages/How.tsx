@@ -1,11 +1,14 @@
-import { Sprout, Users, Hammer, HeartPulse, CheckCircle2, Circle, ArrowRight } from 'lucide-react';
+import { Sprout, Users, Hammer, HeartPulse, CheckCircle2, Circle, ArrowRight, BookOpen, ShieldCheck, Home, Compass } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getStoredMasteredSkills, saveStoredMasteredSkills } from '@/lib/offlineStorage';
+import { EdenicAgricultureGuides } from '@/components/outpost/EdenicAgricultureGuides';
+import { OutpostCenterBlueprints } from '@/components/outpost/OutpostCenterBlueprints';
+import { CommunityDirectory } from '@/components/outpost/CommunityDirectory';
 
 const MASTERY_SKILLS = [
-  { id: 's1', title: 'Deep Compost Pit (Mupando)', category: 'Gardening' },
+  { id: 's1', title: 'Deep Organic Compost Pit', category: 'Gardening' },
   { id: 's2', title: 'Natural Yeast & Sourdough Bread', category: 'Handicrafts' },
   { id: 's3', title: 'Food Canning & Solar Sun-Drying', category: 'Preservation' },
   { id: 's4', title: 'Local Seed Saving & Storage', category: 'Gardening' },
@@ -33,10 +36,10 @@ export default function How() {
   };
   
   const skills = [
-    { title: 'Gardening & Soil Cultivation', icon: Sprout, path: '/what', desc: 'Growing staple Chimanga, Chinangwa, protein legumes (Ntedza/Nzama), and mineral-rich green relishes (Mpiru/Nkhwani).' },
-    { title: 'Food Preservation & Solar Drying', icon: Hammer, path: '/skills', desc: 'Solar drying of green vegetables into Mfutso, airtight seed saving, and Nkhokwe granary ash preservation.' },
+    { title: 'Gardening & Soil Cultivation', icon: Sprout, path: '/what', desc: 'Growing staple grains, cassava, protein legumes, and mineral-rich green garden vegetables.' },
+    { title: 'Food Preservation & Solar Drying', icon: Hammer, path: '/skills', desc: 'Solar drying of green vegetables, airtight seed saving, and ventilated granary ash preservation.' },
     { title: 'Rural Crafts & Homestead Trades', icon: Users, path: '/skills', desc: 'Self-sufficient trades for rural independence: carpentry, solar electrics, masonry, and remote digital productivity.' },
-    { title: 'Natural Health & Hydrotherapy', icon: HeartPulse, path: '/vision', desc: 'Hydrotherapy treatments and the application of natural local herbs like Galuwinki (Garlic), Aloe vera, and Moringa.' },
+    { title: 'Natural Health & Hydrotherapy', icon: HeartPulse, path: '/vision', desc: 'Hydrotherapy treatments and the application of natural simple remedies like Garlic, Aloe vera, Charcoal, and Moringa.' },
   ];
 
   return (
@@ -83,31 +86,31 @@ export default function How() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <SeasonCard 
-            season="Rainy Season (Mvula: Nov-Mar)" 
+            season="Rainy Season (Nov – Mar)" 
             color="text-emerald-400" 
-            items={['Chimanga (Maize)', 'Nyemba (Beans)', 'Nandolo (Pigeon Pea)', 'Nkhwani (Pumpkin Leaves)']} 
-            advice="Plant with the first effective soaking rains on 75cm ridges. Focus on early weeding and applying mature compost directly in planting stations."
-            event="National Tree Planting Month"
+            items={['Maize & Corn', 'Field Beans', 'Pigeon Peas', 'Pumpkin Leaves & Squash']} 
+            advice="Plant with the first effective soaking rains on prepared ridges. Focus on early weeding and applying mature compost directly in planting stations."
+            event="Tree Planting & Sowing Period"
           />
           <SeasonCard 
-            season="Harvest Season (Kukolola: Apr-Jun)" 
+            season="Harvest Season (Apr – Jun)" 
             color="text-amber-400" 
-            items={['Soya (Soybeans)', 'Mbatata (Sweet Potato)', 'Ntedza (Groundnuts)', 'Mbatata ya Chizungu (Irish Potato)']} 
-            advice="Harvest when crops reach full physiological maturity. Ensure grains are dried thoroughly on raised racks before storage in ventilated Nkhokwe granaries."
+            items={['Soybeans', 'Sweet Potatoes', 'Groundnuts', 'Irish Potatoes']} 
+            advice="Harvest when crops reach full physiological maturity. Ensure grains are dried thoroughly on raised racks before storage in ventilated pest-proof granaries."
             event="Harvest Thanksgiving Gatherings"
           />
           <SeasonCard 
-            season="Cold Season (Mpepo: Jul-Aug)" 
+            season="Cold Season (Jul – Aug)" 
             color="text-sky-400" 
-            items={['Mpiru (African Mustard)', 'Anyezi (Red Onion)', 'Galuwinki (Garlic)', 'Dambo / Dimba Wetlands']} 
-            advice="Utilize 'Dambo / Dimba' wetlands and treadle pump irrigation. Use residual valley moisture for vegetable beds. Protect tender seedlings from cold plateau drafts."
+            items={['Mustard Greens', 'Red Onions', 'Garlic', 'Sub-Irrigated Valley Beds']} 
+            advice="Utilize moist valley beds and simple gravity/treadle irrigation. Use residual valley moisture for vegetable beds. Protect tender seedlings from cold plateau drafts."
             event="Winter Wheat & Green Relish Season"
           />
           <SeasonCard 
-            season="Hot Dry Season (Chirimwe: Sep-Oct)" 
+            season="Hot Dry Season (Sep – Oct)" 
             color="text-amber-300" 
-            items={['Land Prep (Kupalira Misozi)', 'Nthochi (Banana Pits)', 'Manga (Mango Mulch)', 'Chitedze Cover Crop']} 
-            advice="Clear fields and prepare planting stations (mupando). Mulch perennial orchards heavily (Manga & Avokado) to conserve deep subsoil moisture."
+            items={['Bed Preparation', 'Banana Mulch Pits', 'Fruit Tree Mulching', 'Legume Cover Crops']} 
+            advice="Clear fields and prepare planting stations with compost. Mulch perennial orchards heavily (Mangoes & Avocados) to conserve deep subsoil moisture."
             event="Homestead Dry Season Building"
           />
         </div>
@@ -150,6 +153,21 @@ export default function How() {
             </button>
           ))}
         </div>
+      </section>
+
+      {/* Edenic Agriculture Guides (Pillar 3) */}
+      <section>
+        <EdenicAgricultureGuides />
+      </section>
+
+      {/* Outpost Center Blueprints (Pillar 4) */}
+      <section>
+        <OutpostCenterBlueprints />
+      </section>
+
+      {/* Community Connection Directory (Pillar 4) */}
+      <section>
+        <CommunityDirectory />
       </section>
     </div>
   );

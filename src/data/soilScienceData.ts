@@ -40,17 +40,17 @@ export const SOIL_SCIENCE_KNOWLEDGE_BASE: SoilScienceTopic[] = [
     category: 'Adventist Edenic Stewardship',
     scientificPrinciple: 'Rhizobium bacteria in legume root nodules fix atmospheric nitrogen (N2) into plant-available ammonium (NH4+), reducing synthetic fertilizer dependency.',
     adventistPrinciple: 'In Eden, plants grew in symbiotic harmony. Monoculture depletes the earth; polycultures mimic divine creation and ensure household food security.',
-    practicalAction: 'Intercrop maize (Chimanga) with pigeon peas (Nandolo), groundnuts (Ntedza), or cowpeas (Khobwe). Leave crop residue on fields as protective mulch.',
+    practicalAction: 'Intercrop maize with pigeon peas, groundnuts, or cowpeas. Leave crop residue on fields as protective mulch.',
     optimalTarget: '30-40% legume canopy integration in crop rotations.',
     citations: ['E.G. White, Education, "Study of Agriculture", p. 219', 'IITA Legume Nitrogen Fixation Protocols']
   },
   {
     id: 'katondo-malawi-latosol',
-    title: 'Malawian Katondo (Red Latosol) & Dambo Clay Profiles',
+    title: 'Malawian Red Loam & Valley Clay Profiles',
     category: 'Malawian Soil Types',
-    scientificPrinciple: 'Katondo soils are deep, well-drained kaolinitic oxisols/ultisols rich in iron oxides. Dambo soils are hydromorphic vertisols high in expanding clays.',
-    adventistPrinciple: 'Discernment of land features allows families to plant fruit trees on high-drained Latosols while conserving lowland Dambo wetlands for winter relish.',
-    practicalAction: 'Plant perennial orchards (Avocado, Macadamia, Mango) on gentle slope Katondo; build treadle-irrigated raised beds for relish (Nkhwani, Mpiru) in Dambo fringes.',
+    scientificPrinciple: 'Red loam soils are deep, well-drained soils rich in iron oxides. Valley soils are moisture-retentive soils with fine silt and clay.',
+    adventistPrinciple: 'Discernment of land features allows families to plant fruit trees on high-drained red loams while conserving lowland valley wetlands for winter garden crops.',
+    practicalAction: 'Plant perennial orchards (Avocado, Macadamia, Mango) on gentle slopes; build raised beds for garden relish, greens, and onions in moist valley fringes.',
     optimalTarget: 'Soil depth > 1.5m on Latosols; clear distinction of wetland boundaries.',
     citations: ['Malawi Soil Survey Division Bulletin No. 4', 'ICRAF Agroforestry Guide for Southern Africa']
   },

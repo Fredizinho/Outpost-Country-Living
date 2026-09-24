@@ -32,8 +32,8 @@ const PILLARS: FeaturetteItem[] = [
     icon: Heart,
     title: 'Peace & Space',
     badge: 'Sanctuary & Health',
-    description: 'Leave behind urban congestion for clean mountain air, rich Katondo soils, and natural seasonal rhythms.',
-    highlights: ['Clean Mountain Air & Mist', 'Volcanic Living Katondo Soil', 'Natural Seasonal Rhythms (Chilimwe & Dambo)'],
+    description: 'Leave behind urban congestion for clean mountain air, rich living soils, and natural seasonal rhythms.',
+    highlights: ['Clean Mountain Air & Mist', 'Rich Living Loam Soil', 'Natural Dry & Rainy Seasons'],
     linkTo: '/where',
     linkLabel: 'Scout Land Zones',
     accentColor: 'from-emerald-500/20 via-teal-500/10 to-transparent'
@@ -55,27 +55,27 @@ export function WhyCountryLivingFeaturette({ className = '' }: { className?: str
   return (
     <section className={`w-full flex flex-col gap-6 ${className}`}>
       {/* Section Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-amber-500/20 pb-5">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-stone-300 pb-5">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-            <span className="text-[10px] font-mono font-black uppercase tracking-[0.25em] text-amber-300">
+            <span className="w-2 h-2 rounded-full bg-emerald-700 animate-pulse" />
+            <span className="text-[11px] font-sans font-bold uppercase tracking-[0.2em] text-emerald-800">
               The Vision & Philosophy
             </span>
           </div>
-          <h2 className="serif text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#FAF8F5] tracking-tight">
+          <h2 className="serif text-3xl md:text-4xl lg:text-5xl font-extrabold text-stone-900 tracking-tight">
             Why Country Living?
           </h2>
-          <p className="text-sm md:text-base text-emerald-100/80 max-w-2xl font-medium leading-relaxed italic">
+          <p className="text-sm md:text-base text-stone-600 max-w-2xl font-serif font-medium leading-relaxed italic">
             Connecting with your deepest calling for independence, tranquility, and generational sanctuary.
           </p>
         </div>
 
         <Link
           to="/vision"
-          className="inline-flex items-center gap-2 text-xs font-mono font-black uppercase tracking-wider text-amber-300 hover:text-amber-200 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 px-4 py-2.5 rounded-xl transition-all w-fit shadow-xs group"
+          className="inline-flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-wider text-emerald-800 hover:text-emerald-950 bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-300/60 px-4 py-2.5 rounded-xl transition-all w-fit shadow-xs group"
         >
-          <Sparkles size={14} className="text-amber-400 group-hover:rotate-12 transition-transform" />
+          <Sparkles size={14} className="text-amber-600 group-hover:rotate-12 transition-transform" />
           <span>Read Prophetic Counsel</span>
           <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
         </Link>

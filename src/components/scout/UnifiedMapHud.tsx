@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  Search, X, Layers, Filter, Compass, Plus, Minus, Globe, 
-  Target, Eye, EyeOff, Sliders, List, Map as MapIcon, WifiOff,
-  Satellite, Moon
+  Search, X, Plus, Minus, Globe, Target, SlidersHorizontal,
+  Satellite, Map as MapIcon, WifiOff, Bot, Sparkles
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MalawiDistrictSpec } from '@/data/malawiDistrictData';
@@ -12,36 +11,38 @@ export interface UnifiedMapHudProps {
   // Search
   searchQuery: string;
   onSearchChange: (query: string) => void;
-  // Layers & Declutter
+  // Layers & Options
   onOpenLayersDeck: () => void;
   activeLayerCount: number;
-  isDecluttered: boolean;
-  onToggleDeclutter: () => void;
-  // Filters & Drawer
-  onOpenFilters: () => void;
-  activeFilterCount: number;
-  isSidebarOpen: boolean;
-  onToggleSidebar: () => void;
-  // Basemap & Satellite Hybrid Toggle
+  isDecluttered?: boolean;
+  onToggleDeclutter?: () => void;
+  // Basemap Toggle
   tileStyle?: string;
   onToggleSatelliteHybrid?: () => void;
+  // AI Map Scout
+  onOpenAiScout?: () => void;
+  isAiScoutOpen?: boolean;
   // Zoom & Center
   onZoomIn: () => void;
   onZoomOut: () => void;
   onResetMapView: () => void;
-  activeDistrict: MalawiDistrictSpec | null;
+  activeDistrict?: MalawiDistrictSpec | null;
   onFocusDistrict?: (district: MalawiDistrictSpec) => void;
-  // Auto-hide
-  isAutoHideActive: boolean;
-  onToggleAutoHide: () => void;
-  isDetailsAutoHidden?: boolean;
-  onWakeUp?: () => void;
   // View mode
-  viewMode: 'map' | 'list';
-  onToggleViewMode: () => void;
+  viewMode?: 'map' | 'list';
+  onToggleViewMode?: () => void;
   // Offline
   isOffline?: boolean;
   onOpenOfflineModal?: () => void;
+  // Auto-hide & wake (kept for backward compatibility)
+  isAutoHideActive?: boolean;
+  onToggleAutoHide?: () => void;
+  isDetailsAutoHidden?: boolean;
+  onWakeUp?: () => void;
+  onOpenFilters?: () => void;
+  activeFilterCount?: number;
+  isSidebarOpen?: boolean;
+  onToggleSidebar?: () => void;
 }
 
 export function UnifiedMapHud({
@@ -49,12 +50,6 @@ export function UnifiedMapHud({
   onSearchChange,
   onOpenLayersDeck,
   activeLayerCount,
-  isDecluttered,
-  onToggleDeclutter,
-  onOpenFilters,
-  activeFilterCount,
-  isSidebarOpen,
-  onToggleSidebar,
   tileStyle = 'dark',
   onToggleSatelliteHybrid,
   onZoomIn,
@@ -62,14 +57,11 @@ export function UnifiedMapHud({
   onResetMapView,
   activeDistrict,
   onFocusDistrict,
-  isAutoHideActive,
-  onToggleAutoHide,
-  isDetailsAutoHidden = false,
-  onWakeUp,
-  viewMode,
-  onToggleViewMode,
+  onOpenAiScout,
+  isAiScoutOpen = false,
   isOffline = false,
-  onOpenOfflineModal
+  onOpenOfflineModal,
+  onWakeUp,
 }: UnifiedMapHudProps) {
   const [isSearchExpanded, setIsSearchExpanded] = useState<boolean>(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -80,16 +72,15 @@ export function UnifiedMapHud({
     }
   }, [isSearchExpanded]);
 
+  const isSatellite = tileStyle === 'satellite' || tileStyle === 'hybrid';
+
   return (
     <div 
       onMouseEnter={onWakeUp}
-      className={cn(
-        "absolute right-3 top-3 z-30 flex flex-col items-end gap-2 pointer-events-auto transition-all duration-300",
-        isDetailsAutoHidden ? "opacity-35 hover:opacity-100" : "opacity-100"
-      )}
+      className="absolute right-3 top-14 sm:top-16 z-30 flex flex-col items-end gap-2 pointer-events-auto"
       id="unified-map-hud"
     >
-      {/* Search Popout Bar (Slides out smoothly to the left of the toolbar) */}
+      {/* Search Popout Bar */}
       <AnimatePresence>
         {isSearchExpanded && (
           <motion.div
@@ -97,21 +88,21 @@ export function UnifiedMapHud({
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 20, scale: 0.95 }}
             transition={{ duration: 0.18 }}
-            className="flex items-center gap-2 bg-slate-950/95 backdrop-blur-2xl border border-amber-500/50 rounded-2xl px-3 py-2 shadow-2xl text-white w-64 sm:w-80"
+            className="flex items-center gap-2 bg-stone-900/95 dark:bg-stone-950/95 backdrop-blur-2xl border border-stone-700 rounded-2xl px-3 py-2 shadow-2xl text-white w-64 sm:w-72"
           >
-            <Search size={15} className="text-amber-400 shrink-0" />
+            <Search size={15} className="text-emerald-400 shrink-0" />
             <input
               ref={searchInputRef}
               type="text"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Search district, station, soil..."
-              className="w-full bg-transparent text-white placeholder:text-slate-500 text-xs font-mono font-medium focus:outline-none"
+              placeholder="Search district or location..."
+              className="w-full bg-transparent text-white placeholder:text-stone-400 text-xs font-medium focus:outline-none"
             />
             {searchQuery && (
               <button
                 onClick={() => onSearchChange('')}
-                className="text-slate-400 hover:text-white p-1 rounded-md transition-colors"
+                className="text-stone-400 hover:text-white p-1 rounded transition-colors"
                 title="Clear Search"
               >
                 <X size={13} />
@@ -119,7 +110,7 @@ export function UnifiedMapHud({
             )}
             <button
               onClick={() => setIsSearchExpanded(false)}
-              className="text-xs font-mono text-amber-400 hover:text-amber-300 px-1.5 py-0.5 rounded bg-white/5 border border-white/10 shrink-0 cursor-pointer"
+              className="text-xs text-emerald-400 hover:text-emerald-300 px-1.5 py-0.5 rounded bg-stone-800 border border-stone-700 shrink-0 cursor-pointer"
             >
               Done
             </button>
@@ -127,190 +118,126 @@ export function UnifiedMapHud({
         )}
       </AnimatePresence>
 
-      {/* Main Vertical Floating Toolbar */}
-      <div className="bg-slate-950/90 backdrop-blur-2xl border border-white/15 rounded-2xl p-1.5 shadow-2xl flex flex-col items-center gap-1.5 text-white">
+      {/* Clean, Intuitive Control Dock */}
+      <div className="bg-stone-900/90 dark:bg-stone-950/90 backdrop-blur-2xl border border-stone-700/70 rounded-2xl p-1.5 shadow-2xl flex flex-col items-center gap-1.5 text-stone-200">
         
-        {/* 1. SEARCH TOGGLE */}
-        <button
-          onClick={() => setIsSearchExpanded(!isSearchExpanded)}
-          className={cn(
-            "w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer relative",
-            isSearchExpanded || searchQuery
-              ? "bg-amber-500 text-slate-950 shadow-md font-bold"
-              : "hover:bg-slate-800 text-slate-300 hover:text-amber-300"
-          )}
-          title={isSearchExpanded ? "Close Search" : "Search Districts & Stations"}
-        >
-          <Search size={16} />
-          {searchQuery && (
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          )}
-        </button>
-
-        {/* 1.5 SATELLITE HYBRID / DARK GIS TOGGLE */}
-        {onToggleSatelliteHybrid && (
+        {/* 0. AI MAP SCOUT (Maps Grounded Assistant) */}
+        {onOpenAiScout && (
           <button
-            onClick={onToggleSatelliteHybrid}
+            onClick={onOpenAiScout}
             className={cn(
               "w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer relative",
-              tileStyle === 'satellite' || tileStyle === 'hybrid'
-                ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 shadow-md"
-                : "hover:bg-slate-800 text-slate-300 hover:text-white"
+              isAiScoutOpen
+                ? "bg-gradient-to-tr from-emerald-600 to-teal-500 text-white shadow-lg shadow-emerald-900/50 scale-105"
+                : "bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-900 hover:text-white"
             )}
-            title={
-              tileStyle === 'satellite' || tileStyle === 'hybrid'
-                ? "Active: Satellite Hybrid (Tree canopy & soil imagery). Click for High-Contrast Dark GIS Vector."
-                : "One-Tap: Switch to Satellite Hybrid Mode (Tree canopy & high-res terrain)"
-            }
+            title="AI Map Scout (Gemini 3.8 Flash + Google Maps Grounding)"
           >
-            {tileStyle === 'satellite' || tileStyle === 'hybrid' ? (
-              <Satellite size={16} className="text-emerald-400" />
-            ) : (
-              <Moon size={16} className="text-cyan-400" />
-            )}
-            <span className={cn(
-              "absolute -bottom-0.5 text-[8px] font-black uppercase font-mono px-0.5 rounded",
-              tileStyle === 'satellite' || tileStyle === 'hybrid' ? "text-emerald-400" : "text-cyan-400"
-            )}>
-              {tileStyle === 'satellite' || tileStyle === 'hybrid' ? 'SAT' : 'DARK'}
-            </span>
+            <Bot size={18} />
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-400" />
           </button>
         )}
 
-        {/* 2. LAYERS DECK */}
+        {/* 1. WHAT TO SHOW (OPTIONS & FEATURES) */}
         <button
           onClick={onOpenLayersDeck}
           className={cn(
-            "w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer relative hover:bg-slate-800 text-slate-300 hover:text-sky-300",
-            activeLayerCount > 0 && "text-sky-400"
+            "w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer relative",
+            activeLayerCount > 0
+              ? "bg-emerald-800 text-emerald-100 hover:bg-emerald-700 shadow-md"
+              : "hover:bg-stone-800 text-stone-300 hover:text-white"
           )}
-          title={`GIS Layers & Overlays (${activeLayerCount} active)`}
+          title={`What to Show on Map (${activeLayerCount} active)`}
         >
-          <Layers size={16} />
+          <SlidersHorizontal size={17} />
           {activeLayerCount > 0 && (
-            <span className="absolute top-1 right-1 bg-sky-500 text-slate-950 font-mono text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow">
+            <span className="absolute -top-1 -right-1 bg-amber-400 text-stone-950 text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow">
               {activeLayerCount}
             </span>
           )}
         </button>
 
-        {/* 3. FILTERS MODAL */}
-        <button
-          onClick={onOpenFilters}
-          className={cn(
-            "w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer relative hover:bg-slate-800 text-slate-300 hover:text-emerald-300",
-            activeFilterCount > 0 && "text-emerald-400"
-          )}
-          title={`Filter Stations & Soils (${activeFilterCount} active)`}
-        >
-          <Filter size={16} />
-          {activeFilterCount > 0 && (
-            <span className="absolute top-1 right-1 bg-emerald-500 text-slate-950 font-mono text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow">
-              {activeFilterCount}
-            </span>
-          )}
-        </button>
+        {/* 2. SATELLITE VS CLEAN MAP TOGGLE */}
+        {onToggleSatelliteHybrid && (
+          <button
+            onClick={onToggleSatelliteHybrid}
+            className={cn(
+              "w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer relative",
+              isSatellite
+                ? "bg-sky-900/80 text-sky-200 border border-sky-600/50 shadow-md"
+                : "hover:bg-stone-800 text-stone-300 hover:text-white"
+            )}
+            title={isSatellite ? "Switch to Clean Map" : "Switch to Satellite Aerial Photo"}
+          >
+            {isSatellite ? <MapIcon size={16} /> : <Satellite size={16} />}
+          </button>
+        )}
 
-        {/* 4. DECLUTTER TOGGLE */}
+        {/* 3. SEARCH */}
         <button
-          onClick={onToggleDeclutter}
-          className={cn(
-            "w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer relative",
-            isDecluttered
-              ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
-              : "hover:bg-slate-800 text-slate-400 hover:text-white"
-          )}
-          title={isDecluttered ? "Declutter Active (Focus View)" : "Toggle Declutter (Clean Map)"}
-        >
-          <Sliders size={16} />
-          {isDecluttered && (
-            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-amber-400" />
-          )}
-        </button>
-
-        {/* 5. OVERVIEW / DOSSIER SHEET TOGGLE */}
-        <button
-          onClick={onToggleSidebar}
+          onClick={() => setIsSearchExpanded(!isSearchExpanded)}
           className={cn(
             "w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer relative",
-            isSidebarOpen
-              ? "bg-amber-500 text-slate-950 shadow-md font-bold"
-              : "hover:bg-slate-800 text-slate-300 hover:text-white"
+            isSearchExpanded || searchQuery
+              ? "bg-emerald-700 text-white shadow-md font-bold"
+              : "hover:bg-stone-800 text-stone-300 hover:text-white"
           )}
-          title={isSidebarOpen ? "Close Overview Sheet" : "Open Overview Sheet & Dossier"}
+          title={isSearchExpanded ? "Close Search" : "Search districts"}
         >
-          <Compass size={16} />
-        </button>
-
-        {/* 6. LIST / MAP VIEW TOGGLE */}
-        <button
-          onClick={onToggleViewMode}
-          className="w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer hover:bg-slate-800 text-slate-400 hover:text-white"
-          title={viewMode === 'map' ? "Switch to Catalog List" : "Switch to Interactive Map"}
-        >
-          {viewMode === 'map' ? <List size={16} /> : <MapIcon size={16} />}
+          <Search size={16} />
+          {searchQuery && (
+            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-amber-400" />
+          )}
         </button>
 
         {/* SEPARATOR */}
-        <div className="w-6 h-px bg-white/10 my-0.5" />
+        <div className="w-5 h-px bg-stone-700/70 my-0.5" />
 
-        {/* 7. ZOOM CONTROLS */}
+        {/* 4. ZOOM IN */}
         <button
           onClick={onZoomIn}
-          className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg hover:bg-slate-800 text-slate-200 hover:text-white transition-all cursor-pointer"
-          title="Zoom In (+)"
+          className="w-10 h-10 rounded-xl flex items-center justify-center hover:bg-stone-800 text-stone-200 hover:text-white transition-colors cursor-pointer"
+          title="Zoom In"
         >
-          <Plus size={16} />
+          <Plus size={17} />
         </button>
 
+        {/* 5. ZOOM OUT */}
         <button
           onClick={onZoomOut}
-          className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg hover:bg-slate-800 text-slate-200 hover:text-white transition-all cursor-pointer"
-          title="Zoom Out (-)"
+          className="w-10 h-10 rounded-xl flex items-center justify-center hover:bg-stone-800 text-stone-200 hover:text-white transition-colors cursor-pointer"
+          title="Zoom Out"
         >
-          <Minus size={16} />
+          <Minus size={17} />
         </button>
 
-        {/* 8. RESET VIEW (ENTIRE MALAWI) */}
+        {/* 6. RESET TO ALL MALAWI */}
         <button
           onClick={onResetMapView}
-          className="w-10 h-10 rounded-xl flex items-center justify-center hover:bg-slate-800 text-emerald-400 hover:text-emerald-300 transition-all cursor-pointer"
-          title="Reset Map to Full Malawi Extent"
+          className="w-10 h-10 rounded-xl flex items-center justify-center hover:bg-stone-800 text-stone-300 hover:text-emerald-300 transition-colors cursor-pointer"
+          title="Show All of Malawi"
         >
           <Globe size={16} />
         </button>
 
-        {/* 9. DISTRICT TARGET (IF ACTIVE) */}
+        {/* 7. FOCUS DISTRICT (IF ACTIVE) */}
         {activeDistrict && (
           <button
             onClick={() => onFocusDistrict?.(activeDistrict)}
-            className="w-10 h-10 rounded-xl flex items-center justify-center bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold transition-all cursor-pointer shadow-lg"
-            title={`Center Camera on ${activeDistrict.name} District`}
+            className="w-10 h-10 rounded-xl flex items-center justify-center bg-emerald-800 hover:bg-emerald-700 text-white font-bold transition-all cursor-pointer shadow-md"
+            title={`Center on ${activeDistrict.name} District`}
           >
             <Target size={16} />
           </button>
         )}
 
-        {/* 10. AUTO-HIDE TOGGLE */}
-        <button
-          onClick={onToggleAutoHide}
-          className={cn(
-            "w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer",
-            isAutoHideActive
-              ? "bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 hover:border-emerald-400"
-              : "hover:bg-slate-800 text-slate-400 hover:text-white"
-          )}
-          title={isAutoHideActive ? "Auto-Hide Active (extra details fade on pan)" : "Auto-Hide Disabled (details stay pinned)"}
-        >
-          {isAutoHideActive ? <EyeOff size={16} className="text-emerald-400" /> : <Eye size={16} />}
-        </button>
-
-        {/* 11. OFFLINE BADGE (IF OFFLINE) */}
+        {/* 8. OFFLINE NOTICE (IF OFFLINE) */}
         {isOffline && (
           <button
             onClick={onOpenOfflineModal}
-            className="w-10 h-10 rounded-xl flex items-center justify-center bg-amber-950/80 border border-amber-500/50 text-amber-400 hover:bg-amber-900 transition-all cursor-pointer"
-            title="Offline GIS Vector Pack Active"
+            className="w-10 h-10 rounded-xl flex items-center justify-center bg-amber-950/80 border border-amber-600/50 text-amber-300 hover:bg-amber-900 transition-all cursor-pointer"
+            title="Offline Map Ready"
           >
             <WifiOff size={15} />
           </button>

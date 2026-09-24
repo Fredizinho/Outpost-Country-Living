@@ -114,7 +114,32 @@ export function MapLegend({ isAutoHidden = false, onWakeUp }: MapLegendProps) {
               </div>
             </div>
 
-            {/* Section 4: District Badges & Clusters */}
+            {/* Section 4: Thematic Layers & Settlements */}
+            <div className="flex flex-col gap-1.5 border-t border-white/10 pt-2">
+              <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1.5">
+                <MapPin size={11} className="text-amber-400" />
+                <span>Thematic Settlements & Soil</span>
+              </span>
+              <div className="flex flex-col gap-1 text-[11px] pl-1">
+                <div className="flex items-center gap-2">
+                  <span className="w-4 h-4 rounded bg-amber-900/80 border border-amber-400 flex items-center justify-center text-[9px] shrink-0">⛪</span>
+                  <span className="text-amber-300 font-bold">Church Pin:</span>
+                  <span className="text-slate-300">Adventist Outpost & Mission Hub</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-4 h-4 rounded bg-emerald-950 border border-emerald-400 flex items-center justify-center text-[9px] shrink-0">🏡</span>
+                  <span className="text-emerald-300 font-bold">House Pin:</span>
+                  <span className="text-slate-300">Highland Homestead Cluster</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-2.5 bg-emerald-600/30 border border-emerald-400 rounded-xs shrink-0" />
+                  <span className="text-emerald-300 font-bold">Arable Belt:</span>
+                  <span className="text-slate-300">Katondo Red Loam (pH 6.0–6.5)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Section 5: District Badges & Clusters */}
             <div className="flex items-center justify-between border-t border-white/10 pt-2 text-[10px] text-slate-400">
               <div className="flex items-center gap-1.5">
                 <div className="w-4 h-4 rounded-full bg-slate-900 border border-amber-400 flex items-center justify-center text-[8px] font-black text-amber-300">

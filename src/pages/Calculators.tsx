@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Sun, Droplets, Utensils, Compass, PieChart, ShieldCheck, Download, Sparkles, RefreshCw, Layers, CloudRain, DollarSign, Save, Check, Sprout, TrendingUp, Users, MapPin, Calendar, ArrowRight, Copy, CheckCircle2 } from 'lucide-react';
+import { Sun, Droplets, Utensils, Compass, PieChart, ShieldCheck, Download, Sparkles, RefreshCw, Layers, CloudRain, DollarSign, Save, Check, Sprout, TrendingUp, Users, MapPin, Calendar, ArrowRight, Copy, CheckCircle2, Gauge } from 'lucide-react';
 import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 import { YieldComparisonChart } from '@/components/calculators/YieldComparisonChart';
 import { useAuth } from '@/contexts/AuthContext';
 import { OnboardingWizard } from '@/components/onboarding/OnboardingWizard';
 import { saveStoredSavedSpecs } from '@/lib/offlineStorage';
+import { OffGridSizingTools } from '@/components/outpost/OffGridSizingTools';
 import { 
   SanctuaryCard, 
   SanctuaryButton, 
@@ -22,8 +23,8 @@ export default function Calculators() {
   const seasonParam = searchParams.get('season');
 
   const [showWizard, setShowWizard] = useState(false);
-  const [activeTab, setActiveTab] = useState<'yield' | 'solar' | 'food' | 'land' | 'rainwater' | 'budget'>(() => {
-    if (tabParam && ['yield', 'solar', 'food', 'land', 'rainwater', 'budget'].includes(tabParam)) {
+  const [activeTab, setActiveTab] = useState<'yield' | 'solar' | 'food' | 'land' | 'rainwater' | 'budget' | 'offgrid'>(() => {
+    if (tabParam && ['yield', 'solar', 'food', 'land', 'rainwater', 'budget', 'offgrid'].includes(tabParam)) {
       return tabParam as any;
     }
     return 'yield';
@@ -406,6 +407,7 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
           { id: 'food', label: 'Grain & Food Reserve', icon: Utensils },
           { id: 'land', label: 'Sanctuary Acreage', icon: PieChart },
           { id: 'rainwater', label: 'Rainwater Harvest', icon: CloudRain },
+          { id: 'offgrid', label: 'Off-Grid Engineering Sizer', icon: Gauge },
           { id: 'budget', label: 'Setup Budget', icon: DollarSign },
         ].map((tab) => {
           const Icon = tab.icon;
@@ -927,6 +929,16 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
               </div>
             </div>
           </div>
+        </motion.div>
+      )}
+
+      {/* TAB: OFF-GRID SIZING WORKBENCH */}
+      {activeTab === 'offgrid' && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <OffGridSizingTools />
         </motion.div>
       )}
 

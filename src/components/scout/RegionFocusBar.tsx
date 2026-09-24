@@ -99,7 +99,7 @@ export function RegionFocusBar({
                   ? "bg-amber-500 text-slate-950 border-amber-300 font-black shadow-amber-500/20"
                   : "bg-slate-900/90 text-amber-300 border-amber-500/40 hover:border-amber-400 hover:bg-slate-800"
               )}
-              title={isExpanded ? "Click to close controls" : "Click to expand region controls"}
+              title={isExpanded ? "Close Controls" : "Select Region"}
             >
               <Compass size={14} className={isExpanded ? "text-slate-950" : "text-amber-400"} />
               <span className="font-bold tracking-tight">
@@ -151,7 +151,7 @@ export function RegionFocusBar({
                   ? "bg-emerald-500/30 text-emerald-300 border-emerald-400 shadow-md ring-1 ring-emerald-400/40"
                   : "bg-slate-900/80 text-slate-400 border-white/10 hover:text-white hover:border-slate-600"
               )}
-              title={isDecluttered ? "Clean View active: Clutter hidden. Click to restore full map overlays." : "Clean map: Hide textured heatmaps for a clear view."}
+              title={isDecluttered ? "Declutter On" : "Declutter Off"}
             >
               <Sparkles size={13} className={isDecluttered ? "text-emerald-400" : "text-slate-400"} />
               <span className="hidden sm:inline">{isDecluttered ? "Clean" : "Declutter"}</span>
@@ -161,7 +161,7 @@ export function RegionFocusBar({
             <button
               onClick={onOpenLayersDeck}
               className="px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-mono font-bold bg-slate-900/80 hover:bg-slate-800 text-slate-200 hover:text-white border border-white/10 hover:border-amber-400/40 transition-all flex items-center gap-1.5 cursor-pointer"
-              title="Open Map Layer Controls"
+              title="Map Layers"
             >
               <Layers size={13} className="text-amber-400" />
               <span className="hidden sm:inline">Layers</span>
@@ -180,7 +180,7 @@ export function RegionFocusBar({
                     ? "bg-amber-500/25 text-amber-300 border-amber-400 shadow-md"
                     : "bg-slate-900/80 text-emerald-400 border-emerald-500/30 hover:border-emerald-400"
                 )}
-                title={isOffline ? "Offline Map Active" : "Connection Status"}
+                title={isOffline ? "Offline Mode" : "Online Sync"}
               >
                 {isOffline ? <WifiOff size={13} className="text-amber-400 animate-pulse" /> : <Wifi size={13} className="text-emerald-400" />}
                 <span className="hidden lg:inline">{isOffline ? "Offline" : "Sync"}</span>
@@ -196,7 +196,7 @@ export function RegionFocusBar({
                   ? "bg-amber-500/25 text-amber-300 border-amber-400/80 shadow-md shadow-amber-950/40" 
                   : "bg-gradient-to-r from-emerald-950 to-slate-900 text-emerald-300 border-emerald-500/50 hover:border-emerald-400"
               )}
-              title="Toggle Details Drawer"
+              title="Toggle Details"
             >
               {isSidebarOpen ? <X size={13} className="text-amber-400" /> : <Sliders size={13} className="text-emerald-400" />}
               <span className="hidden sm:inline">Details</span>
@@ -206,7 +206,7 @@ export function RegionFocusBar({
             <button
               onClick={() => setIsExpanded(!isExpanded)}
               className="w-8 h-8 rounded-xl bg-slate-900 border border-white/10 hover:border-amber-400/50 text-slate-300 hover:text-white flex items-center justify-center cursor-pointer transition-all"
-              title={isExpanded ? "Close Controls" : "Open Region Controls"}
+              title={isExpanded ? "Close Controls" : "Select Region"}
             >
               {isExpanded ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
             </button>
@@ -229,7 +229,7 @@ export function RegionFocusBar({
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-amber-400 flex items-center gap-1 shrink-0">
-                    <Globe size={12} className="text-amber-400" /> Select Region:
+                    <Globe size={12} className="text-amber-400" /> Region:
                   </span>
                 </div>
 
@@ -255,7 +255,7 @@ export function RegionFocusBar({
                             ? "bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-slate-950 font-black border-amber-300 shadow-md shadow-amber-500/20 scale-[1.01]"
                             : "bg-slate-900/90 text-slate-300 border-white/10 hover:border-amber-400/40 hover:text-white hover:bg-slate-800"
                         )}
-                        title={`Focus canvas onto ${tab.label}`}
+                        title={`Select ${tab.label}`}
                       >
                         <Icon size={13} className={isActive ? "text-slate-950" : "text-amber-400"} />
                         <span className="truncate">{tab.label}</span>
@@ -290,7 +290,7 @@ export function RegionFocusBar({
                       : "bg-slate-900 text-slate-400 border-white/5 hover:text-white hover:border-slate-700"
                   )}
                 >
-                  <span>Region Overview</span>
+                  <span>All Districts</span>
                 </button>
 
                 {/* Region Districts Chips */}
@@ -306,7 +306,7 @@ export function RegionFocusBar({
                           ? "bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-black border-amber-300 shadow-md ring-2 ring-amber-400/40"
                           : "bg-slate-950 text-slate-300 border-slate-800 hover:text-white hover:border-slate-600"
                       )}
-                      title={`${d.name} District: Elevation ${d.elevationRange}, Rain ${d.rainfallAnnualMm}mm/yr, Feasibility Grade ${d.feasibilityGrade}`}
+                      title={`Select ${d.name}`}
                     >
                       <MapPin size={10} className={isSelected ? "text-slate-950" : "text-amber-400"} />
                       <span className="font-semibold">{d.name}</span>
@@ -327,7 +327,7 @@ export function RegionFocusBar({
                   onClick={() => setIsExpanded(false)}
                   className="text-amber-400 hover:text-amber-300 flex items-center gap-1 font-bold cursor-pointer"
                 >
-                  <span>Close Menu</span>
+                  <span>Close</span>
                   <ChevronUp size={13} />
                 </button>
               </div>

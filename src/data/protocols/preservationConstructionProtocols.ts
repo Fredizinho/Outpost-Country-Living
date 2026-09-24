@@ -152,7 +152,7 @@ export const PRESERVATION_CONSTRUCTION_PROTOCOLS: Record<string, DetailedSkillPr
         title: 'Slice Uniform 5mm Slices & Blanch Leafy Greens',
         timing: 'Morning of Drying Day (07:00)',
         seasonalWindow: 'Continuous Harvest',
-        instructions: 'Wash fresh mangoes, tomatoes, squashes, or pumpkin leaves (Nkhwani). Slice uniformly to 4-5mm thickness. Steam blanch greens for 60 seconds and plunge into cold water to preserve bright green vitamins and enzymes.',
+        instructions: 'Wash fresh mangoes, tomatoes, squashes, or pumpkin leaves. Slice uniformly to 4-5mm thickness. Steam blanch greens for 60 seconds and plunge into cold water to preserve bright green vitamins and enzymes.',
         criticalCheck: 'Uniform slice thickness is mandatory; thick pieces remain wet inside and spoil.'
       },
       {

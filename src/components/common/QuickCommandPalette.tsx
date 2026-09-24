@@ -245,7 +245,7 @@ export function QuickCommandPalette({ isOpen, onClose, onOpenAdvisor }: QuickCom
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/80 backdrop-blur-md cursor-pointer"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm cursor-pointer"
           />
 
           {/* Palette Modal Box */}
@@ -254,11 +254,11 @@ export function QuickCommandPalette({ isOpen, onClose, onOpenAdvisor }: QuickCom
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: -10 }}
             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-            className="relative z-50 w-full max-w-2xl bg-slate-950/95 backdrop-blur-2xl border border-amber-500/30 rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col text-slate-100 divide-y divide-white/10"
+            className="relative z-50 w-full max-w-2xl bg-[#FAF8F5] border border-stone-300 rounded-3xl shadow-2xl overflow-hidden flex flex-col text-stone-900 divide-y divide-stone-200"
           >
             {/* Input Bar */}
-            <div className="flex items-center px-4 sm:px-6 py-4 gap-3">
-              <Search size={20} className="text-amber-400 shrink-0" />
+            <div className="flex items-center px-4 sm:px-6 py-4 gap-3 bg-white">
+              <Search size={20} className="text-emerald-800 shrink-0" />
               <input
                 ref={inputRef}
                 type="text"
@@ -268,29 +268,29 @@ export function QuickCommandPalette({ isOpen, onClose, onOpenAdvisor }: QuickCom
                   setSelectedIndex(0);
                 }}
                 placeholder="Jump to any guide, calculator, district map or skill (e.g. 'solar', 'dedza', 'compost')..."
-                className="w-full bg-transparent text-sm sm:text-base text-white placeholder-slate-400 font-sans focus:outline-none"
+                className="w-full bg-transparent text-sm sm:text-base text-stone-900 placeholder:text-stone-400 font-sans focus:outline-none"
               />
               {query ? (
                 <button
                   onClick={() => setQuery('')}
-                  className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+                  className="p-1 rounded-lg text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors"
                 >
                   <X size={16} />
                 </button>
               ) : (
-                <kbd className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold text-slate-400 bg-white/5 border border-white/10">
+                <kbd className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold text-stone-500 bg-stone-100 border border-stone-200">
                   ESC
                 </kbd>
               )}
             </div>
 
             {/* Results List */}
-            <div className="max-h-[60vh] overflow-y-auto custom-scrollbar p-2 sm:p-3 flex flex-col gap-1">
+            <div className="max-h-[60vh] overflow-y-auto custom-scrollbar p-2 sm:p-3 flex flex-col gap-1 bg-[#FAF8F5]">
               {filteredResults.length === 0 ? (
-                <div className="py-12 px-4 text-center flex flex-col items-center justify-center gap-2 text-slate-400">
-                  <Compass size={32} className="text-amber-400/40 animate-pulse" />
-                  <span className="text-sm font-bold text-slate-300">No matching guides or tools found</span>
-                  <span className="text-xs text-slate-400">Try searching for "solar", "water", "districts", "almanac", or "skills"</span>
+                <div className="py-12 px-4 text-center flex flex-col items-center justify-center gap-2 text-stone-500">
+                  <Compass size={32} className="text-emerald-800/40 animate-pulse" />
+                  <span className="text-sm font-bold text-stone-800">No matching guides or tools found</span>
+                  <span className="text-xs text-stone-500">Try searching for "solar", "water", "districts", "almanac", or "skills"</span>
                 </div>
               ) : (
                 filteredResults.map((item, index) => {
@@ -305,16 +305,16 @@ export function QuickCommandPalette({ isOpen, onClose, onOpenAdvisor }: QuickCom
                       className={cn(
                         "w-full flex items-center justify-between p-3 rounded-2xl transition-all text-left cursor-pointer border",
                         isSelected
-                          ? "bg-gradient-to-r from-amber-500/20 to-emerald-500/10 border-amber-500/40 text-white shadow-md"
-                          : "bg-transparent border-transparent hover:bg-white/5 text-slate-300"
+                          ? "bg-emerald-50/90 border-emerald-300 text-stone-900 shadow-xs"
+                          : "bg-transparent border-transparent hover:bg-stone-100/80 text-stone-700"
                       )}
                     >
                       <div className="flex items-center gap-3.5 min-w-0">
                         <div className={cn(
                           "w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors",
                           isSelected
-                            ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20"
-                            : "bg-slate-900 text-amber-400 border border-white/10"
+                            ? "bg-emerald-800 text-white shadow-xs"
+                            : "bg-stone-100 text-emerald-800 border border-stone-200"
                         )}>
                           <Icon size={20} />
                         </div>
@@ -322,17 +322,17 @@ export function QuickCommandPalette({ isOpen, onClose, onOpenAdvisor }: QuickCom
                         <div className="flex flex-col min-w-0">
                           <div className="flex items-center gap-2">
                             <span className={cn(
-                              "text-sm font-bold truncate",
-                              isSelected ? "text-amber-200" : "text-slate-100"
+                              "text-sm font-bold truncate font-sans",
+                              isSelected ? "text-emerald-950" : "text-stone-900"
                             )}>
                               {item.title}
                             </span>
-                            <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-white/5 text-slate-400 border border-white/10 hidden sm:inline-block">
+                            <span className="text-[10px] font-sans font-semibold uppercase px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200 hidden sm:inline-block">
                               {item.category}
                             </span>
                           </div>
                           {item.subtitle && (
-                            <span className="text-xs text-slate-400 truncate mt-0.5">
+                            <span className="text-xs text-stone-500 truncate mt-0.5 font-normal">
                               {item.subtitle}
                             </span>
                           )}
@@ -341,13 +341,13 @@ export function QuickCommandPalette({ isOpen, onClose, onOpenAdvisor }: QuickCom
 
                       <div className="flex items-center gap-2 shrink-0 ml-3">
                         {item.shortcut && (
-                          <kbd className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[10px] font-mono text-slate-400 bg-black/40 border border-white/10">
+                          <kbd className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[10px] font-mono text-stone-500 bg-white border border-stone-200">
                             {item.shortcut}
                           </kbd>
                         )}
                         <ChevronRight size={16} className={cn(
                           "transition-transform",
-                          isSelected ? "text-amber-400 translate-x-0.5" : "text-slate-400"
+                          isSelected ? "text-emerald-800 translate-x-0.5" : "text-stone-400"
                         )} />
                       </div>
                     </button>
@@ -357,24 +357,24 @@ export function QuickCommandPalette({ isOpen, onClose, onOpenAdvisor }: QuickCom
             </div>
 
             {/* Footer Keyboard Hints */}
-            <div className="hidden sm:flex items-center justify-between px-6 py-3 bg-slate-950/80 text-[11px] font-mono text-slate-400">
+            <div className="hidden sm:flex items-center justify-between px-6 py-3 bg-stone-100/90 text-[11px] font-sans text-stone-500 border-t border-stone-200">
               <div className="flex items-center gap-4">
                 <span className="flex items-center gap-1.5">
-                  <kbd className="px-1 py-0.5 rounded bg-white/5 border border-white/10 text-[9px]">↑</kbd>
-                  <kbd className="px-1 py-0.5 rounded bg-white/5 border border-white/10 text-[9px]">↓</kbd>
+                  <kbd className="px-1 py-0.5 rounded bg-white border border-stone-200 text-[9px] font-mono text-stone-600">↑</kbd>
+                  <kbd className="px-1 py-0.5 rounded bg-white border border-stone-200 text-[9px] font-mono text-stone-600">↓</kbd>
                   Navigate
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-[9px]">↵</kbd>
+                  <kbd className="px-1.5 py-0.5 rounded bg-white border border-stone-200 text-[9px] font-mono text-stone-600">↵</kbd>
                   Open
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-[9px]">ESC</kbd>
+                  <kbd className="px-1.5 py-0.5 rounded bg-white border border-stone-200 text-[9px] font-mono text-stone-600">ESC</kbd>
                   Close
                 </span>
               </div>
 
-              <span className="text-amber-400/80 font-semibold">
+              <span className="text-emerald-900 font-semibold">
                 Instant Navigation • Works Offline
               </span>
             </div>
