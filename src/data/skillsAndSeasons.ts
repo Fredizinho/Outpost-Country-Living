@@ -138,7 +138,7 @@ export const SKILL_SUBSKILLS_DATA: Record<string, SubSkillItem[]> = {
     { id: 'fa-5', title: 'Spitting Cobra Eye Saline Irrigation', summary: 'Continuous 15-20 min saline/milk eye flushing to prevent corneal chemical burns.' }
   ],
   'fruit-tree-cultivation': [
-    { id: 'ft-1', title: 'Ellen G. White Tree Planting Method (Deep Pit & Rock Bedding)', summary: 'Excavating 1m³ (3ft deep) planting pits with bottom drainage rocks, layered aged compost, biochar, bone meal, and enriched topsoil for permanent root anchoring.' },
+    { id: 'ft-1', title: 'Ellen G. White Tree Planting Method (Deep Pit & Rock Bedding)', summary: 'Excavating 80cm–1m³ planting pits with bottom drainage rocks, layered aged compost, biochar, bone meal, and enriched topsoil for permanent root anchoring.' },
     { id: 'ft-2', title: 'Cultivation of Apples, Peaches & Pears (Highlands)', summary: 'Highland low-chill varieties (Anna, Dorsett Golden), chill-hour management in Dedza/Nyika/Zomba, dormancy pruning, and powdery mildew control.' },
     { id: 'ft-3', title: 'Cultivation of Guavas, Mangoes, Citrus & Avocados', summary: 'Sub-tropical & lowland orchard spacing, organic fruit fly traps, rootstock vigor, and citrus greening management across Shire/Lakeshore zones.' },
     { id: 'ft-4', title: 'Whip-and-Tongue, T-Budding & Cleft Grafting', summary: 'Aligning green cambium layers of elite scions onto drought-hardy wild rootstocks, parafilm binding, and wax sealing for early, true-to-type fruit yields.' },
@@ -358,7 +358,7 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     summary: 'Establishing lifelong high-yield perennial orchards (Apples, Guavas, Mangoes, Avocados, Citrus, Peaches) using the Ellen G. White deep-pit planting method with rock bedding, cambium grafting, and micro-swale guilds.',
     description: 'Perennial food forests provide multi-generational food security, microclimate temperature buffering, and cash income with decreasing labor over time. Successful orchard establishment follows the proven Ellen G. White method: excavating deep 1m³ pits with bottom drainage rocks and enriched organic stratifications, selecting zone-specific varieties (low-chill apples in highland Dedza/Nyika vs. guavas, mangoes, and citrus in sub-tropical lowlands), executing precision whip-and-tongue/cleft grafting, and intercropping companion guilds.',
     steps: [
-      'Ellen G. White Deep Pit Excavation: Dig 1m x 1m x 1m (3ft deep) planting holes during the dry season. Place a 15–20cm base layer of coarse river stones and volcanic gravel at the bottom for lifelong aeration and deep taproot drainage.',
+      'Ellen G. White Deep Pit Excavation: Dig 80cm x 80cm x 80cm planting holes (up to 1m³ for deep taproot avocados and mangoes on heavy clay) during the dry season. Place a 15–20cm base layer of coarse river stones and volcanic gravel at the bottom for lifelong aeration and deep taproot drainage.',
       'Stratified Organic Backfill: Mix separated topsoil 50/50 with well-aged thermophilic compost, 3kg crushed biochar, 250g steamed bone meal, and 100g hardwood ash to build a lifelong nutrient reservoir.',
       'Highland vs. Lowland Variety Selection: For cool highlands (Dedza, Nyika, Zomba), plant low-chill apples (Anna, Dorsett Golden), peaches, and plums. For warmer sub-tropical/lakeshore valleys, establish guavas (pink/white heirloom), improved mangoes (Tommy Atkins, Kent), avocados (Hass/Fuerte), and citrus.',
       'Precision Scion Grafting: Collect pencil-thick dormant scions with 3–4 plump vegetative buds. Align the green inner cambium layers with hardy local wild rootstocks using whip-and-tongue or cleft cuts; bind tightly with parafilm and seal cut ends with beeswax.',
@@ -367,7 +367,7 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
       'Symbiotic Guild Establishment: Plant nitrogen-fixing pigeon peas (nandolo) on the windward side, deep-rooting comfrey around the dripline for mineral pumping, and aromatic lemongrass/marigolds to deter root-knot nematodes and fruit pests.'
     ],
     toolsNeeded: ['Shovel & Digging Hoe (Khasu)', 'Razor Sharp Grafting Knife & Parafilm', 'Secateurs / Pruning Shears', 'River Stones / Gravel for Drainage Layer', 'Aged Compost, Biochar & Bone Meal', 'Tree Support Stakes & Mulch'],
-    inspiredCounsel: '"While we were in Australia, we adopted the plan of digging deep trenches and filling them in with dressing that would provide nourishment for the roots... When you plant that apple tree, dig deep, and put in plenty of rich soil." — Ellen G. White, Selected Messages, Book 3, p. 328 (Letter 157, 1900)',
+    inspiredCounsel: '"While we were in Australia, we adopted the plan of digging deep trenches and filling them in with dressing that would provide nourishment for the roots... This was done with tomatoes, oranges, lemons, peaches, and grapes." — Ellen G. White, Letter 350, 1907 (Ellen G. White Estate)',
     commonMistakes: [
       'Burying the tree stem too deep with the graft union under soil, which leads to deadly collar rot (Phytophthora) and loss of rootstock resistance.',
       'Skipping the bottom drainage layer in heavy clay soils, resulting in waterlogging and anaerobic root suffocation during torrential wet seasons.',
@@ -1065,7 +1065,7 @@ export const SEASONAL_CALENDAR: SeasonalTask[] = [
     focus: 'Land Clearing, No-Till Bed Preparation & Tree Planting',
     keyActivities: [
       'Broadfork and mulch main planting beds before rains arrive',
-      'Dig tree planting holes (60cm x 60cm x 60cm) for fruit trees and fill with compost/topsoil mixture',
+      'Dig tree planting holes (80cm x 80cm x 80cm) for fruit trees and fill with compost/topsoil mixture',
       'Inspect and clean rooftop rain gutters and water filter barrels',
       'Prepare nursery seedbeds for early rain transplants'
     ],

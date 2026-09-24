@@ -343,7 +343,7 @@ export const MALAWI_DISTRICTS_DATA: Record<string, MalawiDistrictInfo> = {
     name: 'Kasungu District',
     region: 'Central',
     altitude: 'Mid Savanna Plateau (1,000 - 1,150m)',
-    rainfall: '800 - 1,020 mm/year',
+    rainfall: '850 - 950 mm/year (avg 900 mm)',
     soil: 'Orthic Ferralsols & Sandy Clay Loam',
     soilTypeDetailed: 'Coarse to medium textured sandy loam over friable subsoil clays.',
     soilPh: 'pH 5.8 - 6.6 (Slightly acidic to near neutral, excellent for legumes)',
@@ -395,7 +395,7 @@ export const MALAWI_DISTRICTS_DATA: Record<string, MalawiDistrictInfo> = {
   },
   nkhotakota: {
     name: 'Nkhotakota District',
-    region: 'Northern',
+    region: 'Central',
     altitude: 'Lakeshore Lowland & Foothills (480 - 750m)',
     rainfall: '1,200 - 1,600 mm/year',
     soil: 'Sandy Alluvial Fluvisols & Humic Lakeshore Clays',

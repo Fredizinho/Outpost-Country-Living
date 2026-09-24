@@ -66,40 +66,51 @@ export default function Calculators() {
   const [annualRainfallMm, setAnnualRainfallMm] = useState<number>(1100); // Dedza default mm
   const [districtPreset, setDistrictPreset] = useState<string>(initialDistrict);
 
-  // Sync tab parameter changes from URL
+  // Sync tab parameter changes from URL (including offgrid tab)
   useEffect(() => {
-    if (tabParam && ['yield', 'solar', 'food', 'land', 'rainwater', 'budget'].includes(tabParam)) {
+    if (tabParam && ['yield', 'solar', 'food', 'land', 'rainwater', 'budget', 'offgrid'].includes(tabParam)) {
       setActiveTab(tabParam as any);
     }
   }, [tabParam]);
 
-  // Auto-sync when profile updates
+  // Auto-sync when profile updates, preserving seasonal hot-dry water multiplier
   useEffect(() => {
     if (user) {
-      if (user.landSizeAcres) setAcres(user.landSizeAcres);
+      if (user.landSizeAcres) {
+        setAcres(user.landSizeAcres);
+        setLandCostUsd(Math.round(user.landSizeAcres * pricePerAcreUsd));
+      }
       if (user.familyMembers) {
         const ad = Math.max(1, Math.floor(user.familyMembers / 2));
         const ch = Math.max(0, user.familyMembers - ad);
         setAdults(ad);
         setChildren(ch);
-        setWaterNeeded(user.familyMembers * 500);
+        const lpd = seasonParam === 'hot-dry' ? 750 : 500;
+        setWaterNeeded(user.familyMembers * lpd);
       }
       if (user.district) {
         setDistrictPreset(user.district.toLowerCase());
       }
     }
-  }, [user?.landSizeAcres, user?.familyMembers, user?.district]);
+  }, [user?.landSizeAcres, user?.familyMembers, user?.district, seasonParam]);
 
   // Budget Estimator State
   const [currency, setCurrency] = useState<'USD' | 'MWK'>('USD');
   const exchangeRate = 1750; // 1 USD ~ 1,750 MWK
 
-  const [landCostUsd, setLandCostUsd] = useState<number>(3500); // per acre total for 3.5 acres
+  const [pricePerAcreUsd, setPricePerAcreUsd] = useState<number>(1000); // Standard rural Malawi customary estate guideline
+  const [landCostUsd, setLandCostUsd] = useState<number>(() => Math.round(initialAcres * 1000));
   const [waterSetupUsd, setWaterSetupUsd] = useState<number>(2800); // Borehole + Solar Pump
   const [solarSystemUsd, setSolarSystemUsd] = useState<number>(2200); // PV + LiFePO4
   const [fencingUsd, setFencingUsd] = useState<number>(650); // Fencing & Live Hedge
   const [cottageUsd, setCottageUsd] = useState<number>(4500); // Earth Block Cottage
   const [seedsToolingUsd, setSeedsToolingUsd] = useState<number>(500); // Heirloom Seeds & Tools
+
+  // Update land cost whenever user adjusts acres
+  const handleAcresChange = (newAcres: number) => {
+    setAcres(newAcres);
+    setLandCostUsd(Math.round(newAcres * pricePerAcreUsd));
+  };
 
   const showToast = (msg: string) => {
     setToastMsg(msg);
@@ -182,8 +193,8 @@ export default function Calculators() {
     showToast('Sanctuary Specifications saved to your Outpost Vault!');
   };
 
-  const exportSummary = () => {
-    const text = `OUTPOST LIVING - SANCTUARY PLANNING SHEET
+  const generateSpecsSummaryText = (): string => {
+    return `OUTPOST LIVING - SANCTUARY PLANNING SHEET
 ========================================
 Generated: ${new Date().toLocaleDateString()}
 
@@ -194,6 +205,7 @@ Generated: ${new Date().toLocaleDateString()}
 -> Recommended Solar PV Array: ${recommendedPvWatts} Watts
 -> Storage Tank Capacity: ${recommendedTankSize} Liters
 -> Min Borehole Flow Yield: ${minimumBoreholeFlow} L/min
+-> Controller Spec: ${(recommendedPvWatts > 600 || depth > 45 || waterNeeded > 3500) ? '48V Controller' : '24V Controller'}
 
 2. ${months}-MONTH HOMESTEAD FOOD & WATER RESERVE
 - Household: ${adults} Adults, ${children} Children
@@ -228,7 +240,10 @@ Generated: ${new Date().toLocaleDateString()}
 TOTAL ESTABLISHMENT ESTIMATE: $${totalBudgetUsd.toLocaleString()} USD (${totalBudgetMwk.toLocaleString()} MWK)
 OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
 `;
+  };
 
+  const exportSummary = () => {
+    const text = generateSpecsSummaryText();
     const blob = new Blob([text], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -239,52 +254,7 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
   };
 
   const copySpecsToClipboard = async () => {
-    const text = `OUTPOST LIVING - SANCTUARY PLANNING SHEET
-========================================
-Generated: ${new Date().toLocaleDateString()}
-
-1. SOLAR BOREHOLE PUMP SPECIFICATIONS
-- Target Well Depth: ${depth} meters
-- Daily Water Needs: ${waterNeeded} Liters/day
-- Peak Solar Irradiation: ${sunHours} Hours/day
--> Recommended Solar PV Array: ${recommendedPvWatts} Watts
--> Storage Tank Capacity: ${recommendedTankSize} Liters
--> Min Borehole Flow Yield: ${minimumBoreholeFlow} L/min
-
-2. ${months}-MONTH HOMESTEAD FOOD & WATER RESERVE
-- Household: ${adults} Adults, ${children} Children
--> Maize/Staple Grain: ${maizeKg} kg
--> Legumes / Beans: ${beansKg} kg
--> Oilseeds / Groundnuts: ${groundnutsKg} kg
--> Tubers (Sweet Potatoes/Cassava): ${tubersKg} kg
--> Mineral Salt Reserve: ${saltKg} kg
--> Pure Water Reserve Capacity: ${waterLiters} Liters
-
-3. ${acres}-ACRE LAND ALLOCATION PLAN
-- Dwelling & Rain Catchment: ${zoneDwelling} Acres
-- Intensive Kitchen Organic Garden: ${zoneGarden} Acres
-- Orchard & Agroforestry Windbreak: ${zoneOrchard} Acres
-- Field Grain & Legume Crop Rotation: ${zoneCrops} Acres
-- Livestock, Swales & Dambo Ponds: ${zoneLivestockWater} Acres
-
-4. RAINWATER CATCHMENT ESTIMATE
-- Iron Roof Surface Area: ${roofAreaM2} sq. meters
-- Regional Annual Rainfall: ${annualRainfallMm} mm
--> Annual Harvest Potential: ${harvestableVolumeLiters.toLocaleString()} Liters
--> Recommended Cistern Capacity: ${recommendedCisternLiters.toLocaleString()} Liters
-
-5. SANCTUARY ESTABLISHMENT BUDGET ESTIMATE
-- Land Acquisition (${acres} Acres): $${landCostUsd.toLocaleString()} (${(landCostUsd * exchangeRate).toLocaleString()} MWK)
-- Water Security (Borehole + Solar Pump): $${waterSetupUsd.toLocaleString()}
-- Off-Grid Power (PV Array & LiFePO4): $${solarSystemUsd.toLocaleString()}
-- Fencing & Live Hedgerow: $${fencingUsd.toLocaleString()}
-- Compressed Earth Block Cottage: $${cottageUsd.toLocaleString()}
-- Heirloom Seeds & Tools: $${seedsToolingUsd.toLocaleString()}
-========================================
-TOTAL ESTABLISHMENT ESTIMATE: $${totalBudgetUsd.toLocaleString()} USD (${totalBudgetMwk.toLocaleString()} MWK)
-OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
-`;
-
+    const text = generateSpecsSummaryText();
     try {
       await navigator.clipboard.writeText(text);
       setHasCopied(true);
@@ -299,7 +269,7 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
     <div className="px-6 md:px-12 py-10 max-w-6xl mx-auto flex flex-col gap-10">
       {/* Toast Notification */}
       {toastMsg && (
-        <div className="fixed top-20 right-6 z-50 bg-[#121D16] text-white px-5 py-3 rounded-2xl shadow-2xl border border-amber-600/40 flex items-center gap-2 text-xs font-bold animate-bounce">
+        <div className="fixed top-20 right-6 z-50 bg-[#121D16] text-white px-5 py-3 rounded-2xl shadow-2xl border border-amber-600/40 flex items-center gap-2 text-xs font-bold transition-all duration-300">
           <Check size={16} className="text-amber-400" />
           {toastMsg}
         </div>
@@ -312,8 +282,8 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 relative z-10">
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="bg-amber-500/20 text-amber-300 text-[10px] font-mono font-black uppercase px-3.5 py-1 rounded-full border border-amber-500/30 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" /> Quantitative Off-Grid Workbench
+              <span className="bg-amber-500/20 text-amber-300 text-xs font-sans font-bold uppercase px-3.5 py-1 rounded-full border border-amber-500/30 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" /> Homestead Engineering Calculators
               </span>
               <span className="bg-emerald-500/15 text-emerald-300 font-mono text-[9px] font-black uppercase px-3 py-1 rounded-full border border-emerald-500/25">
                 Auto-Synced to Steward Profile
@@ -448,9 +418,9 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
           className="grid grid-cols-1 lg:grid-cols-12 gap-8"
         >
           {/* Controls */}
-          <div className="lg:col-span-6 backdrop-blur-md bg-white/5 p-8 rounded-[2.5rem] border border-amber-500/25 shadow-2xl flex flex-col gap-6 text-white">
+          <div className="lg:col-span-6 bg-stone-900/95 dark:bg-[#0A1A10]/95 backdrop-blur-md p-8 rounded-[2.5rem] border border-amber-500/25 shadow-2xl flex flex-col gap-6 text-white">
             <div className="border-b border-amber-500/20 pb-4">
-              <span className="text-[10px] font-mono font-black uppercase tracking-widest text-amber-300">Solar Water Sizing</span>
+              <span className="text-xs font-mono font-bold uppercase tracking-widest text-amber-300">Solar Water Sizing</span>
               <h3 className="serif text-2xl font-bold text-[#FAF8F5] flex items-center gap-2 mt-1">
                 <Droplets size={22} className="text-amber-400" /> Well & Solar Pump Calculator
               </h3>
@@ -559,15 +529,17 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
                 </div>
 
                 <div className="bg-black/30 p-5 rounded-2xl border border-amber-500/20 shadow-inner flex flex-col gap-1">
-                  <span className="text-[9px] font-mono font-black uppercase text-emerald-300">Solar Pump Controller</span>
+                  <span className="text-xs font-mono font-bold uppercase text-emerald-300">Solar Pump Controller</span>
                   <span className="serif text-2xl font-bold text-emerald-200 font-mono">
-                    {depth > 50 ? '48V Controller' : '24V Controller'}
+                    {(recommendedPvWatts > 600 || depth > 45 || waterNeeded > 3500) ? '48V Controller' : '24V Controller'}
                   </span>
-                  <span className="text-[9px] text-emerald-200 font-mono">Direct Sun-Powered Drive</span>
+                  <span className="text-[11px] text-emerald-200 font-mono">
+                    {(recommendedPvWatts > 600 || depth > 45 || waterNeeded > 3500) ? 'High-head brushless drive (low line loss)' : 'Standard brushless DC drive'}
+                  </span>
                 </div>
               </div>
 
-              <div className="bg-white/5 p-4 rounded-2xl border border-amber-500/15 text-xs text-emerald-100/90 font-medium leading-relaxed">
+              <div className="bg-stone-950/60 p-4 rounded-2xl border border-amber-500/20 text-xs text-emerald-100/90 font-medium leading-relaxed">
                 <strong className="text-amber-300">Steward Note:</strong> Direct solar pumping to an elevated tank eliminates costly battery replacements and ensures uninterrupted gravity-fed water for drip irrigation even during outages.
               </div>
             </div>

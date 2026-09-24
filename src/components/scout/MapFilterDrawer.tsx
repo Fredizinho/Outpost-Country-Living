@@ -311,10 +311,10 @@ export function MapFilterDrawer({
                   </div>
                   <div>
                     <span className="text-xs font-bold text-white uppercase tracking-wider block font-mono">
-                      Chief Boundary Verification
+                      Research & Model Benchmarks
                     </span>
-                    <span className="text-[10px] text-slate-400 font-medium">
-                      Require Traditional Authority (TA) signed agreement
+                    <span className="text-[11px] text-slate-300 font-medium">
+                      Filter to national agricultural research stations & public model sites (Indicative reference only)
                     </span>
                   </div>
                 </div>

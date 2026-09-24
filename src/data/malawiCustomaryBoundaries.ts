@@ -1,6 +1,8 @@
-// Customary & Traditional Authority (T/A) Demarcations (Malire)
-// Rendered as dashed amber boundary lines to distinguish from national/district borders
-// Reflecting customary tenure custodianship recognized under the Land Act of Malawi
+// Indicative Traditional Authority Reference Lines (Customary Malire Overviews)
+// NOTE: INDICATIVE / REFERENCE ONLY. These vector lines are approximate educational representations 
+// of traditional authority jurisdictions. They are NOT legal cadastral boundaries or land survey demarcations.
+// Any actual customary boundary must be physically walked and verified with the Village Headman (Mfumu),
+// Traditional Authority (T/A), and the local Customary Land Committee under the Ministry of Lands.
 
 export interface CustomaryBoundaryLine {
   id: string;

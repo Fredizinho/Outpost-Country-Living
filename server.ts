@@ -32,6 +32,39 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Rate Limiter for AI endpoints (protect Gemini quota from runaway requests)
+interface RateLimitRecord {
+  count: number;
+  resetTime: number;
+}
+const ipRateLimits = new Map<string, RateLimitRecord>();
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
+const MAX_REQUESTS_PER_WINDOW = 15; // 15 requests per 10 minutes per IP
+
+function checkRateLimit(req: express.Request, res: express.Response): boolean {
+  const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0].trim() || req.socket.remoteAddress || 'unknown';
+  const now = Date.now();
+  const record = ipRateLimits.get(ip);
+
+  if (!record || now > record.resetTime) {
+    ipRateLimits.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    return true;
+  }
+
+  if (record.count >= MAX_REQUESTS_PER_WINDOW) {
+    const minutesLeft = Math.ceil((record.resetTime - now) / 60000);
+    res.status(429).json({
+      error: `Rate limit exceeded. To protect community resources, please wait ${minutesLeft} minute(s) before sending more queries.`,
+      rateLimited: true,
+      retryAfterMinutes: minutesLeft
+    });
+    return false;
+  }
+
+  record.count += 1;
+  return true;
+}
+
 // Real-Time Malawi Regional Weather Endpoint
 app.get('/api/weather', async (req, res) => {
   try {
@@ -130,6 +163,8 @@ app.get('/api/weather', async (req, res) => {
 
 // AI Homestead Advisor Endpoint
 app.post('/api/advisor', async (req, res) => {
+  if (!checkRateLimit(req, res)) return;
+
   try {
     const { message, history } = req.body;
     if (!message) {
@@ -158,14 +193,19 @@ Provide encouraging, practical, well-formatted markdown responses with actionabl
         });
 
         const reply = response.text || "I recommend evaluating local water access and soil structure before establishing permanent beds.";
-        return res.json({ reply });
+        return res.json({ 
+          reply, 
+          isAi: true, 
+          model: 'gemini-3.8-flash',
+          source: 'gemini-ai'
+        });
       } catch (geminiError: any) {
         console.warn('Gemini API call failed, falling back to regional knowledge engine:', geminiError?.message || geminiError);
         // Fall through to the intelligent fallback knowledge engine below
       }
     }
 
-    // Intelligent fallback knowledge engine when GEMINI_API_KEY is not configured or unavailable
+    // Intelligent fallback knowledge engine when GEMINI_API_KEY is unavailable or rate-limited
     const lower = message.toLowerCase();
     let reply = "I am your Outpost Living Advisor. Here is guidance based on regional sanctuary principles:\n\n";
 
@@ -181,19 +221,19 @@ Provide encouraging, practical, well-formatted markdown responses with actionabl
         "- **Intercropping**: Plant maize (*Chimanga*) together with nitrogen-fixing beans (*Chimbamba*) and pumpkin ground cover (*Nkhwani*) to lock in soil moisture.";
     } else if (lower.includes('solar') || lower.includes('power') || lower.includes('battery') || lower.includes('electricity')) {
       reply += "### ☀️ Off-Grid Solar Power in Malawi\n" +
-        "- **Sunlight Potential**: Malawi averages 7.5 to 9 peak sun hours daily, ranking among the world's best solar resources.\n" +
+        "- **Sunlight Potential**: Malawi averages 5.2 to 5.8 peak sun hours (PSH) daily (~5.5 kWh/m²/day), ranking among the world's best solar resources.\n" +
         "- **Recommended Setup**: 1.5kW to 3kW Solar Array paired with a 24V or 48V 100Ah LiFePO4 battery bank and a 3kVA Pure Sine Wave Inverter.\n" +
         "- **Priority Loads**: DC submersible borehole pump, efficient DC chest freezer, LED security lighting, and seed dehydration fans.";
     } else if (lower.includes('land') || lower.includes('district') || lower.includes('dedza') || lower.includes('mzimba') || lower.includes('mulanje') || lower.includes('zomba')) {
       reply += "### 📍 Regional Land Scouting in Malawi\n" +
-        "- **Dedza & Ntcheu**: Cool climate, 1,400m - 1,800m altitude, high rainfall, rich volcanic-origin loam. Prime for seed production and potatoes.\n" +
+        "- **Dedza & Ntcheu**: Cool climate, 1,400m - 1,800m altitude, 1,250 mm/year rainfall, rich volcanic-origin loam. Prime for seed production and potatoes.\n" +
         "- **Mzimba & Viphya**: High plateau with deep soils, vast space for timber agroforestry, livestock, and grains.\n" +
         "- **Mulanje & Thyolo**: High precipitation, deep red clay-loam, excellent for perennial gravity water, fruit orchards, and tea/coffee agroforestry.";
     } else if (lower.includes('law') || lower.includes('customary') || lower.includes('chief') || lower.includes('mfumu') || lower.includes('title')) {
       reply += "### 📜 Customary Land Protocols in Malawi\n" +
         "1. **Village Headman (*Mfumu ya Mudzi*)**: Present customary introduction (*Chikhalidwe*) and define boundaries (*Malire*).\n" +
         "2. **Group Village Headman (GVH) & Traditional Authority (TA)**: Validate that the parcel has no existing family disputes.\n" +
-        "3. **Village Land Committee (VLC)**: Register the land under the Customary Land Act of 2016 for Customary Estate Certificate conversion.";
+        "3. **Customary Land Committee (CLC)**: Apply under Customary Land Act procedures (Note: always confirm with District Land Registry and legal counsel).";
     } else {
       reply += "### 🌿 Country Exodus Principles\n" +
         "1. **Secure Land & Perennial Water**: Establish gravity water or borehole before building heavy structures.\n" +
@@ -201,7 +241,12 @@ Provide encouraging, practical, well-formatted markdown responses with actionabl
         "3. **Learn Practical Hand Skills**: Broadforking, seed saving, solar food drying (*Mfutso*), and compressed earth block masonry.";
     }
 
-    return res.json({ reply });
+    return res.json({ 
+      reply: "ℹ️ *Notice: Guidance provided from Built-in Regional Sanctuary Knowledge Engine (AI quota offline/unconfigured).*\n\n" + reply,
+      isAi: false,
+      isFallback: true,
+      source: 'regional-knowledge-base'
+    });
   } catch (error: any) {
     console.error('AI Advisor Error:', error);
     res.status(500).json({ error: 'Failed to generate advice. Please try again.' });
@@ -210,6 +255,7 @@ Provide encouraging, practical, well-formatted markdown responses with actionabl
 
 // Dedicated AI Map Scout with Google Maps Grounding
 app.post('/api/scout-ai', async (req, res) => {
+  if (!checkRateLimit(req, res)) return;
   try {
     const { 
       prompt, 

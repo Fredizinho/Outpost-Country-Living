@@ -499,8 +499,8 @@ export const TRANSITION_MILESTONES: TransitionMilestone[] = [
       'Host small Sabbath Bible studies and health fellowship circles under the shade trees'
     ],
     spiritualGuidance: {
-      text: "The disciples were to be God's outposts of mercy, bringing healing of body and soul to those in need.",
-      source: "Desire of Ages, p. 350"
+      text: "Christ's method alone will give true success in reaching the people. The Saviour mingled with men as one who desired their good. He showed His sympathy for them, ministered to their needs, and won their confidence. Then He bade them, 'Follow Me.'",
+      source: "The Ministry of Healing, p. 143"
     },
     category: 'Ministry'
   }

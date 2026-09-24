@@ -197,7 +197,7 @@ export default function Account() {
     <div className="px-6 md:px-12 py-10 max-w-4xl mx-auto flex flex-col gap-10">
       {/* Toast notification */}
       {toastMsg && (
-        <div className="fixed top-20 right-6 z-50 bg-emerald-900 text-white px-6 py-3 rounded-2xl shadow-2xl text-xs font-bold flex items-center gap-2 border border-emerald-700 animate-bounce">
+        <div className="fixed top-20 right-6 z-50 bg-emerald-900 text-white px-6 py-3 rounded-2xl shadow-xl text-xs font-bold flex items-center gap-2 border border-emerald-700 transition-all duration-300">
           <Check size={16} className="text-emerald-400" />
           {toastMsg}
         </div>
@@ -336,7 +336,7 @@ export default function Account() {
               <div className="flex flex-col gap-1">
                 <h3 className="serif text-2xl font-bold text-emerald-950 dark:text-white">Guest Steward Access</h3>
                 <p className="text-slate-500 dark:text-stone-400 text-xs font-medium">
-                  Instant offline access as Onesimo Alfred without connecting your Google account.
+                  Instant offline access as a Country Living Steward without connecting your Google account.
                 </p>
               </div>
 
@@ -344,7 +344,7 @@ export default function Account() {
                 onClick={() => signIn()}
                 className="flex items-center justify-center gap-3 bg-emerald-700 hover:bg-emerald-600 text-white px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-lg active:scale-95 cursor-pointer w-full"
               >
-                <LogIn size={18} /> Continue as Alfred Onesi
+                <LogIn size={18} /> Continue as Guest Steward
               </button>
 
               <div className="flex gap-6 mt-1">
@@ -370,7 +370,7 @@ export default function Account() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Onesimo Alfred"
+                    placeholder="e.g. Chisomo Phiri"
                     value={regName}
                     onChange={(e) => setRegName(e.target.value)}
                     className="w-full bg-white/80 dark:bg-emerald-950/80 border border-slate-200 dark:border-emerald-800/60 rounded-2xl pl-12 pr-4 py-3 text-sm text-slate-800 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -385,7 +385,7 @@ export default function Account() {
                   <input
                     type="email"
                     required
-                    placeholder="onesialfred@gmail.com"
+                    placeholder="steward@example.mw"
                     value={regEmail}
                     onChange={(e) => setRegEmail(e.target.value)}
                     className="w-full bg-white/80 dark:bg-emerald-950/80 border border-slate-200 dark:border-emerald-800/60 rounded-2xl pl-12 pr-4 py-3 text-sm text-slate-800 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"

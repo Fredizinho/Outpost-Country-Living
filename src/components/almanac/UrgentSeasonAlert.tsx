@@ -16,8 +16,8 @@ interface UrgentSeasonAlertProps {
 
 export function UrgentSeasonAlert({
   urgentTaskTitle = 'Inspect Roof Gutters, Downpipes & 5,000L First-Flush Diverters',
-  urgentNotice = '14 Days Remaining before First Rains: Finalize Roof Gutter Catchments & Katondo Deep-Beds',
-  daysRemaining = 14,
+  urgentNotice = 'Pre-Rain Preparation Window: Finalize Roof Gutter Catchments & Katondo Deep-Beds',
+  daysRemaining,
   calculatorTab = 'rainwater',
   calculatorLabel = 'Calculate Rainwater Harvest Yield',
   fieldGuideSkillId = 'rainwater-swale-dambo-capture',
@@ -38,10 +38,10 @@ export function UrgentSeasonAlert({
         <div className="flex flex-col gap-0.5">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="bg-amber-400 text-slate-950 text-[10px] font-mono font-black uppercase px-2.5 py-0.5 rounded-full flex items-center gap-1">
-              <Clock size={11} /> {daysRemaining} Days Window Closing
+              <Clock size={11} /> {daysRemaining ? `~${daysRemaining}-Day Target Window` : 'Priority Seasonal Window'}
             </span>
             <span className="text-amber-200/70 font-mono text-[10px] uppercase font-bold tracking-wider">
-              Urgent Critical Path
+              Critical Path
             </span>
           </div>
 
@@ -50,7 +50,7 @@ export function UrgentSeasonAlert({
           </h4>
 
           <p className="text-xs text-emerald-100/80 font-medium">
-            Immediate seasonal action required: <strong className="text-amber-300">{urgentTaskTitle}</strong>
+            Immediate seasonal action: <strong className="text-amber-300">{urgentTaskTitle}</strong>
           </p>
         </div>
       </div>

@@ -1,8 +1,9 @@
 import { HOMESTEAD_SKILLS, SEASONAL_CALENDAR, REGIONS_LIST, SkillItem, SeasonalTask, RegionData } from '@/data/skillsAndSeasons';
 
 export const STORAGE_KEYS = {
-  EXODUS_TRACKER: 'exodus-tracker-v3',
+  EXODUS_TRACKER: 'exodus-tracker-v4',
   LEGACY_EXODUS_TRACKER: 'exodus-tracker',
+  LEGACY_EXODUS_TRACKER_V3: 'exodus-tracker-v3',
   LAND_CHECKLIST: 'land-checklist',
   PANTRY_STOCK: 'country-pantry-stock',
   SAVED_SPECS: 'outpost-saved-specs',
@@ -11,10 +12,10 @@ export const STORAGE_KEYS = {
   PINNED_ITEMS: 'outpost_pinned_items_v2',
   SIDEBAR_COLLAPSED: 'outpost_sidebar_collapsed_v1',
   USER_PROFILE: 'outpost_user',
-  MAP_GEOJSON_CACHE: 'malawi_district_geojson_cache_v1',
-  SKILLS_CACHE: 'outpost_skills_cache',
-  SEASONS_CACHE: 'outpost_seasons_cache',
-  REGIONS_CACHE: 'outpost_regions_cache',
+  MAP_GEOJSON_CACHE: 'malawi_district_geojson_cache_v2',
+  SKILLS_CACHE: 'outpost_skills_cache_v4',
+  SEASONS_CACHE: 'outpost_seasons_cache_v4',
+  REGIONS_CACHE: 'outpost_regions_cache_v4',
   BOOKMARKS: 'outpost_offline_bookmarks',
   FIELD_NOTES: 'outpost_offline_field_notes',
   COMPLETED_SEASONAL_TASKS: 'outpost_completed_seasonal_tasks_v1',
@@ -45,6 +46,13 @@ export function getStoredTrackerData<T = any[]>(): T | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEYS.EXODUS_TRACKER);
     if (raw) return JSON.parse(raw);
+
+    // v3 migration fallback
+    const v3 = localStorage.getItem(STORAGE_KEYS.LEGACY_EXODUS_TRACKER_V3);
+    if (v3) {
+      localStorage.setItem(STORAGE_KEYS.EXODUS_TRACKER, v3);
+      return JSON.parse(v3);
+    }
 
     // Legacy fallback check & auto-migration
     const legacy = localStorage.getItem(STORAGE_KEYS.LEGACY_EXODUS_TRACKER);
@@ -279,6 +287,26 @@ export function createFullAppBackup() {
   const user = getStoredUserProfile();
   const masteredSkills = getStoredMasteredSkills();
   const bookmarkedParcels = getStoredBookmarkedParcels();
+  const bookmarks = getOfflineBookmarks();
+  const fieldNotes = getOfflineFieldNotes();
+  const completedSeasonalTasks = getCompletedSeasonalTasks();
+
+  const transitionLedger = localStorage.getItem('outpost_transition_ledger');
+  const transitionNotes = localStorage.getItem('outpost_transition_notes');
+
+  // Collect all individual skill step checklist states (homestead_skill_steps_*)
+  const skillStepTicks: Record<string, string> = {};
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('homestead_skill_steps_')) {
+        const val = localStorage.getItem(key);
+        if (val) skillStepTicks[key] = val;
+      }
+    }
+  } catch (e) {
+    console.warn('Failed reading skill step ticks for backup:', e);
+  }
 
   return {
     user,
@@ -288,6 +316,12 @@ export function createFullAppBackup() {
     savedSpecs: savedSpecs ? (typeof savedSpecs === 'string' ? savedSpecs : JSON.stringify(savedSpecs)) : null,
     masteredSkills: masteredSkills ? JSON.stringify(masteredSkills) : null,
     bookmarkedParcels: bookmarkedParcels ? JSON.stringify(bookmarkedParcels) : null,
+    bookmarks,
+    fieldNotes,
+    completedSeasonalTasks,
+    transitionLedger,
+    transitionNotes,
+    skillStepTicks,
     timestamp: new Date().toISOString()
   };
 }
@@ -329,24 +363,56 @@ export function restoreFullAppBackup(backupJson: any): void {
     } catch (e) {}
   }
 
-  // Always clean up legacy tracker key
+  if (backupJson.bookmarks && Array.isArray(backupJson.bookmarks)) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.BOOKMARKS, JSON.stringify(backupJson.bookmarks));
+    } catch (e) {}
+  }
+
+  if (backupJson.fieldNotes && Array.isArray(backupJson.fieldNotes)) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.FIELD_NOTES, JSON.stringify(backupJson.fieldNotes));
+    } catch (e) {}
+  }
+
+  if (backupJson.completedSeasonalTasks && Array.isArray(backupJson.completedSeasonalTasks)) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.COMPLETED_SEASONAL_TASKS, JSON.stringify(backupJson.completedSeasonalTasks));
+    } catch (e) {}
+  }
+
+  if (backupJson.transitionLedger) {
+    try {
+      const val = typeof backupJson.transitionLedger === 'string' ? backupJson.transitionLedger : JSON.stringify(backupJson.transitionLedger);
+      localStorage.setItem('outpost_transition_ledger', val);
+    } catch (e) {}
+  }
+
+  if (backupJson.transitionNotes) {
+    try {
+      const val = typeof backupJson.transitionNotes === 'string' ? backupJson.transitionNotes : JSON.stringify(backupJson.transitionNotes);
+      localStorage.setItem('outpost_transition_notes', val);
+    } catch (e) {}
+  }
+
+  if (backupJson.skillStepTicks && typeof backupJson.skillStepTicks === 'object') {
+    try {
+      Object.entries(backupJson.skillStepTicks).forEach(([k, v]) => {
+        if (typeof v === 'string') localStorage.setItem(k, v);
+      });
+    } catch (e) {}
+  }
+
+  // Always clean up legacy tracker keys
   try {
     localStorage.removeItem(STORAGE_KEYS.LEGACY_EXODUS_TRACKER);
+    localStorage.removeItem(STORAGE_KEYS.LEGACY_EXODUS_TRACKER_V3);
   } catch (e) {}
 }
 
-// Initialize offline cache in localStorage with static fallback data
+// Initialize offline storage
 export function initializeOfflineStorage() {
   try {
-    if (!localStorage.getItem(STORAGE_KEYS.SKILLS_CACHE)) {
-      localStorage.setItem(STORAGE_KEYS.SKILLS_CACHE, JSON.stringify(HOMESTEAD_SKILLS));
-    }
-    if (!localStorage.getItem(STORAGE_KEYS.SEASONS_CACHE)) {
-      localStorage.setItem(STORAGE_KEYS.SEASONS_CACHE, JSON.stringify(SEASONAL_CALENDAR));
-    }
-    if (!localStorage.getItem(STORAGE_KEYS.REGIONS_CACHE)) {
-      localStorage.setItem(STORAGE_KEYS.REGIONS_CACHE, JSON.stringify(REGIONS_LIST));
-    }
     if (!localStorage.getItem(STORAGE_KEYS.LAST_SYNC)) {
       localStorage.setItem(STORAGE_KEYS.LAST_SYNC, new Date().toISOString());
     }
@@ -355,59 +421,19 @@ export function initializeOfflineStorage() {
   }
 }
 
-// Retrieve cached skills (falls back to memory if localStorage fails)
+// Retrieve skills: bundled fresh data is the authoritative source of truth
 export function getCachedSkills(): SkillItem[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEYS.SKILLS_CACHE);
-    if (!raw) return HOMESTEAD_SKILLS;
-    const cached: SkillItem[] = JSON.parse(raw);
-    const homesteadMap = new Map(HOMESTEAD_SKILLS.map(s => [s.id, s]));
-    
-    // Merge updated fields from HOMESTEAD_SKILLS into cached items
-    const updated = cached.map(item => {
-      const fresh = homesteadMap.get(item.id);
-      if (!fresh) return item;
-      return {
-        ...fresh,
-        ...item,
-        subskills: fresh.subskills || item.subskills,
-        detailedProtocol: fresh.detailedProtocol || item.detailedProtocol,
-        seasonalTag: fresh.seasonalTag || item.seasonalTag,
-        prerequisiteSkillIds: fresh.prerequisiteSkillIds || item.prerequisiteSkillIds,
-        prerequisiteNote: fresh.prerequisiteNote || item.prerequisiteNote,
-        inspiredCounsel: fresh.inspiredCounsel || item.inspiredCounsel,
-        commonMistakes: fresh.commonMistakes || item.commonMistakes
-      };
-    });
-
-    const cachedIds = new Set(cached.map(s => s.id));
-    const missing = HOMESTEAD_SKILLS.filter(s => !cachedIds.has(s.id));
-    const merged = [...updated, ...missing];
-    localStorage.setItem(STORAGE_KEYS.SKILLS_CACHE, JSON.stringify(merged));
-    return merged;
-  } catch (e) {
-    return HOMESTEAD_SKILLS;
-  }
+  return HOMESTEAD_SKILLS;
 }
 
-// Retrieve cached seasonal guide
+// Retrieve seasonal guide: bundled fresh data is authoritative
 export function getCachedSeasons(): SeasonalTask[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEYS.SEASONS_CACHE);
-    return raw ? JSON.parse(raw) : SEASONAL_CALENDAR;
-  } catch (e) {
-    return SEASONAL_CALENDAR;
-  }
+  return SEASONAL_CALENDAR;
 }
 
-// Retrieve cached regions map data
+// Retrieve regions: bundled fresh data is authoritative
 export function getCachedRegions(): RegionData[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEYS.REGIONS_CACHE);
-    return raw ? JSON.parse(raw) : REGIONS_LIST;
-  } catch (e) {
-    return REGIONS_LIST;
-  }
+  return REGIONS_LIST;
 }
 
 // Bookmarks management
@@ -571,7 +597,7 @@ export function calculateHomesteadReadinessScore(): ReadinessScoreResult {
       }
     });
   }
-  const exodusScorePct = totalSubtasks > 0 ? Math.round((completedSubtasks / totalSubtasks) * 100) : 15;
+  const exodusScorePct = totalSubtasks > 0 ? Math.round((completedSubtasks / totalSubtasks) * 100) : 0;
 
   // 2. Mastered Skills
   const masteredSkills = getStoredMasteredSkills() || [];
@@ -594,7 +620,7 @@ export function calculateHomesteadReadinessScore(): ReadinessScoreResult {
   const totalScorePct = Math.min(
     100,
     Math.max(
-      8,
+      0,
       Math.round(
         (exodusScorePct * 0.35) +
         (skillsMasteryPct * 0.25) +

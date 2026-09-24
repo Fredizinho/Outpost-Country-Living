@@ -27,28 +27,32 @@ export default function Home() {
   // Daily devotional highlight for today
   const todayDevotional = DAILY_DEVOTIONALS[0];
 
-  // Calculate completed steps from user storage
+  // Calculate completed steps from user storage accurately without fake defaults
   const [completedMilestonesCount, setCompletedMilestonesCount] = React.useState<number>(() => {
     try {
-      const saved = localStorage.getItem('outpost_completed_milestones');
-      if (saved) {
-        const arr = JSON.parse(saved);
-        if (Array.isArray(arr)) return arr.length;
+      const tracker = getStoredTrackerData<any[]>();
+      let completedSubtasks = 0;
+      if (Array.isArray(tracker)) {
+        tracker.forEach(step => {
+          if (step?.subtasks && Array.isArray(step.subtasks)) {
+            completedSubtasks += step.subtasks.filter((s: any) => s.completed).length;
+          }
+        });
+        return completedSubtasks;
       }
-      const tracker = localStorage.getItem('exodus-tracker-v3');
-      if (tracker) {
-        const parsed = JSON.parse(tracker);
-        if (Array.isArray(parsed)) {
-          return parsed.filter((s: any) => s.completed || s.status === 'completed').length;
-        }
+      const savedLedger = localStorage.getItem('outpost_transition_ledger');
+      if (savedLedger) {
+        const obj = JSON.parse(savedLedger);
+        return Object.values(obj).filter(Boolean).length;
       }
     } catch {
       // fallback
     }
-    return 2; // initial default for country steward
+    return 0; // Honest zero progress for new stewards
   });
 
-  const readinessPercentage = Math.min(100, Math.round((completedMilestonesCount / 9) * 100));
+  const totalPossibleItems = 15; // 15 foundational milestones across the Exodus ledger
+  const readinessPercentage = Math.min(100, Math.round((completedMilestonesCount / totalPossibleItems) * 100));
 
   return (
     <div className="min-h-screen bg-[#FAF7F0] dark:bg-[#08130C] text-stone-800 dark:text-stone-100 flex flex-col selection:bg-amber-200 dark:selection:bg-emerald-900 selection:text-amber-950 dark:selection:text-emerald-100 pb-24 transition-colors">
@@ -109,7 +113,7 @@ export default function Home() {
                   className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-300 px-2.5 py-1 rounded-lg hover:bg-emerald-950/80 transition-colors"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span>Steward {user.displayName?.split(' ')[0] || 'Alfred'}</span>
+                  <span>Steward {user.displayName?.split(' ')[0] || 'Homesteader'}</span>
                 </Link>
               ) : (
                 <Link
@@ -426,7 +430,7 @@ export default function Home() {
             to="/tracker"
             className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 dark:text-amber-300 hover:underline"
           >
-            <span>View Full 9-Step Milestone Ledger</span>
+            <span>View Full Outpost Transition Ledger</span>
             <ArrowRight size={14} />
           </Link>
         </div>
@@ -477,7 +481,7 @@ export default function Home() {
                   <div className="flex items-center gap-2.5">
                     <Sparkles size={16} className="text-emerald-600 dark:text-emerald-400" />
                     <span className="text-xs font-bold text-stone-800 dark:text-stone-200">
-                      9-Step Country Exodus Readiness Ledger
+                      15-Milestone Country Exodus Ledger
                     </span>
                   </div>
                   <ArrowRight size={14} className="text-stone-400 group-hover/link:text-emerald-600 dark:group-hover/link:text-emerald-400 transition-colors" />
@@ -722,7 +726,7 @@ export default function Home() {
             </div>
 
             <h2 className="serif text-2xl sm:text-3xl font-bold">
-              Your 9-Step Country Relocation Path
+              Your 15-Milestone Country Relocation Journey
             </h2>
 
             <p className="text-emerald-100/80 text-xs sm:text-sm max-w-xl leading-relaxed">
@@ -737,7 +741,7 @@ export default function Home() {
                 />
               </div>
               <span className="text-xs font-bold text-amber-300 font-mono">
-                {completedMilestonesCount} of 9 Milestones Active
+                {completedMilestonesCount} of {totalPossibleItems} Milestones Completed
               </span>
             </div>
           </div>

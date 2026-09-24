@@ -234,7 +234,7 @@ export function getAlmanacInfo(seasonOverride?: SeasonalTag | string, date: Date
         },
         keyActivities: [
           'Prepare ridges (misozi) and mulched no-till beds before first rains',
-          'Dig fruit tree planting pits (60cm x 60cm x 60cm) and mix topsoil with well-rotted manure',
+          'Dig fruit tree planting pits (80cm x 80cm x 80cm) and mix topsoil with well-rotted manure',
           'Inspect and service solar water pumps, rooftop rain gutters, and filter barrels',
           'Prepare nursery seedbeds for early rain transplants'
         ],

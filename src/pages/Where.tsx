@@ -301,31 +301,38 @@ Generated from OUTPOST: Country Living Matrix
             </motion.div>
           )}
 
-          {/* Customary Land Act (2016) Legal Registration Roadmap */}
+          {/* Customary Land Act Statutory Overview & Legal Advisory */}
           <div className="bg-stone-50 p-6 rounded-3xl border border-stone-200 flex flex-col gap-4 text-stone-900">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-200 pb-3">
               <div className="flex items-center gap-2">
                 <FileText className="text-emerald-800" size={20} />
-                <h3 className="serif text-lg sm:text-xl font-bold text-stone-900">Malawi Customary Land Act (2016) Acquisition Guide</h3>
+                <h3 className="serif text-lg sm:text-xl font-bold text-stone-900">Malawi Customary Land Act — Statutory Procedure Overview</h3>
               </div>
-              <span className="bg-emerald-100 text-emerald-900 border border-emerald-300 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg font-sans self-start sm:self-auto">
-                Official Statutory Process
+              <span className="bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg font-sans self-start sm:self-auto">
+                Indicative Reference & Legal Advisory
               </span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div className="bg-white p-3.5 rounded-2xl border border-stone-200 flex flex-col gap-1 text-xs">
-                <span className="text-emerald-900 font-bold text-[11px] uppercase font-sans">Step 1: T/A & GVH Consent</span>
-                <p className="text-stone-600 leading-snug">Meet Village Headman & Traditional Authority (TA) to verify customary land allocation and agree on boundaries.</p>
+                <span className="text-emerald-900 font-bold text-[11px] uppercase font-sans">Step 1: Mfumu & T/A Consultation</span>
+                <p className="text-stone-600 leading-snug">Present customary introduction (Chikhalidwe) to the Village Headman and Traditional Authority (TA) to confirm boundary consensus (Malire) and verify absence of family inheritance disputes.</p>
               </div>
               <div className="bg-white p-3.5 rounded-2xl border border-stone-200 flex flex-col gap-1 text-xs">
-                <span className="text-emerald-900 font-bold text-[11px] uppercase font-sans">Step 2: Customary Land Committee</span>
-                <p className="text-stone-600 leading-snug">File application with District Customary Land Committee (CLC) for beacon demarcation and GPS boundary mapping.</p>
+                <span className="text-emerald-900 font-bold text-[11px] uppercase font-sans">Step 2: Customary Land Committee & Mapping</span>
+                <p className="text-stone-600 leading-snug">Submit land transfer records to the local Customary Land Committee (CLC) and Land Clerk for preliminary boundary inspection and parcel demarcation.</p>
               </div>
               <div className="bg-white p-3.5 rounded-2xl border border-stone-200 flex flex-col gap-1 text-xs">
-                <span className="text-emerald-900 font-bold text-[11px] uppercase font-sans">Step 3: Customary Estate Cert.</span>
-                <p className="text-stone-600 leading-snug">Receive Certificate of Customary Estate issued under Section 22 of Land Act 2016, giving perpetual private ownership rights.</p>
+                <span className="text-emerald-900 font-bold text-[11px] uppercase font-sans">Step 3: Customary Estate Certificate</span>
+                <p className="text-stone-600 leading-snug">Apply for a Certificate of Customary Estate under the Customary Land Act framework. Note that formal registration is subject to District Land Registry recording, statutory land use conditions, and survey requirements.</p>
               </div>
+            </div>
+
+            <div className="bg-amber-50/80 border border-amber-200/80 rounded-2xl p-3 text-xs text-amber-950 flex items-start gap-2">
+              <span className="font-bold text-amber-800 shrink-0">⚠️ Legal Note:</span>
+              <p className="leading-relaxed">
+                Land tenure rules in Malawi are subject to the Customary Land Act (2016) and recent Land Amendment Acts. Customary estate grants require official gazetted Land Clerks, local CLC quorum, and formal District Registry recording. Prospective homesteaders must verify all title claims, boundaries, and zoning restrictions directly with the District Commissioner's Lands Desk, the Ministry of Lands, and a certified Malawian legal practitioner before executing agreements or paying acquisition fees.
+              </p>
             </div>
           </div>
         </div>

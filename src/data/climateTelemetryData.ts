@@ -83,7 +83,7 @@ export const DISTRICT_CLIMATE_DATABASE: Record<string, DistrictClimateData> = {
     elevationRangeMeters: '1,200m – 2,198m ASL',
     elevationMeanM: 1560,
     agroEcologicalClassification: 'High-Altitude Moist Montane Plateau & Escarpment',
-    annualRainfallMm: 1280,
+    annualRainfallMm: 1250,
     rainfallRangeMm: '1,150mm – 1,600mm',
     monthlyRainfallMm: [290, 245, 190, 65, 18, 8, 6, 5, 10, 32, 125, 286],
     rainfallDistributionType: 'Unimodal Monsoon + Winter Chiperoni Orographic Mists',

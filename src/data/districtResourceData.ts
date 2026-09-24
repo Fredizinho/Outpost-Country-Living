@@ -1,5 +1,6 @@
-// Verified district population, land area, and resource density statistics for all 28 districts of Malawi
-// Data sources: National Statistical Office (NSO) Census Projections, Department of Water Resources, and Department of Climate Change & Meteorological Services (DCCMS)
+// Indicative Reference Only: District population, land area, and resource density statistics for all 28 districts of Malawi
+// Compiled from public statistical reports (National Statistical Office Census Projections, DCCMS, Ministry of Water & Sanitation).
+// All data values are regional reference approximations for educational homestead planning, not legal cadastral or survey records.
 
 export interface DistrictResourceStats {
   id: string;
@@ -140,7 +141,7 @@ export const MALAWI_DISTRICT_RESOURCES: DistrictResourceStats[] = [
     areaKm2: 7878,
     densityPerKm2: 107,
     arableLandPct: 72,
-    rainfallMm: 1050,
+    rainfallMm: 900,
     aquiferDepthM: 30,
     solarKwhDay: 5.7,
     waterRating: 'Shallow Aquifer',

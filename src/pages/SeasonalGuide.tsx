@@ -13,6 +13,7 @@ import {
   getOfflineFieldNotes, saveOfflineFieldNote, deleteOfflineFieldNote, OfflineFieldNote,
   calculateHomesteadReadinessScore, getCompletedSeasonalTasks 
 } from '@/lib/offlineStorage';
+import { getCurrentMalawiSeason } from '@/lib/seasonalAlmanac';
 import { 
   ACTIONABLE_ALMANAC_TASKS, ActionableTask, TaskDomain, TaskPriority, 
   DISTRICT_TELEMETRY, getTelemetryForDistrict, DistrictSeasonalTelemetry 
@@ -40,14 +41,14 @@ export default function SeasonalGuide() {
     return (user?.district || 'Dedza').toLowerCase();
   });
 
-  // Active Season Tag
+  // Active Season Tag (defaults to dynamic current Malawi season)
   const seasonQueryParam = searchParams.get('season');
   const [activeSeasonKey, setActiveSeasonKey] = useState<SeasonalTag>(() => {
     if (seasonQueryParam) {
       const matched = seasons.find(s => s.season.toLowerCase() === seasonQueryParam.toLowerCase());
       if (matched) return matched.season;
     }
-    return 'Hot Dry Preparation';
+    return getCurrentMalawiSeason();
   });
 
   // Match the legacy activeSeason object for notes & compatibility

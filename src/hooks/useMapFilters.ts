@@ -152,7 +152,7 @@ export function useMapFilters() {
       if (filters.quickChips.perennialWater && p.waterReliability !== 'Perennial Stream') return false;
       if (filters.quickChips.registeredTenure && (p.landTenure !== 'Customary Estate Registered' && p.landTenure !== 'Private Leasehold')) return false;
       if (filters.quickChips.signal4G && (p.tnmSignal !== '4G' && p.airtelSignal !== '4G')) return false;
-      if (filters.quickChips.chiefVerified && p.chiefVerification !== 'Verified') return false;
+      if (filters.quickChips.chiefVerified && !(p.legalStatus.includes('Research') || p.legalStatus.includes('Benchmark'))) return false;
       if (filters.quickChips.highHumus && (p.soilOrganicMatterPct || 0) < 3.5) return false;
       if (filters.quickChips.edenicPrime && (p.edenicStewardshipScore || 0) < 90) return false;
 
@@ -206,8 +206,8 @@ export function useMapFilters() {
         if ((p.soilPh || 0) >= 6.0) return false;
       }
 
-      // 12. Chief Verification
-      if (filters.chiefVerifiedOnly && p.chiefVerification !== 'Verified') {
+      // 12. Public Research / Model Benchmark Only
+      if (filters.chiefVerifiedOnly && !(p.legalStatus.includes('Research') || p.legalStatus.includes('Benchmark'))) {
         return false;
       }
 

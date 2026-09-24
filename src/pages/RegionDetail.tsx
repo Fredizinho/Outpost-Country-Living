@@ -6,6 +6,13 @@ import { cn } from '@/lib/utils';
 import DetachedRegionMap from '@/components/map/DetachedRegionMap';
 import { DetachedRegionId } from '@/data/malawiRegionalDetailData';
 
+function getDetachedRegionId(id: string): DetachedRegionId {
+  const lower = (id || '').toLowerCase();
+  if (lower.includes('north')) return 'northern';
+  if (lower.includes('south')) return 'southern';
+  return 'central';
+}
+
 export default function RegionDetail() {
   const { id } = useParams<{ id: string }>();
   const regions = getCachedRegions();
@@ -113,7 +120,7 @@ export default function RegionDetail() {
       {/* Detached Regional Vector Map with 8 Geographic Layers */}
       <section className="flex flex-col gap-4">
         <DetachedRegionMap
-          regionId={(region.id as DetachedRegionId) || 'central'}
+          regionId={getDetachedRegionId(region.id)}
         />
       </section>
 

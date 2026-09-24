@@ -68,7 +68,7 @@ export const DISTRICT_TELEMETRY: Record<string, DistrictSeasonalTelemetry> = {
     dailyWaterRequirementLitersM2: 5.2,
     soilPrepFocus: 'Deep Katondo Trenching & Vetiver Contour Bunds',
     frostRisk: 'High (June-July)',
-    urgentAlert: '18 Days to Rain Window: Finalize compost pit blending & clear contour swales.'
+    urgentAlert: 'Hot-Dry Phase: Finalize compost pit blending & clear contour swales before seasonal rains.'
   },
   'lilongwe': {
     district: 'Lilongwe Rural',
@@ -80,7 +80,7 @@ export const DISTRICT_TELEMETRY: Record<string, DistrictSeasonalTelemetry> = {
     dailyWaterRequirementLitersM2: 4.8,
     soilPrepFocus: 'Sasakawa Planting Basins & 10cm Biomass Mulch Blanket',
     frostRisk: 'Low',
-    urgentAlert: '14 Days to Rain Window: Seal grain storage and service DC borehole pump.'
+    urgentAlert: 'Pre-Rain Window: Seal grain storage and service DC borehole pump.'
   },
   'zomba': {
     district: 'Zomba',
@@ -154,7 +154,7 @@ export const ACTIONABLE_ALMANAC_TASKS: ActionableTask[] = [
     title: 'Inspect Roof Gutters, Downpipes & 5,000L First-Flush Diverters',
     domain: 'water',
     priority: 'urgent',
-    urgencyNotice: '14 Days Remaining before First Rains: Clear dry debris from all roof channels.',
+    urgencyNotice: 'Seasonal Window Target: Clear dry debris and service all roof channels before early storms.',
     daysRemainingEstimate: 14,
     exodusStage: 'Water Security',
     readinessPoints: 8,

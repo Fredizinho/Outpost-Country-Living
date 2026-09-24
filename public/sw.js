@@ -1,4 +1,4 @@
-const CACHE_NAME = 'outpost-sanctuary-v3';
+const CACHE_NAME = 'outpost-sanctuary-v4';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -34,24 +34,45 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch Event - Cache First for static shell & stale-while-revalidate for navigation
+// Fetch Event
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
-  // Ignore dynamic AI endpoints
-  if (event.request.url.includes('/api/advisor')) {
+  const url = new URL(event.request.url);
+
+  // Bypass service worker completely for ALL API routes (/api/weather, /api/advisor, /api/scout-ai, etc.)
+  // This guarantees real-time weather and fresh AI data are never served stale.
+  if (url.pathname.startsWith('/api/')) {
     return;
   }
 
+  // Network-first strategy for navigation (HTML documents) to prevent stale index.html and chunk mismatch errors
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const copy = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+          }
+          return networkResponse;
+        })
+        .catch(() => {
+          return caches.match(event.request).then((cached) => cached || caches.match('/index.html') || caches.match('/'));
+        })
+    );
+    return;
+  }
+
+  // Cache-first with background revalidation for static assets
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
-        // Fetch updated asset in background to revalidate cache
         fetch(event.request).then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
+          if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
             caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkResponse));
           }
-        }).catch(() => {/* Offline mode - ignore network failure */});
+        }).catch(() => {/* Offline mode - ignore */});
 
         return cachedResponse;
       }
@@ -68,10 +89,7 @@ self.addEventListener('fetch', (event) => {
 
         return networkResponse;
       }).catch(() => {
-        // Return index.html fallback for SPA client-side navigation when offline
-        if (event.request.mode === 'navigate') {
-          return caches.match('/index.html') || caches.match('/');
-        }
+        return caches.match('/index.html') || caches.match('/');
       });
     })
   );
