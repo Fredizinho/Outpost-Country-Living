@@ -15,6 +15,7 @@ import {
   SanctuaryStatBox 
 } from '@/components/ui';
 import { TransitionReadinessLedger } from '@/components/outpost/TransitionReadinessLedger';
+import { getDistrictRecord, PLANTING_PIT_SPECS } from '@/constants';
 
 const ICON_MAP: Record<string, any> = {
   prepare: ShoppingBag,
@@ -25,6 +26,7 @@ const ICON_MAP: Record<string, any> = {
 export default function Tracker() {
   const { user } = useAuth();
   const [showWizard, setShowWizard] = useState(false);
+  const currentDistrictRecord = getDistrictRecord(user?.district || 'Dedza');
 
   // Initialize steps either from user-customized offlineStorage or generated from Auth profile
   const [steps, setSteps] = useState<Step[]>(() => {
@@ -208,6 +210,19 @@ export default function Tracker() {
             <span className="bg-white/10 text-emerald-200 text-[10px] font-bold px-2.5 py-1 rounded-lg border border-white/10 flex items-center gap-1">
               <Calendar size={12} /> {user?.timeline?.split('(')[0] || 'This Season'}
             </span>
+            {currentDistrictRecord && (
+              <>
+                <span className="bg-emerald-950/80 text-amber-300 text-[10px] font-mono font-bold px-2.5 py-1 rounded-lg border border-amber-500/30 flex items-center gap-1">
+                  🌧️ {currentDistrictRecord.rainfallAnnualMm} mm/yr
+                </span>
+                <span className="bg-emerald-950/80 text-emerald-200 text-[10px] font-mono font-bold px-2.5 py-1 rounded-lg border border-emerald-500/30 flex items-center gap-1">
+                  🌱 {currentDistrictRecord.soilPh}
+                </span>
+                <span className="bg-emerald-950/80 text-amber-200 text-[10px] font-mono font-bold px-2.5 py-1 rounded-lg border border-amber-500/30 flex items-center gap-1">
+                  ⛏️ {PLANTING_PIT_SPECS.egwDeepPit.dimensionString} Pits
+                </span>
+              </>
+            )}
           </div>
         </div>
 

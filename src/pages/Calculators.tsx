@@ -15,6 +15,12 @@ import {
   SanctuarySectionHeader, 
   SanctuaryStatBox 
 } from '@/components/ui';
+import { 
+  DISTRICT_RAINFALL_PRESETS, 
+  HOMESTEAD_WATER_CONSTANTS,
+  PLANTING_PIT_SPECS,
+  getDistrictRainfall 
+} from '@/constants';
 
 export default function Calculators() {
   const { user } = useAuth();
@@ -143,24 +149,14 @@ export default function Calculators() {
   const zoneLivestockWater = Math.round(acres * 0.15 * 100) / 100; // 15%
 
   // Rainwater Catchment Math
-  // Harvestable Volume = Roof Area (m2) * Annual Rainfall (m) * 0.85 (runoff efficiency) * 1000 L/m3
-  const harvestableVolumeLiters = Math.round(roofAreaM2 * (annualRainfallMm / 1000) * 0.85 * 1000);
-  const drySeasonBufferDays = 150; // Nov to Apr rainy season means ~150 dry days
-  const recommendedCisternLiters = Math.min(harvestableVolumeLiters, Math.round(waterNeeded * 90)); // 3 months dry coverage
+  // Harvestable Volume = Roof Area (m2) * Annual Rainfall (m) * runoff efficiency * 1000 L/m3
+  const harvestableVolumeLiters = Math.round(roofAreaM2 * (annualRainfallMm / 1000) * HOMESTEAD_WATER_CONSTANTS.runoffEfficiency * 1000);
+  const drySeasonBufferDays = HOMESTEAD_WATER_CONSTANTS.drySeasonBufferDays; // Nov to Apr rainy season means ~150 dry days
+  const recommendedCisternLiters = Math.min(harvestableVolumeLiters, Math.round(waterNeeded * HOMESTEAD_WATER_CONSTANTS.reserveBufferDays)); // 3 months dry coverage
 
   // Budget Total
   const totalBudgetUsd = landCostUsd + waterSetupUsd + solarSystemUsd + fencingUsd + cottageUsd + seedsToolingUsd;
   const totalBudgetMwk = totalBudgetUsd * exchangeRate;
-
-  // Preset Rainfalls in Malawi
-  const DISTRICT_RAINFALL_PRESETS: Record<string, { name: string; rainfall: number }> = {
-    dedza: { name: 'Dedza / Ntcheu Highlands', rainfall: 1100 },
-    mzimba: { name: 'Mzimba & Viphya Plateau', rainfall: 950 },
-    mulanje: { name: 'Mulanje & Thyolo Tea Belt', rainfall: 1650 },
-    lilongwe: { name: 'Lilongwe & Central Plains', rainfall: 850 },
-    zomba: { name: 'Zomba Plateau', rainfall: 1250 },
-    karonga: { name: 'Karonga & Northern Lake', rainfall: 1050 },
-  };
 
   const handleDistrictChange = (key: string) => {
     setDistrictPreset(key);
@@ -724,10 +720,14 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
               <strong className="text-amber-300 font-mono">Smart Homestead Layout Plan:</strong>
               <p className="space-y-1 text-emerald-200/80 leading-relaxed">
                 <strong>Zone 1 (Closest):</strong> House, kitchen garden & water tank<br />
-                <strong>Zone 2 (Near):</strong> Fruit orchard, compost & chickens/goats<br />
-                <strong>Zone 3 (Middle):</strong> Main crop fields (Maize, Groundnuts, Beans)<br />
-                <strong>Zone 4 (Outer):</strong> Rain trenches (swales), pond & boundary trees
+                <strong>Zone 2 (Near):</strong> Fruit orchard ({PLANTING_PIT_SPECS.egwDeepPit.dimensionString} planting pits), compost & small livestock<br />
+                <strong>Zone 3 (Middle):</strong> Main crop fields with {PLANTING_PIT_SPECS.zaiPit.dimensionString} Zaï water-harvesting basins<br />
+                <strong>Zone 4 (Outer):</strong> Rain trenches (swales), pond & boundary windbreak trees
               </p>
+              <div className="mt-2 pt-2 border-t border-white/10 flex items-center justify-between text-[11px] text-amber-300/90 font-mono">
+                <span>Standard EGW Orchard Pit:</span>
+                <span className="font-bold">{PLANTING_PIT_SPECS.egwDeepPit.dimensionString}</span>
+              </div>
             </div>
           </div>
 

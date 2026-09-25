@@ -1,4 +1,5 @@
 import { ShoppingBag, Search, Mountain } from 'lucide-react';
+import { getDistrictRecord, PLANTING_PIT_SPECS } from '@/constants';
 
 export interface Subtask {
   id: string;
@@ -63,16 +64,20 @@ export function generatePersonalizedRoadmap(answers: Partial<OnboardingAnswers>)
     { id: 's1', label: `Evaluate land availability & traditional authority protocols in ${district} (${region} Region)`, completed: false },
   ];
 
-  // District-specific land tasks
-  const lowerDist = district.toLowerCase();
-  if (lowerDist.includes('dedza') || lowerDist.includes('ntcheu') || lowerDist.includes('viphya')) {
-    scoutTasks.push({ id: 's_district', label: `Soil & Frost Check: Test ${district} highland clay for organic matter & prepare windbreaks`, completed: false });
-  } else if (lowerDist.includes('salima') || lowerDist.includes('karonga') || lowerDist.includes('mangochi') || lowerDist.includes('nkhotakota')) {
-    scoutTasks.push({ id: 's_district', label: `Lakeshore Climate: Verify shallow borehole depth & plan shade-netting for intense heat`, completed: false });
-  } else if (lowerDist.includes('mulanje') || lowerDist.includes('thyolo') || lowerDist.includes('zomba')) {
-    scoutTasks.push({ id: 's_district', label: `High Rainfall Zone: Test soil pH for acidity & inspect slope drainage near ${district}`, completed: false });
+  // District-specific land tasks from Central Registry
+  const distRecord = getDistrictRecord(district);
+  if (distRecord) {
+    scoutTasks.push({
+      id: 's_district',
+      label: `District Soil & Water Audit: Verify ${distRecord.name} soil (${distRecord.primarySoil}, ${distRecord.soilPh}), ${distRecord.rainfallAnnualMm}mm/yr rainfall, and aquifer depth (${distRecord.aquiferDepth})`,
+      completed: false
+    });
   } else {
-    scoutTasks.push({ id: 's_district', label: `Water Table Inspection: Verify year-round groundwater depth & stream flow in ${district}`, completed: false });
+    scoutTasks.push({
+      id: 's_district',
+      label: `Water Table & Soil Inspection: Verify year-round groundwater depth & stream flow in ${district}`,
+      completed: false
+    });
   }
 
   scoutTasks.push({ id: 's3', label: 'Inspect 3 candidate rural properties with direct road access & secure boundary legalities', completed: false });
@@ -85,7 +90,7 @@ export function generatePersonalizedRoadmap(answers: Partial<OnboardingAnswers>)
   // Goal-specific tasks
   const lowerGoal = goal.toLowerCase();
   if (lowerGoal.includes('organic') || lowerGoal.includes('farm') || lowerGoal.includes('garden')) {
-    exodusTasks.push({ id: 'e_goal', label: 'Organic Production: Construct 10 deep double-dug bio-intensive garden beds & heirloom seed vault', completed: false });
+    exodusTasks.push({ id: 'e_goal', label: `Organic Production: Excavate ${PLANTING_PIT_SPECS.egwDeepPit.dimensionString} orchard pits and construct double-dug bio-intensive garden beds`, completed: false });
   } else if (lowerGoal.includes('medical') || lowerGoal.includes('sanctuary') || lowerGoal.includes('retreat')) {
     exodusTasks.push({ id: 'e_goal', label: 'Sanctuary Care: Establish dedicated herbal garden (Artemisia, Moringa, Neem, Aloe) & quiet rest quarters', completed: false });
   } else if (lowerGoal.includes('seed') || lowerGoal.includes('nursery') || lowerGoal.includes('commercial')) {

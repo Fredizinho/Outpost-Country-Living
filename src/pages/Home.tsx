@@ -17,6 +17,7 @@ import { HomeSceneryBackground } from '@/components/home/HomeSceneryBackground';
 import { MalawiAgriWeatherForecast } from '@/components/home/MalawiAgriWeatherForecast';
 import { BotanicalEmblemCrestCard } from '@/components/home/BotanicalEmblemCrestCard';
 import { HeroQuickPreviewOverlays, QuickFilterCategory } from '@/components/home/HeroQuickPreviewOverlays';
+import { getStoredTrackerData } from '@/lib/offlineStorage';
 import { cn } from '@/lib/utils';
 
 export default function Home() {

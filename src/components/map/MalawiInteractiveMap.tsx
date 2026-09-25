@@ -12,6 +12,7 @@ import {
 import { Link } from 'react-router-dom';
 import { isItemBookmarked, toggleOfflineBookmark, getCachedSkills, getStoredTrackerData, saveStoredTrackerData } from '@/lib/offlineStorage';
 import { cn } from '@/lib/utils';
+import { URBAN_HUBS as CENTRAL_URBAN_HUBS, getDistrictRecord, getDistrictRainfall } from '@/constants';
 import {
   projectGeoToSvg,
   geoGeometryToSvgPath,
@@ -310,11 +311,7 @@ export const MALAWI_HIGHWAYS = [
   }
 ];
 
-export const URBAN_HUBS = {
-  lilongwe: { name: 'Lilongwe City (Capital)', lat: -13.97, lng: 33.79 },
-  blantyre: { name: 'Blantyre Commercial Hub', lat: -15.79, lng: 35.00 },
-  mzuzu: { name: 'Mzuzu Northern Hub', lat: -11.46, lng: 34.02 },
-};
+export const URBAN_HUBS = CENTRAL_URBAN_HUBS;
 
 export type MapImageryStyle = 'vector' | 'satellite' | 'hybrid' | 'relief3d';
 export type MapLayer = 'feasibility' | 'topography' | 'catchments' | 'escarpments' | 'elevation' | 'water' | 'soil' | 'highways';

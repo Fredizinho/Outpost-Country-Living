@@ -4,6 +4,7 @@ import { MapPin, Target, Sparkles, Sprout, Sun, Droplets, ArrowRight, ShieldChec
 import { useAuth } from '@/contexts/AuthContext';
 import { OnboardingWizard } from '@/components/onboarding/OnboardingWizard';
 import { Link } from 'react-router-dom';
+import { getDistrictRecord } from '@/constants';
 
 export function PersonalizedHomeSection() {
   const { user } = useAuth();
@@ -17,55 +18,27 @@ export function PersonalizedHomeSection() {
   const timeline = user?.timeline || 'This Season';
   const isCompleted = user?.onboardingCompleted;
 
-  // District specific climate & soil intelligence
+  // District specific climate & soil intelligence from Central Registry
   const getDistrictIntelligence = (distName: string, regName: string) => {
-    const lower = distName.toLowerCase();
-    if (lower.includes('dedza') || lower.includes('ntcheu')) {
+    const rec = getDistrictRecord(distName);
+    if (rec) {
       return {
-        zone: 'Central Temperate Highlands',
-        altitude: '1,400m - 1,800m',
-        soil: 'Volcanic Red Clay & Humus-Rich Loam',
-        water: 'High seasonal mist, mountain springs & shallow streams',
-        crops: ['Peaches & Temperate Fruit', 'Solanum Potatoes', 'Bio-intensive Cabbages', 'Wheat & Maize'],
-        solarAdvice: 'Higher winter cloud cover; size solar panels +20% for foggy months (June-August).'
-      };
-    } else if (lower.includes('mzimba') || lower.includes('rumphi') || lower.includes('chitipa')) {
-      return {
-        zone: 'Northern Highland Valleys',
-        altitude: '1,200m - 1,600m',
-        soil: 'Deep Red Ferralsols & Forest Clay',
-        water: 'Perennial hill streams, Nyika plateau watersheds',
-        crops: ['Macadamia & Coffee', 'Sweet Potatoes', 'Horticulture & Maize', 'Citrus'],
-        solarAdvice: 'Excellent solar irradiation; 600W solar array generates ample daily power year-round.'
-      };
-    } else if (lower.includes('mulanje') || lower.includes('thyolo') || lower.includes('zomba')) {
-      return {
-        zone: 'Southern Mountain Massif',
-        altitude: '900m - 1,500m',
-        soil: 'Acidic Loam & Rich Granite Topsoil',
-        water: 'Abundant high-rainfall streams & perennial springs',
-        crops: ['Tea & Spices', 'Avocados & Passion Fruit', 'Cassava & Yams', 'Herbal Medicines'],
-        solarAdvice: 'High precipitation zone; install elevated rainwater catchments alongside 800W solar pumps.'
-      };
-    } else if (lower.includes('salima') || lower.includes('karonga') || lower.includes('mangochi') || lower.includes('nkhotakota')) {
-      return {
-        zone: 'Lake Shore Alluvial Plain',
-        altitude: '470m - 600m',
-        soil: 'Alluvial Sand-Clay & High Water Table Soil',
-        water: 'Lake Malawi aquifers, shallow boreholes (< 25m)',
-        crops: ['Rice & Maize', 'Rice & Sugar Cane', 'Bananas & Mangos', 'Legumes'],
-        solarAdvice: 'Maximum solar radiation year-round; ideal for direct solar borehole pumping without heavy battery loss.'
-      };
-    } else {
-      return {
-        zone: `${regName} Agricultural Plateau`,
-        altitude: '1,000m - 1,300m',
-        soil: 'Medium Clay Loam & Alluvial Plains',
-        water: 'Boreholes (~30-45m depth) & seasonal dambos',
-        crops: ['Sorghum & Groundnuts', 'Maize & Beans', 'Sunflowers', 'Garden Vegetables'],
-        solarAdvice: 'Reliable sunshine; 800W array with 2.4kWh battery meets all domestic and pumping needs.'
+        zone: `${rec.name} (${rec.region} Region)`,
+        altitude: rec.elevationRange,
+        soil: `${rec.primarySoil} (${rec.soilPh})`,
+        water: `${rec.aquiferDepth} • Annual Rainfall: ${rec.rainfallAnnualMm} mm/yr`,
+        crops: rec.topCrops.slice(0, 4),
+        solarAdvice: `${rec.solarKwhDay} kWh/m²/day peak solar insolation. Excellent for PV borehole pump arrays.`,
       };
     }
+    return {
+      zone: `${regName} Agricultural Plateau`,
+      altitude: '1,000m - 1,300m',
+      soil: 'Medium Clay Loam & Alluvial Plains',
+      water: 'Boreholes (~30-45m depth) & seasonal dambos',
+      crops: ['Sorghum & Groundnuts', 'Maize & Beans', 'Sunflowers', 'Garden Vegetables'],
+      solarAdvice: 'Reliable sunshine; 800W array with 2.4kWh battery meets domestic and pumping needs.',
+    };
   };
 
   const intel = getDistrictIntelligence(district, region);
