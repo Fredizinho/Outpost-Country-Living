@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { cn } from '@/lib/utils';
+import { fetchMapScoutWithFallback } from '@/lib/apiClient';
 import { MalawiDistrictSpec } from '@/data/malawiDistrictData';
 import { ScoutAiAnalysisResponse, GroundingSource } from '@/types/scoutAi';
 
@@ -102,31 +103,19 @@ export function MapScoutAiDrawer({
     const lng = currentCoordinates?.lng ?? activeDistrict?.centroid?.[1] ?? 34.33;
 
     try {
-      const response = await fetch('/api/scout-ai', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          prompt: queryText,
-          district: activeDistrict?.name,
-          region: activeDistrict?.region,
-          altitude: activeDistrict?.elevationRange,
-          coordinates: {
-            latitude: lat,
-            longitude: lng
-          },
-          selectedAmenities: activeDistrict?.topCrops,
-          activeLayers,
-          mapBounds,
-          zoomLevel,
-          layerInsightsMode
-        })
+      const data = await fetchMapScoutWithFallback({
+        prompt: queryText,
+        district: activeDistrict?.name,
+        region: activeDistrict?.region,
+        altitude: activeDistrict?.elevationRange,
+        coordinates: {
+          latitude: lat,
+          longitude: lng
+        },
+        selectedAmenities: activeDistrict?.topCrops,
+        activeLayers,
+        layerInsightsMode
       });
-
-      if (!response.ok) {
-        throw new Error(`Server returned HTTP ${response.status}`);
-      }
-
-      const data: ScoutAiAnalysisResponse = await response.json();
       setAnalysisResult(data);
     } catch (err: any) {
       console.error('Failed to run AI Scout query:', err);
@@ -264,7 +253,7 @@ export function MapScoutAiDrawer({
           <div className="p-4 rounded-xl bg-emerald-950/30 border border-emerald-500/30 flex items-center gap-3">
             <div className="w-5 h-5 rounded-full border-2 border-emerald-400 border-t-transparent animate-spin shrink-0" />
             <div className="text-xs">
-              <span className="font-bold text-white block">Querying Gemini 3.8 Flash & Google Maps...</span>
+              <span className="font-bold text-white block">Analyzing Topographic & Agronomic Layers...</span>
               <span className="text-slate-400 text-[11px]">Evaluating catchment hydrology, soil latosols, and local infrastructure</span>
             </div>
           </div>

@@ -93,6 +93,22 @@
           "type": "array",
           "description": "IDs of bookmarked land parcels"
         },
+        "transitionLedgerCompletedIds": {
+          "type": "array",
+          "description": "IDs of completed 5-phase transition readiness ledger milestones"
+        },
+        "masteredSkillIds": {
+          "type": "array",
+          "description": "IDs of mastered homestead country skills"
+        },
+        "completedSeasonalTaskIds": {
+          "type": "array",
+          "description": "IDs of completed seasonal almanac tasks"
+        },
+        "customaryChecklistIds": {
+          "type": "array",
+          "description": "IDs of completed Malawi Customary Land Act verification steps"
+        },
         "updatedAt": {
           "type": "string",
           "description": "Last progress update timestamp"

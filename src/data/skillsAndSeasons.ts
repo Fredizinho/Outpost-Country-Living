@@ -12,7 +12,7 @@ export interface SubSkillItem {
 export interface SkillItem {
   id: string;
   title: string;
-  category: 'Farming' | 'Water & Energy' | 'Food & Preservation' | 'Construction' | 'Medical & Health' | 'Livestock & Health';
+  category: 'Farming' | 'Water & Energy' | 'Food & Preservation' | 'Construction' | 'Medical & Health' | 'Livestock & Health' | 'SDA Education & Sustenance';
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
   timeToMaster: string;
   summary: string;
@@ -79,7 +79,7 @@ export const REGIONS_LIST: RegionData[] = [
     topCrops: ['Irish Potatoes', 'Maize', 'Beans', 'Groundnuts', 'Peaches', 'Cabbage', 'Soybeans'],
     waterSources: 'Perennial dambos, mountain springs, and weathered basement boreholes (25-45m depth).',
     challenges: ['Frost in high Dedza & Ntcheu escarpment pockets during June/July', 'Highland dry spells in October before main rains'],
-    recommendations: ['Build solar seed dehydrators', 'Construct contour ridges (misozi) for rain capture', 'Plant windbreaks of bamboo and acacias']
+    recommendations: ['Build solar seed dehydrators', 'Construct contour marker ridges (mitumbira ya mizere / mikwingwirima) for rain capture', 'Plant windbreaks of bamboo and acacias']
   },
   {
     id: 'northern-plateau',
@@ -154,7 +154,7 @@ export const SKILL_SUBSKILLS_DATA: Record<string, SubSkillItem[]> = {
   'water-conservation-retention': [
     { id: 'wc-1', title: 'A-Frame Plumb-Line Calibration', summary: 'Zero-point calibration for surveying exact contour lines across rolling acreage.' },
     { id: 'wc-2', title: 'Contour Swale Ditch Excavation', summary: 'Level 50cm wide x 30cm deep trenches that slow, spread, and sink surface runoff.' },
-    { id: 'wc-3', title: 'Downhill Earth Berm (Msozi) Shaper', summary: 'Mounding excavated soil on downhill edge with Vetiver grass living root anchors.' },
+    { id: 'wc-3', title: 'Downhill Earth Berm (Mtumbira / Bund) Shaper', summary: 'Mounding excavated soil on downhill edge with Vetiver grass living root anchors.' },
     { id: 'wc-4', title: 'Stone-Paved Level Sill Flood Spillways', summary: 'Armored discharge sills at swale ends preventing gully erosion during flash floods.' },
     { id: 'wc-5', title: 'Dambo Wetland Aquifer Recharging', summary: 'Interception swales feeding seasonal dambo sponges for dry-season shallow wells.' }
   ],
@@ -287,6 +287,47 @@ export const SKILL_SUBSKILLS_DATA: Record<string, SubSkillItem[]> = {
     { id: 'si-3', title: 'Solar Pump Controller & Dry-Run Sensor Sizing', summary: 'Connecting water-level probe controller preventing low water table motor damage.' },
     { id: 'si-4', title: 'Direct-Drive 2x 350W Panel Array Connection', summary: 'Zero-battery direct solar PV array delivering 5,000L-10,000L daily water.' },
     { id: 'si-5', title: '32mm HDPE Pipeline to 2,000L Header Tank', summary: 'Gravity-fed distribution pipeline to garden drip lines and trench furrows.' }
+  ],
+  'sda-true-education-curriculum': [
+    { id: 'ed-1', title: 'Balanced Morning Academic & Bible Block (08:00–11:30)', summary: 'Teaching Scripture, physiology, practical arithmetic, bookkeeping, and natural sciences from creation.' },
+    { id: 'ed-2', title: 'Individual Student 5m × 5m Garden Plot Stewardship', summary: 'Assigning each child a personal raised bed plot to cultivate, harvest, and log yields.' },
+    { id: 'ed-3', title: 'Afternoon Vocational Trade Rotation (13:30–16:30)', summary: 'Hands-on mastery in carpentry, earth masonry, grafting, sewing, and hygienic cookery.' },
+    { id: 'ed-4', title: 'Homestead Bookkeeping & Debt-Free Accounting', summary: 'Double-entry ledger tracking seed inputs, harvest weights, tithe, and emergency reserves.' },
+    { id: 'ed-5', title: 'Nature Object Lessons & Field Botany Walks', summary: 'Connecting agricultural parables (germination, pruning, soil aeration) to spiritual character growth.' }
+  ],
+  'wholesome-breadmaking-grain-milling': [
+    { id: 'wb-1', title: 'Fresh Whole-Grain Milling (Wheat, Sorghum, Millet)', summary: 'Grinding whole berries on a cast-iron or stone burr mill immediately before dough mixing.' },
+    { id: 'wb-2', title: 'Sweet Wild Yeast Starter & Potato Water Ferment', summary: 'Cultivating non-sour natural yeast without harmful baking soda or saleratus.' },
+    { id: 'wb-3', title: 'Retained-Heat Clay Drum & Cob Oven Baking', summary: 'Firing a high-thermal-mass clay oven to 210°C for thorough, even crust baking.' },
+    { id: 'wb-4', title: 'Twice-Baked Zwieback Rusk Dehydration', summary: 'Slicing whole-grain loaves into 12mm slices and slow-toasting at 120°C to convert starch to dextrin.' },
+    { id: 'wb-5', title: 'Unleavened Whole-Grain Flatbreads & Rolls', summary: 'Aerating whole-meal dough with cold water, nut cream, and vigorous kneading for light rolls.' }
+  ],
+  'hydrotherapy-charcoal-poultice-remedies': [
+    { id: 'hc-1', title: 'Contrast Hot & Cold Fomentation Protocol', summary: 'Three cycles of 3-min hot wool fomentations and 30-sec cold friction rubs to boost white blood cells.' },
+    { id: 'hc-2', title: 'Derivative Hot Foot Bath (40°C–43°C)', summary: 'Drawing congestion away from the brain, lungs, and pelvic organs during fevers or headaches.' },
+    { id: 'hc-3', title: 'Medical-Grade Hardwood Charcoal Pyrolysis', summary: 'Carbonizing clean eucalyptus or peach branches in sealed tins and grinding to 200-mesh powder.' },
+    { id: 'hc-4', title: 'Activated Charcoal & Flax/Cassava Poultice', summary: 'Mixing 3 tbsp charcoal + 3 tbsp ground flax/cassava meal in boiling water to draw out venom and sepsis.' },
+    { id: 'hc-5', title: 'Eucalyptus & Lemongrass Steam Inhalation', summary: 'Tent inhalation with fresh crushed Eucalyptus globulus leaves for bronchial relief.' }
+  ],
+  'plant-protein-nut-milks-oil-pressing': [
+    { id: 'pp-1', title: 'Soybean & Groundnut Milk Extraction', summary: 'Soaking, wet-grinding, straining, and 20-minute simmering to deactivate trypsin inhibitors.' },
+    { id: 'pp-2', title: 'Artisanal Tofu & Soy Curd Coagulation', summary: 'Coagulating hot soy milk with fresh lemon juice or magnesium chloride into firm protein blocks.' },
+    { id: 'pp-3', title: '72-Hour Legume Sprouting & Phytic Acid Breakdown', summary: 'Germinating mung beans, lentils, and cowpeas to multiply vitamin C and slash cooking fuel by 50%.' },
+    { id: 'pp-4', title: 'Manual Ram-Press Sunflower & Moringa Oil Extraction', summary: 'Cold-pressing sun-dried black oilseed sunflower and moringa seeds for pure cooking oil and livestock cake.' },
+    { id: 'pp-5', title: 'Nut Butter & Sesame Tahini Stone Grinding', summary: 'Roasting and grinding groundnuts, macadamia, and sesame into high-calorie shelf-stable pastes.' }
+  ],
+  'wood-ash-soap-natural-fibers-tailoring': [
+    { id: 'ws-1', title: 'Hardwood Ash Lye (KOH) Gravity Leaching Barrel', summary: 'Percolating rain water through white hardwood ash over straw to reach specific gravity egg-float density.' },
+    { id: 'ws-2', title: 'Hot-Process Vegetable Oil Saponification', summary: 'Boiling leached wood-ash lye with sunflower, coconut, and moringa oil to trace.' },
+    { id: 'ws-3', title: 'Antiseptic Neem, Aloe & Lemongrass Bar Curing', summary: 'Folding botanical extracts into soap trace and curing on slatted wooden racks for 4 weeks.' },
+    { id: 'ws-4', title: 'Non-Electric Foot-Treadle Sewing Machine Servicing', summary: 'Leather belt tensioning, bobbin timing, and castor oil lubrication for off-grid tailoring.' },
+    { id: 'ws-5', title: 'Healthful, Unconstricted Work Garment Drafting', summary: 'Drafting durable cotton/linen garments supported from the shoulders without chest or waist compression.' }
+  ],
+  'sabbath-sanctuary-fireless-thermal-cooking': [
+    { id: 'sb-1', title: 'Insulated Rice-Hull / Hay-Box Thermal Cooker (Wonderbag)', summary: 'Sewing double-wall cotton cushions packed with dry rice hulls or wool to slow-cook for 8 hours without fire.' },
+    { id: 'sb-2', title: 'Insulated Pumice & Clay Rocket Stove Construction', summary: 'Building an L-tube insulated combustion chamber that cuts firewood consumption by 75%.' },
+    { id: 'sb-3', title: 'Friday Preparation Day Protocol & Sundown Readiness', summary: 'Completing all bread baking, bean simmering, bath water heating, and tool cleaning before Friday sunset.' },
+    { id: 'sb-4', title: 'Solar Audio-Bible & Literature Outpost Station', summary: 'Charging solar Chichewa audio-Bibles and organizing health/gospel tracts for surrounding villages.' }
   ]
 };
 
@@ -622,7 +663,7 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     category: 'Farming',
     difficulty: 'Beginner',
     timeToMaster: '2 Weeks',
-    iconName: 'soilscience',
+    iconName: 'broadfork',
     summary: 'Aerating soil deeply without turning over delicate microbial layers, preserving organic humus and earthworm pathways.',
     description: 'Traditional tilling flips subsoil over topsoil, destroying fungal mycorrhizae and exposing soil to baking sun. Broadforking uses a heavy 5-tine forged steel tool inserted into the soil and leaned back to fracture hardpan subsoil while leaving soil biology intact.',
     steps: [
@@ -647,7 +688,7 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     category: 'Farming',
     difficulty: 'Intermediate',
     timeToMaster: '1 Season',
-    iconName: 'droughtcrops',
+    iconName: 'seedvault',
     summary: 'Selecting, fermenting, drying, and hermetically sealing non-GMO heirloom seeds for infinite generations.',
     description: 'Commercial hybrid seeds do not breed true in subsequent generations. True heirloom seed saving guarantees food security independently of commercial seed suppliers.',
     steps: [
@@ -750,7 +791,7 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     category: 'Construction',
     difficulty: 'Intermediate',
     timeToMaster: '2 Weeks',
-    iconName: 'soilscience',
+    iconName: 'earthblock',
     summary: 'Pressing local soil with 5-8% lime or cement into dense, fireproof, thermally insulating building blocks.',
     description: 'CSEB blocks require no wood burning for kilns (unlike traditional clay bricks), saving forests while producing ultra-durable, thermal-mass walls.',
     steps: [
@@ -775,7 +816,7 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     category: 'Food & Preservation',
     difficulty: 'Beginner',
     timeToMaster: '3 Days',
-    iconName: 'foodpreservation',
+    iconName: 'zeerpot',
     summary: 'Preserving fresh vegetables, eggs, and fruits for weeks without electricity using double-walled terracotta clay pots and wet river sand.',
     description: 'In off-grid homesteads, electricity for refrigeration is costly or unavailable. Zeer pot cooling operates on the thermodynamic principle of evaporative cooling: as water evaporates through porous unglazed terracotta outer clay walls, heat is drawn away from the inner chamber, lowering internal temperature by up to 10°C-15°C below ambient air.',
     steps: [
@@ -800,7 +841,7 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     category: 'Livestock & Health',
     difficulty: 'Intermediate',
     timeToMaster: '1 Month',
-    iconName: 'insects',
+    iconName: 'poultry',
     summary: 'Housing, feeding, and disease prevention for local indigenous chickens (kuku wa chimaye) and dairy goats on natural forage.',
     description: 'Poultry and goats provide essential protein (eggs, milk, manure) and weed control for rural homesteads. Managing hardy local breeds requires elevated predator-proof coops, balanced natural feed mixes (grain, termites, greens, crushed eggshells for calcium), and herbal pest protection.',
     steps: [
@@ -825,7 +866,7 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     category: 'Food & Preservation',
     difficulty: 'Intermediate',
     timeToMaster: '1 Week',
-    iconName: 'foodpreservation',
+    iconName: 'saltcuring',
     summary: 'Preserving meat and fish without refrigeration using coarse rock salt, natural hardwood smoke, and solar air drying.',
     description: 'Before electric freezers, families preserved surplus meat and freshwater fish (such as Chambo or Usipa) using dry salt curing, vinegar/citrus wash, and slow cold smoking. Salt draws out moisture while hardwood smoke creates an antimicrobial coating that inhibits bacterial growth for months.',
     steps: [
@@ -851,7 +892,7 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     category: 'Water & Energy',
     difficulty: 'Intermediate',
     timeToMaster: '2 Weeks',
-    iconName: 'waterconservation',
+    iconName: 'swale',
     summary: 'Digging level contour ditches (misozi) and mini-catchment earth dams to infiltrate rainwater into subsoil aquifers.',
     description: 'Instead of letting heavy rain runoff erode topsoil into rivers, swales are level ditches dug precisely along contour lines. Water collects in the swale, slowly soaking into the ground to hydrate down-slope crops, recharge shallow wells, and nourish perennial fruit trees throughout the dry season.',
     steps: [
@@ -929,7 +970,7 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     category: 'Water & Energy',
     difficulty: 'Advanced',
     timeToMaster: '2 Weeks',
-    iconName: 'waterconservation',
+    iconName: 'borehole',
     summary: 'Installing direct-drive DC solar submersible pumps in shallow dambo wells for zero-cost drip and trench crop irrigation.',
     description: 'Pumping water manually with treadle pumps or buckets limits dry season crop acreage. DC solar pumps connect directly to PV panels to automatically deliver 5,000–10,000 liters of water daily during peak sunshine hours without fuel costs or expensive batteries.',
     steps: [
@@ -948,6 +989,160 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     seasonalTag: 'Hot Dry Preparation',
     prerequisiteSkillIds: ['solar-pv-lithium-bank', 'rainwater-swale-dambo-capture'],
     prerequisiteNote: 'Requires prior completion of Off-Grid Solar PV wiring and Contour Swale water catchment design.'
+  },
+  {
+    id: 'sda-true-education-curriculum',
+    title: 'SDA True Education & Manual Training Curriculum (Head, Hand & Heart)',
+    category: 'SDA Education & Sustenance',
+    difficulty: 'Intermediate',
+    timeToMaster: '1 Season',
+    iconName: 'trueeducation',
+    summary: 'Structuring an Avondale-model family home school and outpost training ground combining morning Bible and scientific study with afternoon agriculture, carpentry, bookkeeping, and self-supporting missionary trades.',
+    description: 'True Adventist education rejects the cramming of dead classics and passive urban schooling in favor of harmonious physical, mental, and spiritual culture. Patterned after the Schools of the Prophets and the Avondale School blueprint in Education and Testimonies Vol. 6, students spend morning hours mastering Scripture, physiology, bookkeeping, and natural sciences, and afternoon hours working side-by-side with parents/instructors in no-till gardening, orchard grafting, carpentry, sewing, and hygienic cookery.',
+    steps: [
+      'Morning Sacred & Scientific Block (08:00–11:30): Dedicate peak mental hours to Bible history, human physiology, practical arithmetic, homestead bookkeeping, and botany/soil chemistry.',
+      'Individual Child Garden Plots (5m × 5m): Assign every child their own raised garden bed. Have them test soil pH, sow heirloom seeds, manage mulch, harvest produce, and record yields and tithe in a personal ledger.',
+      'Vocational Trade Mastery (13:30–16:30): Rotate youth through essential self-supporting trades: timber joinery and roofing, compressed earth block masonry, fruit tree grafting, treadle tailoring, and hydrotherapy treatment.',
+      'Bookkeeping & Debt-Free Stewardship: Teach youth double-entry farm accounting—calculating seed-to-harvest multiplication ratios, tool depreciation, and household budgeting under the principle "owe no man anything."',
+      'Nature Object Lesson Walks: Conduct weekly field walks across hillside contours, streams, and beehives, connecting natural laws directly to Christ’s parables in Scripture.'
+    ],
+    toolsNeeded: ['Bible & Spirit of Prophecy Library', 'Student Garden Plot Tools (Small Fork, Hoe, Watering Can)', 'Double-Entry Farm Ledger & Measuring Tape', 'Carpentry Hand Tools (Saw, Chisel, Plane, Square)', 'Soil pH & Thermometer Kit'],
+    inspiredCounsel: '"Study in agricultural lines should be the A, B, and C of the education given in our schools... Instruction should be given in agriculture, manufactures—covering as many as possible of the most useful trades—also in household economy, healthful cookery, sewing, hygienic dressmaking, the treatment of the sick, and kindred lines." — Ellen G. White, Testimonies Vol. 6, p. 179 & Education, p. 218 (6T 179.2 · Ed 218.2)',
+    commonMistakes: [
+      'Treating outdoor manual labor as a punishment or menial drudgery instead of dignifying it with parent/teacher participation and scientific inquiry.',
+      'Allowing children to spend all day indoors with textbooks or screens, weakening their lungs, digestion, and practical judgment.'
+    ],
+    seasonalTag: 'Year-Round / Any Season',
+    prerequisiteSkillIds: ['compost-making'],
+    prerequisiteNote: 'Pairs directly with basic composting and garden bed preparation for student plots.'
+  },
+  {
+    id: 'wholesome-breadmaking-grain-milling',
+    title: 'Wholesome Breadmaking, Sourdough, Zwieback & Whole-Grain Milling',
+    category: 'Food & Preservation',
+    difficulty: 'Beginner',
+    timeToMaster: '2 Weeks',
+    iconName: 'breadmaking',
+    summary: 'Milling whole wheat, sorghum, finger millet (mawere), and heirloom maize on the homestead, cultivating sweet wild yeast starters without baking soda/saleratus, baking in clay thermal ovens, and twice-baking shelf-stable Zwieback.',
+    description: 'In The Ministry of Healing (pp. 300–302) and Counsels on Diet and Foods, Ellen White emphasizes that wholesome breadmaking is a vital domestic art directly impacting family health and clarity of mind. Commercial white flour is stripped of mineral bran and germ, while baking soda/saleratus inflames the stomach lining. By milling whole grain berries fresh, fermenting with sweet potato-water yeast before souring occurs, baking small loaves thoroughly in a wood-fired clay oven, and converting slices into twice-baked Zwieback (dextrinized rusks), a homestead secures digestible, nutrient-dense bread year-round.',
+    steps: [
+      'Fresh Whole-Grain Milling: Clean dry whole wheat, red sorghum (mapira), or finger millet (mawere). Grind into fine whole meal using a manual cast-iron or solar-powered stone burr mill immediately before baking to prevent germ oil rancidity.',
+      'Sweet Potato-Water Yeast Starter: Boil 1 peeled Irish potato in 500ml water; mash and cool to lukewarm (32°C). Stir in 2 tbsp whole wheat flour and 1 tsp raw honey; aerate in a warm spot for 18–24 hours until bubbly and fragrant—never allow it to turn sour or acidic.',
+      'Dough Kneading & Hydration: Combine 70% whole wheat flour with 30% fine sorghum or millet flour, warm water, a pinch of sea salt, and sweet yeast starter. Knead vigorously for 12–15 minutes to develop gluten elasticity without any baking soda or chemical baking powder.',
+      'Controlled Proofing & Small Loaf Shaping: Let dough rise in a warm draft-free cloth until just doubled (60–90 minutes). Shape into small, narrow loaves so heat penetrates to the center and destroys all live yeast germs during baking.',
+      'Clay Thermal Oven Baking (200°C–210°C): Bake in a pre-heated insulated clay cob oven or Dutch oven for 40–45 minutes until the crust rings hollow when tapped. Cool completely on wire racks before slicing (never eat hot, clammy fresh bread).',
+      'Zwieback (Twice-Baked Rusk) Conversion: Slice 24-hour cooled whole-grain loaves into uniform 12mm slices. Arrange on oven trays and slow-bake at 110°C–125°C for 45–60 minutes until crisp and golden through-and-through, converting complex starch into easily digested dextrin.'
+    ],
+    toolsNeeded: ['Manual Cast-Iron or Stone Burr Grain Mill', 'Glass Jar for Sweet Yeast Starter', 'Wood-Fired Clay Thermal Oven or Cast-Iron Dutch Oven', 'Bread Loaf Pans & Cooling Wire Racks', 'Airtight Glass or Tin Zwieback Containers'],
+    inspiredCounsel: '"The use of soda or baking powder in breadmaking is harmful and unnecessary. Soda causes inflammation of the stomach and often poisons the entire system... Bread should be light and sweet. Not the least taint of sourness should be tolerated. The loaves should be small, and so thoroughly baked that, so far as possible, the yeast germs shall be destroyed... Whole-wheat bread, or zwieback, are the best articles of diet." — E.G. White, The Ministry of Healing, pp. 300–301 (MH 300.2)',
+    commonMistakes: [
+      'Over-fermenting sourdough until it becomes sharply acetic and sour, or pulling large loaves out of the oven with damp, underbaked doughy centers that ferment in the stomach.',
+      'Using commercial baking soda (sodium bicarbonate) or alum baking powders, which neutralize gastric juices and irritate digestive mucous membranes.'
+    ],
+    seasonalTag: 'Year-Round / Any Season',
+    prerequisiteNote: 'Foundational SDA culinary and off-grid sustenance skill. No prerequisites required.'
+  },
+  {
+    id: 'hydrotherapy-charcoal-poultice-remedies',
+    title: 'Medical Missionary Hydrotherapy, Fomentations & Charcoal Poultices',
+    category: 'Medical & Health',
+    difficulty: 'Intermediate',
+    timeToMaster: '3 Weeks',
+    iconName: 'hydrotherapy',
+    summary: 'Administering clinical hot-and-cold contrast fomentations, derivative hot foot baths, heating chest compresses, and pulverized hardwood charcoal poultices for fevers, malaria congestion, infections, and reptile bites.',
+    description: 'Every Adventist country outpost is called to serve as a beacon of rational, drugless healing. Hydrotherapy utilizes the thermal and mechanical properties of pure water—vasodilation from heat and vasoconstriction from brief cold—to mobilize leukocytes (white blood cells), relieve internal organ congestion, and break fevers. Paired with pulverized hardwood charcoal poultices (which adsorb bacterial endotoxins, venom, and inflammatory exudates), a rural family can effectively manage common acute ailments.',
+    steps: [
+      'Hot Foot Bath Foundation (40°C–43°C): Place the patient’s feet in a deep bucket of hot water (40°C, gradually adding hot water up to 43°C) while keeping a cold wet washcloth on the forehead/neck. This draws blood from congested lungs, brain, or abdominal organs.',
+      'Hot & Cold Contrast Fomentations: Wring a heavy folded wool or flannel blanket towel out of boiling water (or steam in a double boiler), wrap in a dry outer towel, and apply over the chest, spine, or liver for 3 minutes. Remove, briskly rub the skin with an ice-cold wet mitt for 30 seconds, and dry. Repeat for 3 complete hot/cold cycles.',
+      'Medical Hardwood Charcoal Production: Cut clean, unpainted eucalyptus, guava, or peach wood into 5cm billets. Pack tightly inside a sealed metal tin with a single 3mm vent nail-hole in the lid; burn in a hot fire for 60 minutes until gas venting stops, cool completely while sealed, and grind in a mortar to a superfine powder.',
+      'Charcoal & Flaxseed/Cassava Poultice: Mix 3 tablespoons of fine activated hardwood charcoal powder with 3 tablespoons of ground flaxseed or fine cassava/maize meal. Stir into 150ml boiling water to form a smooth paste. Spread 6mm thick onto a porous cotton cloth, fold edges, apply warm over infected wounds, boils, cellulitis, or snakebites, and cover with plastic wrap and a wool binder overnight.',
+      'Heating Chest Compress (Overnight): Wring a thin cotton cloth out of cold water, wrap snugly around the chest or throat for coughs/bronchitis, and cover completely with a wider dry wool flannel scarf pinned tightly so body heat warms it through the night.'
+    ],
+    toolsNeeded: ['Wool Flannel Fomentation Blankets & Cotton Towels', 'Deep Foot Bath Tub & Water Thermometer', 'Sealed Metal Pyrolysis Tin & Mortar/Pestle', 'Pulverized Hardwood Charcoal Powder (Eucalyptus/Peach)', 'Ground Flaxseed or Cassava Meal', 'Kettle & Double Boiler'],
+    inspiredCounsel: '"Pulverized charcoal, wet with water or used in poultices, is most successful in checking inflammation and drawing out poison... In health and in sickness, pure water is one of Heaven\'s choicest blessings. Its proper use promotes health. It is the beverage which God provided to quench the thirst of animals and man." — E.G. White, Selected Messages Book 2, p. 294 & Ministry of Healing, p. 237 (2SM 294.2 · MH 237.1)',
+    commonMistakes: [
+      'Applying scalding fomentation cloths directly to bare skin without a dry insulating layer or without testing temperature on the inner wrist, especially on diabetic or elderly patients with reduced sensation.',
+      'Leaving a cold wet compress uncovered by dry wool flannel, which chills the patient through evaporation instead of creating a therapeutic heating reaction.'
+    ],
+    seasonalTag: 'Year-Round / Any Season',
+    prerequisiteSkillIds: ['offgrid-first-aid', 'herbs-cultivation-medicinal'],
+    prerequisiteNote: 'Builds upon emergency first aid triage and medicinal herb garden preparation.'
+  },
+  {
+    id: 'plant-protein-nut-milks-oil-pressing',
+    title: 'Edenic Sustenance: Plant Milks, Tofu Curds, Sprouting & Cold Oil Pressing',
+    category: 'Food & Preservation',
+    difficulty: 'Beginner',
+    timeToMaster: '2 Weeks',
+    iconName: 'oilpress',
+    summary: 'Producing complete plant-based proteins, dairy-free soybean and groundnut milks, coagulated tofu curds, sprouted legumes, and cold-pressed sunflower/moringa oils without electricity or dairy reliance.',
+    description: 'As Ellen White foretold, disease in animal flocks and dairy cattle makes plant-based nutrition a cornerstone of country self-sufficiency. Malawi’s climate excels at producing high-protein soybeans, groundnuts, pigeon peas, macadamia nuts, sesame, and oilseed sunflowers. Mastering wet-milling for plant milks, lemon/nigari tofu coagulation, 72-hour seed sprouting, and manual screw/ram oil pressing ensures abundant protein, calcium, and essential fatty acids entirely from your own soil.',
+    steps: [
+      'Soybean & Groundnut Milk Production: Soak 500g clean non-GMO soybeans in water for 10 hours; rub off hulls. Wet-grind with 3.5L water into a fine slurry. Strain through a tight muslin cloth (save okara pulp for bread/patties). Boil the raw soy milk at a rolling simmer for 20 minutes to neutralize trypsin inhibitors and bean enzymes.',
+      'Artisanal Homestead Tofu Coagulation: Cool freshly boiled soy milk to 78°C. Slowly stir in a coagulant solution (60ml fresh squeezed lemon/lime juice or 2 tsp nigari/Epsom salt dissolved in warm water) in a figure-8 motion. Cover for 15 minutes until white curds separate from clear amber whey; press curds in a cloth-lined wooden mold under a 2kg stone for 30 minutes.',
+      '72-Hour Legume Sprouting Protocol: Soak mung beans, lentils, or cowpeas for 8 hours, drain in a wide-mouth glass jar with a mesh lid, and rinse twice daily in shade for 3 days. Sprouting neutralizes phytic acid, increases Vitamin C by 300%, and reduces firewood cooking time from 90 minutes to 15 minutes.',
+      'Cold-Pressed Sunflower & Moringa Oil: Harvest and sun-dry black-hulled oilseed sunflower seeds or winged Moringa oleifera seeds to <8% moisture. Feed into a manual lever ram-press (Capricorn/Bielenberg press) to extract golden virgin cooking oil; clarify by gravity settling for 48 hours in dark glass jugs.',
+      'Stone-Ground Nut Creams & Tahini: Lightly toast shelled groundnuts, macadamia nuts, or white sesame seeds in a heavy cast-iron pan; grind warm in a burr mill or mortar into smooth nut butter. Whisk 2 tbsp nut butter with warm water to create instant dairy-free cream for soups, gravies, and breadmaking.'
+    ],
+    toolsNeeded: ['Muslin / Cheesecloth Straining Bags', 'Perforated Wooden Tofu Press Box', 'Wide-Mouth Glass Sprouting Jars with Mesh Lids', 'Manual Lever Oilseed Ram-Press', 'Heavy Cast-Iron Skillet & Burr Grinder'],
+    inspiredCounsel: '"Grains, fruits, nuts, and vegetables constitute the diet chosen for us by our Creator. These foods, prepared in as simple and natural a manner as possible, are the most healthful and nourishing... The time will come when we may have to discard some of the articles of diet we now use, such as milk and cream and eggs." — E.G. White, The Ministry of Healing, p. 296 & Counsels on Diet and Foods, p. 206 (MH 296.1 · CD 206.1)',
+    commonMistakes: [
+      'Under-boiling raw soybean milk (<15 minutes), leaving active trypsin inhibitors that cause severe indigestion and block protein absorption.',
+      'Using excessive proportions of rich nuts or oils in a single meal; Ellen White counsels that one tenth to one sixth part of nuts/oil is sufficient alongside grains and fruit (CD 351).'
+    ],
+    seasonalTag: 'Harvest & Storage',
+    prerequisiteSkillIds: ['drought-resistant-crops'],
+    prerequisiteNote: 'Pairs with harvesting and drying homestead legumes, soybeans, and oilseeds.'
+  },
+  {
+    id: 'wood-ash-soap-natural-fibers-tailoring',
+    title: 'Domestic Self-Reliance: Wood-Ash Soap Making & Treadle Tailoring',
+    category: 'SDA Education & Sustenance',
+    difficulty: 'Intermediate',
+    timeToMaster: '3 Weeks',
+    iconName: 'soapmaking',
+    summary: 'Leaching potassium hydroxide (KOH) lye from hardwood cooking ash to saponify sunflower and moringa oils into antiseptic homestead soap, paired with non-electric treadle sewing and healthful garment drafting.',
+    description: 'Complete off-grid independence extends beyond food to hygiene and clothing. By leaching white ash from hardwood cooking fires through a straw-lined barrel with soft rainwater, homesteaders produce natural potassium hydroxide (KOH) lye at zero cost. Saponified with home-pressed sunflower, coconut, or moringa oil and infused with antiseptic neem and lemongrass, this yields gentle laundry and body soap. Simultaneously, mastering a non-electric foot-treadle sewing machine enables families to draft durable, modest, physiologically healthful work garments.',
+    steps: [
+      'Hardwood Ash Leaching Barrel Setup: Drill a 10mm outlet hole near the bottom of a wooden or heavy HDPE barrel; plug with a wooden spigot. Lay a 10cm filter bed of river pebbles topped with 10cm of clean dry straw. Fill barrel tightly with cold, white, sifted ash from burned hardwood (acacia, mango, eucalyptus—never soft pine).',
+      'Percolating & Testing Lye Concentration: Pour soft rainwater slowly over the ash until golden-brown potash lye trickles from the bottom spigot. Test concentration using the traditional specific-gravity test: a fresh chicken egg or raw potato cube should just float with a coin-sized circle exposed above the lye surface.',
+      'Hot-Process Saponification: Heat 2 liters of strained wood-ash lye in a stainless steel or cast-iron pot (never aluminum!) and slowly whisk in 1.5 liters of warm sunflower/coconut/moringa oil blend. Simmer gently for 2–3 hours, stirring periodically until the mixture thickens to a translucent pudding ("trace") with no free oil.',
+      'Botanical Infusion & Curing: Stir in 2 tbsp neem leaf powder, 3 tbsp fresh Aloe vera gel, and 15ml lemongrass essential oil (plus 2 tbsp sea salt to firm potassium soap into harder bars). Pour into cloth-lined wooden molds, cut after 48 hours, and cure on ventilated racks for 3–4 weeks.',
+      'Treadle Sewing & Healthful Garment Drafting: Clean and lubricate a cast-iron foot-treadle sewing machine. Draft work trousers, skirts, and shirts from breathable heavy cotton or linen, ensuring garment weight hangs comfortably from the shoulders with full freedom for deep diaphragmatic breathing.'
+    ],
+    toolsNeeded: ['Ash Leaching Barrel with Spigot & Straw Filter', 'Stainless Steel or Cast-Iron Soap Pot (No Aluminum)', 'Wooden Soap Molds & Wire Cutter', 'Cast-Iron Foot-Treadle Sewing Machine', 'Tailoring Shears, Measuring Tape & Heavy Cotton Fabric'],
+    inspiredCounsel: '"Strict habits of cleanliness should be maintained. Many are susceptible to disease merely because of their uncleanly habits... Our clothing, while modest and simple, should be of good quality, of becoming colors, and suited for service. It should be chosen for durability rather than display; and it should provide warmth and proper protection, leaving the lungs and limbs free to act." — E.G. White, Counsels on Health, p. 101 & Education, p. 248 (CH 101.2 · Ed 248.2)',
+    commonMistakes: [
+      'Boiling wood-ash lye in an aluminum pot, which reacts violently with alkali, corroding the pot and releasing toxic hydrogen gas.',
+      'Using softwood pine ash or un-sifted charcoal chunks, which yields weak lye and leaves abrasive black grit in finished laundry soap.'
+    ],
+    seasonalTag: 'Year-Round / Any Season',
+    prerequisiteNote: 'Foundational domestic economy and sanitation trade skill. No prerequisites required.'
+  },
+  {
+    id: 'sabbath-sanctuary-fireless-thermal-cooking',
+    title: 'Sabbath Preparation, Fireless Thermal Cookers & Outpost Literature Ministry',
+    category: 'SDA Education & Sustenance',
+    difficulty: 'Beginner',
+    timeToMaster: '1 Week',
+    iconName: 'thermalcooker',
+    summary: 'Constructing insulated hay-box / rice-hull thermal cookers (Wonderbags) to keep Sabbath meals hot from Friday sundown without kindling fires, combined with rocket-stove masonry and village gospel outreach.',
+    description: 'In the country outpost, Friday ("the preparation day") is organized with calm precision so that when the sun sets behind the mountains, all cooking, bathing, tool cleaning, and secular labor are finished (Exodus 16:23; Testimonies Vol. 6, p. 355). By constructing high-efficiency insulated clay rocket stoves for Friday preparation and sewing deep rice-hull or sheep-wool thermal retention cookers (fireless cookers), stews, beans, and whole grains brought to a 10-minute boil on Friday afternoon remain piping hot (above 68°C food-safe threshold) through Sabbath noon meal—freeing the entire family for worship, nature study, and medical/literature ministry.',
+    steps: [
+      'Insulated Clay-Pumice Rocket Stove Construction: Build an L-shaped combustion tunnel using 1 part clay, 2 parts coarse sand, and 2 parts crushed charcoal/rice-hull ash insulation. The vertical insulated chimney creates a fierce draft that boils 5L of water using only 4 small dry twigs, cutting smoke and firewood use by 75%.',
+      'Sewing the Fireless Thermal Cooker (Wonderbag / Hay-Box): Sew two concentric heavy cotton drawstring bags (inner bag 45cm diameter, outer bag 65cm diameter) and pack the 10cm annular wall tightly with dry rice hulls, kapok fiber, raw sheep wool, or shredded dry maize husks, plus a thick insulated top pillow.',
+      'Friday Afternoon Thermal Cooking Protocol: Two hours before Friday sunset, bring a heavy lidded stainless or cast-iron pot of seasoned beans, brown rice, or vegetable stew to a rolling boil for 15 minutes on the rocket stove. Immediately transfer the sealed boiling pot into the insulated thermal bag, cinch the top pillow tight, and place in a draft-free corner.',
+      'Friday Sundown Sanctuary Readiness: Polish boots/shoes, lay out Sabbath garments, prepare solar-heated or stove-heated bathwater, harvest fresh fruit, and tidy the homestead yard 30 minutes before sunset so the family greets the Sabbath with singing and Scripture.',
+      'Sabbath Afternoon Outpost Ministry: Pack health tracts, Chichewa/English Steps to Christ, solar-charged audio-Bibles, and small baskets of homestead fruit or herbal teas to visit sick, elderly, or bereaved villagers within walking distance.'
+    ],
+    toolsNeeded: ['Heavy Cotton Fabric & Dry Rice Hulls / Kapok Insulation', 'Tight-Fitting Lidded Stainless or Cast-Iron Stockpot', 'Clay-Sand Insulated Rocket Stove', 'Solar Audio-Bible & Health Literature Pouch'],
+    inspiredCounsel: '"On Friday let the preparation for the Sabbath be completed. See that all the clothing is in readiness and that all the cooking is done. Let the boots be blacked and the baths be taken. It is possible to do this. If you make it a rule you can do it. The Sabbath is not to be given to the repairing of garments, to the cooking of food, to pleasure seeking, or to any other worldly employment." — E.G. White, Testimonies for the Church, Vol. 6, pp. 355–356 (6T 355.3)',
+    commonMistakes: [
+      'Using a thin, poorly fitting pot lid or opening the thermal cooker repeatedly to peek, which releases trapped steam heat and allows food temperature to drop below 60°C.',
+      'Delaying Friday preparation until late afternoon, rushing into the sacred Sabbath hours exhausted and irritable.'
+    ],
+    seasonalTag: 'Year-Round / Any Season',
+    prerequisiteNote: 'Essential Seventh-day Adventist homestead rhythm and energy-conservation skill.'
   }
 ];
 

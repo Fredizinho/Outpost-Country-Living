@@ -236,11 +236,11 @@ export function OutpostLogo({
       <div className={cn("flex flex-col", layout === 'vertical' ? "items-center" : "items-start")}>
         <div className="flex items-center gap-1.5 flex-wrap">
           <span className={cn(
-            "serif font-extrabold tracking-tight transition-colors",
+            "font-display font-extrabold tracking-tight transition-colors",
             titleSizes[size],
             titleColor
           )}>
-            OUTPOST <span className={cn("italic font-normal transition-colors", accentColor)}>Country Living</span>
+            OUTPOST <span className={cn("font-semibold transition-colors", accentColor)}>Country Living</span>
           </span>
         </div>
 

@@ -243,7 +243,7 @@ export const DETACHED_REGIONS_DATA: Record<DetachedRegionId, DetachedRegionDetai
       {
         id: 'n-soil-1',
         name: 'Highland Humic Peat & Mountain Loam',
-        classification: 'Humic Cambisols & Andosols',
+        classification: 'Humic Acrisols & Dystric Cambisols (FAO HWSD v2.0)',
         phRange: 'pH 5.2 - 6.0',
         texture: 'Deep crumbly organic loam rich in humus',
         fertility: 'Very High',
@@ -271,7 +271,7 @@ export const DETACHED_REGIONS_DATA: Record<DetachedRegionId, DetachedRegionDetai
       {
         id: 'n-soil-3',
         name: 'Nkhata Bay / Lakeshore Alluvial Silt',
-        classification: 'Fluvisols & Sandy Entisols',
+        classification: 'Eutric Fluvisols & Humic Ferralsols (FAO HWSD v2.0)',
         phRange: 'pH 6.2 - 7.0',
         texture: 'Silky alluvial river silt and lacustrine sands',
         fertility: 'High',
@@ -534,8 +534,8 @@ export const DETACHED_REGIONS_DATA: Record<DetachedRegionId, DetachedRegionDetai
       {
         id: 'c-soil-2',
         name: 'Dedza & Ntcheu Volcanic Humic Loam',
-        classification: 'Humic Andosols & Nitisols',
-        phRange: 'pH 6.0 - 6.6',
+        classification: 'Eutric & Humic Nitisols (FAO HWSD v2.0)',
+        phRange: 'pH 5.8 - 6.5',
         texture: 'Deep volcanic friable crumbly clay loam',
         fertility: 'Very High',
         color: '#7c2d12',

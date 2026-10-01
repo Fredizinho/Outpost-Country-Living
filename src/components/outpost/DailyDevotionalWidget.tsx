@@ -1,248 +1,314 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  BookOpen, Heart, Sparkles, Copy, Check, ChevronLeft, 
-  ChevronRight, Calendar, Bookmark, BookmarkCheck, Share2, 
-  Sprout, Sun, ShieldCheck, RefreshCw, Feather
+import { DAILY_DEVOTIONALS } from '@/data/outpostFourPillarsData';
+import { fetchVerifiedScriptureWithFallback } from '@/lib/apiClient';
+import {
+  ExternalLink,
+  RefreshCw,
+  CheckCircle2,
+  ShieldCheck,
+  Quote as QuoteIcon,
+  Sun as SabbathRestIcon,
+  BookOpen as SpiritualGrowthIcon,
+  Sprout as EdenicDietIcon,
+  Compass as SoilTestIcon,
+  PenLine,
+  Save
 } from 'lucide-react';
-import { DAILY_DEVOTIONALS, DailyDevotional } from '@/data/outpostFourPillarsData';
-import { cn } from '@/lib/utils';
 
-export function DailyDevotionalWidget({ className }: { className?: string }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedTheme, setSelectedTheme] = useState<string>('All');
-  const [copied, setCopied] = useState(false);
-  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => {
+const REFLECTIONS_STORAGE_KEY = 'outpost_devotional_reflections_v1';
+
+interface DevotionalReflectionEntry {
+  note: string;
+  updatedAt: string;
+}
+
+export function DailyDevotionalWidget() {
+  const dayOfYear = useMemo(() => {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), 0, 0);
+    const diff = now.getTime() - start.getTime();
+    const oneDay = 1000 * 60 * 60 * 24;
+    return Math.floor(diff / oneDay);
+  }, []);
+
+  const initialIndex = dayOfYear % DAILY_DEVOTIONALS.length;
+  const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  const [liveKjvText, setLiveKjvText] = useState<
+    Record<string, { text: string; reference: string; source: string }>
+  >({});
+  const [verifyingScripture, setVerifyingScripture] = useState(false);
+
+  // Personal & Family Prayer Reflection Journal persisted in local/backup vault
+  const [reflections, setReflections] = useState<Record<string, DevotionalReflectionEntry>>(() => {
     try {
-      const saved = localStorage.getItem('outpost_bookmarked_devotionals');
-      return saved ? JSON.parse(saved) : [];
+      const saved = localStorage.getItem(REFLECTIONS_STORAGE_KEY);
+      return saved ? JSON.parse(saved) : {};
     } catch {
-      return [];
+      return {};
     }
   });
+  const [draftNote, setDraftNote] = useState('');
+  const [savedNotice, setSavedNotice] = useState(false);
 
-  const themes = ['All', 'Nature Study', 'The Outpost Vision', 'Agricultural Parables', 'Health & Healing', 'Family Education'];
+  const currentDevotional = DAILY_DEVOTIONALS[currentIndex];
 
-  const filteredDevotionals = useMemo(() => {
-    if (selectedTheme === 'All') return DAILY_DEVOTIONALS;
-    return DAILY_DEVOTIONALS.filter(d => d.theme === selectedTheme);
-  }, [selectedTheme]);
-
-  // Keep index within bounds when theme changes
   useEffect(() => {
-    setCurrentIndex(0);
-  }, [selectedTheme]);
+    setDraftNote(reflections[currentDevotional.id]?.note || '');
+    setSavedNotice(false);
+  }, [currentDevotional.id, reflections]);
 
-  const currentDevotional: DailyDevotional = filteredDevotionals[currentIndex] || DAILY_DEVOTIONALS[0];
-
-  const isBookmarked = bookmarkedIds.includes(currentDevotional.id);
-
-  const toggleBookmark = () => {
-    const updated = isBookmarked
-      ? bookmarkedIds.filter(id => id !== currentDevotional.id)
-      : [...bookmarkedIds, currentDevotional.id];
-    setBookmarkedIds(updated);
+  const handleSaveReflection = () => {
+    const updated: Record<string, DevotionalReflectionEntry> = {
+      ...reflections,
+      [currentDevotional.id]: {
+        note: draftNote.trim(),
+        updatedAt: new Date().toLocaleDateString([], {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+        }),
+      },
+    };
+    setReflections(updated);
     try {
-      localStorage.setItem('outpost_bookmarked_devotionals', JSON.stringify(updated));
+      localStorage.setItem(REFLECTIONS_STORAGE_KEY, JSON.stringify(updated));
     } catch {
-      // ignore
+      // ignore storage quota errors
     }
-  };
-
-  const handleCopy = async () => {
-    const textToCopy = `"${currentDevotional.egwQuote.text}"\n— ${currentDevotional.egwQuote.source}\n\nScripture: ${currentDevotional.scripture.verse} (${currentDevotional.scripture.reference})\n\nReflection: ${currentDevotional.practicalReflection}\n\nOutpost Country Living Sanctuary`;
-    try {
-      await navigator.clipboard.writeText(textToCopy);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2200);
-    } catch {
-      // ignore
-    }
+    setSavedNotice(true);
+    setTimeout(() => setSavedNotice(false), 2500);
   };
 
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % filteredDevotionals.length);
+    setCurrentIndex((prev) => (prev + 1) % DAILY_DEVOTIONALS.length);
   };
 
   const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + filteredDevotionals.length) % filteredDevotionals.length);
+    setCurrentIndex((prev) => (prev - 1 + DAILY_DEVOTIONALS.length) % DAILY_DEVOTIONALS.length);
   };
 
+  const handleVerifyLiveScripture = async () => {
+    const ref = currentDevotional.scripture.reference.split(';')[0].trim();
+    setVerifyingScripture(true);
+    try {
+      const data = await fetchVerifiedScriptureWithFallback(
+        ref,
+        currentDevotional.scripture.verse
+      );
+      setLiveKjvText((prev) => ({
+        ...prev,
+        [currentDevotional.id]: {
+          text: data.text,
+          reference: data.reference,
+          source: data.verifiedSource,
+        },
+      }));
+    } catch {
+      // Keep default text on offline fallback
+    } finally {
+      setVerifyingScripture(false);
+    }
+  };
+
+  const verifiedVerse = liveKjvText[currentDevotional.id];
+  const savedEntry = reflections[currentDevotional.id];
+
   return (
-    <section 
-      id="country-living-devotional"
-      aria-label="Daily Country Living Devotional"
-      className={cn(
-        "relative rounded-3xl bg-[#FAF8F5] dark:bg-[#0E1D14] border border-stone-200/90 dark:border-emerald-900/60 shadow-sm p-6 sm:p-8 md:p-10 transition-colors",
-        className
-      )}
-    >
-      {/* Top Header & Theme Selector */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-stone-200/80 dark:border-emerald-900/40">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-emerald-800 dark:bg-emerald-700 text-amber-300 flex items-center justify-center shadow-inner">
-            <Feather size={20} />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold tracking-wider text-emerald-800 dark:text-amber-300 uppercase">
-                Spirit of Prophecy & Scripture
-              </span>
-              <span className="text-stone-300 dark:text-stone-600">•</span>
-              <span className="text-xs font-medium text-stone-500 dark:text-stone-400">Daily Country Living Manna</span>
+    <section className="py-6 relative">
+      <div className="max-w-5xl mx-auto">
+        <div className="relative rounded-[2.5rem] bg-gradient-to-br from-[#1C2A21] via-[#152019] to-[#0F1712] text-[#F7F4EC] p-6 sm:p-8 md:p-12 shadow-2xl border border-white/10 overflow-hidden">
+          <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#C89B3C]/10 blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-[#2E6F40]/15 blur-3xl pointer-events-none" />
+
+          {/* Top Bar */}
+          <div className="relative z-10 flex flex-wrap items-center justify-between gap-4 pb-8 mb-8 border-b border-white/10">
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-2xl bg-[#C89B3C]/20 border border-[#C89B3C]/40 flex items-center justify-center text-[#E6B655]">
+                <SabbathRestIcon className="w-6 h-6" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[#E6B655]">
+                  <span>Morning Watch & Country Counsel</span>
+                  <span aria-hidden="true">·</span>
+                  <span className="text-white/80">{currentDevotional.theme}</span>
+                </div>
+                <h3 className="text-xl md:text-2xl font-serif font-normal text-white mt-0.5">
+                  Daily Sanctuary Reflection
+                </h3>
+              </div>
             </div>
-            <h2 className="serif text-xl sm:text-2xl font-bold text-stone-900 dark:text-stone-50 tracking-tight">
-              {currentDevotional.title}
-            </h2>
+
+            {/* Day selector controls */}
+            <div className="flex items-center gap-2 bg-white/5 p-1.5 rounded-2xl border border-white/10">
+              <button
+                onClick={handlePrev}
+                className="px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-white/70 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                aria-label="Previous devotional"
+              >
+                ← Prev
+              </button>
+              <span className="px-3 text-xs font-mono text-[#E6B655]">
+                {currentIndex + 1} / {DAILY_DEVOTIONALS.length}
+              </span>
+              <button
+                onClick={handleNext}
+                className="px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-white/70 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                aria-label="Next devotional"
+              >
+                Next →
+              </button>
+            </div>
           </div>
-        </div>
 
-        {/* Action Controls: Bookmark, Copy, Navigation */}
-        <div className="flex items-center gap-2 self-start sm:self-auto">
-          <button
-            type="button"
-            onClick={toggleBookmark}
-            title={isBookmarked ? "Remove Bookmark" : "Bookmark this devotional"}
-            className={cn(
-              "p-2.5 rounded-xl border transition-all flex items-center gap-1.5 text-xs font-semibold cursor-pointer",
-              isBookmarked 
-                ? "bg-amber-100/80 dark:bg-amber-950/60 border-amber-300 dark:border-amber-600/60 text-amber-900 dark:text-amber-200" 
-                : "bg-white dark:bg-[#14281D] border-stone-200 dark:border-emerald-900/60 text-stone-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-emerald-950/60"
-            )}
-          >
-            {isBookmarked ? <BookmarkCheck size={16} className="text-amber-700 dark:text-amber-400" /> : <Bookmark size={16} />}
-            <span className="hidden md:inline">{isBookmarked ? "Saved" : "Save"}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={handleCopy}
-            title="Copy reflection to clipboard"
-            className="p-2.5 rounded-xl border border-stone-200 dark:border-emerald-900/60 bg-white dark:bg-[#14281D] text-stone-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-emerald-950/60 transition-all text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
-          >
-            {copied ? <Check size={16} className="text-emerald-700 dark:text-emerald-400" /> : <Copy size={16} />}
-            <span className="hidden md:inline">{copied ? "Copied" : "Share"}</span>
-          </button>
-
-          <div className="flex items-center gap-1 border-l border-stone-200 dark:border-emerald-900/60 pl-2">
-            <button
-              type="button"
-              onClick={handlePrev}
-              disabled={filteredDevotionals.length <= 1}
-              title="Previous devotional"
-              className="p-2 rounded-xl border border-stone-200 dark:border-emerald-900/60 bg-white dark:bg-[#14281D] text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-emerald-950/60 disabled:opacity-40 transition-all cursor-pointer"
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentDevotional.id}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.3 }}
+              className="relative z-10 flex flex-col gap-6"
             >
-              <ChevronLeft size={16} />
-            </button>
-            <span className="text-xs font-mono font-medium text-stone-500 dark:text-stone-400 px-1">
-              {currentIndex + 1}/{filteredDevotionals.length}
-            </span>
-            <button
-              type="button"
-              onClick={handleNext}
-              disabled={filteredDevotionals.length <= 1}
-              title="Next devotional"
-              className="p-2 rounded-xl border border-stone-200 dark:border-emerald-900/60 bg-white dark:bg-[#14281D] text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-emerald-950/60 disabled:opacity-40 transition-all cursor-pointer"
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
+              <h4 className="text-2xl md:text-4xl font-serif font-normal text-[#F7F4EC] leading-tight">
+                {currentDevotional.title}
+              </h4>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Scripture Card with Live Verification */}
+                <div className="bg-white/[0.04] backdrop-blur-sm rounded-3xl p-6 md:p-8 border border-white/10 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-4">
+                      <div className="flex items-center gap-2 text-[#86EFAC] text-xs font-bold uppercase tracking-widest">
+                        <SpiritualGrowthIcon className="w-4 h-4" />
+                        <span>The Sacred Word (KJV)</span>
+                      </div>
+                      <button
+                        onClick={handleVerifyLiveScripture}
+                        disabled={verifyingScripture}
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10 hover:bg-[#C89B3C]/30 text-[10px] font-bold uppercase tracking-wider text-[#E6B655] transition-colors cursor-pointer"
+                      >
+                        <RefreshCw className={`w-3 h-3 ${verifyingScripture ? 'animate-spin' : ''}`} />
+                        {verifiedVerse ? 'Verified Live' : 'Verify Live API'}
+                      </button>
+                    </div>
+                    <p className="text-lg md:text-xl font-serif italic text-white/95 leading-relaxed mb-4">
+                      “{verifiedVerse ? verifiedVerse.text : currentDevotional.scripture.verse}”
+                    </p>
+                  </div>
+                  <div className="flex items-center justify-between pt-3 border-t border-white/10">
+                    <div className="text-xs font-bold uppercase tracking-widest text-[#E6B655]">
+                      — {verifiedVerse ? verifiedVerse.reference : currentDevotional.scripture.reference}
+                    </div>
+                    {verifiedVerse && (
+                      <span className="inline-flex items-center gap-1 text-[10px] text-[#86EFAC] font-mono">
+                        <CheckCircle2 className="w-3 h-3" /> {verifiedVerse.source}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Verbatim Spirit of Prophecy Card */}
+                <div className="bg-[#C89B3C]/[0.08] backdrop-blur-sm rounded-3xl p-6 md:p-8 border border-[#C89B3C]/25 flex flex-col justify-between">
+                  <div>
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+                      <div className="flex items-center gap-2 text-[#E6B655] text-xs font-bold uppercase tracking-widest">
+                        <QuoteIcon className="w-4 h-4" />
+                        <span>Spirit of Prophecy Counsel</span>
+                      </div>
+                      {currentDevotional.egwQuote.egwCode && (
+                        <span className="inline-flex items-center gap-1 text-[11px] font-mono text-[#E6B655]">
+                          <ShieldCheck className="w-3 h-3" /> {currentDevotional.egwQuote.egwCode}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-base md:text-lg font-serif text-white/90 leading-relaxed mb-4">
+                      “{currentDevotional.egwQuote.text}”
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-[#C89B3C]/20">
+                    <div className="text-xs font-bold uppercase tracking-widest text-[#E6B655]">
+                      — Ellen G. White,{' '}
+                      <span className="italic font-normal">{currentDevotional.egwQuote.source}</span>
+                    </div>
+                    {currentDevotional.egwQuote.verifiedUrl && (
+                      <a
+                        href={currentDevotional.egwQuote.verifiedUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-white/80 hover:text-[#E6B655] transition-colors"
+                      >
+                        <span>EGW Estate</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Practical Homestead Reflection & Prayer */}
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 bg-black/25 rounded-3xl p-6 md:p-8 border border-white/10">
+                <div className="md:col-span-7 space-y-2">
+                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#86EFAC]">
+                    <SoilTestIcon className="w-4 h-4" />
+                    <span>Homestead Application Today</span>
+                  </div>
+                  <p className="text-sm md:text-base text-white/80 leading-relaxed">
+                    {currentDevotional.practicalReflection}
+                  </p>
+                </div>
+
+                <div className="md:col-span-5 md:border-l border-white/10 md:pl-6 space-y-2">
+                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#E6B655]">
+                    <EdenicDietIcon className="w-4 h-4" />
+                    <span>Family Prayer Focus</span>
+                  </div>
+                  <p className="text-sm font-serif italic text-white/90 leading-relaxed">
+                    “{currentDevotional.prayerPrompt}”
+                  </p>
+                </div>
+              </div>
+
+              {/* Personal & Family Reflection Journal Vault */}
+              <div className="bg-white/[0.03] rounded-3xl p-5 sm:p-6 border border-white/10 flex flex-col gap-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#E6B655]">
+                    <PenLine className="w-4 h-4" />
+                    <span>Personal & Family Worship Journal</span>
+                  </div>
+                  {savedEntry?.updatedAt && (
+                    <span className="text-[11px] font-mono text-white/60">
+                      Last saved: {savedEntry.updatedAt}
+                    </span>
+                  )}
+                </div>
+
+                <textarea
+                  rows={3}
+                  value={draftNote}
+                  onChange={(e) => setDraftNote(e.target.value)}
+                  placeholder="Record your family’s prayer requests, country-living impressions, or action steps from today’s reading (saved offline in your device vault)..."
+                  className="w-full rounded-2xl bg-black/30 border border-white/15 px-4 py-3 text-xs sm:text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-[#C89B3C] transition-colors"
+                />
+
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-[11px] text-white/50 font-mono">
+                    Included automatically in Sanctuary JSON Backups
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleSaveReflection}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#C89B3C] hover:bg-[#d8ab4c] text-[#141D17] text-xs font-bold uppercase tracking-wider transition-all cursor-pointer"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>{savedNotice ? 'Saved to Vault ✓' : 'Save Reflection'}</span>
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
-
-      {/* Theme Filters */}
-      <div className="flex items-center gap-1.5 overflow-x-auto py-3 no-scrollbar">
-        {themes.map((theme) => (
-          <button
-            key={theme}
-            type="button"
-            onClick={() => setSelectedTheme(theme)}
-            className={cn(
-              "text-xs font-medium px-3.5 py-1.5 rounded-xl whitespace-nowrap transition-all cursor-pointer",
-              selectedTheme === theme
-                ? "bg-emerald-900 dark:bg-emerald-700 text-white font-semibold shadow-xs"
-                : "bg-white dark:bg-[#14281D] text-stone-600 dark:text-stone-300 hover:bg-stone-100/80 dark:hover:bg-emerald-950/60 border border-stone-200/80 dark:border-emerald-900/60"
-            )}
-          >
-            {theme}
-          </button>
-        ))}
-      </div>
-
-      {/* Main Devotional Content Card */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentDevotional.id}
-          initial={{ opacity: 0, y: 4 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -4 }}
-          transition={{ duration: 0.18 }}
-          className="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-6"
-        >
-          {/* Inspired Quote (Ellen G. White) */}
-          <div className="lg:col-span-7 flex flex-col justify-between p-6 sm:p-7 rounded-2xl bg-white dark:bg-[#14281D] border border-stone-200/90 dark:border-emerald-900/60 shadow-xs">
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-lg">
-                  {currentDevotional.theme}
-                </span>
-                <span className="text-xs font-medium text-stone-500 dark:text-stone-400 italic">
-                  Ellen G. White Counsel
-                </span>
-              </div>
-
-              <blockquote className="serif text-lg sm:text-xl text-stone-800 dark:text-stone-100 font-medium leading-relaxed italic border-l-2 border-amber-600/70 pl-4 py-1">
-                "{currentDevotional.egwQuote.text}"
-              </blockquote>
-            </div>
-
-            <div className="mt-5 pt-4 border-t border-stone-100 dark:border-emerald-900/40 flex items-center justify-between">
-              <span className="text-xs font-bold text-stone-700 dark:text-stone-300">
-                — {currentDevotional.egwQuote.source}
-              </span>
-              <span className="text-xs font-mono text-emerald-800 dark:text-amber-300 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md">
-                Book: {currentDevotional.egwQuote.book}
-              </span>
-            </div>
-          </div>
-
-          {/* Scripture & Practical Application Column */}
-          <div className="lg:col-span-5 flex flex-col gap-4">
-            {/* Scripture Anchor */}
-            <div className="p-5 rounded-2xl bg-amber-50/80 dark:bg-amber-950/30 border border-amber-200/70 dark:border-amber-800/40 flex flex-col gap-2">
-              <div className="flex items-center justify-between text-amber-900 dark:text-amber-300 text-xs font-bold uppercase tracking-wider">
-                <span className="flex items-center gap-1.5">
-                  <BookOpen size={14} className="text-amber-800 dark:text-amber-400" />
-                  Scripture Anchor
-                </span>
-                <span className="font-semibold">{currentDevotional.scripture.reference}</span>
-              </div>
-              <p className="serif text-sm sm:text-base text-stone-800 dark:text-stone-200 italic leading-relaxed">
-                "{currentDevotional.scripture.verse}"
-              </p>
-            </div>
-
-            {/* Practical Daily Application */}
-            <div className="p-5 rounded-2xl bg-white dark:bg-[#14281D] border border-stone-200/80 dark:border-emerald-900/60 flex flex-col gap-2 shadow-xs">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5">
-                <Sprout size={14} /> Practical Country Lesson
-              </span>
-              <p className="text-sm text-stone-700 dark:text-stone-300 leading-relaxed">
-                {currentDevotional.practicalReflection}
-              </p>
-            </div>
-
-            {/* Prayer Prompt */}
-            <div className="p-4 rounded-xl bg-stone-100/80 dark:bg-emerald-950/40 border border-stone-200/60 dark:border-emerald-900/40 flex items-start gap-2.5">
-              <Heart size={15} className="text-emerald-800 dark:text-amber-300 mt-0.5 shrink-0" />
-              <div className="text-xs sm:text-sm text-stone-700 dark:text-stone-300 italic leading-relaxed">
-                <strong className="not-italic text-stone-900 dark:text-stone-100 font-semibold">Prayer: </strong>
-                {currentDevotional.prayerPrompt}
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </AnimatePresence>
     </section>
   );
 }

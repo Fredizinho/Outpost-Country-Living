@@ -9,7 +9,16 @@ import {
   OUTPOST_BLUEPRINTS, 
   OutpostBlueprint 
 } from '@/data/outpostFourPillarsData';
+import { CountryIcon, CountryIconName } from '@/components/icons/CountryIcons';
 import { cn } from '@/lib/utils';
+import { OutpostSitePlanDiagram } from './OutpostSitePlanDiagram';
+
+const BLUEPRINT_ILLUSTRATIONS: Record<OutpostBlueprint['type'], CountryIconName> = {
+  'Home School': 'homestead',
+  'Small Sanitarium': 'outpost',
+  'Treatment Rooms': 'hydro',
+  'Agricultural Training': 'orchard',
+};
 
 export function OutpostCenterBlueprints({ className }: { className?: string }) {
   const [selectedBlueprintId, setSelectedBlueprintId] = useState<string>('home-school-blueprint');
@@ -45,6 +54,7 @@ export function OutpostCenterBlueprints({ className }: { className?: string }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {OUTPOST_BLUEPRINTS.map((bp) => {
           const isSelected = selectedBlueprintId === bp.id;
+          const iconName = BLUEPRINT_ILLUSTRATIONS[bp.type] || 'outpost';
 
           return (
             <button
@@ -52,22 +62,21 @@ export function OutpostCenterBlueprints({ className }: { className?: string }) {
               type="button"
               onClick={() => setSelectedBlueprintId(bp.id)}
               className={cn(
-                "p-4 rounded-2xl text-left border transition-all flex flex-col justify-between gap-2.5 shadow-xs cursor-pointer",
+                "p-4 rounded-2xl text-left border transition-all flex flex-col justify-between gap-3 shadow-xs cursor-pointer group",
                 isSelected
                   ? "bg-emerald-900 dark:bg-emerald-800 text-white border-emerald-950 dark:border-emerald-700 ring-2 ring-emerald-800/30"
                   : "bg-white dark:bg-[#0E1D14] hover:bg-stone-50 dark:hover:bg-emerald-950/60 border-stone-200 dark:border-emerald-900/60 text-stone-900 dark:text-stone-100"
               )}
             >
-              <div className="flex items-center justify-between">
-                <span className={cn(
-                  "w-8 h-8 rounded-xl flex items-center justify-center",
-                  isSelected ? "bg-white/20 text-amber-300" : "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300"
+              <div className="flex items-center justify-between gap-2">
+                <div className={cn(
+                  "w-14 h-14 rounded-xl p-1.5 flex items-center justify-center border shrink-0 transition-transform group-hover:scale-105",
+                  isSelected
+                    ? "bg-[#07150E] border-emerald-500/40"
+                    : "bg-[#FAF6EE] dark:bg-[#07150E] border-stone-200/80 dark:border-emerald-900/60"
                 )}>
-                  {bp.type === 'Home School' && <Home size={16} />}
-                  {bp.type === 'Small Sanitarium' && <Building2 size={16} />}
-                  {bp.type === 'Treatment Rooms' && <Stethoscope size={16} />}
-                  {bp.type === 'Agricultural Training' && <Sprout size={16} />}
-                </span>
+                  <CountryIcon name={iconName} className="w-full h-full object-contain" />
+                </div>
                 <span className={cn(
                   "text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded",
                   isSelected ? "bg-white/20 text-emerald-100" : "bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300"
@@ -132,6 +141,9 @@ export function OutpostCenterBlueprints({ className }: { className?: string }) {
             </div>
           </div>
         </div>
+
+        {/* Architectural Site Zoning Vector Diagram & Ready Photography */}
+        <OutpostSitePlanDiagram blueprint={activeBlueprint} />
 
         {/* 2-Column Specs: Key Features & Daily Rhythm */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">

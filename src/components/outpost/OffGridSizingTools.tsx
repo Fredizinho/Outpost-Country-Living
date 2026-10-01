@@ -6,6 +6,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { OffGridSystemSchematics } from './OffGridSystemSchematics';
 
 export function OffGridSizingTools({ className }: { className?: string }) {
   const [activeTab, setActiveTab] = useState<'gravity' | 'rainwater' | 'solar-pump' | 'solar-power'>('gravity');
@@ -246,8 +247,29 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                 {/* Elevation Head */}
                 <div className="flex flex-col gap-1.5">
                   <div className="flex justify-between text-xs sm:text-sm font-semibold text-stone-800 dark:text-stone-200">
-                    <span>Elevation Drop (Head):</span>
+                    <span>Elevation Drop (How high is the spring above the house?):</span>
                     <span className="font-mono text-emerald-800 dark:text-amber-300 font-bold">{gravityHeadMeters} meters</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-1.5 my-1">
+                    {[
+                      { label: 'Gentle Slope (10m ~ 3-story bldg)', val: 10 },
+                      { label: 'Hillside (30m)', val: 30 },
+                      { label: 'Steep Mountain (60m)', val: 60 }
+                    ].map((preset) => (
+                      <button
+                        key={preset.val}
+                        type="button"
+                        onClick={() => setGravityHeadMeters(preset.val)}
+                        className={cn(
+                          "py-1.5 px-2 text-[11px] font-semibold rounded-lg border transition-all cursor-pointer",
+                          gravityHeadMeters === preset.val
+                            ? "bg-emerald-900 dark:bg-emerald-800 text-white border-emerald-950"
+                            : "bg-stone-50 dark:bg-[#14281D] border-stone-200 dark:border-emerald-900/60 text-stone-700 dark:text-stone-300 hover:bg-stone-100"
+                        )}
+                      >
+                        {preset.label}
+                      </button>
+                    ))}
                   </div>
                   <input
                     type="range"
@@ -370,8 +392,29 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                 {/* Roof Area */}
                 <div className="flex flex-col gap-1.5">
                   <div className="flex justify-between text-xs sm:text-sm font-semibold text-stone-800 dark:text-stone-200">
-                    <span>Roof Catchment Area:</span>
+                    <span>Roof Size (Tap a House Size Preset or Slide):</span>
                     <span className="font-mono text-emerald-800 dark:text-amber-300 font-bold">{roofAreaM2} m²</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-1.5 my-1">
+                    {[
+                      { label: 'Small Cabin (50 m²)', val: 50 },
+                      { label: '2-Bed Cottage (90 m²)', val: 90 },
+                      { label: '4-Bed Home (140 m²)', val: 140 }
+                    ].map((preset) => (
+                      <button
+                        key={preset.val}
+                        type="button"
+                        onClick={() => setRoofAreaM2(preset.val)}
+                        className={cn(
+                          "py-1.5 px-2 text-[11px] font-semibold rounded-lg border transition-all cursor-pointer",
+                          roofAreaM2 === preset.val
+                            ? "bg-emerald-900 dark:bg-emerald-800 text-white border-emerald-950"
+                            : "bg-stone-50 dark:bg-[#14281D] border-stone-200 dark:border-emerald-900/60 text-stone-700 dark:text-stone-300 hover:bg-stone-100"
+                        )}
+                      >
+                        {preset.label}
+                      </button>
+                    ))}
                   </div>
                   <input
                     type="range"
@@ -593,6 +636,39 @@ export function OffGridSizingTools({ className }: { className?: string }) {
               </div>
 
               <div className="flex flex-col gap-4 bg-white dark:bg-[#0E1D14] p-5 rounded-2xl border border-stone-200 dark:border-emerald-900/60">
+                {/* One-Click Household Presets for Beginners */}
+                <div className="flex flex-col gap-1.5 pb-3 border-b border-stone-100 dark:border-emerald-900/40">
+                  <span className="text-xs font-bold text-emerald-800 dark:text-amber-300 uppercase tracking-wider">
+                    Quick Household Setup (Tap One if Unsure of Volts/Amps):
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    {[
+                      { label: 'Starter Cabin (Lights + Phones)', lamps: 4, fridge: 0, laptop: 2, volt: 12 as const },
+                      { label: 'Family Home (+ Fridge & Laptops)', lamps: 8, fridge: 14, laptop: 4, volt: 24 as const },
+                      { label: 'Full Outpost (+ Freezer & Clinic)', lamps: 14, fridge: 20, laptop: 8, volt: 48 as const },
+                    ].map((preset) => (
+                      <button
+                        key={preset.label}
+                        type="button"
+                        onClick={() => {
+                          setLampCount(preset.lamps);
+                          setFridgeHours(preset.fridge);
+                          setLaptopHours(preset.laptop);
+                          setBatteryVoltage(preset.volt);
+                        }}
+                        className={cn(
+                          "p-2.5 rounded-xl border text-left text-xs font-semibold transition-all cursor-pointer",
+                          lampCount === preset.lamps && batteryVoltage === preset.volt
+                            ? "bg-emerald-900 dark:bg-emerald-800 text-white border-emerald-950"
+                            : "bg-stone-50 dark:bg-[#14281D] border-stone-200 dark:border-emerald-900/60 text-stone-800 dark:text-stone-200 hover:bg-stone-100"
+                        )}
+                      >
+                        {preset.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 {/* Lighting */}
                 <div className="flex justify-between items-center text-xs sm:text-sm">
                   <span className="font-semibold text-stone-800 dark:text-stone-200">LED Light Fixtures (8W each):</span>
@@ -710,6 +786,46 @@ export function OffGridSizingTools({ className }: { className?: string }) {
             </div>
           </div>
         )}
+
+        {/* Live Reactive Vector Engineering Schematic & Ready Image Reference */}
+        <OffGridSystemSchematics
+          activeTab={activeTab}
+          gravity={{
+            headMeters: gravityHeadMeters,
+            pipeDiameterMm: gravityPipeDiameterMm,
+            pipeLengthMeters: gravityPipeLengthMeters,
+            staticBar: gravityResult.staticBar,
+            staticPsi: gravityResult.staticPsi,
+            qLpm: gravityResult.qLpm,
+          }}
+          rainwater={{
+            roofAreaM2,
+            annualRainfallMm,
+            totalHarvestableLiters: rainResult.totalHarvestableLiters,
+            recommendedStorageLiters: rainResult.recommendedStorageLiters,
+            tanksCount5000L: rainResult.tanksCount5000L,
+          }}
+          solarPump={{
+            boreholeDepthMeters,
+            dailyWaterLiters,
+            recommendedPvWatts: solarPumpResult.recommendedPvWatts,
+            panelCount380W: solarPumpResult.panelCount380W,
+            hourlyM3: solarPumpResult.hourlyM3,
+            electricalWatts: solarPumpResult.electricalWatts,
+          }}
+          solarPower={{
+            lampCount,
+            fridgeHours,
+            laptopHours,
+            batteryVoltage,
+            batteryType,
+            totalDailyWh: solarPowerResult.totalDailyWh,
+            requiredAh: solarPowerResult.requiredAh,
+            pvWattsNeeded: solarPowerResult.pvWattsNeeded,
+            pvPanelsCount400W: solarPowerResult.pvPanelsCount400W,
+            inverterRatingWatts: solarPowerResult.inverterRatingWatts,
+          }}
+        />
       </div>
     </section>
   );

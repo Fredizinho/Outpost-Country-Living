@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import '@/lib/leafletSafePatch';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -211,10 +212,22 @@ export function ScoutingMap({
   }, []);
 
   // Active Geographic Focus Region: 'all' | 'north' | 'central' | 'south'
-  const [activeFocusRegion, setActiveFocusRegion] = useState<FocusRegionId>(initialFocusRegion);
+  const [searchParams] = useSearchParams();
+  const [activeFocusRegion, setActiveFocusRegion] = useState<FocusRegionId>(() => {
+    const regParam = searchParams.get('region')?.toLowerCase();
+    if (regParam === 'north' || regParam === 'northern') return 'north';
+    if (regParam === 'central') return 'central';
+    if (regParam === 'south' || regParam === 'southern') return 'south';
+    return initialFocusRegion;
+  });
   
   // Active District for deep microclimate inspection & vector highlighting
   const [activeDistrict, setActiveDistrict] = useState<MalawiDistrictSpec | null>(() => {
+    const distParam = searchParams.get('district');
+    if (distParam) {
+      const matched = getDistrictByIdOrName(distParam);
+      if (matched) return matched;
+    }
     return getDistrictByIdOrName('Dedza') || null;
   });
   
@@ -281,6 +294,94 @@ export function ScoutingMap({
     return getStoredBookmarkedParcels();
   });
   const [copiedCoords, setCopiedCoords] = useState(false);
+  const [sentEvaluatorNotice, setSentEvaluatorNotice] = useState<string | null>(null);
+
+  // Persistent Custom GPS Field Waypoints
+  const [droppedWaypoint, setDroppedWaypoint] = useState<{
+    lat: number;
+    lng: number;
+    districtName: string;
+    elevationRange: string;
+    rainfallMm: number;
+    aquiferDepth: string;
+    soilPh: string;
+  } | null>(null);
+
+  const [savedWaypoints, setSavedWaypoints] = useState<Array<{
+    id: string;
+    label: string;
+    lat: number;
+    lng: number;
+    districtName: string;
+    savedAt: string;
+  }>>(() => {
+    try {
+      const raw = localStorage.getItem('outpost_saved_waypoints_v1');
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const handleSaveWaypoint = (wp: { lat: number; lng: number; districtName: string }) => {
+    const newEntry = {
+      id: `wp-${Date.now()}`,
+      label: `${wp.districtName} Field Pin (${wp.lat.toFixed(3)}°, ${wp.lng.toFixed(3)}°)`,
+      lat: wp.lat,
+      lng: wp.lng,
+      districtName: wp.districtName,
+      savedAt: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }),
+    };
+    setSavedWaypoints(prev => {
+      const next = [newEntry, ...prev].slice(0, 15);
+      try {
+        localStorage.setItem('outpost_saved_waypoints_v1', JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+    setSentEvaluatorNotice(`Saved GPS Pin in ${wp.districtName}`);
+    setTimeout(() => setSentEvaluatorNotice(null), 3000);
+  };
+
+  const handleSendToEvaluatorFromMap = (title: string, district: string, note: string) => {
+    try {
+      const raw = localStorage.getItem('outpost_suitability_parcels_v1');
+      const existing = raw ? JSON.parse(raw) : [];
+      const defaultScores = {
+        w1: 10, w2: 8, w3: 7,
+        s1: 8, s2: 6, s3: 6,
+        t1: 5, t2: 5, t3: 5,
+        i1: 8, i2: 6, i3: 6,
+        c1: 5, c2: 5, c3: 5,
+      };
+      const entry = {
+        id: `map-${Date.now()}`,
+        name: title,
+        district,
+        acreageNote: note,
+        scores: defaultScores,
+        totalScore: 95,
+        savedAt: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+      };
+      const updated = [entry, ...existing.filter((p: any) => p.name !== title)].slice(0, 12);
+      localStorage.setItem('outpost_suitability_parcels_v1', JSON.stringify(updated));
+      localStorage.setItem(
+        'outpost_suitability_active_v1',
+        JSON.stringify({
+          scores: defaultScores,
+          parcelName: title,
+          parcelDistrict: district,
+          parcelAcreageNote: note,
+        })
+      );
+      setSentEvaluatorNotice(`Added "${title}" to 100-Point Evaluator`);
+      setTimeout(() => setSentEvaluatorNotice(null), 3500);
+    } catch {
+      // ignore
+    }
+  };
 
   // Offline & Field Mode State
   const [isOfflineModalOpen, setIsOfflineModalOpen] = useState(false);
@@ -343,14 +444,60 @@ export function ScoutingMap({
     window.addEventListener('outpost:open-layers', handleOpenLayersEvent);
     window.addEventListener('outpost:open-ai-insights', handleOpenAiInsightsEvent);
 
+    // Desktop Keyboard Shortcuts for Map Scout (L = Layers, F = Filters, A = AI Scout, D = District Dossier, Esc = Close)
+    const handleMapKeyDown = (e: KeyboardEvent) => {
+      const targetTag = (e.target as HTMLElement)?.tagName;
+      const isTyping = ['INPUT', 'TEXTAREA', 'SELECT'].includes(targetTag) || (e.target as HTMLElement)?.isContentEditable;
+      if (isTyping || e.metaKey || e.ctrlKey || e.altKey) return;
+
+      if (e.key === 'l' || e.key === 'L') {
+        e.preventDefault();
+        setIsLayersDeckOpen(prev => !prev);
+      } else if (e.key === 'f' || e.key === 'F') {
+        e.preventDefault();
+        setIsFilterDrawerOpen(prev => !prev);
+      } else if (e.key === 'a' || e.key === 'A') {
+        e.preventDefault();
+        setIsAiScoutDrawerOpen(prev => !prev);
+      } else if (e.key === 'd' || e.key === 'D') {
+        e.preventDefault();
+        setIsSidebarOpen(prev => !prev);
+        setIsDrawerMinimized(false);
+      } else if (e.key === 'Escape') {
+        setIsLayersDeckOpen(false);
+        setIsFilterDrawerOpen(false);
+        setIsAiScoutDrawerOpen(false);
+        setIsOfflineModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleMapKeyDown);
+
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
       window.removeEventListener('outpost:offline-mode-changed', handleOfflineModeChange);
       window.removeEventListener('outpost:open-layers', handleOpenLayersEvent);
       window.removeEventListener('outpost:open-ai-insights', handleOpenAiInsightsEvent);
+      window.removeEventListener('keydown', handleMapKeyDown);
     };
   }, []);
+
+  // React to URL ?district= or ?region= query parameter changes
+  useEffect(() => {
+    const distParam = searchParams.get('district');
+    if (distParam) {
+      const matched = getDistrictByIdOrName(distParam);
+      if (matched) {
+        setActiveDistrict(matched);
+        setIsSpotlightMinimized(false);
+        setIsSidebarOpen(true);
+        setIsDrawerMinimized(false);
+        if (mapInstanceRef.current && matched.centroid) {
+          mapInstanceRef.current.flyTo(matched.centroid as L.LatLngTuple, matched.optimalZoom || 10.5, { duration: 1.2 });
+        }
+      }
+    }
+  }, [searchParams]);
 
   // Invalidate map size on window resize or sidebar change
   useEffect(() => {
@@ -604,6 +751,32 @@ export function ScoutingMap({
       setLiveCursorCoords(null);
     });
 
+    // Click-to-Drop Field Waypoint on Map Canvas
+    map.on('click', (e: L.LeafletMouseEvent) => {
+      const { lat, lng } = e.latlng;
+      // Find nearest Malawi district centroid
+      let nearest = MALAWI_DISTRICTS[0];
+      let minDist = Infinity;
+      for (const d of MALAWI_DISTRICTS) {
+        const dLat = d.centroid[0] - lat;
+        const dLng = d.centroid[1] - lng;
+        const distSq = dLat * dLat + dLng * dLng;
+        if (distSq < minDist) {
+          minDist = distSq;
+          nearest = d;
+        }
+      }
+      setDroppedWaypoint({
+        lat,
+        lng,
+        districtName: nearest.name,
+        elevationRange: nearest.elevationRange,
+        rainfallMm: nearest.rainfallAnnualMm,
+        aquiferDepth: nearest.aquiferDepth.split('(')[0].trim(),
+        soilPh: nearest.soilPh,
+      });
+    });
+
     // Auto-hide overlays during active map pan / zoom for unobstructed visual feedback
     const onMapMove = () => {
       if (isAutoHideActiveRef.current) {
@@ -632,11 +805,18 @@ export function ScoutingMap({
 
     mapInstanceRef.current = map;
 
-    // Trigger initial fit bounds for maximum wide display
+    // Trigger initial fit bounds for maximum wide display or deep-linked district focus
     let initTimer: ReturnType<typeof setTimeout> | null = setTimeout(() => {
       if (mapInstanceRef.current && (mapInstanceRef.current as any)._mapPane) {
         try {
           mapInstanceRef.current.invalidateSize({ pan: false });
+          const distParam = new URLSearchParams(window.location.search).get('district');
+          if (distParam) {
+            const matched = getDistrictByIdOrName(distParam);
+            if (matched && matched.centroid) {
+              mapInstanceRef.current.flyTo(matched.centroid as L.LatLngTuple, matched.optimalZoom || 10.5, { duration: 1.1 });
+            }
+          }
           updateViewTelemetry();
         } catch {
           // ignore
@@ -686,10 +866,10 @@ export function ScoutingMap({
     inverseMaskLayerRef.current.clearLayers();
     nationalBorderLayerRef.current.clearLayers();
 
-    // 1. Outer World Mask Polygon: Covers everything outside Malawi in slate-950 canvas background
+    // 1. Outer World Mask Polygon: Covers everything outside Malawi in deep forest cartographic obsidian
     const maskLatLngs = getMalawiInverseMaskLatLngs();
     const maskPolygon = L.polygon(maskLatLngs as unknown as L.LatLngExpression[][], {
-      fillColor: '#020617', // Match the deep canvas slate background
+      fillColor: '#06110B', // Deep Forest Cartographic Obsidian
       fillOpacity: 1.0,
       stroke: false,
       interactive: false
@@ -1264,29 +1444,29 @@ export function ScoutingMap({
           handleFocusDistrict(dSpec || null);
         });
         core.bindTooltip(`
-          <div style="font-family: sans-serif; padding: 6px 8px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid #f59e0b; box-shadow: 0 8px 20px rgba(245,158,11,0.35);">
-            <div style="font-weight: 900; color: #fbbf24; font-size: 13px;">${district.name} District (Active Selection)</div>
-            <div style="font-size: 10px; color: #e2e8f0; margin-top: 2px;">Zone: ${district.region} Region • ${district.elevationRange}</div>
-            <div style="font-size: 10px; color: #34d399; font-weight: bold; margin-top: 2px;">Grade: ${district.feasibilityGrade}</div>
-            <div style="font-size: 9px; color: #38bdf8; margin-top: 1px;">Aquifer: ${district.aquiferDepth}</div>
+          <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 8px 10px; background: rgba(6, 19, 12, 0.96); color: #f8fafc; border-radius: 10px; border: 1.5px solid #f59e0b; box-shadow: 0 10px 24px rgba(0,0,0,0.75);">
+            <div style="font-family: 'Fraunces', Georgia, serif; font-weight: 700; color: #fde68a; font-size: 13px;">${district.name} District (Selected)</div>
+            <div style="font-size: 10px; color: #d6d3d1; margin-top: 2px;">${district.region} Region · ${district.elevationRange}</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #34d399; font-weight: 700; margin-top: 3px;">Suitability Grade: ${district.feasibilityGrade}</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: #7dd3fc; margin-top: 1px;">Aquifer: ${district.aquiferDepth.split('(')[0]}</div>
           </div>
         `, { sticky: true });
         districtsLayerRef.current?.addLayer(core);
       } else {
-        // Clean, smooth solid slate-cyan ambient border (no jagged dashes)
+        // Warm Botanical Emerald & Topographic Slate district borders (saving cyan strictly for water)
         const halo = L.polygon(district.boundary as L.LatLngTuple[], {
-          color: '#0284c7',
-          weight: 3.0,
-          opacity: 0.25,
+          color: '#047857',
+          weight: 2.6,
+          opacity: 0.22,
           fillColor: 'transparent',
           fillOpacity: 0
         });
         districtsLayerRef.current?.addLayer(halo);
 
         const polygon = L.polygon(district.boundary as L.LatLngTuple[], {
-          color: '#38bdf8',
-          weight: 1.3,
-          opacity: 0.8,
+          color: '#34d399',
+          weight: 1.15,
+          opacity: 0.65,
           fillColor: 'transparent',
           fillOpacity: 0,
           className: 'district-glow-subtle'
@@ -1296,11 +1476,11 @@ export function ScoutingMap({
           handleFocusDistrict(dSpec || null);
         });
         polygon.bindTooltip(`
-          <div style="font-family: sans-serif; padding: 6px 8px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid #06b6d4; box-shadow: 0 8px 20px rgba(0,0,0,0.6);">
-            <div style="font-weight: 900; color: #22d3ee; font-size: 13px;">${district.name} District</div>
-            <div style="font-size: 10px; color: #94a3b8; margin-top: 2px;">Zone: ${district.region} Region • ${district.elevationRange}</div>
-            <div style="font-size: 10px; color: #34d399; font-weight: bold; margin-top: 2px;">Grade: ${district.feasibilityGrade}</div>
-            <div style="font-size: 9px; color: #38bdf8; margin-top: 1px;">Aquifer: ${district.aquiferDepth}</div>
+          <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 8px 10px; background: rgba(6, 19, 12, 0.96); color: #f8fafc; border-radius: 10px; border: 1px solid rgba(52, 211, 153, 0.45); box-shadow: 0 10px 24px rgba(0,0,0,0.75);">
+            <div style="font-family: 'Fraunces', Georgia, serif; font-weight: 700; color: #6ee7b7; font-size: 13px;">${district.name} District</div>
+            <div style="font-size: 10px; color: #d6d3d1; margin-top: 2px;">${district.region} Region · ${district.elevationRange}</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #fde68a; font-weight: 700; margin-top: 3px;">Suitability Grade: ${district.feasibilityGrade}</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: #7dd3fc; margin-top: 1px;">Aquifer: ${district.aquiferDepth.split('(')[0]}</div>
           </div>
         `, { sticky: true });
         districtsLayerRef.current?.addLayer(polygon);
@@ -1704,7 +1884,7 @@ export function ScoutingMap({
   }, [activeDistrict]);
 
   return (
-    <div className="w-full h-screen min-h-[600px] relative overflow-hidden shadow-2xl bg-slate-950 flex flex-col" id="scouting-map-root">
+    <div className="w-full h-screen min-h-[600px] relative overflow-hidden shadow-2xl bg-[#06110B] flex flex-col" id="scouting-map-root">
       
       {/* ------------------------------------------------------------- */}
       {/* 1. COMPACT TOP-LEFT REGION PICKER & UNIFIED FLOATING HUD      */}
@@ -1767,7 +1947,7 @@ export function ScoutingMap({
       {/* ------------------------------------------------------------- */}
       <div className={cn("relative w-full h-full", viewMode !== 'map' && "hidden")}>
         {/* Leaflet DOM Canvas container */}
-        <div ref={mapContainerRef} className="w-full h-full z-0 bg-slate-950" />
+        <div ref={mapContainerRef} className="w-full h-full z-0 bg-[#06110B]" />
 
         {/* Bottom Floating Spotlight Card & Telemetry Pill */}
           <div className="absolute bottom-3 left-3 right-3 z-20 pointer-events-none flex flex-col sm:flex-row items-end justify-between gap-3">
@@ -1871,6 +2051,20 @@ export function ScoutingMap({
                           <FileText size={13} />
                           <span>Inspect Dossier</span>
                           <ChevronRight size={13} />
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleSendToEvaluatorFromMap(
+                              activeParcel.title,
+                              activeParcel.district,
+                              `${activeParcel.acres} Acres (${activeParcel.hectares} ha) • ${activeParcel.landTenure}`
+                            )
+                          }
+                          className="py-1.5 px-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-300 font-mono text-xs flex items-center gap-1 transition-all cursor-pointer"
+                          title="Send this parcel to the 100-Point Land Evaluator"
+                        >
+                          <ShieldCheck size={13} />
+                          <span>Evaluate</span>
                         </button>
                         <button
                           onClick={() => setIsAiScoutDrawerOpen(true)}
@@ -2024,20 +2218,83 @@ export function ScoutingMap({
               </AnimatePresence>
             </div>
 
-            {/* Bottom Right: Live GPS Coordinate Ticker & Active Tile Mode */}
-            <div className="pointer-events-auto bg-slate-950/85 backdrop-blur-md border border-white/15 px-3 py-1.5 rounded-xl shadow-xl flex items-center gap-2.5 text-[11px] font-mono text-slate-300 ml-auto shrink-0">
-              <div className="flex items-center gap-1.5">
-                <Navigation size={12} className="text-amber-400 rotate-45" />
-                <span>
-                  {liveCursorCoords 
-                    ? `${liveCursorCoords.lat.toFixed(4)}°, ${liveCursorCoords.lng.toFixed(4)}°`
-                    : `-13.2543°, 34.3015°`}
+            {/* Bottom Right: Live GPS Coordinate Ticker, Dropped Waypoint Pill & Active Tile Mode */}
+            <div className="flex flex-col items-end gap-2 ml-auto shrink-0 pointer-events-auto">
+              {sentEvaluatorNotice && (
+                <div className="bg-emerald-950/95 border border-emerald-400/60 text-emerald-200 px-3 py-1.5 rounded-xl shadow-xl text-xs font-mono flex items-center gap-2">
+                  <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
+                  <span>{sentEvaluatorNotice}</span>
+                  <Link to="/suitability" className="underline text-amber-300 hover:text-white font-bold ml-1">
+                    Open Evaluator →
+                  </Link>
+                </div>
+              )}
+
+              {droppedWaypoint && (
+                <div className="bg-slate-950/95 backdrop-blur-xl border border-cyan-500/50 px-3 py-2 rounded-2xl shadow-2xl flex flex-col gap-1.5 text-xs font-mono text-slate-200 max-w-sm">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-1.5 text-cyan-300 font-bold">
+                      <MapPin size={13} className="text-amber-400 shrink-0" />
+                      <span>GPS Pin • {droppedWaypoint.districtName}</span>
+                    </div>
+                    <button
+                      onClick={() => setDroppedWaypoint(null)}
+                      className="text-slate-400 hover:text-white p-0.5 cursor-pointer"
+                      title="Clear GPS Pin"
+                    >
+                      <X size={12} />
+                    </button>
+                  </div>
+                  <div className="text-[10px] text-slate-300">
+                    {droppedWaypoint.lat.toFixed(4)}°S, {droppedWaypoint.lng.toFixed(4)}°E • {droppedWaypoint.rainfallMm}mm/yr • {droppedWaypoint.soilPh} • Aquifer: {droppedWaypoint.aquiferDepth}
+                  </div>
+                  <div className="flex items-center gap-1.5 pt-0.5">
+                    <button
+                      onClick={() => handleSaveWaypoint(droppedWaypoint)}
+                      className="px-2 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/40 text-cyan-200 text-[10px] font-bold cursor-pointer"
+                    >
+                      + Save Waypoint ({savedWaypoints.length})
+                    </button>
+                    <button
+                      onClick={() =>
+                        handleSendToEvaluatorFromMap(
+                          `${droppedWaypoint.districtName} GPS Plot (${droppedWaypoint.lat.toFixed(3)}°, ${droppedWaypoint.lng.toFixed(3)}°)`,
+                          droppedWaypoint.districtName,
+                          `GPS ${droppedWaypoint.lat.toFixed(4)}°, ${droppedWaypoint.lng.toFixed(4)}° • ${droppedWaypoint.aquiferDepth}`
+                        )
+                      }
+                      className="px-2 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-300 text-[10px] font-bold cursor-pointer"
+                    >
+                      Evaluate Plot
+                    </button>
+                    <button
+                      onClick={() => handleCopyCoords([droppedWaypoint.lng, droppedWaypoint.lat])}
+                      className="px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 text-[10px] cursor-pointer"
+                    >
+                      {copiedCoords ? 'Copied!' : 'Copy GPS'}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <div className="bg-slate-950/85 backdrop-blur-md border border-white/15 px-3 py-1.5 rounded-xl shadow-xl flex items-center gap-2.5 text-[11px] font-mono text-slate-300">
+                <div className="flex items-center gap-1.5">
+                  <Navigation size={12} className="text-amber-400 rotate-45" />
+                  <span>
+                    {liveCursorCoords 
+                      ? `${liveCursorCoords.lat.toFixed(4)}°, ${liveCursorCoords.lng.toFixed(4)}°`
+                      : `-13.2543°, 34.3015°`}
+                  </span>
+                </div>
+                <span className="text-slate-600">|</span>
+                <span className="text-emerald-400 font-semibold hidden md:inline">
+                  {tileStyle === 'offline-vector' ? 'Offline Vector' : tileStyle.toUpperCase()}
+                </span>
+                <span className="text-slate-600 hidden lg:inline">|</span>
+                <span className="text-[10px] text-slate-400 hidden lg:inline" title="Desktop Shortcuts: L (Layers), F (Filters), A (AI Scout), D (Dossier)">
+                  Keys: <strong className="text-amber-300">L</strong> Layers · <strong className="text-amber-300">F</strong> Filter · <strong className="text-amber-300">A</strong> AI · <strong className="text-amber-300">D</strong> Intel
                 </span>
               </div>
-              <span className="text-slate-600">|</span>
-              <span className="text-emerald-400 font-semibold hidden md:inline">
-                {tileStyle === 'offline-vector' ? 'Offline Vector' : tileStyle.toUpperCase()}
-              </span>
             </div>
 
           </div>

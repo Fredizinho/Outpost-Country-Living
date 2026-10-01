@@ -78,6 +78,45 @@ export function ScoutTelemetryDrawer({
   const [isCadastralModalOpen, setIsCadastralModalOpen] = useState<boolean>(false);
   const [isNdviSplitModalOpen, setIsNdviSplitModalOpen] = useState<boolean>(false);
   const [showDeepTelemetry, setShowDeepTelemetry] = useState<boolean>(false);
+  const [sentParcelId, setSentParcelId] = useState<string | null>(null);
+
+  const handleSendParcelToEvaluator = (parcel: ScoutParcelProperties) => {
+    try {
+      const raw = localStorage.getItem('outpost_suitability_parcels_v1');
+      const existing = raw ? JSON.parse(raw) : [];
+      const defaultCriteria = {
+        w1: 10, w2: 8, w3: 7,
+        s1: 8, s2: 6, s3: 6,
+        t1: 5, t2: 5, t3: 5,
+        i1: 8, i2: 6, i3: 6,
+        c1: 5, c2: 5, c3: 5,
+      };
+      const entry = {
+        id: `scout-${parcel.id}`,
+        name: parcel.title,
+        district: parcel.district,
+        acreageNote: `${parcel.acres} Acres (${parcel.hectares} ha) • ${parcel.landTenure}`,
+        scores: defaultCriteria,
+        totalScore: 95,
+        savedAt: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+      };
+      const updated = [entry, ...existing.filter((p: any) => p.id !== entry.id && p.name !== parcel.title)].slice(0, 12);
+      localStorage.setItem('outpost_suitability_parcels_v1', JSON.stringify(updated));
+      localStorage.setItem(
+        'outpost_suitability_active_v1',
+        JSON.stringify({
+          scores: defaultCriteria,
+          parcelName: parcel.title,
+          parcelDistrict: parcel.district,
+          parcelAcreageNote: `${parcel.acres} Acres (${parcel.hectares} ha) • ${parcel.landTenure}`,
+        })
+      );
+      setSentParcelId(parcel.id);
+      setTimeout(() => setSentParcelId(null), 3500);
+    } catch {
+      // ignore storage errors
+    }
+  };
 
   const isMinimized = propIsMinimized !== undefined ? propIsMinimized : internalMinimized;
 
@@ -131,7 +170,7 @@ export function ScoutTelemetryDrawer({
             </div>
             <span className="text-[10px] font-mono text-slate-400 truncate">
               {activeDistrict 
-                ? `${activeDistrict.rainfallAnnualMm} mm/yr • Katondo (Red Clay): pH ${activeDistrict.soilPh}` 
+                ? `${activeDistrict.rainfallAnnualMm} mm/yr • ${activeDistrict.primarySoil.split('(')[0].trim()}: ${activeDistrict.soilPh}` 
                 : `${displayedParcels.length} surveyed stations`}
             </span>
           </div>
@@ -339,6 +378,20 @@ export function ScoutTelemetryDrawer({
               </button>
 
               <button
+                onClick={() => handleSendParcelToEvaluator(activeParcel)}
+                className={cn(
+                  "py-1.5 px-2.5 rounded-xl text-[11px] font-mono font-bold flex items-center justify-center gap-1 cursor-pointer transition-all border",
+                  sentParcelId === activeParcel.id
+                    ? "bg-amber-500 text-slate-950 border-amber-300 font-black"
+                    : "bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border-amber-500/40"
+                )}
+                title="Send Parcel to 100-Point Land Evaluator"
+              >
+                {sentParcelId === activeParcel.id ? <Check size={12} /> : <ShieldCheck size={12} />}
+                <span>{sentParcelId === activeParcel.id ? 'Saved to Evaluator!' : 'Evaluate Plot'}</span>
+              </button>
+
+              <button
                 onClick={() => setIsNdviSplitModalOpen(true)}
                 className="py-1.5 px-2.5 bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/40 rounded-xl text-[11px] font-mono font-bold flex items-center justify-center gap-1 cursor-pointer transition-all"
                 title="Compare Seasons"
@@ -431,13 +484,16 @@ export function ScoutTelemetryDrawer({
 
               {/* Soil */}
               <div className="bg-slate-900/90 border border-white/5 p-2.5 rounded-2xl flex flex-col gap-0.5">
-                <div className="flex items-center gap-1.5 text-emerald-400 text-[10px] font-mono font-bold uppercase">
-                  <Sprout size={12} /> Katondo (Red Clay)
+                <div className="flex items-center gap-1.5 text-emerald-400 text-[10px] font-mono font-bold uppercase truncate">
+                  <Sprout size={12} className="shrink-0" />
+                  <span className="truncate">{activeDistrict ? activeDistrict.primarySoil.split('(')[0].trim() : 'Katondo (Red Clay)'}</span>
                 </div>
                 <div className="text-sm font-bold text-white font-mono">
-                  pH {activeDistrict ? activeDistrict.soilPh : '6.0–6.5'}
+                  {activeDistrict ? activeDistrict.soilPh : 'pH 5.8 – 6.5'}
                 </div>
-                <span className="text-[10px] text-slate-400">Deep red loam</span>
+                <span className="text-[10px] text-slate-400 truncate">
+                  {activeDistrict ? activeDistrict.faoSoilClassification.split('(')[0].trim() : 'Deep red loam'}
+                </span>
               </div>
 
               {/* Solar Irradiance */}
@@ -446,7 +502,7 @@ export function ScoutTelemetryDrawer({
                   <Sun size={12} /> Solar Irradiance
                 </div>
                 <div className="text-sm font-bold text-white font-mono">
-                  {climateZone.solarRadiationKwhM2Day} kWh/m²/day
+                  {activeDistrict ? activeDistrict.solarKwhDay : climateZone.solarRadiationKwhM2Day} kWh/m²/day
                 </div>
                 <span className="text-[10px] text-slate-400">Ideal for solar pumping</span>
               </div>
@@ -457,27 +513,34 @@ export function ScoutTelemetryDrawer({
             <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-white/10 flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-mono font-bold uppercase text-amber-400 flex items-center gap-1.5">
-                  <Sprout size={12} /> Recommended Crops
+                  <Sprout size={12} /> {activeDistrict ? `${activeDistrict.name} Prime Crops` : 'Recommended Crops'}
                 </span>
                 <span className="text-[9px] font-mono text-emerald-400">
-                  Best for maize, beans, and fruit trees
+                  {activeDistrict ? `Grade ${activeDistrict.feasibilityGrade} Suitability` : 'Best for maize, beans, and fruit trees'}
                 </span>
               </div>
               <div className="grid grid-cols-2 gap-1.5 text-xs font-mono">
-                {[
-                  { name: 'Mbatata (Sweet Potato)', score: '98% Prime', tag: 'Dambo (Wetland) / Ridge' },
-                  { name: 'Anyenzi (Onion)', score: '94% Prime', tag: 'Alluvial Loam' },
-                  { name: 'Mtedza (Groundnut)', score: '92% Prime', tag: 'Sandy Loam' },
-                  { name: 'Nzimbe (Sugarcane)', score: '89% High', tag: 'Dambo (Wetland)' },
-                  { name: 'Macadamia', score: '96% Prime', tag: 'Highland Ridge' },
-                  { name: 'Coffee (Arabica)', score: '91% Prime', tag: 'Thermal Belt' }
-                ].map((crop, idx) => (
-                  <div key={idx} className="p-2 rounded-xl bg-slate-950/80 border border-white/5 flex items-center justify-between">
-                    <div>
-                      <div className="text-white font-bold text-[11px]">{crop.name}</div>
-                      <div className="text-[9px] text-slate-400">{crop.tag}</div>
+                {(activeDistrict && activeDistrict.topCrops.length > 0
+                  ? activeDistrict.topCrops.map((cropName, idx) => ({
+                      name: cropName,
+                      score: idx < 2 ? '97% Prime' : idx < 4 ? '93% Prime' : '90% High',
+                      tag: activeDistrict.elevationRange.split('(')[0].trim()
+                    }))
+                  : [
+                      { name: 'Mbatata (Sweet Potato)', score: '98% Prime', tag: 'Dambo (Wetland) / Ridge' },
+                      { name: 'Anyenzi (Onion)', score: '94% Prime', tag: 'Alluvial Loam' },
+                      { name: 'Mtedza (Groundnut)', score: '92% Prime', tag: 'Sandy Loam' },
+                      { name: 'Nzimbe (Sugarcane)', score: '89% High', tag: 'Dambo (Wetland)' },
+                      { name: 'Macadamia', score: '96% Prime', tag: 'Highland Ridge' },
+                      { name: 'Coffee (Arabica)', score: '91% Prime', tag: 'Thermal Belt' }
+                    ]
+                ).map((crop, idx) => (
+                  <div key={idx} className="p-2 rounded-xl bg-slate-950/80 border border-white/5 flex items-center justify-between gap-1">
+                    <div className="min-w-0">
+                      <div className="text-white font-bold text-[11px] truncate">{crop.name}</div>
+                      <div className="text-[9px] text-slate-400 truncate">{crop.tag}</div>
                     </div>
-                    <span className="text-[10px] font-bold text-emerald-400">{crop.score}</span>
+                    <span className="text-[10px] font-bold text-emerald-400 shrink-0">{crop.score}</span>
                   </div>
                 ))}
               </div>
@@ -501,14 +564,22 @@ export function ScoutTelemetryDrawer({
               <div className="grid grid-cols-2 gap-2 text-xs font-mono">
                 <div className="p-2.5 rounded-xl bg-slate-950/80 border border-cyan-900/40 flex flex-col">
                   <span className="text-[9px] text-slate-400 uppercase">Chilimwe (Dry Season) Aquifer</span>
-                  <span className="text-sm font-bold text-sky-300">14m – 22m Depth</span>
-                  <span className="text-[9px] text-emerald-400 mt-0.5">✓ Shallow Well Viable</span>
+                  <span className="text-sm font-bold text-sky-300">
+                    {activeDistrict ? activeDistrict.aquiferDepth.split('(')[0].trim() : '14m – 22m Depth'}
+                  </span>
+                  <span className="text-[9px] text-emerald-400 mt-0.5 truncate">
+                    ✓ {activeDistrict ? `Target ~${activeDistrict.aquiferDepthM}m borehole` : 'Shallow Well Viable'}
+                  </span>
                 </div>
 
                 <div className="p-2.5 rounded-xl bg-slate-950/80 border border-cyan-900/40 flex flex-col">
-                  <span className="text-[9px] text-slate-400 uppercase">Perennial Spring Flow</span>
-                  <span className="text-sm font-bold text-cyan-300">180 L / min</span>
-                  <span className="text-[9px] text-slate-400 mt-0.5">Gravity mountain runoff</span>
+                  <span className="text-[9px] text-slate-400 uppercase">Rainfall & Recharge</span>
+                  <span className="text-sm font-bold text-cyan-300">
+                    {activeDistrict ? `${activeDistrict.rainfallAnnualMm} mm/yr` : '180 L / min'}
+                  </span>
+                  <span className="text-[9px] text-slate-400 mt-0.5 truncate">
+                    {activeDistrict ? activeDistrict.rainfallPattern.split('(')[0].trim() : 'Gravity mountain runoff'}
+                  </span>
                 </div>
               </div>
             </div>
@@ -721,37 +792,43 @@ export function ScoutTelemetryDrawer({
           <div className="flex flex-col gap-3 text-xs">
             <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-amber-500/30 flex flex-col gap-1.5">
               <h4 className="serif text-sm font-bold text-amber-300 flex items-center gap-1.5">
-                <Sprout size={14} /> Katondo (Red Clay) Profile
+                <Sprout size={14} /> {activeDistrict ? `${activeDistrict.name} Soil Horizon` : 'Katondo (Red Clay) Profile'}
               </h4>
               <p className="text-slate-300 text-[11px] leading-relaxed">
-                Deep iron-rich latosol with high drainage and natural moisture retention. Best for macadamia, coffee, and maize.
+                {activeDistrict
+                  ? `${activeDistrict.primarySoil} (${activeDistrict.faoSoilClassification}) with ${activeDistrict.soilPh}. Ideal for ${activeDistrict.topCrops.slice(0, 4).join(', ')}.`
+                  : 'Deep iron-rich latosol with high drainage and natural moisture retention. Best for macadamia, coffee, and maize.'}
               </p>
             </div>
 
             <div className="p-3 rounded-2xl bg-slate-900/80 border border-white/10 flex flex-col gap-1">
               <span className="text-[10px] font-mono font-bold uppercase text-emerald-400">
-                1. Natural Soil Nutrition
+                1. Natural Soil Nutrition & pH Buffering
               </span>
               <p className="text-slate-300 text-[11px] leading-relaxed">
-                Fertilize Katondo (Red Clay) with fermented wild sunflower tea (Tithonia) to build nitrogen naturally without synthetic inputs.
+                Amend {activeDistrict ? activeDistrict.primarySoil.split('(')[0].trim() : 'Katondo (Red Clay)'} with 20–30L cured compost, wood ash, and fermented wild sunflower tea (*Tithonia diversifolia*) to build organic nitrogen and buffer soil pH naturally.
               </p>
             </div>
 
             <div className="p-3 rounded-2xl bg-slate-900/80 border border-white/10 flex flex-col gap-1">
               <span className="text-[10px] font-mono font-bold uppercase text-sky-400">
-                2. Dambo (Wetland) & Dimba (Wetland Garden)
+                2. Dambo (Wetland) & Moisture Retention
               </span>
               <p className="text-slate-300 text-[11px] leading-relaxed">
-                Dambo (Wetland) valleys retain soil moisture throughout Chilimwe (Dry Season), enabling year-round vegetable yields.
+                {activeDistrict
+                  ? `${activeDistrict.name} receives ~${activeDistrict.rainfallAnnualMm} mm/yr (${activeDistrict.rainfallPattern}). Pair mid-slope contour Vetiver swales with valley-margin Dimba beds for year-round Chilimwe harvests.`
+                  : 'Dambo (Wetland) valleys retain soil moisture throughout Chilimwe (Dry Season), enabling year-round vegetable yields.'}
               </p>
             </div>
 
             <div className="p-3 rounded-2xl bg-slate-900/80 border border-white/10 flex flex-col gap-1">
               <span className="text-[10px] font-mono font-bold uppercase text-amber-400">
-                3. Malire (Boundary) & Land Registration
+                3. Malire (Boundary) & Traditional Authorities
               </span>
               <p className="text-slate-300 text-[11px] leading-relaxed">
-                Customary family parcels are registered with the Traditional Authority (TA) under the Customary Land Act for long-term security.
+                {activeDistrict && activeDistrict.traditionalAuthorities.length > 0
+                  ? `Key Traditional Authorities in ${activeDistrict.name}: ${activeDistrict.traditionalAuthorities.join(', ')}. Always verify boundaries (Kuyendera Malire) with the GVH and TA before applying for a Customary Estate Certificate.`
+                  : 'Customary family parcels are registered with the Traditional Authority (TA) under the Customary Land Act for long-term security.'}
               </p>
             </div>
           </div>

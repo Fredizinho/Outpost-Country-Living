@@ -73,7 +73,7 @@ export const MALAWI_MACRO_REGIONS: RegionalClimateZone[] = [
     ],
     metrics: {
       elevation: '1,100m – 2,100m ASL (Dedza Mountain Peak 2,198m)',
-      soilProfile: 'Deep Volcanic Red Clay Loam (Katondo Oxisols) with high CEC',
+      soilProfile: 'Deep Volcanic Red Clay Loam (Eutric & Humic Nitisols · FAO HWSD v2.0) with high CEC',
       aquiferDepth: '15m – 25m (Shallow fractured basement & mountain springs)',
       rainfall: '1,100 – 1,450 mm/year (Unimodal + Winter Chiperoni mists)',
       temperature: '12°C – 26°C (Cool nights, winter lows drop to 6°C in Dedza)',
@@ -277,9 +277,9 @@ export const MALAWI_RAINFALL_OVERLAYS: RegionalRainfallOverlay[] = [
 export const MALAWI_SOIL_OVERLAYS: RegionalSoilOverlay[] = [
   {
     id: 'soil-katondo-central',
-    name: 'Katondo Red Latosols (Oxisols / Nitisols)',
-    characteristics: 'Deep fertile red clay loam, pH 6.0–6.5, high CEC & rich mycorrhizae. Prime for staples & orchards.',
-    soilpH: 'pH 6.0 – 6.5',
+    name: 'Katondo Red Clay Loams (Eutric & Humic Nitisols · FAO HWSD v2.0)',
+    characteristics: 'Deep fertile red clay loam, pH 5.8–6.5, high CEC & rich mycorrhizae. Prime for staples & orchards.',
+    soilpH: 'pH 5.8 – 6.5',
     color: '#b91c1c', // Crimson/Red
     fillOpacity: 0.2,
     coordinates: [
@@ -293,7 +293,7 @@ export const MALAWI_SOIL_OVERLAYS: RegionalSoilOverlay[] = [
   },
   {
     id: 'soil-humic-north',
-    name: 'Humic Montane Acrisols & Peat Soils',
+    name: 'Humic & Ferric Acrisols (FAO HWSD v2.0)',
     characteristics: 'High organic matter forest soils, pH 5.0–5.8. High porosity, perfect for coffee & agroforestry.',
     soilpH: 'pH 5.0 – 5.8',
     color: '#15803d', // Deep Green
@@ -309,7 +309,7 @@ export const MALAWI_SOIL_OVERLAYS: RegionalSoilOverlay[] = [
   },
   {
     id: 'soil-alluvial-dambo',
-    name: 'Hydromorphic Dambo Clays & Silt Basins',
+    name: 'Eutric Fluvisols & Hydromorphic Gleysols (FAO HWSD v2.0)',
     characteristics: 'Water-retentive valley floor soils, pH 6.2–7.2. Ideal for dry-season wetland furrow horticulture.',
     soilpH: 'pH 6.2 – 7.2',
     color: '#0891b2', // Cyan-Teal
@@ -324,7 +324,7 @@ export const MALAWI_SOIL_OVERLAYS: RegionalSoilOverlay[] = [
   },
   {
     id: 'soil-volcanic-south',
-    name: 'Volcanic Humic Loams (Shire Highlands)',
+    name: 'Humic & Dystric Nitisols (FAO HWSD v2.0 · Shire Highlands)',
     characteristics: 'Rich weathering mineral soils, pH 5.2–6.2. Exceptional fertility for avocados, macadamia, tea.',
     soilpH: 'pH 5.2 – 6.2',
     color: '#7c2d12', // Warm Earth Red

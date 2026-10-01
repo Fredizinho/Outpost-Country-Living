@@ -1,4 +1,13 @@
 import { HOMESTEAD_SKILLS, SEASONAL_CALENDAR, REGIONS_LIST, SkillItem, SeasonalTask, RegionData } from '@/data/skillsAndSeasons';
+import {
+  DISTRICT_LIST,
+  SOIL_TYPES_REGISTRY,
+  PLANTING_PIT_SPECS,
+  DistrictRegistryRecord,
+  MalawiSoilTypeSpec,
+  PlantingPitSpec
+} from '@/data/dataRegistry';
+import { EDENIC_AGRICULTURE_GUIDES } from '@/data/outpostFourPillarsData';
 
 export const STORAGE_KEYS = {
   EXODUS_TRACKER: 'exodus-tracker-v4',
@@ -13,9 +22,15 @@ export const STORAGE_KEYS = {
   SIDEBAR_COLLAPSED: 'outpost_sidebar_collapsed_v1',
   USER_PROFILE: 'outpost_user',
   MAP_GEOJSON_CACHE: 'malawi_district_geojson_cache_v2',
-  SKILLS_CACHE: 'outpost_skills_cache_v4',
-  SEASONS_CACHE: 'outpost_seasons_cache_v4',
-  REGIONS_CACHE: 'outpost_regions_cache_v4',
+  SKILLS_CACHE: 'outpost_skills_cache_v5',
+  SEASONS_CACHE: 'outpost_seasons_cache_v5',
+  REGIONS_CACHE: 'outpost_regions_cache_v5',
+  DISTRICTS_CACHE: 'outpost_districts_28_cache_v5',
+  SOILS_CACHE: 'outpost_fao_soils_cache_v5',
+  PITS_CACHE: 'outpost_planting_pits_cache_v5',
+  EDENIC_GUIDES_CACHE: 'outpost_edenic_guides_cache_v5',
+  WEATHER_LIVE_CACHE: 'outpost_weather_live_cache_v5',
+  TELEMETRY_LIVE_CACHE: 'outpost_telemetry_live_cache_v5',
   BOOKMARKS: 'outpost_offline_bookmarks',
   FIELD_NOTES: 'outpost_offline_field_notes',
   COMPLETED_SEASONAL_TASKS: 'outpost_completed_seasonal_tasks_v1',
@@ -73,6 +88,9 @@ export function saveStoredTrackerData(data: any): void {
     const str = typeof data === 'string' ? data : JSON.stringify(data);
     localStorage.setItem(STORAGE_KEYS.EXODUS_TRACKER, str);
     localStorage.removeItem(STORAGE_KEYS.LEGACY_EXODUS_TRACKER);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('outpost:progress-updated'));
+    }
   } catch (e) {
     console.warn('Failed saving tracker data to localStorage:', e);
   }
@@ -95,6 +113,9 @@ export function saveStoredLandChecklist(data: any): void {
   try {
     const str = typeof data === 'string' ? data : JSON.stringify(data);
     localStorage.setItem(STORAGE_KEYS.LAND_CHECKLIST, str);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('outpost:progress-updated'));
+    }
   } catch (e) {
     console.warn('Failed saving land checklist to localStorage:', e);
   }
@@ -160,6 +181,9 @@ export function getStoredMasteredSkills(): string[] {
 export function saveStoredMasteredSkills(skillIds: string[]): void {
   try {
     localStorage.setItem(STORAGE_KEYS.MASTERED_SKILLS, JSON.stringify(skillIds));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('outpost:progress-updated'));
+    }
   } catch (e) {
     console.warn('Failed saving mastered skills to localStorage:', e);
   }
@@ -181,6 +205,9 @@ export function getStoredBookmarkedParcels(): string[] {
 export function saveStoredBookmarkedParcels(parcelIds: string[]): void {
   try {
     localStorage.setItem(STORAGE_KEYS.BOOKMARKED_PARCELS, JSON.stringify(parcelIds));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('outpost:progress-updated'));
+    }
   } catch (e) {
     console.warn('Failed saving bookmarked parcels to localStorage:', e);
   }
@@ -293,6 +320,9 @@ export function createFullAppBackup() {
 
   const transitionLedger = localStorage.getItem('outpost_transition_ledger');
   const transitionNotes = localStorage.getItem('outpost_transition_notes');
+  const customaryLandSteps = localStorage.getItem('outpost_customary_land_steps_v1');
+  const devotionalReflections = localStorage.getItem('outpost_devotional_reflections_v1');
+  const suitabilityParcels = localStorage.getItem('outpost_suitability_parcels_v1');
 
   // Collect all individual skill step checklist states (homestead_skill_steps_*)
   const skillStepTicks: Record<string, string> = {};
@@ -321,6 +351,9 @@ export function createFullAppBackup() {
     completedSeasonalTasks,
     transitionLedger,
     transitionNotes,
+    customaryLandSteps,
+    devotionalReflections,
+    suitabilityParcels,
     skillStepTicks,
     timestamp: new Date().toISOString()
   };
@@ -395,6 +428,27 @@ export function restoreFullAppBackup(backupJson: any): void {
     } catch (e) {}
   }
 
+  if (backupJson.customaryLandSteps) {
+    try {
+      const val = typeof backupJson.customaryLandSteps === 'string' ? backupJson.customaryLandSteps : JSON.stringify(backupJson.customaryLandSteps);
+      localStorage.setItem('outpost_customary_land_steps_v1', val);
+    } catch (e) {}
+  }
+
+  if (backupJson.devotionalReflections) {
+    try {
+      const val = typeof backupJson.devotionalReflections === 'string' ? backupJson.devotionalReflections : JSON.stringify(backupJson.devotionalReflections);
+      localStorage.setItem('outpost_devotional_reflections_v1', val);
+    } catch (e) {}
+  }
+
+  if (backupJson.suitabilityParcels) {
+    try {
+      const val = typeof backupJson.suitabilityParcels === 'string' ? backupJson.suitabilityParcels : JSON.stringify(backupJson.suitabilityParcels);
+      localStorage.setItem('outpost_suitability_parcels_v1', val);
+    } catch (e) {}
+  }
+
   if (backupJson.skillStepTicks && typeof backupJson.skillStepTicks === 'object') {
     try {
       Object.entries(backupJson.skillStepTicks).forEach(([k, v]) => {
@@ -410,14 +464,125 @@ export function restoreFullAppBackup(backupJson: any): void {
   } catch (e) {}
 }
 
-// Initialize offline storage
+export interface CachedPayloadEnvelope<T = any> {
+  data: T;
+  cachedAt: string;
+}
+
+// Initialize offline storage and pre-populate the local offline vault
 export function initializeOfflineStorage() {
   try {
+    if (!localStorage.getItem(STORAGE_KEYS.DISTRICTS_CACHE)) {
+      localStorage.setItem(STORAGE_KEYS.DISTRICTS_CACHE, JSON.stringify(DISTRICT_LIST));
+    }
+    if (!localStorage.getItem(STORAGE_KEYS.SOILS_CACHE)) {
+      localStorage.setItem(STORAGE_KEYS.SOILS_CACHE, JSON.stringify(SOIL_TYPES_REGISTRY));
+    }
+    if (!localStorage.getItem(STORAGE_KEYS.PITS_CACHE)) {
+      localStorage.setItem(STORAGE_KEYS.PITS_CACHE, JSON.stringify(PLANTING_PIT_SPECS));
+    }
+    if (!localStorage.getItem(STORAGE_KEYS.EDENIC_GUIDES_CACHE)) {
+      localStorage.setItem(STORAGE_KEYS.EDENIC_GUIDES_CACHE, JSON.stringify(EDENIC_AGRICULTURE_GUIDES));
+    }
+    if (!localStorage.getItem(STORAGE_KEYS.SKILLS_CACHE)) {
+      localStorage.setItem(STORAGE_KEYS.SKILLS_CACHE, JSON.stringify(HOMESTEAD_SKILLS));
+    }
+    if (!localStorage.getItem(STORAGE_KEYS.SEASONS_CACHE)) {
+      localStorage.setItem(STORAGE_KEYS.SEASONS_CACHE, JSON.stringify(SEASONAL_CALENDAR));
+    }
+    if (!localStorage.getItem(STORAGE_KEYS.REGIONS_CACHE)) {
+      localStorage.setItem(STORAGE_KEYS.REGIONS_CACHE, JSON.stringify(REGIONS_LIST));
+    }
     if (!localStorage.getItem(STORAGE_KEYS.LAST_SYNC)) {
       localStorage.setItem(STORAGE_KEYS.LAST_SYNC, new Date().toISOString());
     }
   } catch (e) {
     console.warn('LocalStorage error during offline storage init:', e);
+  }
+}
+
+// Retrieve 28 districts: bundled registry + localStorage offline fallback
+export function getCachedDistricts(): DistrictRegistryRecord[] {
+  try {
+    if (DISTRICT_LIST && DISTRICT_LIST.length > 0) return DISTRICT_LIST;
+    const raw = localStorage.getItem(STORAGE_KEYS.DISTRICTS_CACHE);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return DISTRICT_LIST;
+  }
+}
+
+// Retrieve FAO HWSD v2.0 Soil Orders
+export function getCachedSoilTypes(): MalawiSoilTypeSpec[] {
+  try {
+    if (SOIL_TYPES_REGISTRY && SOIL_TYPES_REGISTRY.length > 0) return SOIL_TYPES_REGISTRY;
+    const raw = localStorage.getItem(STORAGE_KEYS.SOILS_CACHE);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return SOIL_TYPES_REGISTRY;
+  }
+}
+
+// Retrieve Planting Pit Specifications
+export function getCachedPlantingPits(): Record<string, PlantingPitSpec> {
+  try {
+    if (PLANTING_PIT_SPECS && Object.keys(PLANTING_PIT_SPECS).length > 0) return PLANTING_PIT_SPECS;
+    const raw = localStorage.getItem(STORAGE_KEYS.PITS_CACHE);
+    return raw ? JSON.parse(raw) : PLANTING_PIT_SPECS;
+  } catch {
+    return PLANTING_PIT_SPECS;
+  }
+}
+
+// Save & Retrieve Cached Regional Weather Forecasts (for Offline PWA Mode)
+export function saveCachedWeather(regionId: string, payload: any): void {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.WEATHER_LIVE_CACHE);
+    const map: Record<string, CachedPayloadEnvelope> = raw ? JSON.parse(raw) : {};
+    map[regionId] = {
+      data: payload,
+      cachedAt: new Date().toISOString()
+    };
+    localStorage.setItem(STORAGE_KEYS.WEATHER_LIVE_CACHE, JSON.stringify(map));
+  } catch (e) {
+    console.warn('Failed caching weather payload:', e);
+  }
+}
+
+export function getCachedWeather(regionId: string): CachedPayloadEnvelope | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.WEATHER_LIVE_CACHE);
+    if (!raw) return null;
+    const map: Record<string, CachedPayloadEnvelope> = JSON.parse(raw);
+    return map[regionId] || null;
+  } catch {
+    return null;
+  }
+}
+
+// Save & Retrieve Cached District Satellite & Soil Telemetry (for Offline PWA Mode)
+export function saveCachedDistrictTelemetry(districtId: string, payload: any): void {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.TELEMETRY_LIVE_CACHE);
+    const map: Record<string, CachedPayloadEnvelope> = raw ? JSON.parse(raw) : {};
+    map[districtId] = {
+      data: payload,
+      cachedAt: new Date().toISOString()
+    };
+    localStorage.setItem(STORAGE_KEYS.TELEMETRY_LIVE_CACHE, JSON.stringify(map));
+  } catch (e) {
+    console.warn('Failed caching district telemetry payload:', e);
+  }
+}
+
+export function getCachedDistrictTelemetry(districtId: string): CachedPayloadEnvelope | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.TELEMETRY_LIVE_CACHE);
+    if (!raw) return null;
+    const map: Record<string, CachedPayloadEnvelope> = JSON.parse(raw);
+    return map[districtId] || null;
+  } catch {
+    return null;
   }
 }
 
@@ -523,14 +688,31 @@ export function getOfflineSyncStatus() {
   const skillsCount = getCachedSkills().length;
   const seasonsCount = getCachedSeasons().length;
   const regionsCount = getCachedRegions().length;
+  const districtsCount = getCachedDistricts().length;
+  const soilsCount = getCachedSoilTypes().length;
+  const pitsCount = Object.keys(getCachedPlantingPits()).length;
   const bookmarksCount = getOfflineBookmarks().length;
   const notesCount = getOfflineFieldNotes().length;
+
+  let weatherCachedCount = 0;
+  let telemetryCachedCount = 0;
+  try {
+    const rawW = localStorage.getItem(STORAGE_KEYS.WEATHER_LIVE_CACHE);
+    if (rawW) weatherCachedCount = Object.keys(JSON.parse(rawW)).length;
+    const rawT = localStorage.getItem(STORAGE_KEYS.TELEMETRY_LIVE_CACHE);
+    if (rawT) telemetryCachedCount = Object.keys(JSON.parse(rawT)).length;
+  } catch {}
 
   return {
     lastSyncFormatted: new Date(lastSync).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }),
     skillsCount,
     seasonsCount,
     regionsCount,
+    districtsCount,
+    soilsCount,
+    pitsCount,
+    weatherCachedCount,
+    telemetryCachedCount,
     bookmarksCount,
     notesCount
   };
@@ -563,6 +745,7 @@ export function toggleCompletedSeasonalTask(taskId: string): { completed: boolea
     // Dispatch custom event for cross-module reactivity
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('outpost:readiness-updated', { detail: { taskId, completed: !exists } }));
+      window.dispatchEvent(new CustomEvent('outpost:progress-updated'));
     }
   } catch (e) {
     console.warn('Failed saving completed seasonal tasks:', e);
@@ -574,6 +757,8 @@ export interface ReadinessScoreResult {
   totalScorePct: number;
   levelLabel: string;
   badgeColor: string;
+  completedMilestones: number;
+  totalMilestones: number;
   breakdown: {
     exodusScorePct: number;
     skillsMasteryPct: number;
@@ -585,11 +770,11 @@ export interface ReadinessScoreResult {
 }
 
 export function calculateHomesteadReadinessScore(): ReadinessScoreResult {
-  // 1. Exodus Steps
+  // 1. Exodus Steps & 15-Milestone Transition Ledger
   const trackerData = getStoredTrackerData<any[]>() || [];
   let totalSubtasks = 0;
   let completedSubtasks = 0;
-  if (Array.isArray(trackerData)) {
+  if (Array.isArray(trackerData) && trackerData.length > 0) {
     trackerData.forEach(step => {
       if (step?.subtasks && Array.isArray(step.subtasks)) {
         totalSubtasks += step.subtasks.length;
@@ -597,7 +782,23 @@ export function calculateHomesteadReadinessScore(): ReadinessScoreResult {
       }
     });
   }
-  const exodusScorePct = totalSubtasks > 0 ? Math.round((completedSubtasks / totalSubtasks) * 100) : 0;
+
+  // Also check the 15-milestone transition ledger (outpost_transition_ledger)
+  let ledgerCompleted = 0;
+  const ledgerTotal = 15;
+  try {
+    const rawLedger = localStorage.getItem('outpost_transition_ledger');
+    if (rawLedger) {
+      const parsedLedger = JSON.parse(rawLedger);
+      if (parsedLedger && typeof parsedLedger === 'object') {
+        ledgerCompleted = Object.values(parsedLedger).filter((v) => v === true).length;
+      }
+    }
+  } catch {}
+
+  const effectiveCompleted = totalSubtasks > 0 ? completedSubtasks : ledgerCompleted;
+  const effectiveTotal = totalSubtasks > 0 ? totalSubtasks : ledgerTotal;
+  const exodusScorePct = effectiveTotal > 0 ? Math.min(100, Math.round((effectiveCompleted / effectiveTotal) * 100)) : 0;
 
   // 2. Mastered Skills
   const masteredSkills = getStoredMasteredSkills() || [];
@@ -606,14 +807,23 @@ export function calculateHomesteadReadinessScore(): ReadinessScoreResult {
 
   // 3. Completed Seasonal Tasks
   const completedSeasonal = getCompletedSeasonalTasks();
-  // Assume a benchmark of 8 active seasonal tasks per quarter
   const seasonalActionPct = Math.min(100, Math.round((completedSeasonal.length / 6) * 100));
 
-  // 4. Land Checklist & Bookmarked Parcels
-  const landChecklist = getStoredLandChecklist() || {};
-  const checkedCount = Object.values(landChecklist).filter(Boolean).length;
+  // 4. Land Checklist, Customary Land Act Steps & Bookmarked Parcels
+  const landChecklist = getStoredLandChecklist<any>() || {};
+  const checkedCount = Array.isArray(landChecklist?.completedIds)
+    ? landChecklist.completedIds.length
+    : Object.values(landChecklist).filter((v) => v === true).length;
+  let customaryStepsCount = 0;
+  try {
+    const rawCustomary = localStorage.getItem('outpost_customary_land_steps_v1');
+    if (rawCustomary) {
+      const parsedCustomary = JSON.parse(rawCustomary);
+      if (Array.isArray(parsedCustomary)) customaryStepsCount = parsedCustomary.length;
+    }
+  } catch {}
   const bookmarkedParcels = getStoredBookmarkedParcels() || [];
-  const landReadinessPct = Math.min(100, Math.round(((checkedCount * 5) + (bookmarkedParcels.length > 0 ? 30 : 0))));
+  const landReadinessPct = Math.min(100, Math.round((checkedCount * 5) + (customaryStepsCount * 10) + (bookmarkedParcels.length > 0 ? 30 : 0)));
 
   // Weighted Total Score:
   // Exodus: 35%, Skills: 25%, Seasonal Actions: 25%, Land: 15%
@@ -648,22 +858,35 @@ export function calculateHomesteadReadinessScore(): ReadinessScoreResult {
     totalScorePct,
     levelLabel,
     badgeColor,
+    completedMilestones: effectiveCompleted,
+    totalMilestones: effectiveTotal,
     breakdown: {
       exodusScorePct,
       skillsMasteryPct,
       seasonalActionPct,
       landReadinessPct
     },
-    totalPoints: (completedSubtasks * 10) + (masteredSkills.length * 25) + (completedSeasonal.length * 15) + (checkedCount * 5),
-    maxPoints: (totalSubtasks * 10 || 200) + (allSkills.length * 25) + (10 * 15) + (20 * 5)
+    totalPoints: (effectiveCompleted * 10) + (masteredSkills.length * 25) + (completedSeasonal.length * 15) + (checkedCount * 5),
+    maxPoints: (effectiveTotal * 10 || 150) + (allSkills.length * 25) + (10 * 15) + (20 * 5)
   };
 }
 
-// Force re-sync cached storage with default guide data
+// Force re-sync cached storage with default guide, 28-district, soil, and planting pit data
 export function forceSyncOfflineCache() {
-  localStorage.setItem(STORAGE_KEYS.SKILLS_CACHE, JSON.stringify(HOMESTEAD_SKILLS));
-  localStorage.setItem(STORAGE_KEYS.SEASONS_CACHE, JSON.stringify(SEASONAL_CALENDAR));
-  localStorage.setItem(STORAGE_KEYS.REGIONS_CACHE, JSON.stringify(REGIONS_LIST));
-  localStorage.setItem(STORAGE_KEYS.LAST_SYNC, new Date().toISOString());
+  try {
+    localStorage.setItem(STORAGE_KEYS.DISTRICTS_CACHE, JSON.stringify(DISTRICT_LIST));
+    localStorage.setItem(STORAGE_KEYS.SOILS_CACHE, JSON.stringify(SOIL_TYPES_REGISTRY));
+    localStorage.setItem(STORAGE_KEYS.PITS_CACHE, JSON.stringify(PLANTING_PIT_SPECS));
+    localStorage.setItem(STORAGE_KEYS.EDENIC_GUIDES_CACHE, JSON.stringify(EDENIC_AGRICULTURE_GUIDES));
+    localStorage.setItem(STORAGE_KEYS.SKILLS_CACHE, JSON.stringify(HOMESTEAD_SKILLS));
+    localStorage.setItem(STORAGE_KEYS.SEASONS_CACHE, JSON.stringify(SEASONAL_CALENDAR));
+    localStorage.setItem(STORAGE_KEYS.REGIONS_CACHE, JSON.stringify(REGIONS_LIST));
+    localStorage.setItem(STORAGE_KEYS.LAST_SYNC, new Date().toISOString());
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('outpost:offline-vault-synced'));
+    }
+  } catch (e) {
+    console.warn('Failed syncing offline vault:', e);
+  }
   return getOfflineSyncStatus();
 }

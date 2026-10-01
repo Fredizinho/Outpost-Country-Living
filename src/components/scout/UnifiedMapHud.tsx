@@ -88,7 +88,7 @@ export function UnifiedMapHud({
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 20, scale: 0.95 }}
             transition={{ duration: 0.18 }}
-            className="flex items-center gap-2 bg-stone-900/95 dark:bg-stone-950/95 backdrop-blur-2xl border border-stone-700 rounded-2xl px-3 py-2 shadow-2xl text-white w-64 sm:w-72"
+            className="flex items-center gap-2 bg-[#07140D]/95 backdrop-blur-2xl border border-emerald-500/35 rounded-2xl px-3 py-2 shadow-2xl text-white w-64 sm:w-72"
           >
             <Search size={15} className="text-emerald-400 shrink-0" />
             <input
@@ -119,7 +119,7 @@ export function UnifiedMapHud({
       </AnimatePresence>
 
       {/* Clean, Intuitive Control Dock */}
-      <div className="bg-stone-900/90 dark:bg-stone-950/90 backdrop-blur-2xl border border-stone-700/70 rounded-2xl p-1.5 shadow-2xl flex flex-col items-center gap-1.5 text-stone-200">
+      <div className="bg-[#07140D]/92 backdrop-blur-2xl border border-emerald-500/25 rounded-2xl p-1.5 shadow-2xl flex flex-col items-center gap-1.5 text-stone-200">
         
         {/* 0. AI MAP SCOUT (Maps Grounded Assistant) */}
         {onOpenAiScout && (
@@ -131,7 +131,7 @@ export function UnifiedMapHud({
                 ? "bg-gradient-to-tr from-emerald-600 to-teal-500 text-white shadow-lg shadow-emerald-900/50 scale-105"
                 : "bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-900 hover:text-white"
             )}
-            title="AI Map Scout (Gemini 3.8 Flash + Google Maps Grounding)"
+            title="Field Map Scout & Grounded Telemetry"
           >
             <Bot size={18} />
             <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />

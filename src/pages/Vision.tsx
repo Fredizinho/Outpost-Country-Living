@@ -1,386 +1,430 @@
-import { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { EGW_QUOTES, Quote } from '@/data/content';
-import { 
-  Book, Quote as QuoteIcon, Sparkles, Sprout, ArrowRight, 
-  ShieldCheck, Heart, Leaf, Search, Copy, CheckCircle2, 
-  Compass, Eye, Calendar, Info, Layers, Bookmark
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { cn } from '@/lib/utils';
-import { WhyCountryLivingFeaturette } from '@/components/home/WhyCountryLivingFeaturette';
+import { EGW_QUOTES, QuoteCategory, Quote } from '@/data/content';
 import { COUNTRY_IMAGES } from '@/assets/images';
-import { DailyDevotionalWidget } from '@/components/outpost/DailyDevotionalWidget';
+import { fetchVerifiedScriptureWithFallback } from '@/lib/apiClient';
+import { PropheticTimeline1844 } from '@/components/vision/PropheticTimeline1844';
+import {
+  ExternalLink,
+  BookOpen,
+  CheckCircle2,
+  RefreshCw,
+  Sparkles,
+  Search,
+  ShieldCheck,
+  Compass,
+  Quote as QuoteIcon,
+  HeartHandshake,
+  Hammer,
+  Users,
+  Sprout,
+  Stethoscope,
+  GraduationCap,
+  Sun,
+  Layers,
+  ChevronDown,
+  ChevronUp,
+} from 'lucide-react';
+
+interface VerifiedScriptureResult {
+  reference: string;
+  translation_name: string;
+  text: string;
+  verifiedSource: string;
+  verifiedUrl: string;
+}
 
 export default function Vision() {
-  const [filter, setFilter] = useState<'All' | 'Preparation' | 'Vision' | 'Children' | 'Physical Labor' | 'Mental Health' | 'Spiritual Growth'>('All');
+  const [activeDesktopTab, setActiveDesktopTab] = useState<'prophecy-atlas' | 'egw-archive' | 'split-all'>('prophecy-atlas');
+  const [selectedCategory, setSelectedCategory] = useState<QuoteCategory | 'All'>('All');
   const [searchQuery, setSearchQuery] = useState('');
-  const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
+  const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({});
+  const [expandAllDetails, setExpandAllDetails] = useState(false);
+  const [liveScriptures, setLiveScriptures] = useState<Record<string, VerifiedScriptureResult>>({});
+  const [loadingScriptureId, setLoadingScriptureId] = useState<string | null>(null);
+  const [scriptureError, setScriptureError] = useState<Record<string, string>>({});
 
-  const categories = ['All', 'Preparation', 'Vision', 'Children', 'Physical Labor', 'Mental Health', 'Spiritual Growth'];
+  const categories: { label: QuoteCategory | 'All'; icon: React.ComponentType<{ className?: string }> }[] = [
+    { label: 'All', icon: QuoteIcon },
+    { label: 'Vision', icon: Compass },
+    { label: 'Preparation', icon: ShieldCheck },
+    { label: 'Education & Manual Training', icon: GraduationCap },
+    { label: 'Sustenance & Diet', icon: Sprout },
+    { label: 'Medical Missionary', icon: Stethoscope },
+    { label: 'Children', icon: Users },
+    { label: 'Physical Labor', icon: Hammer },
+    { label: 'Mental Health', icon: HeartHandshake },
+    { label: 'Spiritual Growth', icon: Sun },
+  ];
 
-  const filteredQuotes = EGW_QUOTES.filter(q => {
-    const matchesCategory = filter === 'All' || q.category === filter;
-    const matchesSearch = !searchQuery || 
-      q.text.toLowerCase().includes(searchQuery.toLowerCase()) || 
-      q.source.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      q.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (q.title && q.title.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (q.theme && q.theme.toLowerCase().includes(searchQuery.toLowerCase()));
-    return matchesCategory && matchesSearch;
-  });
+  const filteredQuotes = useMemo(() => {
+    return EGW_QUOTES.filter((q) => {
+      const matchesCat = selectedCategory === 'All' || q.category === selectedCategory;
+      if (!matchesCat) return false;
+      if (!searchQuery.trim()) return true;
+      const query = searchQuery.toLowerCase();
+      return (
+        q.text.toLowerCase().includes(query) ||
+        q.source.toLowerCase().includes(query) ||
+        (q.title && q.title.toLowerCase().includes(query)) ||
+        (q.egwCode && q.egwCode.toLowerCase().includes(query)) ||
+        (q.historicalContext && q.historicalContext.toLowerCase().includes(query)) ||
+        (q.malawiOutpostApplication && q.malawiOutpostApplication.toLowerCase().includes(query)) ||
+        (q.scriptureCompanion &&
+          (q.scriptureCompanion.verse.toLowerCase().includes(query) ||
+            q.scriptureCompanion.reference.toLowerCase().includes(query)))
+      );
+    });
+  }, [selectedCategory, searchQuery]);
 
-  const handleCopyQuote = async (quote: Quote) => {
-    const text = `"${quote.text}" — ${quote.source} (Country Living Counsel & Foundations)`;
+  const toggleCardDetail = (id: string) => {
+    setExpandedCards((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const fetchVerifiedScripture = async (quote: Quote) => {
+    if (!quote.scriptureCompanion?.reference) return;
+    const refPart = quote.scriptureCompanion.reference.split(';')[0].trim();
+    if (!refPart) return;
+
+    setLoadingScriptureId(quote.id);
+    setScriptureError((prev) => ({ ...prev, [quote.id]: '' }));
     try {
-      await navigator.clipboard.writeText(text);
-      setCopiedId(quote.id);
-      setTimeout(() => setCopiedId(null), 2000);
-    } catch {
-      // ignore clipboard error
+      const data = await fetchVerifiedScriptureWithFallback(
+        refPart,
+        quote.scriptureCompanion.verse
+      );
+      setLiveScriptures((prev) => ({ ...prev, [quote.id]: data }));
+    } catch (err: any) {
+      setScriptureError((prev) => ({
+        ...prev,
+        [quote.id]: err?.message || 'Unable to reach live Bible API',
+      }));
+    } finally {
+      setLoadingScriptureId(null);
     }
   };
 
   return (
-    <div className="px-4 sm:px-6 md:px-12 py-8 sm:py-12 max-w-6xl mx-auto flex flex-col gap-10">
-      
-      {/* ====================================================================
-          1. HEADER BANNER: THE PROPHETIC VISION & BLUEPRINT
-      ==================================================================== */}
-      <header 
-        className="bg-cover bg-center text-white rounded-[2.5rem] p-8 md:p-12 border border-amber-500/30 shadow-2xl relative overflow-hidden flex flex-col gap-6"
-        style={{
-          backgroundImage: `linear-gradient(to bottom, rgba(4, 29, 16, 0.90), rgba(7, 24, 14, 0.86), rgba(4, 29, 16, 0.96)), url(${COUNTRY_IMAGES.mountainVista})`
-        }}
-      >
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-amber-500/20 via-emerald-500/15 to-transparent rounded-full -mr-40 -mt-40 pointer-events-none blur-3xl" />
-        
-        <div className="flex flex-wrap items-center gap-3 relative z-10">
-          <span className="bg-amber-500/20 text-amber-300 border border-amber-500/40 px-3.5 py-1 rounded-full font-mono font-bold uppercase text-[10px] tracking-widest flex items-center gap-2 backdrop-blur-md">
-            <Book size={13} className="text-amber-400" />
-            <span>Spirit of Prophecy Blueprint</span>
-          </span>
-          <span className="text-emerald-300/60 text-xs hidden sm:inline">•</span>
-          <span className="text-emerald-200/90 font-mono text-xs hidden sm:inline">
-            Adapted Imagery & Historical Contexts
-          </span>
-        </div>
-
-        <div className="flex flex-col gap-3 relative z-10">
-          <h1 className="serif text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#FAF8F5] leading-tight">
-            The Prophetic Vision & Blueprint
-          </h1>
-          <p className="text-emerald-100/90 max-w-3xl text-sm sm:text-base md:text-lg font-medium leading-relaxed italic border-l-2 border-amber-400/80 pl-4 py-1">
-            "The instruction has been given that we should move out of the cities to the country, where we can grow our own fruit and vegetables... As the siege of Jerusalem was a signal for flight, so the decrees ahead call us to country sanctuaries."
-          </p>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3 relative z-10 pt-2 border-t border-amber-500/20">
-          <Link
-            to="/where"
-            className="bg-amber-400 hover:bg-amber-300 text-stone-950 font-mono font-bold text-xs uppercase px-4 py-2.5 rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer"
-          >
-            <Sprout size={14} /> 
-            <span>Land Scouting Matrix</span>
-            <ArrowRight size={13} />
-          </Link>
-
-          <Link
-            to="/tracker"
-            className="bg-white/10 hover:bg-white/20 text-amber-200 border border-amber-400/30 font-mono text-xs font-bold uppercase px-4 py-2.5 rounded-xl transition-all"
-          >
-            Exodus Checklist
-          </Link>
-
-          <Link
-            to="/devotional"
-            className="bg-emerald-950/60 hover:bg-emerald-900 text-emerald-200 border border-emerald-700/50 font-mono text-xs font-bold uppercase px-4 py-2.5 rounded-xl transition-all ml-auto hidden sm:inline-flex items-center gap-1.5"
-          >
-            <Calendar size={13} />
-            <span>Daily Manna Treasury</span>
-          </Link>
-        </div>
-      </header>
-
-      {/* ====================================================================
-          2. FEATURED SPOTLIGHT: THE JERUSALEM SIEGE SIGNAL & THE CALL TO FLIGHT
-      ==================================================================== */}
-      <section className="relative rounded-[2.5rem] overflow-hidden border border-amber-500/40 shadow-xl bg-stone-900 text-white group">
-        <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch">
-          
-          {/* Adapted Image Column: Jerusalem Siege */}
-          <div className="lg:col-span-6 relative min-h-[300px] lg:min-h-[460px] overflow-hidden">
-            <img 
-              src={COUNTRY_IMAGES.jerusalemSiege} 
-              alt="Historical dramatic portrayal of Roman armies besieging ancient Jerusalem with fortified city walls and legions"
-              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
-              loading="eager"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-stone-950/30 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-stone-950" />
-            
-            <div className="absolute top-4 left-4 bg-red-950/80 text-amber-300 border border-red-700/60 px-3.5 py-1.5 rounded-full font-mono text-[10px] font-bold uppercase tracking-wider backdrop-blur-md flex items-center gap-2">
-              <ShieldCheck size={12} className="text-amber-400" />
-              <span>Prophetic Signal Parallel</span>
-            </div>
-
-            <div className="absolute bottom-4 left-4 right-4 text-xs text-stone-200/90 bg-stone-950/80 backdrop-blur-md p-3 rounded-2xl border border-stone-800">
-              <span className="font-bold text-amber-400">Historical Blueprint:</span> The Roman retreat in AD 66 allowed Christians to flee to Pella, escaping the catastrophic AD 70 destruction.
-            </div>
-          </div>
-
-          {/* Quote & Counsel Column */}
-          <div className="lg:col-span-6 p-6 sm:p-10 flex flex-col justify-between gap-6 bg-gradient-to-b from-[#0e1f15] to-[#08150e]">
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-amber-300 bg-amber-500/20 px-3 py-1 rounded-full border border-amber-500/30">
-                  Key Prophetic Mandate • Preparation
-                </span>
-                <button
-                  onClick={() => handleCopyQuote(EGW_QUOTES[0])}
-                  className="px-3 py-1.5 rounded-xl text-xs font-mono font-semibold uppercase transition-all flex items-center gap-1.5 bg-stone-800 hover:bg-stone-700 text-stone-200 border border-stone-700 cursor-pointer active:scale-95"
-                >
-                  {copiedId === EGW_QUOTES[0].id ? <CheckCircle2 size={13} className="text-emerald-400" /> : <Copy size={13} />}
-                  <span>{copiedId === EGW_QUOTES[0].id ? 'Copied' : 'Copy'}</span>
-                </button>
-              </div>
-
-              <h2 className="serif text-2xl sm:text-3xl font-extrabold text-[#FAF8F5] leading-snug">
-                The Siege of Jerusalem & The Flight to Mountain Sanctuaries
-              </h2>
-
-              <blockquote className="serif text-base sm:text-lg text-emerald-100/95 italic leading-relaxed border-l-3 border-amber-400/90 pl-4 py-1">
-                "{EGW_QUOTES[0].text}"
-              </blockquote>
-            </div>
-
-            <div className="pt-4 border-t border-stone-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-              <span className="font-mono font-bold text-amber-400 uppercase tracking-wider">
-                — Ellen G. White, {EGW_QUOTES[0].source}
-              </span>
-              <Link
-                to="/where"
-                className="text-emerald-300 hover:text-white font-mono font-bold flex items-center gap-1 transition-colors"
-              >
-                <span>Scout Highland Sanctuaries</span>
-                <ArrowRight size={13} />
-              </Link>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* Daily Devotional & Spirit of Prophecy Reflection Widget */}
-      <section>
-        <DailyDevotionalWidget />
-      </section>
-
-      {/* Why Country Living Featurette */}
-      <WhyCountryLivingFeaturette />
-
-      {/* ====================================================================
-          3. SEARCH & CATEGORY FILTER BAR
-      ==================================================================== */}
-      <div className="flex flex-col gap-4">
-        <div className="relative w-full">
-          <Search className="absolute left-4 top-3.5 text-emerald-800" size={18} />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search counsel by keyword e.g. Jerusalem, siege, buying and selling, children, mental health, garden..."
-            className="w-full bg-white border border-stone-300 rounded-2xl pl-12 pr-4 py-3.5 text-sm text-stone-900 placeholder:text-stone-400 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-800 shadow-xs"
+    <div className="min-h-screen bg-[#141D17] text-[#F7F4EC] pb-20 selection:bg-[#C89B3C]/30 selection:text-[#F7F4EC]">
+      {/* Compact Desktop Command Header */}
+      <div className="relative pt-8 pb-7 px-6 overflow-hidden border-b border-white/10">
+        <div className="absolute inset-0 z-0">
+          <img
+            src={COUNTRY_IMAGES.malawiHomesteadSanctuary}
+            alt="Spirit of Prophecy Counsel & Country Living Vision"
+            className="w-full h-full object-cover opacity-15 scale-105 filter saturate-75 contrast-125"
           />
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery('')}
-              className="absolute right-4 top-3.5 text-xs text-stone-500 hover:text-stone-900 uppercase font-sans font-bold cursor-pointer"
-            >
-              Clear
-            </button>
-          )}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#141D17]/85 via-[#141D17]/95 to-[#141D17]" />
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap gap-2 overflow-x-auto pb-1 scrollbar-hide">
-            {categories.map((cat) => {
-              const isSelected = filter === cat;
-              return (
-                <button
-                  key={cat}
-                  onClick={() => setFilter(cat as any)}
-                  className={cn(
-                    "px-4 py-2 rounded-2xl text-xs font-sans font-semibold uppercase tracking-wider transition-all shadow-xs active:scale-95 border cursor-pointer",
-                    isSelected
-                      ? "bg-emerald-900 text-amber-100 border-emerald-950 shadow-sm font-bold" 
-                      : "bg-white text-stone-700 border-stone-300 hover:bg-stone-100 hover:text-stone-900"
-                  )}
-                >
-                  {cat}
-                </button>
-              );
-            })}
+        <div className="max-w-7xl mx-auto relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-white/5 border border-white/15 mb-2.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#C89B3C]" />
+              <span className="text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-[#E6B655]">
+                EGW Estate Verbatim Vault · {EGW_QUOTES.length} Passages · 7 End-Time Plates
+              </span>
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-serif font-normal tracking-tight text-[#F7F4EC]">
+              The Inspired <span className="italic text-[#E6B655]">Blueprint</span>
+            </h1>
+            <p className="text-xs sm:text-sm text-white/70 mt-1 max-w-2xl">
+              1844 Sanctuary Judgment chart, Three Angels’ proclamation, country living directives, and verbatim EGW citations with live KJV verification.
+            </p>
           </div>
 
-          <span className="text-[11px] font-sans font-semibold text-stone-700 bg-stone-200/90 px-3 py-1.5 rounded-xl border border-stone-300">
-            Showing {filteredQuotes.length} {filteredQuotes.length === 1 ? 'Statement with Adapted Visual' : 'Statements with Adapted Visuals'}
-          </span>
-        </div>
-      </div>
-
-      {/* ====================================================================
-          4. RICH QUOTES CARDS GRID WITH ADAPTED EGW IMAGERY & CONTEXT
-      ==================================================================== */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <AnimatePresence mode="popLayout">
-          {filteredQuotes.map((quote) => (
-            <motion.article
-              layout
-              key={quote.id}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-              className="bg-white rounded-3xl border border-stone-200/90 shadow-sm hover:shadow-xl hover:border-emerald-700/50 transition-all flex flex-col justify-between overflow-hidden group"
+          {/* Desktop Perspective Switcher Bar */}
+          <div className="flex flex-wrap items-center gap-1.5 p-1.5 rounded-2xl bg-[#0c140f]/90 border border-white/15 shrink-0">
+            <button
+              type="button"
+              onClick={() => setActiveDesktopTab('prophecy-atlas')}
+              className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 ${
+                activeDesktopTab === 'prophecy-atlas'
+                  ? 'bg-[#C89B3C] text-[#141D17] shadow-md'
+                  : 'text-white/70 hover:text-white hover:bg-white/5'
+              }`}
             >
-              {/* Card Image Banner */}
-              {quote.image && (
-                <div className="relative h-56 sm:h-64 w-full overflow-hidden bg-stone-900">
-                  <img
-                    src={quote.image}
-                    alt={quote.imageAlt || quote.title || quote.source}
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-stone-950/85 via-stone-950/25 to-transparent" />
-                  
-                  {/* Category Pill Over Image */}
-                  <div className="absolute top-4 left-4 flex items-center gap-2">
-                    <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-amber-300 bg-stone-950/80 px-3 py-1 rounded-full border border-amber-500/40 backdrop-blur-md">
-                      {quote.category}
-                    </span>
-                  </div>
-
-                  {/* Copy Button Over Image */}
-                  <div className="absolute top-4 right-4">
-                    <button
-                      onClick={() => handleCopyQuote(quote)}
-                      className={cn(
-                        "px-2.5 py-1.5 rounded-xl text-[11px] font-sans font-bold uppercase transition-all flex items-center gap-1.5 border cursor-pointer backdrop-blur-md shadow-xs active:scale-90",
-                        copiedId === quote.id
-                          ? "bg-emerald-700 border-emerald-600 text-white"
-                          : "bg-stone-900/80 hover:bg-stone-900 text-stone-200 border-stone-700/80"
-                      )}
-                      title="Copy quote citation"
-                    >
-                      {copiedId === quote.id ? <CheckCircle2 size={12} className="text-white" /> : <Copy size={12} />}
-                      <span>{copiedId === quote.id ? 'Copied' : 'Copy'}</span>
-                    </button>
-                  </div>
-
-                  {/* Title & Theme Banner in Image Base */}
-                  <div className="absolute bottom-3 left-4 right-4 flex flex-col gap-0.5">
-                    {quote.title && (
-                      <h3 className="serif font-bold text-lg text-white leading-tight drop-shadow-sm">
-                        {quote.title}
-                      </h3>
-                    )}
-                    {quote.theme && (
-                      <span className="text-[11px] font-mono text-amber-300/90 font-medium">
-                        Theme: {quote.theme}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Card Body */}
-              <div className="p-6 sm:p-7 flex flex-col justify-between flex-1 gap-5">
-                
-                {/* Historical context note if present */}
-                {quote.historicalContext && (
-                  <div className="p-3 rounded-2xl bg-amber-50/70 border border-amber-200/70 text-xs text-stone-700 flex items-start gap-2.5 leading-relaxed">
-                    <Info size={14} className="text-amber-700 shrink-0 mt-0.5" />
-                    <span>
-                      <strong className="text-amber-950">Context & Blueprint: </strong>
-                      {quote.historicalContext}
-                    </span>
-                  </div>
-                )}
-
-                {/* Ellen G. White Quote Content */}
-                <div className="relative">
-                  <QuoteIcon className="text-stone-200 absolute -top-3 -left-3 w-16 h-16 pointer-events-none opacity-40" />
-                  <p className="serif text-lg sm:text-xl leading-relaxed text-stone-900 font-normal italic relative z-10 pl-2">
-                    "{quote.text}"
-                  </p>
-                </div>
-
-                {/* Footer Citation */}
-                <div className="pt-4 border-t border-stone-100 flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-900 bg-emerald-50 px-3 py-1 rounded-xl border border-emerald-200">
-                    — {quote.source}
-                  </span>
-                  
-                  <span className="text-[11px] font-sans text-stone-500 font-medium">
-                    Country Living Principle
-                  </span>
-                </div>
-
-              </div>
-            </motion.article>
-          ))}
-        </AnimatePresence>
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>01 · 1844 Prophetic Atlas</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveDesktopTab('egw-archive')}
+              className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 ${
+                activeDesktopTab === 'egw-archive'
+                  ? 'bg-[#C89B3C] text-[#141D17] shadow-md'
+                  : 'text-white/70 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>02 · Verbatim EGW Vault ({EGW_QUOTES.length})</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveDesktopTab('split-all')}
+              className={`px-3 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                activeDesktopTab === 'split-all'
+                  ? 'bg-[#C89B3C] text-[#141D17] shadow-md'
+                  : 'text-white/70 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>All Open</span>
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* Empty State */}
-      {filteredQuotes.length === 0 && (
-        <div className="py-20 text-center bg-white rounded-[2.5rem] border border-stone-200 shadow-xs flex flex-col items-center gap-3">
-          <Book className="text-stone-400" size={32} />
-          <p className="serif text-2xl text-stone-700 italic">No counsel found matching your search.</p>
-          <button
-            onClick={() => { setSearchQuery(''); setFilter('All'); }}
-            className="text-xs font-bold text-emerald-800 underline uppercase tracking-wider"
-          >
-            Reset Filters
-          </button>
-        </div>
+      {/* PERSPECTIVE 01: 1844 to Second Coming Interactive Prophetic Timeline & Vector Atlas */}
+      {(activeDesktopTab === 'prophecy-atlas' || activeDesktopTab === 'split-all') && (
+        <PropheticTimeline1844 />
       )}
 
-      {/* ====================================================================
-          5. INSPIRING HARMONIOUS SANCTUARY BANNER
-      ==================================================================== */}
-      <div 
-        className="relative rounded-[2.5rem] overflow-hidden p-8 sm:p-12 border border-amber-500/40 shadow-2xl text-white flex flex-col md:flex-row items-center justify-between gap-8 bg-cover bg-center"
-        style={{
-          backgroundImage: `linear-gradient(to right, rgba(4, 29, 16, 0.94), rgba(7, 24, 14, 0.88), rgba(4, 29, 16, 0.95)), url(${COUNTRY_IMAGES.homesteadHighlands})`
-        }}
-      >
-        <div className="flex flex-col gap-3 max-w-2xl relative z-10">
-          <span className="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-3.5 py-1 rounded-full font-mono font-black uppercase text-[10px] tracking-widest w-fit flex items-center gap-2">
-            <Leaf size={12} className="text-amber-400" />
-            <span>Harmonious Outpost Principle</span>
-          </span>
-          <h3 className="serif text-2xl sm:text-3xl font-extrabold text-white">
-            "An Education in Useful Labor & Nature's Lessons"
-          </h3>
-          <p className="text-emerald-100/90 text-sm sm:text-base leading-relaxed">
-            In the country, children and families are preserved from the corrupting associations of the cities. Working with the soil instills diligence, resilience, peace of mind, and quiet trust in Providence.
-          </p>
-        </div>
+      {/* PERSPECTIVE 02: Verbatim EGW Counsel Library */}
+      {(activeDesktopTab === 'egw-archive' || activeDesktopTab === 'split-all') && (
+        <div className="max-w-7xl mx-auto px-6 pt-8">
+          {/* Search + Category Filter + Progressive Disclosure Control Bar */}
+          <div className="bg-[#1C2820]/95 backdrop-blur-xl p-4 rounded-2xl border border-white/10 shadow-xl mb-8 flex flex-col gap-3.5">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+              <div className="relative flex-1">
+                <Search className="w-4 h-4 text-[#C89B3C] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Filter by keyword, book code (GC 422.1, MH 127.2, CL 9.6), or Scripture..."
+                  className="w-full pl-10 pr-20 py-2.5 rounded-xl bg-black/30 border border-white/15 text-[#F7F4EC] placeholder:text-white/40 text-xs focus:outline-none focus:border-[#C89B3C]"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono font-bold uppercase text-[#E6B655] hover:text-white cursor-pointer"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
 
-        <div className="flex flex-col sm:flex-row items-center gap-3 relative z-10 w-full md:w-auto shrink-0">
-          <Link
-            to="/tracker"
-            className="w-full sm:w-auto bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-stone-950 font-mono font-bold text-xs uppercase px-6 py-3.5 rounded-2xl transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <span>Open Exodus Ledger</span>
-            <ArrowRight size={15} />
-          </Link>
-        </div>
-      </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="text-[11px] font-mono text-white/60">
+                  Showing {filteredQuotes.length} of {EGW_QUOTES.length}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setExpandAllDetails((prev) => !prev)}
+                  className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-[11px] font-mono font-bold text-[#E6B655] cursor-pointer transition-colors"
+                >
+                  {expandAllDetails ? 'Compact Cards' : 'Expand All Context'}
+                </button>
+              </div>
+            </div>
 
+            <div className="flex flex-wrap gap-1.5">
+              {categories.map(({ label, icon: Icon }) => {
+                const isActive = selectedCategory === label;
+                const count =
+                  label === 'All'
+                    ? EGW_QUOTES.length
+                    : EGW_QUOTES.filter((q) => q.category === label).length;
+                return (
+                  <button
+                    key={label}
+                    onClick={() => setSelectedCategory(label)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold tracking-wide transition-all cursor-pointer ${
+                      isActive
+                        ? 'bg-[#C89B3C] text-[#141D17] shadow-xs'
+                        : 'bg-white/[0.03] text-white/70 hover:bg-white/10 hover:text-white border border-white/5'
+                    }`}
+                  >
+                    <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#141D17]' : 'text-[#C89B3C]'}`} />
+                    <span>{label}</span>
+                    <span
+                      className={`px-1.5 py-0.2 rounded text-[10px] font-mono ${
+                        isActive ? 'bg-[#141D17]/20 text-[#141D17]' : 'bg-white/10 text-white/60'
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* High-Density Archival Quote Grid with Progressive Disclosure */}
+          <AnimatePresence mode="popLayout">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {filteredQuotes.map((quote, idx) => {
+                const liveVerse = liveScriptures[quote.id];
+                const isLoadingVerse = loadingScriptureId === quote.id;
+                const verseErr = scriptureError[quote.id];
+                const isExpanded = expandAllDetails || !!expandedCards[quote.id];
+
+                return (
+                  <motion.article
+                    key={quote.id}
+                    layout
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.97 }}
+                    transition={{ duration: 0.25, delay: Math.min(idx * 0.03, 0.2) }}
+                    className="bg-white/[0.03] backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:border-[#C89B3C]/40 transition-all flex flex-col justify-between relative overflow-hidden group"
+                  >
+                    <div className="relative z-10">
+                      {/* Illustrated Banner */}
+                      {quote.image && (
+                        <div className="mb-4 rounded-xl overflow-hidden border border-white/15 h-40 relative bg-black/50">
+                          <img
+                            src={quote.image}
+                            alt={quote.imageAlt || quote.title || 'Spirit of Prophecy Illustration'}
+                            referrerPolicy="no-referrer"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#141D17] via-transparent to-transparent" />
+                          {quote.theme && (
+                            <span className="absolute bottom-2.5 left-2.5 px-2.5 py-0.5 rounded-md bg-black/75 border border-[#C89B3C]/40 text-[10px] font-mono font-bold uppercase tracking-wider text-[#E6B655]">
+                              {quote.theme}
+                            </span>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Top Metadata Row */}
+                      <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[10px] font-mono font-bold uppercase tracking-wider bg-[#C89B3C]/15 text-[#E6B655] border border-[#C89B3C]/30">
+                          {quote.category}
+                        </span>
+
+                        <div className="flex items-center gap-1.5">
+                          {quote.egwCode && (
+                            <span className="px-2.5 py-0.5 rounded-md bg-white/5 border border-white/10 text-[11px] font-mono font-bold text-[#E6B655]">
+                              {quote.egwCode}
+                            </span>
+                          )}
+                          {quote.yearWritten && (
+                            <span className="px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-[10px] font-mono text-white/60">
+                              {quote.yearWritten}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {quote.title && (
+                        <h2 className="text-lg md:text-xl font-serif font-bold text-[#E6B655] mb-2">
+                          {quote.title}
+                        </h2>
+                      )}
+
+                      {/* Verbatim EGW Quote */}
+                      <blockquote className="text-base md:text-lg font-serif text-[#F7F4EC] leading-relaxed mb-4 italic">
+                        “{quote.text}”
+                      </blockquote>
+
+                      {/* Scripture Companion Bar (Always visible, concise) */}
+                      {quote.scriptureCompanion && (
+                        <div className="mb-3 p-3 rounded-xl bg-[#C89B3C]/[0.07] border border-[#C89B3C]/25">
+                          <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
+                            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#E6B655] flex items-center gap-1">
+                              <Sparkles className="w-3 h-3" /> {quote.scriptureCompanion.reference}
+                            </span>
+                            <button
+                              onClick={() => fetchVerifiedScripture(quote)}
+                              disabled={isLoadingVerse}
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#C89B3C]/20 hover:bg-[#C89B3C]/35 text-[#F7F4EC] text-[10px] font-mono font-bold uppercase transition-colors cursor-pointer disabled:opacity-50"
+                            >
+                              <RefreshCw className={`w-2.5 h-2.5 ${isLoadingVerse ? 'animate-spin' : ''}`} />
+                              {liveVerse ? 'KJV Verified' : 'Verify KJV'}
+                            </button>
+                          </div>
+
+                          {liveVerse ? (
+                            <div className="text-xs font-serif italic text-[#F7F4EC] leading-relaxed">
+                              “{liveVerse.text}”
+                              <span className="block not-italic text-[10px] font-mono text-[#86EFAC] mt-1">
+                                ✓ {liveVerse.reference} ({liveVerse.translation_name})
+                              </span>
+                            </div>
+                          ) : (
+                            <p className="text-xs text-white/80 italic leading-relaxed">
+                              “{quote.scriptureCompanion.verse}”
+                            </p>
+                          )}
+                          {verseErr && <p className="text-[11px] text-amber-300 mt-1">{verseErr}</p>}
+                        </div>
+                      )}
+
+                      {/* Progressive Disclosure Drawer for Historical Context & Malawi Application */}
+                      {(quote.historicalContext || quote.malawiOutpostApplication) && (
+                        <div className="mb-3">
+                          <button
+                            type="button"
+                            onClick={() => toggleCardDetail(quote.id)}
+                            className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.07] border border-white/10 text-[11px] font-mono font-semibold text-white/80 cursor-pointer transition-colors"
+                          >
+                            <span>
+                              {isExpanded
+                                ? 'Hide Archival Context & Malawi Field Application'
+                                : 'Inspect Archival Context & Malawi Field Application'}
+                            </span>
+                            {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-[#E6B655]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#E6B655]" />}
+                          </button>
+
+                          {isExpanded && (
+                            <div className="mt-2 grid grid-cols-1 gap-2.5">
+                              {quote.historicalContext && (
+                                <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10">
+                                  <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#E6B655] mb-1 flex items-center gap-1">
+                                    <BookOpen className="w-3 h-3" /> Archival Context
+                                  </div>
+                                  <p className="text-xs text-white/75 leading-relaxed">
+                                    {quote.historicalContext}
+                                  </p>
+                                </div>
+                              )}
+                              {quote.malawiOutpostApplication && (
+                                <div className="p-3 rounded-xl bg-[#2E6F40]/15 border border-[#2E6F40]/35">
+                                  <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#86EFAC] mb-1 flex items-center gap-1">
+                                    <Compass className="w-3 h-3" /> Malawi Field Application
+                                  </div>
+                                  <p className="text-xs text-white/85 leading-relaxed">
+                                    {quote.malawiOutpostApplication}
+                                  </p>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Footer Citation & Official EGW Writings Link */}
+                    <div className="relative z-10 pt-3.5 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <div className="text-xs text-[#E6B655] font-semibold">{quote.source}</div>
+                        {quote.originalDocument && (
+                          <div className="text-[10px] text-white/50 font-mono">{quote.originalDocument}</div>
+                        )}
+                      </div>
+
+                      {quote.verifiedUrl && (
+                        <a
+                          href={quote.verifiedUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-[#C89B3C] text-white/85 hover:text-[#141D17] border border-white/15 hover:border-[#C89B3C] text-[11px] font-mono font-bold uppercase tracking-wider transition-all"
+                        >
+                          <span>EGW Estate</span>
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      )}
+                    </div>
+                  </motion.article>
+                );
+              })}
+            </div>
+          </AnimatePresence>
+        </div>
+      )}
     </div>
   );
 }

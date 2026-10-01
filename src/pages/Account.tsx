@@ -10,7 +10,8 @@ import {
   getStoredLandChecklist, 
   getStoredPantryStock, 
   createFullAppBackup, 
-  restoreFullAppBackup 
+  restoreFullAppBackup,
+  calculateHomesteadReadinessScore
 } from '@/lib/offlineStorage';
 import { OnboardingWizard } from '@/components/onboarding/OnboardingWizard';
 
@@ -76,24 +77,17 @@ export default function Account() {
     setTimeout(() => setToastMsg(null), 3000);
   };
 
-  // Read real progress from offlineStorage
+  // Read real unified progress from offlineStorage
   const trackerData = (() => {
     try {
-      const parsed = getStoredTrackerData();
-      if (!parsed) return { completed: 0, total: 9, percentage: 0 };
-      let completed = 0;
-      let total = 0;
-      if (Array.isArray(parsed)) {
-        parsed.forEach((step: any) => {
-          step.subtasks?.forEach((st: any) => {
-            total++;
-            if (st.completed) completed++;
-          });
-        });
-      }
-      return { completed, total, percentage: total > 0 ? Math.round((completed / total) * 100) : 0 };
+      const stats = calculateHomesteadReadinessScore();
+      return {
+        completed: stats.completedMilestones,
+        total: stats.totalMilestones,
+        percentage: stats.breakdown.exodusScorePct
+      };
     } catch (e) {
-      return { completed: 0, total: 9, percentage: 0 };
+      return { completed: 0, total: 15, percentage: 0 };
     }
   })();
 
@@ -247,7 +241,7 @@ export default function Account() {
                   : "text-slate-600 dark:text-emerald-300/70 hover:text-slate-900 dark:hover:text-white"
               )}
             >
-              <LogIn size={15} /> Quick Guest
+              <LogIn size={15} /> Local Guest
             </button>
             <button
               onClick={() => setAuthTab('register')}
@@ -258,7 +252,7 @@ export default function Account() {
                   : "text-slate-600 dark:text-emerald-300/70 hover:text-slate-900 dark:hover:text-white"
               )}
             >
-              <UserIcon size={15} /> Custom
+              <UserIcon size={15} /> Local Profile
             </button>
           </div>
 
@@ -359,8 +353,11 @@ export default function Account() {
           ) : (
             <form onSubmit={handleRegisterSubmit} className="flex flex-col gap-5 max-w-lg mx-auto w-full">
               <div className="text-center mb-2">
-                <h3 className="serif text-2xl font-bold text-emerald-950 dark:text-white">Custom Steward Profile</h3>
-                <p className="text-slate-500 dark:text-stone-400 text-xs font-medium">Enter your details to create your personalized homestead account.</p>
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300/60 mb-2">
+                  <CloudOff size={12} /> Local Device Storage Only (Not Cloud Synced)
+                </span>
+                <h3 className="serif text-2xl font-bold text-emerald-950 dark:text-white">Local Device Steward Profile</h3>
+                <p className="text-slate-500 dark:text-stone-400 text-xs font-medium">Creates an offline profile saved in this browser only. Use Google Sign-In above if you want Cloud Firestore backup.</p>
               </div>
 
               <div>

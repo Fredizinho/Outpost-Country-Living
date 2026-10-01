@@ -128,13 +128,151 @@ export function SoilStrataBlueprint() {
       {/* Main Interactive Grid: Left Strata Visual, Right Detailed Pedology Ledger */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10">
         {/* Left Column: Soil Layer Visual Stack (5 Cols) */}
-        <div className="lg:col-span-5 flex flex-col gap-3">
-          <span className="text-[10px] font-mono font-black uppercase tracking-widest text-emerald-400 mb-1 flex items-center justify-between">
-            <span>Soil Profile Cross-Section</span>
-            <span>Depth Scale</span>
+        <div className="lg:col-span-5 flex flex-col gap-3.5">
+          <span className="text-[10px] font-mono font-black uppercase tracking-widest text-emerald-400 flex items-center justify-between">
+            <span>Interactive Soil &amp; Aquifer Cutaway</span>
+            <span>Click Any Stratum</span>
           </span>
 
-          <div className="flex flex-col gap-2.5">
+          {/* Interactive SVG Cross-Section Cutaway Diagram */}
+          <div className="rounded-2xl overflow-hidden border border-emerald-500/35 bg-[#04110B] shadow-inner relative">
+            <svg
+              viewBox="0 0 420 300"
+              className="w-full h-auto select-none block"
+              role="img"
+              aria-label="Interactive Malawi Soil Profile & Groundwater Aquifer Cutaway"
+            >
+              {/* Sky & Surface Horizon (0 - 50px) */}
+              <rect x="0" y="0" width="420" height="52" fill="#062216" />
+              {/* Sun & Rain Infiltration Arrows */}
+              <circle cx="375" cy="24" r="13" fill="#F59E0B" fillOpacity="0.25" stroke="#FBBF24" strokeWidth="1.5" />
+              <circle cx="375" cy="24" r="6" fill="#FDE68A" />
+              {/* Vetiver Grass & Fruit Tree Canopy on Surface */}
+              <path d="M55 52 C55 34, 42 22, 34 14 M55 52 C55 32, 55 18, 55 10 M55 52 C55 34, 68 22, 76 14" stroke="#34D399" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+              {/* Fruit Tree Trunk & Canopy */}
+              <path d="M195 52 L195 26" stroke="#92400E" strokeWidth="5" strokeLinecap="round" />
+              <circle cx="195" cy="20" r="16" fill="#059669" fillOpacity="0.55" stroke="#34D399" strokeWidth="1.5" />
+              <circle cx="183" cy="23" r="10" fill="#10B981" fillOpacity="0.45" />
+              <circle cx="207" cy="23" r="10" fill="#10B981" fillOpacity="0.45" />
+              {/* Solar Borehole Pump Head at Surface */}
+              <rect x="310" y="32" width="32" height="20" rx="3" fill="#0F172A" stroke="#38BDF8" strokeWidth="1.5" />
+              <line x1="306" y1="26" x2="346" y2="20" stroke="#38BDF8" strokeWidth="2.5" strokeLinecap="round" />
+
+              {/* LAYER 1: Rich Topsoil & Organic Humus (0-25cm) */}
+              <g
+                onClick={() => setActiveLayerId('topsoil')}
+                className="cursor-pointer transition-opacity"
+              >
+                <rect
+                  x="0"
+                  y="52"
+                  width="420"
+                  height="56"
+                  fill={activeLayerId === 'topsoil' ? '#064E3B' : '#052E22'}
+                  stroke={activeLayerId === 'topsoil' ? '#FBBF24' : '#10B981'}
+                  strokeWidth={activeLayerId === 'topsoil' ? '2.5' : '1'}
+                />
+                {/* Golden Surface Mulch Blanket */}
+                <path d="M0 54 Q35 49 70 54 T140 54 T210 54 T280 54 T350 54 T420 54" stroke="#F59E0B" strokeWidth="3" fill="none" />
+                {/* Fibrous Roots & Earthworm Channels */}
+                <path d="M55 52 C50 68, 44 82, 38 98 M55 52 C58 70, 64 85, 70 100" stroke="#6EE7B7" strokeWidth="1.5" fill="none" />
+                <path d="M115 76 Q128 70 140 78 T165 75" stroke="#F472B6" strokeWidth="2" strokeLinecap="round" fill="none" />
+                <circle cx="95" cy="72" r="2" fill="#A7F3D0" />
+                <circle cx="150" cy="90" r="2" fill="#A7F3D0" />
+                <circle cx="250" cy="75" r="2" fill="#A7F3D0" />
+                <text x="14" y="72" fill="#A7F3D0" fontSize="10" fontFamily="monospace" fontWeight="bold">
+                  O/A HORIZON · HUMUS &amp; MULCH (0–25cm)
+                </text>
+                <text x="14" y="88" fill="#6EE7B7" fontSize="8.5" fontFamily="monospace">
+                  Mycorrhizal Fungi · Earthworms · pH 6.2–6.8
+                </text>
+              </g>
+
+              {/* LAYER 2: Katondo Red Loam & Clay Subsoil (25-120cm) */}
+              <g
+                onClick={() => setActiveLayerId('latosol')}
+                className="cursor-pointer transition-opacity"
+              >
+                <rect
+                  x="0"
+                  y="108"
+                  width="420"
+                  height="64"
+                  fill={activeLayerId === 'latosol' ? '#78350F' : '#451A03'}
+                  stroke={activeLayerId === 'latosol' ? '#FBBF24' : '#D97706'}
+                  strokeWidth={activeLayerId === 'latosol' ? '2.5' : '1'}
+                />
+                {/* Deep Taproots & 3x3x3ft Biochar Pit */}
+                <rect x="172" y="108" width="46" height="48" rx="6" fill="#1C1917" fillOpacity="0.6" stroke="#F59E0B" strokeDasharray="3 2" />
+                <path d="M195 52 L195 150 M195 115 L178 142 M195 120 L212 146" stroke="#FDE68A" strokeWidth="2" strokeLinecap="round" fill="none" />
+                <path d="M55 95 L52 158 M58 95 L64 154" stroke="#34D399" strokeWidth="1.3" strokeDasharray="2 2" fill="none" />
+                <text x="14" y="128" fill="#FDE68A" fontSize="10" fontFamily="monospace" fontWeight="bold">
+                  B HORIZON · KATONDO RED LOAM (25–120cm)
+                </text>
+                <text x="14" y="144" fill="#FCD34D" fontSize="8.5" fontFamily="monospace">
+                  3×3×3ft Orchard Pit Sponge · Deep Moisture Bank
+                </text>
+              </g>
+
+              {/* LAYER 3: Weathered Saprolite & Fractured Granite Filter (1.2-3.5m) */}
+              <g
+                onClick={() => setActiveLayerId('bedrock')}
+                className="cursor-pointer transition-opacity"
+              >
+                <rect
+                  x="0"
+                  y="172"
+                  width="420"
+                  height="60"
+                  fill={activeLayerId === 'bedrock' ? '#292524' : '#1C1917'}
+                  stroke={activeLayerId === 'bedrock' ? '#FBBF24' : '#57534E'}
+                  strokeWidth={activeLayerId === 'bedrock' ? '2.5' : '1'}
+                />
+                {/* Fractured Stone Polygon Blocks & Percolation Drops */}
+                <polygon points="240,182 270,178 278,198 246,204" fill="#44403C" stroke="#78716C" strokeWidth="1" />
+                <polygon points="285,186 312,180 316,208 282,210" fill="#44403C" stroke="#78716C" strokeWidth="1" />
+                <polygon points="185,190 222,185 228,216 190,220" fill="#44403C" stroke="#78716C" strokeWidth="1" />
+                <path d="M232 176 L232 226 M279 176 L279 226" stroke="#38BDF8" strokeWidth="1.5" strokeDasharray="3 3" />
+                <text x="14" y="194" fill="#E7E5E4" fontSize="10" fontFamily="monospace" fontWeight="bold">
+                  C HORIZON · SAPROLITE ROCK FILTER (1.2–3.5m)
+                </text>
+                <text x="14" y="210" fill="#A8A29E" fontSize="8.5" fontFamily="monospace">
+                  Natural Mineral Filtration · Spring Percolation Zone
+                </text>
+              </g>
+
+              {/* LAYER 4: Crystalline Basement Aquifer & Borehole Table (4-25m+) */}
+              <g
+                onClick={() => setActiveLayerId('aquifer')}
+                className="cursor-pointer transition-opacity"
+              >
+                <rect
+                  x="0"
+                  y="232"
+                  width="420"
+                  height="68"
+                  fill={activeLayerId === 'aquifer' ? '#083344' : '#041E2B'}
+                  stroke={activeLayerId === 'aquifer' ? '#38BDF8' : '#0284C7'}
+                  strokeWidth={activeLayerId === 'aquifer' ? '2.5' : '1'}
+                />
+                {/* Flowing Underground Water Waves */}
+                <path d="M0 256 Q45 248 90 256 T180 256 T270 256 T360 256 T420 256" stroke="#38BDF8" strokeWidth="1.8" fill="none" opacity="0.65" />
+                <path d="M0 276 Q45 268 90 276 T180 276 T270 276 T360 276 T420 276" stroke="#7DD3FC" strokeWidth="1.5" fill="none" opacity="0.5" />
+                <text x="14" y="254" fill="#7DD3FC" fontSize="10" fontFamily="monospace" fontWeight="bold">
+                  R AQUIFER · BASEMENT WATER TABLE (4–25m+)
+                </text>
+                <text x="14" y="272" fill="#BAE6FD" fontSize="8.5" fontFamily="monospace">
+                  Solar Submersible Borehole Intake · pH 7.1 Pure
+                </text>
+              </g>
+
+              {/* Continuous Borehole Casing Pipe from Surface to Aquifer */}
+              <rect x="322" y="52" width="8" height="232" fill="#0F172A" stroke="#38BDF8" strokeWidth="1.2" />
+              <rect x="319" y="262" width="14" height="24" rx="3" fill="#0284C7" stroke="#E0F2FE" strokeWidth="1.2" />
+            </svg>
+          </div>
+
+          <div className="flex flex-col gap-2">
             {STRATA_LAYERS.map((layer) => {
               const isActive = layer.id === activeLayerId;
               return (

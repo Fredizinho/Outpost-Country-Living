@@ -19,6 +19,9 @@ import buyingSelling from '@/assets/images/buying_selling_1790182041804.jpg';
 import openAirLabor from '@/assets/images/open_air_labor_1790182055111.jpg';
 import cityNoiseContrast from '@/assets/images/city_noise_contrast_1790182079193.jpg';
 import natureSymbols from '@/assets/images/nature_symbols_1790182094111.jpg';
+import sanctuary1844Judgment from '@/assets/images/sanctuary_1844_judgment_1790840528333.jpg';
+import threeAngelsProclamation from '@/assets/images/three_angels_proclamation_1790840540260.jpg';
+import secondComingDeliverance from '@/assets/images/second_coming_deliverance_1790840555721.jpg';
 
 export const COUNTRY_IMAGES = {
   homesteadHighlands,
@@ -37,4 +40,7 @@ export const COUNTRY_IMAGES = {
   openAirLabor,
   cityNoiseContrast,
   natureSymbols,
+  sanctuary1844Judgment,
+  threeAngelsProclamation,
+  secondComingDeliverance,
 };

@@ -1,7 +1,8 @@
 import { MapPin, Search, CheckCircle2, Circle, PencilLine, Navigation, Map as MapIcon, X, Compass, Check, AlertCircle, FileText, ChevronRight, ChevronDown, ChevronUp, CloudSun, Sprout, Sparkles, Wrench, ArrowUpRight, Copy, Calculator, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useState, useEffect } from 'react';
-import { LAND_CHECKLIST_DATA, MALAWI_OUTPOST_ZONES, MALAWI_DISTRICTS_DATA, MalawiDistrictInfo } from '@/data/content';
+import { LAND_CHECKLIST_DATA, MALAWI_OUTPOST_ZONES, MALAWI_DISTRICTS_DATA, MalawiDistrictInfo, DATA_SOURCES_AND_CITATIONS } from '@/data/content';
+import { getDistrictRecord, DISTRICT_LIST, PLANTING_PIT_SPECS } from '@/constants';
 import { cn } from '@/lib/utils';
 import { getStoredLandChecklist, saveStoredLandChecklist } from '@/lib/offlineStorage';
 import { Link } from 'react-router-dom';
@@ -9,6 +10,8 @@ import { RegionalWeatherWidget } from '@/components/weather/RegionalWeatherWidge
 import { COUNTRY_IMAGES } from '@/assets/images';
 import { LandReadinessCards } from '@/components/outpost/LandReadinessCards';
 import { PropertySuitabilityCalculator } from '@/components/outpost/PropertySuitabilityCalculator';
+import { CustomaryLandChecklist } from '@/components/outpost/CustomaryLandChecklist';
+import { ChichewaFieldPhrasebook } from '@/components/outpost/ChichewaFieldPhrasebook';
 
 interface ChecklistState {
   completedIds: string[];
@@ -28,6 +31,7 @@ export default function Where() {
   const [showSurveyModal, setShowSurveyModal] = useState(false);
   const [activeTipModal, setActiveTipModal] = useState<string | null>(null);
   const [hasCopiedDossier, setHasCopiedDossier] = useState(false);
+  const [activePerspective, setActivePerspective] = useState<'districts' | 'customary-law' | 'evaluator' | 'sources-all'>('districts');
 
   const handleCopyDossier = async () => {
     if (!analyzedDistrict) return;
@@ -87,13 +91,45 @@ Generated from OUTPOST: Country Living Matrix
     setDistrictQuery(query);
     if (!q) return;
 
-    // Find matching district key or substring match
+    // 1. Check curated extended dossier first
     const matchedKey = Object.keys(MALAWI_DISTRICTS_DATA).find(key => 
       key.includes(q) || MALAWI_DISTRICTS_DATA[key].name.toLowerCase().includes(q)
     );
 
     if (matchedKey) {
       setAnalyzedDistrict(MALAWI_DISTRICTS_DATA[matchedKey]);
+      return;
+    }
+
+    // 2. Fallback to full 28-district Central Registry so every Malawi district resolves
+    const regRecord = getDistrictRecord(q === 'mzuzu' ? 'mzimba' : q);
+    if (regRecord) {
+      const pitSpec = PLANTING_PIT_SPECS[regRecord.recommendedPitKey] || PLANTING_PIT_SPECS.egwDeepPit;
+      setAnalyzedDistrict({
+        id: regRecord.id,
+        name: `${regRecord.name} District`,
+        region: regRecord.region,
+        altitude: regRecord.elevationRange,
+        rainfall: `${regRecord.rainfallAnnualMm} mm/year (${regRecord.rainfallPattern})`,
+        rainfallAnnualMm: regRecord.rainfallAnnualMm,
+        soil: regRecord.primarySoil,
+        faoSoilClassification: regRecord.faoSoilClassification,
+        soilTypeDetailed: `${regRecord.primarySoil} · ${regRecord.soilAmendmentPrescription}`,
+        soilPh: regRecord.soilPh,
+        groundwaterDepthM: regRecord.aquiferDepth,
+        aquiferDepthM: regRecord.aquiferDepthM,
+        solarKwhDay: regRecord.solarKwhDay,
+        landCostBallpark: regRecord.landCostBallpark,
+        nearestMarketTown: `${regRecord.name} Boma (${regRecord.traditionalAuthorities.slice(0, 2).join(', ')})`,
+        m1DistanceKm: `Centroid ${Math.abs(regRecord.lat).toFixed(2)}°S, ${regRecord.lng.toFixed(2)}°E`,
+        suitabilityScore: regRecord.suitabilityScore,
+        verificationStatus: regRecord.verificationStatus,
+        unverifiedFields: regRecord.unverifiedFields,
+        bestCrops: regRecord.topCrops,
+        outpostStrategy: `${regRecord.description} Recommended Orchard Standard: ${pitSpec.name} (${pitSpec.dimensionString}).`,
+        hydrogeologyNote: `${regRecord.aquiferDepth}. Solar insolation averages ${regRecord.solarKwhDay} kWh/m²/day for reliable solar borehole pumping.`,
+        dccmsSourceRef: `DCCMS ${regRecord.name} District Meteorological & Hydrogeology Registry`
+      });
     }
   };
 
@@ -122,34 +158,64 @@ Generated from OUTPOST: Country Living Matrix
           </span>
         </div>
 
-        <div className="flex flex-col gap-3 relative z-10">
-          <h1 className="serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#FAF8F5] leading-tight">
+        <div className="flex flex-col gap-2 relative z-10">
+          <h1 className="serif text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#FAF8F5] leading-tight">
             Malawi Land Scouting Matrix
           </h1>
-          <p className="text-emerald-100/90 max-w-3xl text-sm sm:text-base md:text-lg font-medium leading-relaxed italic">
-            Locate and survey your off-grid sanctuary across Malawi's fertile highlands, perennial dambos, and sun-rich plateaus.
+          <p className="text-emerald-100/90 max-w-3xl text-xs sm:text-sm font-medium leading-relaxed">
+            28-district soil/aquifer analyzer, Customary Land Act (2016) procedure, Chichewa Mfumu phrasebook, and 100-point plot evaluator.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 relative z-10 pt-2 border-t border-amber-500/15">
-          <Link
-            to="/scout-map"
-            className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono font-black text-xs uppercase px-4 py-2.5 rounded-xl transition-all shadow-md flex items-center gap-2"
-          >
-            <Compass size={14} /> Open Full Interactive Map <ChevronRight size={13} />
-          </Link>
-          <button
-            onClick={() => setShowSurveyModal(true)}
-            className="bg-white/5 hover:bg-white/10 text-amber-200 border border-amber-500/25 font-mono text-xs font-bold uppercase px-4 py-2.5 rounded-xl transition-all cursor-pointer"
-          >
-            Read Land Guide
-          </button>
+        <div className="flex flex-wrap items-center justify-between gap-3 relative z-10 pt-3 border-t border-amber-500/15">
+          {/* Desktop 4-Tab Perspective Bar */}
+          <div className="flex flex-wrap items-center gap-1.5 bg-black/35 p-1.5 rounded-2xl border border-white/10">
+            {([
+              { id: 'districts', label: '01 · 28-District & Zones' },
+              { id: 'customary-law', label: '02 · Customary Land Law & Chichewa' },
+              { id: 'evaluator', label: '03 · Plot Evaluator & Checklist' },
+              { id: 'sources-all', label: '04 · Sources & All Open' },
+            ] as const).map((tab) => {
+              const active = activePerspective === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActivePerspective(tab.id)}
+                  className={cn(
+                    'px-3 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer',
+                    active
+                      ? 'bg-amber-400 text-stone-950 shadow-sm'
+                      : 'text-emerald-100/80 hover:text-white hover:bg-white/10'
+                  )}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <Link
+              to="/scout"
+              className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono font-black text-xs uppercase px-3.5 py-2 rounded-xl transition-all shadow-md flex items-center gap-1.5"
+            >
+              <Compass size={14} /> Interactive GIS Map <ChevronRight size={13} />
+            </Link>
+            <button
+              onClick={() => setShowSurveyModal(true)}
+              className="bg-white/5 hover:bg-white/10 text-amber-200 border border-amber-500/25 font-mono text-xs font-bold uppercase px-3.5 py-2 rounded-xl transition-all cursor-pointer"
+            >
+              Land Guide
+            </button>
+          </div>
         </div>
       </header>
 
       {/* ------------------------------------------------------------- */}
       {/* SECTION 1: ESSENTIAL FUNCTION - DISTRICT & ZONE ANALYZER      */}
       {/* ------------------------------------------------------------- */}
+      {(activePerspective === 'districts' || activePerspective === 'sources-all') && (
       <section className="bg-white/95 text-stone-900 p-6 sm:p-8 md:p-10 rounded-3xl flex flex-col gap-6 relative shadow-xs border border-stone-200">
         <div className="relative z-10 flex flex-col gap-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-200 pb-4">
@@ -162,27 +228,27 @@ Generated from OUTPOST: Country Living Matrix
               <p className="text-stone-600 mt-1 text-xs sm:text-sm font-medium">Search any district in Malawi to check soil acidity, well water depth, rainfall, and farming conditions.</p>
             </div>
             <Link
-              to="/scout-map"
+              to={analyzedDistrict ? `/scout?district=${encodeURIComponent(analyzedDistrict.id || analyzedDistrict.name.replace(' District', '').toLowerCase())}` : '/scout'}
               className="self-start sm:self-auto bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 font-sans text-xs font-semibold uppercase px-4 py-2.5 rounded-xl transition-all flex items-center gap-2"
             >
-              <Compass size={14} className="text-emerald-800" /> View on Map
+              <Compass size={14} className="text-emerald-800" /> View {analyzedDistrict ? analyzedDistrict.name.replace(' District', '') : ''} on Map
             </Link>
           </div>
 
-          {/* Quick District Buttons */}
-          <div className="flex flex-wrap gap-2">
-            {['Mzimba', 'Dedza', 'Mulanje', 'Lilongwe', 'Mzuzu', 'Zomba', 'Thyolo', 'Kasungu', 'Rumphi', 'Salima'].map(dist => (
+          {/* Quick District Buttons across all 28 Districts */}
+          <div className="flex flex-wrap gap-1.5">
+            {DISTRICT_LIST.map(dist => (
               <button
-                key={dist}
-                onClick={() => handleDistrictSearch(dist)}
+                key={dist.id}
+                onClick={() => handleDistrictSearch(dist.name)}
                 className={cn(
-                  "px-3.5 py-1.5 rounded-xl text-[11px] font-sans font-semibold uppercase tracking-wider transition-all border cursor-pointer",
-                  analyzedDistrict?.name.toLowerCase().includes(dist.toLowerCase())
+                  "px-3 py-1.5 rounded-xl text-[11px] font-sans font-semibold tracking-tight transition-all border cursor-pointer",
+                  analyzedDistrict?.name.toLowerCase().includes(dist.name.toLowerCase())
                     ? "bg-emerald-900 border-emerald-950 text-white shadow-xs font-bold"
                     : "bg-stone-100 border-stone-300 text-stone-700 hover:bg-stone-200 hover:text-stone-900"
                 )}
               >
-                {dist}
+                {dist.name}
               </button>
             ))}
           </div>
@@ -209,11 +275,22 @@ Generated from OUTPOST: Country Living Matrix
             >
               <div className="flex justify-between items-start border-b border-emerald-800 pb-4">
                 <div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <h3 className="serif text-2xl sm:text-3xl font-bold text-white">{analyzedDistrict.name}</h3>
                     <span className="bg-emerald-800/80 text-emerald-200 border border-emerald-600/60 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md">
                       {analyzedDistrict.region} Region
                     </span>
+                    {analyzedDistrict.verificationStatus === 'partial' ? (
+                      <span className="inline-flex items-center gap-1 bg-amber-500/20 text-amber-200 border border-amber-400/40 text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md">
+                        <AlertCircle size={11} className="text-amber-300" />
+                        Regional Interpolation ({analyzedDistrict.unverifiedFields?.join(', ') || 'Field Check Required'})
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 bg-emerald-500/20 text-emerald-200 border border-emerald-400/40 text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md">
+                        <ShieldCheck size={11} className="text-emerald-300" />
+                        WMO / FAO Verified Baseline
+                      </span>
+                    )}
                   </div>
                   <p className="text-xs text-amber-300 font-bold mt-1">
                     Market Access: {analyzedDistrict.nearestMarketTown} ({analyzedDistrict.m1DistanceKm})
@@ -232,21 +309,34 @@ Generated from OUTPOST: Country Living Matrix
                   <span className="text-[11px] text-emerald-200">{analyzedDistrict.rainfall}</span>
                 </div>
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-[10px] uppercase font-bold text-emerald-300/80 font-sans">Soil Type & Acidity (pH)</span>
+                  <span className="text-[10px] uppercase font-bold text-emerald-300/80 font-sans">FAO HWSD v2.0 Soil & pH</span>
                   <span className="font-bold text-white">{analyzedDistrict.soil}</span>
                   <span className="text-[11px] text-emerald-200">{analyzedDistrict.soilPh}</span>
                 </div>
                 <div className="flex flex-col gap-0.5">
                   <span className="text-[10px] uppercase font-bold text-emerald-300/80 font-sans">Well & Borehole Water Depth</span>
                   <span className="font-bold text-white">{analyzedDistrict.groundwaterDepthM}</span>
-                  <span className="text-[11px] text-emerald-200">Good Water Recharge</span>
+                  <span className="text-[11px] text-emerald-200">
+                    {analyzedDistrict.verificationStatus === 'partial' ? 'Watershed Interpolated (Test On-Site)' : 'FAO AQUASTAT Baseline'}
+                  </span>
                 </div>
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-[10px] uppercase font-bold text-amber-300 font-sans">Estimated Land Cost</span>
+                  <span className="text-[10px] uppercase font-bold text-amber-300 font-sans">Indicative Survey & Allocation Est.</span>
                   <span className="font-bold text-amber-300">{analyzedDistrict.landCostBallpark}</span>
-                  <span className="text-[10px] text-stone-300">Village / Customary Land</span>
+                  <span className="text-[10px] text-stone-300">Unverified field est. • Customary Land Act (2016)</span>
                 </div>
               </div>
+
+              {analyzedDistrict.verificationStatus === 'partial' && (
+                <div className="bg-amber-950/50 border border-amber-500/40 rounded-2xl p-3 text-xs text-amber-100 flex items-start gap-2">
+                  <AlertCircle size={15} className="text-amber-300 shrink-0 mt-0.5" />
+                  <p className="leading-relaxed">
+                    <strong className="font-bold text-amber-200">Verification Disclosure:</strong>{' '}
+                    {analyzedDistrict.verificationNote ||
+                      `This district relies on regional watershed interpolation for ${analyzedDistrict.unverifiedFields?.join(' and ') || 'hydrogeology'}. Commission a vertical electrical sounding (VES) borehole survey and 0–30cm soil pH test prior to land commitment.`}
+                  </p>
+                </div>
+              )}
 
               <div className="bg-emerald-950/80 p-3.5 rounded-2xl border border-emerald-800 text-xs flex flex-col gap-1.5">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-300 flex items-center gap-1 font-sans">
@@ -287,7 +377,14 @@ Generated from OUTPOST: Country Living Matrix
                   </button>
 
                   <Link
-                    to={`/calculators?tab=solar&district=${analyzedDistrict.name.toLowerCase()}`}
+                    to={`/scout?district=${encodeURIComponent(analyzedDistrict.id || analyzedDistrict.name.replace(' District', '').toLowerCase())}`}
+                    className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3 py-1.5 rounded-xl text-[10px] font-sans font-black uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-sm"
+                  >
+                    <Compass size={12} /> Scout on GIS Map
+                  </Link>
+
+                  <Link
+                    to={`/calculators?tab=solar&district=${analyzedDistrict.name.replace(' District', '').toLowerCase()}`}
                     className="bg-amber-500/25 hover:bg-amber-500/35 text-amber-200 border border-amber-400/40 px-3 py-1.5 rounded-xl text-[10px] font-sans font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all"
                   >
                     <Calculator size={12} /> Size Solar Pump
@@ -337,31 +434,39 @@ Generated from OUTPOST: Country Living Matrix
           </div>
         </div>
       </section>
+      )}
 
       {/* ------------------------------------------------------------- */}
       {/* SECTION 2: SIMPLIFIED DISTRICT READINESS CARDS                */}
       {/* ------------------------------------------------------------- */}
+      {(activePerspective === 'districts' || activePerspective === 'customary-law' || activePerspective === 'sources-all') && (
       <section>
         <LandReadinessCards />
       </section>
+      )}
 
       {/* ------------------------------------------------------------- */}
       {/* SECTION 3: ELLEN WHITE PROPERTY SUITABILITY CALCULATOR        */}
       {/* ------------------------------------------------------------- */}
+      {(activePerspective === 'evaluator' || activePerspective === 'sources-all') && (
       <section>
         <PropertySuitabilityCalculator />
       </section>
+      )}
 
       {/* ------------------------------------------------------------- */}
       {/* SECTION 4: REGIONAL WEATHER & MICROCLIMATE FORECAST           */}
       {/* ------------------------------------------------------------- */}
+      {(activePerspective === 'districts' || activePerspective === 'sources-all') && (
       <section>
         <RegionalWeatherWidget />
       </section>
+      )}
 
       {/* ------------------------------------------------------------- */}
       {/* SECTION 5: INTERACTIVE LAND EVALUATION CHECKLIST & ADVICE     */}
       {/* ------------------------------------------------------------- */}
+      {(activePerspective === 'evaluator' || activePerspective === 'sources-all') && (
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 flex flex-col gap-8">
           <section className="bg-white/95 p-6 sm:p-8 md:p-10 rounded-3xl border border-stone-200 shadow-xs flex flex-col gap-6 text-stone-900">
@@ -425,11 +530,24 @@ Generated from OUTPOST: Country Living Matrix
 
         <aside className="flex flex-col gap-6">
           <div className="bg-[#0B2517] p-6 sm:p-8 rounded-3xl border border-emerald-800 shadow-md text-white">
-            <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-amber-300 block mb-2">Guiding Light</span>
-            <h4 className="serif text-xl font-bold mb-3 italic text-white">The "Outpost" Principle</h4>
-            <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed font-medium">
-              EGW advised that while we move to the country, we should be close enough to cities to do medical missionary work and evangelism, but far enough that the local environment doesn't poison our children's minds.
-            </p>
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-amber-300">Verbatim Counsel · Ev 77.1</span>
+              <a
+                href="https://m.egwwritings.org/en/book/30.391"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[10px] font-mono text-emerald-300 hover:text-amber-300 underline"
+              >
+                Verify on EGW Estate ↗
+              </a>
+            </div>
+            <h4 className="serif text-xl font-bold mb-3 italic text-white">The Outpost Principle</h4>
+            <blockquote className="text-xs sm:text-sm text-emerald-100/95 leading-relaxed font-serif italic mb-3">
+              “As God's commandment-keeping people, we must leave the cities. As did Enoch, we must work in the cities but not dwell in them... For the present the headquarters of the work in these cities should be in some retired locality just out of the cities, where we can have room for a school and a small sanitarium.”
+            </blockquote>
+            <div className="text-[11px] font-bold text-amber-300">
+              — Ellen G. White, Evangelism, pp. 77–78 (1902)
+            </div>
           </div>
           
           <div className="bg-white/95 p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs flex flex-col gap-4 text-stone-900">
@@ -455,10 +573,12 @@ Generated from OUTPOST: Country Living Matrix
           </div>
         </aside>
       </div>
+      )}
 
       {/* ------------------------------------------------------------- */}
       {/* SECTION 4: REGIONAL MATRIX & CARTOGRAPHY EXPLORER             */}
       {/* ------------------------------------------------------------- */}
+      {(activePerspective === 'districts' || activePerspective === 'sources-all') && (
       <section className="bg-white/95 text-stone-900 rounded-3xl p-6 sm:p-8 md:p-12 shadow-xs relative overflow-hidden border border-stone-200">
         <div className="flex flex-col lg:flex-row gap-12 relative z-10">
           <div className="flex-1 flex flex-col gap-6">
@@ -704,19 +824,19 @@ Generated from OUTPOST: Country Living Matrix
                 {selectedRegion === 'Northern' && (
                   <g>
                     <circle cx="95" cy="70" r="5" fill="#f59e0b" />
-                    <text x="108" y="74" fill="#064e3b" fontSize="10" fontWeight="bold" fontFamily="sans-serif">VIPHYA</text>
+                    <text x="108" y="74" fill="#064e3b" fontSize="10" fontWeight="bold" className="font-sans">VIPHYA</text>
                   </g>
                 )}
                 {selectedRegion === 'Central' && (
                   <g>
                     <circle cx="90" cy="190" r="5" fill="#f59e0b" />
-                    <text x="103" y="194" fill="#064e3b" fontSize="10" fontWeight="bold" fontFamily="sans-serif">DEDZA</text>
+                    <text x="103" y="194" fill="#064e3b" fontSize="10" fontWeight="bold" className="font-sans">DEDZA</text>
                   </g>
                 )}
                 {selectedRegion === 'Southern' && (
                   <g>
                     <circle cx="95" cy="300" r="5" fill="#f59e0b" />
-                    <text x="108" y="304" fill="#064e3b" fontSize="10" fontWeight="bold" fontFamily="sans-serif">MULANJE</text>
+                    <text x="108" y="304" fill="#064e3b" fontSize="10" fontWeight="bold" className="font-sans">MULANJE</text>
                   </g>
                 )}
               </svg>
@@ -731,6 +851,78 @@ Generated from OUTPOST: Country Living Matrix
           <MapIcon size={400} strokeWidth={0.5} />
         </div>
       </section>
+      )}
+
+      {/* ------------------------------------------------------------- */}
+      {/* SECTION 6: VERIFIED INSTITUTIONAL DATA SOURCES & CITATIONS     */}
+      {/* ------------------------------------------------------------- */}
+      {(activePerspective === 'sources-all') && (
+      <section className="bg-[#0B2517] text-white rounded-3xl p-6 sm:p-8 md:p-10 border border-emerald-800 shadow-xl">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 mb-6 border-b border-emerald-800/80">
+          <div>
+            <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-amber-300 block mb-1">
+              Data Provenance & Scientific Verification
+            </span>
+            <h3 className="serif text-2xl sm:text-3xl font-bold text-white">
+              Verified Institutional & Archival Data Sources
+            </h3>
+          </div>
+          <span className="px-3.5 py-1.5 rounded-full bg-emerald-950 border border-emerald-700 text-emerald-300 text-xs font-mono">
+            {DATA_SOURCES_AND_CITATIONS.length} Verified Authorities Connected
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {DATA_SOURCES_AND_CITATIONS.map((src, idx) => (
+            <div
+              key={src.id || idx}
+              className="bg-[#06180E] p-5 rounded-2xl border border-emerald-800/80 flex flex-col justify-between gap-4 hover:border-amber-400/50 transition-all"
+            >
+              <div>
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded bg-emerald-900/70 text-emerald-200 border border-emerald-700/50 line-clamp-1">
+                    {src.category}
+                  </span>
+                  <span className="text-[10px] font-mono font-bold text-amber-300 bg-amber-500/15 px-2 py-0.5 rounded border border-amber-400/30 shrink-0">
+                    ● Verified Authority
+                  </span>
+                </div>
+                <h4 className="font-serif font-bold text-base text-white mb-1.5">{src.title}</h4>
+                <p className="text-[11px] font-semibold text-amber-200/90 mb-1.5">{src.institution}</p>
+                <p className="text-xs text-emerald-100/80 leading-relaxed mb-2">{src.description}</p>
+                <p className="text-[11px] font-mono text-amber-200/80 bg-black/30 p-2 rounded-lg border border-white/5">
+                  Ref: {src.verifiableURLOrDoc}
+                </p>
+              </div>
+
+              <div className="pt-3 border-t border-emerald-900 flex items-center justify-between">
+                {src.directUrl ? (
+                  <a
+                    href={src.directUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-300 hover:text-white transition-colors"
+                  >
+                    <span>Inspect Official Source</span>
+                    <ArrowUpRight size={13} />
+                  </a>
+                ) : (
+                  <span className="text-[10px] font-mono text-emerald-400/80">Official Archival Record</span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+      )}
+
+      {/* Interactive Customary Land Act (2016) 5-Step Acquisition Tracker */}
+      {(activePerspective === 'customary-law' || activePerspective === 'sources-all') && (
+        <>
+          <CustomaryLandChecklist />
+          <ChichewaFieldPhrasebook />
+        </>
+      )}
 
       {/* Scouting Tip Modal */}
       <AnimatePresence>
@@ -759,7 +951,7 @@ Generated from OUTPOST: Country Living Matrix
               </div>
 
               <p className="text-emerald-100 text-sm leading-relaxed font-normal">
-                {activeTipModal === 'drainage' && 'During the Malawian rainy season (Nov - Mar), low-lying areas in valleys can submerge. Choose land with gentle slopes, construct contour ridges (misozi), and plant vetiver grass to prevent soil erosion.'}
+                {activeTipModal === 'drainage' && 'During the Malawian rainy season (Nov - Mar), low-lying areas in valleys can submerge. Choose land with gentle slopes, construct contour marker ridges (mitumbira ya mizere / mikwingwirima), and plant vetiver grass (chisale) to prevent soil erosion.'}
                 {activeTipModal === 'water' && 'Water is the lifeline of an outpost. Verify perennial streams or dambos that maintain water through October. If sinking a borehole, target areas with water tables under 30 meters for efficient solar pumping.'}
                 {activeTipModal === 'zoning' && 'When acquiring customary land in rural Malawi, meet with the Village Headman and Traditional Authority (TA). Ensure clear boundaries are agreed upon with neighbors and documented with official land committee receipts.'}
               </p>

@@ -3,8 +3,9 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
+  --font-display: "Fraunces", Georgia, Cambria, "Times New Roman", Times, serif;
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-serif: "Newsreader", "Fraunces", Georgia, serif;
+  --font-serif: "Fraunces", Georgia, Cambria, "Times New Roman", Times, serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   
   --color-moss-deep: #071A10;
@@ -86,8 +87,9 @@
 
   h1, h2, h3, h4, h5, h6 {
     letter-spacing: -0.025em;
-    font-family: var(--font-serif);
+    font-family: var(--font-display);
     color: #1c1917;
+    text-wrap: balance;
   }
 
   .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
@@ -103,21 +105,26 @@
   }
 }
 
-.serif {
-  font-family: var(--font-serif);
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
+.serif,
+.font-serif,
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Warm Field Guide Display Title */
 .field-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   letter-spacing: -0.025em;
 }
 
 /* Tactile Monospace Telemetry & Instrument Readouts */
 .data-readout,
-.font-mono-data {
+.font-mono-data,
+.font-mono {
   font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" on, "zero" on;
   letter-spacing: -0.02em;
 }
@@ -258,6 +265,25 @@
    MALAWIAN CARTOGRAPHIC & GIS MAP ENHANCEMENTS
    ======================================================== */
 
+.leaflet-container {
+  background-color: #06110B !important;
+  font-family: var(--font-sans) !important;
+}
+
+.leaflet-tooltip {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.leaflet-tooltip-top:before,
+.leaflet-tooltip-bottom:before,
+.leaflet-tooltip-left:before,
+.leaflet-tooltip-right:before {
+  display: none !important;
+}
+
 /* District Centroid Badges (Water Table & Feasibility Grade) */
 .district-centroid-badge-container {
   display: flex;
@@ -273,63 +299,72 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background: rgba(2, 6, 23, 0.92);
-  border: 2px solid #38bdf8;
-  box-shadow: 0 0 14px rgba(56, 189, 248, 0.45), 0 4px 12px rgba(0, 0, 0, 0.7);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+  background: rgba(6, 19, 12, 0.94);
+  border: 1.5px solid rgba(52, 211, 153, 0.75);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.3), 0 4px 12px rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .district-centroid-badge:hover {
-  transform: scale(1.15);
-  border-color: #f59e0b;
-  box-shadow: 0 0 20px rgba(245, 158, 11, 0.75), 0 6px 16px rgba(0, 0, 0, 0.8);
+  transform: scale(1.14);
+  border-color: #fbbf24;
+  background: rgba(11, 31, 20, 0.98);
+  box-shadow: 0 0 18px rgba(245, 158, 11, 0.65), 0 6px 16px rgba(0, 0, 0, 0.85);
 }
 
 .district-centroid-badge.active-district {
-  border-color: #f59e0b;
-  background: rgba(15, 23, 42, 0.96);
-  box-shadow: 0 0 24px rgba(245, 158, 11, 0.85), 0 0 0 4px rgba(245, 158, 11, 0.2);
-  transform: scale(1.18);
-  animation: pulse-beacon 2s infinite ease-in-out;
+  border-color: #fbbf24;
+  background: rgba(13, 36, 23, 0.98);
+  box-shadow: 0 0 22px rgba(245, 158, 11, 0.8), 0 0 0 3px rgba(245, 158, 11, 0.22);
+  transform: scale(1.16);
+  animation: pulse-beacon 2.4s infinite ease-in-out;
 }
 
 .district-badge-grade {
-  font-size: 11px;
-  font-weight: 900;
-  color: #34d399;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #fde68a;
   line-height: 1;
   font-family: var(--font-mono);
-  letter-spacing: -0.05em;
+  letter-spacing: -0.04em;
 }
 
 .district-badge-depth {
-  font-size: 9px;
-  font-weight: 800;
-  color: #38bdf8;
+  font-size: 8.5px;
+  font-weight: 700;
+  color: #6ee7b7;
   line-height: 1.1;
   font-family: var(--font-mono);
   margin-top: 1px;
 }
 
 .district-badge-nametag {
-  margin-top: 3px;
-  padding: 1px 6px;
+  margin-top: 2px;
+  padding: 1.5px 6px;
   border-radius: 6px;
-  background: rgba(2, 6, 23, 0.92);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: #f8fafc;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  background: rgba(6, 18, 11, 0.92);
+  border: 1px solid rgba(52, 211, 153, 0.28);
+  color: #f5f3ef;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.015em;
   white-space: nowrap;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.65);
   font-family: var(--font-sans);
   pointer-events: auto;
   transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease;
   transform-origin: center center;
+}
+
+.district-badge-nametag.active-nametag {
+  background: rgba(20, 46, 30, 0.98);
+  border-color: rgba(251, 191, 36, 0.75);
+  color: #fef3c7;
+  font-weight: 700;
 }
 
 /* Dynamic Collision Avoidance States */
@@ -362,12 +397,12 @@
 
 /* Expanded Marker Badge Styles */
 .district-centroid-badge.expanded-badge {
-  width: 56px;
-  height: 56px;
-  border-color: #f59e0b !important;
-  background: rgba(15, 23, 42, 0.98) !important;
-  box-shadow: 0 0 28px rgba(245, 158, 11, 0.85), 0 0 0 4px rgba(245, 158, 11, 0.25) !important;
-  transform: scale(1.15) !important;
+  width: 48px;
+  height: 48px;
+  border-color: #fbbf24 !important;
+  background: rgba(11, 33, 21, 0.98) !important;
+  box-shadow: 0 0 24px rgba(245, 158, 11, 0.8), 0 0 0 3px rgba(245, 158, 11, 0.25) !important;
+  transform: scale(1.12) !important;
   z-index: 1000 !important;
 }
 
@@ -549,6 +584,40 @@ path.district-glow-subtle {
 .animate-gradient-x {
   animation: gradient-x 3s ease infinite;
 }
+
+/* ==========================================================================
+   DESKTOP WINDOW & ANDROID APK SAFE-AREA / PRINT FIELD-SHEET STYLES
+   ========================================================================== */
+.safe-area-header {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media print {
+  #outpost-main-header,
+  #left-outpost-directory-panel,
+  #outpost-drawer-toggle,
+  footer,
+  button {
+    display: none !important;
+  }
+
+  body,
+  html.dark body,
+  .dark body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  main {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+}
+
 
 
 

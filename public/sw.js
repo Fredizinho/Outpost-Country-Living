@@ -1,9 +1,14 @@
-const CACHE_NAME = 'outpost-sanctuary-v4';
+const CACHE_NAME = 'outpost-sanctuary-v6';
+const API_CACHE_NAME = 'outpost-sanctuary-api-v6';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/icon.svg'
+  '/icon.svg',
+  '/apple-touch-icon.png',
+  '/pwa-192x192.png',
+  '/pwa-512x512.png',
+  '/pwa-maskable-512x512.png'
 ];
 
 // Install Event
@@ -24,7 +29,7 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cache) => {
-          if (cache !== CACHE_NAME) {
+          if (cache !== CACHE_NAME && cache !== API_CACHE_NAME) {
             console.log('[SW] Removing old cache:', cache);
             return caches.delete(cache);
           }
@@ -40,9 +45,44 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
 
-  // Bypass service worker completely for ALL API routes (/api/weather, /api/advisor, /api/scout-ai, etc.)
-  // This guarantees real-time weather and fresh AI data are never served stale.
+  // Network-First with Offline Cache Fallback for GET API routes (/api/weather, /api/verified-telemetry, /api/verified-scripture)
+  // When online: fetches fresh telemetry/weather and updates API_CACHE_NAME.
+  // When offline: serves the last cached JSON payload with X-Outpost-Offline-Cache: true header.
   if (url.pathname.startsWith('/api/')) {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const copy = networkResponse.clone();
+            caches.open(API_CACHE_NAME).then((cache) => cache.put(event.request, copy));
+          }
+          return networkResponse;
+        })
+        .catch(async () => {
+          const cachedResponse = await caches.match(event.request);
+          if (cachedResponse) {
+            const body = await cachedResponse.text();
+            const headers = new Headers(cachedResponse.headers);
+            headers.set('X-Outpost-Offline-Cache', 'true');
+            return new Response(body, {
+              status: cachedResponse.status,
+              statusText: cachedResponse.statusText,
+              headers
+            });
+          }
+          return new Response(
+            JSON.stringify({
+              offline: true,
+              cached: false,
+              error: 'Device is offline and no cached API response was found for this endpoint.'
+            }),
+            {
+              status: 503,
+              headers: { 'Content-Type': 'application/json', 'X-Outpost-Offline-Cache': 'true' }
+            }
+          );
+        })
+    );
     return;
   }
 
@@ -64,7 +104,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Cache-first with background revalidation for static assets
+  // Cache-first with background revalidation for static assets (JS, CSS, SVG, fonts, images)
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {

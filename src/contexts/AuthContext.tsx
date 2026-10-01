@@ -1,5 +1,19 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { getStoredUserProfile, saveStoredUserProfile, removeStoredUserProfile } from '@/lib/offlineStorage';
+import {
+  getStoredUserProfile,
+  saveStoredUserProfile,
+  removeStoredUserProfile,
+  getStoredTrackerData,
+  saveStoredTrackerData,
+  getStoredLandChecklist,
+  saveStoredLandChecklist,
+  getStoredBookmarkedParcels,
+  saveStoredBookmarkedParcels,
+  getStoredMasteredSkills,
+  saveStoredMasteredSkills,
+  getCompletedSeasonalTasks,
+  STORAGE_KEYS
+} from '@/lib/offlineStorage';
 import { 
   auth, 
   db, 
@@ -129,6 +143,131 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
           saveStoredUserProfile(userProfile);
           setUser(userProfile);
+
+          // Hydrate or initialize /users/{uid}/progress/main in Firestore
+          const progressDocRef = doc(db, 'users', fbUser.uid, 'progress', 'main');
+          const progressPath = `users/${fbUser.uid}/progress/main`;
+          try {
+            const progressSnap = await getDoc(progressDocRef);
+            if (progressSnap.exists()) {
+              const pData = progressSnap.data();
+              // Merge cloud landChecklistCompletedIds into local checklist if present
+              if (Array.isArray(pData.landChecklistCompletedIds) && pData.landChecklistCompletedIds.length > 0) {
+                const localLand = getStoredLandChecklist<{ completedIds?: string[]; notes?: Record<string, string> }>() || { completedIds: [], notes: {} };
+                const mergedIds = Array.from(new Set([...(localLand.completedIds || []), ...pData.landChecklistCompletedIds]));
+                saveStoredLandChecklist({ ...localLand, completedIds: mergedIds });
+              }
+              // Merge cloud savedParcelIds into local bookmarked parcels
+              if (Array.isArray(pData.savedParcelIds) && pData.savedParcelIds.length > 0) {
+                const localParcels = getStoredBookmarkedParcels();
+                const mergedParcels = Array.from(new Set([...localParcels, ...pData.savedParcelIds]));
+                saveStoredBookmarkedParcels(mergedParcels);
+              }
+              // Merge cloud masteredSkillIds into local mastered skills
+              if (Array.isArray(pData.masteredSkillIds) && pData.masteredSkillIds.length > 0) {
+                const localSkills = getStoredMasteredSkills();
+                const mergedSkills = Array.from(new Set([...localSkills, ...pData.masteredSkillIds]));
+                saveStoredMasteredSkills(mergedSkills);
+              }
+              // Merge cloud completedSeasonalTaskIds into local seasonal tasks
+              if (Array.isArray(pData.completedSeasonalTaskIds) && pData.completedSeasonalTaskIds.length > 0) {
+                const localSeasonal = getCompletedSeasonalTasks();
+                const mergedSeasonal = Array.from(new Set([...localSeasonal, ...pData.completedSeasonalTaskIds]));
+                try {
+                  localStorage.setItem(STORAGE_KEYS.COMPLETED_SEASONAL_TASKS, JSON.stringify(mergedSeasonal));
+                } catch {}
+              }
+              // Merge cloud customaryChecklistIds into local customary steps
+              if (Array.isArray(pData.customaryChecklistIds) && pData.customaryChecklistIds.length > 0) {
+                try {
+                  const rawLocal = localStorage.getItem('outpost_customary_land_steps_v1');
+                  const localCustomary: string[] = rawLocal ? JSON.parse(rawLocal) : [];
+                  const mergedCustomary = Array.from(new Set([...localCustomary, ...pData.customaryChecklistIds]));
+                  localStorage.setItem('outpost_customary_land_steps_v1', JSON.stringify(mergedCustomary));
+                } catch {}
+              }
+              // Merge cloud transitionLedgerCompletedIds into local transition ledger
+              if (Array.isArray(pData.transitionLedgerCompletedIds) && pData.transitionLedgerCompletedIds.length > 0) {
+                try {
+                  const rawLedger = localStorage.getItem('outpost_transition_ledger');
+                  const localLedger: Record<string, boolean> = rawLedger ? JSON.parse(rawLedger) : {};
+                  pData.transitionLedgerCompletedIds.forEach((id: string) => {
+                    localLedger[id] = true;
+                  });
+                  localStorage.setItem('outpost_transition_ledger', JSON.stringify(localLedger));
+                } catch {}
+              }
+              // Merge cloud completedSubtaskIds into local tracker steps
+              if (Array.isArray(pData.completedSubtaskIds) && pData.completedSubtaskIds.length > 0) {
+                const completedSet = new Set<string>(pData.completedSubtaskIds);
+                const localTracker = getStoredTrackerData<any[]>();
+                if (Array.isArray(localTracker) && localTracker.length > 0) {
+                  const updatedTracker = localTracker.map((step) => ({
+                    ...step,
+                    subtasks: Array.isArray(step.subtasks)
+                      ? step.subtasks.map((st: any) => (completedSet.has(st.id) ? { ...st, completed: true } : st))
+                      : []
+                  }));
+                  saveStoredTrackerData(updatedTracker);
+                }
+              }
+            } else {
+              // Seed initial progress document
+              const localTracker = getStoredTrackerData<any[]>() || [];
+              const completedSubtaskIds: string[] = [];
+              if (Array.isArray(localTracker)) {
+                localTracker.forEach((step) => {
+                  step?.subtasks?.forEach((st: any) => {
+                    if (st.completed && typeof st.id === 'string') completedSubtaskIds.push(st.id);
+                  });
+                });
+              }
+              const localLand = getStoredLandChecklist<{ completedIds?: string[] }>();
+              const landChecklistCompletedIds = Array.isArray(localLand?.completedIds) ? localLand.completedIds.slice(0, 100) : [];
+              const savedParcelIds = getStoredBookmarkedParcels().slice(0, 100);
+              const masteredSkillIds = getStoredMasteredSkills().slice(0, 100);
+              const completedSeasonalTaskIds = getCompletedSeasonalTasks().slice(0, 100);
+
+              let customaryChecklistIds: string[] = [];
+              try {
+                const rawCustomary = localStorage.getItem('outpost_customary_land_steps_v1');
+                if (rawCustomary) {
+                  const parsed = JSON.parse(rawCustomary);
+                  if (Array.isArray(parsed)) customaryChecklistIds = parsed.slice(0, 50);
+                }
+              } catch {}
+
+              let transitionLedgerCompletedIds: string[] = [];
+              try {
+                const rawLedger = localStorage.getItem('outpost_transition_ledger');
+                if (rawLedger) {
+                  const parsed = JSON.parse(rawLedger);
+                  if (parsed && typeof parsed === 'object') {
+                    transitionLedgerCompletedIds = Object.keys(parsed).filter((k) => parsed[k] === true).slice(0, 100);
+                  }
+                }
+              } catch {}
+
+              await setDoc(progressDocRef, {
+                userId: fbUser.uid,
+                completedSubtaskIds: completedSubtaskIds.slice(0, 150),
+                landChecklistCompletedIds,
+                savedParcelIds,
+                masteredSkillIds,
+                completedSeasonalTaskIds,
+                customaryChecklistIds,
+                transitionLedgerCompletedIds,
+                updatedAt: new Date().toISOString()
+              });
+            }
+          } catch (progErr) {
+            console.warn('Could not sync initial progress document:', progErr);
+            try {
+              handleFirestoreError(progErr, OperationType.GET, progressPath);
+            } catch {
+              // Handled for diagnostics
+            }
+          }
         } catch (error) {
           console.error('Error fetching or creating user profile in Firestore:', error);
           // Fallback to local profile
@@ -161,6 +300,84 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     return () => unsubscribe();
   }, []);
+
+  // Sync local progress changes to Firestore /users/{uid}/progress/main when authenticated with Firebase
+  useEffect(() => {
+    if (!firebaseUser) return;
+
+    let syncTimeout: ReturnType<typeof setTimeout> | null = null;
+    const handleProgressSync = () => {
+      if (syncTimeout) clearTimeout(syncTimeout);
+      syncTimeout = setTimeout(async () => {
+        if (!auth.currentUser) return;
+        const progressDocRef = doc(db, 'users', auth.currentUser.uid, 'progress', 'main');
+        const progressPath = `users/${auth.currentUser.uid}/progress/main`;
+        try {
+          const localTracker = getStoredTrackerData<any[]>() || [];
+          const completedSubtaskIds: string[] = [];
+          if (Array.isArray(localTracker)) {
+            localTracker.forEach((step) => {
+              step?.subtasks?.forEach((st: any) => {
+                if (st.completed && typeof st.id === 'string') completedSubtaskIds.push(st.id);
+              });
+            });
+          }
+          const localLand = getStoredLandChecklist<{ completedIds?: string[] }>();
+          const landChecklistCompletedIds = Array.isArray(localLand?.completedIds)
+            ? localLand.completedIds.slice(0, 100)
+            : [];
+          const savedParcelIds = getStoredBookmarkedParcels().slice(0, 100);
+          const masteredSkillIds = getStoredMasteredSkills().slice(0, 100);
+          const completedSeasonalTaskIds = getCompletedSeasonalTasks().slice(0, 100);
+
+          let customaryChecklistIds: string[] = [];
+          try {
+            const rawCustomary = localStorage.getItem('outpost_customary_land_steps_v1');
+            if (rawCustomary) {
+              const parsed = JSON.parse(rawCustomary);
+              if (Array.isArray(parsed)) customaryChecklistIds = parsed.slice(0, 50);
+            }
+          } catch {}
+
+          let transitionLedgerCompletedIds: string[] = [];
+          try {
+            const rawLedger = localStorage.getItem('outpost_transition_ledger');
+            if (rawLedger) {
+              const parsed = JSON.parse(rawLedger);
+              if (parsed && typeof parsed === 'object') {
+                transitionLedgerCompletedIds = Object.keys(parsed).filter((k) => parsed[k] === true).slice(0, 100);
+              }
+            }
+          } catch {}
+
+          await setDoc(progressDocRef, {
+            userId: auth.currentUser.uid,
+            completedSubtaskIds: completedSubtaskIds.slice(0, 150),
+            landChecklistCompletedIds,
+            savedParcelIds,
+            masteredSkillIds,
+            completedSeasonalTaskIds,
+            customaryChecklistIds,
+            transitionLedgerCompletedIds,
+            updatedAt: new Date().toISOString()
+          });
+        } catch (err) {
+          console.warn('Failed to sync progress to Firestore:', err);
+          try {
+            handleFirestoreError(err, OperationType.WRITE, progressPath);
+          } catch {
+            // Handled
+          }
+        }
+      }, 600);
+    };
+
+    window.addEventListener('outpost:progress-updated', handleProgressSync);
+    return () => {
+      if (syncTimeout) clearTimeout(syncTimeout);
+      window.removeEventListener('outpost:progress-updated', handleProgressSync);
+    };
+  }, [firebaseUser]);
 
   // Google Sign-In
   const signInWithGoogle = async () => {

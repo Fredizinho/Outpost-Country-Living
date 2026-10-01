@@ -1,882 +1,1087 @@
-import React from 'react';
-import { motion } from 'motion/react';
-import { 
-  BookOpen, Compass, MapPin, Sprout, 
-  ArrowRight, HeartHandshake,
-  Sun, Droplets, Mountain, Heart, ShieldCheck,
-  Calculator, Home as HomeIcon, Sparkles, Feather,
-  CheckCircle2, Layers, Calendar, Users
+import React, { useState, useMemo, useEffect } from 'react';
+import {
+  BookOpen,
+  Compass,
+  Sprout,
+  ArrowRight,
+  Sun,
+  Droplets,
+  Calculator,
+  Feather,
+  Layers,
+  RefreshCw,
+  Sparkles,
+  CheckCircle2,
+  Mountain,
+  Trees,
+  Waves,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { OutpostLogo } from '@/components/common/OutpostLogo';
 import { DAILY_DEVOTIONALS } from '@/data/outpostFourPillarsData';
 import { CountryLivingIntroQuote } from '@/components/home/CountryLivingIntroQuote';
-import { HomesteadUtilitiesGrid } from '@/components/home/HomesteadUtilitiesGrid';
-import { HomeSceneryBackground } from '@/components/home/HomeSceneryBackground';
 import { MalawiAgriWeatherForecast } from '@/components/home/MalawiAgriWeatherForecast';
 import { BotanicalEmblemCrestCard } from '@/components/home/BotanicalEmblemCrestCard';
-import { HeroQuickPreviewOverlays, QuickFilterCategory } from '@/components/home/HeroQuickPreviewOverlays';
-import { getStoredTrackerData } from '@/lib/offlineStorage';
+import { HomeSceneryBackground } from '@/components/home/HomeSceneryBackground';
+import { DistrictRegistryExplorer } from '@/components/home/DistrictRegistryExplorer';
+import { SoilStrataBlueprint } from '@/components/home/SoilStrataBlueprint';
+import { PropheticTimeline1844 } from '@/components/vision/PropheticTimeline1844';
+import { CountryIcon, CountryIconName } from '@/components/icons/CountryIcons';
+import { COUNTRY_IMAGES } from '@/assets/images';
+import {
+  DISTRICT_LIST,
+  HOMESTEAD_GENERAL_CONSTANTS,
+  PLANTING_PIT_SPECS,
+} from '@/constants';
+import { calculateHomesteadReadinessScore } from '@/lib/offlineStorage';
+import { fetchVerifiedTelemetryWithFallback } from '@/lib/apiClient';
+import { OnboardingWizard } from '@/components/onboarding/OnboardingWizard';
+import { BeginnerGlossaryModal } from '@/components/common/BeginnerGlossaryModal';
 import { cn } from '@/lib/utils';
 
+type WorkspaceTab = 'overview' | 'atlas' | 'sizer' | 'prophecy' | 'weather-strata';
+type ClimateLifestyleId = 'highlands' | 'mid-hills' | 'lakeshore';
+
+const CLIMATE_LIFESTYLE_ZONES: {
+  id: ClimateLifestyleId;
+  title: string;
+  elevation: string;
+  feel: string;
+  crops: string;
+  waterNote: string;
+  districts: { id: string; name: string }[];
+}[] = [
+  {
+    id: 'highlands',
+    title: 'Cool Mist Highlands',
+    elevation: '1,200–2,200m',
+    feel: 'Crisp mountain air (14–23°C), pine ridges & very low malaria risk.',
+    crops: 'Apples, peaches, plums, Irish potatoes, wheat, garlic & berries',
+    waterNote: 'Gravity mountain springs, perennial dambos & 950–1,600 mm/yr rain',
+    districts: [
+      { id: 'dedza', name: 'Dedza' },
+      { id: 'mzimba', name: 'Mzimba' },
+      { id: 'zomba', name: 'Zomba' },
+      { id: 'ntcheu', name: 'Ntcheu' },
+      { id: 'rumphi', name: 'Rumphi' },
+      { id: 'chitipa', name: 'Chitipa' },
+    ],
+  },
+  {
+    id: 'mid-hills',
+    title: 'Fertile Mid-Valleys',
+    elevation: '800–1,200m',
+    feel: 'Balanced sunshine (24–28°C), mild nights & gentle contour slopes.',
+    crops: 'Avocados, macadamia, maize, soya, groundnuts & sweet potatoes',
+    waterNote: 'Shallow hand-pump wells (12–25m) & 850–1,200 mm/yr rain',
+    districts: [
+      { id: 'lilongwe', name: 'Lilongwe Rural' },
+      { id: 'dowa', name: 'Dowa' },
+      { id: 'kasungu', name: 'Kasungu' },
+      { id: 'mchinji', name: 'Mchinji' },
+      { id: 'thyolo', name: 'Thyolo' },
+      { id: 'ntchisi', name: 'Ntchisi' },
+    ],
+  },
+  {
+    id: 'lakeshore',
+    title: 'Warm Lakeshore & Basins',
+    elevation: '400–800m',
+    feel: 'Tropical warmth year-round (26–32°C) & peak solar power output.',
+    crops: 'Mangoes, citrus, papaya, cassava, pigeon peas, rice & moringa',
+    waterNote: 'High-yield alluvial aquifers (6–18m) & up to 2,200 mm/yr in Nkhata Bay',
+    districts: [
+      { id: 'nkhata-bay', name: 'Nkhata Bay' },
+      { id: 'salima', name: 'Salima' },
+      { id: 'karonga', name: 'Karonga' },
+      { id: 'nkhotakota', name: 'Nkhotakota' },
+      { id: 'mangochi', name: 'Mangochi' },
+      { id: 'balaka', name: 'Balaka' },
+    ],
+  },
+];
+
+const FOUR_PILLARS: {
+  number: string;
+  title: string;
+  subtitle: string;
+  iconName: CountryIconName;
+  summary: string;
+  proofLine: string;
+  links: { label: string; to: string }[];
+}[] = [
+  {
+    number: '01',
+    title: 'Why We Leave the Cities',
+    subtitle: 'Prophetic & Family Purpose',
+    iconName: 'prophecy-1844',
+    summary:
+      'Trace the prophetic timeline from 1844 to the final crisis and see why raising children in nature builds resilient character.',
+    proofLine: 'EGW Estate · Daniel 8:14',
+    links: [
+      { label: '1844 Prophetic Timeline', to: '/vision' },
+      { label: 'Daily Devotionals', to: '/devotional' },
+      { label: '15-Step Roadmap', to: '/tracker' },
+    ],
+  },
+  {
+    number: '02',
+    title: 'Finding Water-Rich, Legal Land',
+    subtitle: '28 Districts & Customary Law',
+    iconName: 'map',
+    summary:
+      'Locate customary land with year-round spring water, check well depth before buying, and follow respectful village chief (Mfumu) steps.',
+    proofLine: 'Land Act 2016 · AQUASTAT',
+    links: [
+      { label: '28-District GIS Map', to: '/scout-map' },
+      { label: '100-Point Plot Rubric', to: '/suitability' },
+      { label: 'Land Law & Chichewa', to: '/where' },
+    ],
+  },
+  {
+    number: '03',
+    title: 'Growing Food & Harvesting Sun',
+    subtitle: 'Permaculture & Off-Grid Sizing',
+    iconName: 'soil',
+    summary:
+      'Turn red clay or sandy loam into a drought-proof food forest with 3×3×3ft moisture-sponge tree pits, rainwater tanks, and 48V solar.',
+    proofLine: 'DCCMS · FAO HWSD v2.0',
+    links: [
+      { label: 'Acres, Water & Solar Sizer', to: '/calculators' },
+      { label: 'Soil & 3×3×3ft Tree Pits', to: '/agriculture' },
+      { label: 'Malawi Planting Calendar', to: '/seasons' },
+    ],
+  },
+  {
+    number: '04',
+    title: 'Living Debt-Free & Self-Reliant',
+    subtitle: 'Practical Skills & Natural Health',
+    iconName: 'outpost',
+    summary:
+      'Master 25 hands-on country skills—from burnt-brick building and gravity water rams to hydrotherapy poultices and rural mission schools.',
+    proofLine: 'Avondale Model · 25 Manuals',
+    links: [
+      { label: 'Homestead Blueprints', to: '/blueprints' },
+      { label: '25 Country Skills Manual', to: '/skills' },
+      { label: 'Outpost Family Directory', to: '/community' },
+    ],
+  },
+];
+
+const PROPHETIC_PLATES_PREVIEW = [
+  {
+    epoch: '1844',
+    title: 'Heavenly Sanctuary Cleansed',
+    image: COUNTRY_IMAGES.sanctuary1844Judgment,
+  },
+  {
+    epoch: 'Rev 14',
+    title: 'Three Angels’ Proclamation',
+    image: COUNTRY_IMAGES.threeAngelsProclamation,
+  },
+  {
+    epoch: 'CL 9.6',
+    title: 'Outpost Centers Established',
+    image: COUNTRY_IMAGES.outpostMissionCenter,
+  },
+  {
+    epoch: '5T 464',
+    title: 'The Siege Signal & Flight',
+    image: COUNTRY_IMAGES.siegeSignalExodus,
+  },
+  {
+    epoch: 'GC 629',
+    title: 'Mountain Refuge & Bread Given',
+    image: COUNTRY_IMAGES.timeOfTroubleRefuge,
+  },
+  {
+    epoch: 'Rev 19',
+    title: 'The Glorious Appearing',
+    image: COUNTRY_IMAGES.secondComingDeliverance,
+  },
+];
+
 export default function Home() {
-  const { user } = useAuth();
-  const [showWelcomeQuote, setShowWelcomeQuote] = React.useState(false);
-  const [activeHeroFilter, setActiveHeroFilter] = React.useState<QuickFilterCategory>(null);
-  
-  // Daily devotional highlight for today
-  const todayDevotional = DAILY_DEVOTIONALS[0];
+  const [showWelcomeQuote, setShowWelcomeQuote] = useState(false);
+  const [showBeginnerWizard, setShowBeginnerWizard] = useState(false);
+  const [showBeginnerGlossary, setShowBeginnerGlossary] = useState(false);
+  const [glossaryInitialTab, setGlossaryInitialTab] = useState<'glossary' | 'visual-guide'>('glossary');
+  const [activeWorkspaceTab, setActiveWorkspaceTab] = useState<WorkspaceTab>('overview');
+  const [selectedClimateZone, setSelectedClimateZone] = useState<ClimateLifestyleId>('highlands');
+  const [weatherSubView, setWeatherSubView] = useState<'weather' | 'strata'>('weather');
+  const [devotionalIndex, setDevotionalIndex] = useState<number>(0);
 
-  // Calculate completed steps from user storage accurately without fake defaults
-  const [completedMilestonesCount, setCompletedMilestonesCount] = React.useState<number>(() => {
-    try {
-      const tracker = getStoredTrackerData<any[]>();
-      let completedSubtasks = 0;
-      if (Array.isArray(tracker)) {
-        tracker.forEach(step => {
-          if (step?.subtasks && Array.isArray(step.subtasks)) {
-            completedSubtasks += step.subtasks.filter((s: any) => s.completed).length;
-          }
+  // Interactive Quick Homestead Sizer state
+  const [quickFamilySize, setQuickFamilySize] = useState<number>(5);
+  const [quickDistrictId, setQuickDistrictId] = useState<string>('dedza');
+  const [quickRoofAreaSqm, setQuickRoofAreaSqm] = useState<number>(85);
+  const [sizerLiveTelemetry, setSizerLiveTelemetry] = useState<any>(null);
+  const [isLoadingSizerTelemetry, setIsLoadingSizerTelemetry] = useState<boolean>(false);
+
+  const quickDistrict = useMemo(() => {
+    return DISTRICT_LIST.find((d) => d.id === quickDistrictId) || DISTRICT_LIST[0];
+  }, [quickDistrictId]);
+
+  const quickPitSpec = useMemo(() => {
+    return (
+      PLANTING_PIT_SPECS[quickDistrict.recommendedPitKey] || PLANTING_PIT_SPECS.egwDeepPit
+    );
+  }, [quickDistrict]);
+
+  const activeClimateZone = useMemo(() => {
+    return (
+      CLIMATE_LIFESTYLE_ZONES.find((z) => z.id === selectedClimateZone) ||
+      CLIMATE_LIFESTYLE_ZONES[0]
+    );
+  }, [selectedClimateZone]);
+
+  useEffect(() => {
+    if (activeWorkspaceTab !== 'sizer') return;
+    let cancelled = false;
+    async function loadSizerTelemetry() {
+      setIsLoadingSizerTelemetry(true);
+      try {
+        const data = await fetchVerifiedTelemetryWithFallback({
+          lat: quickDistrict.lat,
+          lng: quickDistrict.lng,
+          key: quickDistrict.id,
+          name: `${quickDistrict.name} District`,
+          region: quickDistrict.region,
         });
-        return completedSubtasks;
+        if (!cancelled && data?.verified) {
+          setSizerLiveTelemetry(data);
+        }
+      } catch {
+        // Fallback to DCCMS / FAO registry baseline
+      } finally {
+        if (!cancelled) setIsLoadingSizerTelemetry(false);
       }
-      const savedLedger = localStorage.getItem('outpost_transition_ledger');
-      if (savedLedger) {
-        const obj = JSON.parse(savedLedger);
-        return Object.values(obj).filter(Boolean).length;
-      }
-    } catch {
-      // fallback
     }
-    return 0; // Honest zero progress for new stewards
-  });
+    loadSizerTelemetry();
+    return () => {
+      cancelled = true;
+    };
+  }, [quickDistrict, activeWorkspaceTab]);
 
-  const totalPossibleItems = 15; // 15 foundational milestones across the Exodus ledger
-  const readinessPercentage = Math.min(100, Math.round((completedMilestonesCount / totalPossibleItems) * 100));
+  const quickEstimates = useMemo(() => {
+    const stapleAcres = +(
+      quickFamilySize * HOMESTEAD_GENERAL_CONSTANTS.LAND_ACRES_PER_PERSON_STAPLE
+    ).toFixed(2);
+    const orchardAcres = +(
+      quickFamilySize * HOMESTEAD_GENERAL_CONSTANTS.LAND_ACRES_PER_PERSON_ORCHARD
+    ).toFixed(2);
+    const gardenShelterAcres = HOMESTEAD_GENERAL_CONSTANTS.LAND_ACRES_BASE_WOODLOT_SHELTER;
+    const totalAcres = +(stapleAcres + orchardAcres + gardenShelterAcres).toFixed(2);
+
+    const annualRainwaterLiters = Math.round(
+      quickRoofAreaSqm *
+        quickDistrict.rainfallAnnualMm *
+        HOMESTEAD_GENERAL_CONSTANTS.DEFAULT_ROOF_RUNOFF_COEFF
+    );
+
+    const effectiveSunHours =
+      sizerLiveTelemetry?.telemetry?.livePeakSunHoursKwh || quickDistrict.solarKwhDay;
+
+    const dailyEnergyKwh = +(1.8 + quickFamilySize * 0.45).toFixed(1);
+    const recommendedSolarKw = +(
+      dailyEnergyKwh /
+      (effectiveSunHours * HOMESTEAD_GENERAL_CONSTANTS.SOLAR_SYSTEM_EFFICIENCY)
+    ).toFixed(2);
+    const recommendedBatteryKwh = +(dailyEnergyKwh * 1.6).toFixed(1);
+
+    const orchardPitCount = Math.max(12, Math.round(orchardAcres * 48));
+    const totalBiocharKg = +(orchardPitCount * quickPitSpec.biocharKgPerPit).toFixed(0);
+
+    return {
+      stapleAcres,
+      orchardAcres,
+      gardenShelterAcres,
+      totalAcres,
+      annualRainwaterLiters,
+      effectiveSunHours,
+      recommendedSolarKw,
+      recommendedBatteryKwh,
+      orchardPitCount,
+      totalBiocharKg,
+    };
+  }, [quickFamilySize, quickDistrict, quickRoofAreaSqm, quickPitSpec, sizerLiveTelemetry]);
+
+  const todayDevotional = DAILY_DEVOTIONALS[devotionalIndex % DAILY_DEVOTIONALS.length];
+
+  const [readinessStats, setReadinessStats] = useState(() => calculateHomesteadReadinessScore());
+
+  useEffect(() => {
+    const refreshReadiness = () => setReadinessStats(calculateHomesteadReadinessScore());
+    window.addEventListener('outpost:progress-updated', refreshReadiness);
+    window.addEventListener('outpost:readiness-updated', refreshReadiness);
+    return () => {
+      window.removeEventListener('outpost:progress-updated', refreshReadiness);
+      window.removeEventListener('outpost:readiness-updated', refreshReadiness);
+    };
+  }, []);
+
+  const completedMilestonesCount = readinessStats.completedMilestones;
+  const totalPossibleItems = readinessStats.totalMilestones;
+  const readinessPercentage = readinessStats.breakdown.exodusScorePct;
 
   return (
-    <div className="min-h-screen bg-[#FAF7F0] dark:bg-[#08130C] text-stone-800 dark:text-stone-100 flex flex-col selection:bg-amber-200 dark:selection:bg-emerald-900 selection:text-amber-950 dark:selection:text-emerald-100 pb-24 transition-colors">
-      
-      {/* Animated Welcoming Country Living Quote (Shows briefly on load or when triggered) */}
-      <CountryLivingIntroQuote 
-        forceShow={showWelcomeQuote} 
-        onClose={() => setShowWelcomeQuote(false)} 
+    <div className="min-h-full bg-[#FAF8F5] dark:bg-[#08130D] text-stone-800 dark:text-stone-100 flex flex-col selection:bg-amber-200 dark:selection:bg-emerald-900 selection:text-amber-950 dark:selection:text-emerald-100 pb-12 transition-colors">
+      <CountryLivingIntroQuote
+        forceShow={showWelcomeQuote}
+        onClose={() => setShowWelcomeQuote(false)}
       />
 
       {/* ====================================================================
-          1. REFINED SANCTUARY HERO: WARM, EDITORIAL & INSPIRING
+          1. HERO STAGE: LAYERED VECTOR MOUNTAIN SCENERY + UN-SQUISHED CREST
       ==================================================================== */}
-      <section 
+      <section
         id="hero-sanctuary"
-        aria-label="Country Living Sanctuary Welcome"
-        className="relative pt-6 sm:pt-10 pb-12 sm:pb-16 border-b border-stone-800/80 dark:border-emerald-950/80 bg-stone-950 text-stone-100 overflow-hidden"
+        aria-label="Country Living Sanctuary Hero"
+        className="relative border-b border-stone-200 dark:border-emerald-950 text-stone-100 overflow-hidden"
       >
-        {/* Outpost Architectural Blueprint & Vector Contour Background */}
-        <HomeSceneryBackground className="pointer-events-none" />
+        {/* Layered SVG Mountain Ridges, Golden Dawn Sunbeams, Elevation Contours & Living Stream */}
+        <HomeSceneryBackground
+          activeScene={
+            selectedClimateZone === 'highlands'
+              ? 'highlands'
+              : selectedClimateZone === 'lakeshore'
+              ? 'waters'
+              : 'sanctuary'
+          }
+        />
 
-        {/* Ambient Top Glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-56 bg-radial from-emerald-500/15 via-cyan-500/5 to-transparent blur-3xl pointer-events-none" />
-
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 flex flex-col gap-6 sm:gap-8 z-10">
-          
-          {/* Top Editorial Kicker & Stewardship Utility Strip */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 dark:border-emerald-800/30 pb-3">
-            <div className="flex items-center gap-2 text-xs font-serif text-stone-300">
-              <span className="font-semibold text-emerald-400 tracking-wide uppercase text-[11px] font-mono">
-                Outpost Living Malawi
-              </span>
-              <span className="text-stone-500" aria-hidden="true">·</span>
-              <span className="hidden sm:inline font-sans text-stone-300 text-xs">
-                Seventh-day Adventist Country Living Guide & Land GIS
-              </span>
-              <span className="sm:hidden font-sans text-stone-300 text-xs">
-                SDA Country Living Guide
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setShowWelcomeQuote(true)}
-                className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-300 px-2.5 py-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
-                title="Play welcoming country living quote"
-              >
-                <Feather size={12} className="text-emerald-400" />
-                <span>Inspirational Quote</span>
-              </button>
-
-              <span className="text-stone-600 hidden sm:inline" aria-hidden="true">·</span>
-
-              {user ? (
-                <Link
-                  to="/account"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-300 px-2.5 py-1 rounded-lg hover:bg-emerald-950/80 transition-colors"
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-7 pb-5 relative z-10 flex flex-col gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* Left (8 Cols): Clean Un-Boxed Hero Stage Directly Over Vector Mountain Scenery */}
+            <div className="lg:col-span-8 flex flex-col justify-between gap-4 text-left">
+              <div className="flex flex-wrap items-center gap-3 text-xs">
+                <span className="font-mono font-bold text-amber-300 tracking-wider">
+                  THE COUNTRY LIVING BLUEPRINT · MALAWI HIGHLANDS &amp; VALLEYS
+                </span>
+                <span className="text-emerald-500/60">·</span>
+                <button
+                  type="button"
+                  onClick={() => setShowWelcomeQuote(true)}
+                  className="inline-flex items-center gap-1 text-emerald-200 hover:text-amber-300 underline cursor-pointer font-medium"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span>Steward {user.displayName?.split(' ')[0] || 'Homesteader'}</span>
-                </Link>
-              ) : (
-                <Link
-                  to="/account"
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-stone-200 px-2.5 py-1 rounded-lg hover:bg-white/10 transition-colors"
-                >
-                  <span>Sign In</span>
-                  <ArrowRight size={11} />
-                </Link>
-              )}
-            </div>
-          </div>
-
-          {/* Hero Main Presentation: Architectural Asymmetry with Classic Craft */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start pt-1">
-            
-            {/* Left: Modern Sleek Dark Glassmorphic Crest Card with Interactive Malawi Vector Map Background */}
-            <div className="lg:col-span-4 flex flex-col items-center sm:items-start justify-center w-full">
-              <BotanicalEmblemCrestCard activeFilter={activeHeroFilter} />
-            </div>
-
-            {/* Right: Welcoming Editorial Message, Quick Filter Chips & Direct Action Suite */}
-            <div className="lg:col-span-8 flex flex-col gap-4 text-left p-6 sm:p-8 rounded-3xl backdrop-blur-xl bg-stone-950/75 dark:bg-stone-950/85 border border-white/10 dark:border-emerald-500/20 shadow-2xl text-stone-100">
-              
-              <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-emerald-400">
-                <Sun size={14} className="text-amber-400 shrink-0" />
-                <span>Step Out into the Quiet and Fruitfulness of Nature</span>
+                  <Feather size={12} />
+                  <span>Read the Inspired Call (CL 9.1)</span>
+                </button>
               </div>
 
-              <h1 className="serif text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.14]">
-                Welcome Home to God’s Peaceful Countryside
-              </h1>
-
-              {/* Floating Quick-Access Pills: Below main headline with Instant Preview Overlays */}
-              <HeroQuickPreviewOverlays 
-                activeFilter={activeHeroFilter}
-                onFilterChange={setActiveHeroFilter}
-              />
-
-              <p className="text-sm sm:text-base text-stone-300 leading-relaxed font-sans font-normal">
-                Step away from the rush, anxiety, and crowded noise of the city into a quiet, fruitful life on the land. 
-                Whether you are seeking fertile Katondo red loam, clean mountain springs for gravity irrigation, or establishing a missionary outpost for Christ, you are warmly welcomed here.
-              </p>
-
-              {/* Ellen G. White Letterpress Quote Plaque */}
-              <div className="relative p-4 sm:p-5 rounded-2xl bg-white/5 border border-white/10 shadow-xs flex flex-col gap-2">
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-400/30 flex items-center justify-center shrink-0 text-emerald-400 shadow-2xs mt-0.5">
-                    <Sprout size={16} />
-                  </div>
-                  <div className="flex flex-col gap-1 min-w-0">
-                    <p className="serif text-xs sm:text-sm text-stone-100 italic leading-relaxed font-normal">
-                      "Get out of the cities as soon as possible and purchase a little piece of land, where you can have a garden, where your children can watch the flowers growing and learn from them lessons of simplicity and purity."
-                    </p>
-                    <div className="flex items-center gap-1.5 text-xs text-amber-300 font-sans font-semibold">
-                      <span>Ellen G. White</span>
-                      <span aria-hidden="true" className="text-stone-500">·</span>
-                      <span className="font-normal text-stone-400">Country Living, p. 24</span>
-                    </div>
-                  </div>
-                </div>
+              <div>
+                <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.1] text-balance drop-shadow-sm">
+                  Step Out of the Cities. Build Your Family’s Self-Reliant Sanctuary.
+                </h1>
+                <p className="text-sm sm:text-base text-stone-200 mt-3 leading-relaxed max-w-2xl">
+                  Discover where to find year-round spring water, fertile highland soil, and legal customary land across all 28 districts of Malawi—guided by timeless prophetic counsel and real field data.
+                </p>
               </div>
 
-              {/* Action Buttons for Easy Guidance */}
-              <div className="flex flex-wrap items-center gap-3 pt-2">
+              <blockquote className="border-l-2 border-amber-400 pl-4 py-1 text-xs sm:text-sm text-amber-100/95 italic font-serif max-w-2xl bg-black/25 backdrop-blur-xs rounded-r-xl pr-4">
+                “Get out of the cities as soon as possible and purchase a little piece of land, where you can have a garden, where your children can watch the flowers growing, and learn from them lessons of simplicity and purity.”
+                <span className="not-italic font-mono text-[11px] text-amber-300 ml-2">
+                  — Ellen G. White, Country Living, p. 24.2
+                </span>
+              </blockquote>
+
+              {/* Primary Hero Actions */}
+              <div className="flex flex-wrap items-center gap-2.5 pt-1">
                 <Link
                   to="/scout-map"
-                  className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-sm shadow-lg shadow-emerald-950/60 transition-all flex items-center gap-2.5 cursor-pointer active:scale-98"
+                  className="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs shadow-md transition-colors inline-flex items-center gap-1.5 whitespace-nowrap"
                 >
-                  <Compass size={18} className="text-amber-300" />
-                  <span>Launch 28-District Scout Map</span>
-                  <ArrowRight size={15} />
-                </Link>
-
-                <Link
-                  to="/tracker"
-                  className="px-5 py-3.5 rounded-2xl bg-white/10 hover:bg-white/15 text-white border border-white/15 font-semibold text-sm shadow-xs transition-all flex items-center gap-2 cursor-pointer backdrop-blur-md"
-                >
-                  <BookOpen size={16} className="text-amber-400" />
-                  <span>Your Readiness Steps</span>
-                </Link>
-
-                <Link
-                  to="/calculators"
-                  className="px-4 py-3.5 rounded-2xl hover:bg-white/10 text-stone-300 hover:text-white font-semibold text-sm transition-all flex items-center gap-1.5 cursor-pointer"
-                >
-                  <Calculator size={16} className="text-emerald-400" />
-                  <span>Solar & Borehole Sizing</span>
-                </Link>
-              </div>
-
-            </div>
-          </div>
-
-          {/* AI MAP SCOUT FEATURE SPOTLIGHT CARD */}
-          <div className="relative overflow-hidden rounded-3xl p-[1px] bg-gradient-to-r from-emerald-500/30 via-teal-500/30 to-amber-500/30 shadow-lg">
-            <div className="rounded-[23px] bg-gradient-to-br from-white via-[#FCFAF5] to-emerald-50/20 dark:from-[#0B1A12] dark:via-[#09150E] dark:to-[#0A1A12] p-5 sm:p-7 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5 backdrop-blur-xl">
-              <div className="flex items-start gap-4 max-w-2xl">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/40 flex items-center justify-center shrink-0 text-emerald-600 dark:text-emerald-300 shadow-sm">
-                  <Sparkles size={22} className="text-amber-500" />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <div className="flex items-center gap-2 text-xs text-stone-600 dark:text-stone-400">
-                    <span className="font-mono font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300">
-                      Gemini 3.8 Flash
-                    </span>
-                    <span aria-hidden="true">·</span>
-                    <span>Maps Grounded Agronomist</span>
-                    <span aria-hidden="true">·</span>
-                    <span className="hidden sm:inline">28-District Analysis</span>
-                  </div>
-                  <h3 className="serif text-xl sm:text-2xl font-bold text-stone-900 dark:text-white">
-                    AI Map Scout & Country Living Agronomist
-                  </h3>
-                  <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 leading-relaxed">
-                    Instantly analyze water security, Katondo red loam fertility, altitude cooling, and Adventist church hubs across all 28 Malawi districts. Tap 'Get AI Insights' to inspect any layer combination.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full lg:w-auto shrink-0">
-                <Link
-                  to="/scout-map"
-                  className="px-5 py-3 rounded-xl bg-emerald-700 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg active:scale-98"
-                >
-                  <Sparkles size={14} className="text-amber-300" />
-                  <span>Try AI Insights on Map</span>
+                  <Compass size={14} />
+                  <span>Explore Ideal Land on the Map</span>
                   <ArrowRight size={13} />
                 </Link>
+
+                <button
+                  type="button"
+                  onClick={() => setShowBeginnerWizard(true)}
+                  className="px-4 py-2.5 rounded-xl bg-emerald-950/90 hover:bg-emerald-900 text-emerald-100 border border-emerald-500/40 font-semibold text-xs transition-colors inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap backdrop-blur-md"
+                >
+                  <Sprout size={14} className="text-amber-300" />
+                  <span>Find My Best District (60-Sec Quiz)</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setGlossaryInitialTab('glossary');
+                    setShowBeginnerGlossary(true);
+                  }}
+                  className="px-3.5 py-2.5 rounded-xl bg-stone-950/70 hover:bg-stone-900 text-stone-200 border border-white/15 font-medium text-xs transition-colors inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap backdrop-blur-md"
+                >
+                  <BookOpen size={13} className="text-amber-300" />
+                  <span>Plain-English &amp; Chichewa Guide</span>
+                </button>
               </div>
+
+              {/* Sleek Single-Row Live Family Homestead & Transition Bar */}
+              <div className="mt-1 p-3.5 rounded-2xl bg-stone-950/75 backdrop-blur-xl border border-white/15 grid grid-cols-1 sm:grid-cols-12 gap-3.5 items-center">
+                {/* Family Size + Instant Sizer Numbers (7 Cols) */}
+                <div className="sm:col-span-7 flex flex-wrap items-center justify-between gap-2 sm:border-r sm:border-white/10 sm:pr-3.5">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[11px] text-stone-300 font-medium">Family of</span>
+                    <button
+                      type="button"
+                      onClick={() => setQuickFamilySize((s) => Math.max(1, s - 1))}
+                      className="w-5 h-5 rounded bg-emerald-900/90 hover:bg-emerald-700 text-white font-mono text-xs font-bold flex items-center justify-center cursor-pointer"
+                      aria-label="Decrease family size"
+                    >
+                      −
+                    </button>
+                    <span className="font-mono font-bold text-amber-300 text-xs tabular-nums px-1">
+                      {quickFamilySize}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setQuickFamilySize((s) => Math.min(12, s + 1))}
+                      className="w-5 h-5 rounded bg-emerald-900/90 hover:bg-emerald-700 text-white font-mono text-xs font-bold flex items-center justify-center cursor-pointer"
+                      aria-label="Increase family size"
+                    >
+                      +
+                    </button>
+                    <span className="text-[11px] text-stone-400">needs:</span>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveWorkspaceTab('sizer')}
+                    className="flex flex-wrap items-center gap-2.5 text-xs font-mono tabular-nums hover:text-amber-300 transition-colors cursor-pointer"
+                    title="Click to open interactive Family Homestead Sizer"
+                  >
+                    <span className="text-white font-bold">{quickEstimates.totalAcres} Acres</span>
+                    <span className="text-stone-500">·</span>
+                    <span className="text-sky-300 font-bold">
+                      {Math.round(quickEstimates.annualRainwaterLiters / 1000)}k L Rain
+                    </span>
+                    <span className="text-stone-500">·</span>
+                    <span className="text-amber-300 font-bold">
+                      {quickEstimates.recommendedSolarKw}kW Solar
+                    </span>
+                  </button>
+                </div>
+
+                {/* 15-Step Transition Roadmap Progress (5 Cols) */}
+                <div className="sm:col-span-5 flex items-center justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between text-[11px] mb-1">
+                      <span className="text-emerald-300 font-semibold flex items-center gap-1 truncate">
+                        <CheckCircle2 size={11} className="text-emerald-400 shrink-0" />
+                        <span>15-Step Roadmap</span>
+                      </span>
+                      <span className="font-mono text-amber-300 font-bold tabular-nums">
+                        {completedMilestonesCount}/{totalPossibleItems} ({readinessPercentage}%)
+                      </span>
+                    </div>
+                    <div className="w-full bg-black/60 rounded-full h-1.5 border border-emerald-900 overflow-hidden">
+                      <div
+                        className="bg-amber-400 h-full rounded-full transition-all duration-300"
+                        style={{ width: `${Math.max(6, readinessPercentage)}%` }}
+                      />
+                    </div>
+                  </div>
+                  <Link
+                    to="/tracker"
+                    className="text-[11px] font-semibold text-amber-300 hover:underline shrink-0"
+                  >
+                    Checklist →
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Right (4 Cols): Full-Width Un-Squished Botanical Emblem Crest Card */}
+            <div className="lg:col-span-4 flex justify-center lg:justify-end">
+              <BotanicalEmblemCrestCard className="w-full max-w-sm" />
             </div>
           </div>
 
-          {/* Clean Editorial 4-Pillar Stat Counter Ribbon */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 py-2 border-y border-stone-200/80 dark:border-emerald-950/80">
-            <div className="flex flex-col p-3 rounded-2xl bg-white/70 dark:bg-stone-900/40 border border-stone-200/70 dark:border-emerald-950/60 text-center">
-              <span className="font-mono text-2xl font-black text-emerald-800 dark:text-emerald-300">28</span>
-              <span className="text-[11px] font-semibold text-stone-600 dark:text-stone-400 uppercase tracking-tight">Districts Surveyed</span>
+          {/* ====================================================================
+              2. DESKTOP PERSPECTIVE SWITCHER BAR + DAILY THOUGHT TICKER
+          ==================================================================== */}
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-white/10">
+            <div
+              role="tablist"
+              aria-label="Sanctuary Home Desktop Views"
+              className="flex flex-wrap items-center gap-1 p-1 rounded-xl bg-stone-950/85 backdrop-blur-xl border border-white/15"
+            >
+              {[
+                { id: 'overview', label: '01 · Start Here: Vision & 4 Pillars' },
+                { id: 'atlas', label: '02 · Compare All 28 Districts (Water & Soil)' },
+                { id: 'sizer', label: '03 · How Much Land, Water & Solar Do We Need?' },
+                { id: 'prophecy', label: '04 · From 1844 to the Final Crisis (Illustrated)' },
+                { id: 'weather-strata', label: '05 · Live Weather & Underground Water' },
+              ].map((tab) => {
+                const isActive = activeWorkspaceTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    onClick={() => setActiveWorkspaceTab(tab.id as WorkspaceTab)}
+                    className={cn(
+                      'px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer whitespace-nowrap',
+                      isActive
+                        ? 'bg-amber-400 text-stone-950 font-bold shadow-xs'
+                        : 'text-stone-300 hover:text-white hover:bg-white/5'
+                    )}
+                  >
+                    {tab.label}
+                  </button>
+                );
+              })}
             </div>
-            <div className="flex flex-col p-3 rounded-2xl bg-white/70 dark:bg-stone-900/40 border border-stone-200/70 dark:border-emerald-950/60 text-center">
-              <span className="font-mono text-2xl font-black text-amber-600 dark:text-amber-300">100</span>
-              <span className="text-[11px] font-semibold text-stone-600 dark:text-stone-400 uppercase tracking-tight">EGW Evaluation Points</span>
-            </div>
-            <div className="flex flex-col p-3 rounded-2xl bg-white/70 dark:bg-stone-900/40 border border-stone-200/70 dark:border-emerald-950/60 text-center">
-              <span className="font-mono text-2xl font-black text-sky-600 dark:text-sky-300">100%</span>
-              <span className="text-[11px] font-semibold text-stone-600 dark:text-stone-400 uppercase tracking-tight">Perennial Water Flow</span>
-            </div>
-            <div className="flex flex-col p-3 rounded-2xl bg-white/70 dark:bg-stone-900/40 border border-stone-200/70 dark:border-emerald-950/60 text-center">
-              <span className="font-mono text-2xl font-black text-teal-700 dark:text-teal-300">Customary</span>
-              <span className="text-[11px] font-semibold text-stone-600 dark:text-stone-400 uppercase tracking-tight">Land Act Malire Data</span>
+
+            {/* Compact Daily Manna Inline Switcher */}
+            <div className="hidden xl:flex items-center gap-2.5 text-xs text-stone-300 max-w-sm truncate">
+              <span className="font-mono text-[11px] text-amber-300 shrink-0">
+                {todayDevotional.egwQuote.egwCode}:
+              </span>
+              <span className="italic truncate text-stone-200">
+                “{todayDevotional.egwQuote.text}”
+              </span>
+              <button
+                type="button"
+                onClick={() =>
+                  setDevotionalIndex((prev) => (prev + 1) % DAILY_DEVOTIONALS.length)
+                }
+                className="text-emerald-300 hover:text-amber-300 font-mono text-[11px] shrink-0 cursor-pointer"
+                title="Next Ellen G. White Country Living Quote"
+              >
+                ↻
+              </button>
             </div>
           </div>
-
-          {/* 3 Foundational Country Living Pillars (Interactive with Hero Preview) */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-1">
-            
-            <button
-              type="button"
-              onClick={() => setActiveHeroFilter(prev => prev === 'water' ? null : 'water')}
-              className={cn(
-                "p-4 rounded-2xl bg-white/90 dark:bg-stone-900/80 border text-left shadow-xs transition-all flex items-start gap-3 group cursor-pointer",
-                activeHeroFilter === 'water'
-                  ? "border-sky-500 ring-2 ring-sky-400/40 bg-sky-50/50 dark:bg-sky-950/40"
-                  : "border-stone-200/80 dark:border-emerald-900/50 hover:border-sky-300/80"
-              )}
-            >
-              <div className="w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-950/80 border border-sky-300 dark:border-sky-800/60 text-sky-700 dark:text-sky-300 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                <Droplets size={20} />
-              </div>
-              <div className="flex flex-col min-w-0">
-                <div className="flex items-center justify-between">
-                  <h2 className="serif font-bold text-stone-900 dark:text-stone-100 text-sm">
-                    Living Waters
-                  </h2>
-                  <span className="text-[10px] font-mono text-sky-700 dark:text-sky-400 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                    Preview →
-                  </span>
-                </div>
-                <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed mt-0.5">
-                  Flowing rivers and mountain springs for pure drinking water and unpowered gravity irrigation.
-                </p>
-              </div>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveHeroFilter(prev => prev === 'soil' ? null : 'soil')}
-              className={cn(
-                "p-4 rounded-2xl bg-white/90 dark:bg-stone-900/80 border text-left shadow-xs transition-all flex items-start gap-3 group cursor-pointer",
-                activeHeroFilter === 'soil'
-                  ? "border-emerald-500 ring-2 ring-emerald-400/40 bg-emerald-50/50 dark:bg-emerald-950/40"
-                  : "border-stone-200/80 dark:border-emerald-900/50 hover:border-emerald-300/80"
-              )}
-            >
-              <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-800/60 text-emerald-700 dark:text-emerald-300 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                <Sprout size={20} />
-              </div>
-              <div className="flex flex-col min-w-0">
-                <div className="flex items-center justify-between">
-                  <h2 className="serif font-bold text-stone-900 dark:text-stone-100 text-sm">
-                    Fertile Red Loam Soil
-                  </h2>
-                  <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                    Preview →
-                  </span>
-                </div>
-                <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed mt-0.5">
-                  Deep, nutrient-rich red loam soils for family orchards, garden relish, and food sovereignty.
-                </p>
-              </div>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveHeroFilter(prev => prev === 'altitude' ? null : 'altitude')}
-              className={cn(
-                "p-4 rounded-2xl bg-white/90 dark:bg-stone-900/80 border text-left shadow-xs transition-all flex items-start gap-3 group cursor-pointer",
-                activeHeroFilter === 'altitude'
-                  ? "border-amber-500 ring-2 ring-amber-400/40 bg-amber-50/50 dark:bg-amber-950/40"
-                  : "border-stone-200/80 dark:border-emerald-900/50 hover:border-amber-300/80"
-              )}
-            >
-              <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-950/80 border border-amber-300 dark:border-amber-800/60 text-amber-800 dark:text-amber-300 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                <Mountain size={20} />
-              </div>
-              <div className="flex flex-col min-w-0">
-                <div className="flex items-center justify-between">
-                  <h2 className="serif font-bold text-stone-900 dark:text-stone-100 text-sm">
-                    Highland Air & Peace
-                  </h2>
-                  <span className="text-[10px] font-mono text-amber-700 dark:text-amber-400 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                    Preview →
-                  </span>
-                </div>
-                <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed mt-0.5">
-                  Cool plateaus and quiet retreats where children thrive and families worship in peace.
-                </p>
-              </div>
-            </button>
-
-          </div>
-
         </div>
       </section>
 
       {/* ====================================================================
-          2. DAILY SPIRIT OF PROPHECY MANNA (COMPACT & SLEEK)
+          WORKSPACE VIEW 1: HIGH-EFFICIENCY HORIZONTAL CARDS & CLIMATE MATCHER
       ==================================================================== */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14">
-        <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#0D1D13] border border-amber-200/90 dark:border-emerald-900/60 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
-          <div className="flex items-start gap-4 flex-1">
-            <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-emerald-950/80 border border-amber-300/80 dark:border-emerald-700/60 flex items-center justify-center shrink-0 text-amber-800 dark:text-amber-300 shadow-xs">
-              <BookOpen size={22} />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-amber-200 dark:border-emerald-800/50">
-                  Daily Manna • {todayDevotional.theme}
+      {activeWorkspaceTab === 'overview' && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 flex flex-col gap-5 w-full">
+          {/* 1. Compact Horizontal Climate & District Matcher Bar */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#0D1D13] border border-stone-200/90 dark:border-emerald-900/60 flex flex-col gap-3.5 shadow-2xs">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <span className="text-xs font-mono font-bold text-emerald-800 dark:text-amber-300">
+                  STEP 1 · PICK YOUR MALAWI CLIMATE ZONE
                 </span>
-                <span className="text-xs text-stone-400 font-mono">
-                  {todayDevotional.scripture.reference}
+                <span className="hidden sm:inline text-stone-300 dark:text-stone-700">|</span>
+                <span className="text-xs text-stone-600 dark:text-stone-300">
+                  Click a growing zone to see matching districts &amp; switch the mountain backdrop:
                 </span>
               </div>
 
-              <h2 className="serif text-xl sm:text-2xl font-bold text-stone-900 dark:text-stone-50">
-                "{todayDevotional.title}"
-              </h2>
-
-              <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 italic max-w-2xl leading-relaxed">
-                "{todayDevotional.egwQuote.text}"
-              </p>
-
-              <span className="text-[11px] font-bold text-stone-500 dark:text-stone-400">
-                — {todayDevotional.egwQuote.source}
-              </span>
+              <div className="flex flex-wrap items-center gap-1 bg-stone-100 dark:bg-stone-900 p-1 rounded-xl border border-stone-200 dark:border-emerald-900/60">
+                {[
+                  { id: 'highlands' as const, label: 'Cool Mist Highlands', icon: Mountain },
+                  { id: 'mid-hills' as const, label: 'Fertile Mid-Valleys', icon: Trees },
+                  { id: 'lakeshore' as const, label: 'Warm Lakeshore', icon: Waves },
+                ].map((zoneBtn) => {
+                  const Icon = zoneBtn.icon;
+                  const active = selectedClimateZone === zoneBtn.id;
+                  return (
+                    <button
+                      key={zoneBtn.id}
+                      type="button"
+                      onClick={() => setSelectedClimateZone(zoneBtn.id)}
+                      className={cn(
+                        'px-3 py-1.5 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer',
+                        active
+                          ? 'bg-emerald-800 text-white dark:bg-amber-400 dark:text-stone-950 font-bold shadow-2xs'
+                          : 'text-stone-700 dark:text-stone-300 hover:text-stone-950 dark:hover:text-white'
+                      )}
+                    >
+                      <Icon size={13} />
+                      <span>{zoneBtn.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
 
-          <Link
-            to="/devotional"
-            className="shrink-0 px-5 py-3 rounded-2xl bg-amber-100/90 hover:bg-amber-200/90 dark:bg-emerald-950/80 dark:hover:bg-emerald-900 text-stone-900 dark:text-amber-200 text-xs font-bold uppercase tracking-wider border border-amber-300/80 dark:border-emerald-700/60 transition-all flex items-center gap-2 shadow-xs"
-          >
-            <span>Open Devotional Treasury</span>
-            <ArrowRight size={14} />
-          </Link>
-        </div>
-      </section>
-
-      {/* ====================================================================
-          3. DIVIDE & CONQUER: THE FOUR PILLARS DEDICATED TOOLS PORTAL
-      ==================================================================== */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 flex flex-col gap-6">
-        
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-stone-200/80 dark:border-emerald-950/80">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold tracking-wider text-emerald-800 dark:text-amber-300 uppercase bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-md">
-                Dedicated Outpost Tools
-              </span>
-              <span className="text-stone-300 dark:text-stone-600">•</span>
-              <span className="text-xs font-medium text-stone-500 dark:text-stone-400">Focused Portals</span>
-            </div>
-            <h2 className="serif text-2xl sm:text-3xl lg:text-4xl font-extrabold text-stone-900 dark:text-stone-50 mt-1">
-              The Four Pillars of Country Living
-            </h2>
-            <p className="text-stone-600 dark:text-stone-300 text-sm sm:text-base max-w-2xl mt-1 leading-relaxed">
-              Explore specialized tools and guides built to walk you step-by-step through spiritual preparation, land verification, edible organic farming, and outpost ministry.
-            </p>
-          </div>
-
-          <Link
-            to="/tracker"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 dark:text-amber-300 hover:underline"
-          >
-            <span>View Full Outpost Transition Ledger</span>
-            <ArrowRight size={14} />
-          </Link>
-        </div>
-
-        {/* 4 Dedicated Portals Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          
-          {/* PILLAR 1: SANCTUARY & COUNSEL */}
-          <div className="p-6 sm:p-7 rounded-3xl bg-white dark:bg-[#0D1D13] border border-stone-200/90 dark:border-emerald-900/60 shadow-sm hover:shadow-md transition-all flex flex-col justify-between gap-5 group">
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center justify-between">
-                <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-950/60 border border-amber-300/80 dark:border-amber-800/60 text-amber-800 dark:text-amber-300 flex items-center justify-center">
-                  <BookOpen size={22} />
+            {/* Single-Row Tabular Readout + District Quick-Jump Chips */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 items-center pt-3 border-t border-stone-200/70 dark:border-emerald-900/50 text-xs">
+              <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 block">
+                    {activeClimateZone.title} ({activeClimateZone.elevation})
+                  </span>
+                  <span className="text-stone-800 dark:text-stone-200 font-medium leading-snug block mt-0.5">
+                    {activeClimateZone.feel}
+                  </span>
                 </div>
-                <span className="text-xs font-mono font-bold uppercase text-stone-400 dark:text-stone-500">
-                  Pillar 1
-                </span>
+                <div>
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 block">
+                    Best Staples &amp; Orchards
+                  </span>
+                  <span className="text-stone-800 dark:text-stone-200 font-medium leading-snug block mt-0.5">
+                    {activeClimateZone.crops}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 block">
+                    Springs, Wells &amp; Rain
+                  </span>
+                  <span className="text-stone-800 dark:text-stone-200 font-medium leading-snug block mt-0.5">
+                    {activeClimateZone.waterNote}
+                  </span>
+                </div>
               </div>
 
+              <div className="lg:col-span-5 flex flex-wrap items-center justify-between lg:justify-end gap-1.5 lg:border-l lg:border-stone-200/80 dark:lg:border-emerald-900/50 lg:pl-3.5">
+                {activeClimateZone.districts.map((dist) => (
+                  <Link
+                    key={dist.id}
+                    to={`/scout-map?district=${dist.id}`}
+                    className="px-2.5 py-1 rounded-lg bg-stone-100 dark:bg-stone-900 hover:bg-emerald-800 hover:text-white dark:hover:bg-amber-400 dark:hover:text-stone-950 border border-stone-200 dark:border-emerald-800/70 text-[11px] font-semibold text-stone-800 dark:text-stone-200 transition-colors"
+                  >
+                    {dist.name} →
+                  </Link>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => setActiveWorkspaceTab('atlas')}
+                  className="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-amber-300 border border-emerald-300/70 dark:border-emerald-700/60 text-[11px] font-bold hover:underline cursor-pointer"
+                >
+                  All 28 Districts →
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* 2. High-Efficiency 2×2 Horizontal Split-Cards for the Four Pillars */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {FOUR_PILLARS.map((pillar) => (
+              <div
+                key={pillar.number}
+                className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#0D1D13] border border-stone-200/90 dark:border-emerald-900/60 flex flex-col sm:flex-row items-stretch gap-4 shadow-2xs group hover:border-emerald-600/50 dark:hover:border-amber-400/40 transition-colors"
+              >
+                {/* Left: Dedicated Vector Illustration Panel */}
+                <div className="w-full sm:w-36 md:w-40 shrink-0 rounded-xl bg-[#FAF6EE] dark:bg-[#07150E] border border-[#E6DFD1] dark:border-emerald-900/70 p-2.5 flex flex-col items-center justify-center relative overflow-hidden">
+                  <span className="absolute top-1.5 left-2 text-[10px] font-mono font-bold text-emerald-800 dark:text-amber-300">
+                    {pillar.number}
+                  </span>
+                  <CountryIcon
+                    name={pillar.iconName}
+                    className="w-full h-24 sm:h-28 object-contain group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+
+                {/* Right: Compact Title, 1-Sentence Benefit & Horizontal Action Chips */}
+                <div className="flex-1 flex flex-col justify-between gap-2.5 min-w-0">
+                  <div>
+                    <div className="flex items-center justify-between gap-2 text-[11px]">
+                      <span className="font-semibold text-emerald-800 dark:text-amber-300">
+                        {pillar.subtitle}
+                      </span>
+                      <span className="font-mono text-[10px] text-stone-400 dark:text-stone-500 truncate">
+                        {pillar.proofLine}
+                      </span>
+                    </div>
+
+                    <h3 className="font-display text-lg font-bold text-stone-900 dark:text-stone-50 leading-snug mt-0.5">
+                      {pillar.title}
+                    </h3>
+
+                    <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed mt-1">
+                      {pillar.summary}
+                    </p>
+                  </div>
+
+                  {/* Horizontal 3-Chip Action Bar (No Vertical Link Stacking) */}
+                  <div className="pt-2.5 border-t border-stone-100 dark:border-emerald-950/80 flex flex-wrap items-center gap-1.5">
+                    {pillar.links.map((item) => (
+                      <Link
+                        key={item.to}
+                        to={item.to}
+                        className="px-2.5 py-1.5 rounded-lg bg-stone-100/90 hover:bg-emerald-800 text-stone-800 hover:text-white dark:bg-stone-900/90 dark:text-stone-200 dark:hover:bg-amber-400 dark:hover:text-stone-950 border border-stone-200/80 dark:border-emerald-900/60 text-[11px] font-semibold inline-flex items-center gap-1 transition-colors"
+                      >
+                        <span>{item.label}</span>
+                        <ArrowRight size={11} className="opacity-70" />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* 3. Magnetic 1844 Prophetic Spotlight with 6-Plate Visual Filmstrip Preview */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-[#091A11] border border-amber-500/35 flex flex-col gap-3.5 text-stone-100">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
               <div>
-                <h3 className="serif text-xl sm:text-2xl font-bold text-stone-900 dark:text-stone-50">
-                  Sanctuary & Inspired Counsel
+                <div className="flex items-center gap-2 text-[11px] font-mono text-amber-300 font-bold">
+                  <Sparkles size={12} />
+                  <span>ILLUSTRATED PROPHETIC PANORAMA · 1844 TO THE EARTH MADE NEW</span>
+                </div>
+                <h3 className="font-display text-lg sm:text-xl font-bold text-white mt-0.5">
+                  From 1844 to the Final Exodus: Why Country Living Is Not Optional
                 </h3>
-                <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 mt-1 leading-relaxed">
-                  Establish the spiritual bedrock of your family's move. Anchored in God's Word and the counsels of Ellen G. White on leaving the cities before strife and economic distress intensify.
-                </p>
               </div>
 
-              {/* Dedicated Tool Links */}
-              <div className="flex flex-col gap-2 pt-2">
-                <Link
-                  to="/devotional"
-                  className="p-3 rounded-xl bg-stone-50 dark:bg-stone-800/50 hover:bg-amber-50 dark:hover:bg-emerald-950/50 border border-stone-200/70 dark:border-stone-700/50 transition-all flex items-center justify-between group/link"
+              <div className="flex flex-wrap items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setActiveWorkspaceTab('prophecy')}
+                  className="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap shadow-sm"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <Feather size={16} className="text-amber-600 dark:text-amber-400" />
-                    <span className="text-xs font-bold text-stone-800 dark:text-stone-200">
-                      Country Living Daily Devotionals
-                    </span>
-                  </div>
-                  <ArrowRight size={14} className="text-stone-400 group-hover/link:text-amber-600 dark:group-hover/link:text-amber-400 transition-colors" />
-                </Link>
-
-                <Link
-                  to="/tracker"
-                  className="p-3 rounded-xl bg-stone-50 dark:bg-stone-800/50 hover:bg-amber-50 dark:hover:bg-emerald-950/50 border border-stone-200/70 dark:border-stone-700/50 transition-all flex items-center justify-between group/link"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Sparkles size={16} className="text-emerald-600 dark:text-emerald-400" />
-                    <span className="text-xs font-bold text-stone-800 dark:text-stone-200">
-                      15-Milestone Country Exodus Ledger
-                    </span>
-                  </div>
-                  <ArrowRight size={14} className="text-stone-400 group-hover/link:text-emerald-600 dark:group-hover/link:text-emerald-400 transition-colors" />
-                </Link>
-
+                  <span>Open 1844 Interactive Chart</span>
+                  <ArrowRight size={13} />
+                </button>
                 <Link
                   to="/vision"
-                  className="p-3 rounded-xl bg-stone-50 dark:bg-stone-800/50 hover:bg-amber-50 dark:hover:bg-emerald-950/50 border border-stone-200/70 dark:border-stone-700/50 transition-all flex items-center justify-between group/link"
+                  className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-stone-200 border border-white/15 text-xs font-semibold whitespace-nowrap"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <BookOpen size={16} className="text-sky-600 dark:text-sky-400" />
-                    <span className="text-xs font-bold text-stone-800 dark:text-stone-200">
-                      Divine Counsel: The Call Out of Cities
-                    </span>
-                  </div>
-                  <ArrowRight size={14} className="text-stone-400 group-hover/link:text-sky-600 dark:group-hover/link:text-sky-400 transition-colors" />
+                  Verbatim EGW Vault
                 </Link>
               </div>
             </div>
-          </div>
 
-          {/* PILLAR 2: LAND RECONNAISSANCE & VERIFICATION */}
-          <div className="p-6 sm:p-7 rounded-3xl bg-white dark:bg-[#0D1D13] border border-stone-200/90 dark:border-emerald-900/60 shadow-sm hover:shadow-md transition-all flex flex-col justify-between gap-5 group">
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center justify-between">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-300/80 dark:border-emerald-800/60 text-emerald-800 dark:text-emerald-300 flex items-center justify-center">
-                  <MapPin size={22} />
-                </div>
-                <span className="text-xs font-mono font-bold uppercase text-stone-400 dark:text-stone-500">
-                  Pillar 2
-                </span>
-              </div>
-
-              <div>
-                <h3 className="serif text-xl sm:text-2xl font-bold text-stone-900 dark:text-stone-50">
-                  Land Scouting & Verification
-                </h3>
-                <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 mt-1 leading-relaxed">
-                  Verify water security, fertile red loam topsoil depth, rainfall patterns, customary land governance, and safe distance from urban vice across Malawi's 28 districts.
-                </p>
-              </div>
-
-              {/* Dedicated Tool Links */}
-              <div className="flex flex-col gap-2 pt-2">
-                <Link
-                  to="/scout-map"
-                  className="p-3 rounded-xl bg-stone-50 dark:bg-stone-800/50 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 border border-stone-200/70 dark:border-stone-700/50 transition-all flex items-center justify-between group/link"
+            {/* 6-Plate Visual Filmstrip Preview */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+              {PROPHETIC_PLATES_PREVIEW.map((plate) => (
+                <button
+                  key={plate.epoch}
+                  type="button"
+                  onClick={() => setActiveWorkspaceTab('prophecy')}
+                  className="group relative h-22 rounded-xl overflow-hidden border border-white/15 hover:border-amber-400 transition-all text-left cursor-pointer bg-black"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <Compass size={16} className="text-emerald-600 dark:text-emerald-400" />
-                    <span className="text-xs font-bold text-stone-800 dark:text-stone-200">
-                      GPS Land & Water Scout Map
+                  <img
+                    src={plate.image}
+                    alt={plate.title}
+                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                  <div className="absolute bottom-1.5 left-2 right-2">
+                    <span className="text-[9px] font-mono font-bold text-amber-300 block">
+                      {plate.epoch}
+                    </span>
+                    <span className="text-[11px] font-semibold text-white leading-tight line-clamp-1">
+                      {plate.title}
                     </span>
                   </div>
-                  <ArrowRight size={14} className="text-stone-400 group-hover/link:text-emerald-600 dark:group-hover/link:text-emerald-400 transition-colors" />
-                </Link>
-
-                <Link
-                  to="/suitability"
-                  className="p-3 rounded-xl bg-stone-50 dark:bg-stone-800/50 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 border border-stone-200/70 dark:border-stone-700/50 transition-all flex items-center justify-between group/link"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <ShieldCheck size={16} className="text-amber-600 dark:text-amber-400" />
-                    <span className="text-xs font-bold text-stone-800 dark:text-stone-200">
-                      100-Point EGW Land Suitability Evaluator
-                    </span>
-                  </div>
-                  <ArrowRight size={14} className="text-stone-400 group-hover/link:text-amber-600 dark:group-hover/link:text-amber-400 transition-colors" />
-                </Link>
-
-                <Link
-                  to="/where"
-                  className="p-3 rounded-xl bg-stone-50 dark:bg-stone-800/50 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 border border-stone-200/70 dark:border-stone-700/50 transition-all flex items-center justify-between group/link"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Layers size={16} className="text-sky-600 dark:text-sky-400" />
-                    <span className="text-xs font-bold text-stone-800 dark:text-stone-200">
-                      Malawi Regional Profiles & Land Law
-                    </span>
-                  </div>
-                  <ArrowRight size={14} className="text-stone-400 group-hover/link:text-sky-600 dark:group-hover/link:text-sky-400 transition-colors" />
-                </Link>
-              </div>
+                </button>
+              ))}
             </div>
           </div>
-
-          {/* PILLAR 3: EDENIC FARMING & ENGINEERING */}
-          <div className="p-6 sm:p-7 rounded-3xl bg-white dark:bg-[#0D1D13] border border-stone-200/90 dark:border-emerald-900/60 shadow-sm hover:shadow-md transition-all flex flex-col justify-between gap-5 group">
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center justify-between">
-                <div className="w-12 h-12 rounded-2xl bg-sky-100 dark:bg-sky-950/60 border border-sky-300/80 dark:border-sky-800/60 text-sky-800 dark:text-sky-300 flex items-center justify-center">
-                  <Sprout size={22} />
-                </div>
-                <span className="text-xs font-mono font-bold uppercase text-stone-400 dark:text-stone-500">
-                  Pillar 3
-                </span>
-              </div>
-
-              <div>
-                <h3 className="serif text-xl sm:text-2xl font-bold text-stone-900 dark:text-stone-50">
-                  Edenic Farming & Engineering
-                </h3>
-                <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 mt-1 leading-relaxed">
-                  Size your off-grid solar panels, calculate borehole pump requirements, harvest seasonal rainwater, and manage fertile red loam soils organically with God-given natural inputs.
-                </p>
-              </div>
-
-              {/* Dedicated Tool Links */}
-              <div className="flex flex-col gap-2 pt-2">
-                <Link
-                  to="/calculators"
-                  className="p-3 rounded-xl bg-stone-50 dark:bg-stone-800/50 hover:bg-sky-50 dark:hover:bg-emerald-950/50 border border-stone-200/70 dark:border-stone-700/50 transition-all flex items-center justify-between group/link"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Calculator size={16} className="text-sky-600 dark:text-sky-400" />
-                    <span className="text-xs font-bold text-stone-800 dark:text-stone-200">
-                      Off-Grid Solar, Water & Food Sizing Calculators
-                    </span>
-                  </div>
-                  <ArrowRight size={14} className="text-stone-400 group-hover/link:text-sky-600 dark:group-hover/link:text-sky-400 transition-colors" />
-                </Link>
-
-                <Link
-                  to="/agriculture"
-                  className="p-3 rounded-xl bg-stone-50 dark:bg-stone-800/50 hover:bg-sky-50 dark:hover:bg-emerald-950/50 border border-stone-200/70 dark:border-stone-700/50 transition-all flex items-center justify-between group/link"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Sprout size={16} className="text-emerald-600 dark:text-emerald-400" />
-                    <span className="text-xs font-bold text-stone-800 dark:text-stone-200">
-                      Edenic Agriculture Field Manuals
-                    </span>
-                  </div>
-                  <ArrowRight size={14} className="text-stone-400 group-hover/link:text-emerald-600 dark:group-hover/link:text-emerald-400 transition-colors" />
-                </Link>
-
-                <Link
-                  to="/seasons"
-                  className="p-3 rounded-xl bg-stone-50 dark:bg-stone-800/50 hover:bg-sky-50 dark:hover:bg-emerald-950/50 border border-stone-200/70 dark:border-stone-700/50 transition-all flex items-center justify-between group/link"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Calendar size={16} className="text-amber-600 dark:text-amber-400" />
-                    <span className="text-xs font-bold text-stone-800 dark:text-stone-200">
-                      Malawi Seasonal Planting Almanac
-                    </span>
-                  </div>
-                  <ArrowRight size={14} className="text-stone-400 group-hover/link:text-amber-600 dark:group-hover/link:text-amber-400 transition-colors" />
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* PILLAR 4: OUTPOST CENTERS & FELLOWSHIP */}
-          <div className="p-6 sm:p-7 rounded-3xl bg-white dark:bg-[#0D1D13] border border-stone-200/90 dark:border-emerald-900/60 shadow-sm hover:shadow-md transition-all flex flex-col justify-between gap-5 group">
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center justify-between">
-                <div className="w-12 h-12 rounded-2xl bg-stone-100 dark:bg-stone-800/60 border border-stone-300/80 dark:border-stone-700/60 text-stone-800 dark:text-stone-200 flex items-center justify-center">
-                  <HeartHandshake size={22} />
-                </div>
-                <span className="text-xs font-mono font-bold uppercase text-stone-400 dark:text-stone-500">
-                  Pillar 4
-                </span>
-              </div>
-
-              <div>
-                <h3 className="serif text-xl sm:text-2xl font-bold text-stone-900 dark:text-stone-50">
-                  Outposts & Believer Community
-                </h3>
-                <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 mt-1 leading-relaxed">
-                  Establish self-supporting country schools, sanitariums, and mission stations. Connect with Adventist seed savers, builders, and fellow country dwellers across Malawi.
-                </p>
-              </div>
-
-              {/* Dedicated Tool Links */}
-              <div className="flex flex-col gap-2 pt-2">
-                <Link
-                  to="/blueprints"
-                  className="p-3 rounded-xl bg-stone-50 dark:bg-stone-800/50 hover:bg-stone-100 dark:hover:bg-emerald-950/50 border border-stone-200/70 dark:border-stone-700/50 transition-all flex items-center justify-between group/link"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <HomeIcon size={16} className="text-emerald-600 dark:text-emerald-400" />
-                    <span className="text-xs font-bold text-stone-800 dark:text-stone-200">
-                      Outpost Center & Sanitarium Blueprints
-                    </span>
-                  </div>
-                  <ArrowRight size={14} className="text-stone-400 group-hover/link:text-emerald-600 dark:group-hover/link:text-emerald-400 transition-colors" />
-                </Link>
-
-                <Link
-                  to="/community"
-                  className="p-3 rounded-xl bg-stone-50 dark:bg-stone-800/50 hover:bg-stone-100 dark:hover:bg-emerald-950/50 border border-stone-200/70 dark:border-stone-700/50 transition-all flex items-center justify-between group/link"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Users size={16} className="text-amber-600 dark:text-amber-400" />
-                    <span className="text-xs font-bold text-stone-800 dark:text-stone-200">
-                      Malawi Believer & Outpost Directory
-                    </span>
-                  </div>
-                  <ArrowRight size={14} className="text-stone-400 group-hover/link:text-amber-600 dark:group-hover/link:text-amber-400 transition-colors" />
-                </Link>
-
-                <Link
-                  to="/skills"
-                  className="p-3 rounded-xl bg-stone-50 dark:bg-stone-800/50 hover:bg-stone-100 dark:hover:bg-emerald-950/50 border border-stone-200/70 dark:border-stone-700/50 transition-all flex items-center justify-between group/link"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <CheckCircle2 size={16} className="text-sky-600 dark:text-sky-400" />
-                    <span className="text-xs font-bold text-stone-800 dark:text-stone-200">
-                      25 Essential Country Skills Manual
-                    </span>
-                  </div>
-                  <ArrowRight size={14} className="text-stone-400 group-hover/link:text-sky-600 dark:group-hover/link:text-sky-400 transition-colors" />
-                </Link>
-              </div>
-            </div>
-          </div>
-
         </div>
-      </section>
+      )}
 
       {/* ====================================================================
-          HOMESTEAD AGRICULTURAL WEATHER & CLIMATE FORECAST
+          WORKSPACE VIEW 2: 28-DISTRICT SOIL, WATER & PLANTING PIT ATLAS
       ==================================================================== */}
-      <MalawiAgriWeatherForecast />
+      {activeWorkspaceTab === 'atlas' && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 w-full">
+          <DistrictRegistryExplorer embedded />
+        </div>
+      )}
 
       {/* ====================================================================
-          HOMESTEAD UTILITIES & DECISION TOOLS SUITE (DIVIDE & CONQUER)
+          WORKSPACE VIEW 3: INTERACTIVE FAMILY HOMESTEAD & SOLAR SIZER
       ==================================================================== */}
-      <HomesteadUtilitiesGrid />
-
-      {/* ====================================================================
-          4. READINESS PULSE: PERSONAL FAMILY TRANSITION STATUS
-      ==================================================================== */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16">
-        <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-emerald-900 via-emerald-950 to-stone-900 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full -mr-32 -mt-32 pointer-events-none" />
-
-          <div className="flex flex-col gap-2 relative z-10 text-center md:text-left">
-            <div className="flex items-center justify-center md:justify-start gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-300 bg-emerald-950/80 px-3 py-0.5 rounded-full border border-emerald-700/60">
-                Steward Readiness Pulse
-              </span>
+      {activeWorkspaceTab === 'sizer' && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 w-full">
+          <div className="p-5 sm:p-7 rounded-3xl bg-white dark:bg-[#0D1D13] border border-stone-200/90 dark:border-emerald-900/60 shadow-2xs flex flex-col gap-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-stone-200/80 dark:border-emerald-950">
+              <div>
+                <span className="text-xs font-mono font-bold text-emerald-800 dark:text-amber-300">
+                  FAMILY HOMESTEAD &amp; OFF-GRID SIZER
+                </span>
+                <h2 className="font-display text-xl sm:text-2xl font-bold text-stone-900 dark:text-stone-50">
+                  How Much Land, Rainwater Storage &amp; Solar Power Does Your Family Need?
+                </h2>
+              </div>
+              <Link
+                to="/calculators"
+                className="px-4 py-2 rounded-xl bg-emerald-800 hover:bg-emerald-700 text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-colors whitespace-nowrap self-start sm:self-auto"
+              >
+                <Calculator size={14} />
+                <span>Open Full 6-Calculator Suite &amp; Budget</span>
+              </Link>
             </div>
 
-            <h2 className="serif text-2xl sm:text-3xl font-bold">
-              Your 15-Milestone Country Relocation Journey
-            </h2>
+            {/* 3 Interactive Inputs */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center justify-between text-xs">
+                  <label
+                    htmlFor="home-quick-district"
+                    className="font-semibold text-stone-700 dark:text-stone-200"
+                  >
+                    1. Choose a Malawi District
+                  </label>
+                  <span className="font-mono text-emerald-800 dark:text-emerald-400 tabular-nums">
+                    {quickDistrict.region} Region
+                  </span>
+                </div>
+                <select
+                  id="home-quick-district"
+                  value={quickDistrictId}
+                  onChange={(e) => setQuickDistrictId(e.target.value)}
+                  className="w-full px-3.5 py-2 rounded-xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-emerald-900/60 text-xs sm:text-sm font-semibold text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                >
+                  {DISTRICT_LIST.map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.name} ({d.rainfallAnnualMm} mm/yr · {d.agroZone})
+                    </option>
+                  ))}
+                </select>
+                <span className="text-[11px] text-stone-500 dark:text-stone-400 font-mono tabular-nums">
+                  {quickDistrict.elevationRange} · Typical Well Depth ~{quickDistrict.aquiferDepthM}m
+                </span>
+              </div>
 
-            <p className="text-emerald-100/80 text-xs sm:text-sm max-w-xl leading-relaxed">
-              Step out in orderly faith. From building family consensus and settling urban debts to securing customary land and planting your food forest.
-            </p>
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center justify-between text-xs">
+                  <label
+                    htmlFor="home-quick-family"
+                    className="font-semibold text-stone-700 dark:text-stone-200"
+                  >
+                    2. People on the Homestead
+                  </label>
+                  <span className="font-mono font-bold text-emerald-800 dark:text-amber-300 tabular-nums">
+                    {quickFamilySize} {quickFamilySize === 1 ? 'Person' : 'People'}
+                  </span>
+                </div>
+                <input
+                  id="home-quick-family"
+                  type="range"
+                  min={1}
+                  max={12}
+                  step={1}
+                  value={quickFamilySize}
+                  onChange={(e) => setQuickFamilySize(Number(e.target.value))}
+                  className="w-full accent-emerald-700 dark:accent-emerald-400 cursor-pointer my-1.5"
+                />
+                <div className="flex items-center justify-between text-[11px] font-mono text-stone-500 dark:text-stone-400 tabular-nums">
+                  <span>1 Solo</span>
+                  <span>6 Family</span>
+                  <span>12 Outpost Team</span>
+                </div>
+              </div>
 
-            <div className="flex items-center justify-center md:justify-start gap-3 mt-2">
-              <div className="w-36 bg-emerald-950 rounded-full h-3 border border-emerald-700/60 overflow-hidden">
-                <div 
-                  className="bg-amber-400 h-full rounded-full transition-all duration-500" 
-                  style={{ width: `${Math.max(10, readinessPercentage)}%` }} 
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center justify-between text-xs">
+                  <label
+                    htmlFor="home-quick-roof"
+                    className="font-semibold text-stone-700 dark:text-stone-200"
+                  >
+                    3. Roof Size for Catching Rain
+                  </label>
+                  <span className="font-mono font-bold text-sky-700 dark:text-sky-300 tabular-nums">
+                    {quickRoofAreaSqm} m²
+                  </span>
+                </div>
+                <div className="grid grid-cols-3 gap-1.5 my-0.5">
+                  {[
+                    { label: 'Cottage (50m²)', sqm: 50 },
+                    { label: 'Family (90m²)', sqm: 90 },
+                    { label: 'Large (140m²)', sqm: 140 },
+                  ].map((preset) => (
+                    <button
+                      key={preset.sqm}
+                      type="button"
+                      onClick={() => setQuickRoofAreaSqm(preset.sqm)}
+                      className={cn(
+                        'py-1 px-2 rounded-lg text-[11px] font-semibold border transition-colors cursor-pointer',
+                        quickRoofAreaSqm === preset.sqm
+                          ? 'bg-sky-700 text-white border-sky-800'
+                          : 'bg-stone-50 dark:bg-stone-900 text-stone-700 dark:text-stone-300 border-stone-200 dark:border-emerald-900/50 hover:bg-stone-100'
+                      )}
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
+                </div>
+                <input
+                  id="home-quick-roof"
+                  type="range"
+                  min={40}
+                  max={240}
+                  step={10}
+                  value={quickRoofAreaSqm}
+                  onChange={(e) => setQuickRoofAreaSqm(Number(e.target.value))}
+                  className="w-full accent-sky-600 dark:accent-sky-400 cursor-pointer"
                 />
               </div>
-              <span className="text-xs font-bold text-amber-300 font-mono">
-                {completedMilestonesCount} of {totalPossibleItems} Milestones Completed
+            </div>
+
+            {/* 4 Computed Outputs as High-Efficiency Horizontal Split-Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/60 border border-stone-200/80 dark:border-emerald-900/50 flex items-center gap-4">
+                <div className="w-24 h-20 rounded-xl bg-[#FAF6EE] dark:bg-[#07150E] border border-stone-200/70 dark:border-emerald-900/50 p-1.5 shrink-0 flex items-center justify-center">
+                  <CountryIcon name="homestead" className="w-full h-full object-contain" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between text-xs text-stone-500 dark:text-stone-400">
+                    <span>Total Land Needed</span>
+                    <Sprout size={14} className="text-emerald-700 dark:text-emerald-400" />
+                  </div>
+                  <div className="font-mono text-2xl font-bold text-stone-900 dark:text-white tabular-nums">
+                    {quickEstimates.totalAcres} Acres
+                  </div>
+                  <div className="text-xs text-emerald-800 dark:text-emerald-300 font-semibold">
+                    Yields ~{Math.ceil((quickFamilySize * 165) / 50)} × 50kg grain sacks/yr ({quickEstimates.stapleAcres}ac crops · {quickEstimates.orchardAcres}ac orchard)
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/60 border border-stone-200/80 dark:border-emerald-900/50 flex items-center gap-4">
+                <div className="w-24 h-20 rounded-xl bg-[#FAF6EE] dark:bg-[#07150E] border border-stone-200/70 dark:border-emerald-900/50 p-1.5 shrink-0 flex items-center justify-center">
+                  <CountryIcon name="cistern" className="w-full h-full object-contain" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between text-xs text-stone-500 dark:text-stone-400">
+                    <span>Free Roof Rainwater</span>
+                    <Droplets size={14} className="text-sky-600 dark:text-sky-400" />
+                  </div>
+                  <div className="font-mono text-2xl font-bold text-stone-900 dark:text-white tabular-nums">
+                    {quickEstimates.annualRainwaterLiters.toLocaleString()} L/yr
+                  </div>
+                  <div className="text-xs text-sky-800 dark:text-sky-300 font-semibold">
+                    Store in {Math.max(1, Math.ceil((quickEstimates.annualRainwaterLiters * 0.25) / 5000))} × 5,000L tanks (~{Math.round(quickEstimates.annualRainwaterLiters / 365)} L/day)
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/60 border border-stone-200/80 dark:border-emerald-900/50 flex items-center gap-4">
+                <div className="w-24 h-20 rounded-xl bg-[#FAF6EE] dark:bg-[#07150E] border border-stone-200/70 dark:border-emerald-900/50 p-1.5 shrink-0 flex items-center justify-center">
+                  <CountryIcon name="solar" className="w-full h-full object-contain" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between text-xs text-stone-500 dark:text-stone-400">
+                    <span>Off-Grid Solar Power</span>
+                    <Sun size={14} className="text-amber-600 dark:text-amber-400" />
+                  </div>
+                  <div className="font-mono text-2xl font-bold text-stone-900 dark:text-white tabular-nums">
+                    {quickEstimates.recommendedSolarKw} kW Solar
+                  </div>
+                  <div className="text-xs text-amber-800 dark:text-amber-300 font-semibold">
+                    {Math.max(2, Math.ceil((quickEstimates.recommendedSolarKw * 1000) / 400))} × 400W panels + {quickEstimates.recommendedBatteryKwh}kWh battery ({quickEstimates.effectiveSunHours} hrs/day)
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/60 border border-stone-200/80 dark:border-emerald-900/50 flex items-center gap-4">
+                <div className="w-24 h-20 rounded-xl bg-[#FAF6EE] dark:bg-[#07150E] border border-stone-200/70 dark:border-emerald-900/50 p-1.5 shrink-0 flex items-center justify-center">
+                  <CountryIcon name="orchard" className="w-full h-full object-contain" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between text-xs text-stone-500 dark:text-stone-400">
+                    <span>Drought-Proof Fruit Pits</span>
+                    <Layers size={14} className="text-emerald-700 dark:text-emerald-400" />
+                  </div>
+                  <div className="font-mono text-2xl font-bold text-stone-900 dark:text-white tabular-nums">
+                    {quickEstimates.orchardPitCount} Tree Pits
+                  </div>
+                  <div className="text-xs text-emerald-800 dark:text-emerald-300 font-semibold">
+                    Holds {quickPitSpec.waterRetentionLiters}L moisture/tree ({quickPitSpec.dimensionString} · {quickEstimates.totalBiocharKg}kg biochar)
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-stone-200/70 dark:border-emerald-950 text-xs text-stone-600 dark:text-stone-300">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="font-semibold text-stone-900 dark:text-white">
+                  {quickDistrict.name} Local Soil Profile:
+                </span>
+                <span>
+                  {quickDistrict.primarySoil} ({quickDistrict.soilPh})
+                </span>
+                {isLoadingSizerTelemetry && (
+                  <RefreshCw size={12} className="animate-spin text-emerald-600" />
+                )}
+              </div>
+
+              <Link
+                to={`/scout-map?district=${quickDistrict.id}`}
+                className="font-semibold text-emerald-800 dark:text-amber-300 hover:underline inline-flex items-center gap-1"
+              >
+                <span>Explore {quickDistrict.name} on the Interactive Map</span>
+                <ArrowRight size={12} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ====================================================================
+          WORKSPACE VIEW 4: 1844 TO SECOND COMING PROPHETIC TIMELINE & VECTORS
+      ==================================================================== */}
+      {activeWorkspaceTab === 'prophecy' && (
+        <div className="pt-2">
+          <PropheticTimeline1844 />
+        </div>
+      )}
+
+      {/* ====================================================================
+          WORKSPACE VIEW 5: LIVE AGRO-WEATHER & SOIL / AQUIFER CUTAWAY
+      ==================================================================== */}
+      {activeWorkspaceTab === 'weather-strata' && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 flex flex-col gap-5 w-full">
+          <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-white dark:bg-[#0D1D13] border border-stone-200/90 dark:border-emerald-900/60">
+            <div>
+              <span className="text-xs font-mono font-bold text-emerald-800 dark:text-amber-300">
+                LIVE WEATHER &amp; UNDERGROUND WATER GUIDE
               </span>
+              <h2 className="font-display text-lg sm:text-xl font-bold text-stone-900 dark:text-white">
+                {weatherSubView === 'weather'
+                  ? '7-Day Malawi Farming Weather & Soil Moisture Forecast'
+                  : 'How Rainwater Soaks Into Malawi’s Soil & Underground Wells'}
+              </h2>
+            </div>
+
+            <div className="inline-flex items-center p-1 rounded-xl bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-emerald-900/60">
+              <button
+                type="button"
+                onClick={() => setWeatherSubView('weather')}
+                className={cn(
+                  'px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer',
+                  weatherSubView === 'weather'
+                    ? 'bg-emerald-800 text-white'
+                    : 'text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white'
+                )}
+              >
+                7-Day Farming Weather
+              </button>
+              <button
+                type="button"
+                onClick={() => setWeatherSubView('strata')}
+                className={cn(
+                  'px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer',
+                  weatherSubView === 'strata'
+                    ? 'bg-emerald-800 text-white'
+                    : 'text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white'
+                )}
+              >
+                Soil &amp; Well Depth Cutaway
+              </button>
             </div>
           </div>
 
-          <div className="relative z-10 flex flex-col sm:flex-row gap-3">
-            <Link
-              to="/tracker"
-              className="px-6 py-3.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-stone-950 text-xs font-extrabold uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <span>Track Your Milestones</span>
-              <ArrowRight size={14} />
-            </Link>
-          </div>
+          {weatherSubView === 'weather' ? (
+            <MalawiAgriWeatherForecast embedded />
+          ) : (
+            <SoilStrataBlueprint />
+          )}
         </div>
-      </section>
+      )}
 
-      {/* ====================================================================
-          5. PRIME COUNTRY SANCTUARIES IN MALAWI SPOTLIGHT
-      ==================================================================== */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 flex flex-col gap-6">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-3 border-b border-stone-200/80 dark:border-emerald-950/80">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300">
-              Prime Outpost Sanctuaries
-            </span>
-            <h2 className="serif text-2xl sm:text-3xl font-bold text-stone-900 dark:text-stone-50 mt-0.5">
-              Highland Regions Suited for Country Living
-            </h2>
-          </div>
-
-          <Link
-            to="/scout-map"
-            className="text-xs font-bold text-emerald-800 dark:text-amber-300 hover:underline flex items-center gap-1"
-          >
-            <span>View All 28 Districts on Map</span>
-            <ArrowRight size={13} />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {/* Dedza Highlands */}
-          <div className="p-5 rounded-3xl bg-white dark:bg-[#0D1D13] border border-stone-200/90 dark:border-emerald-900/60 shadow-sm flex flex-col justify-between gap-4">
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between">
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300/60 dark:border-emerald-800/60">
-                  Central Highlands
-                </span>
-                <span className="text-xs font-mono font-bold text-stone-500">1,600m Alt.</span>
-              </div>
-              <h3 className="serif text-lg font-bold text-stone-900 dark:text-stone-100">
-                Dedza Highland Plateau
-              </h3>
-              <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed">
-                Cool temperate mountain climate, high rainfall, and rich deep red loam soil. Ideal for Irish potatoes, temperate apples, and peaceful family lifestyle centers.
-              </p>
-            </div>
-            <Link
-              to="/scout-map"
-              className="text-xs font-bold text-emerald-800 dark:text-amber-300 hover:underline flex items-center gap-1 pt-2 border-t border-stone-100 dark:border-stone-800"
-            >
-              <span>Scout Dedza on Map</span>
-              <ArrowRight size={12} />
-            </Link>
-          </div>
-
-          {/* Viphya Highlands */}
-          <div className="p-5 rounded-3xl bg-white dark:bg-[#0D1D13] border border-stone-200/90 dark:border-emerald-900/60 shadow-sm flex flex-col justify-between gap-4">
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between">
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300/60 dark:border-emerald-800/60">
-                  Northern Highlands
-                </span>
-                <span className="text-xs font-mono font-bold text-stone-500">1,750m Alt.</span>
-              </div>
-              <h3 className="serif text-lg font-bold text-stone-900 dark:text-stone-100">
-                Viphya High Forests (Mzimba)
-              </h3>
-              <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed">
-                Crisp mountain pine breezes, crystal-clear perennial streams, wide acreage availability, and complete quiet away from urban centers.
-              </p>
-            </div>
-            <Link
-              to="/scout-map"
-              className="text-xs font-bold text-emerald-800 dark:text-amber-300 hover:underline flex items-center gap-1 pt-2 border-t border-stone-100 dark:border-stone-800"
-            >
-              <span>Scout Viphya on Map</span>
-              <ArrowRight size={12} />
-            </Link>
-          </div>
-
-          {/* Mulanje Mountain Slopes */}
-          <div className="p-5 rounded-3xl bg-white dark:bg-[#0D1D13] border border-stone-200/90 dark:border-emerald-900/60 shadow-sm flex flex-col justify-between gap-4">
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between">
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300/60 dark:border-emerald-800/60">
-                  Southern Foothills
-                </span>
-                <span className="text-xs font-mono font-bold text-stone-500">1,200m Alt.</span>
-              </div>
-              <h3 className="serif text-lg font-bold text-stone-900 dark:text-stone-100">
-                Mulanje Mountain Slopes
-              </h3>
-              <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed">
-                Unrivaled year-round perennial mountain spring water, rich organic soils, tea and avocado microclimates with reliable unpowered gravity irrigation.
-              </p>
-            </div>
-            <Link
-              to="/scout-map"
-              className="text-xs font-bold text-emerald-800 dark:text-amber-300 hover:underline flex items-center gap-1 pt-2 border-t border-stone-100 dark:border-stone-800"
-            >
-              <span>Scout Mulanje on Map</span>
-              <ArrowRight size={12} />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ====================================================================
-          6. FAITH BENEDICTION
-      ==================================================================== */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-16">
-        <div className="p-8 rounded-3xl bg-amber-50/80 dark:bg-[#0A160F] border border-amber-200/80 dark:border-emerald-900/40 text-center flex flex-col items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-amber-200/80 dark:bg-emerald-900/80 border border-amber-300 dark:border-emerald-700 flex items-center justify-center text-amber-800 dark:text-amber-300 shadow-xs">
-            <Feather size={22} />
-          </div>
-          <p className="serif text-base sm:text-lg text-stone-900 dark:text-stone-100 max-w-2xl italic font-medium">
-            "When the Lord says, 'Go into the country,' He will open the way before His people who walk in the light of His counsel. Move forward in faith, trusting Him for the harvest."
-          </p>
-          <span className="text-xs font-bold uppercase tracking-wider text-amber-900 dark:text-amber-300">
-            Outpost Country Living • For the Advent Movement in Malawi
-          </span>
-        </div>
-      </section>
-
+      <OnboardingWizard
+        isOpen={showBeginnerWizard}
+        onClose={() => setShowBeginnerWizard(false)}
+      />
+      <BeginnerGlossaryModal
+        isOpen={showBeginnerGlossary}
+        onClose={() => setShowBeginnerGlossary(false)}
+        initialTab={glossaryInitialTab}
+      />
     </div>
   );
 }

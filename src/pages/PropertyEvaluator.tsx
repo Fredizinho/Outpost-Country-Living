@@ -6,8 +6,8 @@ import { PropertySuitabilityCalculator } from '@/components/outpost/PropertySuit
 export default function PropertyEvaluator() {
   return (
     <div className="min-h-screen bg-[#FAF7F0] dark:bg-[#09150E] text-stone-800 dark:text-stone-100 flex flex-col pb-24 transition-colors">
-      {/* Top Banner & Breadcrumb */}
-      <section className="border-b border-stone-200/80 dark:border-emerald-950/80 bg-white/70 dark:bg-[#0C1A12]/80 backdrop-blur-md sticky top-16 z-20 px-4 sm:px-6 py-3.5">
+      {/* Top Breadcrumb Bar (Non-sticky to prevent header collision) */}
+      <section className="border-b border-stone-200/80 dark:border-emerald-950/80 bg-white/60 dark:bg-[#0C1A12]/60 px-4 sm:px-6 py-3">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <Link
             to="/"

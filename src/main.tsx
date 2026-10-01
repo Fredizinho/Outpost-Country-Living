@@ -8,17 +8,27 @@ import { initializeOfflineStorage } from './lib/offlineStorage';
 // Initialize offline guide storage
 initializeOfflineStorage();
 
-// Register Service Worker for offline app shell caching
-if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+// Register Service Worker in production; clean up any stale dev-sw registrations in dev mode
+if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').then(
-      (registration) => {
-        console.log('Sanctuary ServiceWorker registered with scope: ', registration.scope);
-      },
-      (err) => {
-        console.log('Sanctuary ServiceWorker registration failed: ', err);
-      }
-    );
+    if (import.meta.env.PROD) {
+      navigator.serviceWorker.register('/sw.js').then(
+        (registration) => {
+          console.log('Sanctuary ServiceWorker registered with scope: ', registration.scope);
+        },
+        (err) => {
+          console.log('Sanctuary ServiceWorker registration failed: ', err);
+        }
+      );
+    } else {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (const reg of registrations) {
+          if (reg.active?.scriptURL.includes('dev-sw') || reg.installing?.scriptURL.includes('dev-sw')) {
+            reg.unregister();
+          }
+        }
+      }).catch(() => {});
+    }
   });
 }
 

@@ -246,7 +246,7 @@ export function ThematicLayerControlPanel({
                       }
                     }}
                     className="w-full relative group overflow-hidden rounded-xl p-[1px] shadow-lg transition-all duration-300 hover:shadow-emerald-500/25 active:scale-[0.98] cursor-pointer"
-                    title="Analyze current map view and selected layers with Gemini AI"
+                    title="Analyze current map view and selected layers"
                   >
                     <span className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-teal-400 to-amber-400 rounded-xl opacity-85 group-hover:opacity-100 transition-opacity" />
                     <div className="relative px-3 py-2 rounded-[11px] bg-slate-950/90 group-hover:bg-slate-900/90 transition-colors flex items-center justify-between gap-2">

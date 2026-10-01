@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { OnboardingWizard } from '@/components/onboarding/OnboardingWizard';
 import { saveStoredSavedSpecs } from '@/lib/offlineStorage';
 import { OffGridSizingTools } from '@/components/outpost/OffGridSizingTools';
+import { HomesteadBoQEstimator } from '@/components/outpost/HomesteadBoQEstimator';
 import { 
   SanctuaryCard, 
   SanctuaryButton, 
@@ -158,10 +159,20 @@ export default function Calculators() {
   const totalBudgetUsd = landCostUsd + waterSetupUsd + solarSystemUsd + fencingUsd + cottageUsd + seedsToolingUsd;
   const totalBudgetMwk = totalBudgetUsd * exchangeRate;
 
+  const [selectedPitType, setSelectedPitType] = useState<keyof typeof PLANTING_PIT_SPECS>('egwDeepPit');
+  const [dimbaAreaSqm, setDimbaAreaSqm] = useState<number>(200);
+  const dimbaDailyLiters = Math.round(dimbaAreaSqm * 4.5); // 4.5 L/m²/day mulched dry-season dimba rate
+  const dimbaWateringCans20L = Math.ceil(dimbaDailyLiters / 20);
+  const dimbaDripLinesMeters = Math.round(dimbaAreaSqm / 0.75); // 75cm ridge spacing
+
   const handleDistrictChange = (key: string) => {
     setDistrictPreset(key);
-    if (DISTRICT_RAINFALL_PRESETS[key]) {
-      setAnnualRainfallMm(DISTRICT_RAINFALL_PRESETS[key].rainfall);
+    const preset = DISTRICT_RAINFALL_PRESETS[key];
+    if (preset) {
+      setAnnualRainfallMm(preset.rainfall);
+      if (preset.aquiferDepthM) setDepth(preset.aquiferDepthM);
+      if (preset.solarKwhDay) setSunHours(preset.solarKwhDay);
+      if (preset.recommendedPitKey) setSelectedPitType(preset.recommendedPitKey);
     }
   };
 
@@ -383,10 +394,10 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
               className={cn(
-                "px-5 py-3 rounded-2xl text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-2 transition-all shadow-xs active:scale-95 border",
+                "px-5 py-3 rounded-2xl text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-2 transition-all shadow-xs active:scale-95 border cursor-pointer",
                 isSelected
                   ? "bg-amber-500 text-slate-950 border-amber-300 shadow-[0_4px_20px_rgba(245,158,11,0.3)] font-black"
-                  : "backdrop-blur-md bg-white/5 text-emerald-200 border-amber-500/20 hover:bg-white/10 hover:text-white"
+                  : "bg-stone-900/95 dark:bg-white/5 text-emerald-200 border-amber-500/25 hover:bg-stone-800 dark:hover:bg-white/10 hover:text-white"
               )}
             >
               <Icon size={15} className={isSelected ? "text-slate-950" : "text-amber-400"} />
@@ -551,7 +562,7 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
           className="grid grid-cols-1 lg:grid-cols-12 gap-8"
         >
           {/* Controls */}
-          <div className="lg:col-span-6 backdrop-blur-md bg-white/5 p-8 rounded-[2.5rem] border border-amber-500/25 shadow-2xl flex flex-col gap-6 text-white">
+          <div className="lg:col-span-6 bg-stone-900/95 dark:bg-[#0A1A10]/95 backdrop-blur-md p-8 rounded-[2.5rem] border border-amber-500/25 shadow-2xl flex flex-col gap-6 text-white">
             <div className="border-b border-amber-500/20 pb-4">
               <span className="text-[10px] font-mono font-black uppercase tracking-widest text-amber-300">Food Autonomy Matrix</span>
               <h3 className="serif text-2xl font-bold text-[#FAF8F5] flex items-center gap-2 mt-1">
@@ -638,37 +649,49 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
                 <div className="bg-black/30 p-4 rounded-2xl border border-amber-500/20 flex flex-col gap-0.5">
                   <span className="text-[9px] font-mono font-black uppercase text-amber-300">Maize / Staple Grain</span>
                   <span className="serif text-2xl font-bold text-amber-300">{maizeKg} kg</span>
-                  <span className="text-[9px] text-emerald-200 font-mono">~{Math.ceil(maizeKg / 50)}x 50kg bags</span>
+                  <span className="text-[11px] text-emerald-200 font-mono">
+                    ≈ {Math.ceil(maizeKg / 50)} × 50kg sacks (or {Math.ceil(maizeKg / 15)} × 20L buckets)
+                  </span>
                 </div>
 
                 <div className="bg-black/30 p-4 rounded-2xl border border-amber-500/20 flex flex-col gap-0.5">
                   <span className="text-[9px] font-mono font-black uppercase text-emerald-300">Beans & Legumes</span>
                   <span className="serif text-2xl font-bold text-white">{beansKg} kg</span>
-                  <span className="text-[9px] text-emerald-200 font-mono">Protein & Soil Nitrogen</span>
+                  <span className="text-[11px] text-emerald-200 font-mono">
+                    ≈ {Math.ceil(beansKg / 50)} × 50kg sacks (or {Math.ceil(beansKg / 16)} × 20L buckets)
+                  </span>
                 </div>
 
                 <div className="bg-black/30 p-4 rounded-2xl border border-amber-500/20 flex flex-col gap-0.5">
                   <span className="text-[9px] font-mono font-black uppercase text-emerald-300">Groundnuts / Oilseeds</span>
                   <span className="serif text-2xl font-bold text-white">{groundnutsKg} kg</span>
-                  <span className="text-[9px] text-emerald-200 font-mono">Healthy Fats & Nsinjiro</span>
+                  <span className="text-[11px] text-emerald-200 font-mono">
+                    ≈ {Math.ceil(groundnutsKg / 50)} × 50kg sacks (or {Math.ceil(groundnutsKg / 14)} × 20L buckets)
+                  </span>
                 </div>
 
                 <div className="bg-black/30 p-4 rounded-2xl border border-amber-500/20 flex flex-col gap-0.5">
                   <span className="text-[9px] font-mono font-black uppercase text-emerald-300">Sweet Potatoes / Cassava</span>
                   <span className="serif text-2xl font-bold text-white">{tubersKg} kg</span>
-                  <span className="text-[9px] text-emerald-200 font-mono">Tubers & Drought Buffer</span>
+                  <span className="text-[11px] text-emerald-200 font-mono">
+                    ≈ {Math.ceil(tubersKg / 50)} × 50kg sacks (keep growing in garden beds)
+                  </span>
                 </div>
 
                 <div className="bg-black/30 p-4 rounded-2xl border border-amber-500/20 flex flex-col gap-0.5">
                   <span className="text-[9px] font-mono font-black uppercase text-emerald-300">Pure Water Reserve</span>
                   <span className="serif text-2xl font-bold text-emerald-300 font-mono">{waterLiters.toLocaleString()} L</span>
-                  <span className="text-[9px] text-emerald-200 font-mono">Emergency Drinking Storage</span>
+                  <span className="text-[11px] text-emerald-200 font-mono">
+                    ≈ {Math.ceil(waterLiters / 20)} × 20L jerrycans (emergency drinking)
+                  </span>
                 </div>
 
                 <div className="bg-black/30 p-4 rounded-2xl border border-amber-500/20 flex flex-col gap-0.5">
                   <span className="text-[9px] font-mono font-black uppercase text-emerald-300">Mineral Salt</span>
                   <span className="serif text-2xl font-bold text-white">{saltKg} kg</span>
-                  <span className="text-[9px] text-emerald-200 font-mono">Food Preservation & Health</span>
+                  <span className="text-[11px] text-emerald-200 font-mono">
+                    ≈ {Math.ceil(saltKg / 20)} × 20kg bags (keeps indefinitely if dry)
+                  </span>
                 </div>
               </div>
             </div>
@@ -684,7 +707,7 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
           className="grid grid-cols-1 lg:grid-cols-12 gap-8"
         >
           {/* Controls */}
-          <div className="lg:col-span-6 backdrop-blur-md bg-white/5 p-8 rounded-[2.5rem] border border-amber-500/25 shadow-2xl flex flex-col gap-6 text-white">
+          <div className="lg:col-span-6 bg-stone-900/95 dark:bg-[#0A1A10]/95 backdrop-blur-md p-8 rounded-[2.5rem] border border-amber-500/25 shadow-2xl flex flex-col gap-6 text-white">
             <div className="border-b border-amber-500/20 pb-4">
               <span className="text-[10px] font-mono font-black uppercase tracking-widest text-amber-300">Homestead Layout & Space</span>
               <h3 className="serif text-2xl font-bold text-[#FAF8F5] flex items-center gap-2 mt-1">
@@ -716,17 +739,42 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
               </span>
             </div>
 
-            <div className="bg-black/40 border border-amber-500/20 p-5 rounded-2xl flex flex-col gap-2 text-xs text-emerald-100/90 font-medium">
-              <strong className="text-amber-300 font-mono">Smart Homestead Layout Plan:</strong>
-              <p className="space-y-1 text-emerald-200/80 leading-relaxed">
-                <strong>Zone 1 (Closest):</strong> House, kitchen garden & water tank<br />
-                <strong>Zone 2 (Near):</strong> Fruit orchard ({PLANTING_PIT_SPECS.egwDeepPit.dimensionString} planting pits), compost & small livestock<br />
-                <strong>Zone 3 (Middle):</strong> Main crop fields with {PLANTING_PIT_SPECS.zaiPit.dimensionString} Zaï water-harvesting basins<br />
-                <strong>Zone 4 (Outer):</strong> Rain trenches (swales), pond & boundary windbreak trees
+            <div className="bg-black/40 border border-amber-500/20 p-5 rounded-2xl flex flex-col gap-3 text-xs text-emerald-100/90 font-medium">
+              <div className="flex items-center justify-between gap-2">
+                <strong className="text-amber-300 font-mono">Orchard & Planting Pit Estimator:</strong>
+                <select
+                  value={selectedPitType}
+                  onChange={(e) => setSelectedPitType(e.target.value as keyof typeof PLANTING_PIT_SPECS)}
+                  aria-label="Select Planting Pit Specification"
+                  className="bg-[#0E2A1B] border border-amber-500/30 rounded-lg px-2.5 py-1 text-[11px] font-mono text-amber-200 focus:outline-none"
+                >
+                  {Object.values(PLANTING_PIT_SPECS).map((p) => (
+                    <option key={p.key} value={p.key}>
+                      {p.name} ({p.dimensionString})
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <p className="text-emerald-200/80 leading-relaxed">
+                {PLANTING_PIT_SPECS[selectedPitType].description}
               </p>
-              <div className="mt-2 pt-2 border-t border-white/10 flex items-center justify-between text-[11px] text-amber-300/90 font-mono">
-                <span>Standard EGW Orchard Pit:</span>
-                <span className="font-bold">{PLANTING_PIT_SPECS.egwDeepPit.dimensionString}</span>
+              <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/10 font-mono text-[11px] tabular-nums">
+                <div>
+                  <span className="text-emerald-300/70 block">Est. Orchard Pits</span>
+                  <span className="font-bold text-white">{Math.max(8, Math.round(zoneOrchard * 45))} pits</span>
+                </div>
+                <div>
+                  <span className="text-emerald-300/70 block">Biochar Needed</span>
+                  <span className="font-bold text-amber-300">
+                    {Math.round(Math.max(8, Math.round(zoneOrchard * 45)) * PLANTING_PIT_SPECS[selectedPitType].biocharKgPerPit)} kg
+                  </span>
+                </div>
+                <div>
+                  <span className="text-emerald-300/70 block">Moisture Bank</span>
+                  <span className="font-bold text-sky-300">
+                    {(Math.max(8, Math.round(zoneOrchard * 45)) * PLANTING_PIT_SPECS[selectedPitType].waterRetentionLiters).toLocaleString()} L
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -798,7 +846,7 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
           className="grid grid-cols-1 lg:grid-cols-12 gap-8"
         >
           {/* Controls */}
-          <div className="lg:col-span-6 backdrop-blur-md bg-white/5 p-8 rounded-[2.5rem] border border-amber-500/25 shadow-2xl flex flex-col gap-6 text-white">
+          <div className="lg:col-span-6 bg-stone-900/95 dark:bg-[#0A1A10]/95 backdrop-blur-md p-8 rounded-[2.5rem] border border-amber-500/25 shadow-2xl flex flex-col gap-6 text-white">
             <div className="border-b border-amber-500/20 pb-4">
               <span className="text-[10px] font-mono font-black uppercase tracking-widest text-amber-300">Hydro Collection Modeling</span>
               <h3 className="serif text-2xl font-bold text-[#FAF8F5] flex items-center gap-2 mt-1">
@@ -847,10 +895,31 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
             {/* Roof Area Slider */}
             <div className="flex flex-col gap-2">
               <div className="flex justify-between items-center text-xs font-mono font-bold text-emerald-200">
-                <span>Catchment Roof Surface Area (m²)</span>
+                <span>Catchment Roof Surface Area (Tap a House Size or Slide)</span>
                 <span className="text-amber-300 font-black text-sm bg-amber-500/20 border border-amber-500/30 px-3 py-1 rounded-xl">
                   {roofAreaM2} m²
                 </span>
+              </div>
+              <div className="grid grid-cols-3 gap-2 my-1">
+                {[
+                  { label: 'Small Cabin (50m²)', val: 50 },
+                  { label: '2-Bed Home (90m²)', val: 90 },
+                  { label: '4-Bed Home (140m²)', val: 140 },
+                ].map((preset) => (
+                  <button
+                    key={preset.val}
+                    type="button"
+                    onClick={() => setRoofAreaM2(preset.val)}
+                    className={cn(
+                      'py-1.5 px-2 rounded-xl text-[11px] font-mono font-bold border transition-all cursor-pointer',
+                      roofAreaM2 === preset.val
+                        ? 'bg-amber-500 text-slate-950 border-amber-300'
+                        : 'bg-black/30 text-emerald-200 border-amber-500/20 hover:bg-white/10'
+                    )}
+                  >
+                    {preset.label}
+                  </button>
+                ))}
               </div>
               <input
                 type="range"
@@ -899,6 +968,56 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
               <div className="mt-6 bg-white/5 p-4 rounded-2xl border border-amber-500/15 text-xs text-emerald-100/90 font-medium leading-relaxed">
                 <strong className="text-amber-300">First-Flush Diverter Strategy:</strong> Install a 20-liter PVC first-flush pipe to catch dusty initial roof runoff before diverting clean water directly into your food-grade storage tanks.
               </div>
+
+              {/* Dry-Season Dimba (Chilimwe) Garden Irrigation Sizer */}
+              <div className="mt-6 pt-6 border-t border-amber-500/20 flex flex-col gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-300 block">
+                      May–October Dry Season (Chilimwe) · Valley Garden
+                    </span>
+                    <h4 className="serif text-xl font-bold text-white">
+                      Dry-Season <em>Dimba</em> Irrigation Sizer
+                    </h4>
+                  </div>
+                  <div className="flex gap-1.5">
+                    {[100, 200, 400, 800].map((sqm) => (
+                      <button
+                        key={sqm}
+                        type="button"
+                        onClick={() => setDimbaAreaSqm(sqm)}
+                        className={cn(
+                          'px-2.5 py-1 rounded-lg text-xs font-mono font-bold border transition-all cursor-pointer',
+                          dimbaAreaSqm === sqm
+                            ? 'bg-amber-500 text-slate-950 border-amber-300'
+                            : 'bg-black/30 text-emerald-200 border-amber-500/20 hover:bg-white/10'
+                        )}
+                      >
+                        {sqm}m²
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                  <div className="bg-black/30 p-3.5 rounded-xl border border-amber-500/20">
+                    <span className="text-[10px] font-mono text-emerald-300 block">Daily Mulched Water</span>
+                    <span className="font-mono text-lg font-extrabold text-white">{dimbaDailyLiters.toLocaleString()} L/day</span>
+                  </div>
+                  <div className="bg-black/30 p-3.5 rounded-xl border border-amber-500/20">
+                    <span className="text-[10px] font-mono text-amber-300 block">20L Cans (Malegeni)</span>
+                    <span className="font-mono text-lg font-extrabold text-amber-300">{dimbaWateringCans20L} cans/day</span>
+                  </div>
+                  <div className="bg-black/30 p-3.5 rounded-xl border border-amber-500/20">
+                    <span className="text-[10px] font-mono text-emerald-300 block">75cm Drip Tape Length</span>
+                    <span className="font-mono text-lg font-extrabold text-white">{dimbaDripLinesMeters} m</span>
+                  </div>
+                  <div className="bg-black/30 p-3.5 rounded-xl border border-amber-500/20">
+                    <span className="text-[10px] font-mono text-sky-300 block">Gravity Tank Stand</span>
+                    <span className="font-mono text-lg font-extrabold text-sky-300">1.5m – 2.5m head</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </motion.div>
@@ -922,7 +1041,7 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
           className="grid grid-cols-1 lg:grid-cols-12 gap-8"
         >
           {/* Controls */}
-          <div className="lg:col-span-7 backdrop-blur-md bg-white/5 p-8 rounded-[2.5rem] border border-amber-500/25 shadow-2xl flex flex-col gap-6 text-white">
+          <div className="lg:col-span-7 bg-stone-900/95 dark:bg-[#0A1A10]/95 backdrop-blur-md p-8 rounded-[2.5rem] border border-amber-500/25 shadow-2xl flex flex-col gap-6 text-white">
             <div className="flex items-center justify-between border-b border-amber-500/20 pb-4">
               <div>
                 <span className="text-[10px] font-mono font-black uppercase tracking-widest text-amber-300">Capital Expenditure Modeler</span>
@@ -1099,6 +1218,9 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
               </div>
             </div>
           </div>
+
+          {/* Itemized Bill of Quantities (BoQ) Schedule */}
+          <HomesteadBoQEstimator currency={currency} exchangeRate={exchangeRate} />
         </motion.div>
       )}
 

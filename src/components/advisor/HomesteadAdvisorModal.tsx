@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import Markdown from 'react-markdown';
 import { cn } from '@/lib/utils';
+import { fetchAdvisorWithFallback } from '@/lib/apiClient';
 
 export interface AdvisorMessage {
   id: string;
@@ -120,37 +121,45 @@ export function HomesteadAdvisorModal({
     setIsLoading(true);
 
     try {
-      const res = await fetch('/api/advisor', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: textToSend,
-          history: messages.slice(-6).map(m => ({ role: m.role, content: m.content }))
-        })
-      });
-
-      if (!res.ok) {
-        throw new Error(`Server returned ${res.status}`);
+      let profileContext: Record<string, any> = {};
+      try {
+        const storedProfile = localStorage.getItem('outpost_user_profile');
+        if (storedProfile) {
+          const parsed = JSON.parse(storedProfile);
+          profileContext = {
+            district: parsed.district || 'Dedza',
+            familySize: parsed.familyMembers || parsed.householdSize || '4',
+            budget: parsed.budgetBand || 'Standard Off-Grid',
+            waterSource: 'Gravity spring / Borehole',
+            skills: parsed.homesteadGoal || 'Bio-intensive organic agriculture'
+          };
+        }
+      } catch {
+        // ignore
       }
 
-      const data = await res.json();
+      const conversationHistory = [...messages.slice(-6), userMessage].map(m => ({
+        role: m.role,
+        content: m.content
+      }));
+
+      const { reply } = await fetchAdvisorWithFallback({
+        message: textToSend,
+        messages: conversationHistory,
+        history: messages.slice(-6).map(m => ({ role: m.role, content: m.content })),
+        context: profileContext
+      });
+
       const assistantMessage: AdvisorMessage = {
         id: `assistant-${Date.now()}`,
         role: 'assistant',
-        content: data.reply || 'No advice received. Please try again.',
+        content: reply,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (err: any) {
       console.error('Failed to get advice:', err);
-      const errorMessage: AdvisorMessage = {
-        id: `assistant-err-${Date.now()}`,
-        role: 'assistant',
-        content: '⚠️ Unable to reach the advisor service right now. Please verify your connection or try again in a moment.',
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-      setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -199,9 +208,9 @@ export function HomesteadAdvisorModal({
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="serif text-xl sm:text-2xl font-bold text-[#FAF8F5]">Homestead AI Advisor</h3>
-                  <span className="text-[9px] font-mono font-black uppercase px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-500/30">
-                    Gemini 3.8
+                  <h3 className="font-display text-xl sm:text-2xl font-bold text-[#FAF8F5]">Homestead Field Advisor</h3>
+                  <span className="text-[11px] font-mono text-emerald-300">
+                    · 28-District Telemetry
                   </span>
                 </div>
                 <p className="text-xs text-emerald-200/70 font-mono">Malawi Territorial & Country Living Counsel</p>

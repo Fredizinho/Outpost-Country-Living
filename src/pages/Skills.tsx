@@ -12,12 +12,14 @@ import { cn } from '@/lib/utils';
 import { SanctuaryBadge } from '@/components/ui';
 import { CountryIcon, CountryIconName } from '@/components/icons';
 import { COUNTRY_IMAGES } from '@/assets/images';
+import { SkillStepVectorDiagram } from '@/components/outpost/SkillStepVectorDiagram';
 
 export default function Skills() {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedSeason, setSelectedSeason] = useState<string>('All');
   const [expandedSkillId, setExpandedSkillId] = useState<string | null>(null);
   const [bookmarksUpdated, setBookmarksUpdated] = useState(0);
+  const [activeSdaTab, setActiveSdaTab] = useState<'education' | 'sustenance' | 'remedies'>('education');
 
   const skills = getCachedSkills();
   const skillMap = new Map(skills.map(s => [s.id, s.title]));
@@ -34,7 +36,7 @@ export default function Skills() {
     setExpandedSkillId(prev => (prev === id ? null : id));
   };
 
-  const categories = ['All', 'Farming', 'Water & Energy', 'Food & Preservation', 'Construction', 'Medical & Health', 'Livestock & Health'];
+  const categories = ['All', 'SDA Education & Sustenance', 'Farming', 'Water & Energy', 'Food & Preservation', 'Construction', 'Medical & Health', 'Livestock & Health'];
   const seasons = ['All', 'Hot Dry Preparation', 'Rainy Planting', 'Harvest & Storage', 'Cold Dry Season', 'Year-Round / Any Season'];
 
   const filteredSkills = skills.filter(s => {
@@ -66,13 +68,291 @@ export default function Skills() {
 
         <div className="flex flex-col gap-3 relative z-10">
           <h1 className="serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#FAF8F5] leading-tight">
-            Essential Country Homestead Skills
+            Essential Country Homestead Skills & SDA Sustenance
           </h1>
-          <p className="text-emerald-100/90 max-w-2xl text-sm sm:text-base md:text-lg font-medium leading-relaxed italic">
-            Step-by-step practical field guides with prerequisite chains, seasonal calendar timing, gravity water setups, and natural construction.
+          <p className="text-emerald-100/90 max-w-3xl text-sm sm:text-base md:text-lg font-medium leading-relaxed italic">
+            Step-by-step off-grid sustenance manuals grounded in the Avondale True Education model, wholesome breadmaking & Zwieback, plant protein & oilseed independence, hydrotherapy, and natural construction.
           </p>
         </div>
       </header>
+
+      {/* Interactive SDA True Education & Off-Grid Sustenance Matrix */}
+      <section className="rounded-[2.5rem] bg-gradient-to-br from-[#142219] via-[#0F1B14] to-[#0A130E] border border-amber-500/30 p-6 sm:p-8 md:p-10 shadow-2xl text-[#FAF8F5]">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 mb-6 border-b border-white/10">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[10px] font-mono font-bold uppercase tracking-widest mb-2">
+              <Sparkles size={12} /> Spirit of Prophecy Off-Grid Sustenance & Education Blueprint
+            </div>
+            <h2 className="serif text-2xl sm:text-3xl font-bold text-white">
+              SDA Off-Grid Sustenance & True Education Curriculum
+            </h2>
+          </div>
+
+          <div className="flex flex-wrap gap-2 bg-black/30 p-1.5 rounded-2xl border border-white/10">
+            <button
+              onClick={() => setActiveSdaTab('education')}
+              className={cn(
+                "px-3.5 py-2 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all cursor-pointer",
+                activeSdaTab === 'education'
+                  ? "bg-amber-500 text-slate-950 shadow-md"
+                  : "text-emerald-100/75 hover:text-white hover:bg-white/5"
+              )}
+            >
+              1. Head, Hand & Heart Education
+            </button>
+            <button
+              onClick={() => setActiveSdaTab('sustenance')}
+              className={cn(
+                "px-3.5 py-2 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all cursor-pointer",
+                activeSdaTab === 'sustenance'
+                  ? "bg-amber-500 text-slate-950 shadow-md"
+                  : "text-emerald-100/75 hover:text-white hover:bg-white/5"
+              )}
+            >
+              2. Edenic Diet & Sustenance
+            </button>
+            <button
+              onClick={() => setActiveSdaTab('remedies')}
+              className={cn(
+                "px-3.5 py-2 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all cursor-pointer",
+                activeSdaTab === 'remedies'
+                  ? "bg-amber-500 text-slate-950 shadow-md"
+                  : "text-emerald-100/75 hover:text-white hover:bg-white/5"
+              )}
+            >
+              3. Hydrotherapy & Remedies
+            </button>
+          </div>
+        </div>
+
+        {activeSdaTab === 'education' && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div className="bg-white/[0.04] rounded-2xl p-5 border border-white/10 flex flex-col justify-between gap-4">
+              <div>
+                <div className="w-full h-32 rounded-xl overflow-hidden border border-white/10 mb-3.5 bg-black/30">
+                  <CountryIcon name="trueeducation" className="w-full h-full object-cover" />
+                </div>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-amber-300 font-bold">
+                  Morning Sacred & Scientific Block (08:00–11:30)
+                </span>
+                <h3 className="serif text-xl font-bold text-white mt-1 mb-2">
+                  Bible, Physiology & Farm Bookkeeping
+                </h3>
+                <p className="text-xs sm:text-sm text-emerald-100/80 leading-relaxed">
+                  Patterned after the Avondale blueprint (<em>Education</em>, p. 218; <em>6T</em> 179.2): morning mental hours are devoted to Scripture history, human physiology, practical geometry, and double-entry homestead accounting (“owe no man anything”).
+                </p>
+              </div>
+              <Link
+                to="/skills/sda-true-education-curriculum"
+                className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-amber-400 hover:text-amber-300"
+              >
+                <span>Open Curriculum Protocol</span>
+                <ArrowRight size={13} />
+              </Link>
+            </div>
+
+            <div className="bg-white/[0.04] rounded-2xl p-5 border border-white/10 flex flex-col justify-between gap-4">
+              <div>
+                <div className="w-full h-32 rounded-xl overflow-hidden border border-white/10 mb-3.5 bg-black/30">
+                  <CountryIcon name="soapmaking" className="w-full h-full object-cover" />
+                </div>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-300 font-bold">
+                  Afternoon Vocational Trades (13:30–16:30)
+                </span>
+                <h3 className="serif text-xl font-bold text-white mt-1 mb-2">
+                  Agriculture, Carpentry, Tailoring & Soap
+                </h3>
+                <p className="text-xs sm:text-sm text-emerald-100/80 leading-relaxed">
+                  Every son and daughter masters self-supporting trades: cultivating a personal 5m × 5m garden plot, grafting fruit trees, leaching hardwood ash for antiseptic potash soap, and sewing shoulder-supported garments on a foot-treadle machine.
+                </p>
+              </div>
+              <Link
+                to="/skills/wood-ash-soap-natural-fibers-tailoring"
+                className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-amber-400 hover:text-amber-300"
+              >
+                <span>Open Domestic Trades Guide</span>
+                <ArrowRight size={13} />
+              </Link>
+            </div>
+
+            <div className="bg-white/[0.04] rounded-2xl p-5 border border-white/10 flex flex-col justify-between gap-4">
+              <div>
+                <div className="w-full h-32 rounded-xl overflow-hidden border border-white/10 mb-3.5 bg-black/30">
+                  <CountryIcon name="thermalcooker" className="w-full h-full object-cover" />
+                </div>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-amber-300 font-bold">
+                  Friday Preparation & Sabbath Rhythm (6T 355.3)
+                </span>
+                <h3 className="serif text-xl font-bold text-white mt-1 mb-2">
+                  Fireless Thermal Cookers & Literature Work
+                </h3>
+                <p className="text-xs sm:text-sm text-emerald-100/80 leading-relaxed">
+                  Build insulated clay rocket stoves (75% firewood reduction) and sew 10cm rice-hull thermal cookers (Wonderbags) that keep Friday-boiled beans and whole grains piping hot (&gt;68°C) through Sabbath afternoon without kindling a fire.
+                </p>
+              </div>
+              <Link
+                to="/skills/sabbath-sanctuary-fireless-thermal-cooking"
+                className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-amber-400 hover:text-amber-300"
+              >
+                <span>Open Thermal Cooker Protocol</span>
+                <ArrowRight size={13} />
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {activeSdaTab === 'sustenance' && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div className="bg-white/[0.04] rounded-2xl p-5 border border-white/10 flex flex-col justify-between gap-4">
+              <div>
+                <div className="w-full h-32 rounded-xl overflow-hidden border border-white/10 mb-3.5 bg-black/30">
+                  <CountryIcon name="breadmaking" className="w-full h-full object-cover" />
+                </div>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-amber-300 font-bold">
+                  The Ministry of Healing, pp. 300–302
+                </span>
+                <h3 className="serif text-xl font-bold text-white mt-1 mb-2">
+                  Whole-Grain Milling, Sweet Yeast & Zwieback
+                </h3>
+                <p className="text-xs sm:text-sm text-emerald-100/80 leading-relaxed">
+                  Mill whole wheat, red sorghum (mapira), and finger millet (mawere) fresh on baking day. Ferment with sweet potato-water yeast (zero baking soda/saleratus; zero sourness), bake in a clay cob oven, and twice-bake slices into shelf-stable Zwieback.
+                </p>
+              </div>
+              <Link
+                to="/skills/wholesome-breadmaking-grain-milling"
+                className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-amber-400 hover:text-amber-300"
+              >
+                <span>Open Bread & Zwieback Protocol</span>
+                <ArrowRight size={13} />
+              </Link>
+            </div>
+
+            <div className="bg-white/[0.04] rounded-2xl p-5 border border-white/10 flex flex-col justify-between gap-4">
+              <div>
+                <div className="w-full h-32 rounded-xl overflow-hidden border border-white/10 mb-3.5 bg-black/30">
+                  <CountryIcon name="oilpress" className="w-full h-full object-cover" />
+                </div>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-300 font-bold">
+                  Counsels on Diet & Foods, pp. 206, 351
+                </span>
+                <h3 className="serif text-xl font-bold text-white mt-1 mb-2">
+                  Plant Milks, Tofu Curds & Cold Oil Pressing
+                </h3>
+                <p className="text-xs sm:text-sm text-emerald-100/80 leading-relaxed">
+                  Replace disease-prone dairy and flesh meats with homestead soybean and groundnut milks, lemon-coagulated tofu curds (78°C), 72-hour sprouted mung beans (+300% Vitamin C), and cold-pressed sunflower & Moringa oils.
+                </p>
+              </div>
+              <Link
+                to="/skills/plant-protein-nut-milks-oil-pressing"
+                className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-amber-400 hover:text-amber-300"
+              >
+                <span>Open Plant Sustenance Protocol</span>
+                <ArrowRight size={13} />
+              </Link>
+            </div>
+
+            <div className="bg-white/[0.04] rounded-2xl p-5 border border-white/10 flex flex-col justify-between gap-4">
+              <div>
+                <div className="w-full h-32 rounded-xl overflow-hidden border border-white/10 mb-3.5 bg-black/30">
+                  <CountryIcon name="foodpreservation" className="w-full h-full object-cover" />
+                </div>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-amber-300 font-bold">
+                  Year-Round Harvest Independence
+                </span>
+                <h3 className="serif text-xl font-bold text-white mt-1 mb-2">
+                  Solar Dehydration & Hermetic Grain Storage
+                </h3>
+                <p className="text-xs sm:text-sm text-emerald-100/80 leading-relaxed">
+                  Preserve seasonal surpluses of mangoes, bananas, tomatoes, and leafy greens in indirect solar air-heaters, while sealing dry maize, beans, and millet in triple-layer PICS bags with dried neem leaves.
+                </p>
+              </div>
+              <Link
+                to="/skills/solar-food-dehydration"
+                className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-amber-400 hover:text-amber-300"
+              >
+                <span>Open Solar Preservation Guide</span>
+                <ArrowRight size={13} />
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {activeSdaTab === 'remedies' && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div className="bg-white/[0.04] rounded-2xl p-5 border border-white/10 flex flex-col justify-between gap-4">
+              <div>
+                <div className="w-full h-32 rounded-xl overflow-hidden border border-white/10 mb-3.5 bg-black/30">
+                  <CountryIcon name="hydrotherapy" className="w-full h-full object-cover" />
+                </div>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-amber-300 font-bold">
+                  Selected Messages Book 2, p. 294 · MH 237
+                </span>
+                <h3 className="serif text-xl font-bold text-white mt-1 mb-2">
+                  Contrast Fomentations & Hot Foot Baths
+                </h3>
+                <p className="text-xs sm:text-sm text-emerald-100/80 leading-relaxed">
+                  Master derivative hot foot baths (40°C–43°C) with cold forehead compresses to relieve internal brain and lung congestion, paired with 3 cycles of steaming wool fomentations and brisk cold friction rubs.
+                </p>
+              </div>
+              <Link
+                to="/skills/hydrotherapy-charcoal-poultice-remedies"
+                className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-amber-400 hover:text-amber-300"
+              >
+                <span>Open Hydrotherapy Protocol</span>
+                <ArrowRight size={13} />
+              </Link>
+            </div>
+
+            <div className="bg-white/[0.04] rounded-2xl p-5 border border-white/10 flex flex-col justify-between gap-4">
+              <div>
+                <div className="w-full h-32 rounded-xl overflow-hidden border border-white/10 mb-3.5 bg-black/30">
+                  <CountryIcon name="firstaid" className="w-full h-full object-cover" />
+                </div>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-300 font-bold">
+                  Adsorptive Antidote & Poultice Therapy
+                </span>
+                <h3 className="serif text-xl font-bold text-white mt-1 mb-2">
+                  Pulverized Hardwood Charcoal Poultices
+                </h3>
+                <p className="text-xs sm:text-sm text-emerald-100/80 leading-relaxed">
+                  Pyrolyze clean eucalyptus or peach wood in a sealed metal retort tin, grind to &lt;100 micron powder, and blend 1:1 with ground flaxseed or cassava meal to draw out venom, bacterial endotoxins, and severe inflammation.
+                </p>
+              </div>
+              <Link
+                to="/skills/hydrotherapy-charcoal-poultice-remedies"
+                className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-amber-400 hover:text-amber-300"
+              >
+                <span>Open Charcoal Poultice Specs</span>
+                <ArrowRight size={13} />
+              </Link>
+            </div>
+
+            <div className="bg-white/[0.04] rounded-2xl p-5 border border-white/10 flex flex-col justify-between gap-4">
+              <div>
+                <div className="w-full h-32 rounded-xl overflow-hidden border border-white/10 mb-3.5 bg-black/30">
+                  <CountryIcon name="herbs" className="w-full h-full object-cover" />
+                </div>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-amber-300 font-bold">
+                  Rural Outpost Dispensary
+                </span>
+                <h3 className="serif text-xl font-bold text-white mt-1 mb-2">
+                  Medicinal Herbs & Apothecary Cultivation
+                </h3>
+                <p className="text-xs sm:text-sm text-emerald-100/80 leading-relaxed">
+                  Cultivate Artemisia annua, Moringa oleifera, ginger, turmeric, lemongrass, and peppermint in raised apothecary beds for fevers, digestive colic, and respiratory steam inhalations.
+                </p>
+              </div>
+              <Link
+                to="/skills/herbs-cultivation-medicinal"
+                className="inline-flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-amber-400 hover:text-amber-300"
+              >
+                <span>Open Apothecary Garden Guide</span>
+                <ArrowRight size={13} />
+              </Link>
+            </div>
+          </div>
+        )}
+      </section>
 
       {/* Seasonal & Category Filter Controls */}
       <div className="flex flex-col gap-4 backdrop-blur-xl bg-slate-950/70 p-6 md:p-8 rounded-[2.5rem] border border-amber-500/25 shadow-[0_12px_40px_rgba(0,0,0,0.4)]">
@@ -199,13 +479,18 @@ export default function Skills() {
                   </div>
                 </div>
 
+                {/* Artisan Vector Lithograph Illustration Banner */}
+                {skill.iconName && (
+                  <div className="relative w-full h-40 sm:h-44 rounded-2xl bg-[#07150D] border border-emerald-500/25 overflow-hidden shadow-inner group/illus">
+                    <CountryIcon
+                      name={skill.iconName as CountryIconName}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover/illus:scale-[1.03]"
+                    />
+                  </div>
+                )}
+
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-4">
-                    {skill.iconName && (
-                      <div className="shrink-0 w-14 h-14 rounded-2xl bg-white/5 border border-white/10 p-2 shadow-2xs overflow-hidden flex items-center justify-center">
-                        <CountryIcon name={skill.iconName as CountryIconName} className="w-full h-full text-amber-400" />
-                      </div>
-                    )}
                     <div>
                       {/* Clean Header Title */}
                       <h3 className="font-serif text-amber-200 text-lg md:text-xl font-semibold transition-colors">
@@ -259,6 +544,16 @@ export default function Skills() {
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
                     className="border-t border-white/10 bg-black/40 px-6 md:px-8 py-6 flex flex-col gap-5 overflow-hidden"
                   >
+                    {/* Visual Skill Schematic & Ready Reference Image */}
+                    <SkillStepVectorDiagram
+                      skillId={skill.id}
+                      title={skill.title}
+                      category={skill.category}
+                      steps={skill.steps}
+                      toolsNeeded={skill.toolsNeeded}
+                      compact
+                    />
+
                     {/* 2-Column Concise Content Layout */}
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                       

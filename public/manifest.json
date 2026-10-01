@@ -1,16 +1,32 @@
 {
+  "id": "/",
+  "name": "OUTPOST: COUNTRY LIVING",
   "short_name": "Outpost",
-  "name": "Outpost Living Sanctuary Guide",
+  "description": "An inspired Seventh-day Adventist country living guide and outpost sanctuary blueprint for Malawi.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "background_color": "#06140C",
+  "theme_color": "#06140C",
   "icons": [
     {
-      "src": "/icon.svg",
-      "type": "image/svg+xml",
-      "sizes": "any",
-      "purpose": "any maskable"
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
-  ],
-  "start_url": "/",
-  "background_color": "#142118",
-  "theme_color": "#064e3b",
-  "display": "standalone"
+  ]
 }

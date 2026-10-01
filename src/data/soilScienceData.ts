@@ -46,13 +46,13 @@ export const SOIL_SCIENCE_KNOWLEDGE_BASE: SoilScienceTopic[] = [
   },
   {
     id: 'katondo-malawi-latosol',
-    title: 'Malawian Red Loam & Valley Clay Profiles',
+    title: 'FAO HWSD v2.0 Malawian Nitisol, Ferralsol & Fluvisol Profiles',
     category: 'Malawian Soil Types',
-    scientificPrinciple: 'Red loam soils are deep, well-drained soils rich in iron oxides. Valley soils are moisture-retentive soils with fine silt and clay.',
-    adventistPrinciple: 'Discernment of land features allows families to plant fruit trees on high-drained red loams while conserving lowland valley wetlands for winter garden crops.',
-    practicalAction: 'Plant perennial orchards (Avocado, Macadamia, Mango) on gentle slopes; build raised beds for garden relish, greens, and onions in moist valley fringes.',
-    optimalTarget: 'Soil depth > 1.5m on Latosols; clear distinction of wetland boundaries.',
-    citations: ['Malawi Soil Survey Division Bulletin No. 4', 'ICRAF Agroforestry Guide for Southern Africa']
+    scientificPrinciple: 'Eutric & Humic Nitisols and Rhodic Ferralsols (Katondo red clay loams, pH 5.2–6.4) are deep, well-drained pedons rich in sesquioxides. Valley-bottom Eutric Fluvisols and Gleysols (Dambo wetlands, pH 6.0–7.0) retain fine alluvial silt and high dry-season moisture.',
+    adventistPrinciple: 'Discernment of land features allows families to plant fruit trees on well-drained Eutric Nitisols and Rhodic Ferralsols while conserving lowland Dambo Fluvisol fringes for winter garden crops.',
+    practicalAction: 'Plant perennial orchards (Avocado, Macadamia, Mango) in 1m³ deep pits on Eutric Nitisol & Ferralsol slopes; build raised bio-intensive beds for greens and onions in moist Eutric Fluvisol valley fringes.',
+    optimalTarget: 'Soil depth > 1.5m on Nitisols/Ferralsols; pH 5.8–6.6 buffered with wood ash and compost.',
+    citations: ['FAO Harmonized World Soil Database (HWSD v2.0)', 'Malawi Soil Survey Division Bulletin No. 4', 'ICRAF Agroforestry Guide for Southern Africa']
   },
   {
     id: 'erosion-contour-vetiver',
@@ -60,7 +60,7 @@ export const SOIL_SCIENCE_KNOWLEDGE_BASE: SoilScienceTopic[] = [
     category: 'Erosion & Conservation',
     scientificPrinciple: 'Vetiver grass (Vetiveria zizanioides) has massive vertical root networks down to 3m that lock slope soil, prevent gully formation, and recharge aquifers.',
     adventistPrinciple: 'Stewardship of the land requires preserving topsoil from washouts. Neglect of the soil is a violation of faithful Christian stewardship.',
-    practicalAction: 'Plant dense vetiver hedges along Aney Level contour lines across sloped fields. Construct marker ridges (Misozi) to hold heavy rainy season runoff.',
+    practicalAction: 'Plant dense vetiver hedges along A-frame level contour lines across sloped fields. Construct contour marker ridges (Mitumbira ya mizere / Mikwingwirima) to hold heavy rainy season runoff.',
     optimalTarget: '100% contour barrier protection on slopes exceeding 3%.',
     citations: ['E.G. White, Patriarchs and Prophets, p. 50', 'World Bank Vetiver Network Technical Paper']
   },

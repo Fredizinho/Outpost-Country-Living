@@ -5,9 +5,10 @@ import {
   Compass, Map, FileText, BarChart3, Sprout, 
   Maximize2, Minimize2, Search, Sparkles, Menu, X, 
   MapPin, Calendar, Calculator, Hammer, BookOpen, 
-  ChevronDown, ShieldCheck, WifiOff, Globe, Layers, Eye
+  ChevronDown, ChevronLeft, ChevronRight, ShieldCheck, WifiOff, Globe, Layers, Eye
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { prefetchRoute } from '@/lib/routePrefetch';
 import { OutpostLogo } from '../common/OutpostLogo';
 import { LandHubTab } from './UnifiedLandHub';
 
@@ -106,95 +107,16 @@ export function ConsolidatedMapHeaderIsland({
       id="consolidated-map-control-island"
       className="absolute top-2.5 left-2 right-2 sm:left-3 sm:right-3 z-40 pointer-events-auto select-none"
     >
-      <div className="max-w-7xl mx-auto bg-slate-950/90 backdrop-blur-2xl border border-white/15 rounded-2xl shadow-2xl px-2.5 sm:px-4 py-2 flex items-center justify-between gap-2 sm:gap-3 text-white transition-all">
+      <div className="max-w-6xl mx-auto bg-slate-950/90 backdrop-blur-2xl border border-white/15 rounded-2xl shadow-2xl px-2.5 sm:px-4 py-1.5 flex items-center justify-between gap-2 sm:gap-3 text-white transition-all">
         
-        {/* LEFT SECTION: BRAND EMBLEM & GLOBAL APP NAV TRIGGER */}
+        {/* LEFT SECTION: GIS WORKSPACE INDICATOR */}
         <div className="flex items-center gap-2 shrink-0" ref={menuRef}>
-          <Link 
-            to="/" 
-            className="flex items-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 rounded-xl"
-            title="OUTPOST • Return Home"
-          >
-            <OutpostLogo size="sm" />
-          </Link>
-
-          {/* Quick App Navigation Dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => setIsNavMenuOpen(!isNavMenuOpen)}
-              className={cn(
-                "h-8 px-2 sm:px-2.5 rounded-xl border text-[11px] font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer",
-                isNavMenuOpen 
-                  ? "bg-amber-500 text-slate-950 border-amber-400 font-black shadow-md"
-                  : "bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border-white/10"
-              )}
-              title="Navigate Outpost Sections"
-            >
-              <Menu size={13} className={isNavMenuOpen ? "text-slate-950" : "text-amber-400"} />
-              <span className="hidden md:inline">Outpost Menu</span>
-              <ChevronDown size={11} className={cn("transition-transform", isNavMenuOpen && "rotate-180")} />
-            </button>
-
-            {/* Global Nav Popover Menu */}
-            <AnimatePresence>
-              {isNavMenuOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 8, scale: 0.95 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute top-10 left-0 w-64 bg-slate-950/98 backdrop-blur-2xl border border-amber-500/40 rounded-2xl shadow-2xl p-2 z-50 flex flex-col gap-1"
-                >
-                  <div className="px-2.5 py-1.5 text-[10px] font-mono uppercase tracking-wider text-amber-400/90 font-bold border-b border-white/10 flex items-center justify-between">
-                    <span>Field Navigation</span>
-                    <span className="text-slate-500">7 Guides</span>
-                  </div>
-
-                  <div className="flex flex-col gap-0.5 py-1">
-                    {appNavLinks.map(link => {
-                      const Icon = link.icon;
-                      return (
-                        <Link
-                          key={link.path}
-                          to={link.path}
-                          onClick={() => setIsNavMenuOpen(false)}
-                          className={cn(
-                            "flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-xs font-mono transition-all",
-                            link.active 
-                              ? "bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30" 
-                              : "text-slate-300 hover:text-white hover:bg-white/5"
-                          )}
-                        >
-                          <Icon size={14} className={link.active ? "text-amber-400" : "text-slate-400"} />
-                          <span>{link.label}</span>
-                          {link.active && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />}
-                        </Link>
-                      );
-                    })}
-                  </div>
-
-                  <div className="border-t border-white/10 pt-1 flex items-center justify-between px-2 text-[10px] font-mono text-slate-400">
-                    <button 
-                      onClick={() => { setIsNavMenuOpen(false); handleOpenCitations(); }} 
-                      className="hover:text-amber-300 flex items-center gap-1 cursor-pointer"
-                    >
-                      <ShieldCheck size={11} className="text-amber-400" />
-                      <span>Citations</span>
-                    </button>
-                    <span>Malawi GPS</span>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* 28 DISTRICTS Title Badge */}
-          <div className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 bg-amber-500/10 border border-amber-500/30 rounded-xl text-[11px] font-mono font-bold text-amber-300 shrink-0">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-            <span>28 DISTRICTS</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 bg-amber-500/10 border border-amber-500/30 rounded-xl text-[11px] font-mono font-bold text-amber-300 shrink-0">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+            <span>28 DISTRICTS GIS</span>
             {activeDistrictName && (
-              <span className="text-white font-normal text-[10px] truncate max-w-[90px]">
-                • {activeDistrictName}
+              <span className="text-white font-normal text-[10px] truncate max-w-[110px]">
+                · {activeDistrictName}
               </span>
             )}
           </div>
@@ -269,7 +191,7 @@ export function ConsolidatedMapHeaderIsland({
               window.dispatchEvent(new CustomEvent('outpost:open-ai-insights'));
             }}
             className="h-8 px-2.5 rounded-xl bg-gradient-to-r from-emerald-600/30 via-teal-600/30 to-amber-600/30 hover:from-emerald-600/50 hover:to-amber-600/50 border border-emerald-400/50 text-emerald-200 hover:text-white text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm hover:shadow-emerald-500/20 active:scale-95"
-            title="Get AI Insights on visible map view & layers (Gemini 3.8 Flash)"
+            title="Get Field Insights on visible map view & layers"
           >
             <Sparkles size={13} className="text-amber-300 animate-pulse" />
             <span className="hidden sm:inline">AI Insights</span>

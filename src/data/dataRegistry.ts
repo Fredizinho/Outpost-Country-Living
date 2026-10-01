@@ -1,93 +1,95 @@
 // Centralized Data Registry for Outpost Living
-// Single source of truth for District Telemetry, Coordinates, Rainfall, Soil Types, and Agronomy/Pit Dimensions
+// Single source of truth for all 28 Malawi Districts: Telemetry, Coordinates, Rainfall (DCCMS), Soil Taxonomy (FAO HWSD v2.0), Aquifers (FAO AQUASTAT), and Solar Insolation (NASA POWER)
 
-import { MALAWI_DISTRICTS, MalawiDistrictSpec } from './malawiDistrictData';
+import { MALAWI_DISTRICTS, DataVerificationStatus } from './malawiDistrictData';
 import { MALAWI_DISTRICT_RESOURCES, DistrictResourceStats } from './districtResourceData';
+
+export type AgroEcologicalZone =
+  | 'Highland Sanctuary'
+  | 'Mid-Elevation Savanna Plateau'
+  | 'Lakeshore Alluvial Basin'
+  | 'Rift Valley & Wetland Floor';
+
+export type PlantingPitKey =
+  | 'egwDeepPit'
+  | 'standardFruitTreePit'
+  | 'compactTreePit'
+  | 'zaiPit'
+  | 'bananaCirclePit'
+  | 'biointensiveBed';
 
 export interface DistrictRegistryRecord {
   id: string;
   name: string;
   region: 'Northern' | 'Central' | 'Southern';
+  agroZone: AgroEcologicalZone;
   centroid: [number, number]; // [latitude, longitude]
   lat: number;
   lng: number;
   optimalZoom: number;
   elevationRange: string;
+  temperatureRangeC: string;
+  frostRisk: string;
   rainfallAnnualMm: number; // Canonical annual rainfall normal (DCCMS source of truth)
   rainfallPattern: string;
-  primarySoil: string;
-  soilPh: string;
+  rainfallSource: string | null;
+  faoSoilClassification: string; // Strictly FAO HWSD v2.0 classification
+  primarySoil: string; // FAO HWSD v2.0 classification + Malawian local soil name
+  soilPh: string; // Strictly numeric pH range (e.g. 'pH 5.8 – 6.5')
+  soilSource: string | null;
+  soilAmendmentPrescription: string;
+  recommendedPitKey: PlantingPitKey;
   topCrops: string[];
   traditionalAuthorities: string[];
   feasibilityGrade: string;
+  suitabilityScore: number;
   aquiferDepth: string;
   aquiferDepthM: number;
+  aquiferSource: string | null;
   solarKwhDay: number;
+  solarSource: string | null;
+  verificationStatus: DataVerificationStatus;
+  unverifiedFields: string[];
+  verificationNote?: string;
+  waterRating: string;
+  landSpace: string;
+  landCostBallpark: string;
   population?: number;
   areaKm2?: number;
+  densityPerKm2?: number;
+  arableLandPct?: number;
   description: string;
   boundary: [number, number][];
 }
 
-// Map resources by district ID
-const resourceMap = new Map<string, DistrictResourceStats>();
-MALAWI_DISTRICT_RESOURCES.forEach((r) => resourceMap.set(r.id.toLowerCase(), r));
-
-// Build comprehensive unified dictionary
-export const DISTRICT_REGISTRY: Record<string, DistrictRegistryRecord> = {};
-export const DISTRICT_LIST: DistrictRegistryRecord[] = MALAWI_DISTRICTS.map((spec) => {
-  const res = resourceMap.get(spec.id.toLowerCase());
-  const record: DistrictRegistryRecord = {
-    id: spec.id,
-    name: spec.name,
-    region: spec.region,
-    centroid: spec.centroid,
-    lat: spec.centroid[0],
-    lng: spec.centroid[1],
-    optimalZoom: spec.optimalZoom,
-    elevationRange: spec.elevationRange,
-    // Canonical rainfall (Dedza = 1250mm, Mzimba = 1250mm, Mulanje = 2200mm, etc.)
-    rainfallAnnualMm: spec.rainfallAnnualMm,
-    rainfallPattern: spec.rainfallPattern,
-    primarySoil: spec.primarySoil,
-    soilPh: spec.soilPh,
-    topCrops: spec.topCrops,
-    traditionalAuthorities: spec.traditionalAuthorities,
-    feasibilityGrade: spec.feasibilityGrade,
-    aquiferDepth: spec.aquiferDepth,
-    aquiferDepthM: res?.aquiferDepthM || 20,
-    solarKwhDay: res?.solarKwhDay || 5.5,
-    population: res?.population,
-    areaKm2: res?.areaKm2,
-    description: spec.description,
-    boundary: spec.boundary,
-  };
-  DISTRICT_REGISTRY[spec.id.toLowerCase()] = record;
-  DISTRICT_REGISTRY[spec.name.toLowerCase()] = record;
-  return record;
-});
-
-// Canonical Rainfall Presets for Calculators & Agricultural Models
-export const DISTRICT_RAINFALL_PRESETS: Record<string, { name: string; rainfall: number; region: string }> = {
-  dedza: { name: 'Dedza / Ntcheu Highlands', rainfall: 1250, region: 'Central' },
-  mzimba: { name: 'Mzimba & Viphya Plateau', rainfall: 1250, region: 'Northern' },
-  mulanje: { name: 'Mulanje & Thyolo Tea Belt', rainfall: 2200, region: 'Southern' },
-  lilongwe: { name: 'Lilongwe & Central Plains', rainfall: 950, region: 'Central' },
-  zomba: { name: 'Zomba Plateau', rainfall: 1550, region: 'Southern' },
-  kasungu: { name: 'Kasungu Savanna Plateau', rainfall: 1050, region: 'Central' },
-  ntcheu: { name: 'Ntcheu / Kirk Range Ridge', rainfall: 1350, region: 'Central' },
-  nkhotakota: { name: 'Nkhotakota & Lake Shore', rainfall: 1200, region: 'Central' },
-  chitipa: { name: 'Chitipa / Misuku Hills', rainfall: 1450, region: 'Northern' },
-  karonga: { name: 'Karonga & Northern Lake', rainfall: 1150, region: 'Northern' },
-  salima: { name: 'Salima Lakeshore Basin', rainfall: 1100, region: 'Central' },
-  rumphi: { name: 'Rumphi & Nyika Foothills', rainfall: 1100, region: 'Northern' },
-};
-
 // Canonical Planting Pit & Permaculture Bed Dimensions
-export const PLANTING_PIT_SPECS = {
+export interface PlantingPitSpec {
+  id: string;
+  key: PlantingPitKey;
+  name: string;
+  chichewaName: string;
+  widthCm: number;
+  lengthCm: number;
+  depthCm: number;
+  volumeM3: number;
+  volumeLiters: number;
+  dimensionString: string;
+  rockDrainageDepthCm: number;
+  biocharKgPerPit: number;
+  compostWheelbarrows: number;
+  waterRetentionLiters: number;
+  laborHoursEstimate: string;
+  layers: string[];
+  idealCrops: string[];
+  description: string;
+}
+
+export const PLANTING_PIT_SPECS: Record<PlantingPitKey, PlantingPitSpec> = {
   egwDeepPit: {
     id: 'egw-deep-pit',
+    key: 'egwDeepPit',
     name: 'Ellen G. White Deep Planting Pit',
+    chichewaName: 'Dzenje Lalikulu la Mitengo (1m³)',
     widthCm: 100,
     lengthCm: 100,
     depthCm: 100,
@@ -97,71 +99,401 @@ export const PLANTING_PIT_SPECS = {
     rockDrainageDepthCm: 20,
     biocharKgPerPit: 3.0,
     compostWheelbarrows: 4,
-    description: 'Excavated 100cm deep into subsoil with coarse rock drainage layer, layered thermophilic compost, charged biochar, and topsoil to break hardpan and allow lifelong taproot anchoring.',
+    waterRetentionLiters: 240,
+    laborHoursEstimate: '2.5 – 3.5 hrs per pit',
+    layers: [
+      'Bottom (80–100cm): 20cm coarse river stones & fractured rock for taproot aeration & drainage',
+      'Lower Mid (50–80cm): Chopped dry maize stalks, kasarani grass & pruned legume branches',
+      'Upper Mid (15–50cm): Topsoil blended with 4 wheelbarrows thermophilic compost, 3kg charged biochar & 200g wood ash',
+      'Crown (0–15cm): Unamended collar around root flare + 5cm sunken rainwater smile-bund & 10cm dry grass mulch',
+    ],
+    idealCrops: ['Apples', 'Peaches', 'Avocados (Hass)', 'Macadamia', 'Mangoes', 'Citrus'],
+    description:
+      'Excavated 100cm deep into subsoil with coarse rock drainage layer, layered thermophilic compost, charged biochar, and topsoil to shatter hardpans and establish drought-proof taproots.',
   },
   standardFruitTreePit: {
     id: 'standard-orchard-pit',
+    key: 'standardFruitTreePit',
     name: 'Standard Orchard Tree Pit',
+    chichewaName: 'Dzenje la Zipatso (80cm)',
     widthCm: 80,
     lengthCm: 80,
     depthCm: 80,
     volumeM3: 0.512,
     volumeLiters: 512,
-    dimensionString: '80cm × 80cm × 80cm (0.5 m³)',
+    dimensionString: '80cm × 80cm × 80cm (0.51 m³)',
     rockDrainageDepthCm: 15,
     biocharKgPerPit: 2.0,
     compostWheelbarrows: 2.5,
-    description: 'Medium deep orchard pit suited for citrus, avocado, macadamia, and guava in deep friable loams.',
+    waterRetentionLiters: 130,
+    laborHoursEstimate: '1.5 – 2.0 hrs per pit',
+    layers: [
+      'Bottom (65–80cm): 15cm gravel or broken terracotta brick for drainage',
+      'Core (15–65cm): Friable Eutric Nitisol red loam mixed with 2.5 wheelbarrows cured compost & 2kg biochar',
+      'Surface (0–15cm): Mulch ring kept 10cm clear of graft union',
+    ],
+    idealCrops: ['Citrus', 'Guava', 'Loquat (Masuku)', 'Papaya', 'Pomegranate', 'Coffee'],
+    description:
+      'Medium-deep orchard pit suited for citrus, avocado, macadamia, and coffee in deep friable Eutric Nitisol (Katondo) red loams.',
   },
   compactTreePit: {
     id: 'compact-tree-pit',
-    name: 'Compact Tree Pit',
+    key: 'compactTreePit',
+    name: 'Compact Agroforestry Pit',
+    chichewaName: 'Dzenje la Mitengo Yothandiza Nthaka',
     widthCm: 60,
     lengthCm: 60,
     depthCm: 60,
     volumeM3: 0.216,
     volumeLiters: 216,
-    dimensionString: '60cm × 60cm × 60cm',
+    dimensionString: '60cm × 60cm × 60cm (0.22 m³)',
     rockDrainageDepthCm: 10,
     biocharKgPerPit: 1.0,
     compostWheelbarrows: 1.5,
-    description: 'Standard nursery transplant pit for fast-growing pioneer trees and windbreak hedges.',
+    waterRetentionLiters: 65,
+    laborHoursEstimate: '45 – 60 mins per pit',
+    layers: [
+      'Bottom (50–60cm): loosened subsoil + coarse organic litter',
+      'Main Fill (10–50cm): 1:1 topsoil and cured compost with 1kg biochar',
+      'Surface (0–10cm): Vetiver grass mulch cover',
+    ],
+    idealCrops: ['Moringa (Chamwamba)', 'Gliricidia', 'Tephrosia', 'Pigeon Pea (Nandolo)', 'Mulberry'],
+    description:
+      'Rapid-excavation transplant pit for fast-growing nitrogen-fixing pioneer trees, fodder banks, and windbreak hedges.',
   },
   zaiPit: {
     id: 'zai-water-harvesting-pit',
+    key: 'zaiPit',
     name: 'Traditional Zaï Water-Harvesting Pit',
+    chichewaName: 'Mbowo Zosungira Chinyezi (Zaï)',
     widthCm: 30,
     lengthCm: 30,
     depthCm: 20,
     volumeM3: 0.018,
     volumeLiters: 18,
-    dimensionString: '30cm wide × 20cm deep',
-    spacingCm: 75,
-    description: 'Sunken micro-basin filled with compost/manure slurry to concentrate rainfall and runoff directly in crop root zones in semi-arid plains.',
+    dimensionString: '30cm × 30cm × 20cm deep',
+    rockDrainageDepthCm: 0,
+    biocharKgPerPit: 0.25,
+    compostWheelbarrows: 0.2,
+    waterRetentionLiters: 12,
+    laborHoursEstimate: '10 – 15 mins per 5 pits',
+    layers: [
+      'Bottom (10–20cm): Two handfuls (500g) well-rotted kraal manure + pinch of charged biochar',
+      'Top (0–10cm): 5cm topsoil cover leaving a 5cm sunken catch basin to trap overland storm runoff',
+    ],
+    idealCrops: ['Maize (Chimanga)', 'Sorghum (Mapira)', 'Pearl Millet (Mchewere)', 'Cowpeas (Khobwe)', 'Groundnuts'],
+    description:
+      'Sunken micro-basin filled with compost/manure slurry to concentrate rainfall and runoff directly in crop root zones in semi-arid plains and Shire Valley floors.',
   },
   bananaCirclePit: {
     id: 'banana-circle-pit',
-    name: 'Banana Circle Mulch Basin',
-    diameterM: 2.0,
-    depthM: 1.0,
+    key: 'bananaCirclePit',
+    name: 'Banana & Taro Sponge Mulch Basin',
+    chichewaName: 'Chitsime cha Nthochi ndi Coco',
+    widthCm: 200,
+    lengthCm: 200,
+    depthCm: 100,
+    volumeM3: 2.1,
+    volumeLiters: 2100,
     dimensionString: '2.0m diameter × 1.0m center depth',
-    description: 'Central organic sponge basin receiving roof overflow or swale water, ringed by 4-6 heavy-feeding banana or papaya trees.',
+    rockDrainageDepthCm: 15,
+    biocharKgPerPit: 5.0,
+    compostWheelbarrows: 8,
+    waterRetentionLiters: 650,
+    laborHoursEstimate: '4.0 – 5.0 hrs per circle',
+    layers: [
+      'Center Bowl (0–100cm): Rough wood logs, banana pseudostems, maize stover & kitchen greywater inflow',
+      'Raised Berm Ring: Excavated topsoil mounded 40cm high around perimeter, planted with 4–6 banana suckers & sweet potato vines',
+    ],
+    idealCrops: ['Bananas (Nthochi)', 'Plantains (Matoki)', 'Taro (Masimbi)', 'Papaya', 'Sweet Potato Vines', 'Lemongrass'],
+    description:
+      'Central organic sponge basin receiving roof overflow or swale water, ringed by heavy-feeding banana, papaya, and taro guilds.',
   },
   biointensiveBed: {
     id: 'biointensive-double-dug-bed',
+    key: 'biointensiveBed',
     name: 'Double-Dug Bio-Intensive Bed',
-    widthM: 1.2,
-    lengthM: 6.0,
+    chichewaName: 'Tanthwe Lolimidwa Mozama (60cm)',
+    widthCm: 120,
+    lengthCm: 600,
     depthCm: 60,
+    volumeM3: 4.32,
+    volumeLiters: 4320,
     dimensionString: '1.2m width × 6.0m length × 60cm depth',
-    description: 'Standard 4ft wide garden bed loosened to 60cm depth without turning subsoil, providing aerated pore volume for multi-tier companion planting.',
+    rockDrainageDepthCm: 0,
+    biocharKgPerPit: 6.0,
+    compostWheelbarrows: 6,
+    waterRetentionLiters: 900,
+    laborHoursEstimate: '3.5 – 4.5 hrs per 6m bed',
+    layers: [
+      'Lower Subsoil (30–60cm): Fractured in-place with broadfork or digging fork without inverting onto surface',
+      'Upper Topsoil (0–30cm): Aerated and blended with 6 wheelbarrows cured compost, 6kg biochar & 1kg bone/ash mineral mix',
+      'Canopy Cover: Hexagonal close-spacing plant matrix + 8cm fine grass mulch',
+    ],
+    idealCrops: ['Rape / Tanaposi', 'Tomatoes', 'Onions', 'Garlic', 'Carrots', 'Cabbage', 'Amaranth (Bonongwe)'],
+    description:
+      'Standard 1.2m wide permanent no-compaction bed loosened to 60cm depth, yielding 3–4× conventional output per square meter.',
   },
-} as const;
+};
+
+// Comprehensive Soil Types Registry for Malawi (Strictly Reconciled to FAO HWSD v2.0)
+export interface MalawiSoilTypeSpec {
+  id: string;
+  name: string;
+  chichewaName: string;
+  faoClassification: string;
+  phRange: string;
+  drainage: 'Rapid' | 'Well-Drained' | 'Moderate' | 'Seasonal Waterlogging';
+  waterHoldingCapacity: 'High' | 'Medium-High' | 'Moderate' | 'Very High (Swelling Clay)';
+  organicMatterTarget: string;
+  amendmentProtocol: string;
+  primaryDistricts: string[];
+  idealCrops: string[];
+}
+
+export const SOIL_TYPES_REGISTRY: MalawiSoilTypeSpec[] = [
+  {
+    id: 'katondo-red-loam',
+    name: 'Eutric & Humic Nitisols (Katondo Red Clay Loam)',
+    chichewaName: 'Katondo Wofiira (Rich Red Loam)',
+    faoClassification: 'Eutric & Humic Nitisols / Rhodic Ferralsols (FAO HWSD v2.0)',
+    phRange: 'pH 5.8 – 6.5',
+    drainage: 'Well-Drained',
+    waterHoldingCapacity: 'High',
+    organicMatterTarget: '3.8% – 5.0% SOM',
+    amendmentProtocol:
+      'Maintain permanent 10–15cm organic mulch cover; incorporate 3kg charged biochar per orchard pit and rotate maize with velvet bean (Kalongonda) or pigeon pea (Nandolo).',
+    primaryDistricts: ['Dedza', 'Ntcheu', 'Lilongwe', 'Dowa', 'Ntchisi', 'Mchinji', 'Zomba', 'Chiradzulu'],
+    idealCrops: ['Irish Potatoes', 'Apples', 'Peaches', 'Wheat', 'Beans', 'Soybeans', 'Cabbage'],
+  },
+  {
+    id: 'ferruginous-sandy-clay',
+    name: 'Orthic Ferralsols & Ferric Luvisols (Sandy Clay Loam)',
+    chichewaName: 'Mchenga Wosakaniza ndi Katondo',
+    faoClassification: 'Orthic Ferralsols & Ferric Luvisols (FAO HWSD v2.0)',
+    phRange: 'pH 5.5 – 6.3',
+    drainage: 'Rapid',
+    waterHoldingCapacity: 'Moderate',
+    organicMatterTarget: '3.0% – 4.2% SOM',
+    amendmentProtocol:
+      'Counteract leaching with high-carbon thermophilic compost, contour vetiver hedgerows, and sunken Zaï planting basins.',
+    primaryDistricts: ['Kasungu', 'Mzimba', 'Balaka', 'Machinga', 'Blantyre', 'Mwanza', 'Neno'],
+    idealCrops: ['Groundnuts', 'Sunflowers', 'Maize', 'Sorghum', 'Pigeon Peas', 'Sweet Potatoes'],
+  },
+  {
+    id: 'alluvial-fluvisol',
+    name: 'Eutric Fluvisols & Calcaric Gleysols (Alluvial Silt)',
+    chichewaName: 'Chonde cha M’mphepete mwa Nyanja',
+    faoClassification: 'Eutric Fluvisols & Alluvial Gleysols (FAO HWSD v2.0)',
+    phRange: 'pH 6.2 – 7.2',
+    drainage: 'Moderate',
+    waterHoldingCapacity: 'High',
+    organicMatterTarget: '3.5% – 4.8% SOM',
+    amendmentProtocol:
+      'Use raised contour beds in wet months and sunken moisture-retaining mulch basins during the dry winter solar pumping season.',
+    primaryDistricts: ['Salima', 'Karonga', 'Nkhotakota', 'Mangochi', 'Phalombe', 'Nsanje'],
+    idealCrops: ['Kilombero Rice', 'Cassava', 'Bananas', 'Mangoes', 'Citrus', 'Winter Tomatoes'],
+  },
+  {
+    id: 'acidic-mountain-acrisol',
+    name: 'Humic Ferralsols & Humic Acrisols (Montane Loam)',
+    chichewaName: 'Nthaka Yachonde ya ku Mapiri',
+    faoClassification: 'Humic Ferralsols & Humic Acrisols (FAO HWSD v2.0)',
+    phRange: 'pH 4.8 – 5.8',
+    drainage: 'Well-Drained',
+    waterHoldingCapacity: 'High',
+    organicMatterTarget: '4.5% – 6.5% SOM',
+    amendmentProtocol:
+      'Apply 200g–350g dolomitic agricultural lime or hardwood ash per planting pit to buffer aluminum acidity for annual vegetables; ideal naturally for acid-loving perennials.',
+    primaryDistricts: ['Mulanje', 'Thyolo', 'Nkhata Bay', 'Rumphi', 'Chitipa'],
+    idealCrops: ['Arabica Coffee', 'Macadamia', 'Tea', 'Avocados', 'Pineapples', 'Berries', 'Bananas'],
+  },
+  {
+    id: 'dambo-vertisol',
+    name: 'Pellic Vertisols & Humic Gleysols (Makande / Dambo Clay)',
+    chichewaName: 'Makande / Dambo Clay',
+    faoClassification: 'Pellic Vertisols & Humic Gleysols (FAO HWSD v2.0)',
+    phRange: 'pH 6.4 – 7.6',
+    drainage: 'Seasonal Waterlogging',
+    waterHoldingCapacity: 'Very High (Swelling Clay)',
+    organicMatterTarget: '4.0% – 6.0% SOM',
+    amendmentProtocol:
+      'Never plow with heavy machinery; build 40cm raised bio-intensive beds on upper wetland fringes for dry-season residual moisture cropping (Dimba).',
+    primaryDistricts: ['Chikwawa', 'Nsanje', 'Phalombe', 'Dedza', 'Lilongwe', 'Mzimba'],
+    idealCrops: ['Dry-Season Leafy Greens', 'Onions', 'Garlic', 'Irish Potatoes', 'Sorghum', 'Taro'],
+  },
+];
+
+// Map resources by district ID
+const resourceMap = new Map<string, DistrictResourceStats>();
+MALAWI_DISTRICT_RESOURCES.forEach((r) => resourceMap.set(r.id.toLowerCase(), r));
+
+function deriveAgroZone(id: string, elevationRange: string): AgroEcologicalZone {
+  const lowerId = id.toLowerCase();
+  if (['salima', 'karonga', 'nkhotakota', 'mangochi', 'likoma', 'nkhata-bay'].includes(lowerId)) {
+    return 'Lakeshore Alluvial Basin';
+  }
+  if (['chikwawa', 'nsanje', 'balaka', 'machinga', 'phalombe'].includes(lowerId)) {
+    return 'Rift Valley & Wetland Floor';
+  }
+  if (
+    ['dedza', 'ntcheu', 'mzimba', 'rumphi', 'chitipa', 'zomba', 'mulanje', 'thyolo', 'ntchisi', 'neno', 'mwanza'].includes(
+      lowerId
+    ) ||
+    elevationRange.includes('1,800') ||
+    elevationRange.includes('2,000')
+  ) {
+    return 'Highland Sanctuary';
+  }
+  return 'Mid-Elevation Savanna Plateau';
+}
+
+function deriveRecommendedPit(agroZone: AgroEcologicalZone, rainfallMm: number): PlantingPitKey {
+  if (agroZone === 'Rift Valley & Wetland Floor' || rainfallMm < 900) {
+    return 'zaiPit';
+  }
+  if (agroZone === 'Lakeshore Alluvial Basin' && rainfallMm >= 1200) {
+    return 'bananaCirclePit';
+  }
+  if (agroZone === 'Highland Sanctuary') {
+    return 'egwDeepPit';
+  }
+  return 'standardFruitTreePit';
+}
+
+function deriveSuitabilityScore(grade: string): number {
+  if (grade.startsWith('A+')) return 10;
+  if (grade.startsWith('A-')) return 8.5;
+  if (grade.startsWith('A')) return 9.2;
+  if (grade.startsWith('B+')) return 8.0;
+  return 7.5;
+}
+
+function deriveLandCostBallpark(agroZone: AgroEcologicalZone, id: string): string {
+  if (['lilongwe', 'blantyre', 'zomba'].includes(id)) {
+    return 'Statutory Leasehold / Peri-Urban Customary Estate (Malawi Land Act No. 16 & No. 19 of 2016)';
+  }
+  if (agroZone === 'Highland Sanctuary') {
+    return 'Customary Estate Allocation via TLMA Committee & T/A (Customary Land Act No. 19 of 2016)';
+  }
+  if (agroZone === 'Lakeshore Alluvial Basin') {
+    return 'Customary Estate & Littoral Buffer Verification (Customary Land Act No. 19 of 2016)';
+  }
+  return 'Customary Estate Registration via Village Land Committee & District Registry (Act No. 19 of 2016)';
+}
+
+function deriveAmendmentPrescription(soilPh: string, primarySoil: string): string {
+  if (soilPh.includes('4.') || soilPh.includes('5.0') || soilPh.includes('5.2') || soilPh.includes('5.4')) {
+    return 'Apply 250g dolomitic lime or hardwood ash + 3kg charged biochar & 4 wheelbarrows cured compost per 1m³ pit to buffer acidity.';
+  }
+  if (primarySoil.toLowerCase().includes('sandy') || primarySoil.toLowerCase().includes('luvisol') || primarySoil.toLowerCase().includes('ferralsol')) {
+    return 'Incorporate high-humus thermophilic compost + 2.5kg biochar & intercrop Mucuna/pigeon pea to boost cation exchange & water retention.';
+  }
+  return 'Blend 3 wheelbarrows aged compost + 2kg charged biochar & rock phosphate/wood ash into top 40cm root zone.';
+}
+
+// Build comprehensive unified dictionary for all 28 districts
+export const DISTRICT_REGISTRY: Record<string, DistrictRegistryRecord> = {};
+export const DISTRICT_LIST: DistrictRegistryRecord[] = MALAWI_DISTRICTS.map((spec) => {
+  const res = resourceMap.get(spec.id.toLowerCase());
+  const agroZone = deriveAgroZone(spec.id, spec.elevationRange);
+  const recommendedPitKey = deriveRecommendedPit(agroZone, spec.rainfallAnnualMm);
+
+  const record: DistrictRegistryRecord = {
+    id: spec.id,
+    name: spec.name,
+    region: spec.region,
+    agroZone,
+    centroid: spec.centroid,
+    lat: spec.centroid[0],
+    lng: spec.centroid[1],
+    optimalZoom: spec.optimalZoom,
+    elevationRange: spec.elevationRange,
+    temperatureRangeC:
+      agroZone === 'Highland Sanctuary'
+        ? '11°C – 24°C (Cool Temperate Highland)'
+        : agroZone === 'Lakeshore Alluvial Basin'
+          ? '21°C – 32°C (Warm Lakeshore Littoral)'
+          : agroZone === 'Rift Valley & Wetland Floor'
+            ? '22°C – 36°C (Tropical Lowland Basin)'
+            : '15°C – 28°C (Moderate Savanna Plateau)',
+    frostRisk:
+      spec.id === 'dedza' || spec.id === 'ntcheu' || spec.id === 'chitipa' || spec.id === 'rumphi'
+        ? 'Occasional June–July High-Valley Frost (>1,650m)'
+        : 'Frost-Free Year-Round',
+    rainfallAnnualMm: spec.rainfallAnnualMm,
+    rainfallPattern: spec.rainfallPattern,
+    rainfallSource: spec.rainfallSource,
+    faoSoilClassification: spec.faoSoilClassification,
+    primarySoil: spec.primarySoil,
+    soilPh: spec.soilPh,
+    soilSource: spec.soilSource,
+    soilAmendmentPrescription: deriveAmendmentPrescription(spec.soilPh, spec.primarySoil),
+    recommendedPitKey,
+    topCrops: spec.topCrops,
+    traditionalAuthorities: spec.traditionalAuthorities,
+    feasibilityGrade: spec.feasibilityGrade,
+    suitabilityScore: deriveSuitabilityScore(spec.feasibilityGrade),
+    aquiferDepth: spec.aquiferDepth,
+    aquiferDepthM: spec.aquiferDepthM,
+    aquiferSource: spec.aquiferSource,
+    solarKwhDay: spec.solarKwhDay,
+    solarSource: spec.solarSource,
+    verificationStatus: spec.verificationStatus,
+    unverifiedFields: spec.unverifiedFields,
+    verificationNote: spec.verificationNote,
+    waterRating: res?.waterRating || 'Shallow Aquifer',
+    landSpace: res?.landSpace || 'Good Space',
+    landCostBallpark: deriveLandCostBallpark(agroZone, spec.id),
+    population: res?.population,
+    areaKm2: res?.areaKm2,
+    densityPerKm2: res?.densityPerKm2,
+    arableLandPct: res?.arableLandPct,
+    description: spec.description,
+    boundary: spec.boundary,
+  };
+  DISTRICT_REGISTRY[spec.id.toLowerCase()] = record;
+  DISTRICT_REGISTRY[spec.name.toLowerCase()] = record;
+  return record;
+});
+
+// Canonical Rainfall & Hydrogeology Presets for All 28 Districts in Calculators
+export const DISTRICT_RAINFALL_PRESETS: Record<
+  string,
+  {
+    name: string;
+    rainfall: number;
+    region: string;
+    aquiferDepthM: number;
+    solarKwhDay: number;
+    soil: string;
+    faoSoilClassification: string;
+    soilPh: string;
+    recommendedPitKey: PlantingPitKey;
+    verificationStatus: DataVerificationStatus;
+  }
+> = Object.fromEntries(
+  DISTRICT_LIST.map((d) => [
+    d.id,
+    {
+      name: `${d.name} (${d.region})`,
+      rainfall: d.rainfallAnnualMm,
+      region: d.region,
+      aquiferDepthM: d.aquiferDepthM,
+      solarKwhDay: d.solarKwhDay,
+      soil: d.primarySoil,
+      faoSoilClassification: d.faoSoilClassification,
+      soilPh: d.soilPh,
+      recommendedPitKey: d.recommendedPitKey,
+      verificationStatus: d.verificationStatus,
+    },
+  ])
+);
 
 // Canonical Urban Hubs
 export const URBAN_HUBS = {
   lilongwe: { name: 'Lilongwe City (Capital)', lat: -13.97, lng: 33.79 },
-  blantyre: { name: 'Blantyre Commercial Hub', lat: -15.79, lng: 35.00 },
+  blantyre: { name: 'Blantyre Commercial Hub', lat: -15.79, lng: 35.0 },
   mzuzu: { name: 'Mzuzu Northern Hub', lat: -11.46, lng: 34.02 },
 } as const;
 
@@ -176,6 +508,14 @@ export const HOMESTEAD_WATER_CONSTANTS = {
   runoffEfficiency: 0.85,
   drySeasonBufferDays: 150,
   reserveBufferDays: 90,
+} as const;
+
+export const HOMESTEAD_GENERAL_CONSTANTS = {
+  LAND_ACRES_PER_PERSON_STAPLE: 0.35,
+  LAND_ACRES_PER_PERSON_ORCHARD: 0.15,
+  LAND_ACRES_BASE_WOODLOT_SHELTER: 0.75,
+  DEFAULT_ROOF_RUNOFF_COEFF: 0.85,
+  SOLAR_SYSTEM_EFFICIENCY: 0.78,
 } as const;
 
 // Helper Functions
@@ -198,13 +538,18 @@ export function getDistrictRainfall(idOrName: string, fallbackMm = 1100): number
 
 export function getDistrictCentroid(idOrName: string): [number, number] {
   const d = getDistrictRecord(idOrName);
-  return d ? d.centroid : [-13.97, 33.79]; // default to Malawi central
+  return d ? d.centroid : [-13.97, 33.79];
 }
 
-export function getDistrictSoil(idOrName: string): { primarySoil: string; soilPh: string } {
+export function getDistrictSoil(idOrName: string): {
+  faoSoilClassification: string;
+  primarySoil: string;
+  soilPh: string;
+} {
   const d = getDistrictRecord(idOrName);
   return {
-    primarySoil: d?.primarySoil || 'Ferruginous Red Clay Loam',
-    soilPh: d?.soilPh || 'pH 6.0 – 6.5',
+    faoSoilClassification: d?.faoSoilClassification || 'Eutric & Humic Nitisols (FAO HWSD v2.0)',
+    primarySoil: d?.primarySoil || 'Eutric & Humic Nitisols (Katondo Red Clay Loam)',
+    soilPh: d?.soilPh || 'pH 5.8 – 6.5',
   };
 }

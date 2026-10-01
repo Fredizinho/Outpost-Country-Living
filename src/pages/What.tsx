@@ -1,9 +1,12 @@
-import { Shield, Hammer, Flame, Package, Zap, CheckCircle2, Circle, X, Info } from 'lucide-react';
+import { Shield, Hammer, Flame, Package, Zap, CheckCircle2, Circle, X, Info, Sprout } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/lib/utils';
 import { MalawiCropExplorer } from '@/components/crops/MalawiCropExplorer';
+import { VisualSoilSwatchGuide } from '@/components/outpost/VisualSoilSwatchGuide';
+import { MalawiRidgeAndSeedPlanner } from '@/components/outpost/MalawiRidgeAndSeedPlanner';
 import { getStoredPantryStock, saveStoredPantryStock } from '@/lib/offlineStorage';
+import { SOIL_TYPES_REGISTRY } from '@/constants';
 
 export default function What() {
   const essentials = [
@@ -52,30 +55,42 @@ export default function What() {
   });
 
   const [selectedEssential, setSelectedEssential] = useState<typeof essentials[0] | null>(null);
+  const [selectedSoilId, setSelectedSoilId] = useState<string>(SOIL_TYPES_REGISTRY[0].id);
 
   useEffect(() => {
     saveStoredPantryStock(pantryItems);
   }, [pantryItems]);
 
+  useEffect(() => {
+    if (!selectedEssential) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedEssential(null);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [selectedEssential]);
+
   const togglePantryItem = (id: string) => {
     setPantryItems(prev => prev.map(item => item.id === id ? { ...item, checked: !item.checked } : item));
   };
+
+  const activeSoil = SOIL_TYPES_REGISTRY.find(s => s.id === selectedSoilId) || SOIL_TYPES_REGISTRY[0];
 
   return (
     <div className="px-6 md:px-12 py-10 max-w-6xl mx-auto flex flex-col gap-12">
       <header className="flex flex-col gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-100 border border-emerald-300 flex items-center justify-center text-emerald-800 shadow-xs">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-800 flex items-center justify-center text-emerald-800 dark:text-emerald-300 shadow-xs">
             <Package size={26} />
           </div>
           <div>
-            <span className="text-[11px] font-sans uppercase tracking-widest font-bold text-emerald-800">Homestead Infrastructure</span>
-            <h2 className="serif text-3xl md:text-4xl lg:text-5xl font-extrabold text-stone-900">
+            <span className="text-[11px] font-sans uppercase tracking-widest font-bold text-emerald-800 dark:text-emerald-400">Homestead Infrastructure</span>
+            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-extrabold text-stone-900 dark:text-stone-50">
               The Essentials & Farm Infrastructure
             </h2>
           </div>
         </div>
-        <p className="text-stone-600 max-w-3xl text-sm sm:text-base font-serif font-medium leading-relaxed">
+        <p className="text-stone-600 dark:text-stone-300 max-w-3xl text-sm sm:text-base font-sans font-medium leading-relaxed">
           Building the infrastructure of a self-sustaining home requires intentional stewardship of resources. Click any essential pillar below to inspect detailed field specifications.
         </p>
       </header>
@@ -85,23 +100,105 @@ export default function What() {
           <div 
             key={item.id} 
             onClick={() => setSelectedEssential(item)}
-            className="bg-white/95 p-7 rounded-3xl border border-stone-200 shadow-xs flex flex-col gap-4 card-hover cursor-pointer group hover:border-emerald-700/50 hover:shadow-md transition-all duration-300"
+            className="bg-white/95 dark:bg-[#0D1D13] p-7 rounded-3xl border border-stone-200 dark:border-emerald-900/60 shadow-xs flex flex-col gap-4 card-hover cursor-pointer group hover:border-emerald-700/50 hover:shadow-md transition-all duration-300"
           >
-            <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-800 shadow-xs group-hover:scale-105 group-hover:bg-emerald-100 transition-all">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 flex items-center justify-center text-emerald-800 dark:text-emerald-300 shadow-xs group-hover:scale-105 transition-all">
               <item.icon size={24} />
             </div>
             <div className="flex justify-between items-start gap-2">
-              <h3 className="serif text-xl font-bold text-stone-900 group-hover:text-emerald-900 transition-colors">{item.title}</h3>
+              <h3 className="font-display text-xl font-bold text-stone-900 dark:text-white group-hover:text-emerald-800 dark:group-hover:text-emerald-300 transition-colors">{item.title}</h3>
               <Info size={16} className="text-stone-400 shrink-0 group-hover:text-emerald-700 transition-colors mt-1" />
             </div>
-            <p className="text-xs text-stone-600 leading-relaxed font-medium">{item.desc}</p>
-            <span className="text-[11px] font-sans font-bold uppercase text-emerald-800 tracking-wider mt-auto flex items-center gap-1 group-hover:text-emerald-950">
+            <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed font-medium">{item.desc}</p>
+            <span className="text-[11px] font-sans font-bold uppercase text-emerald-800 dark:text-emerald-400 tracking-wider mt-auto flex items-center gap-1">
               <span>Read Specs</span>
               <span>→</span>
             </span>
           </div>
         ))}
       </div>
+
+      {/* Malawi Soil Orders & Organic Fertility Protocol Selector */}
+      <section className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#0D1D13] border border-stone-200/90 dark:border-emerald-900/60 shadow-xs flex flex-col gap-5">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-stone-200 dark:border-emerald-900/50">
+          <div>
+            <div className="flex items-center gap-2 text-xs text-stone-500 dark:text-stone-400">
+              <span className="font-semibold text-emerald-800 dark:text-emerald-400">Malawi Pedology Registry</span>
+              <span aria-hidden="true">·</span>
+              <span>5 Major Soil Orders</span>
+            </div>
+            <h3 className="font-display text-2xl font-bold text-stone-900 dark:text-white mt-0.5">
+              Malawi Soil Chemistry & Organic Amendment Reference
+            </h3>
+          </div>
+
+          <div className="flex flex-wrap gap-1.5">
+            {SOIL_TYPES_REGISTRY.map((soil) => (
+              <button
+                key={soil.id}
+                type="button"
+                onClick={() => setSelectedSoilId(soil.id)}
+                className={cn(
+                  'px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap',
+                  selectedSoilId === soil.id
+                    ? 'bg-emerald-900 text-white dark:bg-emerald-700'
+                    : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700'
+                )}
+              >
+                {soil.name.split(' ')[0]} {soil.name.split(' ')[1]}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <div className="lg:col-span-5 flex flex-col gap-2.5 p-5 rounded-2xl bg-stone-50 dark:bg-stone-900/70 border border-stone-200/80 dark:border-emerald-900/40">
+            <span className="text-xs font-mono text-emerald-800 dark:text-amber-300 font-semibold">
+              {activeSoil.chichewaName}
+            </span>
+            <h4 className="font-display text-xl font-bold text-stone-900 dark:text-white">
+              {activeSoil.name}
+            </h4>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-mono text-stone-600 dark:text-stone-300 tabular-nums pt-1">
+              <span>{activeSoil.phRange}</span>
+              <span aria-hidden="true">·</span>
+              <span>Drainage: {activeSoil.drainage}</span>
+              <span aria-hidden="true">·</span>
+              <span>Target OM: {activeSoil.organicMatterTarget}</span>
+            </div>
+            <p className="text-xs text-stone-500 dark:text-stone-400 pt-1">
+              FAO Classification: {activeSoil.faoClassification}
+            </p>
+          </div>
+
+          <div className="lg:col-span-7 flex flex-col gap-3 p-5 rounded-2xl bg-stone-50 dark:bg-stone-900/70 border border-stone-200/80 dark:border-emerald-900/40">
+            <div>
+              <span className="text-xs font-bold text-stone-900 dark:text-white block mb-1">
+                Organic Soil Restoration & Amendment Protocol
+              </span>
+              <p className="text-xs sm:text-sm text-stone-700 dark:text-stone-200 leading-relaxed">
+                {activeSoil.amendmentProtocol}
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-stone-200/70 dark:border-emerald-900/40 text-xs">
+              <div>
+                <span className="font-semibold text-stone-900 dark:text-white block">Primary Malawi Districts:</span>
+                <span className="text-stone-600 dark:text-stone-300">{activeSoil.primaryDistricts.join(' · ')}</span>
+              </div>
+              <div>
+                <span className="font-semibold text-stone-900 dark:text-white block">Best Adapted Crops:</span>
+                <span className="text-stone-600 dark:text-stone-300">{activeSoil.idealCrops.join(' · ')}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Visual Soil Swatch & Hand-Ribbon Test Guide */}
+        <VisualSoilSwatchGuide />
+      </section>
+
+      {/* Interactive 75cm Ridge Companion Planner & Malawi Seed Station Directory */}
+      <MalawiRidgeAndSeedPlanner />
 
       {/* Malawi Crop Cultivation Blueprint & Agronomy Section */}
       <MalawiCropExplorer />

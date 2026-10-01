@@ -35,16 +35,16 @@ export const MALAWI_CROPS_DATABASE: MalawiCrop[] = [
     maturityPeriod: '90 - 120 days (Early maturing), 130 - 150 days (Highland varieties)',
     yieldPotential: '4.5 - 7.5 tonnes / hectare with manure & biochar incorporation',
     companionPlanting: 'Traditional Malawian Three Sisters: Intercrop with Nandolo (pigeon pea) & Nkhwani (pumpkin)',
-    preservationAndStorage: 'Dried on cob in raised Nkhokwe granaries; dusted with wood ash or Neem leaf powder to control Nankafumbwa (grain borer)',
+    preservationAndStorage: 'Dried on cob in raised Nkhokwe granaries; dusted with wood ash or Neem leaf powder to control Kafucheche (larger grain borer) and Kafumbwe (maize weevils)',
     accessibilityScore: 'Universal',
     description: 'The primary staple food crop across all 28 districts of Malawi, ground into Ufa woyera or Ufa wa mgaiwa for Nsima.',
-    proCultivationTip: 'Apply manure or compost directly into planting holes (mupando) 3 weeks before first rains to maximize early root vigor.'
+    proCultivationTip: 'Apply manure or compost directly into planting stations (mipando / mazenje) 3 weeks before first rains to maximize early root vigor.'
   },
   {
     id: 'chinangwa',
     name: 'Chinangwa',
     englishName: 'Cassava',
-    chichewaName: 'Chinangwa / Nkhwangwa',
+    chichewaName: 'Chinangwa / Manyoka (Leaves: Chigwada)',
     scientificName: 'Manihot esculenta',
     category: 'Root & Tuber Crops',
     malawiRegions: ['Lakeshore (Nkhotakota, Nkhata Bay, Karonga)', 'Central Plateau', 'Lower Shire'],
@@ -75,7 +75,7 @@ export const MALAWI_CROPS_DATABASE: MalawiCrop[] = [
     maturityPeriod: '3 - 5 months (90 - 140 days); leaves (Mathambo) harvested as greens',
     yieldPotential: '12 - 20 tonnes / hectare tubers',
     companionPlanting: 'Planted on contour ridges as living ground cover to suppress weeds and prevent soil erosion',
-    preservationAndStorage: 'Cured in cool underground sand pits, or solar-dehydrated into sweet potato chips (Futali chips)',
+    preservationAndStorage: 'Cured in cool underground sand pits, solar-dehydrated into dried chips (Makaka a mbatata), or boiled and mashed with groundnut flour as traditional Futali',
     accessibilityScore: 'Universal',
     description: 'High-yielding orange-fleshed varieties like Zondeni supply abundant Vitamin A, rapid food turnaround, and edible vine greens (Mathambo).',
     proCultivationTip: 'Take vine cuttings strictly from the top 30cm of healthy young vines to reduce sweet potato weevil transmission.'
@@ -198,7 +198,7 @@ export const MALAWI_CROPS_DATABASE: MalawiCrop[] = [
     preservationAndStorage: 'Dry seeds saved in sacks for next season cover crop planting',
     accessibilityScore: 'High',
     description: 'The ultimate soil reclamation legume in Malawi. Smothers invasive weeds, fixes massive atmospheric nitrogen, and restores dead soil.',
-    proCultivationTip: 'Slash biomass down at early pod stage and leave as a thick sheet mulch (chintunda) before planting maize.'
+    proCultivationTip: 'Slash biomass down at early pod stage and leave as a thick organic mulch blanket (chiphuphu / udzu wofunda) before planting maize.'
   },
   {
     id: 'khobwe',
@@ -224,7 +224,7 @@ export const MALAWI_CROPS_DATABASE: MalawiCrop[] = [
     id: 'mpiru',
     name: 'Mpiru',
     englishName: 'African Mustard Greens',
-    chichewaName: 'Mpiru / Masinga wa Mpiru',
+    chichewaName: 'Mpiru / Masamba a Mpiru',
     scientificName: 'Brassica juncea',
     category: 'Leafy Greens & Relish',
     malawiRegions: ['Central Highlands', 'Southern Highlands', 'Dambo Wetlands Nationwide'],
@@ -275,9 +275,9 @@ export const MALAWI_CROPS_DATABASE: MalawiCrop[] = [
     maturityPeriod: '50 - 65 days; pick young pods every 2-3 days',
     yieldPotential: '6 - 12 tonnes / hectare fresh pods',
     companionPlanting: 'Interplanted with Peppers, Eggplant (Ngwangwa), or Cucumbers',
-    preservationAndStorage: 'Sliced pods sun-dried on mats into dry okra chips (Therere womwaza) for year-round relish',
+    preservationAndStorage: 'Sliced pods sun-dried on mats into dry okra rings (Therere louma / Mfutso wa therere) for year-round relish',
     accessibilityScore: 'Universal',
-    description: 'Classic mucilaginous vegetable cooked with soda or potash (Chilungamo) for smooth relish texture.',
+    description: 'Classic mucilaginous vegetable cooked with traditional plant-ash filtrate (Chidulo) or soda for smooth relish texture.',
     proCultivationTip: 'Harvest pods when 7-10cm long using shears; older pods become woody and inedible.'
   },
   {
@@ -337,8 +337,8 @@ export const MALAWI_CROPS_DATABASE: MalawiCrop[] = [
     companionPlanting: 'Intercropped with Nzama or cowpeas on newly opened organic land',
     preservationAndStorage: 'Grain can be stored in granaries for up to 10 years without weevil damage due to small seed size',
     accessibilityScore: 'High',
-    description: 'Nutrient-dense traditional grain prized for infant weaning porridge (Usimwa), calcium fortification, and traditional brewing.',
-    proCultivationTip: 'Prepare a very fine seedbed (kapando) so tiny millet seeds make direct contact with moist soil.'
+    description: 'Nutrient-dense traditional grain prized for nutritious porridge (Phala la Mawere), calcium fortification, and stiff Nsima.',
+    proCultivationTip: 'Prepare a very fine seedbed ( chithaphwi / dothi losalala ) so tiny millet seeds make direct contact with moist soil.'
   },
   {
     id: 'soya',
@@ -368,7 +368,7 @@ export const MALAWI_CROPS_DATABASE: MalawiCrop[] = [
     scientificName: 'Musa acuminata',
     category: 'Fruits & Orchards',
     malawiRegions: ['Thyolo & Mulanje Highlands', 'Nkhata Bay Lakeshore', 'Karonga', 'Chitipa (Misuku)'],
-    ridgeSpacing: '3m x 3m in deep compost pits (mupando waukulu) 90cm deep filled with manure & mulch',
+    ridgeSpacing: '3m x 3m in deep compost pits (dzenje lalikulu) 90cm deep filled with manure & mulch',
     seedRateOrPropagation: 'Healthy sword suckers (1,100 suckers / hectare)',
     soilTypeAndPh: 'pH 5.5 - 7.0. Deep, rich alluvial soil with heavy organic mulch layer',
     waterAndRainfall: '1,200 - 2,200 mm/year or continuous greywater/dambo irrigation',
@@ -435,7 +435,7 @@ export const MALAWI_CROPS_DATABASE: MalawiCrop[] = [
     maturityPeriod: 'Grafted trees fruit in 3 years; local trees fruit in 5-7 years (Peak: Nov-Jan)',
     yieldPotential: '10 - 25 tonnes / hectare fresh fruit',
     companionPlanting: 'Planted on homestead perimeters or contour bunds as permanent windbreaks',
-    preservationAndStorage: 'Sliced ripe mangoes dried in solar dehydrators into mango fruit leather (Manga wowaza)',
+    preservationAndStorage: 'Sliced ripe mangoes dried in solar dehydrators into dried mango slices (Manga wouma / wocheka)',
     accessibilityScore: 'Universal',
     description: 'Ubiquitous fruit tree across Malawi supplying abundant early-summer vitamins and shade.',
     proCultivationTip: 'Prune central leader branches after harvest to keep tree canopy open to sunlight and manageable height.'
@@ -475,16 +475,16 @@ export const MALAWI_CROPS_DATABASE: MalawiCrop[] = [
     maturityPeriod: '75 - 90 days from transplanting; continuous harvest for 8-12 weeks',
     yieldPotential: '20 - 45 tonnes / hectare staked tomatoes',
     companionPlanting: 'Intercropped with Basil, Marigolds, or Onions to reduce whiteflies and nematodes',
-    preservationAndStorage: 'Solar-dried in halves into dried tomato slices (Mfutali ya Mapwetekere) or stewed into jarred sauce',
+    preservationAndStorage: 'Solar-dried in halves into dried tomato slices (Mapwetekere ouma) or stewed into jarred sauce',
     accessibilityScore: 'Universal',
     description: 'The foundation vegetable of Malawian relish sauces, grown year-round in dambos and gardens.',
-    proCultivationTip: 'Prune lower suckers (makwapani) and stake vines off the ground to prevent fungal blight.'
+    proCultivationTip: 'Prune lower axillary suckers (mphukira za m\'khwapa) and stake vines off the ground to prevent fungal blight.'
   },
   {
     id: 'galuwinki',
-    name: 'Galuwinki',
+    name: 'Adyo (Garlic)',
     englishName: 'Garlic',
-    chichewaName: 'Galuwinki / Adyo',
+    chichewaName: 'Adyo / Anyezi wa Adyo',
     scientificName: 'Allium sativum',
     category: 'Spices & Vegetables',
     malawiRegions: ['Dedza Highlands', 'Ntcheu', 'Zomba Plateau'],
@@ -524,7 +524,7 @@ export const MALAWI_CROPS_DATABASE: MalawiCrop[] = [
     id: 'mpendadzuwa',
     name: 'Mpendadzuwa',
     englishName: 'Sunflower',
-    chichewaName: 'Mpendadzuwa / Sanifilawa (Mnasungwi)',
+    chichewaName: 'Mpendadzuwa / Sanifilawa',
     scientificName: 'Helianthus annuus',
     category: 'Legumes & Soil Builders',
     malawiRegions: ['Central Plateau (Kasungu, Lilongwe, Mchinji)', 'Mzimba', 'Salima'],

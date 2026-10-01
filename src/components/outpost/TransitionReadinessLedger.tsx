@@ -45,6 +45,9 @@ export function TransitionReadinessLedger({ className }: { className?: string })
     setCompletedItems(updated);
     try {
       localStorage.setItem('outpost_transition_ledger', JSON.stringify(updated));
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('outpost:progress-updated'));
+      }
     } catch {
       // ignore
     }

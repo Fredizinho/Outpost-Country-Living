@@ -130,8 +130,12 @@ export function ParcelCadastralExportModal({
 
             <div className="p-3 rounded-xl bg-slate-950 print:bg-slate-50 border border-slate-800 print:border-slate-300">
               <span className="text-[9px] font-mono uppercase text-slate-400 print:text-slate-600 block">Dry Season Aquifer</span>
-              <span className="text-base font-bold text-sky-400 print:text-sky-700 font-mono block mt-0.5">14m – 22m</span>
-              <span className="text-[10px] text-slate-400 font-mono">Chilimwe viable</span>
+              <span className="text-base font-bold text-sky-400 print:text-sky-700 font-mono block mt-0.5">
+                {district ? district.aquiferDepth.split('(')[0].trim() : '14m – 22m'}
+              </span>
+              <span className="text-[10px] text-slate-400 font-mono">
+                {district ? `${district.rainfallAnnualMm} mm/yr recharge` : 'Chilimwe viable'}
+              </span>
             </div>
           </div>
 
@@ -170,14 +174,17 @@ export function ParcelCadastralExportModal({
             </h4>
             <div className="p-3 rounded-xl bg-slate-950/60 print:bg-slate-50 border border-slate-800/80 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2 font-mono text-[11px]">
-                <div><strong className="text-slate-300 print:text-black">Soil Type:</strong> {parcel.soilProfile}</div>
-                <div><strong className="text-slate-300 print:text-black">pH Range:</strong> 5.8 – 6.5 (Optimal)</div>
-                <div><strong className="text-slate-300 print:text-black">Erosion Risk:</strong> Low to Moderate</div>
+                <div><strong className="text-slate-300 print:text-black">Soil Type:</strong> {parcel.soilProfile || (district ? district.primarySoil : 'Katondo Red Loam')}</div>
+                <div><strong className="text-slate-300 print:text-black">pH Range:</strong> {district ? district.soilPh : 'pH 5.8 – 6.5'}</div>
+                <div><strong className="text-slate-300 print:text-black">Solar Yield:</strong> {district ? `${district.solarKwhDay} kWh/m²/day` : '5.6 kWh/m²/day'}</div>
               </div>
               <div className="mt-2">
                 <strong className="text-amber-300 print:text-amber-800 block text-[11px] uppercase font-mono mb-1">High-Yield Crops for this Horizon:</strong>
                 <div className="flex flex-wrap gap-1.5">
-                  {['Mbatata (Sweet Potato)', 'Anyenzi (Onions)', 'Mtedza (Groundnuts)', 'Nzimbe (Sugarcane)', 'Macadamia Integrifolia', 'Hass Avocado', 'Coffee (Arabica)'].map((c, i) => (
+                  {(district?.topCrops && district.topCrops.length > 0
+                    ? district.topCrops
+                    : ['Mbatata (Sweet Potato)', 'Anyenzi (Onions)', 'Mtedza (Groundnuts)', 'Nzimbe (Sugarcane)', 'Macadamia Integrifolia', 'Hass Avocado', 'Coffee (Arabica)']
+                  ).map((c, i) => (
                     <span key={i} className="px-2 py-0.5 rounded bg-emerald-950/70 border border-emerald-800 text-emerald-300 print:bg-emerald-100 print:text-emerald-900 text-[11px] font-mono">
                       {c}
                     </span>

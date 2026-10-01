@@ -1,34 +1,43 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Search, 
-  Compass, 
-  MapPin, 
-  Calendar, 
-  Hammer, 
-  Calculator, 
-  Sparkles, 
-  BookOpen, 
-  FileText, 
-  Layers, 
-  Sun, 
-  Droplets, 
-  ShieldCheck, 
-  User, 
-  Database,
-  ArrowRight,
-  Command,
+import {
+  Search,
+  Compass,
+  MapPin,
+  Calendar,
+  Hammer,
+  Calculator,
+  Sparkles,
+  BookOpen,
+  FileText,
+  Layers,
+  Sun,
+  ShieldCheck,
+  User,
   X,
-  ExternalLink,
-  ChevronRight
+  ChevronRight,
+  Scale,
+  MessageSquare,
+  Feather,
+  Building2,
+  Users,
+  Sprout,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { prefetchRoute } from '@/lib/routePrefetch';
+import { getCachedSkills, getCachedRegions } from '@/lib/offlineStorage';
+import { EDENIC_AGRICULTURE_GUIDES } from '@/data/outpostFourPillarsData';
 
 export interface CommandItem {
   id: string;
   title: string;
-  category: 'Land & Maps' | 'Farming & Climate' | 'Homestead Skills' | 'Calculators' | 'Account & Tools';
+  category:
+    | 'Land & Maps'
+    | 'Farming & Climate'
+    | 'Homestead Skills'
+    | 'Calculators & BoQ'
+    | 'Spiritual & Fellowship';
   subtitle?: string;
   path: string;
   icon: React.ElementType;
@@ -40,126 +49,189 @@ const COMMAND_REGISTRY: CommandItem[] = [
   // Land & Maps
   {
     id: 'scout-map',
-    title: 'GPS Land Scout Map',
+    title: 'GPS Land Scout Map (28 Districts)',
     category: 'Land & Maps',
-    subtitle: 'Interactive map of all 28 Malawi districts, river basins & elevations',
+    subtitle: 'Interactive map of all 28 Malawi districts, river basins, aquifers & contours',
     path: '/scout-map',
     icon: Compass,
-    keywords: ['map', 'gps', 'districts', 'gis', 'boundaries', 'satellite', 'elevation', 'rivers', 'coordinates'],
-    shortcut: 'M'
+    keywords: ['map', 'gps', 'districts', 'gis', 'boundaries', 'satellite', 'elevation', 'rivers'],
+    shortcut: 'Alt+3',
   },
   {
     id: 'where-matrix',
-    title: 'Land Scouting Matrix & Districts',
+    title: 'Land Scouting Matrix & 5-Step Customary Land Act Checklist',
     category: 'Land & Maps',
-    subtitle: 'Evaluate 28 districts for fertile Katondo soil, climate & water table',
+    subtitle: 'Evaluate 28 districts, Customary Land Act (2016) protocol & Mfumu verification',
     path: '/where',
-    icon: MapPin,
-    keywords: ['districts', 'land', 'dedza', 'zomba', 'rumphi', 'mzimba', 'lilongwe', 'mulanje', 'freehold', 'customary']
+    icon: Scale,
+    keywords: ['districts', 'land', 'customary', 'mfumu', 'nyakwawa', 'mwini mbumba', 'title', 'dedza'],
+    shortcut: 'Alt+2',
+  },
+  {
+    id: 'chichewa-phrasebook',
+    title: 'Chichewa Chief (Mfumu) Etiquette & Phonetic Phrasebook',
+    category: 'Land & Maps',
+    subtitle: 'Phonetic Chichewa greetings, boundary walk phrases & village protocol',
+    path: '/where',
+    icon: MessageSquare,
+    keywords: ['chichewa', 'phrasebook', 'mfumu', 'chief', 'odi', 'zikomo', 'language', 'etiquette'],
+  },
+  {
+    id: 'suitability-rubric',
+    title: '100-Point Land Suitability Evaluator',
+    category: 'Land & Maps',
+    subtitle: 'Score candidate parcels on perennial water, soil, title safety & clinic distance',
+    path: '/suitability',
+    icon: ShieldCheck,
+    keywords: ['suitability', 'evaluator', 'score', 'rubric', 'parcel', 'assessment'],
   },
   {
     id: 'agro-zones',
-    title: 'Agricultural Climate Zones',
+    title: 'Comparative District Analytics & Agro-Zones',
     category: 'Land & Maps',
-    subtitle: 'Highland frost belts, lakeshore plains and Shire valley microclimates',
+    subtitle: 'Compare rainfall gradients, population density & borehole depth across Malawi',
     path: '/regions',
-    icon: Layers,
-    keywords: ['regions', 'zones', 'highlands', 'plateau', 'weather', 'rain', 'temperature']
-  },
-  {
-    id: 'customary-land',
-    title: 'Customary Land Acquisition Guide',
-    category: 'Land & Maps',
-    subtitle: 'Step-by-step village land laws, Mfumu protocols & title conversion',
-    path: '/how',
-    icon: FileText,
-    keywords: ['customary', 'chikhalidwe', 'chief', 'mfumu', 'land act', 'title deed', 'leasehold', 'law']
+    icon: MapPin,
+    keywords: ['regions', 'zones', 'highlands', 'analytics', 'comparison'],
   },
 
-  // Farming & Seasons
-  {
-    id: 'seasonal-almanac',
-    title: 'Seasonal Almanac & Crop Calendar',
-    category: 'Farming & Climate',
-    subtitle: 'Month-by-month planting, mulching, compost and harvest schedule',
-    path: '/seasons',
-    icon: Calendar,
-    keywords: ['almanac', 'seasons', 'calendar', 'rainy', 'dry', 'cold', 'planting', 'harvest', 'mvula', 'mpepo', 'chirimwe'],
-    shortcut: 'S'
-  },
+  // Farming & Climate
   {
     id: 'crops-guide',
-    title: 'Crops & Nutrition Field Manual',
+    title: 'Crops, Visual Soil Swatches & 75cm Ridge Planner',
     category: 'Farming & Climate',
-    subtitle: 'Growing maize, groundnuts, beans, sweet potatoes & relish vegetables',
+    subtitle: 'Katondo/Makande/Dambo soil ribbon guide, 75cm x 25cm Sasakawa ridges & pantry reserves',
     path: '/what',
+    icon: Sprout,
+    keywords: ['crops', 'soil', 'swatch', 'katondo', 'makande', 'dambo', 'ridges', 'maize', 'chimanga', 'nzama'],
+    shortcut: 'Alt+4',
+  },
+  {
+    id: 'edenic-agriculture',
+    title: 'Edenic Agriculture & 18-Day Compost Manuals',
+    category: 'Farming & Climate',
+    subtitle: 'Deep orchard pit preparation, hot composting thermal curves & natural pest care',
+    path: '/agriculture',
     icon: Sun,
-    keywords: ['crops', 'maize', 'beans', 'groundnuts', 'chimanga', 'ntedza', 'nyemba', 'vegetables', 'food']
+    keywords: ['agriculture', 'edenic', 'compost', 'mulch', 'biochar', 'orchard', 'tithonia'],
+  },
+  {
+    id: 'seasonal-almanac',
+    title: 'Seasonal Almanac & Malawi Crop Calendar',
+    category: 'Farming & Climate',
+    subtitle: 'Month-by-month tasks for Dzinja (Rainy), Masika (Cool Harvest) & Chilimwe (Dry)',
+    path: '/seasons',
+    icon: Calendar,
+    keywords: ['almanac', 'seasons', 'calendar', 'rainy', 'dry', 'dzinja', 'masika', 'chilimwe'],
   },
 
-  // Practical Skills
+  // Homestead Skills & Engineering
+  {
+    id: 'engineering-diagrams',
+    title: 'Field Engineering Schematics & Relocation Guide',
+    category: 'Homestead Skills',
+    subtitle: 'Interactive SVG cross-sections: 3x3x3ft EGW orchard pit, A-frame level & first-flush tank',
+    path: '/how',
+    icon: Layers,
+    keywords: ['how', 'engineering', 'diagrams', 'a-frame', 'contour', 'first-flush', 'orchard pit'],
+    shortcut: 'Alt+5',
+  },
   {
     id: 'skills-hub',
     title: '25 Homestead Skills Masterclass',
     category: 'Homestead Skills',
-    subtitle: 'Practical manuals for compost, solar wiring, brickmaking, food drying & herbal care',
+    subtitle: 'Step-by-step visual protocols for solar dehydrators, biosand filters, rocket stoves & remedies',
     path: '/skills',
     icon: Hammer,
-    keywords: ['skills', 'masterclass', 'brickmaking', 'compost', 'solar', 'herbal', 'canning', 'foraging', 'joinery'],
-    shortcut: 'K'
+    keywords: ['skills', 'masterclass', 'brickmaking', 'compost', 'solar', 'biosand', 'hydrotherapy'],
+  },
+
+  // Calculators & BoQ
+  {
+    id: 'calculators-hub',
+    title: 'Solar, Rainwater & Dry-Season Dimba Calculators',
+    category: 'Calculators & BoQ',
+    subtitle: 'Size off-grid LiFePO4 solar arrays, roof cisterns, gravity pipes & Chilimwe Dimba irrigation',
+    path: '/calculators',
+    icon: Calculator,
+    keywords: ['calculators', 'solar', 'battery', 'borehole', 'rainwater', 'dimba', 'irrigation', 'sizing'],
+    shortcut: 'Alt+6',
+  },
+  {
+    id: 'boq-estimator',
+    title: 'Malawi Homestead Bill of Quantities (MWK / USD Cost Estimator)',
+    category: 'Calculators & BoQ',
+    subtitle: 'Itemized hardware schedule & capital budget in Malawian Kwacha (MWK) and USD',
+    path: '/calculators?tab=budget',
+    icon: FileText,
+    keywords: ['budget', 'boq', 'cost', 'kwacha', 'mwk', 'usd', 'price', 'hardware', 'materials'],
+  },
+
+  // Spiritual & Fellowship
+  {
+    id: 'tracker-roadmap',
+    title: 'My Plan — Exodus Readiness Ledger & Roadmap',
+    category: 'Spiritual & Fellowship',
+    subtitle: 'Track overall readiness score, 5-stage transition ledger & personalized milestones',
+    path: '/tracker',
+    icon: Sparkles,
+    keywords: ['tracker', 'exodus', 'roadmap', 'progress', 'milestones', 'checklist', 'plan'],
+    shortcut: 'Alt+T',
+  },
+  {
+    id: 'daily-devotional',
+    title: 'Daily Country Living Devotionals & Worship Journal',
+    category: 'Spiritual & Fellowship',
+    subtitle: 'Morning Watch KJV Scripture, Spirit of Prophecy counsel & personal reflection vault',
+    path: '/devotional',
+    icon: Feather,
+    keywords: ['devotional', 'journal', 'prayer', 'worship', 'scripture', 'kjv'],
   },
   {
     id: 'country-vision',
-    title: 'Country Living Vision & Philosophy',
-    category: 'Homestead Skills',
-    subtitle: 'Spiritual and health foundation for peaceful self-reliance in rural sanctuaries',
+    title: 'The Inspired Blueprint — Verbatim EGW Archive',
+    category: 'Spiritual & Fellowship',
+    subtitle: 'Searchable archive of Ellen G. White counsels with live KJV Scripture verification',
     path: '/vision',
     icon: BookOpen,
-    keywords: ['vision', 'philosophy', 'country living', 'ellen white', 'health', 'self reliance', 'peace']
+    keywords: ['vision', 'ellen white', 'egw', 'counsel', 'country living', 'ministry of healing'],
   },
-
-  // Off-Grid Calculators
   {
-    id: 'calculators-hub',
-    title: 'Off-Grid Sizing Calculators',
-    category: 'Calculators',
-    subtitle: 'Solar panels, battery banks, borehole pumps, rainwater tanks & land layout',
-    path: '/calculators',
-    icon: Calculator,
-    keywords: ['calculators', 'solar', 'battery', 'borehole', 'water tank', 'rainwater', 'sizing', 'wattage', 'acreage'],
-    shortcut: 'C'
+    id: 'outpost-blueprints',
+    title: 'Outpost Center & Rural Sanitarium Blueprints',
+    category: 'Spiritual & Fellowship',
+    subtitle: 'Architectural site plans modeled on Madison and Avondale training centers',
+    path: '/blueprints',
+    icon: Building2,
+    keywords: ['blueprints', 'sanitarium', 'school', 'clinic', 'avondale', 'madison', 'architecture'],
   },
-
-  // Progress & Profile
   {
-    id: 'tracker-roadmap',
-    title: 'Exodus Move Roadmap & Tracker',
-    category: 'Account & Tools',
-    subtitle: 'Interactive milestone tracker for land purchase, water setup & relocation',
-    path: '/tracker',
-    icon: Sparkles,
-    keywords: ['tracker', 'exodus', 'roadmap', 'progress', 'milestones', 'checklist', 'journey'],
-    shortcut: 'T'
+    id: 'community-directory',
+    title: 'Malawi Outpost & Believer Directory',
+    category: 'Spiritual & Fellowship',
+    subtitle: 'Connect with Seventh-day Adventist homesteaders, seed savers & solar builders',
+    path: '/community',
+    icon: Users,
+    keywords: ['community', 'directory', 'fellowship', 'seed savers', 'believers'],
   },
   {
     id: 'account-backup',
-    title: 'Steward Profile & Data Backup',
-    category: 'Account & Tools',
-    subtitle: 'Export backup JSON, check offline cached guides and customize goals',
+    title: 'Steward Profile, Cloud Sync & JSON Backup',
+    category: 'Spiritual & Fellowship',
+    subtitle: 'Manage Google Cloud Sync, export full Sanctuary JSON backup, or restore offline data',
     path: '/account',
     icon: User,
-    keywords: ['account', 'profile', 'backup', 'export', 'restore', 'sync', 'offline', 'settings']
+    keywords: ['account', 'profile', 'backup', 'export', 'restore', 'sync', 'offline'],
   },
   {
     id: 'homestead-ai-advisor',
     title: 'Homestead AI Sanctuary Advisor',
-    category: 'Account & Tools',
-    subtitle: 'Ask AI questions on land scouting, water borehole sizing, Katondo soil & seasons',
+    category: 'Spiritual & Fellowship',
+    subtitle: 'Ask questions on Malawi land scouting, borehole depth, Katondo soil & EGW counsel',
     path: '#advisor',
     icon: Sparkles,
-    keywords: ['ai', 'advisor', 'gemini', 'ask', 'question', 'help', 'counsel', 'assistant', 'bot', 'chat'],
-    shortcut: 'A'
-  }
+    keywords: ['ai', 'advisor', 'ask', 'question', 'help', 'counsel'],
+  },
 ];
 
 export interface QuickCommandPaletteProps {
@@ -168,47 +240,98 @@ export interface QuickCommandPaletteProps {
   onOpenAdvisor?: () => void;
 }
 
-export function QuickCommandPalette({ isOpen, onClose, onOpenAdvisor }: QuickCommandPaletteProps) {
+export function QuickCommandPalette({
+  isOpen,
+  onClose,
+  onOpenAdvisor,
+}: QuickCommandPaletteProps) {
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
-  // Reset query and focus input on open
   useEffect(() => {
     if (isOpen) {
       setQuery('');
       setSelectedIndex(0);
       setTimeout(() => {
         inputRef.current?.focus();
-      }, 50);
+      }, 30);
     }
   }, [isOpen]);
 
-  // Filter commands by query
+  const allCommands = useMemo<CommandItem[]>(() => {
+    const skillCommands: CommandItem[] = getCachedSkills().map((skill) => ({
+      id: `skill-${skill.id}`,
+      title: `Skill Protocol: ${skill.title}`,
+      category: 'Homestead Skills',
+      subtitle: `${skill.category} · ${skill.difficulty} · ${skill.timeToMaster}`,
+      path: `/skills/${skill.id}`,
+      icon: Hammer,
+      keywords: [
+        skill.title,
+        skill.category,
+        skill.seasonalTag || '',
+        ...(skill.toolsNeeded || []),
+      ],
+    }));
+
+    const regionCommands: CommandItem[] = getCachedRegions().map((region) => ({
+      id: `region-${region.id}`,
+      title: `Region Almanac: ${region.name}`,
+      category: 'Land & Maps',
+      subtitle: `${region.tagline} · Districts: ${region.keyDistricts.join(', ')}`,
+      path: `/regions/${region.id}`,
+      icon: MapPin,
+      keywords: [region.name, ...region.keyDistricts, ...region.topCrops],
+    }));
+
+    const manualCommands: CommandItem[] = EDENIC_AGRICULTURE_GUIDES.map((guide) => ({
+      id: `manual-${guide.id}`,
+      title: `Edenic Manual: ${guide.title}`,
+      category: 'Farming & Climate',
+      subtitle: `${guide.subtitle} (${guide.counselReference})`,
+      path: '/agriculture',
+      icon: Sprout,
+      keywords: [guide.title, guide.subtitle, guide.counselReference],
+    }));
+
+    return [...COMMAND_REGISTRY, ...skillCommands, ...regionCommands, ...manualCommands];
+  }, []);
+
   const filteredResults = useMemo(() => {
     if (!query.trim()) return COMMAND_REGISTRY;
     const q = query.toLowerCase().trim();
-    return COMMAND_REGISTRY.filter(cmd => {
+    return allCommands.filter((cmd) => {
       const matchTitle = cmd.title.toLowerCase().includes(q);
       const matchSubtitle = cmd.subtitle?.toLowerCase().includes(q);
       const matchCategory = cmd.category.toLowerCase().includes(q);
-      const matchKeywords = cmd.keywords?.some(k => k.toLowerCase().includes(q));
+      const matchKeywords = cmd.keywords?.some((k) => k.toLowerCase().includes(q));
       return matchTitle || matchSubtitle || matchCategory || matchKeywords;
     });
-  }, [query]);
+  }, [query, allCommands]);
 
-  // Handle keyboard navigation
+  // Prefetch currently highlighted command route
+  useEffect(() => {
+    if (!isOpen) return;
+    const current = filteredResults[selectedIndex];
+    if (current?.path && !current.path.startsWith('#')) {
+      prefetchRoute(current.path);
+    }
+  }, [isOpen, filteredResults, selectedIndex]);
+
   useEffect(() => {
     if (!isOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowDown') {
         e.preventDefault();
-        setSelectedIndex(prev => (prev + 1) % Math.max(1, filteredResults.length));
+        setSelectedIndex((prev) => (prev + 1) % Math.max(1, filteredResults.length));
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
-        setSelectedIndex(prev => (prev - 1 + filteredResults.length) % Math.max(1, filteredResults.length));
+        setSelectedIndex(
+          (prev) => (prev - 1 + filteredResults.length) % Math.max(1, filteredResults.length)
+        );
       } else if (e.key === 'Enter') {
         e.preventDefault();
         if (filteredResults[selectedIndex]) {
@@ -237,60 +360,64 @@ export function QuickCommandPalette({ isOpen, onClose, onOpenAdvisor }: QuickCom
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4">
+        <div className="fixed inset-0 z-50 flex items-start justify-center pt-14 sm:pt-20 px-4">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
+            transition={{ duration: 0.12 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm cursor-pointer"
+            className="fixed inset-0 bg-black/65 backdrop-blur-xs cursor-pointer"
           />
 
-          {/* Palette Modal Box */}
+          {/* Palette Modal Box with Dark Mode Support */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: -10 }}
+            initial={{ opacity: 0, scale: 0.97, y: -8 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96, y: -10 }}
-            transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-            className="relative z-50 w-full max-w-2xl bg-[#FAF8F5] border border-stone-300 rounded-3xl shadow-2xl overflow-hidden flex flex-col text-stone-900 divide-y divide-stone-200"
+            exit={{ opacity: 0, scale: 0.97, y: -8 }}
+            transition={{ duration: 0.14, ease: 'easeOut' }}
+            className="relative z-50 w-full max-w-2xl bg-[#FAF8F5] dark:bg-[#0B1C12] border border-stone-300 dark:border-emerald-800/80 rounded-3xl shadow-2xl overflow-hidden flex flex-col text-stone-900 dark:text-stone-100 divide-y divide-stone-200 dark:divide-emerald-900/60"
           >
             {/* Input Bar */}
-            <div className="flex items-center px-4 sm:px-6 py-4 gap-3 bg-white">
-              <Search size={20} className="text-emerald-800 shrink-0" />
+            <div className="flex items-center px-4 sm:px-6 py-4 gap-3 bg-white dark:bg-[#08150D]">
+              <Search size={19} className="text-emerald-800 dark:text-amber-400 shrink-0" />
               <input
                 ref={inputRef}
                 type="text"
                 value={query}
-                onChange={e => {
+                onChange={(e) => {
                   setQuery(e.target.value);
                   setSelectedIndex(0);
                 }}
-                placeholder="Jump to any guide, calculator, district map or skill (e.g. 'solar', 'dedza', 'compost')..."
-                className="w-full bg-transparent text-sm sm:text-base text-stone-900 placeholder:text-stone-400 font-sans focus:outline-none"
+                placeholder="Jump to any module, BoQ calculator, Chichewa phrasebook, or map..."
+                className="w-full bg-transparent text-sm sm:text-base text-stone-900 dark:text-stone-100 placeholder:text-stone-400 dark:placeholder:text-stone-500 font-sans focus:outline-none"
               />
               {query ? (
                 <button
                   onClick={() => setQuery('')}
-                  className="p-1 rounded-lg text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors"
+                  className="p-1 rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-white transition-colors cursor-pointer"
                 >
                   <X size={16} />
                 </button>
               ) : (
-                <kbd className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold text-stone-500 bg-stone-100 border border-stone-200">
+                <kbd className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold text-stone-500 dark:text-stone-400 bg-stone-100 dark:bg-emerald-950 border border-stone-200 dark:border-emerald-800">
                   ESC
                 </kbd>
               )}
             </div>
 
             {/* Results List */}
-            <div className="max-h-[60vh] overflow-y-auto custom-scrollbar p-2 sm:p-3 flex flex-col gap-1 bg-[#FAF8F5]">
+            <div className="max-h-[58vh] overflow-y-auto custom-scrollbar p-2 sm:p-3 flex flex-col gap-1 bg-[#FAF8F5] dark:bg-[#0B1C12]">
               {filteredResults.length === 0 ? (
-                <div className="py-12 px-4 text-center flex flex-col items-center justify-center gap-2 text-stone-500">
-                  <Compass size={32} className="text-emerald-800/40 animate-pulse" />
-                  <span className="text-sm font-bold text-stone-800">No matching guides or tools found</span>
-                  <span className="text-xs text-stone-500">Try searching for "solar", "water", "districts", "almanac", or "skills"</span>
+                <div className="py-12 px-4 text-center flex flex-col items-center justify-center gap-2 text-stone-500 dark:text-stone-400">
+                  <Compass size={32} className="text-emerald-800/40 dark:text-amber-400/40" />
+                  <span className="text-sm font-bold text-stone-800 dark:text-stone-200">
+                    No matching guides or tools found
+                  </span>
+                  <span className="text-xs">
+                    Try searching for "boq", "chichewa", "solar", "customary", or "ridges"
+                  </span>
                 </div>
               ) : (
                 filteredResults.map((item, index) => {
@@ -301,38 +428,47 @@ export function QuickCommandPalette({ isOpen, onClose, onOpenAdvisor }: QuickCom
                     <button
                       key={item.id}
                       onClick={() => handleSelect(item)}
-                      onMouseEnter={() => setSelectedIndex(index)}
+                      onMouseEnter={() => {
+                        setSelectedIndex(index);
+                        if (!item.path.startsWith('#')) prefetchRoute(item.path);
+                      }}
                       className={cn(
-                        "w-full flex items-center justify-between p-3 rounded-2xl transition-all text-left cursor-pointer border",
+                        'w-full flex items-center justify-between p-3 rounded-2xl transition-all text-left cursor-pointer border',
                         isSelected
-                          ? "bg-emerald-50/90 border-emerald-300 text-stone-900 shadow-xs"
-                          : "bg-transparent border-transparent hover:bg-stone-100/80 text-stone-700"
+                          ? 'bg-emerald-50/90 dark:bg-emerald-950/90 border-emerald-300 dark:border-amber-500/40 text-stone-900 dark:text-white shadow-xs'
+                          : 'bg-transparent border-transparent hover:bg-stone-100/80 dark:hover:bg-white/5 text-stone-700 dark:text-stone-300'
                       )}
                     >
                       <div className="flex items-center gap-3.5 min-w-0">
-                        <div className={cn(
-                          "w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors",
-                          isSelected
-                            ? "bg-emerald-800 text-white shadow-xs"
-                            : "bg-stone-100 text-emerald-800 border border-stone-200"
-                        )}>
-                          <Icon size={20} />
+                        <div
+                          className={cn(
+                            'w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors',
+                            isSelected
+                              ? 'bg-emerald-800 dark:bg-amber-500 text-white dark:text-stone-950 shadow-xs'
+                              : 'bg-stone-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-amber-300 border border-stone-200 dark:border-emerald-800/60'
+                          )}
+                        >
+                          <Icon size={19} />
                         </div>
 
                         <div className="flex flex-col min-w-0">
                           <div className="flex items-center gap-2">
-                            <span className={cn(
-                              "text-sm font-bold truncate font-sans",
-                              isSelected ? "text-emerald-950" : "text-stone-900"
-                            )}>
+                            <span
+                              className={cn(
+                                'text-sm font-bold truncate font-sans',
+                                isSelected
+                                  ? 'text-emerald-950 dark:text-amber-200'
+                                  : 'text-stone-900 dark:text-stone-100'
+                              )}
+                            >
                               {item.title}
                             </span>
-                            <span className="text-[10px] font-sans font-semibold uppercase px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200 hidden sm:inline-block">
-                              {item.category}
+                            <span className="text-[10px] font-mono text-stone-500 dark:text-emerald-300/70 hidden sm:inline">
+                              · {item.category}
                             </span>
                           </div>
                           {item.subtitle && (
-                            <span className="text-xs text-stone-500 truncate mt-0.5 font-normal">
+                            <span className="text-xs text-stone-500 dark:text-stone-400 truncate mt-0.5 font-normal">
                               {item.subtitle}
                             </span>
                           )}
@@ -341,14 +477,19 @@ export function QuickCommandPalette({ isOpen, onClose, onOpenAdvisor }: QuickCom
 
                       <div className="flex items-center gap-2 shrink-0 ml-3">
                         {item.shortcut && (
-                          <kbd className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[10px] font-mono text-stone-500 bg-white border border-stone-200">
+                          <kbd className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[10px] font-mono text-stone-500 dark:text-stone-300 bg-white dark:bg-black/40 border border-stone-200 dark:border-emerald-800">
                             {item.shortcut}
                           </kbd>
                         )}
-                        <ChevronRight size={16} className={cn(
-                          "transition-transform",
-                          isSelected ? "text-emerald-800 translate-x-0.5" : "text-stone-400"
-                        )} />
+                        <ChevronRight
+                          size={16}
+                          className={cn(
+                            'transition-transform',
+                            isSelected
+                              ? 'text-emerald-800 dark:text-amber-400 translate-x-0.5'
+                              : 'text-stone-400'
+                          )}
+                        />
                       </div>
                     </button>
                   );
@@ -356,27 +497,17 @@ export function QuickCommandPalette({ isOpen, onClose, onOpenAdvisor }: QuickCom
               )}
             </div>
 
-            {/* Footer Keyboard Hints */}
-            <div className="hidden sm:flex items-center justify-between px-6 py-3 bg-stone-100/90 text-[11px] font-sans text-stone-500 border-t border-stone-200">
-              <div className="flex items-center gap-4">
-                <span className="flex items-center gap-1.5">
-                  <kbd className="px-1 py-0.5 rounded bg-white border border-stone-200 text-[9px] font-mono text-stone-600">↑</kbd>
-                  <kbd className="px-1 py-0.5 rounded bg-white border border-stone-200 text-[9px] font-mono text-stone-600">↓</kbd>
-                  Navigate
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <kbd className="px-1.5 py-0.5 rounded bg-white border border-stone-200 text-[9px] font-mono text-stone-600">↵</kbd>
-                  Open
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <kbd className="px-1.5 py-0.5 rounded bg-white border border-stone-200 text-[9px] font-mono text-stone-600">ESC</kbd>
-                  Close
-                </span>
+            {/* Footer Bar */}
+            <div className="px-4 sm:px-6 py-2.5 bg-white dark:bg-[#08150D] flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-stone-500 dark:text-stone-400">
+              <div className="flex items-center gap-3">
+                <span>↑↓ Navigate</span>
+                <span>↵ Open</span>
+                <span>ESC Close</span>
               </div>
-
-              <span className="text-emerald-900 font-semibold">
-                Instant Navigation • Works Offline
-              </span>
+              <div className="hidden sm:flex items-center gap-3">
+                <span>⌘B Directory</span>
+                <span>Alt+←/→ History</span>
+              </div>
             </div>
           </motion.div>
         </div>
@@ -384,5 +515,3 @@ export function QuickCommandPalette({ isOpen, onClose, onOpenAdvisor }: QuickCom
     </AnimatePresence>
   );
 }
-
-export default QuickCommandPalette;

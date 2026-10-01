@@ -108,6 +108,16 @@ export function CommunityDirectory({ className }: { className?: string }) {
     });
   };
 
+  const handleDeleteUserEntry = (id: string) => {
+    const updated = userEntries.filter((e) => e.id !== id);
+    setUserEntries(updated);
+    try {
+      localStorage.setItem('outpost_community_entries', JSON.stringify(updated));
+    } catch {
+      // ignore
+    }
+  };
+
   return (
     <section 
       id="community-directory"
@@ -128,8 +138,7 @@ export function CommunityDirectory({ className }: { className?: string }) {
             Country Living Community Connection
           </h2>
           <p className="text-stone-600 dark:text-stone-300 text-sm sm:text-base max-w-2xl mt-1.5 leading-relaxed">
-            Connect with Seventh-day Adventist families, seed savers, natural builders, and local fellowship groups across Malawi. 
-            We are not meant to stand alone; we are stronger together.
+            Organize and track local seed circles, natural builders, and Seventh-day Adventist country fellowships across Malawi.
           </p>
         </div>
 
@@ -139,8 +148,16 @@ export function CommunityDirectory({ className }: { className?: string }) {
           className="self-start md:self-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-800 dark:bg-emerald-700 hover:bg-emerald-900 dark:hover:bg-emerald-600 text-white text-xs font-semibold shadow-xs transition-all cursor-pointer"
         >
           <Plus size={15} />
-          <span>Add Homestead or Seed Circle</span>
+          <span>Add Personal Contact / Circle</span>
         </button>
+      </div>
+
+      {/* Transparency Notice on Template Examples vs Personal Contacts */}
+      <div className="rounded-2xl border border-amber-300/70 dark:border-amber-700/40 bg-amber-50/70 dark:bg-amber-950/25 px-4 py-3 text-xs text-stone-700 dark:text-stone-300 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <p className="leading-relaxed">
+          <strong className="font-bold text-amber-900 dark:text-amber-300">Directory Data Notice:</strong>{' '}
+          The 6 pre-loaded cards marked <span className="font-mono font-semibold text-amber-900 dark:text-amber-300">[Illustrative Template]</span> show how regional guilds can be structured across Malawi. Contacts you add via <strong>Add Personal Contact / Circle</strong> are saved privately to your device vault ({userEntries.length} personal {userEntries.length === 1 ? 'entry' : 'entries'} saved).
+        </p>
       </div>
 
       {/* Filter and Search Bar */}
@@ -206,10 +223,19 @@ export function CommunityDirectory({ className }: { className?: string }) {
             <div className="flex flex-col gap-3">
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex flex-wrap items-center gap-1.5">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded">
                       {entry.primaryRole}
                     </span>
+                    {entry.isTemplateExample ? (
+                      <span className="text-[10px] font-mono font-semibold text-amber-900 dark:text-amber-300 bg-amber-100/80 dark:bg-amber-950/60 px-1.5 py-0.5 rounded">
+                        Illustrative Template
+                      </span>
+                    ) : (
+                      <span className="text-[10px] font-mono font-semibold text-emerald-900 dark:text-emerald-200 bg-emerald-100/80 dark:bg-emerald-900/60 px-1.5 py-0.5 rounded">
+                        Saved Contact
+                      </span>
+                    )}
                     <span className="text-stone-300 dark:text-stone-600">•</span>
                     <span className="text-xs text-stone-500 dark:text-stone-400 font-medium">
                       {entry.district} ({entry.region})
@@ -220,13 +246,25 @@ export function CommunityDirectory({ className }: { className?: string }) {
                   </h3>
                 </div>
 
-                <div className="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 flex items-center justify-center shrink-0">
-                  {entry.primaryRole === 'Seed Savers' && <Sprout size={16} className="text-emerald-700 dark:text-emerald-400" />}
-                  {entry.primaryRole === 'Organic Growers' && <Sprout size={16} className="text-emerald-700 dark:text-emerald-400" />}
-                  {entry.primaryRole === 'Natural Builders' && <Hammer size={16} className="text-amber-700 dark:text-amber-400" />}
-                  {entry.primaryRole === 'Water & Solar' && <Sun size={16} className="text-amber-600 dark:text-amber-400" />}
-                  {entry.primaryRole === 'Health & Lifestyle' && <Stethoscope size={16} className="text-sky-700 dark:text-sky-400" />}
-                  {entry.primaryRole === 'Country Fellowship' && <Users size={16} className="text-emerald-800 dark:text-emerald-400" />}
+                <div className="flex items-center gap-1.5 shrink-0">
+                  {!entry.isTemplateExample && (
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteUserEntry(entry.id)}
+                      title="Remove saved contact"
+                      className="p-1.5 rounded-lg text-stone-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
+                    >
+                      <X size={14} />
+                    </button>
+                  )}
+                  <div className="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 flex items-center justify-center shrink-0">
+                    {entry.primaryRole === 'Seed Savers' && <Sprout size={16} className="text-emerald-700 dark:text-emerald-400" />}
+                    {entry.primaryRole === 'Organic Growers' && <Sprout size={16} className="text-emerald-700 dark:text-emerald-400" />}
+                    {entry.primaryRole === 'Natural Builders' && <Hammer size={16} className="text-amber-700 dark:text-amber-400" />}
+                    {entry.primaryRole === 'Water & Solar' && <Sun size={16} className="text-amber-600 dark:text-amber-400" />}
+                    {entry.primaryRole === 'Health & Lifestyle' && <Stethoscope size={16} className="text-sky-700 dark:text-sky-400" />}
+                    {entry.primaryRole === 'Country Fellowship' && <Users size={16} className="text-emerald-800 dark:text-emerald-400" />}
+                  </div>
                 </div>
               </div>
 

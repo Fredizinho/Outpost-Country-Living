@@ -1,18 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  BookOpen, Compass, ShieldCheck, Calculator, Sprout, 
-  Building2, Users, CheckCircle2, Calendar, ChevronRight, 
-  X, Search, MapPin, Feather, Layers, ArrowUpRight,
-  Sun, Droplets, HeartHandshake, FileText, ChevronLeft
+import {
+  BookOpen,
+  Compass,
+  ShieldCheck,
+  Calculator,
+  Sprout,
+  Building2,
+  Users,
+  CheckCircle2,
+  Calendar,
+  ChevronRight,
+  ChevronLeft,
+  X,
+  Search,
+  MapPin,
+  Feather,
+  Layers,
+  Sun,
+  FileText,
+  Hammer,
+  Home as HomeIcon,
+  FolderTree,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { prefetchRoute } from '@/lib/routePrefetch';
 import { OutpostLogo } from '@/components/common/OutpostLogo';
 
 export interface DirectoryItem {
   id: string;
   name: string;
+  shortName: string;
   category: string;
   path: string;
   icon: React.ComponentType<{ size?: number; className?: string }>;
@@ -27,185 +46,244 @@ const DIRECTORY_CATEGORIES = [
   'Land & Water Scouting',
   'Homestead Utilities',
   'Edenic Agriculture',
-  'Outposts & Community'
+  'Outposts & Community',
 ] as const;
 
 export const DIRECTORY_ITEMS: DirectoryItem[] = [
   // 1. Spiritual Foundation
   {
     id: 'devotional',
-    name: 'Daily Manna Devotionals',
+    name: 'Daily Manna Devotionals & Journal',
+    shortName: 'Daily Manna',
     category: 'Spiritual Foundation',
     path: '/devotional',
     icon: Feather,
     iconColor: 'text-amber-600 dark:text-amber-300',
     iconBg: 'bg-amber-100 dark:bg-amber-950/80 border-amber-300/80 dark:border-amber-700/60',
-    description: 'Daily Spirit of Prophecy readings, Scripture, and faith for country living.',
-    badge: 'Daily Manna'
+    description: 'Daily Spirit of Prophecy readings, KJV Scripture, and personal worship reflection vault.',
+    badge: 'Daily Manna',
   },
   {
     id: 'vision',
     name: 'Divine Counsel on Leaving Cities',
+    shortName: 'EGW Archive',
     category: 'Spiritual Foundation',
     path: '/vision',
     icon: BookOpen,
     iconColor: 'text-emerald-700 dark:text-emerald-300',
     iconBg: 'bg-emerald-100 dark:bg-emerald-950/80 border-emerald-300/80 dark:border-emerald-700/60',
-    description: 'Ellen G. White writings and warnings on escaping city turmoil for rural homes.'
+    description: 'Verbatim Ellen G. White archival writings on rural living and family education.',
   },
   {
     id: 'tracker',
-    name: '9-Step Exodus Readiness Ledger',
+    name: 'Exodus Readiness Ledger & Plan',
+    shortName: 'Exodus Ledger',
     category: 'Spiritual Foundation',
     path: '/tracker',
     icon: CheckCircle2,
     iconColor: 'text-amber-700 dark:text-amber-400',
     iconBg: 'bg-amber-100 dark:bg-amber-950/80 border-amber-300/80 dark:border-amber-700/60',
-    description: 'Step-by-step progress checklist for prayer, land scouting, moving, and building.',
-    badge: 'Core Guide'
+    description: 'Unified readiness score, 5-stage transition ledger, and customizable relocation checklist.',
+    badge: 'Core Guide',
   },
 
   // 2. Land & Water Scouting
   {
     id: 'scout-map',
     name: 'GPS Land & Water Scout Map',
+    shortName: 'GIS Scout Map',
     category: 'Land & Water Scouting',
     path: '/scout-map',
     icon: Compass,
     iconColor: 'text-cyan-700 dark:text-cyan-300',
     iconBg: 'bg-cyan-100 dark:bg-cyan-950/80 border-cyan-300/80 dark:border-cyan-700/60',
-    description: 'Interactive map showing rivers, dambos, springs, and soil types across Malawi.',
-    badge: 'Live Map'
+    description: 'Interactive 28-district GIS map showing aquifers, springs, contours, and soil zones.',
+    badge: 'Live GIS',
   },
   {
     id: 'suitability',
     name: '100-Point Land Evaluator',
+    shortName: '100-Pt Rubric',
     category: 'Land & Water Scouting',
     path: '/suitability',
     icon: ShieldCheck,
     iconColor: 'text-emerald-700 dark:text-emerald-300',
     iconBg: 'bg-emerald-100 dark:bg-emerald-950/80 border-emerald-300/80 dark:border-emerald-700/60',
-    description: 'Five-point assessment: year-round water, soil quality, title safety, distance, and privacy.',
-    badge: 'Assessment'
+    description: 'Weighted field scoring for perennial water, Katondo soil, title safety, and clinic reach.',
+    badge: 'Assessment',
   },
   {
     id: 'where',
-    name: 'Land Laws & Title Verification',
+    name: 'Customary Land Law & Chichewa Guide',
+    shortName: 'Land Law & Chief',
     category: 'Land & Water Scouting',
     path: '/where',
     icon: FileText,
     iconColor: 'text-stone-700 dark:text-stone-300',
     iconBg: 'bg-stone-200 dark:bg-stone-800 border-stone-300/80 dark:border-stone-700/60',
-    description: 'Clear guidance on Customary land, Leasehold titles, and Chief approval.'
+    description: '5-step Customary Land Act (2016) tracker and Chief (Mfumu) phonetic Chichewa phrasebook.',
   },
   {
     id: 'regions',
     name: '28 District Regional Almanac',
+    shortName: 'District Atlas',
     category: 'Land & Water Scouting',
     path: '/regions',
     icon: MapPin,
     iconColor: 'text-teal-700 dark:text-teal-300',
     iconBg: 'bg-teal-100 dark:bg-teal-950/80 border-teal-300/80 dark:border-teal-700/60',
-    description: 'Farming zones, rainfall records, and elevation profiles for all districts.'
+    description: 'Comparative analytics across Northern, Central, and Southern Malawi districts.',
   },
 
   // 3. Homestead Utilities
   {
     id: 'calculators',
-    name: 'Homestead Sizing Calculators',
+    name: 'Calculators & Bill of Quantities (BoQ)',
+    shortName: 'Calculators & BoQ',
     category: 'Homestead Utilities',
     path: '/calculators',
     icon: Calculator,
     iconColor: 'text-amber-700 dark:text-amber-300',
     iconBg: 'bg-amber-100 dark:bg-amber-950/80 border-amber-300/80 dark:border-amber-700/60',
-    description: 'Calculators for solar panels, battery banks, rainwater tanks, and family crop acreage.',
-    badge: 'Calculators'
+    description: 'Solar PV, rainwater cistern, Dimba irrigation, and MWK/USD Bill of Quantities estimator.',
+    badge: 'Calculators',
+  },
+  {
+    id: 'how',
+    name: 'Engineering Schematics & Build Guide',
+    shortName: 'Schematics',
+    category: 'Homestead Utilities',
+    path: '/how',
+    icon: Hammer,
+    iconColor: 'text-emerald-700 dark:text-emerald-300',
+    iconBg: 'bg-emerald-100 dark:bg-emerald-950/80 border-emerald-300/80 dark:border-emerald-700/60',
+    description: 'Cross-sectional SVG diagrams for 3x3x3ft EGW pits, A-frame contours, and first-flush tanks.',
+  },
+  {
+    id: 'skills',
+    name: '25 Country Skills Masterclass',
+    shortName: '25 Country Skills',
+    category: 'Homestead Utilities',
+    path: '/skills',
+    icon: Layers,
+    iconColor: 'text-amber-700 dark:text-amber-300',
+    iconBg: 'bg-amber-100 dark:bg-amber-950/80 border-amber-300/80 dark:border-amber-700/60',
+    description: 'Step-by-step illustrated field protocols for off-grid water, food preservation, and building.',
   },
 
   // 4. Edenic Agriculture
   {
-    id: 'weather',
-    name: 'Malawi Agricultural Weather',
+    id: 'what',
+    name: 'Crops, Soil Swatches & 75cm Ridges',
+    shortName: 'Crops & Soils',
     category: 'Edenic Agriculture',
-    path: '/#malawi-weather-forecast',
-    icon: Sun,
-    iconColor: 'text-amber-600 dark:text-amber-300',
-    iconBg: 'bg-amber-100 dark:bg-amber-950/80 border-amber-300/80 dark:border-amber-700/60',
-    description: 'Localized rain probability, soil moisture, and 7-day farming task forecasts.',
-    badge: 'Weather & Climate'
+    path: '/what',
+    icon: Sprout,
+    iconColor: 'text-emerald-700 dark:text-emerald-300',
+    iconBg: 'bg-emerald-100 dark:bg-emerald-950/80 border-emerald-300/80 dark:border-emerald-700/60',
+    description: 'Malawi soil color swatch guide, 75cm x 25cm Sasakawa ridge guilds, and pantry reserves.',
   },
   {
     id: 'agriculture',
     name: 'Edenic Agriculture Field Manuals',
+    shortName: 'Organic Farming',
     category: 'Edenic Agriculture',
     path: '/agriculture',
-    icon: Sprout,
-    iconColor: 'text-emerald-700 dark:text-emerald-300',
-    iconBg: 'bg-emerald-100 dark:bg-emerald-950/80 border-emerald-300/80 dark:border-emerald-700/60',
-    description: 'Natural soil feeding, heavy mulching, compost tea, and non-chemical pest prevention.'
+    icon: Sun,
+    iconColor: 'text-amber-600 dark:text-amber-300',
+    iconBg: 'bg-amber-100 dark:bg-amber-950/80 border-amber-300/80 dark:border-amber-700/60',
+    description: '18-day hot composting, deep orchard pit layering, and botanical pest stewardship.',
   },
   {
     id: 'seasons',
     name: 'Seasonal Planting Almanac',
+    shortName: 'Almanac Wheel',
     category: 'Edenic Agriculture',
     path: '/seasons',
     icon: Calendar,
     iconColor: 'text-lime-700 dark:text-lime-300',
     iconBg: 'bg-lime-100 dark:bg-lime-950/80 border-lime-300/80 dark:border-lime-700/60',
-    description: 'Month-by-month planting and harvest schedule for both rainy and dry seasons.'
-  },
-  {
-    id: 'what',
-    name: 'Crops & Pantry Essentials',
-    category: 'Edenic Agriculture',
-    path: '/what',
-    icon: Layers,
-    iconColor: 'text-amber-700 dark:text-amber-300',
-    iconBg: 'bg-amber-100 dark:bg-amber-950/80 border-amber-300/80 dark:border-amber-700/60',
-    description: 'Essential staples, protein legumes, root crops, and long-term pantry storage.'
+    description: 'Month-by-month planting and harvest schedule for Dzinja, Masika, and Chilimwe seasons.',
   },
 
   // 5. Outposts & Community
   {
     id: 'blueprints',
     name: 'Outpost & Sanitarium Blueprints',
+    shortName: 'Outpost Plans',
     category: 'Outposts & Community',
     path: '/blueprints',
     icon: Building2,
     iconColor: 'text-amber-700 dark:text-amber-300',
     iconBg: 'bg-amber-100 dark:bg-amber-950/80 border-amber-300/80 dark:border-amber-700/60',
-    description: 'Architectural floor plans for rural lifestyle training centers and treatment rooms.',
-    badge: 'Ministry'
+    description: 'Architectural zoning diagrams and budgets for rural schools, clinics, and training centers.',
+    badge: 'Ministry',
   },
   {
     id: 'community',
     name: 'Adventist Believer Directory',
+    shortName: 'Fellowship',
     category: 'Outposts & Community',
     path: '/community',
     icon: Users,
     iconColor: 'text-emerald-700 dark:text-emerald-300',
     iconBg: 'bg-emerald-100 dark:bg-emerald-950/80 border-emerald-300/80 dark:border-emerald-700/60',
-    description: 'Connect with fellow Seventh-day Adventist brethren, mentors, and country projects.'
-  }
+    description: 'Connect with fellow Seventh-day Adventist country dwellers and seed savers across Malawi.',
+  },
+];
+
+const ACTIVITY_RAIL_DOCK = [
+  { id: 'home', label: 'Sanctuary Home', path: '/', icon: HomeIcon },
+  { id: 'scout-map', label: '28-District GIS Map', path: '/scout-map', icon: Compass },
+  { id: 'where', label: 'Land Law & Districts', path: '/where', icon: MapPin },
+  { id: 'suitability', label: '100-Pt Land Evaluator', path: '/suitability', icon: ShieldCheck },
+  { id: 'calculators', label: 'Calculators & BoQ', path: '/calculators', icon: Calculator },
+  { id: 'skills', label: '25 Country Skills', path: '/skills', icon: Layers },
+  { id: 'what', label: 'Crops & Soil Swatches', path: '/what', icon: Sprout },
+  { id: 'seasons', label: 'Seasonal Almanac', path: '/seasons', icon: Calendar },
+  { id: 'agriculture', label: 'Edenic Agriculture', path: '/agriculture', icon: Sun },
+  { id: 'blueprints', label: 'Outpost Blueprints', path: '/blueprints', icon: Building2 },
+  { id: 'tracker', label: 'Exodus Readiness Ledger', path: '/tracker', icon: CheckCircle2 },
+  { id: 'devotional', label: 'Daily Manna & Counsel', path: '/devotional', icon: Feather },
 ];
 
 export function LeftSymbolDirectory() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isExplorerOpen, setIsExplorerOpen] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('outpost_directory_pinned_v1') === 'true';
+    } catch {
+      return false;
+    }
+  });
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const location = useLocation();
+  const navigate = useNavigate();
 
-  // Sync state changes with the application
+  // Sync state with header button
   useEffect(() => {
     window.dispatchEvent(
-      new CustomEvent('outpost:directory-state-changed', { detail: { isOpen } })
+      new CustomEvent('outpost:directory-state-changed', { detail: { isOpen: isExplorerOpen } })
     );
-  }, [isOpen]);
+    window.dispatchEvent(
+      new CustomEvent('outpost:directory-pin-changed', { detail: { isPinned: isExplorerOpen } })
+    );
+  }, [isExplorerOpen]);
 
-  // Listen for global toggle / open events (e.g. from Header Directory button)
+  const toggleExplorer = () => {
+    setIsExplorerOpen((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem('outpost_directory_pinned_v1', String(next));
+      } catch {}
+      return next;
+    });
+  };
+
   useEffect(() => {
-    const handleToggle = () => setIsOpen(prev => !prev);
-    const handleOpen = () => setIsOpen(true);
-    const handleClose = () => setIsOpen(false);
+    const handleToggle = () => toggleExplorer();
+    const handleOpen = () => setIsExplorerOpen(true);
+    const handleClose = () => setIsExplorerOpen(false);
 
     window.addEventListener('outpost:toggle-left-directory', handleToggle);
     window.addEventListener('outpost:open-left-directory', handleOpen);
@@ -218,26 +296,7 @@ export function LeftSymbolDirectory() {
     };
   }, []);
 
-  // Close directory when route changes
-  useEffect(() => {
-    setIsOpen(false);
-  }, [location.pathname]);
-
-  // Handle escape key
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        setIsOpen(false);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen]);
-
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
-
-  // Filter items
-  const filteredItems = DIRECTORY_ITEMS.filter(item => {
+  const filteredItems = DIRECTORY_ITEMS.filter((item) => {
     const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
     if (!matchesCategory) return false;
     if (!searchQuery.trim()) return true;
@@ -249,251 +308,232 @@ export function LeftSymbolDirectory() {
     );
   });
 
-  const categories = Array.from(new Set(filteredItems.map(item => item.category)));
+  const categories = Array.from(new Set(filteredItems.map((item) => item.category)));
 
   return (
     <>
       {/* ==================================================================
-          1. SLEEK LEFT DOCKED TAB (ZERO OVERLAP WITH PAGE CONTENT)
-          Docked flush to the screen edge. Hidden on mobile to avoid touch clashes;
-          Mobile users have the prominent top header "DIRECTORY" button.
+          1. NATIVE DESKTOP LEFT ACTIVITY RAIL (ALWAYS DOCKED ON MD+ SCREENS)
       ================================================================== */}
-      <aside 
-        aria-label="Country Living Left Directory Trigger"
-        className="fixed left-0 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-center select-none"
+      <aside
+        aria-label="Desktop Activity Dock"
+        className="hidden md:flex flex-col items-center justify-between w-13 shrink-0 h-full bg-[#05120B] border-r border-emerald-950/90 py-2 select-none z-30"
       >
-        <button
-          onClick={() => setIsOpen(prev => !prev)}
-          title="Open Country Living Directory"
-          aria-expanded={isOpen}
-          aria-controls="left-outpost-directory-panel"
-          className="group relative flex flex-col items-center justify-center gap-2 py-3 px-1.5 rounded-r-2xl bg-[#0B2517]/95 hover:bg-[#0E3220] text-amber-200 border-y border-r border-amber-400/40 shadow-xl backdrop-blur-md cursor-pointer transition-all duration-200 hover:translate-x-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
-        >
-          {/* Subtle gold indicator pip */}
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+        {/* Top Dock Icons */}
+        <div className="flex flex-col items-center gap-1 w-full px-1 overflow-y-auto no-scrollbar">
+          {ACTIVITY_RAIL_DOCK.map((item) => {
+            const Icon = item.icon;
+            const isActive =
+              item.path === '/'
+                ? location.pathname === '/'
+                : location.pathname.startsWith(item.path) ||
+                  (item.path === '/scout-map' &&
+                    ['/scout', '/map', '/regions'].some((p) =>
+                      location.pathname.startsWith(p)
+                    ));
 
-          {/* High-quality vector icon */}
-          <Compass size={17} className="text-amber-300 group-hover:rotate-45 transition-transform" />
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => navigate(item.path)}
+                onMouseEnter={() => prefetchRoute(item.path)}
+                title={item.label}
+                aria-label={item.label}
+                className={cn(
+                  'relative w-9 h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer group',
+                  isActive
+                    ? 'bg-emerald-900/90 text-amber-300 border border-amber-400/40 shadow-xs'
+                    : 'text-stone-400 hover:text-white hover:bg-white/10'
+                )}
+              >
+                {isActive && (
+                  <span className="absolute -left-1 w-1 h-5 rounded-r-full bg-amber-400" />
+                )}
+                <Icon size={16} />
+              </button>
+            );
+          })}
+        </div>
 
-          {/* Elegant vertical text */}
-          <span className="text-[10px] font-sans font-bold tracking-widest text-amber-200/90 group-hover:text-white uppercase [writing-mode:vertical-rl] rotate-180 py-1">
-            Directory
-          </span>
-
-          <ChevronRight size={13} className={cn("text-amber-400 transition-transform duration-200", isOpen && "rotate-180")} />
-        </button>
+        {/* Bottom Explorer Tree Toggle Button */}
+        <div className="pt-2 border-t border-emerald-950 w-full flex flex-col items-center">
+          <button
+            type="button"
+            onClick={toggleExplorer}
+            title={
+              isExplorerOpen
+                ? 'Collapse Workspace Explorer Tree (⌘B)'
+                : 'Expand Workspace Explorer Tree (⌘B)'
+            }
+            aria-label="Toggle Workspace Explorer Tree"
+            className={cn(
+              'w-9 h-9 rounded-xl flex items-center justify-center transition-colors cursor-pointer',
+              isExplorerOpen
+                ? 'bg-amber-400 text-stone-950 font-bold'
+                : 'text-stone-400 hover:text-amber-300 hover:bg-white/10'
+            )}
+          >
+            {isExplorerOpen ? <ChevronLeft size={16} /> : <FolderTree size={16} />}
+          </button>
+        </div>
       </aside>
 
       {/* ==================================================================
-          2. CONVERGED FULL LEFT DIRECTORY DRAWER & OVERLAY
+          2. DOCKED DESKTOP WORKSPACE EXPLORER TREE (OR MOBILE DRAWER)
       ================================================================== */}
-      <AnimatePresence>
-        {isOpen && (
+      <AnimatePresence initial={false}>
+        {isExplorerOpen && (
           <>
-            {/* Backdrop Overlay */}
+            {/* Mobile Backdrop (Hidden on md+ desktop screens where it docks inline) */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={() => setIsOpen(false)}
-              className="fixed inset-0 z-50 bg-stone-950/75 backdrop-blur-xs cursor-pointer"
-              aria-hidden="true"
+              onClick={() => setIsExplorerOpen(false)}
+              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-xs md:hidden"
             />
 
-            {/* Slide-out Left Drawer */}
-            <motion.div
+            <motion.aside
               id="left-outpost-directory-panel"
-              role="dialog"
-              aria-modal="true"
-              aria-label="Country Living Directory"
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ type: 'spring', damping: 28, stiffness: 260 }}
-              className="fixed left-0 top-0 bottom-0 z-50 w-full max-w-md bg-[#FAF7F0] dark:bg-[#0B1A12] border-r border-stone-300/80 dark:border-emerald-900/80 shadow-2xl flex flex-col text-stone-800 dark:text-stone-100 overflow-hidden"
+              role="navigation"
+              aria-label="Outpost Workspace Explorer"
+              initial={{ width: 0, opacity: 0 }}
+              animate={{ width: 272, opacity: 1 }}
+              exit={{ width: 0, opacity: 0 }}
+              transition={{ duration: 0.16, ease: 'easeOut' }}
+              className="fixed md:static top-0 bottom-0 left-0 z-50 md:z-20 w-[272px] shrink-0 h-full bg-[#F5F2EA] dark:bg-[#08160E] border-r border-stone-300/90 dark:border-emerald-900/80 flex flex-col overflow-hidden select-none shadow-xl md:shadow-none"
             >
-              {/* Drawer Top Header with Polished Logo */}
-              <div className="p-4 sm:p-5 border-b border-stone-200/80 dark:border-emerald-900/60 bg-[#0B2517] flex items-center justify-between gap-3 text-white">
-                <OutpostLogo size="sm" variant="header" />
-
+              {/* Explorer Header */}
+              <div className="h-9 px-3 bg-[#EAE5D7] dark:bg-[#06110B] border-b border-stone-300/80 dark:border-emerald-950 flex items-center justify-between gap-2 shrink-0">
+                <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-stone-800 dark:text-amber-300 truncate">
+                  Workspace Explorer
+                </span>
                 <button
-                  onClick={() => setIsOpen(false)}
-                  aria-label="Close directory"
-                  className="p-2 rounded-xl text-stone-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                  type="button"
+                  onClick={() => setIsExplorerOpen(false)}
+                  title="Collapse Explorer (⌘B)"
+                  className="p-1 rounded-md text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer"
                 >
-                  <X size={18} />
+                  <X size={13} />
                 </button>
               </div>
 
-              {/* Instant Search Bar & Category Filter Chips */}
-              <div className="p-3.5 sm:p-4 border-b border-stone-200/60 dark:border-emerald-950/80 bg-white/60 dark:bg-stone-900/60 backdrop-blur-xs flex flex-col gap-2.5">
+              {/* Search & Category Filter */}
+              <div className="p-2.5 border-b border-stone-200/80 dark:border-emerald-950/80 flex flex-col gap-2 shrink-0">
                 <div className="relative">
-                  <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 dark:text-emerald-300/60" />
+                  <Search
+                    size={13}
+                    className="absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-400"
+                  />
                   <input
                     type="text"
+                    placeholder="Filter 15 modules..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search guides, scout map, tools, EGW counsel..."
-                    className="w-full pl-9 pr-8 py-2 text-xs sm:text-sm rounded-xl bg-white dark:bg-stone-900 border border-stone-300/90 dark:border-emerald-800/60 text-stone-800 dark:text-stone-100 placeholder:text-stone-400 dark:placeholder:text-stone-500 focus:outline-none focus:ring-2 focus:ring-amber-500/60 transition-all"
+                    className="w-full pl-7 pr-6 py-1.5 rounded-lg bg-white dark:bg-[#05100A] border border-stone-300/90 dark:border-emerald-900/70 text-xs text-stone-800 dark:text-stone-100 placeholder:text-stone-400 focus:outline-none focus:ring-1 focus:ring-emerald-600"
                   />
                   {searchQuery && (
                     <button
+                      type="button"
                       onClick={() => setSearchQuery('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 text-xs"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 dark:hover:text-white cursor-pointer"
                     >
-                      Clear
+                      <X size={11} />
                     </button>
                   )}
                 </div>
 
-                {/* Filter Pills */}
-                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 custom-scrollbar">
-                  {['All', ...DIRECTORY_CATEGORIES].map((cat) => {
-                    const isSelected = selectedCategory === cat;
-                    return (
-                      <button
-                        key={cat}
-                        onClick={() => setSelectedCategory(cat)}
-                        className={cn(
-                          "px-2.5 py-1 rounded-lg text-[11px] font-sans font-semibold shrink-0 transition-all cursor-pointer",
-                          isSelected
-                            ? "bg-emerald-800 text-amber-200 border border-amber-400/50 shadow-xs"
-                            : "bg-white/80 dark:bg-stone-800/80 hover:bg-stone-100 dark:hover:bg-stone-700 text-stone-600 dark:text-stone-300 border border-stone-200/80 dark:border-stone-700/60"
-                        )}
-                      >
-                        {cat === 'All' ? 'All Guides' : cat.split(' ')[0]}
-                      </button>
-                    );
-                  })}
+                <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
+                  {['All', ...DIRECTORY_CATEGORIES].map((cat) => (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setSelectedCategory(cat)}
+                      className={cn(
+                        'px-2 py-0.5 rounded-md text-[10px] font-semibold whitespace-nowrap transition-colors cursor-pointer shrink-0',
+                        selectedCategory === cat
+                          ? 'bg-emerald-800 text-amber-200'
+                          : 'bg-stone-200/70 dark:bg-white/5 text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+                      )}
+                    >
+                      {cat === 'All' ? 'All (14)' : cat.split(' ')[0]}
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              {/* Categorized Directory List */}
-              <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-6 custom-scrollbar">
-                {categories.length === 0 ? (
-                  <div className="text-center py-16 text-stone-500 text-xs sm:text-sm">
-                    No guides or tools found matching "{searchQuery}"
-                  </div>
-                ) : (
-                  categories.map((category) => {
-                    const items = filteredItems.filter(i => i.category === category);
-                    return (
-                      <div key={category} className="space-y-2">
-                        {/* Section Header */}
-                        <div className="flex items-center gap-2 px-1">
-                          <span className="text-[11px] font-sans font-bold uppercase tracking-wider text-emerald-900 dark:text-amber-300">
-                            {category}
-                          </span>
-                          <span className="text-stone-300 dark:text-stone-700 text-xs">•</span>
-                          <span className="text-[10px] text-stone-500 dark:text-stone-400 font-medium">
-                            {items.length} {items.length === 1 ? 'item' : 'items'}
-                          </span>
-                        </div>
+              {/* Explorer Tree Items */}
+              <div className="flex-1 overflow-y-auto custom-scrollbar p-2 flex flex-col gap-3">
+                {/* Sanctuary Home Root Item */}
+                <Link
+                  to="/"
+                  className={cn(
+                    'px-2.5 py-2 rounded-xl flex items-center justify-between gap-2 text-xs font-semibold transition-colors',
+                    location.pathname === '/'
+                      ? 'bg-emerald-900 text-amber-200 shadow-2xs'
+                      : 'text-stone-800 dark:text-stone-200 hover:bg-stone-200/70 dark:hover:bg-white/5'
+                  )}
+                >
+                  <span className="flex items-center gap-2 truncate">
+                    <HomeIcon size={14} className="text-amber-500 shrink-0" />
+                    <span className="truncate">Sanctuary Home Overview</span>
+                  </span>
+                  <ChevronRight size={12} className="opacity-60 shrink-0" />
+                </Link>
 
-                        {/* Items Stack */}
-                        <div className="space-y-2">
-                          {items.map((item) => {
-                            const Icon = item.icon;
-                            const isActive = location.pathname === item.path;
-
-                            return (
-                              <Link
-                                key={item.id}
-                                to={item.path}
-                                onClick={() => setIsOpen(false)}
-                                className={cn(
-                                  "p-3 rounded-2xl border transition-all flex items-start justify-between gap-3 group/item",
-                                  isActive
-                                    ? "bg-amber-100/90 dark:bg-emerald-950/90 border-amber-400 dark:border-emerald-600 text-stone-900 dark:text-stone-50 shadow-xs ring-1 ring-amber-400/50"
-                                    : "bg-white/80 dark:bg-stone-900/60 hover:bg-amber-50/70 dark:hover:bg-stone-800/80 border-stone-200/90 dark:border-emerald-950/80 text-stone-800 dark:text-stone-200"
-                                )}
-                              >
-                                <div className="flex items-start gap-3">
-                                  {/* High Quality Vector Symbol in Jewel Badge */}
-                                  <div className={cn(
-                                    "w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 group-hover/item:scale-105 transition-transform shadow-2xs",
-                                    item.iconBg
-                                  )}>
-                                    <Icon size={17} className={item.iconColor} />
-                                  </div>
-
-                                  <div className="flex flex-col min-w-0">
-                                    <div className="flex items-center gap-2 flex-wrap">
-                                      <span className="font-serif font-bold text-xs sm:text-sm text-stone-900 dark:text-stone-100 group-hover/item:text-emerald-900 dark:group-hover/item:text-amber-200 transition-colors">
-                                        {item.name}
-                                      </span>
-                                      {item.badge && (
-                                        <span className="text-[9px] font-sans font-bold uppercase px-1.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-700/60">
-                                          {item.badge}
-                                        </span>
-                                      )}
-                                    </div>
-                                    <p className="text-[11px] text-stone-500 dark:text-stone-400 line-clamp-1 mt-0.5 font-sans">
-                                      {item.description}
-                                    </p>
-                                  </div>
-                                </div>
-
-                                <ArrowUpRight 
-                                  size={15} 
-                                  className="text-stone-400 group-hover/item:text-emerald-700 dark:group-hover/item:text-amber-300 shrink-0 transition-colors mt-1" 
-                                />
-                              </Link>
-                            );
-                          })}
-                        </div>
+                {categories.map((category) => {
+                  const items = filteredItems.filter((i) => i.category === category);
+                  return (
+                    <div key={category} className="flex flex-col gap-1">
+                      <div className="px-2 text-[10px] font-mono font-bold uppercase tracking-wider text-stone-500 dark:text-emerald-400/80">
+                        {category}
                       </div>
-                    );
-                  })
-                )}
+
+                      {items.map((item) => {
+                        const Icon = item.icon;
+                        const isActive =
+                          location.pathname === item.path ||
+                          (item.path !== '/' && location.pathname.startsWith(item.path));
+
+                        return (
+                          <Link
+                            key={item.id}
+                            to={item.path}
+                            onMouseEnter={() => prefetchRoute(item.path)}
+                            className={cn(
+                              'group px-2.5 py-1.5 rounded-xl flex items-center justify-between gap-2 text-xs transition-colors',
+                              isActive
+                                ? 'bg-emerald-900 text-white font-semibold shadow-2xs'
+                                : 'text-stone-700 dark:text-stone-300 hover:bg-stone-200/70 dark:hover:bg-white/5'
+                            )}
+                            title={item.description}
+                          >
+                            <span className="flex items-center gap-2 min-w-0">
+                              <Icon
+                                size={14}
+                                className={cn(
+                                  'shrink-0',
+                                  isActive ? 'text-amber-300' : item.iconColor
+                                )}
+                              />
+                              <span className="truncate">{item.shortName || item.name}</span>
+                            </span>
+                            <ChevronRight
+                              size={12}
+                              className={cn(
+                                'shrink-0 transition-transform group-hover:translate-x-0.5',
+                                isActive ? 'text-amber-300' : 'text-stone-400 opacity-0 group-hover:opacity-100'
+                              )}
+                            />
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  );
+                })}
               </div>
-
-              {/* Drawer Dignified Footer with EGW Recommended Resources */}
-              <div className="p-3.5 sm:p-4 border-t border-stone-200/80 dark:border-emerald-900/60 bg-white/70 dark:bg-stone-900/70 flex flex-col gap-2.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-emerald-900 dark:text-emerald-300">
-                    EGW Essential Books
-                  </span>
-                  <Link
-                    to="/vision"
-                    onClick={() => setIsOpen(false)}
-                    className="text-[10px] font-semibold text-amber-700 dark:text-amber-400 hover:underline flex items-center gap-1"
-                  >
-                    <span>Read Counsel</span>
-                    <ArrowUpRight size={10} />
-                  </Link>
-                </div>
-
-                <div className="grid grid-cols-2 gap-1.5">
-                  <Link
-                    to="/vision"
-                    onClick={() => setIsOpen(false)}
-                    className="p-1.5 rounded-lg bg-amber-50/70 dark:bg-stone-800/80 border border-amber-200/60 dark:border-stone-700/60 text-left hover:bg-amber-100/80 transition-colors"
-                  >
-                    <div className="text-[10px] font-serif font-bold text-stone-900 dark:text-stone-100 truncate">Country Living</div>
-                    <div className="text-[9px] text-stone-500 dark:text-stone-400">Escaping city snares</div>
-                  </Link>
-                  <Link
-                    to="/vision"
-                    onClick={() => setIsOpen(false)}
-                    className="p-1.5 rounded-lg bg-emerald-50/70 dark:bg-stone-800/80 border border-emerald-200/60 dark:border-stone-700/60 text-left hover:bg-emerald-100/80 transition-colors"
-                  >
-                    <div className="text-[10px] font-serif font-bold text-stone-900 dark:text-stone-100 truncate">Ministry of Healing</div>
-                    <div className="text-[9px] text-stone-500 dark:text-stone-400">Sanitariums & nature</div>
-                  </Link>
-                </div>
-
-                <div className="text-center pt-1">
-                  <p className="font-serif italic text-xs text-stone-600 dark:text-stone-400">
-                    “The cities are to be worked from outposts.”
-                  </p>
-                  <span className="text-[10px] font-sans font-semibold text-amber-800 dark:text-amber-300">
-                    Ellen G. White — Country Living, p. 30
-                  </span>
-                </div>
-              </div>
-            </motion.div>
+            </motion.aside>
           </>
         )}
       </AnimatePresence>

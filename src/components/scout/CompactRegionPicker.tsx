@@ -78,8 +78,8 @@ export function CompactRegionPicker({
           className={cn(
             "h-10 px-3.5 rounded-2xl font-mono text-xs font-bold transition-all flex items-center gap-2 border shadow-2xl backdrop-blur-2xl cursor-pointer select-none",
             isOpen
-              ? "bg-amber-500 text-slate-950 border-amber-300 font-black shadow-amber-500/20"
-              : "bg-slate-950/90 text-slate-200 border-white/15 hover:border-amber-400/50 hover:bg-slate-900"
+              ? "bg-amber-400 text-stone-950 border-amber-300 font-black shadow-amber-500/20"
+              : "bg-[#07140D]/92 text-stone-100 border-emerald-500/25 hover:border-amber-400/50 hover:bg-[#0B2216]"
           )}
           title="Change Region or District"
         >
@@ -96,8 +96,8 @@ export function CompactRegionPicker({
           className={cn(
             "h-10 px-2.5 rounded-2xl font-mono text-[11px] font-bold transition-all hidden sm:flex items-center gap-1.5 border shadow-2xl backdrop-blur-2xl cursor-pointer select-none",
             activeMode === 'regional'
-              ? "bg-slate-950/90 text-amber-300 border-amber-500/30 hover:border-amber-400"
-              : "bg-emerald-950/90 text-emerald-300 border-emerald-500/40 hover:border-emerald-400"
+              ? "bg-[#07140D]/92 text-amber-300 border-amber-500/30 hover:border-amber-400"
+              : "bg-emerald-950/92 text-emerald-300 border-emerald-500/40 hover:border-emerald-400"
           )}
           title="Toggle between Climate Zones and Verified Agro Stations"
         >
@@ -113,21 +113,6 @@ export function CompactRegionPicker({
             </>
           )}
         </button>
-
-        {/* AI Map Scout Button */}
-        {onOpenAiScout && (
-          <button
-            onClick={onOpenAiScout}
-            className="h-10 px-3 rounded-2xl font-sans text-xs font-bold transition-all flex items-center gap-1.5 border shadow-2xl backdrop-blur-2xl cursor-pointer select-none bg-gradient-to-r from-emerald-950/90 via-slate-950/90 to-emerald-900/90 text-emerald-300 border-emerald-400/50 hover:border-emerald-300 hover:text-white group"
-            title="Open AI Map Scout (Gemini 3.8 Flash + Google Maps Grounding)"
-          >
-            <div className="w-5 h-5 rounded-lg bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 group-hover:scale-105 transition-transform">
-              <Bot size={13} />
-            </div>
-            <span className="hidden xs:inline tracking-tight">AI Scout</span>
-            <Sparkles size={11} className="text-amber-400 animate-pulse" />
-          </button>
-        )}
       </div>
 
       {/* Floating Dropdown Card */}
@@ -138,7 +123,7 @@ export function CompactRegionPicker({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.96 }}
             transition={{ duration: 0.16 }}
-            className="mt-2 w-[calc(100vw-2rem)] sm:w-96 md:w-[440px] max-h-[80vh] overflow-y-auto bg-slate-950/95 backdrop-blur-2xl border border-white/20 rounded-3xl p-4 shadow-2xl flex flex-col gap-4 text-white"
+            className="mt-2 w-[calc(100vw-2rem)] sm:w-96 md:w-[440px] max-h-[80vh] overflow-y-auto bg-[#07140D]/96 backdrop-blur-2xl border border-emerald-500/30 rounded-3xl p-4 shadow-2xl flex flex-col gap-4 text-white"
           >
             {/* Header & Reset */}
             <div className="flex items-center justify-between border-b border-white/10 pb-3">

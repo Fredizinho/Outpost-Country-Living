@@ -46,6 +46,7 @@ export default function Tracker() {
 
   const [newTaskInput, setNewTaskInput] = useState<{ [key: string]: string }>({});
   const [activeAddingStep, setActiveAddingStep] = useState<string | null>(null);
+  const [confirmingReset, setConfirmingReset] = useState(false);
 
   useEffect(() => {
     saveStoredTrackerData(steps);
@@ -113,18 +114,22 @@ export default function Tracker() {
   };
 
   const handleResetTracker = () => {
-    if (window.confirm('Re-generate personalized exodus milestone tasks based on your current district and goal profile?')) {
-      const resetRoadmap = generatePersonalizedRoadmap({
-        district: user?.district || 'Dedza',
-        region: user?.region || 'Central',
-        homesteadGoal: user?.homesteadGoal || 'Self-Sufficient Organic Homestead',
-        householdSize: user?.householdSize || '3-5 Members',
-        budgetBand: user?.budgetBand || 'Standard Off-Grid',
-        timeline: user?.timeline || 'This Season (3-6 Months)',
-      });
-      setSteps(resetRoadmap);
-      saveStoredTrackerData(resetRoadmap);
+    if (!confirmingReset) {
+      setConfirmingReset(true);
+      setTimeout(() => setConfirmingReset(false), 4000);
+      return;
     }
+    const resetRoadmap = generatePersonalizedRoadmap({
+      district: user?.district || 'Dedza',
+      region: user?.region || 'Central',
+      homesteadGoal: user?.homesteadGoal || 'Self-Sufficient Organic Homestead',
+      householdSize: user?.householdSize || '3-5 Members',
+      budgetBand: user?.budgetBand || 'Standard Off-Grid',
+      timeline: user?.timeline || 'This Season (3-6 Months)',
+    });
+    setSteps(resetRoadmap);
+    saveStoredTrackerData(resetRoadmap);
+    setConfirmingReset(false);
   };
 
   const calculateProgress = (step: Step) => {
@@ -142,6 +147,18 @@ export default function Tracker() {
   useEffect(() => {
     setReadinessBreakdown(calculateHomesteadReadinessScore());
   }, [steps]);
+
+  useEffect(() => {
+    const handleProgressSync = () => {
+      setReadinessBreakdown(calculateHomesteadReadinessScore());
+    };
+    window.addEventListener('outpost:progress-updated', handleProgressSync);
+    window.addEventListener('storage', handleProgressSync);
+    return () => {
+      window.removeEventListener('outpost:progress-updated', handleProgressSync);
+      window.removeEventListener('storage', handleProgressSync);
+    };
+  }, []);
 
   const handleExportRoadmap = () => {
     const lines = [
@@ -200,26 +217,23 @@ export default function Tracker() {
             Goal: "{user?.homesteadGoal || 'Self-Sufficient Organic Homestead'}"
           </p>
 
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mt-1">
-            <span className="bg-white/10 text-emerald-200 text-[10px] font-bold px-2.5 py-1 rounded-lg border border-white/10 flex items-center gap-1">
-              <Users size={12} /> {user?.householdSize || '3-5 Members'}
-            </span>
-            <span className="bg-white/10 text-emerald-200 text-[10px] font-bold px-2.5 py-1 rounded-lg border border-white/10 flex items-center gap-1">
-              <Wallet size={12} /> {user?.budgetBand?.split('(')[0] || 'Standard Off-Grid'}
-            </span>
-            <span className="bg-white/10 text-emerald-200 text-[10px] font-bold px-2.5 py-1 rounded-lg border border-white/10 flex items-center gap-1">
-              <Calendar size={12} /> {user?.timeline?.split('(')[0] || 'This Season'}
-            </span>
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-2.5 gap-y-1.5 mt-1 text-xs font-mono text-emerald-200 tabular-nums">
+            <span>{user?.householdSize || '3-5 Members'}</span>
+            <span aria-hidden="true">·</span>
+            <span>{user?.budgetBand?.split('(')[0] || 'Standard Off-Grid'}</span>
+            <span aria-hidden="true">·</span>
+            <span>{user?.timeline?.split('(')[0] || 'This Season'}</span>
             {currentDistrictRecord && (
               <>
-                <span className="bg-emerald-950/80 text-amber-300 text-[10px] font-mono font-bold px-2.5 py-1 rounded-lg border border-amber-500/30 flex items-center gap-1">
-                  🌧️ {currentDistrictRecord.rainfallAnnualMm} mm/yr
+                <span aria-hidden="true">·</span>
+                <span className="text-amber-300 font-bold">
+                  Rain: {currentDistrictRecord.rainfallAnnualMm} mm/yr
                 </span>
-                <span className="bg-emerald-950/80 text-emerald-200 text-[10px] font-mono font-bold px-2.5 py-1 rounded-lg border border-emerald-500/30 flex items-center gap-1">
-                  🌱 {currentDistrictRecord.soilPh}
-                </span>
-                <span className="bg-emerald-950/80 text-amber-200 text-[10px] font-mono font-bold px-2.5 py-1 rounded-lg border border-amber-500/30 flex items-center gap-1">
-                  ⛏️ {PLANTING_PIT_SPECS.egwDeepPit.dimensionString} Pits
+                <span aria-hidden="true">·</span>
+                <span>{currentDistrictRecord.soilPh}</span>
+                <span aria-hidden="true">·</span>
+                <span className="text-amber-200">
+                  Pits: {PLANTING_PIT_SPECS.egwDeepPit.dimensionString}
                 </span>
               </>
             )}
@@ -241,8 +255,8 @@ export default function Tracker() {
           <span className="text-amber-400 font-mono font-extrabold uppercase text-[10px] tracking-[0.25em]">
             Migration Field Ledger
           </span>
-          <span className="bg-emerald-950 text-emerald-300 text-[9px] font-mono font-bold uppercase px-2.5 py-0.5 rounded-full border border-emerald-500/30 flex items-center gap-1">
-            <HardDrive size={10} /> Saved Offline
+          <span className="text-emerald-300 text-[10px] font-mono font-bold uppercase flex items-center gap-1">
+            · <HardDrive size={11} /> Saved Offline
           </span>
         </div>
 
@@ -275,9 +289,15 @@ export default function Tracker() {
           </button>
           <button
             onClick={handleResetTracker}
-            className="bg-white/5 hover:bg-white/10 text-emerald-200 border border-amber-500/30 px-4 py-2.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer"
+            className={cn(
+              "px-4 py-2.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer border",
+              confirmingReset
+                ? "bg-amber-500 text-slate-950 border-amber-400"
+                : "bg-white/5 hover:bg-white/10 text-emerald-200 border-amber-500/30"
+            )}
           >
-            <RotateCcw size={14} /> Re-Generate Roadmap
+            <RotateCcw size={14} />
+            <span>{confirmingReset ? 'Tap Again to Confirm Reset' : 'Re-Generate Roadmap'}</span>
           </button>
         </div>
       </header>

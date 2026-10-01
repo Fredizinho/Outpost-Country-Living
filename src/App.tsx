@@ -1,11 +1,12 @@
-import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import React, { Suspense, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import { Shell } from './components/layout/Shell';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { lazyWithRetry } from './lib/lazyWithRetry';
+import { scheduleDesktopIdleRoutePrefetch } from './lib/routePrefetch';
 import Home from './pages/Home';
 
 // Lazy-loaded routes with auto-retry and chunk fault tolerance
@@ -31,9 +32,9 @@ const NotFound = lazyWithRetry(() => import('./pages/NotFound'));
 
 function PageFallback() {
   return (
-    <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3 p-8 text-center text-emerald-950">
-      <div className="w-10 h-10 border-4 border-emerald-900 border-t-amber-500 rounded-full animate-spin" />
-      <span className="text-xs font-black uppercase tracking-widest text-emerald-900">
+    <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3 p-8 text-center text-emerald-950 dark:text-emerald-200">
+      <div className="w-10 h-10 border-4 border-emerald-900 dark:border-emerald-400 border-t-amber-500 rounded-full animate-spin" />
+      <span className="text-xs font-black uppercase tracking-widest text-emerald-900 dark:text-emerald-300">
         Loading Sanctuary View...
       </span>
     </div>
@@ -42,15 +43,52 @@ function PageFallback() {
 
 function AnimatedAppRoutes() {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const desktopBridge = (
+      window as unknown as {
+        outpostDesktop?: { onNavigate?: (cb: (route: string) => void) => () => void };
+      }
+    ).outpostDesktop;
+    if (desktopBridge?.onNavigate) {
+      return desktopBridge.onNavigate((routePath) => {
+        navigate(routePath);
+      });
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    scheduleDesktopIdleRoutePrefetch();
+  }, []);
+
+  // Smooth scroll restoration on route or hash navigation
+  useEffect(() => {
+    if (location.hash) {
+      const targetId = location.hash.replace('#', '');
+      setTimeout(() => {
+        const el = document.getElementById(targetId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 80);
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+      const scrollContainer = document.getElementById('outpost-scroll-Viewport');
+      if (scrollContainer) {
+        scrollContainer.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+      }
+    }
+  }, [location.pathname, location.hash]);
 
   return (
     <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={location.pathname}
-        initial={{ opacity: 0, y: 6 }}
+        initial={{ opacity: 0, y: 3 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -6 }}
-        transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.11, ease: 'easeOut' }}
         className="w-full h-full"
       >
         <Routes location={location}>
@@ -64,6 +102,7 @@ function AnimatedAppRoutes() {
 
           {/* Secondary route aliases */}
           <Route path="/regions" element={<RegionalMap />} />
+          <Route path="/scout" element={<ScoutMapPage />} />
           <Route path="/scout-map" element={<ScoutMapPage />} />
           <Route path="/map" element={<ScoutMapPage />} />
           <Route path="/regions/:id" element={<RegionDetail />} />

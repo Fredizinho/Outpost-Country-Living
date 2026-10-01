@@ -1896,8 +1896,1138 @@ export function SoilScienceIllustration({
 }
 
 /**
- * 22. DYNAMIC ICON DISPATCHER
- * Allows rendering any country illustration by key name with standard props.
+ * 22. COMPRESSED STABILIZED EARTH BLOCK (CSEB) & RUBBLE FOUNDATION
+ * Manual Cinva-Ram lever press, stacked terracotta earth blocks, stone rubble trench.
+ */
+export function EarthBlockMasonryIllustration({
+  className = 'w-full h-auto',
+  width = 340,
+  height = 220,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg
+      viewBox="0 0 340 220"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      width={width}
+      height={height}
+      {...props}
+    >
+      <defs>
+        <clipPath id="ebm-frame">
+          <rect width="340" height="220" rx="16" />
+        </clipPath>
+      </defs>
+      <g clipPath="url(#ebm-frame)">
+        <rect width="340" height="220" fill="#fef9ee" />
+        {/* Stone Rubble Foundation Trench Base */}
+        <rect x="0" y="155" width="340" height="65" fill="#55483a" />
+        <rect x="0" y="152" width="340" height="5" fill="#0284c7" />
+        {/* Rubble Stones */}
+        <ellipse cx="45" cy="172" rx="18" ry="8" fill="#a18b6e" stroke="#25201a" strokeWidth="1.2" />
+        <ellipse cx="90" cy="174" rx="22" ry="9" fill="#d3c7b5" stroke="#25201a" strokeWidth="1.2" />
+        <ellipse cx="140" cy="171" rx="19" ry="8" fill="#a18b6e" stroke="#25201a" strokeWidth="1.2" />
+
+        {/* Interlocking CSEB Terracotta Wall Stack (Left) */}
+        <g transform="translate(24, 62)">
+          <rect x="0" y="60" width="44" height="28" rx="2" fill="#dc5c23" stroke="#782a15" strokeWidth="1.8" />
+          <rect x="46" y="60" width="44" height="28" rx="2" fill="#b94218" stroke="#782a15" strokeWidth="1.8" />
+          <rect x="92" y="60" width="44" height="28" rx="2" fill="#dc5c23" stroke="#782a15" strokeWidth="1.8" />
+          <rect x="22" y="30" width="44" height="28" rx="2" fill="#f57d42" stroke="#782a15" strokeWidth="1.8" />
+          <rect x="68" y="30" width="44" height="28" rx="2" fill="#dc5c23" stroke="#782a15" strokeWidth="1.8" />
+          <rect x="44" y="0" width="44" height="28" rx="2" fill="#dc5c23" stroke="#782a15" strokeWidth="1.8" />
+          {/* Interlocking dowels */}
+          <circle cx="55" cy="-2" r="3" fill="#782a15" />
+          <circle cx="77" cy="-2" r="3" fill="#782a15" />
+        </g>
+
+        {/* Cinva-Ram Manual Lever Block Press (Right) */}
+        <g transform="translate(195, 42)">
+          {/* Steel legs */}
+          <line x1="18" y1="68" x2="12" y2="110" stroke="#25201a" strokeWidth="4" strokeLinecap="round" />
+          <line x1="72" y1="68" x2="78" y2="110" stroke="#25201a" strokeWidth="4" strokeLinecap="round" />
+          {/* Compression Mold Box */}
+          <rect x="12" y="36" width="66" height="34" rx="3" fill="#0369a1" stroke="#042614" strokeWidth="2" />
+          {/* Freshly Pressed Block Ejecting */}
+          <rect x="20" y="18" width="50" height="20" rx="2" fill="#dc5c23" stroke="#782a15" strokeWidth="1.5" />
+          {/* Long High-Leverage Toggle Handle */}
+          <line x1="45" y1="36" x2="115" y2="-12" stroke="#d97706" strokeWidth="5" strokeLinecap="round" />
+          <circle cx="115" cy="-12" r="5" fill="#782a15" />
+        </g>
+
+        {/* Badge */}
+        <rect x="12" y="180" width="225" height="24" rx="6" fill="#042614" stroke="#dc5c23" strokeWidth="1" />
+        <text x="20" y="196" fill="#ffd7b5" fontSize="9.5" fontWeight="800">
+          🧱 CSEB EARTH MASONRY • 7:2:1 MIX
+        </text>
+        <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
+      </g>
+    </svg>
+  );
+}
+
+/**
+ * 23. FREE-RANGE POULTRY & SMALL LIVESTOCK HUSBANDRY
+ * Elevated 1m slatted bamboo coop, wood-ash dust bath, indigenous chickens, garlic waterer.
+ */
+export function PoultryHusbandryIllustration({
+  className = 'w-full h-auto',
+  width = 340,
+  height = 220,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg
+      viewBox="0 0 340 220"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      width={width}
+      height={height}
+      {...props}
+    >
+      <defs>
+        <clipPath id="ph-frame">
+          <rect width="340" height="220" rx="16" />
+        </clipPath>
+      </defs>
+      <g clipPath="url(#ph-frame)">
+        <rect width="340" height="220" fill="#fef9ee" />
+        <rect x="0" y="155" width="340" height="65" fill="#782a15" />
+        <rect x="0" y="155" width="340" height="8" fill="#15803d" />
+
+        {/* Elevated 1m Predator-Proof Bamboo Coop */}
+        <g transform="translate(30, 28)">
+          {/* 1m Stilts with Predator Baffles */}
+          <line x1="15" y1="75" x2="15" y2="130" stroke="#55483a" strokeWidth="4" />
+          <line x1="115" y1="75" x2="115" y2="130" stroke="#55483a" strokeWidth="4" />
+          {/* Slatted Bamboo Floor */}
+          <rect x="5" y="72" width="120" height="6" rx="2" fill="#d97706" stroke="#782a15" strokeWidth="1.2" />
+          {/* Ventilated Bamboo Walls */}
+          <rect x="10" y="28" width="110" height="44" rx="3" fill="#ffd7b5" stroke="#782a15" strokeWidth="1.8" />
+          <line x1="32" y1="28" x2="32" y2="72" stroke="#b45309" strokeWidth="1.2" />
+          <line x1="54" y1="28" x2="54" y2="72" stroke="#b45309" strokeWidth="1.2" />
+          <line x1="76" y1="28" x2="76" y2="72" stroke="#b45309" strokeWidth="1.2" />
+          <line x1="98" y1="28" x2="98" y2="72" stroke="#b45309" strokeWidth="1.2" />
+          {/* Coop Door & Chicken Ramp */}
+          <rect x="52" y="42" width="24" height="30" rx="2" fill="#361009" />
+          <line x1="76" y1="74" x2="138" y2="128" stroke="#a18b6e" strokeWidth="4" strokeLinecap="round" />
+          {/* Thatch Gable Roof */}
+          <polygon points="0,30 65,0 130,30" fill="#dc5c23" stroke="#782a15" strokeWidth="2" />
+        </g>
+
+        {/* Indigenous Free-Range Hen & Chicks (Right) */}
+        <g transform="translate(195, 112)">
+          {/* Hen Body */}
+          <path d="M10 25 Q25 40 48 25 Q54 12 42 8 Q25 14 10 25 Z" fill="#b94218" stroke="#361009" strokeWidth="1.8" />
+          {/* Head & Comb */}
+          <circle cx="46" cy="8" r="6" fill="#dc5c23" stroke="#361009" strokeWidth="1.5" />
+          <path d="M44 2 Q47 -3 50 2" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" />
+          <polygon points="52,7 58,9 52,11" fill="#fbbf24" />
+          {/* Legs */}
+          <line x1="26" y1="33" x2="26" y2="44" stroke="#d97706" strokeWidth="2" />
+          <line x1="36" y1="33" x2="36" y2="44" stroke="#d97706" strokeWidth="2" />
+          {/* Golden Chicks */}
+          <circle cx="68" cy="36" r="5" fill="#fbbf24" stroke="#b45309" strokeWidth="1" />
+          <circle cx="82" cy="37" r="4.5" fill="#fbbf24" stroke="#b45309" strokeWidth="1" />
+        </g>
+
+        {/* Wood Ash Mite-Prevention Dust Bath & Garlic Clay Waterer */}
+        <g transform="translate(260, 140)">
+          <ellipse cx="32" cy="12" rx="26" ry="7" fill="#d3c7b5" stroke="#55483a" strokeWidth="1.5" />
+          <text x="14" y="15" fill="#25201a" fontSize="6.5" fontWeight="900">ASH BATH</text>
+        </g>
+
+        {/* Badge */}
+        <rect x="12" y="180" width="225" height="24" rx="6" fill="#042614" stroke="#f59e0b" strokeWidth="1" />
+        <text x="20" y="196" fill="#fde68a" fontSize="9.5" fontWeight="800">
+          🐓 INDIGENOUS POULTRY &amp; HUSBANDRY
+        </text>
+        <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
+      </g>
+    </svg>
+  );
+}
+
+/**
+ * 24. ZEER POT EVAPORATIVE CLAY COOLING CHAMBER
+ * Nested unglazed terracotta pots, wet river sand infill, evaporative heat arrows.
+ */
+export function ZeerPotCoolingIllustration({
+  className = 'w-full h-auto',
+  width = 340,
+  height = 220,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg
+      viewBox="0 0 340 220"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      width={width}
+      height={height}
+      {...props}
+    >
+      <defs>
+        <clipPath id="zp-frame">
+          <rect width="340" height="220" rx="16" />
+        </clipPath>
+      </defs>
+      <g clipPath="url(#zp-frame)">
+        <rect width="340" height="220" fill="#f0f9ff" />
+        <rect x="0" y="162" width="340" height="58" fill="#782a15" />
+
+        {/* Cross-Section of Double-Wall Terracotta Zeer Pot */}
+        <g transform="translate(95, 34)">
+          {/* Outer Porous Unglazed Terracotta Pot */}
+          <path d="M10 20 C0 75 18 122 75 122 C132 122 150 75 140 20 Z" fill="#dc5c23" stroke="#782a15" strokeWidth="2.5" />
+          {/* Wet River Sand Interstitial Layer (4cm) */}
+          <path d="M22 22 C14 68 28 110 75 110 C122 110 136 68 128 22 Z" fill="#fcd34d" stroke="#b45309" strokeWidth="1.5" />
+          {/* Inner Cool Dry Storage Chamber */}
+          <path d="M36 24 C30 60 40 96 75 96 C110 96 120 60 114 24 Z" fill="#042614" stroke="#16a34a" strokeWidth="2" />
+
+          {/* Fresh Vegetables & Tomatoes preserved inside */}
+          <circle cx="62" cy="72" r="9" fill="#ef4444" stroke="#782a15" strokeWidth="1" />
+          <circle cx="84" cy="74" r="8" fill="#f97316" stroke="#782a15" strokeWidth="1" />
+          <ellipse cx="75" cy="56" rx="18" ry="8" fill="#22c55e" />
+
+          {/* Damp Jute Cloth Top Cover */}
+          <path d="M6 20 Q75 10 144 20" stroke="#0284c7" strokeWidth="5" strokeLinecap="round" />
+          <text x="52" y="44" fill="#bae6fd" fontSize="9" fontWeight="900">12°C–15°C</text>
+        </g>
+
+        {/* Evaporative Cooling Arrows (Left & Right) */}
+        <g stroke="#0284c7" strokeWidth="2" strokeLinecap="round">
+          <path d="M85 80 L50 70 M56 66 L50 70 L55 76" />
+          <path d="M85 105 L50 110 M56 105 L50 110 L56 115" />
+          <path d="M255 80 L290 70 M284 66 L290 70 L285 76" />
+          <path d="M255 105 L290 110 M284 105 L290 110 L284 115" />
+        </g>
+
+        {/* Badge */}
+        <rect x="12" y="180" width="225" height="24" rx="6" fill="#042614" stroke="#38bdf8" strokeWidth="1" />
+        <text x="20" y="196" fill="#bae6fd" fontSize="9.5" fontWeight="800">
+          🏺 ZEER POT COOLING • ZERO ELECTRIC
+        </text>
+        <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
+      </g>
+    </svg>
+  );
+}
+
+/**
+ * 25. WHOLESOME BREADMAKING, GRAIN MILLING & ZWIEBACK
+ * Hand burr mill, sweet potato yeast starter, clay cob oven, twice-baked Zwieback slices.
+ */
+export function BreadmakingMillingIllustration({
+  className = 'w-full h-auto',
+  width = 340,
+  height = 220,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg
+      viewBox="0 0 340 220"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      width={width}
+      height={height}
+      {...props}
+    >
+      <defs>
+        <clipPath id="bm-frame">
+          <rect width="340" height="220" rx="16" />
+        </clipPath>
+      </defs>
+      <g clipPath="url(#bm-frame)">
+        <rect width="340" height="220" fill="#fef9ee" />
+        <rect x="0" y="152" width="340" height="68" fill="#782a15" />
+
+        {/* Cast-Iron / Stone Burr Grain Mill (Left) */}
+        <g transform="translate(28, 52)">
+          {/* Hopper */}
+          <polygon points="10,0 50,0 40,32 20,32" fill="#d97706" stroke="#782a15" strokeWidth="1.8" />
+          {/* Grinding Chamber */}
+          <rect x="16" y="32" width="28" height="30" rx="3" fill="#55483a" stroke="#25201a" strokeWidth="1.8" />
+          {/* Flywheel & Wood Handle */}
+          <circle cx="14" cy="46" r="18" stroke="#dc5c23" strokeWidth="3.5" fill="none" />
+          <line x1="14" y1="46" x2="-4" y2="46" stroke="#782a15" strokeWidth="3" strokeLinecap="round" />
+          {/* Clamp base */}
+          <rect x="20" y="62" width="20" height="38" fill="#55483a" />
+        </g>
+
+        {/* Dome Clay Cob Thermal Oven (Center) */}
+        <g transform="translate(115, 48)">
+          <path d="M0 104 C0 35 115 35 115 104 Z" fill="#dc5c23" stroke="#782a15" strokeWidth="2.5" />
+          {/* arched oven mouth with glowing embers */}
+          <path d="M35 104 C35 65 80 65 80 104 Z" fill="#361009" stroke="#ffd7b5" strokeWidth="1.8" />
+          <ellipse cx="57" cy="96" rx="16" ry="6" fill="#fbbf24" />
+          {/* Chimney */}
+          <rect x="48" y="18" width="18" height="28" fill="#933113" stroke="#782a15" strokeWidth="1.5" />
+          <text x="36" y="58" fill="#fff8f3" fontSize="8" fontWeight="900">210°C COB</text>
+        </g>
+
+        {/* Twice-Baked Zwieback Rusks & Sweet Yeast Jar (Right) */}
+        <g transform="translate(250, 78)">
+          {/* Yeast Starter Jar */}
+          <rect x="18" y="0" width="32" height="44" rx="4" fill="#fff8f3" stroke="#6a5a47" strokeWidth="1.5" />
+          <rect x="20" y="16" width="28" height="26" fill="#fde68a" />
+          <circle cx="28" cy="26" r="2" fill="#d97706" />
+          <circle cx="38" cy="32" r="2" fill="#d97706" />
+          {/* Golden Zwieback Slices */}
+          <rect x="0" y="52" width="34" height="20" rx="5" fill="#d97706" stroke="#782a15" strokeWidth="1.5" />
+          <rect x="24" y="55" width="34" height="20" rx="5" fill="#f59e0b" stroke="#782a15" strokeWidth="1.5" />
+        </g>
+
+        {/* Badge */}
+        <rect x="12" y="180" width="230" height="24" rx="6" fill="#042614" stroke="#fbbf24" strokeWidth="1" />
+        <text x="20" y="196" fill="#fde68a" fontSize="9.5" fontWeight="800">
+          🍞 WHOLE-GRAIN MILLING &amp; ZWIEBACK
+        </text>
+        <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
+      </g>
+    </svg>
+  );
+}
+
+/**
+ * 26. MEDICAL MISSIONARY HYDROTHERAPY & CHARCOAL POULTICES
+ * Derivative hot foot bath (40-43C), steaming wool fomentations, pulverized charcoal poultice.
+ */
+export function HydrotherapyPoulticeIllustration({
+  className = 'w-full h-auto',
+  width = 340,
+  height = 220,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg
+      viewBox="0 0 340 220"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      width={width}
+      height={height}
+      {...props}
+    >
+      <defs>
+        <clipPath id="hp-frame">
+          <rect width="340" height="220" rx="16" />
+        </clipPath>
+      </defs>
+      <g clipPath="url(#hp-frame)">
+        <rect width="340" height="220" fill="#f0f9ff" />
+        <rect x="0" y="158" width="340" height="62" fill="#55483a" />
+
+        {/* Deep Hot Foot Bath Basin (40°C–43°C) */}
+        <g transform="translate(28, 68)">
+          <polygon points="0,20 90,20 78,86 12,86" fill="#0284c7" stroke="#0369a1" strokeWidth="2" />
+          <ellipse cx="45" cy="20" rx="45" ry="9" fill="#38bdf8" stroke="#0369a1" strokeWidth="1.8" />
+          {/* Rising Steam Waves */}
+          <path d="M28 8 Q24 -6 32 -16" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" fill="none" />
+          <path d="M46 6 Q42 -8 50 -18" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" fill="none" />
+          <path d="M64 8 Q60 -6 68 -16" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" fill="none" />
+          <text x="18" y="58" fill="#ffffff" fontSize="9" fontWeight="900">40°C–43°C</text>
+          <text x="20" y="71" fill="#bae6fd" fontSize="7.5" fontWeight="700">FOOT BATH</text>
+        </g>
+
+        {/* Folded Wool Fomentation & Cold Compress Cycle (Center) */}
+        <g transform="translate(136, 62)">
+          {/* Hot Wool Flannel Roll */}
+          <rect x="0" y="38" width="76" height="22" rx="6" fill="#dc5c23" stroke="#782a15" strokeWidth="1.8" />
+          <text x="10" y="52" fill="#fff8f3" fontSize="7.5" fontWeight="900">HOT FOMENT</text>
+          {/* Cold Compress Cloth */}
+          <rect x="4" y="14" width="68" height="20" rx="5" fill="#bae6fd" stroke="#0284c7" strokeWidth="1.8" />
+          <text x="10" y="27" fill="#0369a1" fontSize="7.5" fontWeight="900">COLD MITT</text>
+        </g>
+
+        {/* Activated Hardwood Charcoal & Cassava Poultice Mortar (Right) */}
+        <g transform="translate(232, 68)">
+          <path d="M8 35 Q12 84 44 84 Q76 84 80 35 Z" fill="#25201a" stroke="#6a5a47" strokeWidth="2" />
+          <ellipse cx="44" cy="35" rx="36" ry="8" fill="#18181b" stroke="#6a5a47" strokeWidth="1.5" />
+          <line x1="44" y1="35" x2="62" y2="-4" stroke="#a18b6e" strokeWidth="6" strokeLinecap="round" />
+          <text x="18" y="62" fill="#86efac" fontSize="7.5" fontWeight="900">CHARCOAL</text>
+          <text x="22" y="73" fill="#fde68a" fontSize="7" fontWeight="700">POULTICE</text>
+        </g>
+
+        {/* Badge */}
+        <rect x="12" y="180" width="235" height="24" rx="6" fill="#042614" stroke="#38bdf8" strokeWidth="1" />
+        <text x="20" y="196" fill="#bae6fd" fontSize="9.5" fontWeight="800">
+          💧 HYDROTHERAPY &amp; CHARCOAL POULTICE
+        </text>
+        <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
+      </g>
+    </svg>
+  );
+}
+
+/**
+ * 27. PLANT MILKS, TOFU CURDS, SPROUTING & COLD OIL PRESSING
+ * Lever oilseed ram-press, wooden tofu press box, 72-hr sprouting jar.
+ */
+export function PlantMilkOilPressIllustration({
+  className = 'w-full h-auto',
+  width = 340,
+  height = 220,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg
+      viewBox="0 0 340 220"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      width={width}
+      height={height}
+      {...props}
+    >
+      <defs>
+        <clipPath id="pm-frame">
+          <rect width="340" height="220" rx="16" />
+        </clipPath>
+      </defs>
+      <g clipPath="url(#pm-frame)">
+        <rect width="340" height="220" fill="#f0fdf4" />
+        <rect x="0" y="156" width="340" height="64" fill="#782a15" />
+
+        {/* Manual Oilseed Ram-Press (Left) */}
+        <g transform="translate(26, 48)">
+          <rect x="10" y="45" width="60" height="60" rx="4" fill="#55483a" stroke="#25201a" strokeWidth="2" />
+          {/* Seed Funnel */}
+          <polygon points="22,18 48,18 40,45 30,45" fill="#fbbf24" stroke="#b45309" strokeWidth="1.5" />
+          {/* Long Steel Ram Handle */}
+          <line x1="35" y1="45" x2="95" y2="5" stroke="#dc5c23" strokeWidth="4.5" strokeLinecap="round" />
+          {/* Golden Oil Drip into Glass Jug */}
+          <circle cx="40" cy="112" r="3.5" fill="#f59e0b" />
+          <text x="18" y="80" fill="#fde68a" fontSize="7.5" fontWeight="900">OIL PRESS</text>
+        </g>
+
+        {/* Artisanal Wooden Tofu Curd Press Box (Center) */}
+        <g transform="translate(132, 76)">
+          {/* 2kg Pressing Stone on Top */}
+          <ellipse cx="42" cy="4" rx="22" ry="9" fill="#6a5a47" stroke="#25201a" strokeWidth="1.5" />
+          {/* Wooden Press Mold */}
+          <rect x="8" y="12" width="68" height="44" rx="3" fill="#ffd7b5" stroke="#782a15" strokeWidth="2" />
+          <text x="18" y="38" fill="#782a15" fontSize="8" fontWeight="900">SOY TOFU</text>
+          {/* Drainage Holes */}
+          <circle cx="24" cy="48" r="2" fill="#0284c7" />
+          <circle cx="42" cy="48" r="2" fill="#0284c7" />
+          <circle cx="60" cy="48" r="2" fill="#0284c7" />
+        </g>
+
+        {/* 72-Hour Sprouted Legume Jar (Right) */}
+        <g transform="translate(238, 56)">
+          <rect x="8" y="12" width="54" height="84" rx="6" fill="#ffffff" stroke="#15803d" strokeWidth="2" />
+          {/* Mesh Screen Lid */}
+          <rect x="14" y="4" width="42" height="8" rx="2" fill="#16a34a" />
+          {/* Sprouting Green Mung Beans inside */}
+          <g stroke="#22c55e" strokeWidth="2" strokeLinecap="round">
+            <path d="M20 75 Q25 60 32 68" />
+            <path d="M35 78 Q42 58 48 70" />
+            <path d="M24 55 Q32 42 40 52" />
+          </g>
+          <text x="15" y="90" fill="#14532d" fontSize="7" fontWeight="900">72h SPROUTS</text>
+        </g>
+
+        {/* Badge */}
+        <rect x="12" y="180" width="235" height="24" rx="6" fill="#042614" stroke="#22c55e" strokeWidth="1" />
+        <text x="20" y="196" fill="#86efac" fontSize="9.5" fontWeight="800">
+          🌻 PLANT MILKS, TOFU &amp; OIL PRESSING
+        </text>
+        <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
+      </g>
+    </svg>
+  );
+}
+
+/**
+ * 28. WOOD-ASH SOAP MAKING & FOOT-TREADLE TAILORING
+ * Hardwood ash KOH leaching barrel, herbal soap bars, cast-iron treadle sewing machine.
+ */
+export function SoapMakingTailoringIllustration({
+  className = 'w-full h-auto',
+  width = 340,
+  height = 220,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg
+      viewBox="0 0 340 220"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      width={width}
+      height={height}
+      {...props}
+    >
+      <defs>
+        <clipPath id="smt-frame">
+          <rect width="340" height="220" rx="16" />
+        </clipPath>
+      </defs>
+      <g clipPath="url(#smt-frame)">
+        <rect width="340" height="220" fill="#fef9ee" />
+        <rect x="0" y="156" width="340" height="64" fill="#782a15" />
+
+        {/* Hardwood Ash Lye (KOH) Gravity Leaching Barrel (Left) */}
+        <g transform="translate(24, 38)">
+          <rect x="8" y="10" width="68" height="88" rx="6" fill="#a18b6e" stroke="#25201a" strokeWidth="2" />
+          {/* White Hardwood Ash Layer */}
+          <rect x="12" y="22" width="60" height="46" fill="#e7e5e4" />
+          <text x="18" y="48" fill="#25201a" fontSize="7.5" fontWeight="900">WOOD ASH</text>
+          {/* Bottom Straw & Pebble Filter */}
+          <rect x="12" y="68" width="60" height="16" fill="#fbbf24" />
+          {/* Spigot & Golden KOH Lye Bucket with Floating Egg Test */}
+          <path d="M76 84 L88 84 L88 92" stroke="#782a15" strokeWidth="3" fill="none" />
+          <rect x="76" y="95" width="26" height="22" rx="2" fill="#d97706" stroke="#782a15" strokeWidth="1.5" />
+          <ellipse cx="89" cy="96" rx="5" ry="3.5" fill="#fff8f3" stroke="#782a15" strokeWidth="1" />
+        </g>
+
+        {/* Cured Antiseptic Neem & Aloe Soap Bars (Center) */}
+        <g transform="translate(132, 96)">
+          <rect x="0" y="28" width="42" height="18" rx="3" fill="#86efac" stroke="#14532d" strokeWidth="1.5" />
+          <rect x="46" y="28" width="42" height="18" rx="3" fill="#fde68a" stroke="#b45309" strokeWidth="1.5" />
+          <rect x="22" y="8" width="42" height="18" rx="3" fill="#bbf7d0" stroke="#14532d" strokeWidth="1.5" />
+          <text x="29" y="20" fill="#042614" fontSize="6.5" fontWeight="900">KOH SOAP</text>
+        </g>
+
+        {/* Non-Electric Cast-Iron Foot-Treadle Sewing Machine (Right) */}
+        <g transform="translate(232, 46)">
+          {/* Cast Iron Sewing Arm */}
+          <path d="M12 52 L12 18 L68 18 L68 38 L54 38 L54 28 L26 28 L26 52 Z" fill="#25201a" stroke="#d97706" strokeWidth="1.5" />
+          <circle cx="70" cy="24" r="9" stroke="#d97706" strokeWidth="2.5" fill="none" />
+          {/* Timber Table & Treadle Wheel */}
+          <rect x="0" y="52" width="82" height="8" rx="2" fill="#782a15" />
+          <line x1="12" y1="60" x2="12" y2="108" stroke="#25201a" strokeWidth="3" />
+          <line x1="70" y1="60" x2="70" y2="108" stroke="#25201a" strokeWidth="3" />
+          <circle cx="42" cy="86" r="14" stroke="#55483a" strokeWidth="2.5" fill="none" />
+        </g>
+
+        {/* Badge */}
+        <rect x="12" y="180" width="235" height="24" rx="6" fill="#042614" stroke="#fbbf24" strokeWidth="1" />
+        <text x="20" y="196" fill="#fde68a" fontSize="9.5" fontWeight="800">
+          🧼 ASH SOAP &amp; TREADLE TAILORING
+        </text>
+        <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
+      </g>
+    </svg>
+  );
+}
+
+/**
+ * 29. SABBATH FIRELESS THERMAL COOKER (WONDERBAG) & ROCKET STOVE
+ * L-tube insulated clay rocket stove + 10cm rice-hull thermal cushion (>68°C for 8 hrs).
+ */
+export function FirelessThermalCookerIllustration({
+  className = 'w-full h-auto',
+  width = 340,
+  height = 220,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg
+      viewBox="0 0 340 220"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      width={width}
+      height={height}
+      {...props}
+    >
+      <defs>
+        <clipPath id="ftc-frame">
+          <rect width="340" height="220" rx="16" />
+        </clipPath>
+      </defs>
+      <g clipPath="url(#ftc-frame)">
+        <rect width="340" height="220" fill="#fef3c7" />
+        <rect x="0" y="156" width="340" height="64" fill="#782a15" />
+
+        {/* Insulated L-Tube Clay Rocket Stove (Left) */}
+        <g transform="translate(28, 54)">
+          <path d="M0 64 L42 64 L42 15 L82 15 L82 102 L0 102 Z" fill="#dc5c23" stroke="#782a15" strokeWidth="2" />
+          {/* L-Combustion Tunnel & 4 Small Twigs */}
+          <path d="M-12 82 L24 82" stroke="#55483a" strokeWidth="4" strokeLinecap="round" />
+          <path d="M-10 88 L24 88" stroke="#55483a" strokeWidth="4" strokeLinecap="round" />
+          {/* Updraft Flame */}
+          <path d="M55 75 Q62 45 62 20" stroke="#fbbf24" strokeWidth="5" strokeLinecap="round" />
+          <text x="46" y="92" fill="#fff8f3" fontSize="7" fontWeight="900">-75% WOOD</text>
+        </g>
+
+        {/* 10cm Rice-Hull Insulated Fireless Thermal Bag / Wonderbag (Right) */}
+        <g transform="translate(158, 52)">
+          {/* Outer Quilted Thermal Cushion */}
+          <ellipse cx="75" cy="68" rx="68" ry="38" fill="#15803d" stroke="#042614" strokeWidth="2.5" />
+          {/* Sealed Lidded Stainless Pot Nested Inside */}
+          <rect x="42" y="34" width="66" height="44" rx="5" fill="#cbd5e1" stroke="#334155" strokeWidth="2" />
+          <ellipse cx="75" cy="34" rx="34" ry="6" fill="#94a3b8" stroke="#334155" strokeWidth="1.8" />
+          {/* Top Insulating Pillow Cap */}
+          <ellipse cx="75" cy="24" rx="42" ry="11" fill="#fbbf24" stroke="#b45309" strokeWidth="1.8" />
+          <text x="50" y="60" fill="#0f172a" fontSize="9.5" fontWeight="900">&gt;68°C • 8h</text>
+          <text x="40" y="95" fill="#dcfce7" fontSize="7.5" fontWeight="900">10cm RICE-HULL BAG</text>
+        </g>
+
+        {/* Badge */}
+        <rect x="12" y="180" width="240" height="24" rx="6" fill="#042614" stroke="#fbbf24" strokeWidth="1" />
+        <text x="20" y="196" fill="#fde68a" fontSize="9.5" fontWeight="800">
+          🍲 SABBATH FIRELESS THERMAL COOKER
+        </text>
+        <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
+      </g>
+    </svg>
+  );
+}
+
+/**
+ * 30. AVONDALE TRUE EDUCATION CURRICULUM (HEAD, HAND & HEART)
+ * Open Scripture, student 5x5m raised garden plot, carpentry square, double-entry ledger.
+ */
+export function TrueEducationCurriculumIllustration({
+  className = 'w-full h-auto',
+  width = 340,
+  height = 220,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg
+      viewBox="0 0 340 220"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      width={width}
+      height={height}
+      {...props}
+    >
+      <defs>
+        <clipPath id="tec-frame">
+          <rect width="340" height="220" rx="16" />
+        </clipPath>
+      </defs>
+      <g clipPath="url(#tec-frame)">
+        <rect width="340" height="220" fill="#f0fdf4" />
+        <rect x="0" y="154" width="340" height="66" fill="#782a15" />
+
+        {/* Morning Sacred & Scientific Study: Open Bible & Farm Ledger (Left) */}
+        <g transform="translate(22, 44)">
+          <path d="M0 30 Q26 20 52 28 L52 68 Q26 60 0 68 Z" fill="#fff8f3" stroke="#782a15" strokeWidth="1.8" />
+          <path d="M52 28 Q78 20 104 30 L104 68 Q78 60 52 68 Z" fill="#fff8f3" stroke="#782a15" strokeWidth="1.8" />
+          <line x1="52" y1="28" x2="52" y2="68" stroke="#782a15" strokeWidth="2" />
+          <text x="8" y="48" fill="#782a15" fontSize="7.5" fontWeight="900">BIBLE</text>
+          <text x="58" y="48" fill="#14532d" fontSize="7.5" fontWeight="900">LEDGER</text>
+        </g>
+
+        {/* Student 5m × 5m Personal Garden Plot (Center-Right) */}
+        <g transform="translate(145, 76)">
+          <polygon points="10,40 90,22 165,45 85,68" fill="#933113" stroke="#361009" strokeWidth="2" />
+          {/* Corner Stakes */}
+          <line x1="10" y1="40" x2="10" y2="18" stroke="#fbbf24" strokeWidth="3" />
+          <line x1="90" y1="22" x2="90" y2="4" stroke="#fbbf24" strokeWidth="3" />
+          <line x1="165" y1="45" x2="165" y2="24" stroke="#fbbf24" strokeWidth="3" />
+          <line x1="85" y1="68" x2="85" y2="46" stroke="#fbbf24" strokeWidth="3" />
+          {/* Young Sprouts */}
+          <circle cx="65" cy="40" r="5" fill="#22c55e" />
+          <circle cx="90" cy="44" r="5.5" fill="#4ade80" />
+          <circle cx="115" cy="48" r="5" fill="#22c55e" />
+          <text x="55" y="18" fill="#14532d" fontSize="8" fontWeight="900">5m × 5m PLOT</text>
+        </g>
+
+        {/* Carpentry Framing Square (Top Right) */}
+        <g transform="translate(245, 22)">
+          <path d="M0 0 L65 0 L65 12 L12 12 L12 52 L0 52 Z" fill="#d97706" stroke="#782a15" strokeWidth="1.5" />
+        </g>
+
+        {/* Badge */}
+        <rect x="12" y="180" width="235" height="24" rx="6" fill="#042614" stroke="#16a34a" strokeWidth="1" />
+        <text x="20" y="196" fill="#86efac" fontSize="9.5" fontWeight="800">
+          🎓 AVONDALE HEAD, HAND &amp; HEART
+        </text>
+        <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
+      </g>
+    </svg>
+  );
+}
+
+/**
+ * 31. NO-TILL BROADFORKING & DEEP SUBSOIL AERATION
+ * 5-tine forged steel broadfork fracturing 30cm hardpan while preserving earthworms & mulch.
+ */
+export function BroadforkNoTillIllustration({
+  className = 'w-full h-auto',
+  width = 340,
+  height = 220,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg
+      viewBox="0 0 340 220"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      width={width}
+      height={height}
+      {...props}
+    >
+      <defs>
+        <clipPath id="bfn-frame">
+          <rect width="340" height="220" rx="16" />
+        </clipPath>
+      </defs>
+      <g clipPath="url(#bfn-frame)">
+        <rect width="340" height="220" fill="#f0fdf4" />
+        {/* Un-inverted Soil Profile: Mulch + Humus + Katondo Subsoil */}
+        <rect x="0" y="95" width="340" height="16" fill="#fbbf24" />
+        <rect x="0" y="111" width="340" height="38" fill="#14532d" />
+        <rect x="0" y="149" width="340" height="71" fill="#782a15" />
+
+        {/* 5-Tine Forged Steel Broadfork angled at 45° */}
+        <g transform="translate(155, 18) rotate(18)">
+          {/* Twin Handles */}
+          <line x1="0" y1="0" x2="0" y2="85" stroke="#782a15" strokeWidth="5" strokeLinecap="round" />
+          <line x1="60" y1="0" x2="60" y2="85" stroke="#782a15" strokeWidth="5" strokeLinecap="round" />
+          {/* Steel Crossbar */}
+          <line x1="-6" y1="85" x2="66" y2="85" stroke="#25201a" strokeWidth="6" strokeLinecap="round" />
+          {/* 5 Deep curved steel tines (30cm) penetrating subsoil */}
+          {[0, 15, 30, 45, 60].map((tx) => (
+            <path key={tx} d={`M${tx} 85 Q${tx - 4} 115 ${tx - 12} 138`} stroke="#cbd5e1" strokeWidth="3.5" strokeLinecap="round" fill="none" />
+          ))}
+        </g>
+
+        {/* Subsoil Oxygen & Water Fracture Channels */}
+        <g stroke="#38bdf8" strokeWidth="1.8" strokeDasharray="3 3">
+          <line x1="120" y1="115" x2="112" y2="168" />
+          <line x1="145" y1="115" x2="138" y2="172" />
+          <line x1="170" y1="115" x2="162" y2="170" />
+        </g>
+
+        {/* Badge */}
+        <rect x="12" y="180" width="235" height="24" rx="6" fill="#042614" stroke="#22c55e" strokeWidth="1" />
+        <text x="20" y="196" fill="#86efac" fontSize="9.5" fontWeight="800">
+          🔱 NO-TILL BROADFORK • 30cm AERATION
+        </text>
+        <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
+      </g>
+    </svg>
+  );
+}
+
+/**
+ * 32. HEIRLOOM SEED SELECTION, FERMENTATION & VAULT STORAGE
+ * Wet-seed fermentation jar, fine mesh sieve, airtight glass jars with silica gel.
+ */
+export function HeirloomSeedVaultIllustration({
+  className = 'w-full h-auto',
+  width = 340,
+  height = 220,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg
+      viewBox="0 0 340 220"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      width={width}
+      height={height}
+      {...props}
+    >
+      <defs>
+        <clipPath id="hsv-frame">
+          <rect width="340" height="220" rx="16" />
+        </clipPath>
+      </defs>
+      <g clipPath="url(#hsv-frame)">
+        <rect width="340" height="220" fill="#fef9ee" />
+        <rect x="0" y="156" width="340" height="64" fill="#782a15" />
+
+        {/* 3-Day Wet Pulp Fermentation Jar (Left) */}
+        <g transform="translate(28, 58)">
+          <rect x="0" y="10" width="52" height="78" rx="6" fill="#fff8f3" stroke="#6a5a47" strokeWidth="2" />
+          <rect x="3" y="34" width="46" height="51" fill="#fde68a" />
+          {/* Viable heavy seeds sunk at bottom */}
+          <circle cx="16" cy="76" r="3" fill="#b45309" />
+          <circle cx="26" cy="78" r="3" fill="#b45309" />
+          <circle cx="36" cy="76" r="3" fill="#b45309" />
+          <text x="6" y="25" fill="#782a15" fontSize="6.5" fontWeight="900">3-DAY FERMENT</text>
+        </g>
+
+        {/* Shaded Drying Mesh Tray (<8% Moisture) (Center) */}
+        <g transform="translate(106, 92)">
+          <rect x="0" y="0" width="92" height="44" rx="4" fill="#d97706" stroke="#782a15" strokeWidth="2" />
+          <rect x="6" y="6" width="80" height="32" fill="#fef3c7" />
+          <circle cx="22" cy="22" r="3" fill="#933113" />
+          <circle cx="38" cy="18" r="3" fill="#15803d" />
+          <circle cx="54" cy="24" r="3" fill="#b45309" />
+          <circle cx="70" cy="20" r="3" fill="#dc5c23" />
+          <text x="14" y="56" fill="#fff8f3" fontSize="7.5" fontWeight="900">SHADE DRY &lt;8%</text>
+        </g>
+
+        {/* Hermetic Glass Seed Vault Jar with Silica Packet (Right) */}
+        <g transform="translate(226, 48)">
+          <rect x="8" y="12" width="68" height="92" rx="8" fill="#042614" stroke="#fbbf24" strokeWidth="2" />
+          <rect x="16" y="2" width="52" height="10" rx="3" fill="#d97706" />
+          {/* Silica Desiccant Packet */}
+          <rect x="22" y="26" width="40" height="22" rx="3" fill="#ffffff" />
+          <text x="27" y="40" fill="#042614" fontSize="7" fontWeight="900">SILICA GEL</text>
+          {/* Heirloom Seeds */}
+          <ellipse cx="32" cy="74" rx="6" ry="4" fill="#fbbf24" />
+          <ellipse cx="52" cy="74" rx="6" ry="4" fill="#f57d42" />
+          <ellipse cx="42" cy="86" rx="6" ry="4" fill="#86efac" />
+        </g>
+
+        {/* Badge */}
+        <rect x="12" y="180" width="235" height="24" rx="6" fill="#042614" stroke="#fbbf24" strokeWidth="1" />
+        <text x="20" y="196" fill="#fde68a" fontSize="9.5" fontWeight="800">
+          🌱 HEIRLOOM SEED BANK &amp; CURING
+        </text>
+        <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
+      </g>
+    </svg>
+  );
+}
+
+/**
+ * 33. SALT CURING, HARDWOOD SMOKING & SOLAR BILTONG CABINET
+ * Rock-salt dredging, fly-screened solar draft drying & smoking house.
+ */
+export function SaltCuringSmokerIllustration({
+  className = 'w-full h-auto',
+  width = 340,
+  height = 220,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg
+      viewBox="0 0 340 220"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      width={width}
+      height={height}
+      {...props}
+    >
+      <defs>
+        <clipPath id="scs-frame">
+          <rect width="340" height="220" rx="16" />
+        </clipPath>
+      </defs>
+      <g clipPath="url(#scs-frame)">
+        <rect width="340" height="220" fill="#fef9ee" />
+        <rect x="0" y="156" width="340" height="64" fill="#782a15" />
+
+        {/* Coarse Rock Salt & Coriander Curing Tray (Left) */}
+        <g transform="translate(24, 96)">
+          <rect x="0" y="20" width="95" height="32" rx="4" fill="#d3c7b5" stroke="#55483a" strokeWidth="2" />
+          <circle cx="20" cy="34" r="3" fill="#ffffff" />
+          <circle cx="35" cy="38" r="3" fill="#ffffff" />
+          <circle cx="52" cy="34" r="3" fill="#ffffff" />
+          <circle cx="72" cy="37" r="3" fill="#ffffff" />
+          <text x="12" y="14" fill="#782a15" fontSize="8" fontWeight="900">ROCK SALT + LEMON</text>
+        </g>
+
+        {/* Fly-Screened Solar & Hardwood Cold Smoker Cabinet (Right) */}
+        <g transform="translate(152, 28)">
+          <polygon points="0,24 75,0 150,24" fill="#933113" stroke="#361009" strokeWidth="2" />
+          <rect x="12" y="24" width="126" height="104" rx="4" fill="#ffd7b5" stroke="#782a15" strokeWidth="2" />
+          {/* Hanging Cured Strips inside Mesh Screen */}
+          <line x1="24" y1="42" x2="126" y2="42" stroke="#55483a" strokeWidth="2" />
+          <rect x="36" y="42" width="10" height="42" rx="3" fill="#933113" />
+          <rect x="68" y="42" width="10" height="42" rx="3" fill="#933113" />
+          <rect x="100" y="42" width="10" height="42" rx="3" fill="#933113" />
+          {/* Aromatic Hardwood Smoke wisps */}
+          <path d="M52 118 Q48 98 56 85" stroke="#64748b" strokeWidth="2" strokeDasharray="3 3" fill="none" />
+          <path d="M92 118 Q88 98 96 85" stroke="#64748b" strokeWidth="2" strokeDasharray="3 3" fill="none" />
+        </g>
+
+        {/* Badge */}
+        <rect x="12" y="180" width="235" height="24" rx="6" fill="#042614" stroke="#dc5c23" strokeWidth="1" />
+        <text x="20" y="196" fill="#ffd7b5" fontSize="9.5" fontWeight="800">
+          🧂 SALT CURING &amp; SOLAR SMOKER
+        </text>
+        <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
+      </g>
+    </svg>
+  );
+}
+
+/**
+ * 34. SEASONAL PANORAMA: RAINY PLANTING (DZINJA • NOV–MAR)
+ */
+export function SeasonRainyDzinjaIllustration({
+  className = 'w-full h-auto',
+  width = 360,
+  height = 200,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg viewBox="0 0 360 200" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} {...props}>
+      <rect width="360" height="200" rx="16" fill="#042614" />
+      {/* Rain Clouds & Downpour */}
+      <path d="M40 35 Q60 15 90 28 Q115 12 145 28 Q165 18 180 35 Z" fill="#0284c7" opacity="0.85" />
+      <g stroke="#38bdf8" strokeWidth="1.5" strokeDasharray="4 4">
+        <line x1="60" y1="42" x2="48" y2="85" />
+        <line x1="95" y1="42" x2="83" y2="85" />
+        <line x1="130" y1="42" x2="118" y2="85" />
+        <line x1="160" y1="42" x2="148" y2="85" />
+      </g>
+      {/* Contour Ridges (Misozi) & Companion Guild (Maize + Pigeon Pea + Pumpkin) */}
+      <path d="M0 125 Q90 105 180 125 T360 115 L360 200 L0 200 Z" fill="#15803d" />
+      <path d="M0 148 Q90 130 180 148 T360 140" stroke="#86efac" strokeWidth="2.5" strokeDasharray="6 4" />
+      {/* Growing Maize & Legumes */}
+      {[70, 140, 210, 280].map((x) => (
+        <g key={x} transform={`translate(${x}, 85)`}>
+          <line x1="0" y1="40" x2="0" y2="0" stroke="#4ade80" strokeWidth="3" />
+          <path d="M0 20 Q-14 10 -20 18" stroke="#22c55e" strokeWidth="2.5" fill="none" />
+          <path d="M0 14 Q14 4 20 12" stroke="#22c55e" strokeWidth="2.5" fill="none" />
+          <circle cx="12" cy="36" r="5" fill="#fbbf24" />
+        </g>
+      ))}
+      <rect x="12" y="164" width="220" height="24" rx="6" fill="#041d10" stroke="#34d399" strokeWidth="1" />
+      <text x="20" y="180" fill="#a7f3d0" fontSize="9.5" fontWeight="800">🌧️ DZINJA • RAINY PLANTING (NOV–MAR)</text>
+    </svg>
+  );
+}
+
+/**
+ * 35. SEASONAL PANORAMA: HARVEST & STORAGE (MASIKA • APR–JUN)
+ */
+export function SeasonHarvestMasikaIllustration({
+  className = 'w-full h-auto',
+  width = 360,
+  height = 200,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg viewBox="0 0 360 200" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} {...props}>
+      <rect width="360" height="200" rx="16" fill="#251605" />
+      <circle cx="290" cy="48" r="28" fill="#f59e0b" opacity="0.85" />
+      <path d="M0 130 Q120 115 240 128 T360 120 L360 200 L0 200 Z" fill="#782a15" />
+      {/* Elevated Solar Grain Drying Rack */}
+      <g transform="translate(35, 72)">
+        <line x1="10" y1="25" x2="10" y2="58" stroke="#a18b6e" strokeWidth="3.5" />
+        <line x1="110" y1="25" x2="110" y2="58" stroke="#a18b6e" strokeWidth="3.5" />
+        <rect x="0" y="18" width="120" height="8" rx="2" fill="#d97706" />
+        <ellipse cx="30" cy="14" rx="12" ry="5" fill="#fbbf24" />
+        <ellipse cx="60" cy="14" rx="12" ry="5" fill="#fbbf24" />
+        <ellipse cx="90" cy="14" rx="12" ry="5" fill="#fbbf24" />
+      </g>
+      {/* Hermetic PICS Bags & Nkhokwe Silo */}
+      <g transform="translate(200, 58)">
+        <rect x="0" y="25" width="38" height="48" rx="5" fill="#0284c7" stroke="#bae6fd" strokeWidth="1.5" />
+        <text x="8" y="52" fill="#ffffff" fontSize="8" fontWeight="900">PICS</text>
+        <polygon points="55,25 85,0 115,25" fill="#d97706" />
+        <rect x="62" y="25" width="46" height="46" rx="3" fill="#ffd7b5" stroke="#782a15" strokeWidth="1.5" />
+      </g>
+      <rect x="12" y="164" width="230" height="24" rx="6" fill="#1c1104" stroke="#fbbf24" strokeWidth="1" />
+      <text x="20" y="180" fill="#fde68a" fontSize="9.5" fontWeight="800">🌾 MASIKA • HARVEST &amp; STORAGE (APR–JUN)</text>
+    </svg>
+  );
+}
+
+/**
+ * 36. SEASONAL PANORAMA: COLD DRY SEASON (CHISANU • JUL–AUG)
+ */
+export function SeasonColdChisanuIllustration({
+  className = 'w-full h-auto',
+  width = 360,
+  height = 200,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg viewBox="0 0 360 200" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} {...props}>
+      <rect width="360" height="200" rx="16" fill="#082032" />
+      {/* Highland Chiperoni Morning Mist Bands */}
+      <path d="M20 45 H180 M120 62 H310" stroke="#bae6fd" strokeWidth="3" strokeLinecap="round" opacity="0.45" />
+      <path d="M0 128 Q110 112 220 126 T360 118 L360 200 L0 200 Z" fill="#0f3d28" />
+      {/* Frost-Protected Straw Mulch Dimba Beds */}
+      <g transform="translate(36, 95)">
+        <path d="M0 32 Q55 6 110 32 Z" fill="#fbbf24" opacity="0.85" stroke="#d97706" strokeWidth="1.5" />
+        <text x="20" y="28" fill="#25201a" fontSize="7.5" fontWeight="900">FROST BLANKET</text>
+      </g>
+      {/* Steaming 60°C Thermophilic Compost Mound */}
+      <g transform="translate(195, 76)">
+        <path d="M0 52 Q55 0 110 52 Z" fill="#55483a" stroke="#d97706" strokeWidth="2" />
+        <text x="30" y="42" fill="#fde68a" fontSize="8.5" fontWeight="900">60°C COMPOST</text>
+      </g>
+      <rect x="12" y="164" width="235" height="24" rx="6" fill="#041421" stroke="#38bdf8" strokeWidth="1" />
+      <text x="20" y="180" fill="#bae6fd" fontSize="9.5" fontWeight="800">❄️ CHISANU • COLD DRY SEASON (JUL–AUG)</text>
+    </svg>
+  );
+}
+
+/**
+ * 37. SEASONAL PANORAMA: HOT DRY PREPARATION (CHILIMWE • SEP–OCT)
+ */
+export function SeasonHotChilimweIllustration({
+  className = 'w-full h-auto',
+  width = 360,
+  height = 200,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg viewBox="0 0 360 200" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} {...props}>
+      <rect width="360" height="200" rx="16" fill="#2b1206" />
+      <circle cx="70" cy="48" r="26" fill="#fbbf24" />
+      <rect x="0" y="120" width="360" height="80" fill="#782a15" />
+      {/* EGW 90x90x90cm Deep Tree Pit Cutaway */}
+      <g transform="translate(115, 88)">
+        <rect x="0" y="32" width="76" height="54" rx="4" fill="#25201a" stroke="#fbbf24" strokeWidth="2" />
+        <rect x="4" y="68" width="68" height="14" fill="#94a3b8" />
+        <text x="10" y="54" fill="#fde68a" fontSize="7.5" fontWeight="900">90cm³ EGW PIT</text>
+      </g>
+      {/* Wooden A-Frame Contour Level */}
+      <g transform="translate(235, 58)">
+        <line x1="35" y1="0" x2="5" y2="64" stroke="#fbbf24" strokeWidth="3.5" />
+        <line x1="35" y1="0" x2="65" y2="64" stroke="#fbbf24" strokeWidth="3.5" />
+        <line x1="15" y1="42" x2="55" y2="42" stroke="#fbbf24" strokeWidth="3" />
+        <line x1="35" y1="4" x2="35" y2="48" stroke="#38bdf8" strokeWidth="1.5" />
+        <circle cx="35" cy="48" r="3.5" fill="#38bdf8" />
+      </g>
+      <rect x="12" y="164" width="235" height="24" rx="6" fill="#1a0902" stroke="#f59e0b" strokeWidth="1" />
+      <text x="20" y="180" fill="#fde68a" fontSize="9.5" fontWeight="800">☀️ CHILIMWE • HOT DRY PREP (SEP–OCT)</text>
+    </svg>
+  );
+}
+
+/**
+ * 38. PROPHETIC ILLUSTRATION: 1844 HEAVENLY SANCTUARY & INVESTIGATIVE JUDGMENT
+ * Two-Apartment Sanctuary cutaway, Ark of the Covenant, Mercy Seat, Two Tables of the Law, 2300 Days.
+ */
+export function Sanctuary1844Illustration({
+  className = 'w-full h-auto',
+  width = 360,
+  height = 220,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} {...props}>
+      <rect width="360" height="220" rx="16" fill="#07150E" />
+      {/* Shekinah Glory Radial Halo above Mercy Seat */}
+      <circle cx="180" cy="76" r="58" fill="#F59E0B" fillOpacity="0.16" />
+      <circle cx="180" cy="76" r="34" fill="#FBBF24" fillOpacity="0.28" />
+      {/* Golden Sanctuary Columns & Open Veil */}
+      <rect x="28" y="18" width="10" height="132" rx="3" fill="#B45309" stroke="#FDE68A" strokeWidth="1.2" />
+      <rect x="322" y="18" width="10" height="132" rx="3" fill="#B45309" stroke="#FDE68A" strokeWidth="1.2" />
+      <path d="M38 20 Q90 48 62 148" stroke="#A855F7" strokeWidth="3" fill="none" />
+      <path d="M322 20 Q270 48 298 148" stroke="#A855F7" strokeWidth="3" fill="none" />
+      {/* Two Tables of the Ten Commandments (I–IV & V–X) */}
+      <path d="M154 48 C154 40, 178 40, 178 48 L178 86 L154 86 Z" fill="#1E293B" stroke="#FDE68A" strokeWidth="1.6" />
+      <path d="M182 48 C182 40, 206 40, 206 48 L206 86 L182 86 Z" fill="#1E293B" stroke="#FDE68A" strokeWidth="1.6" />
+      {/* Highlighted 4th Commandment Sabbath Seal */}
+      <rect x="158" y="72" width="16" height="6" rx="1.5" fill="#10B981" />
+      {/* Covering Cherubim Wings & Golden Ark of the Testament */}
+      <path d="M112 92 Q144 60 174 82" stroke="#FBBF24" strokeWidth="3.2" fill="none" strokeLinecap="round" />
+      <path d="M248 92 Q216 60 186 82" stroke="#FBBF24" strokeWidth="3.2" fill="none" strokeLinecap="round" />
+      <rect x="118" y="92" width="124" height="44" rx="4" fill="#92400E" stroke="#FDE047" strokeWidth="2" />
+      <line x1="92" y1="114" x2="268" y2="114" stroke="#FDE68A" strokeWidth="3.5" strokeLinecap="round" />
+      {/* 2300 Prophetic Days Mathematical Bar */}
+      <rect x="20" y="152" width="320" height="26" rx="6" fill="#04100A" stroke="#10B981" strokeWidth="1.2" />
+      <text x="180" y="169" textAnchor="middle" fill="#FDE68A" fontSize="8.5" fontFamily="monospace" fontWeight="bold">
+        457 BC ─── 2,300 DAYS (DAN 8:14) ─── OCT 22, 1844
+      </text>
+      <rect x="12" y="186" width="255" height="22" rx="6" fill="#1C1404" stroke="#FBBF24" strokeWidth="1" />
+      <text x="20" y="201" fill="#FDE68A" fontSize="9" fontWeight="800">⚖️ 1844 MOST HOLY PLACE • SANCTUARY CLEANSED</text>
+    </svg>
+  );
+}
+
+/**
+ * 39. PROPHETIC ILLUSTRATION: THREE ANGELS' MESSAGES (REVELATION 14:6–12)
+ */
+export function ThreeAngelsVectorIllustration({
+  className = 'w-full h-auto',
+  width = 360,
+  height = 220,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} {...props}>
+      <rect width="360" height="220" rx="16" fill="#06140E" />
+      {/* Earth, Mountains & Fountains of Waters Below */}
+      <path d="M20 182 Q180 124 340 182 Z" fill="#064E3B" stroke="#34D399" strokeWidth="2" />
+      <path d="M85 182 Q180 150 275 182" stroke="#38BDF8" strokeWidth="2" strokeDasharray="4 3" fill="none" />
+      {/* Three Heralds in Midheaven */}
+      {[
+        { cx: 88, cy: 74, label: '1ST ANGEL', ref: 'Rev 14:6–7', color: '#FBBF24' },
+        { cx: 180, cy: 54, label: '2ND ANGEL', ref: 'Rev 14:8', color: '#38BDF8' },
+        { cx: 272, cy: 74, label: '3RD ANGEL', ref: 'Rev 14:9–12', color: '#34D399' },
+      ].map((a) => (
+        <g key={a.label}>
+          <circle cx={a.cx} cy={a.cy} r="25" fill={a.color} fillOpacity="0.16" stroke={a.color} strokeWidth="1.6" />
+          <path d={`M${a.cx - 18} ${a.cy + 4} Q${a.cx - 6} ${a.cy - 14} ${a.cx} ${a.cy - 2} Q${a.cx + 6} ${a.cy - 14} ${a.cx + 18} ${a.cy + 4}`} fill="none" stroke={a.color} strokeWidth="2.2" strokeLinecap="round" />
+          <line x1={a.cx} y1={a.cy + 2} x2={a.cx + 15} y2={a.cy + 10} stroke="#FEF08A" strokeWidth="2.2" strokeLinecap="round" />
+          <text x={a.cx} y={a.cy + 38} textAnchor="middle" fill="#FFFFFF" fontSize="8.5" fontFamily="monospace" fontWeight="bold">{a.label}</text>
+          <text x={a.cx} y={a.cy + 49} textAnchor="middle" fill={a.color} fontSize="7.5" fontFamily="monospace">{a.ref}</text>
+        </g>
+      ))}
+      <rect x="12" y="186" width="255" height="22" rx="6" fill="#041D12" stroke="#34D399" strokeWidth="1" />
+      <text x="20" y="201" fill="#A7F3D0" fontSize="9" fontWeight="800">🎺 THREE ANGELS’ MESSAGES • REV 14:6–12</text>
+    </svg>
+  );
+}
+
+/**
+ * 40. PROPHETIC ILLUSTRATION: SIEGE SIGNAL & COUNTRY LIVING EXODUS (5T 464.3)
+ */
+export function SiegeSignalExodusIllustration({
+  className = 'w-full h-auto',
+  width = 360,
+  height = 220,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} {...props}>
+      <rect width="360" height="220" rx="16" fill="#0F172A" />
+      {/* Left: Urban Towers & Economic Boycott (Rev 13:17) */}
+      <rect x="24" y="68" width="24" height="86" fill="#334155" stroke="#EF4444" strokeWidth="1.4" />
+      <rect x="52" y="48" width="28" height="106" fill="#1E293B" stroke="#F97316" strokeWidth="1.4" />
+      <rect x="84" y="82" width="22" height="72" fill="#334155" stroke="#EF4444" strokeWidth="1.4" />
+      <text x="64" y="38" textAnchor="middle" fill="#FCA5A5" fontSize="8" fontFamily="monospace" fontWeight="bold">NO BUY/SELL</text>
+      {/* Center: Prophetic Exodus Arrow */}
+      <path d="M120 105 L198 105" stroke="#FBBF24" strokeWidth="3" strokeDasharray="6 4" />
+      <polygon points="198,99 212,105 198,111" fill="#FBBF24" />
+      <text x="164" y="94" textAnchor="middle" fill="#FDE68A" fontSize="8" fontFamily="monospace" fontWeight="bold">5T 464.3</text>
+      {/* Right: Mountain Sanctuary & Rural Outpost */}
+      <polygon points="214,154 256,56 296,112 328,68 350,154" fill="#064E3B" stroke="#10B981" strokeWidth="1.8" />
+      <rect x="248" y="122" width="38" height="32" rx="3" fill="#92400E" stroke="#FBBF24" strokeWidth="1.5" />
+      <path d="M328 96 Q315 126 304 154" stroke="#38BDF8" strokeWidth="2.5" fill="none" />
+      <rect x="12" y="186" width="265" height="22" rx="6" fill="#1C1105" stroke="#F97316" strokeWidth="1" />
+      <text x="20" y="201" fill="#FDBA74" fontSize="9" fontWeight="800">⛰️ SIEGE SIGNAL &amp; MOUNTAIN FLIGHT (5T 464.3)</text>
+    </svg>
+  );
+}
+
+/**
+ * 41. PROPHETIC ILLUSTRATION: SECOND COMING & EARTH MADE NEW (REV 14:14 / ISA 65:21)
+ */
+export function SecondComingEdenIllustration({
+  className = 'w-full h-auto',
+  width = 360,
+  height = 220,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} {...props}>
+      <rect width="360" height="220" rx="16" fill="#07150E" />
+      {/* Radiant Glory Cloud & Golden Crown */}
+      <circle cx="180" cy="74" r="56" fill="#FACC15" fillOpacity="0.22" />
+      <circle cx="180" cy="74" r="34" fill="#FEF08A" fillOpacity="0.38" />
+      <polygon points="152,80 159,54 172,68 180,46 188,68 201,54 208,80" fill="#FACC15" stroke="#FEF9C3" strokeWidth="1.6" />
+      {/* Restored Edenic Mountains & River of Life */}
+      <path d="M16 164 Q100 116 180 150 Q260 116 344 164 Z" fill="#065F46" stroke="#34D399" strokeWidth="2" />
+      <path d="M180 110 C170 130 162 146 150 164 L210 164 C198 146 190 130 180 110 Z" fill="#38BDF8" />
+      <rect x="12" y="186" width="265" height="22" rx="6" fill="#1C1603" stroke="#FACC15" strokeWidth="1" />
+      <text x="20" y="201" fill="#FEF08A" fontSize="9" fontWeight="800">👑 SECOND COMING &amp; EDEN RESTORED (REV 14:14)</text>
+    </svg>
+  );
+}
+
+/**
+ * 42. DYNAMIC ICON DISPATCHER
+ * Allows rendering any country or prophetic illustration by key name with standard props.
  */
 export type CountryIconName =
   | 'scene'
@@ -1920,7 +3050,37 @@ export type CountryIconName =
   | 'outposttech'
   | 'insects'
   | 'diseases'
-  | 'soilscience';
+  | 'soilscience'
+  | 'earthblock'
+  | 'poultry'
+  | 'zeerpot'
+  | 'breadmaking'
+  | 'hydrotherapy'
+  | 'oilpress'
+  | 'soapmaking'
+  | 'thermalcooker'
+  | 'trueeducation'
+  | 'broadfork'
+  | 'seedvault'
+  | 'saltcuring'
+  | 'season-rainy'
+  | 'season-harvest'
+  | 'season-cold'
+  | 'season-hot'
+  | 'season-chizimalupsya'
+  | 'season-dzinja'
+  | 'season-masika'
+  | 'season-chilimwe'
+  | 'devotional'
+  | 'map'
+  | 'outpost'
+  | 'cistern'
+  | 'solar'
+  | 'orchard'
+  | 'prophecy-1844'
+  | 'prophecy-three-angels'
+  | 'prophecy-siege'
+  | 'prophecy-second-coming';
 
 export interface CountryIconDispatcherProps extends CountryIllustrationProps {
   name: CountryIconName;
@@ -1930,10 +3090,12 @@ export function CountryIcon({ name, ...props }: CountryIconDispatcherProps) {
   switch (name) {
     case 'scene':
     case 'homestead':
+    case 'outpost':
       return <CountryScene {...props} />;
     case 'soil':
       return <SoilStrataIllustration {...props} />;
     case 'borehole':
+    case 'cistern':
       return <SolarBoreholeIllustration {...props} />;
     case 'swale':
       return <PermacultureSwaleIllustration {...props} />;
@@ -1942,14 +3104,17 @@ export function CountryIcon({ name, ...props }: CountryIconDispatcherProps) {
     case 'apothecary':
       return <HerbalApothecaryIllustration {...props} />;
     case 'lake':
+    case 'map':
       return <LakeMalawiIllustration {...props} />;
     case 'sabbath':
+    case 'devotional':
       return <SabbathSanctuaryIllustration {...props} />;
     case 'compost':
       return <CompostIllustration {...props} />;
     case 'firstaid':
       return <FirstAidIllustration {...props} />;
     case 'fruittree':
+    case 'orchard':
       return <FruitTreeIllustration {...props} />;
     case 'vermiculture':
       return <VermicultureIllustration {...props} />;
@@ -1962,6 +3127,7 @@ export function CountryIcon({ name, ...props }: CountryIconDispatcherProps) {
     case 'foodpreservation':
       return <FoodPreservationIllustration {...props} />;
     case 'outposttech':
+    case 'solar':
       return <OutpostTechIllustration {...props} />;
     case 'insects':
       return <InsectHandlingIllustration {...props} />;
@@ -1969,6 +3135,50 @@ export function CountryIcon({ name, ...props }: CountryIconDispatcherProps) {
       return <DiseaseHandlingIllustration {...props} />;
     case 'soilscience':
       return <SoilScienceIllustration {...props} />;
+    case 'earthblock':
+      return <EarthBlockMasonryIllustration {...props} />;
+    case 'poultry':
+      return <PoultryHusbandryIllustration {...props} />;
+    case 'zeerpot':
+      return <ZeerPotCoolingIllustration {...props} />;
+    case 'breadmaking':
+      return <BreadmakingMillingIllustration {...props} />;
+    case 'hydrotherapy':
+      return <HydrotherapyPoulticeIllustration {...props} />;
+    case 'oilpress':
+      return <PlantMilkOilPressIllustration {...props} />;
+    case 'soapmaking':
+      return <SoapMakingTailoringIllustration {...props} />;
+    case 'thermalcooker':
+      return <FirelessThermalCookerIllustration {...props} />;
+    case 'trueeducation':
+      return <TrueEducationCurriculumIllustration {...props} />;
+    case 'broadfork':
+      return <BroadforkNoTillIllustration {...props} />;
+    case 'seedvault':
+      return <HeirloomSeedVaultIllustration {...props} />;
+    case 'saltcuring':
+      return <SaltCuringSmokerIllustration {...props} />;
+    case 'season-rainy':
+    case 'season-dzinja':
+      return <SeasonRainyDzinjaIllustration {...props} />;
+    case 'season-harvest':
+    case 'season-masika':
+      return <SeasonHarvestMasikaIllustration {...props} />;
+    case 'season-cold':
+    case 'season-chilimwe':
+      return <SeasonColdChisanuIllustration {...props} />;
+    case 'season-hot':
+    case 'season-chizimalupsya':
+      return <SeasonHotChilimweIllustration {...props} />;
+    case 'prophecy-1844':
+      return <Sanctuary1844Illustration {...props} />;
+    case 'prophecy-three-angels':
+      return <ThreeAngelsVectorIllustration {...props} />;
+    case 'prophecy-siege':
+      return <SiegeSignalExodusIllustration {...props} />;
+    case 'prophecy-second-coming':
+      return <SecondComingEdenIllustration {...props} />;
     default:
       return <CountryScene {...props} />;
   }

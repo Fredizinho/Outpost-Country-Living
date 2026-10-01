@@ -1,0 +1,41 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Outpost Country Living",
+  "version": "1.0.0",
+  "identifier": "com.outpostliving.malawi.sanctuary",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:3000",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "withGlobalTauri": false,
+    "windows": [
+      {
+        "title": "OUTPOST: COUNTRY LIVING — Malawi Sanctuary Blueprint",
+        "width": 1440,
+        "height": 900,
+        "minWidth": 1024,
+        "minHeight": 680,
+        "resizable": true,
+        "fullscreen": false,
+        "center": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["msi", "nsis", "dmg", "app", "appimage", "deb"],
+    "icon": [
+      "../public/pwa-192x192.png",
+      "../public/pwa-512x512.png"
+    ],
+    "category": "Education",
+    "shortDescription": "Adventist Country Living & Outpost Sanctuary Blueprint for Malawi",
+    "longDescription": "An inspired Seventh-day Adventist country living guide and outpost sanctuary blueprint for Malawi, featuring 28 district hydrogeology dossiers, FAO soil science, off-grid calculators, and Chichewa field guides."
+  }
+}
