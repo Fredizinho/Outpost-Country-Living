@@ -23,6 +23,10 @@ import {
   Building2,
   Users,
   Sprout,
+  Settings,
+  Code2,
+  HeartPulse,
+  UtensilsCrossed,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { prefetchRoute } from '@/lib/routePrefetch';
@@ -78,7 +82,7 @@ const COMMAND_REGISTRY: CommandItem[] = [
   },
   {
     id: 'suitability-rubric',
-    title: '100-Point Land Suitability Evaluator',
+    title: 'Property Suitability Evaluator',
     category: 'Land & Maps',
     subtitle: 'Score candidate parcels on perennial water, soil, title safety & clinic distance',
     path: '/suitability',
@@ -215,6 +219,24 @@ const COMMAND_REGISTRY: CommandItem[] = [
     keywords: ['community', 'directory', 'fellowship', 'seed savers', 'believers'],
   },
   {
+    id: 'sanitarium-apothecary',
+    title: 'Medical Missionary & Sanitarium Apothecary (NEWSTART)',
+    category: 'Homestead Skills',
+    subtitle: 'Rational hydrotherapy fomentations, activated charcoal poultices & 8 NEWSTART laws',
+    path: '/sanitarium',
+    icon: HeartPulse,
+    keywords: ['sanitarium', 'medical', 'hydrotherapy', 'remedies', 'charcoal', 'poultice', 'newstart'],
+  },
+  {
+    id: 'country-kitchen',
+    title: 'Edenic Country Kitchen & Unfermented Bread Table',
+    category: 'Homestead Skills',
+    subtitle: 'Zwischenbrot whole-grain bread, nut-milk emulsions & oil-free Malawi harvest cuisine',
+    path: '/kitchen',
+    icon: UtensilsCrossed,
+    keywords: ['kitchen', 'recipes', 'bread', 'cooking', 'diet', 'nutrition', 'unfermented'],
+  },
+  {
     id: 'account-backup',
     title: 'Steward Profile, Cloud Sync & JSON Backup',
     category: 'Spiritual & Fellowship',
@@ -222,6 +244,25 @@ const COMMAND_REGISTRY: CommandItem[] = [
     path: '/account',
     icon: User,
     keywords: ['account', 'profile', 'backup', 'export', 'restore', 'sync', 'offline'],
+  },
+  {
+    id: 'workspace-settings',
+    title: 'Workspace Settings, Theme Palette & Offline Backups',
+    category: 'Spiritual & Fellowship',
+    subtitle: 'Switch Highland Emerald / Sapphire Blue palettes, adjust font scale & export JSON backups',
+    path: '#settings-preferences',
+    icon: Settings,
+    keywords: ['settings', 'preferences', 'theme', 'palette', 'sapphire', 'emerald', 'font', 'backup'],
+    shortcut: '⌘,',
+  },
+  {
+    id: 'developer-about',
+    title: 'About Outpost Living & Lead Developer Info (Alfred Pereira-Sozilho Onesi)',
+    category: 'Spiritual & Fellowship',
+    subtitle: 'System architecture, prophetic foundations & developer contact (onesialfred@gmail.com)',
+    path: '#settings-developer',
+    icon: Code2,
+    keywords: ['about', 'developer', 'alfred', 'pereira', 'sozilho', 'onesi', 'credits', 'contact', 'author', 'version'],
   },
   {
     id: 'homestead-ai-advisor',
@@ -247,6 +288,14 @@ export function QuickCommandPalette({
 }: QuickCommandPaletteProps) {
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [recentIds, setRecentIds] = useState<string[]>(() => {
+    try {
+      const raw = localStorage.getItem('outpost_recent_commands_v1');
+      return raw ? JSON.parse(raw) : ['scout-map', 'calculators-hub', 'where-matrix'];
+    } catch {
+      return ['scout-map', 'calculators-hub', 'where-matrix'];
+    }
+  });
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
@@ -348,14 +397,42 @@ export function QuickCommandPalette({
   }, [isOpen, filteredResults, selectedIndex]);
 
   const handleSelect = (item: CommandItem) => {
+    try {
+      const nextRecents = [item.id, ...recentIds.filter((id) => id !== item.id)].slice(0, 5);
+      setRecentIds(nextRecents);
+      localStorage.setItem('outpost_recent_commands_v1', JSON.stringify(nextRecents));
+    } catch {}
+
     if (item.id === 'homestead-ai-advisor') {
       onClose();
       onOpenAdvisor?.();
       return;
     }
+    if (item.path === '#settings-preferences') {
+      onClose();
+      window.dispatchEvent(
+        new CustomEvent('outpost:open-settings', { detail: { tab: 'preferences' } })
+      );
+      return;
+    }
+    if (item.path === '#settings-developer') {
+      onClose();
+      window.dispatchEvent(
+        new CustomEvent('outpost:open-settings', { detail: { tab: 'developer' } })
+      );
+      return;
+    }
     navigate(item.path);
     onClose();
   };
+
+  const recentCommandItems = useMemo(
+    () =>
+      recentIds
+        .map((id) => allCommands.find((c) => c.id === id))
+        .filter((c): c is CommandItem => Boolean(c)),
+    [recentIds, allCommands]
+  );
 
   return (
     <AnimatePresence>
@@ -406,6 +483,29 @@ export function QuickCommandPalette({
                 </kbd>
               )}
             </div>
+
+            {/* Recently Visited Quick-Jump Chips (when query is empty) */}
+            {!query.trim() && recentCommandItems.length > 0 && (
+              <div className="px-4 sm:px-6 py-2.5 bg-stone-100/70 dark:bg-[#06110A] flex items-center gap-2 overflow-x-auto no-scrollbar">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 shrink-0">
+                  Recent:
+                </span>
+                {recentCommandItems.map((rec) => {
+                  const RecIcon = rec.icon;
+                  return (
+                    <button
+                      key={rec.id}
+                      type="button"
+                      onClick={() => handleSelect(rec)}
+                      className="px-2.5 py-1 rounded-xl bg-white dark:bg-emerald-950/70 hover:bg-emerald-50 dark:hover:bg-emerald-900/80 border border-stone-200 dark:border-emerald-800/70 text-xs font-semibold text-stone-700 dark:text-stone-200 inline-flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer"
+                    >
+                      <RecIcon size={12} className="text-emerald-700 dark:text-amber-300" />
+                      <span className="truncate max-w-[160px]">{rec.title.split(' (')[0]}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
 
             {/* Results List */}
             <div className="max-h-[58vh] overflow-y-auto custom-scrollbar p-2 sm:p-3 flex flex-col gap-1 bg-[#FAF8F5] dark:bg-[#0B1C12]">

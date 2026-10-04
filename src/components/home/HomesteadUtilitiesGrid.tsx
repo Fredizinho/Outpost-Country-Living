@@ -47,7 +47,7 @@ const UTILITIES: UtilityItem[] = [
   },
   {
     id: 'suitability-evaluator',
-    name: '100-Point Land Suitability Evaluator',
+    name: 'Property Suitability Evaluator',
     category: 'scouting',
     categoryLabel: 'Land Scouting',
     description:
@@ -57,7 +57,7 @@ const UTILITIES: UtilityItem[] = [
     iconColor: 'text-amber-800 dark:text-amber-300',
     iconBg: 'bg-amber-50 dark:bg-amber-950/70 border-amber-200 dark:border-amber-800/70',
     badge: 'Decision Rubric',
-    highlightText: 'Objective 100-Pt Score',
+    highlightText: 'Field Siting Score',
   },
   {
     id: 'solar-sizing',

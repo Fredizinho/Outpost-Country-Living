@@ -28,17 +28,18 @@ import {
   Building2,
   Users,
   Feather,
-  Maximize2,
-  Minimize2,
   RotateCcw,
-  Pin,
+  Palette,
+  Settings,
+  HeartPulse,
+  UtensilsCrossed,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/utils';
 import { prefetchRoute } from '@/lib/routePrefetch';
 import { OutpostLogo } from './OutpostLogo';
-import { PWAInstallButton } from './PWAInstallButton';
+import { SettingsModalTab } from '../layout/SettingsAndAboutModal';
 
 export interface NavigationProps {
   onOpenCitations?: () => void;
@@ -46,6 +47,7 @@ export interface NavigationProps {
   onOpenAdvisor?: () => void;
   onToggleInspector?: () => void;
   isInspectorOpen?: boolean;
+  onOpenSettings?: (tab?: SettingsModalTab) => void;
 }
 
 export interface WorkspaceTabDefinition {
@@ -63,9 +65,11 @@ interface CatalogRouteMeta {
   basePath: string;
   title: string;
   pillar: string;
+  wittyNote: string;
   iconKey: string;
   icon: React.ComponentType<{ size?: number; className?: string }>;
   accentClass: string;
+  badgeBg: string;
   shortcut?: string;
 }
 
@@ -75,154 +79,198 @@ export const DESKTOP_MODULE_CATALOG: CatalogRouteMeta[] = [
     basePath: '/',
     title: 'Sanctuary Home',
     pillar: 'Overview',
+    wittyNote: 'Sanctuary overview & family acreage sizer',
     iconKey: 'home',
     icon: HomeIcon,
     accentClass: 'text-amber-300',
+    badgeBg: 'bg-amber-500/20 border-amber-400/35',
     shortcut: 'Alt+1',
   },
   {
     id: 'scout-map',
     basePath: '/scout-map',
-    title: '28-District GIS Map',
-    pillar: 'Pillar 2 · Land & Water',
+    title: 'District GIS Map',
+    pillar: 'Land & Water',
+    wittyNote: '28-district GIS aquifers & topography',
     iconKey: 'compass',
     icon: Compass,
     accentClass: 'text-cyan-300',
+    badgeBg: 'bg-cyan-500/20 border-cyan-400/35',
     shortcut: 'Alt+3',
   },
   {
     id: 'where',
     basePath: '/where',
-    title: 'Land Law & Districts',
-    pillar: 'Pillar 2 · Land & Water',
+    title: 'Land Tenure & Evaluation',
+    pillar: 'Land & Water',
+    wittyNote: 'Customary tenure, community protocols & land scoring',
     iconKey: 'mappin',
     icon: MapPin,
     accentClass: 'text-emerald-300',
+    badgeBg: 'bg-emerald-500/20 border-emerald-400/35',
     shortcut: 'Alt+2',
-  },
-  {
-    id: 'suitability',
-    basePath: '/suitability',
-    title: '100-Pt Land Evaluator',
-    pillar: 'Pillar 2 · Land & Water',
-    iconKey: 'shield',
-    icon: ShieldCheck,
-    accentClass: 'text-teal-300',
   },
   {
     id: 'what',
     basePath: '/what',
-    title: 'Crops & Soil Swatches',
-    pillar: 'Pillar 3 · Agronomy',
+    title: 'Agronomy & Soils',
+    pillar: 'Agronomy',
+    wittyNote: 'Soil classifications, swatches & crop rotations',
     iconKey: 'sprout',
     icon: Sprout,
     accentClass: 'text-emerald-300',
+    badgeBg: 'bg-emerald-500/20 border-emerald-400/35',
     shortcut: 'Alt+4',
   },
   {
     id: 'agriculture',
     basePath: '/agriculture',
-    title: 'Edenic Agriculture',
-    pillar: 'Pillar 3 · Agronomy',
+    title: 'Bio-Intensive Farming',
+    pillar: 'Agronomy',
+    wittyNote: 'Thermal compost & tree sponge planting',
     iconKey: 'sun',
     icon: Sun,
     accentClass: 'text-amber-300',
+    badgeBg: 'bg-amber-500/20 border-amber-400/35',
   },
   {
     id: 'seasons',
     basePath: '/seasons',
     title: 'Seasonal Almanac',
-    pillar: 'Pillar 3 · Agronomy',
+    pillar: 'Agronomy',
+    wittyNote: 'Rainfall cycles & planting windows',
     iconKey: 'calendar',
     icon: Calendar,
     accentClass: 'text-lime-300',
+    badgeBg: 'bg-lime-500/20 border-lime-400/35',
+  },
+  {
+    id: 'sanitarium',
+    basePath: '/sanitarium',
+    title: 'Sanitarium & Health',
+    pillar: 'Health & Lifestyle',
+    wittyNote: 'Rational hydrotherapy & 8 health principles',
+    iconKey: 'building',
+    icon: HeartPulse,
+    accentClass: 'text-rose-300',
+    badgeBg: 'bg-rose-500/20 border-rose-400/35',
+  },
+  {
+    id: 'kitchen',
+    basePath: '/kitchen',
+    title: 'Country Kitchen',
+    pillar: 'Nutrition',
+    wittyNote: 'Whole foods, seed emulsions & drying',
+    iconKey: 'sprout',
+    icon: UtensilsCrossed,
+    accentClass: 'text-amber-300',
+    badgeBg: 'bg-amber-500/20 border-amber-400/35',
   },
   {
     id: 'calculators',
     basePath: '/calculators',
-    title: 'Calculators & BoQ',
-    pillar: 'Pillar 3 · Engineering',
+    title: 'Homestead Calculators',
+    pillar: 'Engineering',
+    wittyNote: 'Solar, cistern, and budget estimators',
     iconKey: 'calculator',
     icon: Calculator,
     accentClass: 'text-amber-300',
+    badgeBg: 'bg-amber-500/20 border-amber-400/35',
     shortcut: 'Alt+6',
   },
   {
     id: 'how',
     basePath: '/how',
-    title: 'Engineering Schematics',
-    pillar: 'Pillar 3 · Engineering',
+    title: 'Build Schematics',
+    pillar: 'Engineering',
+    wittyNote: 'Architectural details & water systems',
     iconKey: 'book',
-    icon: BookOpen,
+    icon: Hammer,
     accentClass: 'text-sky-300',
+    badgeBg: 'bg-sky-500/20 border-sky-400/35',
     shortcut: 'Alt+5',
   },
   {
     id: 'skills',
     basePath: '/skills',
-    title: '25 Country Skills',
-    pillar: 'Pillar 4 · Outposts',
+    title: 'Country Skills',
+    pillar: 'Self-Reliance',
+    wittyNote: 'Rural trades & homestead fabrication',
     iconKey: 'hammer',
-    icon: Hammer,
+    icon: BookOpen,
     accentClass: 'text-amber-300',
+    badgeBg: 'bg-amber-500/20 border-amber-400/35',
   },
   {
     id: 'blueprints',
     basePath: '/blueprints',
     title: 'Outpost Blueprints',
-    pillar: 'Pillar 4 · Outposts',
+    pillar: 'Sanctuary Campus',
+    wittyNote: 'Rural schools, clinics & living centers',
     iconKey: 'building',
     icon: Building2,
     accentClass: 'text-emerald-300',
+    badgeBg: 'bg-emerald-500/20 border-emerald-400/35',
   },
   {
     id: 'community',
     basePath: '/community',
-    title: 'Believer Directory',
-    pillar: 'Pillar 4 · Outposts',
+    title: 'Steward Directory',
+    pillar: 'Fellowship',
+    wittyNote: 'Country stewards & heirloom seed registry',
     iconKey: 'users',
     icon: Users,
     accentClass: 'text-teal-300',
+    badgeBg: 'bg-teal-500/20 border-teal-400/35',
   },
   {
     id: 'tracker',
     basePath: '/tracker',
-    title: 'Exodus Readiness Ledger',
-    pillar: 'Pillar 1 · Sanctuary',
+    title: 'Transition Tracker',
+    pillar: 'Sanctuary Path',
+    wittyNote: 'Equier-guided Kanban & milestone ledger',
     iconKey: 'check',
     icon: CheckCircle2,
     accentClass: 'text-amber-300',
+    badgeBg: 'bg-amber-500/20 border-amber-400/35',
     shortcut: 'Alt+T',
   },
   {
     id: 'devotional',
     basePath: '/devotional',
-    title: 'Daily Manna & Counsel',
-    pillar: 'Pillar 1 · Sanctuary',
+    title: 'Daily Devotional',
+    pillar: 'Devotion',
+    wittyNote: 'Morning Scripture & Spirit of Prophecy',
     iconKey: 'feather',
     icon: Feather,
     accentClass: 'text-amber-300',
+    badgeBg: 'bg-amber-500/20 border-amber-400/35',
   },
   {
     id: 'vision',
     basePath: '/vision',
-    title: 'EGW Counsel Archive',
-    pillar: 'Pillar 1 · Sanctuary',
+    title: 'EGW Archive',
+    pillar: 'Counsels',
+    wittyNote: 'Archival counsels & historical charts',
     iconKey: 'book',
     icon: BookOpen,
     accentClass: 'text-emerald-300',
+    badgeBg: 'bg-emerald-500/20 border-emerald-400/35',
   },
   {
     id: 'account',
     basePath: '/account',
     title: 'Steward Profile',
-    pillar: 'System',
+    pillar: 'Settings',
+    wittyNote: 'Sync status & regional preferences',
     iconKey: 'user',
     icon: UserIcon,
-    accentClass: 'text-amber-300',
+    accentClass: 'text-sky-300',
+    badgeBg: 'bg-sky-500/20 border-sky-400/35',
   },
 ];
 
+// Focused 3-Tab Default Set (Zero initial tab-bar bloat; new tabs open as you navigate)
 const DEFAULT_OPEN_TABS: WorkspaceTabDefinition[] = [
   {
     id: 'home',
@@ -237,53 +285,21 @@ const DEFAULT_OPEN_TABS: WorkspaceTabDefinition[] = [
     id: 'scout-map',
     basePath: '/scout-map',
     currentPath: '/scout-map',
-    title: '28-District GIS Map',
-    pillar: 'Pillar 2 · Land & Water',
+    title: 'District GIS Map',
+    pillar: 'Land & Water',
     iconKey: 'compass',
-  },
-  {
-    id: 'where',
-    basePath: '/where',
-    currentPath: '/where',
-    title: 'Land Law & Districts',
-    pillar: 'Pillar 2 · Land & Water',
-    iconKey: 'mappin',
-  },
-  {
-    id: 'calculators',
-    basePath: '/calculators',
-    currentPath: '/calculators',
-    title: 'Calculators & BoQ',
-    pillar: 'Pillar 3 · Engineering',
-    iconKey: 'calculator',
-  },
-  {
-    id: 'skills',
-    basePath: '/skills',
-    currentPath: '/skills',
-    title: '25 Country Skills',
-    pillar: 'Pillar 4 · Outposts',
-    iconKey: 'hammer',
-  },
-  {
-    id: 'seasons',
-    basePath: '/seasons',
-    currentPath: '/seasons',
-    title: 'Seasonal Almanac',
-    pillar: 'Pillar 3 · Agronomy',
-    iconKey: 'calendar',
   },
   {
     id: 'tracker',
     basePath: '/tracker',
     currentPath: '/tracker',
-    title: 'Exodus Readiness Ledger',
-    pillar: 'Pillar 1 · Sanctuary',
+    title: 'Transition Tracker',
+    pillar: 'Sanctuary Path',
     iconKey: 'check',
   },
 ];
 
-const TABS_STORAGE_KEY = 'outpost_desktop_open_tabs_v2';
+const TABS_STORAGE_KEY = 'outpost_desktop_open_tabs_v4';
 
 function resolveRouteMeta(pathname: string): CatalogRouteMeta {
   if (pathname === '/') return DESKTOP_MODULE_CATALOG[0];
@@ -293,8 +309,12 @@ function resolveRouteMeta(pathname: string): CatalogRouteMeta {
   if (pathname.startsWith('/almanac') || pathname.startsWith('/seasons')) {
     return DESKTOP_MODULE_CATALOG.find((m) => m.id === 'seasons')!;
   }
-  if (pathname.startsWith('/property-evaluator') || pathname.startsWith('/suitability')) {
-    return DESKTOP_MODULE_CATALOG.find((m) => m.id === 'suitability')!;
+  if (
+    pathname.startsWith('/property-evaluator') ||
+    pathname.startsWith('/suitability') ||
+    pathname.startsWith('/where')
+  ) {
+    return DESKTOP_MODULE_CATALOG.find((m) => m.id === 'where')!;
   }
   if (pathname.startsWith('/edenic-farming') || pathname.startsWith('/agriculture')) {
     return DESKTOP_MODULE_CATALOG.find((m) => m.id === 'agriculture')!;
@@ -311,15 +331,42 @@ function resolveRouteMeta(pathname: string): CatalogRouteMeta {
   return matched || DESKTOP_MODULE_CATALOG[0];
 }
 
+const QUICK_LAUNCH_SUITES = [
+  {
+    id: 'SANCTUARY',
+    title: '01 · Sanctuary & Vision',
+    ids: ['home', 'tracker', 'devotional', 'vision'],
+  },
+  {
+    id: 'LAND_GIS',
+    title: '02 · Land, Water & Agronomy',
+    ids: ['scout-map', 'where', 'what', 'agriculture', 'seasons'],
+  },
+  {
+    id: 'SANITARIUM',
+    title: '03 · Sanitarium & Kitchen',
+    ids: ['sanitarium', 'kitchen'],
+  },
+  {
+    id: 'ENGINEERING',
+    title: '04 · Engineering & Outposts',
+    ids: ['calculators', 'how', 'skills', 'blueprints', 'community'],
+  },
+];
+
 export function Navigation({
   onOpenCitations,
   onOpenSearch,
   onOpenAdvisor,
   onToggleInspector,
   isInspectorOpen,
+  onOpenSettings,
 }: NavigationProps) {
   const { user, isFirebaseAuthenticated, signInWithGoogle, signOut } = useAuth();
-  const { toggleTheme, isDark } = useTheme();
+  const { palette } = useTheme();
+  const isSapphire = palette === 'sapphire' || palette === 'midnight';
+  const isSienna = palette === 'sienna';
+  const isCharcoal = palette === 'charcoal';
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -327,7 +374,6 @@ export function Navigation({
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isNewTabMenuOpen, setIsNewTabMenuOpen] = useState(false);
   const [isSigningIn, setIsSigningIn] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const [openTabs, setOpenTabs] = useState<WorkspaceTabDefinition[]>(() => {
     try {
@@ -358,7 +404,6 @@ export function Navigation({
     const meta = resolveRouteMeta(location.pathname);
     const fullPath = `${location.pathname}${location.search}`;
 
-    // Dynamic sub-title for skill detail pages
     let dynamicTitle = meta.title;
     if (location.pathname.startsWith('/skills/') && location.pathname.length > 8) {
       const slug = location.pathname.replace('/skills/', '').replace(/-/g, ' ');
@@ -407,10 +452,6 @@ export function Navigation({
 
     const idx = openTabs.findIndex((t) => t.id === tabId);
     if (idx === -1) return;
-    const tabToClose = openTabs[idx];
-    if (tabToClose.pinned && openTabs.length > 1) {
-      // Unpin first if user clicks close on a pinned tab
-    }
 
     const nextTabs = openTabs.filter((t) => t.id !== tabId);
     setOpenTabs(nextTabs);
@@ -421,27 +462,9 @@ export function Navigation({
     }
   };
 
-  const handleTogglePinTab = (e: React.MouseEvent, tabId: string) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setOpenTabs((prev) =>
-      prev.map((t) => (t.id === tabId ? { ...t, pinned: !t.pinned } : t))
-    );
-  };
-
   const handleResetDefaultTabs = () => {
     setOpenTabs(DEFAULT_OPEN_TABS);
     setIsNewTabMenuOpen(false);
-  };
-
-  const handleToggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen?.().catch(() => {});
-      setIsFullscreen(true);
-    } else {
-      document.exitFullscreen?.().catch(() => {});
-      setIsFullscreen(false);
-    }
   };
 
   const handleHeaderSignIn = async () => {
@@ -473,13 +496,11 @@ export function Navigation({
     window.dispatchEvent(new CustomEvent('outpost:toggle-left-directory'));
   };
 
-  // Close menus on route navigation
   useEffect(() => {
     setIsUserMenuOpen(false);
     setIsNewTabMenuOpen(false);
   }, [location.pathname]);
 
-  // Close menus when clicking outside
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
@@ -496,101 +517,117 @@ export function Navigation({
   return (
     <header
       id="outpost-main-header"
-      className="shrink-0 w-full z-50 bg-[#05120B] border-b border-emerald-950 flex flex-col select-none shadow-md"
-      aria-label="Desktop Application Titlebar and Workspace Tabs"
+      className={cn(
+        'shrink-0 w-full z-50 flex flex-col select-none',
+        isSapphire ? 'glass-depth-nav' : 'glass-depth-nav-emerald'
+      )}
+      aria-label="Application Navigation and Workspace Tabs"
     >
-      {/* =====================================================================
-          TIER 1: NATIVE DESKTOP TITLE BAR & MULTI-TAB WORKSPACE STRIP
-      ===================================================================== */}
-      <div className="h-10 px-2 sm:px-3 flex items-center justify-between gap-2 bg-[#040E08] border-b border-emerald-950/90">
-        {/* LEFT: DESKTOP WINDOW TRAFFIC CONTROLS + APP TITLE + SIDEBAR DOCK + HISTORY */}
+      <div
+        className={cn(
+          'h-12 px-2.5 sm:px-3.5 flex items-center justify-between gap-2 bg-gradient-to-r',
+          isCharcoal
+            ? 'from-[#121215]/98 via-[#18181C]/96 to-[#121215]/98'
+            : isSienna
+            ? 'from-[#1F0B05]/96 via-[#2E1108]/94 to-[#1F0B05]/96'
+            : isSapphire
+            ? 'from-[#030F1E]/96 via-[#06182E]/94 to-[#030F1E]/96'
+            : 'from-[#03110A]/96 via-[#071F12]/94 to-[#03110A]/96'
+        )}
+      >
+        {/* ===================================================================
+            LEFT ZONE: DESKTOP WINDOW CHROME + EXPLORER + MINIMALIST LOGO
+        =================================================================== */}
         <div className="flex items-center gap-2 shrink-0">
-          {/* Desktop Window Frame Controls */}
-          <div
-            className="hidden md:flex items-center gap-1.5 px-1.5 py-1"
-            title="Desktop Window Controls"
-          >
+          {/* Native Desktop Window Dots (Traffic Lights) */}
+          <div className="hidden sm:flex items-center gap-1.5 px-1 py-1 rounded-lg bg-black/25 border border-white/5 mr-0.5">
             <button
               type="button"
               onClick={() => navigate('/')}
-              title="Return to Sanctuary Home (Alt+1)"
-              className="w-3 h-3 rounded-full bg-rose-500/85 hover:bg-rose-400 border border-rose-600/50 transition-colors cursor-pointer"
-              aria-label="Home Window Control"
+              title="Return to Sanctuary Home"
+              aria-label="Home"
+              className="w-2.5 h-2.5 rounded-full bg-rose-500/80 hover:bg-rose-500 transition-colors cursor-pointer"
+            />
+            <button
+              type="button"
+              onClick={() => {
+                const el = document.documentElement;
+                if (!document.fullscreenElement) {
+                  el.requestFullscreen?.().catch(() => {});
+                } else {
+                  document.exitFullscreen?.().catch(() => {});
+                }
+              }}
+              title="Toggle Fullscreen Zen Mode (⌘F)"
+              aria-label="Fullscreen Zen Mode"
+              className="w-2.5 h-2.5 rounded-full bg-amber-500/80 hover:bg-amber-500 transition-colors cursor-pointer"
             />
             <button
               type="button"
               onClick={handleToggleDirectory}
-              title="Toggle Left Workspace Explorer (⌘B)"
-              className="w-3 h-3 rounded-full bg-amber-400/90 hover:bg-amber-300 border border-amber-500/50 transition-colors cursor-pointer"
-              aria-label="Toggle Explorer Window Control"
-            />
-            <button
-              type="button"
-              onClick={handleToggleFullscreen}
-              title={isFullscreen ? 'Exit Fullscreen Window' : 'Enter Fullscreen Desktop Mode'}
-              className="w-3 h-3 rounded-full bg-emerald-500/90 hover:bg-emerald-400 border border-emerald-600/50 transition-colors cursor-pointer"
-              aria-label="Toggle Fullscreen Window Control"
+              title="Toggle Field Directory Sidebar (⌘B)"
+              aria-label="Toggle Sidebar"
+              className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 hover:bg-emerald-500 transition-colors cursor-pointer"
             />
           </div>
 
-          {/* App Brand Emblem */}
-          <Link
-            to="/"
-            className="flex items-center gap-1.5 pr-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 rounded-lg whitespace-nowrap"
-            title="OUTPOST DESKTOP • Malawi Country Living Workstation"
-          >
-            <OutpostLogo size="sm" variant="header" showSubtitle={false} />
-          </Link>
+          {/* Unified Window Control Capsule (Sidebar Toggle + Back/Forward) */}
+          <div className="inline-flex items-center rounded-xl bg-white/[0.04] border border-white/12 p-0.5 shadow-inner">
+            <button
+              id="outpost-drawer-toggle"
+              type="button"
+              onClick={handleToggleDirectory}
+              title="Toggle Field Suite Directory (⌘B)"
+              aria-label="Toggle Workspace Explorer"
+              className={cn(
+                'p-1.5 rounded-lg transition-all cursor-pointer',
+                isDrawerOpen
+                  ? 'bg-amber-400 text-stone-950 shadow-xs'
+                  : 'text-stone-200 hover:text-amber-300 hover:bg-white/10'
+              )}
+            >
+              <PanelLeft size={14} />
+            </button>
 
-          {/* Toggle Left Sidebar Explorer Button */}
-          <button
-            id="outpost-drawer-toggle"
-            type="button"
-            onClick={handleToggleDirectory}
-            title="Toggle Workspace Explorer Sidebar (⌘B)"
-            className={cn(
-              'p-1.5 rounded-lg border text-xs transition-colors cursor-pointer',
-              isDrawerOpen
-                ? 'bg-emerald-800/80 text-amber-300 border-amber-400/40'
-                : 'bg-white/5 hover:bg-white/10 text-stone-300 hover:text-white border-white/10'
-            )}
-            aria-label="Toggle Workspace Explorer"
-          >
-            <PanelLeft size={14} />
-          </button>
+            <span className="hidden lg:inline-block w-px h-3.5 bg-white/12 mx-0.5" />
 
-          {/* Native Desktop Back / Forward History Controls */}
-          <div
-            className="hidden sm:flex items-center gap-0.5 p-0.5 rounded-lg bg-white/5 border border-white/10"
-            role="group"
-            aria-label="Workspace History Navigation"
-          >
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="p-1 rounded text-stone-300 hover:text-amber-300 hover:bg-white/10 transition-colors cursor-pointer"
-              title="Navigate Back (Alt+Left)"
+              title="Navigate Back (Alt+←)"
               aria-label="Navigate Back"
+              className="hidden lg:inline-flex p-1.5 rounded-lg text-stone-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
             >
               <ChevronLeft size={13} />
             </button>
             <button
               type="button"
               onClick={() => navigate(1)}
-              className="p-1 rounded text-stone-300 hover:text-amber-300 hover:bg-white/10 transition-colors cursor-pointer"
-              title="Navigate Forward (Alt+Right)"
+              title="Navigate Forward (Alt+→)"
               aria-label="Navigate Forward"
+              className="hidden lg:inline-flex p-1.5 rounded-lg text-stone-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
             >
               <ChevronRight size={13} />
             </button>
           </div>
+
+          {/* Brand Crest */}
+          <Link
+            to="/"
+            className="flex items-center gap-1.5 px-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 rounded-lg whitespace-nowrap"
+            title="Outpost Country Living • Malawi Sanctuary Blueprint"
+          >
+            <OutpostLogo size="sm" variant="header" showSubtitle={false} />
+          </Link>
         </div>
 
-        {/* CENTER: INTERACTIVE MULTI-TAB WORKSPACE STRIP */}
+        {/* ===================================================================
+            CENTER ZONE: SCULPTED 3D GLASS WORKSPACE TABS + COMPACT LAUNCHER
+        =================================================================== */}
         <div
           role="tablist"
-          aria-label="Open Desktop Workspace Tabs"
-          className="flex-1 flex items-end gap-1 overflow-x-auto no-scrollbar h-full pt-1.5 min-w-0"
+          aria-label="Open Workspace Tabs"
+          className="flex-1 flex items-center gap-1.5 overflow-x-auto no-scrollbar min-w-0 px-1"
         >
           {openTabs.map((tab) => {
             const catalogEntry =
@@ -611,105 +648,184 @@ export function Navigation({
                   }
                 }}
                 onMouseEnter={() => prefetchRoute(tab.basePath)}
-                title={`${tab.title} • ${tab.pillar}${
+                title={`${tab.title} — ${catalogEntry.wittyNote}${
                   catalogEntry.shortcut ? ` (${catalogEntry.shortcut})` : ''
                 }`}
                 className={cn(
-                  'group relative h-8.5 px-2.5 sm:px-3 rounded-t-lg border-t border-x flex items-center gap-1.5 text-xs font-medium transition-all cursor-pointer shrink-0 max-w-[195px]',
+                  'group relative h-8 pl-1.5 pr-2.5 rounded-xl border flex items-center gap-1.5 text-xs transition-all cursor-pointer shrink-0 max-w-[195px]',
                   isActive
-                    ? 'bg-[#0C2316] text-white border-t-2 border-t-amber-400 border-x-emerald-800/80 shadow-sm z-10 font-semibold'
-                    : 'bg-[#07160E]/85 hover:bg-[#0A1D13] text-stone-400 hover:text-stone-200 border-t-emerald-950/60 border-x-emerald-950/70'
+                    ? isSapphire
+                      ? 'bg-gradient-to-b from-sky-500/30 via-blue-900/65 to-slate-950/90 text-white border-sky-400/60 shadow-[0_4px_14px_rgba(14,165,233,0.28),inset_0_1px_0_rgba(255,255,255,0.3)] font-bold'
+                      : 'bg-gradient-to-b from-emerald-500/30 via-emerald-950/75 to-stone-950/90 text-white border-emerald-400/60 shadow-[0_4px_14px_rgba(16,185,129,0.28),inset_0_1px_0_rgba(255,255,255,0.3)] font-bold'
+                    : 'bg-white/[0.03] hover:bg-white/[0.09] text-stone-200/80 hover:text-white border-white/10 hover:border-white/25 font-medium'
                 )}
               >
-                <Icon
-                  size={13}
+                {/* Jewelled Mini Symbol Badge inside Tab */}
+                <span
                   className={cn(
-                    'shrink-0',
-                    isActive ? catalogEntry.accentClass : 'text-stone-400 group-hover:text-stone-200'
+                    'w-5 h-5 rounded-lg border flex items-center justify-center shrink-0 transition-transform group-hover:scale-105',
+                    isActive
+                      ? catalogEntry.badgeBg
+                      : 'bg-white/[0.04] border-white/10'
                   )}
-                />
-                <span className="truncate whitespace-nowrap text-[11px] sm:text-xs">
+                >
+                  <Icon
+                    size={11}
+                    className={cn(
+                      'shrink-0',
+                      isActive ? catalogEntry.accentClass : 'text-stone-300 group-hover:text-white'
+                    )}
+                  />
+                </span>
+
+                <span className="truncate whitespace-nowrap text-xs">
                   {tab.title}
                 </span>
 
-                {/* Pin or Close Tab Affordance */}
-                {tab.pinned ? (
+                {isActive && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24] shrink-0" />
+                )}
+
+                {!tab.pinned && openTabs.length > 1 && (
                   <button
                     type="button"
-                    onClick={(e) => handleTogglePinTab(e, tab.id)}
-                    title="Pinned Workspace Tab (Click to unpin)"
-                    className="ml-0.5 p-0.5 rounded text-amber-400/80 hover:text-amber-300 hover:bg-white/10 transition-colors cursor-pointer"
+                    onClick={(e) => handleCloseTab(e, tab.id)}
+                    title="Close Tab"
+                    aria-label={`Close ${tab.title} tab`}
+                    className={cn(
+                      'ml-0.5 p-0.5 rounded hover:bg-white/15 hover:text-amber-300 transition-opacity cursor-pointer',
+                      isActive
+                        ? 'opacity-80 hover:opacity-100 text-stone-200'
+                        : 'opacity-0 group-hover:opacity-100 text-stone-400'
+                    )}
                   >
-                    <Pin size={10} />
+                    <X size={11} />
                   </button>
-                ) : (
-                  openTabs.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={(e) => handleCloseTab(e, tab.id)}
-                      title="Close Tab"
-                      aria-label={`Close ${tab.title} tab`}
-                      className={cn(
-                        'ml-0.5 p-0.5 rounded hover:bg-white/15 hover:text-amber-300 transition-opacity cursor-pointer',
-                        isActive
-                          ? 'opacity-80 hover:opacity-100 text-stone-300'
-                          : 'opacity-0 group-hover:opacity-100 text-stone-400'
-                      )}
-                    >
-                      <X size={11} />
-                    </button>
-                  )
                 )}
               </div>
             );
           })}
 
-          {/* '+' OPEN NEW WORKSPACE TAB BUTTON & LAUNCHER POPOVER */}
-          <div className="relative flex items-center self-center ml-0.5" ref={newTabMenuRef}>
+          {/* Compact '+' Quick-Launch Popover Trigger */}
+          <div className="relative flex items-center gap-1 shrink-0" ref={newTabMenuRef}>
             <button
               type="button"
               onClick={() => setIsNewTabMenuOpen((prev) => !prev)}
-              title="Open Module in Tab (+)"
-              aria-label="Open New Workspace Tab"
+              title="Launch or Pin Module Tab"
+              aria-label="Open Module Quick Launcher"
               className={cn(
-                'w-7 h-7 rounded-lg flex items-center justify-center border transition-colors cursor-pointer',
+                'h-8 px-2.5 rounded-xl flex items-center gap-1 border text-xs font-semibold transition-all cursor-pointer',
                 isNewTabMenuOpen
-                  ? 'bg-amber-400 text-stone-950 border-amber-300'
-                  : 'bg-white/5 hover:bg-white/15 text-stone-300 hover:text-white border-white/10'
+                  ? 'bg-gradient-to-b from-amber-300 to-amber-500 text-stone-950 border-amber-300 shadow-[0_4px_12px_rgba(245,158,11,0.4)] font-bold'
+                  : 'bg-white/[0.05] hover:bg-white/[0.12] text-amber-200 hover:text-white border-white/15'
               )}
             >
-              <Plus size={14} />
+              <Plus size={13} />
+              <span className="hidden 2xl:inline">Modules</span>
             </button>
+
+            {openTabs.length > 3 && (
+              <button
+                type="button"
+                onClick={handleResetDefaultTabs}
+                title="Tidy Workspace to 3 Core Tabs"
+                className="hidden xl:inline-flex h-8 px-2 rounded-xl bg-white/[0.03] hover:bg-white/10 border border-white/10 text-[11px] font-mono text-stone-300 hover:text-amber-300 items-center gap-1 transition-colors cursor-pointer"
+              >
+                <RotateCcw size={11} />
+                <span>Tidy</span>
+              </button>
+            )}
           </div>
         </div>
 
-        {/* RIGHT: SYSTEM TRAY, INSTALL DESKTOP APP, THEME & STEWARD PROFILE */}
+        {/* ===================================================================
+            RIGHT ZONE: 3 UNIFIED GLASS CAPSULES (ZERO REDUNDANCY)
+        =================================================================== */}
         <div className="flex items-center gap-1.5 shrink-0">
-          {/* Install Desktop / Mobile App Button */}
-          <PWAInstallButton className="px-2.5 py-1 rounded-lg text-[11px]" />
+          {/* Capsule 1: Omnibar Search Trigger (⌘K) */}
+          {onOpenSearch && (
+            <button
+              type="button"
+              onClick={onOpenSearch}
+              className="h-8 px-2.5 rounded-xl bg-black/25 hover:bg-white/10 border border-white/15 hover:border-amber-400/50 flex items-center gap-2 text-xs text-stone-200 hover:text-white transition-all cursor-pointer shadow-inner"
+              title="Search 28 districts, crops, calculators & EGW counsel (⌘K)"
+            >
+              <Search size={13} className="text-amber-300 shrink-0" />
+              <span className="hidden xl:inline text-stone-300">Search...</span>
+              <kbd className="hidden sm:inline text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/10 border border-white/15 text-amber-300">
+                ⌘K
+              </kbd>
+            </button>
+          )}
 
-          {/* Theme Switcher */}
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="flex items-center justify-center w-7 h-7 rounded-lg bg-white/5 hover:bg-white/15 text-amber-300 border border-white/10 transition-colors cursor-pointer"
-            title={
-              isDark
-                ? 'Switch to Daylight Workspace (Light Mode)'
-                : 'Switch to Evening Workspace (Dark Mode)'
-            }
-            aria-label="Toggle Workspace Theme"
-          >
-            {isDark ? <Sun size={14} /> : <Moon size={14} />}
-          </button>
+          {/* Capsule 2: Direct Field Utilities (Advisor · Split Sizer ⌘I · Sources) */}
+          <div className="hidden sm:inline-flex items-center rounded-xl bg-white/[0.04] border border-white/14 p-0.5">
+            {onOpenAdvisor && (
+              <button
+                type="button"
+                onClick={onOpenAdvisor}
+                title="Outpost Homestead Advisor (Districts, Water & EGW Counsel)"
+                className="flex items-center gap-1 px-2 h-7 rounded-lg text-xs font-semibold text-amber-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+              >
+                <Sparkles size={12} className="text-amber-300 shrink-0" />
+                <span className="hidden lg:inline">Advisor</span>
+              </button>
+            )}
 
-          {/* Steward Profile / Google Sign-In */}
+            {onToggleInspector && (
+              <button
+                type="button"
+                onClick={onToggleInspector}
+                title="Toggle Side-by-Side Acreage Sizer & Field Notes (⌘I)"
+                className={cn(
+                  'flex items-center gap-1 px-2 h-7 rounded-lg text-xs font-semibold transition-colors cursor-pointer',
+                  isInspectorOpen
+                    ? 'bg-amber-400 text-stone-950 font-bold'
+                    : 'text-stone-200 hover:text-white hover:bg-white/10'
+                )}
+              >
+                <Columns2 size={12} className={isInspectorOpen ? 'text-stone-950' : 'text-emerald-300'} />
+                <span className="hidden xl:inline">Sizer</span>
+              </button>
+            )}
+
+            {onOpenCitations && (
+              <button
+                type="button"
+                onClick={onOpenCitations}
+                title="Verified Data & EGW Archival Sources"
+                className="flex items-center justify-center w-7 h-7 rounded-lg text-sky-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                aria-label="Verified Data Sources"
+              >
+                <ShieldCheck size={13} />
+              </button>
+            )}
+          </div>
+
+          {/* Capsule 3: Unified Settings & Appearance Symbol (Auto-Hides Theme Options Behind ⌘,) */}
+          {onOpenSettings && (
+            <button
+              type="button"
+              onClick={() => onOpenSettings('appearance')}
+              className="flex items-center gap-1.5 px-2.5 h-8 rounded-xl bg-white/[0.04] hover:bg-white/10 text-stone-200 hover:text-amber-300 border border-white/14 transition-all cursor-pointer shadow-inner"
+              title="Settings & Preferences (Themes, Fonts, Offline Vault & Dev Info: Alfred Pereira-Sozilho Onesi) (⌘,)"
+              aria-label="Open Settings and Preferences"
+            >
+              <Settings size={13} className="text-amber-300 shrink-0" />
+              <span className="hidden xl:inline text-xs font-semibold">Settings</span>
+              <kbd className="hidden 2xl:inline text-[9px] font-mono px-1.5 py-0.5 rounded bg-white/10 border border-white/15 text-amber-300">
+                ⌘,
+              </kbd>
+            </button>
+          )}
+
+          {/* Capsule 4: Steward Profile / Google Sign-In */}
           {user ? (
             <div className="relative" ref={userMenuRef}>
               <button
                 type="button"
                 onClick={() => setIsUserMenuOpen((prev) => !prev)}
-                className="flex items-center gap-1.5 pl-1 pr-2 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-stone-100 border border-white/15 text-[11px] font-semibold cursor-pointer"
+                className="flex items-center gap-1.5 pl-1.5 pr-2 h-8 rounded-xl bg-white/10 hover:bg-white/15 text-stone-100 border border-white/20 text-xs font-semibold cursor-pointer"
                 title={`Signed in as ${user.displayName || user.email}`}
               >
                 <img
@@ -723,10 +839,10 @@ export function Navigation({
                   referrerPolicy="no-referrer"
                   className="w-5 h-5 rounded object-cover bg-emerald-950"
                 />
-                <span className="hidden xl:inline max-w-[75px] truncate text-amber-200">
+                <span className="hidden 2xl:inline max-w-[72px] truncate text-amber-200">
                   {user.displayName?.split(' ')[0] || 'Steward'}
                 </span>
-                <ChevronDown size={11} className="text-stone-300" />
+                <ChevronDown size={11} className="text-stone-200" />
               </button>
 
               <AnimatePresence>
@@ -736,35 +852,38 @@ export function Navigation({
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 6, scale: 0.96 }}
                     transition={{ duration: 0.12 }}
-                    className="absolute right-0 mt-2 w-60 rounded-2xl bg-[#071A10] border border-emerald-800/80 shadow-2xl p-2.5 flex flex-col gap-1 z-50 text-xs text-stone-200"
+                    className={cn(
+                      'absolute right-0 mt-2 w-60 rounded-2xl p-2.5 flex flex-col gap-1 z-50 text-xs text-stone-100',
+                      isSapphire ? 'glass-depth-blue-hero' : 'glass-depth-emerald-hero'
+                    )}
                   >
-                    <div className="px-2.5 py-2 border-b border-emerald-900/60 mb-1">
+                    <div className="px-2.5 py-2 border-b border-white/15 mb-1">
                       <p className="font-bold text-white truncate">
                         {user.displayName || 'Country Steward'}
                       </p>
-                      <p className="text-[11px] text-stone-400 truncate">{user.email}</p>
-                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-300 mt-1.5">
+                      <p className="text-[11px] text-stone-300 truncate">{user.email}</p>
+                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-300 mt-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                        {isFirebaseAuthenticated ? 'Cloud Synced' : 'Offline Ready'}
+                        {isFirebaseAuthenticated ? 'Cloud Synced' : 'Local Cache Active'}
                       </span>
                     </div>
 
                     <Link
                       to="/account"
                       onClick={() => setIsUserMenuOpen(false)}
-                      className="flex items-center gap-2.5 px-2.5 py-2 rounded-xl hover:bg-white/10 text-stone-200 hover:text-white transition-colors"
+                      className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl hover:bg-white/10 text-stone-100 hover:text-white transition-colors"
                     >
-                      <UserIcon size={14} className="text-amber-300" />
+                      <UserIcon size={13} className="text-amber-300" />
                       <span>My Sanctuary Profile</span>
                     </Link>
 
                     <Link
                       to="/tracker"
                       onClick={() => setIsUserMenuOpen(false)}
-                      className="flex items-center gap-2.5 px-2.5 py-2 rounded-xl hover:bg-white/10 text-stone-200 hover:text-white transition-colors"
+                      className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl hover:bg-white/10 text-stone-100 hover:text-white transition-colors"
                     >
-                      <Sparkles size={14} className="text-amber-300" />
-                      <span>Exodus Progress Ledger</span>
+                      <CheckCircle2 size={13} className="text-emerald-300" />
+                      <span>Transition Tracker</span>
                     </Link>
 
                     <button
@@ -773,9 +892,9 @@ export function Navigation({
                         setIsUserMenuOpen(false);
                         await signOut();
                       }}
-                      className="flex items-center gap-2.5 px-2.5 py-2 rounded-xl hover:bg-rose-950/40 text-rose-300 hover:text-rose-200 transition-colors w-full text-left mt-1 border-t border-emerald-900/50 pt-2 cursor-pointer"
+                      className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl hover:bg-rose-950/50 text-rose-300 hover:text-rose-200 transition-colors w-full text-left mt-1 border-t border-white/15 pt-2 cursor-pointer"
                     >
-                      <LogOut size={14} className="text-rose-400" />
+                      <LogOut size={13} className="text-rose-400" />
                       <span>Sign Out</span>
                     </button>
                   </motion.div>
@@ -787,7 +906,7 @@ export function Navigation({
               type="button"
               onClick={handleHeaderSignIn}
               disabled={isSigningIn}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-[11px] transition-colors cursor-pointer whitespace-nowrap"
+              className="flex items-center gap-1.5 px-3 h-8 rounded-xl bg-gradient-to-b from-amber-300 to-amber-500 hover:from-amber-200 hover:to-amber-400 text-stone-950 font-bold text-xs shadow-xs transition-all cursor-pointer whitespace-nowrap"
               title="Sign in with Google"
             >
               <span>Sign In</span>
@@ -797,152 +916,101 @@ export function Navigation({
       </div>
 
       {/* =====================================================================
-          TIER 2: DESKTOP ADDRESS / BREADCRUMB BAR & WORKSPACE ACTION DOCK
-      ===================================================================== */}
-      <div className="h-9 px-2.5 sm:px-4 bg-[#0C2316] flex items-center justify-between gap-3 text-xs">
-        {/* Left: Active Workspace Breadcrumb & Quick Module Switcher */}
-        <div className="flex items-center gap-2 min-w-0">
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#07150D] border border-emerald-900/70 text-[11px] font-mono text-stone-300 truncate">
-            <span className="text-emerald-400 hidden sm:inline">outpost://malawi</span>
-            <span className="text-stone-600 hidden sm:inline">/</span>
-            <span className="text-stone-400 hidden md:inline">{activeMeta.pillar}</span>
-            <span className="text-stone-600 hidden md:inline">/</span>
-            <span className="text-amber-300 font-semibold truncate">{activeMeta.title}</span>
-          </div>
-
-          {/* Quick Open Module Dropdown Trigger */}
-          <button
-            type="button"
-            onClick={() => setIsNewTabMenuOpen((prev) => !prev)}
-            className="hidden lg:inline-flex items-center gap-1 px-2 py-1 rounded-md bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] text-stone-300 hover:text-white transition-colors cursor-pointer whitespace-nowrap"
-          >
-            <span>All 15 Modules</span>
-            <ChevronDown size={11} />
-          </button>
-        </div>
-
-        {/* Center: Desktop Command Search Omni-Bar */}
-        {onOpenSearch && (
-          <button
-            type="button"
-            onClick={onOpenSearch}
-            className="flex-1 max-w-md h-7 px-3 rounded-lg bg-[#06140C]/90 hover:bg-[#06140C] border border-emerald-800/70 hover:border-amber-400/50 flex items-center justify-between gap-2 text-[11px] text-stone-300 hover:text-white transition-colors cursor-pointer"
-            title="Open Command & Search Palette (⌘K or /)"
-          >
-            <span className="flex items-center gap-2 truncate">
-              <Search size={12} className="text-amber-300 shrink-0" />
-              <span className="truncate">
-                Search 28 districts, crops, calculators, or jump to tab...
-              </span>
-            </span>
-            <kbd className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-white/10 text-amber-200 border border-white/10 shrink-0">
-              ⌘K
-            </kbd>
-          </button>
-        )}
-
-        {/* Right: Desktop Workspace Tools (AI Advisor, Split Reference Inspector, Citations) */}
-        <div className="flex items-center gap-1.5 shrink-0">
-          {onOpenAdvisor && (
-            <button
-              type="button"
-              onClick={onOpenAdvisor}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 hover:text-white border border-amber-400/35 text-[11px] font-semibold transition-colors cursor-pointer whitespace-nowrap"
-              title="Open Outpost Homestead Advisor"
-            >
-              <Sparkles size={12} className="text-amber-300" />
-              <span className="hidden sm:inline">Advisor</span>
-            </button>
-          )}
-
-          {onToggleInspector && (
-            <button
-              type="button"
-              onClick={onToggleInspector}
-              className={cn(
-                'hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[11px] font-semibold transition-colors cursor-pointer whitespace-nowrap',
-                isInspectorOpen
-                  ? 'bg-amber-400 text-stone-950 border-amber-300 font-bold'
-                  : 'bg-white/5 hover:bg-white/15 text-stone-200 border-white/15'
-              )}
-              title="Toggle Side-by-Side Reference Sizer & Scratchpad Dock (⌘I)"
-            >
-              <Columns2 size={12} />
-              <span className="hidden lg:inline">Inspector Dock</span>
-            </button>
-          )}
-
-          {onOpenCitations && (
-            <button
-              type="button"
-              onClick={onOpenCitations}
-              className="hidden xl:inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-stone-300 hover:text-emerald-300 border border-white/10 text-[11px] font-mono transition-colors cursor-pointer whitespace-nowrap"
-              title="Verify DCCMS, FAO HWSD v2.0 & EGW Citations"
-            >
-              <ShieldCheck size={12} className="text-emerald-400" />
-              <span>Sources</span>
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* =====================================================================
-          NEW TAB / MODULE LAUNCHER POPOVER MENU
+          COMPACT QUICK LAUNCHER POPOVER (MINIMALIST DESKTOP APP COMMAND MENU)
       ===================================================================== */}
       <AnimatePresence>
         {isNewTabMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.14 }}
-            className="absolute top-19 left-4 sm:left-48 z-50 w-88 sm:w-96 rounded-2xl bg-[#071910] border border-emerald-800/90 shadow-2xl p-3 text-xs text-stone-200"
+            initial={{ opacity: 0, y: -6, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -6, scale: 0.98 }}
+            transition={{ duration: 0.14, ease: 'easeOut' }}
+            className={cn(
+              'absolute top-12 left-3 sm:left-36 z-50 w-[94vw] max-w-xl rounded-2xl p-3.5 text-xs text-stone-100 shadow-2xl',
+              isSapphire ? 'glass-depth-blue-hero' : 'glass-depth-emerald-hero'
+            )}
           >
-            <div className="flex items-center justify-between pb-2 mb-2 border-b border-emerald-900/70">
+            <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-white/15">
               <span className="font-mono font-bold uppercase tracking-wider text-amber-300 text-[11px]">
-                Open Workspace Tab
+                Module Launcher
               </span>
-              <button
-                type="button"
-                onClick={handleResetDefaultTabs}
-                className="inline-flex items-center gap-1 text-[11px] text-emerald-300 hover:underline cursor-pointer"
-              >
-                <RotateCcw size={11} />
-                <span>Reset Default Tabs</span>
-              </button>
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={handleResetDefaultTabs}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/12 text-[11px] text-stone-200 hover:text-amber-300 cursor-pointer"
+                >
+                  <RotateCcw size={10} />
+                  <span>Reset 3 Core Tabs</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsNewTabMenuOpen(false)}
+                  className="p-1 rounded-lg bg-white/5 hover:bg-white/10 text-stone-300 hover:text-white cursor-pointer"
+                  aria-label="Close Launcher"
+                >
+                  <X size={12} />
+                </button>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 max-h-80 overflow-y-auto custom-scrollbar">
-              {DESKTOP_MODULE_CATALOG.map((mod) => {
-                const ModIcon = mod.icon;
-                const isAlreadyOpen = openTabs.some((t) => t.id === mod.id);
-                const isCurrent = activeMeta.id === mod.id;
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-[62vh] overflow-y-auto custom-scrollbar pr-0.5">
+              {QUICK_LAUNCH_SUITES.map((suite) => {
+                const suiteModules = suite.ids
+                  .map((id) => DESKTOP_MODULE_CATALOG.find((m) => m.id === id))
+                  .filter(Boolean) as CatalogRouteMeta[];
 
                 return (
-                  <button
-                    key={mod.id}
-                    type="button"
-                    onClick={() => {
-                      navigate(mod.basePath);
-                      setIsNewTabMenuOpen(false);
-                    }}
-                    className={cn(
-                      'p-2 rounded-xl text-left flex items-center justify-between gap-2 transition-colors cursor-pointer',
-                      isCurrent
-                        ? 'bg-emerald-800/80 text-white border border-amber-400/40'
-                        : 'hover:bg-white/10 text-stone-200'
-                    )}
+                  <div
+                    key={suite.id}
+                    className="p-2.5 rounded-xl bg-black/25 border border-white/10 flex flex-col gap-1.5"
                   >
-                    <span className="flex items-center gap-2 truncate">
-                      <ModIcon size={14} className={cn('shrink-0', mod.accentClass)} />
-                      <span className="truncate font-medium">{mod.title}</span>
+                    <span className="font-mono font-bold text-amber-300 text-[11px] px-1">
+                      {suite.title}
                     </span>
-                    {isAlreadyOpen && (
-                      <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 shrink-0">
-                        Open
-                      </span>
-                    )}
-                  </button>
+                    <div className="flex flex-col gap-1">
+                      {suiteModules.map((mod) => {
+                        const ModIcon = mod.icon;
+                        const isCurrent = activeMeta.id === mod.id;
+
+                        return (
+                          <button
+                            key={mod.id}
+                            type="button"
+                            onClick={() => {
+                              navigate(mod.basePath);
+                              setIsNewTabMenuOpen(false);
+                            }}
+                            className={cn(
+                              'px-2 py-1.5 rounded-lg text-left flex items-center justify-between gap-2 border transition-all cursor-pointer group',
+                              isCurrent
+                                ? isSapphire
+                                  ? 'bg-sky-500/25 text-white border-sky-400/50 font-semibold'
+                                  : 'bg-emerald-500/25 text-white border-emerald-400/50 font-semibold'
+                                : 'bg-white/[0.02] hover:bg-white/[0.08] text-stone-200 border-transparent hover:border-white/15'
+                            )}
+                          >
+                            <span className="flex items-center gap-2 min-w-0">
+                              <span
+                                className={cn(
+                                  'w-5 h-5 rounded-md border flex items-center justify-center shrink-0',
+                                  mod.badgeBg
+                                )}
+                              >
+                                <ModIcon size={11} className={mod.accentClass} />
+                              </span>
+                              <span className="truncate text-xs">{mod.title}</span>
+                            </span>
+                            {mod.shortcut && (
+                              <kbd className="text-[10px] font-mono px-1 rounded bg-white/10 text-stone-300 shrink-0">
+                                {mod.shortcut}
+                              </kbd>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
                 );
               })}
             </div>

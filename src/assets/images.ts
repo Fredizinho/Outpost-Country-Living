@@ -43,4 +43,10 @@ export const COUNTRY_IMAGES = {
   sanctuary1844Judgment,
   threeAngelsProclamation,
   secondComingDeliverance,
+
+  // Semantic Prophetic Plate Aliases (ensures zero broken image references)
+  outpostMissionCenter: malawiHomesteadSanctuary,
+  siegeSignalExodus: buyingSelling,
+  timeOfTroubleRefuge: mountainFlight,
+  loudCryProclamation: jerusalemSiege,
 };

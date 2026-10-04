@@ -1,5 +1,5 @@
-const CACHE_NAME = 'outpost-sanctuary-v6';
-const API_CACHE_NAME = 'outpost-sanctuary-api-v6';
+const CACHE_NAME = 'outpost-sanctuary-v8';
+const API_CACHE_NAME = 'outpost-sanctuary-api-v8';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -86,6 +86,11 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Do not intercept cross-origin map tile servers or external APIs with SPA HTML fallbacks
+  if (url.origin !== self.location.origin) {
+    return;
+  }
+
   // Network-first strategy for navigation (HTML documents) to prevent stale index.html and chunk mismatch errors
   if (event.request.mode === 'navigate') {
     event.respondWith(
@@ -104,7 +109,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Cache-first with background revalidation for static assets (JS, CSS, SVG, fonts, images)
+  // Cache-first with background revalidation for same-origin static assets (JS, CSS, SVG, fonts, images)
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
@@ -129,7 +134,7 @@ self.addEventListener('fetch', (event) => {
 
         return networkResponse;
       }).catch(() => {
-        return caches.match('/index.html') || caches.match('/');
+        return new Response('', { status: 408, statusText: 'Offline Asset Unavailable' });
       });
     })
   );

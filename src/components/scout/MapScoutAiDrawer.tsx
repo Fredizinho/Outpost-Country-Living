@@ -83,13 +83,17 @@ export function MapScoutAiDrawer({
     }
   ];
 
-  // Auto-run analysis when opening or changing active district if no previous result
+  // Auto-run analysis when opening or changing active district
+  const lastAnalyzedDistrictRef = React.useRef<string | undefined>(undefined);
   useEffect(() => {
-    if (isOpen && !analysisResult && !isLoading) {
+    const currentDistName = activeDistrict?.name || 'Dedza';
+    const districtChanged = lastAnalyzedDistrictRef.current !== currentDistName;
+    if (isOpen && (!analysisResult || districtChanged) && !isLoading) {
+      lastAnalyzedDistrictRef.current = currentDistName;
       if (layerInsightsMode && activeLayerEntries.length > 0) {
-        handleRunQuery(`Analyze current map view data for ${activeDistrict?.name || 'Central Malawi'}. Selected active layers: ${activeLayerLabels.join(', ')}. Provide practical country living recommendations, homestead water security, Katondo arable soil practices, off-grid siting, and community outpost guidance based on these selected layers.`);
+        handleRunQuery(`Analyze current map view data for ${currentDistName}. Selected active layers: ${activeLayerLabels.join(', ')}. Provide practical country living recommendations, homestead water security, Katondo arable soil practices, off-grid siting, and community outpost guidance based on these selected layers.`);
       } else {
-        handleRunQuery(`Provide a comprehensive geospatial outpost suitability analysis for ${activeDistrict?.name || 'Dedza'} District, evaluating water security, Katondo soil, elevation advantages, and road access.`);
+        handleRunQuery(`Provide a comprehensive geospatial outpost suitability analysis for ${currentDistName} District, evaluating water security, Katondo soil, elevation advantages, and road access.`);
       }
     }
   }, [isOpen, activeDistrict?.name, layerInsightsMode]);
@@ -200,18 +204,30 @@ export function MapScoutAiDrawer({
             </span>
           </div>
 
-          {onFlyToCoordinates && (
-            <button
-              onClick={() => {
-                const lat = currentCoordinates?.lat ?? activeDistrict?.centroid?.[0] ?? -14.38;
-                const lng = currentCoordinates?.lng ?? activeDistrict?.centroid?.[1] ?? 34.33;
-                onFlyToCoordinates(lat, lng);
-              }}
-              className="text-[10px] font-mono text-emerald-400 hover:text-emerald-300 underline shrink-0 cursor-pointer"
+          <div className="flex items-center gap-2 shrink-0">
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${currentCoordinates?.lat ?? activeDistrict?.centroid?.[0] ?? -14.38},${currentCoordinates?.lng ?? activeDistrict?.centroid?.[1] ?? 34.33}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[10px] font-mono text-amber-300 hover:text-amber-200 flex items-center gap-1 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 rounded-lg transition-colors"
+              title="Open coordinates in Google Maps"
             >
-              Recenter
-            </button>
-          )}
+              <span>Google Maps</span>
+              <ExternalLink size={10} />
+            </a>
+            {onFlyToCoordinates && (
+              <button
+                onClick={() => {
+                  const lat = currentCoordinates?.lat ?? activeDistrict?.centroid?.[0] ?? -14.38;
+                  const lng = currentCoordinates?.lng ?? activeDistrict?.centroid?.[1] ?? 34.33;
+                  onFlyToCoordinates(lat, lng);
+                }}
+                className="text-[10px] font-mono text-emerald-400 hover:text-emerald-300 underline shrink-0 cursor-pointer"
+              >
+                Recenter
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Active Layer Pills */}

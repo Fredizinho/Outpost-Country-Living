@@ -1,72 +1,141 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Building2, Heart, Sprout, Home, ShieldCheck } from 'lucide-react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { Building2, Heart, HeartPulse, GraduationCap } from 'lucide-react';
 import { OutpostCenterBlueprints } from '@/components/outpost/OutpostCenterBlueprints';
+import { ActiveDistrictContextBar } from '@/components/common/ActiveDistrictContextBar';
+import { cn } from '@/lib/utils';
+
+const MedicalMissionarySanitarium = lazy(() =>
+  import('@/components/outpost/MedicalMissionarySanitarium').then((m) => ({
+    default: m.MedicalMissionarySanitarium,
+  }))
+);
+
+type BlueprintsTab = 'site-plans' | 'sanitarium' | 'education';
 
 export default function Blueprints() {
-  return (
-    <div className="min-h-screen bg-[#FAF7F0] dark:bg-[#09150E] text-stone-800 dark:text-stone-100 flex flex-col pb-24 transition-colors">
-      {/* Top Breadcrumb Bar (Non-sticky to prevent header collision) */}
-      <section className="border-b border-stone-200/80 dark:border-emerald-950/80 bg-white/60 dark:bg-[#0C1A12]/60 px-4 sm:px-6 py-3">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-xs font-bold text-stone-600 dark:text-stone-300 hover:text-emerald-800 dark:hover:text-amber-300 transition-colors"
-          >
-            <ArrowLeft size={14} />
-            <span>Back to Sanctuary Home</span>
-          </Link>
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
 
-          <div className="flex items-center gap-2 text-xs">
-            <span className="hidden sm:inline text-stone-400">Pillar 4 Mission Blueprint</span>
+  const [activeTab, setActiveTab] = useState<BlueprintsTab>(() => {
+    if (
+      location.pathname.startsWith('/sanitarium') ||
+      searchParams.get('tab') === 'sanitarium'
+    ) {
+      return 'sanitarium';
+    }
+    if (searchParams.get('tab') === 'education') {
+      return 'education';
+    }
+    return 'site-plans';
+  });
+
+  useEffect(() => {
+    if (
+      location.pathname.startsWith('/sanitarium') ||
+      searchParams.get('tab') === 'sanitarium'
+    ) {
+      setActiveTab('sanitarium');
+    } else if (searchParams.get('tab') === 'education') {
+      setActiveTab('education');
+    } else if (location.pathname.startsWith('/blueprints') && !searchParams.get('tab')) {
+      setActiveTab('site-plans');
+    }
+  }, [location.pathname, searchParams]);
+
+  return (
+    <div className="min-h-screen bg-[#FAF7F0] dark:bg-[#09150E] text-stone-800 dark:text-stone-100 flex flex-col pb-20 transition-colors">
+      <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 md:px-10 pt-6 flex flex-col gap-6">
+        <header className="glass-depth-card rounded-2xl p-5 sm:p-6 flex flex-col gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex flex-col gap-1">
+              <div className="flex flex-wrap items-center gap-2 text-xs text-emerald-800 dark:text-amber-300 font-semibold">
+                <span>The Divine Pattern for Outpost Ministry (2SM 358 · MH 127)</span>
+                <span aria-hidden="true">·</span>
+                <span className="text-stone-500 dark:text-stone-400 font-normal">
+                  Site Architecture · NEWSTART Sanitarium &amp; Hydrotherapy · Avondale Youth Curriculum
+                </span>
+              </div>
+              <h1 className="serif text-2xl sm:text-3xl font-bold text-stone-950 dark:text-stone-50 tracking-tight">
+                {activeTab === 'sanitarium'
+                  ? 'Medical Missionary Sanitarium, Hydrotherapy & Charcoal Apothecary'
+                  : activeTab === 'education'
+                  ? 'True Education & Madison / Avondale Family Homestead Curriculum'
+                  : 'Rural Outpost, Sanitarium & Agricultural School Blueprints'}
+              </h1>
+            </div>
+
             <Link
               to="/community"
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-100/80 dark:bg-emerald-950/80 text-emerald-900 dark:text-emerald-200 font-semibold border border-emerald-300/60 dark:border-emerald-800/60 hover:bg-emerald-200/80 transition-all"
+              className="self-start sm:self-auto bg-emerald-950 hover:bg-emerald-900 text-amber-300 font-mono font-bold text-xs uppercase px-3.5 py-2 rounded-xl transition-all shadow-xs flex items-center gap-1.5"
             >
-              <Heart size={13} className="text-emerald-600 dark:text-amber-400" />
-              <span>Believer Directory</span>
+              <Heart size={13} />
+              <span>Steward Network</span>
             </Link>
           </div>
-        </div>
-      </section>
 
-      {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-8 sm:pt-10 flex flex-col gap-8">
-        {/* Context Card */}
-        <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-emerald-900 via-emerald-950 to-stone-900 text-white shadow-xl flex flex-col gap-4 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-amber-400/5 rounded-full -mr-32 -mt-32 pointer-events-none" />
-          
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold uppercase tracking-widest text-amber-300 bg-emerald-950/80 px-3 py-1 rounded-full border border-emerald-700/60">
-              The Divine Pattern for Outpost Ministry
-            </span>
+          {/* 3-Tab Outpost & Sanitarium Workbench Switcher */}
+          <div className="flex flex-wrap items-center gap-1.5 bg-stone-100 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/80 dark:border-stone-800 self-start">
+            {(
+              [
+                {
+                  id: 'site-plans',
+                  label: '01. Outpost & Sanitarium Site Plans',
+                  icon: Building2,
+                },
+                {
+                  id: 'sanitarium',
+                  label: '02. Medical Missionary & NEWSTART Apothecary',
+                  icon: HeartPulse,
+                },
+                {
+                  id: 'education',
+                  label: '03. True Education & Youth Curriculum',
+                  icon: GraduationCap,
+                },
+              ] as const
+            ).map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveTab(tab.id)}
+                  className={cn(
+                    'px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5',
+                    isActive
+                      ? 'bg-emerald-950 dark:bg-amber-500 text-amber-300 dark:text-stone-950 shadow-xs font-bold'
+                      : 'text-stone-700 dark:text-stone-300 hover:bg-white dark:hover:bg-stone-800'
+                  )}
+                >
+                  <Icon size={13} />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
           </div>
 
-          <h1 className="serif text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
-            Outpost Center Blueprints
-          </h1>
+          <ActiveDistrictContextBar />
+        </header>
 
-          <p className="text-emerald-100/90 text-sm sm:text-base leading-relaxed max-w-3xl font-medium">
-            "Repeatedly the Lord has instructed us that we are to work the cities from outpost centers. In these cities there are to be houses of worship, as memorials for God; but institutions for the publication of our literature, for the healing of the sick, and for the training of workers are to be established outside the cities."
-            <span className="block text-amber-300 font-semibold text-xs mt-1">— Ellen G. White, Selected Messages, Book 2, p. 358</span>
-          </p>
-
-          <div className="flex flex-wrap items-center gap-3 pt-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-white border border-white/15">
-              <Home size={13} /> Family Outpost Base
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-white border border-white/15">
-              <Building2 size={13} /> Lifestyle Sanitarium
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-white border border-white/15">
-              <Sprout size={13} /> Agricultural Training Farm
-            </span>
-          </div>
-        </div>
-
-        {/* Blueprint Interactive Guide */}
+        {/* Active Workbench Body */}
         <div className="bg-white dark:bg-[#0D1D13] p-6 sm:p-8 rounded-3xl border border-stone-200/90 dark:border-emerald-900/60 shadow-md">
-          <OutpostCenterBlueprints />
+          {activeTab === 'site-plans' ? (
+            <OutpostCenterBlueprints />
+          ) : (
+            <Suspense
+              fallback={
+                <div className="p-8 text-center text-xs font-mono text-stone-500">
+                  Loading Medical Missionary &amp; Sanitarium Workbench...
+                </div>
+              }
+            >
+              <MedicalMissionarySanitarium
+                initialSection={activeTab === 'education' ? 'education' : 'newstart'}
+              />
+            </Suspense>
+          )}
         </div>
       </main>
     </div>

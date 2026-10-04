@@ -16,14 +16,12 @@ const What = lazyWithRetry(() => import('./pages/What'));
 const How = lazyWithRetry(() => import('./pages/How'));
 const Tracker = lazyWithRetry(() => import('./pages/Tracker'));
 const Account = lazyWithRetry(() => import('./pages/Account'));
-const RegionalMap = lazyWithRetry(() => import('./pages/RegionalMap'));
 const RegionDetail = lazyWithRetry(() => import('./pages/RegionDetail'));
 const SeasonalGuide = lazyWithRetry(() => import('./pages/SeasonalGuide'));
 const Skills = lazyWithRetry(() => import('./pages/Skills'));
 const SkillDetail = lazyWithRetry(() => import('./pages/SkillDetail'));
 const Calculators = lazyWithRetry(() => import('./pages/Calculators'));
 const ScoutMapPage = lazyWithRetry(() => import('./pages/ScoutMapPage'));
-const PropertyEvaluator = lazyWithRetry(() => import('./pages/PropertyEvaluator'));
 const Blueprints = lazyWithRetry(() => import('./pages/Blueprints'));
 const Community = lazyWithRetry(() => import('./pages/Community'));
 const Devotional = lazyWithRetry(() => import('./pages/Devotional'));
@@ -99,9 +97,11 @@ function AnimatedAppRoutes() {
           <Route path="/how" element={<How />} />
           <Route path="/tracker" element={<Tracker />} />
           <Route path="/account" element={<Account />} />
+          <Route path="/login" element={<Account />} />
+          <Route path="/signin" element={<Account />} />
 
           {/* Secondary route aliases */}
-          <Route path="/regions" element={<RegionalMap />} />
+          <Route path="/regions" element={<ScoutMapPage />} />
           <Route path="/scout" element={<ScoutMapPage />} />
           <Route path="/scout-map" element={<ScoutMapPage />} />
           <Route path="/map" element={<ScoutMapPage />} />
@@ -111,9 +111,11 @@ function AnimatedAppRoutes() {
           <Route path="/skills" element={<Skills />} />
           <Route path="/skills/:id" element={<SkillDetail />} />
           <Route path="/calculators" element={<Calculators />} />
-          <Route path="/suitability" element={<PropertyEvaluator />} />
-          <Route path="/property-evaluator" element={<PropertyEvaluator />} />
+          <Route path="/suitability" element={<Where />} />
+          <Route path="/property-evaluator" element={<Where />} />
           <Route path="/blueprints" element={<Blueprints />} />
+          <Route path="/sanitarium" element={<Blueprints />} />
+          <Route path="/kitchen" element={<What />} />
           <Route path="/community" element={<Community />} />
           <Route path="/directory" element={<Community />} />
           <Route path="/devotional" element={<Devotional />} />

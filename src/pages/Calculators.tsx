@@ -7,8 +7,12 @@ import { YieldComparisonChart } from '@/components/calculators/YieldComparisonCh
 import { useAuth } from '@/contexts/AuthContext';
 import { OnboardingWizard } from '@/components/onboarding/OnboardingWizard';
 import { saveStoredSavedSpecs } from '@/lib/offlineStorage';
+import { getActiveHomesteadDistrictId, setActiveHomesteadDistrictId } from '@/lib/activeDistrictSync';
 import { OffGridSizingTools } from '@/components/outpost/OffGridSizingTools';
 import { HomesteadBoQEstimator } from '@/components/outpost/HomesteadBoQEstimator';
+import { ActiveDistrictContextBar } from '@/components/common/ActiveDistrictContextBar';
+import { HomeSceneryBackground } from '@/components/home/HomeSceneryBackground';
+import { CountryIcon } from '@/components/icons/CountryIcons';
 import { 
   SanctuaryCard, 
   SanctuaryButton, 
@@ -44,10 +48,14 @@ export default function Calculators() {
   const initialMembers = user?.familyMembers || 4;
   const initialAdults = Math.max(1, Math.floor(initialMembers / 2));
   const initialChildren = Math.max(0, initialMembers - initialAdults);
-  const initialDistrict = (user?.district || 'dedza').toLowerCase();
+  const districtQueryParam = searchParams.get('district');
+  const initialDistrict = (districtQueryParam || getActiveHomesteadDistrictId(user?.district || 'dedza')).toLowerCase();
 
   // Solar Pump Sizing State
-  const [depth, setDepth] = useState<number>(35); // meters
+  const [depth, setDepth] = useState<number>(() => {
+    const p = DISTRICT_RAINFALL_PRESETS[initialDistrict];
+    return p?.aquiferDepthM || 35;
+  }); // meters
   const [waterNeeded, setWaterNeeded] = useState<number>(() => {
     // If season is hot-dry, increase water requirements for dry season irrigation
     if (seasonParam === 'hot-dry') return initialMembers * 750;
@@ -70,8 +78,26 @@ export default function Calculators() {
 
   // Rainwater Harvesting State
   const [roofAreaM2, setRoofAreaM2] = useState<number>(120); // square meters
-  const [annualRainfallMm, setAnnualRainfallMm] = useState<number>(1100); // Dedza default mm
+  const [annualRainfallMm, setAnnualRainfallMm] = useState<number>(() => {
+    const p = DISTRICT_RAINFALL_PRESETS[initialDistrict];
+    return p?.rainfall || 1100;
+  }); // Dedza default mm
   const [districtPreset, setDistrictPreset] = useState<string>(initialDistrict);
+
+  useEffect(() => {
+    const onGlobalDistrict = (e: Event) => {
+      const key = (e as CustomEvent<{ districtId: string }>).detail?.districtId;
+      if (key && DISTRICT_RAINFALL_PRESETS[key]) {
+        setDistrictPreset(key);
+        const preset = DISTRICT_RAINFALL_PRESETS[key];
+        setAnnualRainfallMm(preset.rainfall);
+        if (preset.aquiferDepthM) setDepth(preset.aquiferDepthM);
+        if (preset.solarKwhDay) setSunHours(preset.solarKwhDay);
+      }
+    };
+    window.addEventListener('outpost:active-district-changed', onGlobalDistrict);
+    return () => window.removeEventListener('outpost:active-district-changed', onGlobalDistrict);
+  }, []);
 
   // Sync tab parameter changes from URL (including offgrid tab)
   useEffect(() => {
@@ -167,6 +193,7 @@ export default function Calculators() {
 
   const handleDistrictChange = (key: string) => {
     setDistrictPreset(key);
+    setActiveHomesteadDistrictId(key);
     const preset = DISTRICT_RAINFALL_PRESETS[key];
     if (preset) {
       setAnnualRainfallMm(preset.rainfall);
@@ -273,7 +300,7 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
   };
 
   return (
-    <div className="px-6 md:px-12 py-10 max-w-6xl mx-auto flex flex-col gap-10">
+    <div className="px-4 sm:px-6 md:px-10 py-6 md:py-8 max-w-7xl mx-auto flex flex-col gap-8">
       {/* Toast Notification */}
       {toastMsg && (
         <div className="fixed top-20 right-6 z-50 bg-[#121D16] text-white px-5 py-3 rounded-2xl shadow-2xl border border-amber-600/40 flex items-center gap-2 text-xs font-bold transition-all duration-300">
@@ -282,74 +309,109 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
         </div>
       )}
 
-      {/* Engineering Workbench Header */}
-      <header className="bg-gradient-to-br from-[#0B2316] via-[#0E2A1B] to-[#07180E] text-white p-8 md:p-12 rounded-[2.5rem] border border-amber-500/30 shadow-2xl relative overflow-hidden flex flex-col gap-6">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-amber-500/15 via-emerald-500/10 to-transparent rounded-full -mr-36 -mt-36 pointer-events-none blur-3xl" />
-        
-        <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 relative z-10">
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="bg-amber-500/20 text-amber-300 text-xs font-sans font-bold uppercase px-3.5 py-1 rounded-full border border-amber-500/30 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" /> Homestead Engineering Calculators
+      {/* Compact Engineering Workbench Header */}
+      <header className="glass-depth-card rounded-2xl p-5 sm:p-6 flex flex-col gap-4">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div className="flex flex-col gap-1">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-emerald-800 dark:text-amber-300 font-semibold">
+              <span>7 Off-Grid Sizing Calculators</span>
+              <span aria-hidden="true">·</span>
+              <span className="text-stone-500 dark:text-stone-400 font-normal">
+                Synced Outpost: {user?.district || 'Dedza'} ({user?.region || 'Central'}) · {user?.familyMembers || 4} Members · {user?.landSizeAcres || 2.5} Acres — Honest Math for Solar, Wells &amp; Grain Sacks
               </span>
-              <span className="bg-emerald-500/15 text-emerald-300 font-mono text-[9px] font-black uppercase px-3 py-1 rounded-full border border-emerald-500/25">
-                Auto-Synced to Steward Profile
-              </span>
-            </div>
-
-            <h1 className="serif text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#FAF8F5] leading-tight">
-              Homestead Off-Grid Calculators
-            </h1>
-            <p className="text-emerald-100/90 max-w-2xl text-sm sm:text-base font-medium leading-relaxed italic">
-              Determine solar pump wattage, food grain storage requirements, rainwater harvesting yields, and setup budgets for country sanctuaries in Malawi.
-            </p>
-
-            {/* Setup Profile Live Badge */}
-            <div className="mt-2 bg-black/40 border border-amber-500/20 p-3.5 rounded-2xl flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-2.5 text-xs text-emerald-200 font-medium">
-                <MapPin size={15} className="text-amber-400 shrink-0" />
-                <span>
-                  Synced Outpost: <strong className="text-white font-mono">{user?.district || 'Dedza'} ({user?.region || 'Central'})</strong> • <strong className="text-amber-300 font-mono">{user?.familyMembers || 4} Members</strong> • <strong className="text-emerald-300 font-mono">{user?.landSizeAcres || 2.5} Acres</strong>
-                </span>
-              </div>
               <button
                 onClick={() => setShowWizard(true)}
-                className="text-[10px] font-mono font-black uppercase tracking-wider bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 px-3.5 py-1.5 rounded-xl border border-amber-500/30 transition-all flex items-center gap-1.5"
+                className="text-emerald-800 dark:text-amber-300 underline hover:no-underline cursor-pointer ml-1"
               >
-                <Sparkles size={12} className="text-amber-400" /> Tweak Profile
+                Edit Household
               </button>
             </div>
+            <h1 className="serif text-2xl sm:text-3xl font-bold text-stone-950 dark:text-stone-50 tracking-tight">
+              Homestead Acreage, Solar Borehole, Rainwater &amp; Grain Calculators
+            </h1>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2.5 shrink-0 pt-2 md:pt-0">
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
             <button
               onClick={copySpecsToClipboard}
               className={cn(
-                "px-4 py-3 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all flex items-center gap-2 active:scale-95 border cursor-pointer",
+                "px-3 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 active:scale-95 border cursor-pointer",
                 hasCopied 
-                  ? "bg-emerald-600 text-white border-emerald-400 shadow-md"
-                  : "bg-white/5 hover:bg-white/10 text-amber-200 border-amber-500/25"
+                  ? "bg-emerald-700 text-white border-emerald-500 shadow-xs"
+                  : "bg-stone-100 dark:bg-stone-900 hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 border-stone-300 dark:border-stone-700"
               )}
             >
-              {hasCopied ? <CheckCircle2 size={15} className="text-emerald-300" /> : <Copy size={15} className="text-amber-400" />}
-              {hasCopied ? 'Copied!' : 'Copy Specs'}
+              {hasCopied ? <CheckCircle2 size={14} className="text-emerald-200" /> : <Copy size={14} className="text-amber-600 dark:text-amber-400" />}
+              {hasCopied ? 'Copied!' : 'Copy Spec Sheet'}
             </button>
 
             <button
               onClick={saveSpecsToVault}
-              className="bg-white/5 hover:bg-white/10 text-amber-200 border border-amber-500/25 px-4 py-3 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all flex items-center gap-2 active:scale-95 cursor-pointer"
+              className="bg-stone-100 dark:bg-stone-900 hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 border border-stone-300 dark:border-stone-700 px-3 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer"
             >
-              <Save size={15} className="text-amber-400" /> Save
+              <Save size={14} className="text-emerald-700 dark:text-amber-400" /> Save to Vault
             </button>
 
             <button
               onClick={exportSummary}
-              className="bg-amber-500 hover:bg-amber-400 text-slate-950 px-5 py-3 rounded-xl text-xs font-mono font-black uppercase tracking-wider transition-all flex items-center gap-2 shadow-md active:scale-95 cursor-pointer"
+              className="bg-emerald-950 hover:bg-emerald-900 text-amber-300 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 shadow-xs active:scale-95 cursor-pointer"
             >
-              <Download size={15} /> Export
+              <Download size={14} /> Export .TXT
             </button>
           </div>
         </div>
+
+        {/* Consolidated 4-Suite Engineering Navigation */}
+        <div className="flex flex-wrap items-center gap-1.5 bg-stone-100 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/80 dark:border-stone-800 self-start">
+          {[
+            {
+              id: 'land',
+              matchIds: ['land', 'yield'],
+              label: '01. Land Zoning, Pits & Crop Yields',
+              icon: Sprout,
+            },
+            {
+              id: 'solar',
+              matchIds: ['solar', 'rainwater'],
+              label: '02. Water Security (Solar Well & Rain Cisterns)',
+              icon: Droplets,
+            },
+            {
+              id: 'food',
+              matchIds: ['food'],
+              label: '03. 12-Month Grain & Seed Reserve',
+              icon: Utensils,
+            },
+            {
+              id: 'budget',
+              matchIds: ['budget', 'offgrid'],
+              label: '04. MWK/USD Bill of Quantities & Off-Grid Hardware',
+              icon: DollarSign,
+            },
+          ].map((suite) => {
+            const Icon = suite.icon;
+            const isSelected = suite.matchIds.includes(activeTab);
+            return (
+              <button
+                key={suite.id}
+                type="button"
+                onClick={() => setActiveTab(suite.id as any)}
+                className={cn(
+                  'px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5',
+                  isSelected
+                    ? 'bg-emerald-950 dark:bg-amber-500 text-amber-300 dark:text-stone-950 shadow-xs font-bold'
+                    : 'text-stone-700 dark:text-stone-300 hover:bg-white dark:hover:bg-stone-800'
+                )}
+              >
+                <Icon size={13} />
+                <span>{suite.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Unified Active Malawi District Telemetry Strip */}
+        <ActiveDistrictContextBar onDistrictSelect={handleDistrictChange} />
       </header>
 
       {/* Seasonal Context Alert Banner */}
@@ -376,49 +438,19 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
         </div>
       )}
 
-      {/* Workbench Navigation Tabs */}
-      <div className="flex flex-wrap gap-2.5">
-        {[
-          { id: 'yield', label: 'Crop Yield Comparison', icon: Sprout },
-          { id: 'solar', label: 'Solar Pump & Well', icon: Sun },
-          { id: 'food', label: 'Grain & Food Reserve', icon: Utensils },
-          { id: 'land', label: 'Sanctuary Acreage', icon: PieChart },
-          { id: 'rainwater', label: 'Rainwater Harvest', icon: CloudRain },
-          { id: 'offgrid', label: 'Off-Grid Engineering Sizer', icon: Gauge },
-          { id: 'budget', label: 'Setup Budget', icon: DollarSign },
-        ].map((tab) => {
-          const Icon = tab.icon;
-          const isSelected = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
-              className={cn(
-                "px-5 py-3 rounded-2xl text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-2 transition-all shadow-xs active:scale-95 border cursor-pointer",
-                isSelected
-                  ? "bg-amber-500 text-slate-950 border-amber-300 shadow-[0_4px_20px_rgba(245,158,11,0.3)] font-black"
-                  : "bg-stone-900/95 dark:bg-white/5 text-emerald-200 border-amber-500/25 hover:bg-stone-800 dark:hover:bg-white/10 hover:text-white"
-              )}
-            >
-              <Icon size={15} className={isSelected ? "text-slate-950" : "text-amber-400"} />
-              {tab.label}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* TAB 0: CROP YIELD COMPARISON */}
-      {activeTab === 'yield' && (
+      {/* SUITE 1 (Part B): CROP YIELD COMPARISON */}
+      {(activeTab === 'yield' || activeTab === 'land') && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
+          className="order-2"
         >
           <YieldComparisonChart />
         </motion.div>
       )}
 
-      {/* TAB 1: SOLAR PUMP SIZER */}
-      {activeTab === 'solar' && (
+      {/* SUITE 2 (Part A): SOLAR PUMP SIZER */}
+      {(activeTab === 'solar' || activeTab === 'rainwater') && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -699,12 +731,12 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
         </motion.div>
       )}
 
-      {/* TAB 3: LAND ALLOCATION CALCULATOR */}
-      {activeTab === 'land' && (
+      {/* SUITE 1 (Part A): LAND ALLOCATION CALCULATOR */}
+      {(activeTab === 'land' || activeTab === 'yield') && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-8"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 order-1"
         >
           {/* Controls */}
           <div className="lg:col-span-6 bg-stone-900/95 dark:bg-[#0A1A10]/95 backdrop-blur-md p-8 rounded-[2.5rem] border border-amber-500/25 shadow-2xl flex flex-col gap-6 text-white">
@@ -838,8 +870,8 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
         </motion.div>
       )}
 
-      {/* TAB 4: RAINWATER HARVESTING CALCULATOR */}
-      {activeTab === 'rainwater' && (
+      {/* SUITE 2 (Part B): RAINWATER HARVESTING & DIMBA CALCULATOR */}
+      {(activeTab === 'rainwater' || activeTab === 'solar') && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -1023,22 +1055,23 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
         </motion.div>
       )}
 
-      {/* TAB: OFF-GRID SIZING WORKBENCH */}
-      {activeTab === 'offgrid' && (
+      {/* SUITE 4 (Part B): OFF-GRID SIZING WORKBENCH */}
+      {(activeTab === 'offgrid' || activeTab === 'budget') && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
+          className="order-2"
         >
           <OffGridSizingTools />
         </motion.div>
       )}
 
-      {/* TAB 5: SETUP BUDGET ESTIMATOR */}
-      {activeTab === 'budget' && (
+      {/* SUITE 4 (Part A): SETUP BUDGET ESTIMATOR */}
+      {(activeTab === 'budget' || activeTab === 'offgrid') && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-8"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 order-1"
         >
           {/* Controls */}
           <div className="lg:col-span-7 bg-stone-900/95 dark:bg-[#0A1A10]/95 backdrop-blur-md p-8 rounded-[2.5rem] border border-amber-500/25 shadow-2xl flex flex-col gap-6 text-white">

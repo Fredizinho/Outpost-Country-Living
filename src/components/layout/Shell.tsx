@@ -1,21 +1,37 @@
 import { ReactNode, useState, useEffect } from 'react';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { ShieldCheck, Columns2, Layers, CheckCircle2, Calendar } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Settings, Code2, Palette, MapPin, CheckCircle2, Columns2, ChevronUp, Compass } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { CitationsModal } from './CitationsModal';
 import { DesktopReferenceInspector } from './DesktopReferenceInspector';
+import { SettingsAndAboutModal, SettingsModalTab } from './SettingsAndAboutModal';
 import { Header } from '../common/Header';
 import { QuickCommandPalette } from '../common/QuickCommandPalette';
 import { HomesteadAdvisorModal } from '../advisor/HomesteadAdvisorModal';
 import { LeftSymbolDirectory } from '../navigation/LeftSymbolDirectory';
 import { OfflinePwaStatusBanner } from '../common/OfflinePwaStatusBanner';
 import { calculateHomesteadReadinessScore } from '@/lib/offlineStorage';
+import { useActiveHomesteadDistrict } from '@/lib/activeDistrictSync';
+import { DISTRICT_LIST } from '@/constants';
 import { getCurrentMalawiSeason } from '@/lib/seasonalAlmanac';
+import { useTheme, PALETTE_META } from '@/contexts/ThemeContext';
 
 export function Shell({ children }: { children: ReactNode }) {
+  const { palette, togglePalette } = useTheme();
+  const isSapphire = palette === 'sapphire' || palette === 'midnight';
+  const isSienna = palette === 'sienna';
+  const activePaletteMeta = PALETTE_META[palette];
+
   const [showCitationsModal, setShowCitationsModal] = useState(false);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [isAdvisorOpen, setIsAdvisorOpen] = useState(false);
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [settingsModalTab, setSettingsModalTab] = useState<SettingsModalTab>('preferences');
+  const [isDistrictPickerOpen, setIsDistrictPickerOpen] = useState(false);
+  const [activeDistrictId, setActiveDistrictId] = useActiveHomesteadDistrict('dedza');
+  const activeDistrictObj =
+    DISTRICT_LIST.find((d) => d.id === activeDistrictId) || DISTRICT_LIST[0];
+  const activeDistrictName = activeDistrictObj?.name || 'Dedza';
   const [isInspectorOpen, setIsInspectorOpen] = useState<boolean>(() => {
     try {
       return localStorage.getItem('outpost_desktop_inspector_v1') === 'true';
@@ -23,7 +39,7 @@ export function Shell({ children }: { children: ReactNode }) {
       return false;
     }
   });
-  const [openTabsCount, setOpenTabsCount] = useState<number>(7);
+  const [openTabsCount, setOpenTabsCount] = useState<number>(3);
   const [readinessPct, setReadinessPct] = useState<number>(
     () => calculateHomesteadReadinessScore().breakdown.exodusScorePct
   );
@@ -35,6 +51,11 @@ export function Shell({ children }: { children: ReactNode }) {
   const isScoutMapRoute = ['/scout', '/scout-map', '/map', '/regions'].includes(
     location.pathname
   );
+
+  const openSettings = (tab: SettingsModalTab = 'preferences') => {
+    setSettingsModalTab(tab);
+    setIsSettingsModalOpen(true);
+  };
 
   const toggleInspector = () => {
     setIsInspectorOpen((prev) => {
@@ -68,6 +89,7 @@ export function Shell({ children }: { children: ReactNode }) {
 
   // Desktop Keyboard Navigation Engine:
   // - Cmd/Ctrl+K or / : Open Command Palette
+  // - Cmd/Ctrl+, : Open Settings & About Modal
   // - Cmd/Ctrl+B or Cmd/Ctrl+D : Toggle Left Workspace Explorer
   // - Cmd/Ctrl+I : Toggle Right Reference Inspector
   // - Alt+ArrowLeft or Cmd+[ : Navigate Back
@@ -86,6 +108,12 @@ export function Shell({ children }: { children: ReactNode }) {
         return;
       }
 
+      if ((e.metaKey || e.ctrlKey) && e.key === ',') {
+        e.preventDefault();
+        openSettings('preferences');
+        return;
+      }
+
       if (
         (e.metaKey || e.ctrlKey) &&
         (e.key.toLowerCase() === 'b' || e.key.toLowerCase() === 'd')
@@ -98,6 +126,17 @@ export function Shell({ children }: { children: ReactNode }) {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'i') {
         e.preventDefault();
         toggleInspector();
+        return;
+      }
+
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'f') {
+        e.preventDefault();
+        const el = document.documentElement;
+        if (!document.fullscreenElement) {
+          el.requestFullscreen?.().catch(() => {});
+        } else {
+          document.exitFullscreen?.().catch(() => {});
+        }
         return;
       }
 
@@ -148,6 +187,11 @@ export function Shell({ children }: { children: ReactNode }) {
             e.preventDefault();
             navigate('/calculators');
             break;
+          case 's':
+          case 'S':
+            e.preventDefault();
+            navigate('/sanitarium');
+            break;
           case 't':
           case 'T':
             e.preventDefault();
@@ -166,22 +210,28 @@ export function Shell({ children }: { children: ReactNode }) {
     const handleOpenCitations = () => setShowCitationsModal(true);
     const handleOpenSearch = () => setIsCommandPaletteOpen(true);
     const handleOpenAdvisor = () => setIsAdvisorOpen(true);
+    const handleOpenSettings = (e: Event) => {
+      const custom = e as CustomEvent<{ tab?: SettingsModalTab }>;
+      openSettings(custom.detail?.tab || 'preferences');
+    };
 
     window.addEventListener('outpost:open-citations', handleOpenCitations);
     window.addEventListener('outpost:open-search', handleOpenSearch);
     window.addEventListener('outpost:open-advisor', handleOpenAdvisor);
+    window.addEventListener('outpost:open-settings', handleOpenSettings);
 
     return () => {
       window.removeEventListener('outpost:open-citations', handleOpenCitations);
       window.removeEventListener('outpost:open-search', handleOpenSearch);
       window.removeEventListener('outpost:open-advisor', handleOpenAdvisor);
+      window.removeEventListener('outpost:open-settings', handleOpenSettings);
     };
   }, []);
 
   return (
     <div className="h-screen w-screen overflow-hidden flex flex-col font-sans bg-[#FAF8F5] dark:bg-[#07120C] text-stone-800 dark:text-stone-100 relative selection:bg-amber-200 dark:selection:bg-emerald-900 selection:text-stone-900 dark:selection:text-amber-200 transition-colors duration-200">
       {/* ====================================================================
-          1. DESKTOP WINDOW TITLE BAR, MULTI-TAB STRIP & ADDRESS TOOLBAR
+          1. DESKTOP WINDOW TITLE BAR, MULTI-TAB STRIP & BUNDLED COMMAND MENUS
       ==================================================================== */}
       <Header
         onOpenCitations={() => setShowCitationsModal(true)}
@@ -189,6 +239,7 @@ export function Shell({ children }: { children: ReactNode }) {
         onOpenAdvisor={() => setIsAdvisorOpen(true)}
         onToggleInspector={toggleInspector}
         isInspectorOpen={isInspectorOpen}
+        onOpenSettings={openSettings}
       />
 
       {/* ====================================================================
@@ -219,82 +270,6 @@ export function Shell({ children }: { children: ReactNode }) {
         />
       </div>
 
-      {/* ====================================================================
-          3. NATIVE DESKTOP BOTTOM STATUS BAR
-      ==================================================================== */}
-      <footer
-        aria-label="Desktop Application Status Bar"
-        className="h-7 shrink-0 bg-[#040E08] border-t border-emerald-950/90 px-3 flex items-center justify-between gap-3 text-[11px] font-mono text-stone-300 select-none z-40"
-      >
-        {/* Left: Offline Vault Sync, Active Malawi Season & Readiness Score */}
-        <div className="flex items-center gap-3 min-w-0 overflow-hidden">
-          <div className="text-emerald-300 shrink-0">
-            <OfflinePwaStatusBanner compact />
-          </div>
-
-          <span className="hidden sm:inline text-emerald-900">|</span>
-
-          <Link
-            to="/seasons"
-            className="hidden sm:inline-flex items-center gap-1.5 text-stone-300 hover:text-amber-300 transition-colors truncate"
-            title="Active Malawi Agricultural Season (Click to open Almanac)"
-          >
-            <Calendar size={11} className="text-amber-400 shrink-0" />
-            <span className="truncate">Season: {currentSeason}</span>
-          </Link>
-
-          <span className="hidden md:inline text-emerald-900">|</span>
-
-          <Link
-            to="/tracker"
-            className="hidden md:inline-flex items-center gap-1.5 text-stone-300 hover:text-amber-300 transition-colors tabular-nums shrink-0"
-            title="Homestead Readiness Score (Click to open 15-Milestone Ledger)"
-          >
-            <CheckCircle2 size={11} className="text-emerald-400 shrink-0" />
-            <span>Readiness: {readinessPct}%</span>
-          </Link>
-        </div>
-
-        {/* Right: Open Tabs, Inspector Toggle, Citations & Malawi GIS Coordinates */}
-        <div className="flex items-center gap-3 shrink-0">
-          <span className="hidden lg:inline-flex items-center gap-1 text-stone-400 tabular-nums">
-            <Layers size={11} className="text-emerald-400" />
-            <span>{openTabsCount} Tabs</span>
-          </span>
-
-          <span className="hidden lg:inline text-emerald-900">|</span>
-
-          <button
-            type="button"
-            onClick={toggleInspector}
-            className={cn(
-              'hidden sm:inline-flex items-center gap-1 hover:text-amber-300 transition-colors cursor-pointer',
-              isInspectorOpen ? 'text-amber-300 font-bold' : 'text-stone-300'
-            )}
-            title="Toggle Side-by-Side Reference Sizer & Scratchpad (⌘I)"
-          >
-            <Columns2 size={11} />
-            <span>Inspector</span>
-          </button>
-
-          <span className="hidden sm:inline text-emerald-900">|</span>
-
-          <button
-            type="button"
-            onClick={() => setShowCitationsModal(true)}
-            className="text-stone-300 hover:text-emerald-300 flex items-center gap-1 transition-colors cursor-pointer"
-          >
-            <ShieldCheck size={11} className="text-emerald-400" />
-            <span>DCCMS · FAO · EGW</span>
-          </button>
-
-          <span className="hidden xl:inline text-emerald-900">|</span>
-          <span className="hidden xl:inline text-stone-400 tabular-nums">
-            13.25°S, 34.30°E · Malawi
-          </span>
-        </div>
-      </footer>
-
       {/* Quick Command Palette Modal */}
       <QuickCommandPalette
         isOpen={isCommandPaletteOpen}
@@ -312,6 +287,13 @@ export function Shell({ children }: { children: ReactNode }) {
       <CitationsModal
         isOpen={showCitationsModal}
         onClose={() => setShowCitationsModal(false)}
+      />
+
+      {/* Workspace Settings, About & Developer Modal */}
+      <SettingsAndAboutModal
+        isOpen={isSettingsModalOpen}
+        onClose={() => setIsSettingsModalOpen(false)}
+        initialTab={settingsModalTab}
       />
     </div>
   );

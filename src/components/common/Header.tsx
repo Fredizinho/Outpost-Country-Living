@@ -1,4 +1,5 @@
 import { Navigation, NavigationProps } from './Navigation';
+import { SettingsModalTab } from '../layout/SettingsAndAboutModal';
 
 export interface HeaderProps extends NavigationProps {
   onOpenCitations: () => void;
@@ -6,6 +7,7 @@ export interface HeaderProps extends NavigationProps {
   onOpenAdvisor?: () => void;
   onToggleInspector?: () => void;
   isInspectorOpen?: boolean;
+  onOpenSettings?: (tab?: SettingsModalTab) => void;
 }
 
 export function Header({
@@ -14,6 +16,7 @@ export function Header({
   onOpenAdvisor,
   onToggleInspector,
   isInspectorOpen,
+  onOpenSettings,
 }: HeaderProps) {
   return (
     <Navigation
@@ -22,6 +25,7 @@ export function Header({
       onOpenAdvisor={onOpenAdvisor}
       onToggleInspector={onToggleInspector}
       isInspectorOpen={isInspectorOpen}
+      onOpenSettings={onOpenSettings}
     />
   );
 }

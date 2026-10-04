@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 
 /**
  * CountryIcons.tsx
@@ -82,6 +82,11 @@ export function CountryScene({
   height = 360,
   ...props
 }: CountryIllustrationProps) {
+  const uid = useId().replace(/:/g, '');
+  const frameId = `cs-frame-${uid}`;
+  const skyId = `cs-sky-${uid}`;
+  const mountainId = `cs-mountain-${uid}`;
+
   return (
     <svg
       viewBox="0 0 640 360"
@@ -93,34 +98,34 @@ export function CountryScene({
       {...props}
     >
       <defs>
-        <clipPath id="cs-frame">
+        <clipPath id={frameId}>
           <rect width="640" height="360" rx="24" />
         </clipPath>
-        <linearGradient id="cs-sky" x1="320" y1="0" x2="320" y2="240" gradientUnits="userSpaceOnUse">
+        <linearGradient id={skyId} x1="320" y1="0" x2="320" y2="240" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stopColor="#fef3c7" />
           <stop offset="60%" stopColor="#fef9ee" />
           <stop offset="100%" stopColor="#dcfce7" />
         </linearGradient>
-        <linearGradient id="cs-mountain" x1="0" y1="80" x2="640" y2="200" gradientUnits="userSpaceOnUse">
+        <linearGradient id={mountainId} x1="0" y1="80" x2="640" y2="200" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stopColor="#6a5a47" />
           <stop offset="50%" stopColor="#55483a" />
           <stop offset="100%" stopColor="#14532d" />
         </linearGradient>
       </defs>
 
-      <g clipPath="url(#cs-frame)">
+      <g clipPath={`url(#${frameId})`}>
         {/* Soft Atmosphere Sky */}
-        <rect width="640" height="360" fill="url(#cs-sky)" />
+        <rect width="640" height="360" fill={`url(#${skyId})`} />
 
         {/* Morning Sun Disk & Rays */}
         <circle cx="140" cy="110" r="42" fill="#fbbf24" fillOpacity="0.85" />
         <circle cx="140" cy="110" r="58" stroke="#f59e0b" strokeWidth="1.5" strokeDasharray="6 6" strokeOpacity="0.4" />
-        <circle cx="140" cy="110" r="74" stroke="#fbbf24" strokeWidth="1" strokeDasharray="3 6" strokeOpacity="0.25" />
+        <circle cx="140" cy="110" r="74" stroke="#fbbf24" strokeWidth="1.4" strokeDasharray="3 6" strokeOpacity="0.25" />
 
         {/* Distant Mountain Escarpment (Mulanje / Dedza Ridge) */}
         <path
           d="M-20 220 L70 145 L160 180 L280 110 L390 175 L490 125 L580 165 L660 130 L660 270 L-20 270 Z"
-          fill="url(#cs-mountain)"
+          fill={`url(#${mountainId})`}
           fillOpacity="0.28"
         />
         <path
@@ -159,27 +164,27 @@ export function CountryScene({
           <circle cx="41" cy="52" r="1.5" fill="#fbbf24" />
           {/* Windows */}
           <rect x="8" y="34" width="14" height="14" rx="2" fill="#bae6fd" stroke="#782a15" strokeWidth="1.5" />
-          <line x1="15" y1="34" x2="15" y2="48" stroke="#782a15" strokeWidth="1" />
-          <line x1="8" y1="41" x2="22" y2="41" stroke="#782a15" strokeWidth="1" />
+          <line x1="15" y1="34" x2="15" y2="48" stroke="#782a15" strokeWidth="1.4" />
+          <line x1="8" y1="41" x2="22" y2="41" stroke="#782a15" strokeWidth="1.4" />
           <rect x="52" y="34" width="14" height="14" rx="2" fill="#bae6fd" stroke="#782a15" strokeWidth="1.5" />
-          <line x1="59" y1="34" x2="59" y2="48" stroke="#782a15" strokeWidth="1" />
-          <line x1="52" y1="41" x2="66" y2="41" stroke="#782a15" strokeWidth="1" />
+          <line x1="59" y1="34" x2="59" y2="48" stroke="#782a15" strokeWidth="1.4" />
+          <line x1="52" y1="41" x2="66" y2="41" stroke="#782a15" strokeWidth="1.4" />
           {/* Roof (Gabled Brick Terracotta) */}
           <polygon points="-8,25 38,-2 84,25" fill="#dc5c23" stroke="#782a15" strokeWidth="2" />
           {/* Solar Photovoltaic Panels on Roof */}
-          <rect x="8" y="8" width="24" height="13" rx="1.5" fill="#0369a1" stroke="#0284c7" strokeWidth="1" transform="skewX(-14)" />
-          <line x1="16" y1="8" x2="16" y2="21" stroke="#38bdf8" strokeWidth="0.8" transform="skewX(-14)" />
-          <line x1="24" y1="8" x2="24" y2="21" stroke="#38bdf8" strokeWidth="0.8" transform="skewX(-14)" />
+          <rect x="8" y="8" width="24" height="13" rx="1.5" fill="#0369a1" stroke="#0284c7" strokeWidth="1.4" transform="skewX(-14)" />
+          <line x1="16" y1="8" x2="16" y2="21" stroke="#38bdf8" strokeWidth="1.4" transform="skewX(-14)" />
+          <line x1="24" y1="8" x2="24" y2="21" stroke="#38bdf8" strokeWidth="1.4" transform="skewX(-14)" />
           {/* Chimney / Ventilation */}
-          <rect x="56" y="2" width="8" height="14" fill="#933113" stroke="#782a15" strokeWidth="1.2" />
+          <rect x="56" y="2" width="8" height="14" fill="#933113" stroke="#782a15" strokeWidth="1.4" />
         </g>
 
         {/* Rainwater Harvesting Ferrocement Tank */}
         <g transform="translate(266, 235)">
           <rect x="0" y="8" width="22" height="28" rx="4" fill="#0284c7" stroke="#0369a1" strokeWidth="1.8" />
           <ellipse cx="11" cy="8" rx="11" ry="3.5" fill="#38bdf8" stroke="#0369a1" strokeWidth="1.5" />
-          <line x1="4" y1="18" x2="18" y2="18" stroke="#bae6fd" strokeWidth="1" />
-          <line x1="4" y1="26" x2="18" y2="26" stroke="#bae6fd" strokeWidth="1" />
+          <line x1="4" y1="18" x2="18" y2="18" stroke="#bae6fd" strokeWidth="1.4" />
+          <line x1="4" y1="26" x2="18" y2="26" stroke="#bae6fd" strokeWidth="1.4" />
           {/* Water Spigot */}
           <path d="M22 26 L26 26 L26 29" stroke="#782a15" strokeWidth="1.5" fill="none" />
         </g>
@@ -215,8 +220,8 @@ export function CountryScene({
           <circle cx="55" cy="8" r="32" fill="#14532d" stroke="#042614" strokeWidth="1.8" />
           <circle cx="55" cy="6" r="22" fill="#22c55e" fillOpacity="0.9" />
           {/* Hanging fruit pods */}
-          <ellipse cx="42" cy="42" rx="3" ry="5" fill="#fbbf24" stroke="#782a15" strokeWidth="1" />
-          <ellipse cx="68" cy="46" rx="3" ry="5" fill="#fbbf24" stroke="#782a15" strokeWidth="1" />
+          <ellipse cx="42" cy="42" rx="3" ry="5" fill="#fbbf24" stroke="#782a15" strokeWidth="1.4" />
+          <ellipse cx="68" cy="46" rx="3" ry="5" fill="#fbbf24" stroke="#782a15" strokeWidth="1.4" />
         </g>
 
         {/* Raised Garden Beds (Permaculture Bio-Intensive Rows) */}
@@ -225,10 +230,10 @@ export function CountryScene({
           <path d="M0 20 Q50 10 110 18 L105 32 Q45 24 -5 32 Z" fill="#933113" stroke="#782a15" strokeWidth="1.5" />
           {/* Crops in Bed 1 */}
           <g transform="translate(10, 12)">
-            <circle cx="10" cy="0" r="4" fill="#22c55e" stroke="#042614" strokeWidth="1" />
-            <circle cx="30" cy="-2" r="5" fill="#4ade80" stroke="#042614" strokeWidth="1" />
-            <circle cx="52" cy="-1" r="4.5" fill="#22c55e" stroke="#042614" strokeWidth="1" />
-            <circle cx="74" cy="0" r="5" fill="#86efac" stroke="#042614" strokeWidth="1" />
+            <circle cx="10" cy="0" r="4" fill="#22c55e" stroke="#042614" strokeWidth="1.4" />
+            <circle cx="30" cy="-2" r="5" fill="#4ade80" stroke="#042614" strokeWidth="1.4" />
+            <circle cx="52" cy="-1" r="4.5" fill="#22c55e" stroke="#042614" strokeWidth="1.4" />
+            <circle cx="74" cy="0" r="5" fill="#86efac" stroke="#042614" strokeWidth="1.4" />
           </g>
           {/* Bed 2 */}
           <path d="M-20 42 Q40 32 100 40 L95 54 Q35 46 -25 54 Z" fill="#782a15" stroke="#361009" strokeWidth="1.5" />
@@ -276,6 +281,9 @@ export function SoilStrataIllustration({
   height = 280,
   ...props
 }: CountryIllustrationProps) {
+  const uid = useId().replace(/:/g, '');
+  const soilFrameId = `soil-frame-${uid}`;
+
   return (
     <svg
       viewBox="0 0 400 280"
@@ -287,11 +295,11 @@ export function SoilStrataIllustration({
       {...props}
     >
       <defs>
-        <clipPath id="soil-frame">
+        <clipPath id={soilFrameId}>
           <rect width="400" height="280" rx="16" />
         </clipPath>
       </defs>
-      <g clipPath="url(#soil-frame)">
+      <g clipPath={`url(#${soilFrameId})`}>
         {/* Layer 1: Surface Vegetation & Mulch (0-5cm) */}
         <rect x="0" y="0" width="400" height="40" fill="#042614" />
         <path d="M0 40 Q50 35 100 40 T200 38 T300 40 T400 37 L400 42 L0 42 Z" fill="#14532d" />
@@ -3077,6 +3085,8 @@ export type CountryIconName =
   | 'cistern'
   | 'solar'
   | 'orchard'
+  | 'forage'
+  | 'hydro'
   | 'prophecy-1844'
   | 'prophecy-three-angels'
   | 'prophecy-siege'
@@ -3123,6 +3133,7 @@ export function CountryIcon({ name, ...props }: CountryIconDispatcherProps) {
     case 'droughtcrops':
       return <DroughtCropsIllustration {...props} />;
     case 'herbs':
+    case 'forage':
       return <HerbsCultivationIllustration {...props} />;
     case 'foodpreservation':
       return <FoodPreservationIllustration {...props} />;
@@ -3143,6 +3154,7 @@ export function CountryIcon({ name, ...props }: CountryIconDispatcherProps) {
       return <ZeerPotCoolingIllustration {...props} />;
     case 'breadmaking':
       return <BreadmakingMillingIllustration {...props} />;
+    case 'hydro':
     case 'hydrotherapy':
       return <HydrotherapyPoulticeIllustration {...props} />;
     case 'oilpress':

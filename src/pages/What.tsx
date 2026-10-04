@@ -1,14 +1,52 @@
-import { Shield, Hammer, Flame, Package, Zap, CheckCircle2, Circle, X, Info, Sprout } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Shield, Hammer, Flame, Package, Zap, CheckCircle2, Circle, X, Info, Sprout, Calendar, Layers, UtensilsCrossed } from 'lucide-react';
+import { useState, useEffect, Suspense, lazy } from 'react';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/lib/utils';
 import { MalawiCropExplorer } from '@/components/crops/MalawiCropExplorer';
 import { VisualSoilSwatchGuide } from '@/components/outpost/VisualSoilSwatchGuide';
 import { MalawiRidgeAndSeedPlanner } from '@/components/outpost/MalawiRidgeAndSeedPlanner';
+import { EdenicAgricultureGuides } from '@/components/outpost/EdenicAgricultureGuides';
+import { SoilStrataBlueprint } from '@/components/home/SoilStrataBlueprint';
+import { ActiveDistrictContextBar } from '@/components/common/ActiveDistrictContextBar';
 import { getStoredPantryStock, saveStoredPantryStock } from '@/lib/offlineStorage';
 import { SOIL_TYPES_REGISTRY } from '@/constants';
 
+const EdenicCountryKitchen = lazy(() =>
+  import('@/components/outpost/EdenicCountryKitchen').then((m) => ({
+    default: m.EdenicCountryKitchen,
+  }))
+);
+
 export default function What() {
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+
+  const [workspaceTab, setWorkspaceTab] = useState<'soil-crops' | 'orchard-pits' | 'pantry-infra' | 'kitchen'>(() => {
+    if (
+      location.pathname.startsWith('/kitchen') ||
+      searchParams.get('tab') === 'kitchen'
+    ) {
+      return 'kitchen';
+    }
+    if (searchParams.get('tab') === 'orchard-pits') return 'orchard-pits';
+    if (searchParams.get('tab') === 'pantry-infra') return 'pantry-infra';
+    return 'soil-crops';
+  });
+
+  useEffect(() => {
+    if (
+      location.pathname.startsWith('/kitchen') ||
+      searchParams.get('tab') === 'kitchen'
+    ) {
+      setWorkspaceTab('kitchen');
+    } else if (searchParams.get('tab') === 'orchard-pits') {
+      setWorkspaceTab('orchard-pits');
+    } else if (searchParams.get('tab') === 'pantry-infra') {
+      setWorkspaceTab('pantry-infra');
+    }
+  }, [location.pathname, searchParams]);
+
   const essentials = [
     { 
       id: 'shelter',
@@ -77,24 +115,83 @@ export default function What() {
   const activeSoil = SOIL_TYPES_REGISTRY.find(s => s.id === selectedSoilId) || SOIL_TYPES_REGISTRY[0];
 
   return (
-    <div className="px-6 md:px-12 py-10 max-w-6xl mx-auto flex flex-col gap-12">
-      <header className="flex flex-col gap-3">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-800 flex items-center justify-center text-emerald-800 dark:text-emerald-300 shadow-xs">
-            <Package size={26} />
+    <div className="px-4 sm:px-6 md:px-10 py-6 max-w-7xl mx-auto flex flex-col gap-8">
+      <header className="glass-depth-card rounded-2xl p-5 sm:p-6 flex flex-col gap-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2 text-xs text-emerald-800 dark:text-amber-300 font-semibold">
+              <span>Malawi Agronomy, Pedology &amp; Homestead Reserves</span>
+              <span aria-hidden="true">·</span>
+              <span className="text-stone-500 dark:text-stone-400 font-normal">5 Soil Orders, 75cm Ridges &amp; How to Persuade Red Clay to Grow Apples</span>
+            </div>
+            <h1 className="font-display text-2xl sm:text-3xl font-bold text-stone-950 dark:text-stone-50 tracking-tight">
+              Crops, Soil Chemistry &amp; 3×3×3 ft Orchard Pits
+            </h1>
           </div>
-          <div>
-            <span className="text-[11px] font-sans uppercase tracking-widest font-bold text-emerald-800 dark:text-emerald-400">Homestead Infrastructure</span>
-            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-extrabold text-stone-900 dark:text-stone-50">
-              The Essentials & Farm Infrastructure
-            </h2>
-          </div>
+
+          <Link
+            to="/seasons"
+            className="self-start md:self-auto bg-emerald-900 hover:bg-emerald-800 dark:bg-amber-500 dark:hover:bg-amber-400 text-white dark:text-stone-950 font-sans font-semibold text-xs px-3.5 py-2 rounded-xl transition-all shadow-xs flex items-center gap-1.5"
+          >
+            <Calendar size={13} />
+            <span>Monthly Planting Almanac →</span>
+          </Link>
         </div>
-        <p className="text-stone-600 dark:text-stone-300 max-w-3xl text-sm sm:text-base font-sans font-medium leading-relaxed">
-          Building the infrastructure of a self-sustaining home requires intentional stewardship of resources. Click any essential pillar below to inspect detailed field specifications.
-        </p>
+
+        {/* Consolidated 4-Tab Agronomy & Country Kitchen Switcher */}
+        <div className="flex flex-wrap items-center gap-1.5 bg-stone-100 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/80 dark:border-stone-800 self-start">
+          {([
+            { id: 'soil-crops', label: '01. Crops, Soil Swatches & 75cm Ridges', icon: Sprout },
+            { id: 'orchard-pits', label: '02. 3×3×3 ft Orchard Pits & Organic Manuals', icon: Layers },
+            { id: 'pantry-infra', label: '03. Country Pantry & Shelter Specs', icon: Package },
+            { id: 'kitchen', label: '04. Edenic Country Kitchen & Unfermented Bread', icon: UtensilsCrossed },
+          ] as const).map((tab) => {
+            const active = workspaceTab === tab.id;
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setWorkspaceTab(tab.id)}
+                className={cn(
+                  'px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5',
+                  active
+                    ? 'bg-emerald-950 dark:bg-amber-500 text-amber-300 dark:text-stone-950 shadow-xs font-bold'
+                    : 'text-stone-700 dark:text-stone-300 hover:bg-white dark:hover:bg-stone-800'
+                )}
+              >
+                <Icon size={13} />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        <ActiveDistrictContextBar />
       </header>
 
+      {workspaceTab === 'kitchen' && (
+        <Suspense
+          fallback={
+            <div className="p-8 rounded-3xl text-center text-xs font-mono text-stone-500">
+              Loading Edenic Country Kitchen &amp; Unfermented Bread Bakery...
+            </div>
+          }
+        >
+          <EdenicCountryKitchen />
+        </Suspense>
+      )}
+
+      {workspaceTab === 'orchard-pits' && (
+        <div className="flex flex-col gap-8">
+          <div className="bg-white dark:bg-[#0D1D13] p-6 sm:p-8 rounded-3xl border border-stone-200/90 dark:border-emerald-900/60 shadow-xs">
+            <EdenicAgricultureGuides />
+          </div>
+          <SoilStrataBlueprint />
+        </div>
+      )}
+
+      {workspaceTab === 'pantry-infra' && (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {essentials.map((item) => (
           <div 
@@ -109,16 +206,19 @@ export default function What() {
               <h3 className="font-display text-xl font-bold text-stone-900 dark:text-white group-hover:text-emerald-800 dark:group-hover:text-emerald-300 transition-colors">{item.title}</h3>
               <Info size={16} className="text-stone-400 shrink-0 group-hover:text-emerald-700 transition-colors mt-1" />
             </div>
-            <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed font-medium">{item.desc}</p>
-            <span className="text-[11px] font-sans font-bold uppercase text-emerald-800 dark:text-emerald-400 tracking-wider mt-auto flex items-center gap-1">
+            <p className="text-sm text-stone-600 dark:text-stone-300 leading-relaxed font-medium">{item.desc}</p>
+            <span className="text-xs font-sans font-bold uppercase text-emerald-800 dark:text-emerald-400 tracking-wider mt-auto flex items-center gap-1">
               <span>Read Specs</span>
               <span>→</span>
             </span>
           </div>
         ))}
       </div>
+      )}
 
       {/* Malawi Soil Orders & Organic Fertility Protocol Selector */}
+      {workspaceTab === 'soil-crops' && (
+      <>
       <section className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#0D1D13] border border-stone-200/90 dark:border-emerald-900/60 shadow-xs flex flex-col gap-5">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-stone-200 dark:border-emerald-900/50">
           <div>
@@ -202,52 +302,54 @@ export default function What() {
 
       {/* Malawi Crop Cultivation Blueprint & Agronomy Section */}
       <MalawiCropExplorer />
+      </>
+      )}
 
       {/* Country Pantry Section */}
-      <section className="bg-gradient-to-br from-[#071F13] via-slate-950 to-[#041209] backdrop-blur-2xl rounded-[3rem] p-8 md:p-12 text-white flex flex-col md:flex-row gap-10 items-center border border-amber-500/30 shadow-[0_20px_60px_rgba(0,0,0,0.6)] overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="flex-1 flex flex-col gap-6 relative z-10 w-full">
+      {(workspaceTab === 'pantry-infra' || workspaceTab === 'soil-crops') && (
+      <section className="bg-white dark:bg-[#0D1D13] rounded-3xl p-6 sm:p-8 md:p-10 text-stone-900 dark:text-stone-100 flex flex-col md:flex-row gap-8 items-start border border-stone-200/90 dark:border-emerald-900/60 shadow-xs overflow-hidden relative">
+        <div className="flex-1 flex flex-col gap-5 relative z-10 w-full">
           <div>
-            <span className="text-amber-400 text-[10px] font-mono font-black uppercase tracking-[0.2em] bg-amber-500/15 border border-amber-500/30 px-3 py-1 rounded-full">Pantry Stock Checklist</span>
-            <h3 className="serif text-3xl md:text-4xl font-bold mt-2 text-[#FAF8F5]">The Country Pantry & Food Granary</h3>
-            <p className="text-emerald-100/80 font-medium text-sm sm:text-base leading-relaxed max-w-lg mt-2">
-              A guide to preserving and storing staple harvests, based on inspired counsel to "preserve as much food as possible." Click items to track your off-grid stock!
+            <span className="text-emerald-800 dark:text-amber-400 text-xs font-sans font-semibold">Pantry Stock Checklist</span>
+            <h3 className="serif text-2xl sm:text-3xl font-bold mt-1 text-stone-900 dark:text-stone-50">The Country Pantry &amp; Food Granary</h3>
+            <p className="text-stone-600 dark:text-stone-300 font-medium text-sm leading-relaxed max-w-lg mt-1.5">
+              A guide to preserving and storing staple harvests, based on inspired counsel to &ldquo;preserve as much food as possible.&rdquo; Click items to track your off-grid stock.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono font-bold uppercase tracking-wider text-emerald-200">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm font-sans font-medium">
             {pantryItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => togglePantryItem(item.id)}
                 className={cn(
-                  "flex items-center gap-3 p-3.5 rounded-2xl border transition-all text-left active:scale-98 cursor-pointer shadow-xs",
+                  "flex items-center gap-3 p-4 rounded-2xl border transition-all text-left active:scale-98 cursor-pointer leading-snug",
                   item.checked 
-                    ? "bg-emerald-950/90 border-emerald-400/50 text-emerald-100 shadow-[0_0_15px_rgba(16,185,129,0.15)]" 
-                    : "bg-slate-950/70 border-white/10 text-slate-300 hover:bg-slate-900 hover:text-white"
+                    ? "bg-emerald-50/90 dark:bg-emerald-950/80 border-emerald-400 dark:border-emerald-500/50 text-emerald-950 dark:text-emerald-100 shadow-2xs" 
+                    : "bg-stone-50/90 dark:bg-stone-900/60 border-stone-200/90 dark:border-emerald-900/40 text-stone-800 dark:text-stone-200 hover:bg-white dark:hover:bg-stone-900"
                 )}
               >
-                {item.checked ? <CheckCircle2 size={18} className="text-emerald-400 shrink-0" /> : <Circle size={18} className="text-slate-500 shrink-0" />}
-                <span className={cn(item.checked && "line-through opacity-75 text-emerald-300")}>{item.label}</span>
+                {item.checked ? <CheckCircle2 size={18} className="text-emerald-700 dark:text-emerald-400 shrink-0" /> : <Circle size={18} className="text-stone-400 dark:text-stone-500 shrink-0" />}
+                <span className={cn(item.checked && "line-through opacity-70 text-emerald-800 dark:text-emerald-300")}>{item.label}</span>
               </button>
             ))}
           </div>
         </div>
 
-        <div className="w-full md:w-1/3 bg-slate-950/80 backdrop-blur-xl p-7 md:p-8 rounded-[2.5rem] border border-amber-500/25 shadow-xl group transition-all shrink-0">
-          <h4 className="serif text-xl font-bold mb-3 text-amber-200 italic underline underline-offset-8 decoration-amber-500/40">Pro Stewardship</h4>
-          <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium">
-            "Buy tools that last a lifetime. In the country, your tools are your lifeline. Prefer forged steel and seasoned hardwood handles over cheap metal."
+        <div className="w-full md:w-1/3 bg-stone-50 dark:bg-stone-900/80 p-6 sm:p-7 rounded-2xl border border-stone-200/90 dark:border-emerald-900/50 shrink-0">
+          <h4 className="serif text-xl font-bold mb-2.5 text-stone-900 dark:text-amber-200">Pro Stewardship</h4>
+          <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 leading-relaxed font-medium italic">
+            &ldquo;Buy tools that last a lifetime. In the country, your tools are your lifeline. Prefer forged steel and seasoned hardwood handles over cheap metal.&rdquo;
           </p>
-          <div className="mt-6 flex justify-between items-center pt-4 border-t border-amber-500/20">
-             <span className="text-[10px] uppercase font-mono font-bold text-amber-300">Malawi Quality Standard</span>
-             <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center border border-amber-500/30">
-                <Shield size={14} className="text-amber-400" />
+          <div className="mt-5 flex justify-between items-center pt-3.5 border-t border-stone-200 dark:border-emerald-900/40">
+             <span className="text-xs font-sans font-semibold text-emerald-800 dark:text-amber-300">Malawi Quality Standard</span>
+             <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-amber-500/20 flex items-center justify-center border border-emerald-300 dark:border-amber-500/30">
+                <Shield size={14} className="text-emerald-800 dark:text-amber-400" />
              </div>
           </div>
         </div>
       </section>
+      )}
 
       {/* Essential Detail Modal */}
       <AnimatePresence>

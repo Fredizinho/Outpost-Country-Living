@@ -269,13 +269,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             }
           }
         } catch (error) {
-          console.error('Error fetching or creating user profile in Firestore:', error);
+          console.warn('Using local profile fallback (Firestore offline or unreachable):', error);
           // Fallback to local profile
+          const cachedLocal = getStoredUserProfile<User>();
           const localProfile: User = {
             uid: fbUser.uid,
-            email: fbUser.email || 'steward@outpostliving.mw',
-            displayName: fbUser.displayName || 'Outpost Steward',
-            photoURL: fbUser.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=Steward`,
+            email: fbUser.email || cachedLocal?.email || 'steward@outpostliving.mw',
+            displayName: fbUser.displayName || cachedLocal?.displayName || 'Outpost Steward',
+            photoURL: fbUser.photoURL || cachedLocal?.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=Steward`,
+            region: cachedLocal?.region || '',
+            district: cachedLocal?.district || '',
+            familyMembers: cachedLocal?.familyMembers,
+            landSizeAcres: cachedLocal?.landSizeAcres,
             isFirebaseUser: true,
           };
           setUser(localProfile);

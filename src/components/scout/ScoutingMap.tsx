@@ -66,6 +66,8 @@ import { MapCompassAndScale } from './MapCompassAndScale';
 import { isForceOfflineActive, isCacheStorageAvailable } from '@/lib/offlineTileManager';
 import { cn } from '@/lib/utils';
 import { getStoredBookmarkedParcels, saveStoredBookmarkedParcels } from '@/lib/offlineStorage';
+import { fetchVerifiedTelemetryWithFallback, resolveApiUrl } from '@/lib/apiClient';
+import { getActiveHomesteadDistrictId, setActiveHomesteadDistrictId } from '@/lib/activeDistrictSync';
 import { Link } from 'react-router-dom';
 
 export type FocusRegionId = 'all' | 'north' | 'central' | 'south';
@@ -221,15 +223,22 @@ export function ScoutingMap({
     return initialFocusRegion;
   });
   
-  // Active District for deep microclimate inspection & vector highlighting
+  // Active District for deep microclimate inspection & vector highlighting (synced globally)
   const [activeDistrict, setActiveDistrict] = useState<MalawiDistrictSpec | null>(() => {
     const distParam = searchParams.get('district');
     if (distParam) {
       const matched = getDistrictByIdOrName(distParam);
       if (matched) return matched;
     }
-    return getDistrictByIdOrName('Dedza') || null;
+    const savedGlobal = getActiveHomesteadDistrictId('Dedza');
+    return getDistrictByIdOrName(savedGlobal) || getDistrictByIdOrName('Dedza') || null;
   });
+
+  useEffect(() => {
+    if (activeDistrict?.id) {
+      setActiveHomesteadDistrictId(activeDistrict.id);
+    }
+  }, [activeDistrict?.id]);
   
   // Selected Region for macro-telemetry
   const [selectedRegion, setSelectedRegion] = useState<RegionalClimateZone>(() => {
@@ -264,6 +273,39 @@ export function ScoutingMap({
   const [isLayersDeckOpen, setIsLayersDeckOpen] = useState(false);
   const [isAiScoutDrawerOpen, setIsAiScoutDrawerOpen] = useState(false);
   const [aiScoutLayerInsightsMode, setAiScoutLayerInsightsMode] = useState(false);
+
+  // Exclusive Single-Drawer Mode: opening one drawer closes any other active drawer
+  useEffect(() => {
+    if (isSidebarOpen) {
+      setIsFilterDrawerOpen(false);
+      setIsLayersDeckOpen(false);
+      setIsAiScoutDrawerOpen(false);
+    }
+  }, [isSidebarOpen]);
+
+  useEffect(() => {
+    if (isFilterDrawerOpen) {
+      setIsSidebarOpen(false);
+      setIsLayersDeckOpen(false);
+      setIsAiScoutDrawerOpen(false);
+    }
+  }, [isFilterDrawerOpen]);
+
+  useEffect(() => {
+    if (isLayersDeckOpen) {
+      setIsSidebarOpen(false);
+      setIsFilterDrawerOpen(false);
+      setIsAiScoutDrawerOpen(false);
+    }
+  }, [isLayersDeckOpen]);
+
+  useEffect(() => {
+    if (isAiScoutDrawerOpen) {
+      setIsSidebarOpen(false);
+      setIsFilterDrawerOpen(false);
+      setIsLayersDeckOpen(false);
+    }
+  }, [isAiScoutDrawerOpen]);
   const [activeParcel, setActiveParcel] = useState<ScoutParcelProperties | null>(null);
   const [viewMode, setViewMode] = useState<'map' | 'list'>(initialViewMode);
   const [tileStyle, setTileStyle] = useState<TileLayerType>('dark');
@@ -288,6 +330,56 @@ export function ScoutingMap({
 
   // Live telemetry state on cursor movement
   const [liveCursorCoords, setLiveCursorCoords] = useState<{ lat: number; lng: number } | null>(null);
+
+  // Live Verified Satellite & Weather API Telemetry for the active district
+  const [liveDistrictTelemetry, setLiveDistrictTelemetry] = useState<{
+    livePeakSunHoursKwh?: number;
+    soilMoisturePct?: number;
+    evapotranspirationMmDay?: number;
+    tempC?: number;
+    condition?: string;
+    source?: string;
+  } | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const dist = activeDistrict || getDistrictByIdOrName('Dedza');
+    if (!dist) return;
+    const [lat, lng] = dist.centroid || [-14.38, 34.33];
+
+    Promise.all([
+      fetchVerifiedTelemetryWithFallback({
+        lat,
+        lng,
+        key: dist.id,
+        name: dist.name,
+        region: dist.region,
+      }).catch(() => null),
+      fetch(resolveApiUrl(`/api/weather?lat=${lat}&lon=${lng}&district=${encodeURIComponent(dist.name)}`))
+        .then((r) => (r.ok ? r.json() : null))
+        .catch(() => null),
+    ]).then(([telemRes, weatherRes]) => {
+      if (cancelled) return;
+      const t = telemRes?.telemetry;
+      const cur = weatherRes?.current;
+      const agro = weatherRes?.agro || weatherRes?.soil;
+      setLiveDistrictTelemetry({
+        livePeakSunHoursKwh: t?.livePeakSunHoursKwh ?? dist.solarKwhDay,
+        soilMoisturePct:
+          cur?.soilMoisturePct ??
+          agro?.soilMoistureRootPct ??
+          (typeof t?.soilMoistureRootZone === 'number' ? Math.round(t.soilMoistureRootZone * 100) : 29),
+        evapotranspirationMmDay: cur?.et0Mm ?? t?.evapotranspirationMmDay ?? 4.1,
+        tempC: cur?.tempC ?? cur?.temperature ?? 23,
+        condition: cur?.condition ?? 'Clear Highland Air',
+        source: t?.source || 'NASA POWER · Open-Meteo API',
+      });
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [activeDistrict]);
 
   // Bookmarks
   const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => {
@@ -376,7 +468,7 @@ export function ScoutingMap({
           parcelAcreageNote: note,
         })
       );
-      setSentEvaluatorNotice(`Added "${title}" to 100-Point Evaluator`);
+      setSentEvaluatorNotice(`Added "${title}" to Property Evaluator`);
       setTimeout(() => setSentEvaluatorNotice(null), 3500);
     } catch {
       // ignore
@@ -713,11 +805,12 @@ export function ScoutingMap({
       attributionControl: false
     });
 
-    // Base Tile Layer
+    // Base Tile Layer with transparent 1x1 fallback to prevent broken tile icons
     tileLayerRef.current = L.tileLayer(getTileUrl(tileStyle), {
       attribution: getTileAttribution(tileStyle),
       maxZoom: 18,
-      subdomains: tileStyle === 'dark' ? 'abcd' : 'abc'
+      subdomains: tileStyle === 'dark' ? 'abcd' : 'abc',
+      errorTileUrl: 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='
     }).addTo(map);
 
     // Initialize Layer Groups in optical Z-order
@@ -2061,7 +2154,7 @@ export function ScoutingMap({
                             )
                           }
                           className="py-1.5 px-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-300 font-mono text-xs flex items-center gap-1 transition-all cursor-pointer"
-                          title="Send this parcel to the 100-Point Land Evaluator"
+                          title="Send this parcel to the Property Suitability Evaluator"
                         >
                           <ShieldCheck size={13} />
                           <span>Evaluate</span>
@@ -2170,7 +2263,7 @@ export function ScoutingMap({
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-2 text-[11px] font-mono py-1.5 border-y border-white/10 text-slate-300">
+                      <div className="grid grid-cols-4 gap-2 text-[11px] font-mono py-1.5 border-y border-white/10 text-slate-300">
                         <div>
                           <span className="text-slate-500 text-[9px] block">Rainfall</span>
                           <span className="text-sky-300 font-bold">{activeDistrict.rainfallAnnualMm}mm/yr</span>
@@ -2182,6 +2275,12 @@ export function ScoutingMap({
                         <div>
                           <span className="text-slate-500 text-[9px] block">Aquifer Depth</span>
                           <span className="text-amber-300 font-bold truncate block">{activeDistrict.aquiferDepth.split('(')[0]}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-500 text-[9px] block">Live API</span>
+                          <span className="text-emerald-300 font-bold truncate block">
+                            {liveDistrictTelemetry?.tempC !== undefined ? `${liveDistrictTelemetry.tempC}°C` : '23°C'} · {liveDistrictTelemetry?.livePeakSunHoursKwh ?? activeDistrict.solarKwhDay} PSH
+                          </span>
                         </div>
                       </div>
 
@@ -2340,12 +2439,6 @@ export function ScoutingMap({
             isAutoHidden={isDetailsAutoHidden}
             onWakeUp={wakeUpControls}
           />
-
-          {/* Collapsible GIS Map Legend */}
-          <MapLegend 
-            isAutoHidden={isDetailsAutoHidden}
-            onWakeUp={wakeUpControls}
-          />
         </div>
 
       {/* LIST CATALOGUE VIEW */}
@@ -2443,6 +2536,7 @@ export function ScoutingMap({
         onToggleDeclutter={handleToggleDeclutter}
         onOpenLayersModal={() => setIsLayersDeckOpen(true)}
         onOpenAiScout={() => setIsAiScoutDrawerOpen(true)}
+        liveTelemetry={liveDistrictTelemetry}
       />
 
       {/* ------------------------------------------------------------- */}

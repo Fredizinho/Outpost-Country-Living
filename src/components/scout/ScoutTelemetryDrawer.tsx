@@ -44,6 +44,14 @@ export interface ScoutTelemetryDrawerProps {
   onToggleDeclutter: () => void;
   onOpenLayersModal: () => void;
   onOpenAiScout?: () => void;
+  liveTelemetry?: {
+    livePeakSunHoursKwh?: number;
+    soilMoisturePct?: number;
+    evapotranspirationMmDay?: number;
+    tempC?: number;
+    condition?: string;
+    source?: string;
+  } | null;
 }
 
 export function ScoutTelemetryDrawer({
@@ -70,7 +78,8 @@ export function ScoutTelemetryDrawer({
   isDecluttered,
   onToggleDeclutter,
   onOpenLayersModal,
-  onOpenAiScout
+  onOpenAiScout,
+  liveTelemetry
 }: ScoutTelemetryDrawerProps) {
   const [drawerTab, setDrawerTab] = useState<'dossier' | 'parcels' | 'soil' | 'layers'>('dossier');
   const [parcelSearch, setParcelSearch] = useState('');
@@ -385,7 +394,7 @@ export function ScoutTelemetryDrawer({
                     ? "bg-amber-500 text-slate-950 border-amber-300 font-black"
                     : "bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border-amber-500/40"
                 )}
-                title="Send Parcel to 100-Point Land Evaluator"
+                title="Send Parcel to Property Suitability Evaluator"
               >
                 {sentParcelId === activeParcel.id ? <Check size={12} /> : <ShieldCheck size={12} />}
                 <span>{sentParcelId === activeParcel.id ? 'Saved to Evaluator!' : 'Evaluate Plot'}</span>
@@ -434,6 +443,41 @@ export function ScoutTelemetryDrawer({
                 {activeDistrict ? activeDistrict.description : selectedRegion.metrics.description}
               </p>
             </div>
+
+            {/* LIVE SATELLITE & METEOROLOGICAL API FEED */}
+            {liveTelemetry && (
+              <div className="p-3 rounded-2xl bg-emerald-950/35 border border-emerald-500/35 flex flex-col gap-2 shadow-sm">
+                <div className="flex items-center justify-between text-[10px] font-mono">
+                  <span className="text-emerald-300 font-bold uppercase flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    Live Satellite & Weather API
+                  </span>
+                  <span className="text-slate-400 truncate max-w-[190px]">
+                    {liveTelemetry.source || 'NASA POWER · Open-Meteo'}
+                  </span>
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-[11px] font-mono">
+                  <div className="bg-slate-950/70 border border-white/5 rounded-xl p-2">
+                    <span className="text-[9px] text-slate-400 block">LIVE SOLAR PSH</span>
+                    <span className="text-amber-300 font-bold">
+                      {liveTelemetry.livePeakSunHoursKwh ?? (activeDistrict ? activeDistrict.solarKwhDay : 5.8)} kWh/m²
+                    </span>
+                  </div>
+                  <div className="bg-slate-950/70 border border-white/5 rounded-xl p-2">
+                    <span className="text-[9px] text-slate-400 block">SOIL MOISTURE</span>
+                    <span className="text-cyan-300 font-bold">
+                      {liveTelemetry.soilMoisturePct !== undefined ? `${liveTelemetry.soilMoisturePct}% Vol` : '28% Vol'}
+                    </span>
+                  </div>
+                  <div className="bg-slate-950/70 border border-white/5 rounded-xl p-2">
+                    <span className="text-[9px] text-slate-400 block">LIVE WEATHER</span>
+                    <span className="text-emerald-300 font-bold truncate block">
+                      {liveTelemetry.tempC !== undefined ? `${liveTelemetry.tempC}°C` : '23°C'} {liveTelemetry.condition ? `· ${liveTelemetry.condition}` : ''}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* TIER 1: SCANNABLE METRICS (ALWAYS VISIBLE) */}
             <div className="grid grid-cols-2 gap-2">

@@ -1,21 +1,57 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { CheckCircle2, Circle, Mountain, Search, ShoppingBag, Tent, Plus, Trash2, Download, RotateCcw, HardDrive, Sparkles, MapPin, Users, Wallet, Calendar, Activity, ArrowRight, ShieldCheck, Sprout } from 'lucide-react';
+import {
+  CheckCircle2,
+  Circle,
+  Mountain,
+  Search,
+  ShoppingBag,
+  Tent,
+  Plus,
+  Trash2,
+  Download,
+  RotateCcw,
+  Sparkles,
+  MapPin,
+  Users,
+  Wallet,
+  Calendar,
+  ArrowRight,
+  ShieldCheck,
+  Sprout,
+  LayoutGrid,
+  CheckSquare,
+  Layers,
+  ArrowRightLeft,
+  ChevronRight,
+  Filter,
+  Palette,
+  X
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTheme, ColorPalette, FontPairing } from '@/contexts/ThemeContext';
 import { OnboardingWizard } from '@/components/onboarding/OnboardingWizard';
-import { generatePersonalizedRoadmap, Step } from '@/lib/checklistGenerator';
+import { generatePersonalizedRoadmap, Step, Subtask } from '@/lib/checklistGenerator';
 import { getStoredTrackerData, saveStoredTrackerData, calculateHomesteadReadinessScore } from '@/lib/offlineStorage';
-import { 
-  SanctuaryCard, 
-  SanctuaryButton, 
-  SanctuaryBadge, 
-  SanctuarySectionHeader, 
-  SanctuaryStatBox 
-} from '@/components/ui';
 import { TransitionReadinessLedger } from '@/components/outpost/TransitionReadinessLedger';
 import { getDistrictRecord, PLANTING_PIT_SPECS } from '@/constants';
+import { COUNTRY_IMAGES } from '@/assets/images';
+
+export type KanbanColumnId = 'todo' | 'inprogress' | 'scouting' | 'completed';
+
+interface KanbanTaskItem {
+  id: string;
+  stepId: string;
+  stepTitle: string;
+  label: string;
+  completed: boolean;
+  status: KanbanColumnId;
+  priority: 'high' | 'medium' | 'normal';
+  image?: string;
+  districtTag?: string;
+}
 
 const ICON_MAP: Record<string, any> = {
   prepare: ShoppingBag,
@@ -23,10 +59,29 @@ const ICON_MAP: Record<string, any> = {
   exodus: Mountain,
 };
 
+const KANBAN_COLUMNS: { id: KanbanColumnId; label: string; dotColor: string; description: string }[] = [
+  { id: 'todo', label: 'To Do', dotColor: 'bg-rose-500', description: 'City exit, finance clearance & pantry reserves' },
+  { id: 'inprogress', label: 'In Progress', dotColor: 'bg-amber-400', description: 'Solar array, deep pits & water piping' },
+  { id: 'scouting', label: 'Site Review & Scouting', dotColor: 'bg-cyan-400', description: 'Traditional authority, soils & aquifer depth' },
+  { id: 'completed', label: 'Completed', dotColor: 'bg-emerald-500', description: 'Verified homestead milestones grounded' },
+];
+
 export default function Tracker() {
   const { user } = useAuth();
-  const [showWizard, setShowWizard] = useState(false);
+  const { palette, setPalette, setFontPairing, isDark, setTheme } = useTheme();
+  const isCharcoal = palette === 'charcoal';
   const currentDistrictRecord = getDistrictRecord(user?.district || 'Dedza');
+
+  const [showWizard, setShowWizard] = useState(false);
+  const [activePerspective, setActivePerspective] = useState<'kanban' | 'milestones' | 'readiness-ledger'>('kanban');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterPriority, setFilterPriority] = useState<'all' | 'high' | 'medium' | 'normal'>('all');
+
+  // Custom task creation state
+  const [isAddingKanbanTask, setIsAddingKanbanTask] = useState(false);
+  const [kanbanTargetCol, setKanbanTargetCol] = useState<KanbanColumnId>('todo');
+  const [newKanbanTaskText, setNewKanbanTaskText] = useState('');
+  const [newKanbanPriority, setNewKanbanPriority] = useState<'high' | 'medium' | 'normal'>('medium');
 
   // Initialize steps either from user-customized offlineStorage or generated from Auth profile
   const [steps, setSteps] = useState<Step[]>(() => {
@@ -48,6 +103,7 @@ export default function Tracker() {
   const [activeAddingStep, setActiveAddingStep] = useState<string | null>(null);
   const [confirmingReset, setConfirmingReset] = useState(false);
 
+  // Sync to offlineStorage whenever steps change
   useEffect(() => {
     saveStoredTrackerData(steps);
   }, [steps]);
@@ -160,6 +216,112 @@ export default function Tracker() {
     };
   }, []);
 
+  // Map steps to unified Kanban task items
+  const kanbanTasks: KanbanTaskItem[] = useMemo(() => {
+    const items: KanbanTaskItem[] = [];
+    steps.forEach((step, sIdx) => {
+      step.subtasks.forEach((st, idx) => {
+        // Assign default Kanban column if not saved
+        let status: KanbanColumnId = 'todo';
+        if (st.completed) {
+          status = 'completed';
+        } else if (step.id === 'scout') {
+          status = 'scouting';
+        } else if (step.id === 'exodus') {
+          status = 'inprogress';
+        } else {
+          status = 'todo';
+        }
+
+        // Priority heuristics
+        let priority: 'high' | 'medium' | 'normal' = 'normal';
+        if (idx === 0 || st.label.toLowerCase().includes('water') || st.label.toLowerCase().includes('debt')) {
+          priority = 'high';
+        } else if (st.label.toLowerCase().includes('solar') || st.label.toLowerCase().includes('land')) {
+          priority = 'medium';
+        }
+
+        // Thumbnail previews for flagship architectural / permaculture milestones (Equier aesthetic)
+        let image: string | undefined;
+        if (st.label.toLowerCase().includes('orchard') || st.label.toLowerCase().includes('pit')) {
+          image = COUNTRY_IMAGES.permacultureGarden;
+        } else if (st.label.toLowerCase().includes('soil') || st.label.toLowerCase().includes('scout')) {
+          image = COUNTRY_IMAGES.homesteadHighlands;
+        } else if (st.label.toLowerCase().includes('water') || st.label.toLowerCase().includes('aquifer')) {
+          image = COUNTRY_IMAGES.offgridHomesteadWater;
+        } else if (st.label.toLowerCase().includes('solar') || st.label.toLowerCase().includes('shelter')) {
+          image = COUNTRY_IMAGES.malawiHomesteadSanctuary;
+        }
+
+        items.push({
+          id: st.id,
+          stepId: step.id,
+          stepTitle: step.title,
+          label: st.label,
+          completed: st.completed,
+          status,
+          priority,
+          image,
+          districtTag: user?.district || 'Dedza'
+        });
+      });
+    });
+    return items;
+  }, [steps, user?.district]);
+
+  // Filtered Kanban tasks
+  const filteredKanbanTasks = useMemo(() => {
+    return kanbanTasks.filter((task) => {
+      const matchesSearch = searchQuery.trim() === '' || 
+        task.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        task.stepTitle.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesPriority = filterPriority === 'all' || task.priority === filterPriority;
+      return matchesSearch && matchesPriority;
+    });
+  }, [kanbanTasks, searchQuery, filterPriority]);
+
+  // Advance task to next Kanban stage
+  const handleAdvanceTask = (task: KanbanTaskItem) => {
+    const nextColMap: Record<KanbanColumnId, KanbanColumnId> = {
+      todo: 'scouting',
+      scouting: 'inprogress',
+      inprogress: 'completed',
+      completed: 'todo'
+    };
+    const next = nextColMap[task.status];
+    if (next === 'completed') {
+      toggleSubtask(task.stepId, task.id);
+    } else if (task.completed) {
+      toggleSubtask(task.stepId, task.id);
+    }
+  };
+
+  // Add task directly from Kanban column button
+  const handleCreateKanbanTask = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newKanbanTaskText.trim()) return;
+
+    // Map column to step
+    const targetStepId = kanbanTargetCol === 'scouting' ? 'scout' : kanbanTargetCol === 'inprogress' ? 'exodus' : 'prepare';
+    const isCompleted = kanbanTargetCol === 'completed';
+
+    setSteps(prev => prev.map(step => {
+      if (step.id === targetStepId) {
+        return {
+          ...step,
+          subtasks: [
+            ...step.subtasks,
+            { id: `custom_${Date.now()}`, label: newKanbanTaskText.trim(), completed: isCompleted }
+          ]
+        };
+      }
+      return step;
+    }));
+
+    setNewKanbanTaskText('');
+    setIsAddingKanbanTask(false);
+  };
+
   const handleExportRoadmap = () => {
     const lines = [
       'OUTPOST LIVING - PERSONALIZED EXODUS PREPARATION ROADMAP',
@@ -195,333 +357,588 @@ export default function Tracker() {
   };
 
   return (
-    <div className="px-6 md:px-12 py-10 max-w-5xl mx-auto flex flex-col gap-10">
-      {/* Onboarding / Personalization Profile Banner */}
-      <section className="bg-[#142118] rounded-[2.5rem] p-8 md:p-10 text-white shadow-2xl border border-amber-600/30 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-amber-600/10 to-transparent rounded-full -mr-32 -mt-32 pointer-events-none" />
-
-        <div className="flex flex-col gap-3 relative z-10 text-center md:text-left">
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
-            <span className="bg-amber-600/20 text-amber-300 border border-amber-500/30 text-[10px] font-black uppercase px-3 py-1 rounded-full flex items-center gap-1.5">
-              <Sparkles size={12} className="text-amber-400" /> Tailored Field Roadmap
+    <div className="px-4 sm:px-6 md:px-8 py-5 max-w-7xl mx-auto flex flex-col gap-6 text-stone-900 dark:text-stone-100">
+      {/* ====================================================================
+          1. EQUIER-GUIDED BREADCRUMB & METRIC HEADER BAR
+      ==================================================================== */}
+      <div className="flex flex-col gap-3">
+        {/* Equier Top Breadcrumbs */}
+        <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-1.5 text-stone-500 dark:text-stone-400 font-mono">
+            <Link to="/" className="hover:text-stone-950 dark:hover:text-white transition-colors">
+              Outpost
+            </Link>
+            <ChevronRight size={12} className="text-stone-400" />
+            <span className="text-stone-700 dark:text-stone-300 font-semibold">
+              Homestead Projects
             </span>
-            <span className="bg-emerald-900/80 text-emerald-300 border border-emerald-700/80 text-[10px] font-bold uppercase px-3 py-1 rounded-full flex items-center gap-1">
-              <MapPin size={12} /> {user?.district || 'Dedza'}, {user?.region || 'Central'}
+            <ChevronRight size={12} className="text-stone-400" />
+            <span className="text-stone-900 dark:text-amber-300 font-bold">
+              City-to-Country Relocation Tasks
             </span>
           </div>
 
-          <h3 className="serif text-2xl md:text-3xl font-bold text-[#FAF8F5]">
-            {user?.displayName || 'Steward'}'s Personalized Exodus Ledger
-          </h3>
-          <p className="text-emerald-200/80 text-xs font-medium max-w-xl">
-            Goal: "{user?.homesteadGoal || 'Self-Sufficient Organic Homestead'}"
-          </p>
-
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-2.5 gap-y-1.5 mt-1 text-xs font-mono text-emerald-200 tabular-nums">
-            <span>{user?.householdSize || '3-5 Members'}</span>
-            <span aria-hidden="true">·</span>
-            <span>{user?.budgetBand?.split('(')[0] || 'Standard Off-Grid'}</span>
-            <span aria-hidden="true">·</span>
-            <span>{user?.timeline?.split('(')[0] || 'This Season'}</span>
-            {currentDistrictRecord && (
-              <>
-                <span aria-hidden="true">·</span>
-                <span className="text-amber-300 font-bold">
-                  Rain: {currentDistrictRecord.rainfallAnnualMm} mm/yr
-                </span>
-                <span aria-hidden="true">·</span>
-                <span>{currentDistrictRecord.soilPh}</span>
-                <span aria-hidden="true">·</span>
-                <span className="text-amber-200">
-                  Pits: {PLANTING_PIT_SPECS.egwDeepPit.dimensionString}
-                </span>
-              </>
-            )}
+          {/* Quick Charcoal + Inter Theme Launcher Button */}
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setPalette('charcoal');
+                setTheme('dark');
+                setFontPairing('inter');
+              }}
+              title="Activate Minimalist Charcoal + Inter UI (Equier & NeuroNest Aesthetic)"
+              className={cn(
+                'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-mono text-xs transition-all cursor-pointer border',
+                isCharcoal
+                  ? 'bg-amber-400 text-stone-950 border-amber-300 font-bold shadow-xs'
+                  : 'bg-white/[0.06] hover:bg-white/[0.12] text-stone-600 dark:text-stone-300 border-stone-300/80 dark:border-white/10'
+              )}
+            >
+              <Palette size={12} className={isCharcoal ? 'text-stone-950' : 'text-amber-400'} />
+              <span>{isCharcoal ? 'Charcoal Active' : 'Charcoal + Inter UI'}</span>
+            </button>
+            <button
+              onClick={handleExportRoadmap}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-white/5 hover:bg-white/10 border border-stone-300/80 dark:border-white/10 transition-colors cursor-pointer"
+            >
+              <Download size={12} />
+              <span>Export .TXT</span>
+            </button>
           </div>
         </div>
 
-        <button
-          onClick={() => setShowWizard(true)}
-          className="relative z-10 bg-amber-700 hover:bg-amber-600 text-white px-6 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all shadow-lg active:scale-95 border border-amber-500/40 shrink-0 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
-        >
-          <Sparkles size={16} />
-          {user?.onboardingCompleted ? 'Re-Customize Roadmap' : 'Take Onboarding Quiz'}
-        </button>
-      </section>
-
-      {/* Header Overview Card */}
-      <header className="flex flex-col gap-6 text-center backdrop-blur-xl bg-slate-950/80 rounded-[2.5rem] p-8 md:p-10 border border-amber-500/25 shadow-[0_12px_40px_rgba(0,0,0,0.4)]">
-        <div className="flex items-center justify-center gap-2">
-          <span className="text-amber-400 font-mono font-extrabold uppercase text-[10px] tracking-[0.25em]">
-            Migration Field Ledger
-          </span>
-          <span className="text-emerald-300 text-[10px] font-mono font-bold uppercase flex items-center gap-1">
-            · <HardDrive size={11} /> Saved Offline
-          </span>
-        </div>
-
-        <h2 className="serif text-4xl md:text-5xl font-extrabold text-[#FAF8F5]">The Exodus Journey</h2>
-        <p className="text-emerald-100/70 max-w-xl mx-auto font-medium text-sm leading-relaxed">
-          Step-by-step milestone checklist customized for {user?.district || 'Dedza'} land conditions, budget, and household size.
-        </p>
-        
-        {/* Overall Progress Bar */}
-        <div className="mt-2 max-w-xl mx-auto w-full">
-          <div className="flex justify-between text-[10px] font-mono font-black uppercase tracking-[0.2em] text-slate-300 mb-2">
-            <span>Overall Migration Progress</span>
-            <span className="text-amber-400 font-extrabold">{Math.round(overallProgress)}% ({totalCompleted}/{totalTasks})</span>
-          </div>
-          <div className="h-3 w-full bg-slate-900 rounded-full overflow-hidden p-[2px] border border-white/10 shadow-inner">
-            <motion.div 
-              initial={{ width: 0 }}
-              animate={{ width: `${overallProgress}%` }}
-              className="h-full bg-gradient-to-r from-emerald-500 via-amber-500 to-amber-400 rounded-full shadow-xs"
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-          <button
-            onClick={handleExportRoadmap}
-            className="bg-amber-500 hover:bg-amber-400 text-slate-950 px-5 py-2.5 rounded-xl text-xs font-mono font-black uppercase tracking-wider shadow-md transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer"
-          >
-            <Download size={14} /> Export Roadmap
-          </button>
-          <button
-            onClick={handleResetTracker}
-            className={cn(
-              "px-4 py-2.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer border",
-              confirmingReset
-                ? "bg-amber-500 text-slate-950 border-amber-400"
-                : "bg-white/5 hover:bg-white/10 text-emerald-200 border-amber-500/30"
-            )}
-          >
-            <RotateCcw size={14} />
-            <span>{confirmingReset ? 'Tap Again to Confirm Reset' : 'Re-Generate Roadmap'}</span>
-          </button>
-        </div>
-      </header>
-
-      {/* Cross-Module Homestead Readiness Ledger */}
-      <section className="bg-gradient-to-br from-emerald-950 via-slate-950 to-[#05130B] p-6 md:p-8 rounded-[2.5rem] border border-amber-500/30 text-white shadow-2xl flex flex-col gap-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
-          <div>
-            <span className="text-[10px] font-mono font-black uppercase tracking-widest text-amber-400 flex items-center gap-1.5">
-              <Activity size={13} className="text-amber-400" />
-              Overall Preparedness Score
-            </span>
-            <h3 className="serif text-2xl sm:text-3xl font-bold text-[#FAF8F5]">
-              Total Homestead Readiness: {readinessBreakdown.totalScorePct}%
-            </h3>
-            <p className="text-xs text-emerald-200/80 font-medium mt-0.5">
-              Calculated from your Move Checklist (35%), Practical Skills (25%), Seasonal Tasks (25%), and Land Readiness (15%).
+        {/* Header Title + Stats Row */}
+        <div className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#161619] border border-stone-200/90 dark:border-white/10 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+          <div className="flex flex-col gap-1.5">
+            <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-emerald-700 dark:text-amber-300">
+              <span>Equier Task Board · Malawi Country Living Sizing</span>
+              <span aria-hidden="true">·</span>
+              <span className="text-stone-500 dark:text-stone-400 font-normal">
+                {user?.district || 'Dedza'}, {user?.region || 'Central'} ({currentDistrictRecord?.rainfallAnnualMm || 950}mm/yr rain) · {user?.householdSize || '3-5 Members'}
+              </span>
+            </div>
+            <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-stone-950 dark:text-white">
+              City-to-Country Relocation Tasks &amp; Milestones
+            </h1>
+            <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 max-w-2xl leading-relaxed">
+              Organized into 4 actionable sprint columns. Move tasks between stages or mark complete as your family prepares, scouts land, and establishes your self-sufficient sanctuary.
             </p>
           </div>
 
-          <Link
-            to="/almanac"
-            className="bg-amber-500 hover:bg-amber-400 text-slate-950 px-4 py-2.5 rounded-xl text-xs font-mono font-black uppercase tracking-wider flex items-center gap-1.5 self-start sm:self-auto transition-all shadow-sm cursor-pointer"
-          >
-            <span>Seasonal Tasks Engine</span>
-            <ArrowRight size={13} />
-          </Link>
-        </div>
-
-        {/* 4 Pillars Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div className="bg-slate-950/60 p-4 rounded-2xl border border-white/10 flex flex-col justify-between gap-2 shadow-inner">
-            <span className="text-[9px] font-mono uppercase tracking-wider text-slate-400">1. Exodus Roadmap (35%)</span>
-            <div className="flex items-baseline justify-between">
-              <span className="text-lg font-mono font-extrabold text-amber-300">{readinessBreakdown.breakdown.exodusScorePct}%</span>
-              <span className="text-[9px] text-slate-400">{totalCompleted}/{totalTasks} tasks</span>
+          {/* Quick Metrics Capsule */}
+          <div className="flex flex-wrap items-center gap-3 shrink-0">
+            <div className="p-3 rounded-2xl bg-stone-100 dark:bg-[#1E1E22] border border-stone-200 dark:border-white/10 flex flex-col">
+              <span className="text-[11px] text-stone-500 dark:text-stone-400">Total Completion</span>
+              <span className="text-base font-mono font-bold text-emerald-700 dark:text-amber-300 tabular-nums">
+                {Math.round(overallProgress)}% ({totalCompleted}/{totalTasks})
+              </span>
             </div>
-            <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
-              <div className="h-full bg-amber-400 rounded-full" style={{ width: `${readinessBreakdown.breakdown.exodusScorePct}%` }} />
+            <div className="p-3 rounded-2xl bg-stone-100 dark:bg-[#1E1E22] border border-stone-200 dark:border-white/10 flex flex-col">
+              <span className="text-[11px] text-stone-500 dark:text-stone-400">Readiness Score</span>
+              <span className="text-base font-mono font-bold text-stone-900 dark:text-white tabular-nums">
+                {readinessBreakdown.totalScorePct}% Ready
+              </span>
             </div>
-          </div>
-
-          <div className="bg-slate-950/60 p-4 rounded-2xl border border-white/10 flex flex-col justify-between gap-2 shadow-inner">
-            <span className="text-[9px] font-mono uppercase tracking-wider text-slate-400">2. Field Skills (25%)</span>
-            <div className="flex items-baseline justify-between">
-              <span className="text-lg font-mono font-extrabold text-emerald-300">{readinessBreakdown.breakdown.skillsMasteryPct}%</span>
-              <Link to="/skills" className="text-[9px] text-emerald-400 hover:underline">View Guides</Link>
-            </div>
-            <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
-              <div className="h-full bg-emerald-400 rounded-full" style={{ width: `${readinessBreakdown.breakdown.skillsMasteryPct}%` }} />
-            </div>
-          </div>
-
-          <div className="bg-slate-950/60 p-4 rounded-2xl border border-white/10 flex flex-col justify-between gap-2 shadow-inner">
-            <span className="text-[9px] font-mono uppercase tracking-wider text-slate-400">3. Seasonal Actions (25%)</span>
-            <div className="flex items-baseline justify-between">
-              <span className="text-lg font-mono font-extrabold text-sky-300">{readinessBreakdown.breakdown.seasonalActionPct}%</span>
-              <Link to="/almanac" className="text-[9px] text-sky-300 hover:underline">Almanac</Link>
-            </div>
-            <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
-              <div className="h-full bg-sky-400 rounded-full" style={{ width: `${readinessBreakdown.breakdown.seasonalActionPct}%` }} />
-            </div>
-          </div>
-
-          <div className="bg-slate-950/60 p-4 rounded-2xl border border-white/10 flex flex-col justify-between gap-2 shadow-inner">
-            <span className="text-[9px] font-mono uppercase tracking-wider text-slate-400">4. Land Readiness (15%)</span>
-            <div className="flex items-baseline justify-between">
-              <span className="text-lg font-mono font-extrabold text-amber-200">{readinessBreakdown.breakdown.landReadinessPct}%</span>
-              <Link to="/scout-map" className="text-[9px] text-amber-300 hover:underline">Land Map</Link>
-            </div>
-            <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
-              <div className="h-full bg-amber-400 rounded-full" style={{ width: `${readinessBreakdown.breakdown.landReadinessPct}%` }} />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Spirit of Prophecy 5-Stage Transition Readiness Ledger (Pillar 1) */}
-      <section>
-        <TransitionReadinessLedger />
-      </section>
-
-      {/* Step Cards List */}
-      <div className="flex flex-col gap-8">
-        {steps.map((step, index) => {
-          const Icon = ICON_MAP[step.id] || Tent;
-          const isAdding = activeAddingStep === step.id;
-
-          return (
-            <motion.div
-              key={step.id}
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.1 }}
-              className="backdrop-blur-xl bg-slate-950/70 rounded-[2.5rem] border border-amber-500/25 shadow-[0_12px_40px_rgba(0,0,0,0.4)] overflow-hidden"
+            <button
+              onClick={() => setShowWizard(true)}
+              className="px-4 py-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs flex items-center gap-1.5 shadow-md cursor-pointer transition-all"
             >
-              <div className="p-8 md:p-10 flex flex-col md:flex-row gap-8">
-                <div className="flex-1 flex flex-col gap-6">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-start gap-5">
-                      <div className="w-14 h-14 rounded-2xl bg-emerald-950/80 text-amber-400 border border-emerald-500/30 flex items-center justify-center shrink-0 shadow-inner">
-                        <Icon size={28} />
-                      </div>
-                      <div>
-                        <h3 className="serif text-2xl font-bold text-[#FAF8F5]">{step.title}</h3>
-                        <p className="text-sm text-slate-300 font-medium mt-1 leading-relaxed">{step.description}</p>
-                      </div>
+              <Sparkles size={14} />
+              <span>{user?.onboardingCompleted ? 'Update Profile' : 'Start Sizer Quiz'}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Perspective Switcher & Search Action Toolbar */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+          {/* 3 Perspectives: Kanban (Equier View), Checklist, 5-Stage Ledger */}
+          <div className="inline-flex items-center gap-1 bg-stone-200/80 dark:bg-[#1A1A1E] p-1 rounded-xl border border-stone-300/80 dark:border-white/10">
+            {[
+              { id: 'kanban' as const, label: '01 · Kanban Board (Equier View)', icon: LayoutGrid },
+              { id: 'milestones' as const, label: '02 · 3-Phase Checklist', icon: CheckSquare },
+              { id: 'readiness-ledger' as const, label: '03 · 5-Stage Readiness Ledger', icon: Layers },
+            ].map((tab) => {
+              const Icon = tab.icon;
+              const active = activePerspective === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActivePerspective(tab.id)}
+                  className={cn(
+                    'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer',
+                    active
+                      ? 'bg-stone-950 text-white dark:bg-white dark:text-stone-950 shadow-xs font-bold'
+                      : 'text-stone-600 dark:text-stone-400 hover:text-stone-950 dark:hover:text-white'
+                  )}
+                >
+                  <Icon size={13} />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Search + Priority Filters + Add Task */}
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="relative">
+              <Search size={13} className="absolute left-3 top-2.5 text-stone-400" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search tasks or phases..."
+                className="pl-8 pr-3 py-1.5 rounded-xl bg-white dark:bg-[#18181B] border border-stone-200 dark:border-white/15 text-xs text-stone-900 dark:text-white placeholder:text-stone-400 focus:outline-none focus:ring-1 focus:ring-amber-400 w-44 sm:w-56"
+              />
+            </div>
+
+            <div className="inline-flex items-center gap-1 bg-stone-200/70 dark:bg-white/[0.05] p-0.5 rounded-xl border border-stone-300 dark:border-white/10 text-xs">
+              {(['all', 'high', 'medium', 'normal'] as const).map((p) => (
+                <button
+                  key={p}
+                  type="button"
+                  onClick={() => setFilterPriority(p)}
+                  className={cn(
+                    'px-2 py-1 rounded-lg text-[11px] font-mono capitalize transition-colors cursor-pointer',
+                    filterPriority === p
+                      ? 'bg-stone-900 text-white dark:bg-white dark:text-stone-950 font-bold'
+                      : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+                  )}
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setIsAddingKanbanTask(true)}
+              className="px-3 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-semibold text-xs inline-flex items-center gap-1 cursor-pointer transition-all shadow-xs"
+            >
+              <Plus size={14} />
+              <span>Create Task</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ====================================================================
+          2. PERSPECTIVE 01: 4-COLUMN EQUIER KANBAN BOARD
+      ==================================================================== */}
+      {activePerspective === 'kanban' && (
+        <section aria-label="Equier Kanban Task Board" className="flex flex-col gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 items-start">
+            {KANBAN_COLUMNS.map((col) => {
+              const colTasks = filteredKanbanTasks.filter((t) => t.status === col.id);
+              return (
+                <div
+                  key={col.id}
+                  className="flex flex-col gap-3 p-3.5 sm:p-4 rounded-3xl bg-stone-100/90 dark:bg-[#141417] border border-stone-200/90 dark:border-white/10 min-h-[550px]"
+                >
+                  {/* Column Header */}
+                  <div className="flex items-center justify-between pb-2 border-b border-stone-200 dark:border-white/10">
+                    <div className="flex items-center gap-2">
+                      <span className={cn('w-2 h-2 rounded-full shrink-0', col.dotColor)} />
+                      <h2 className="font-display text-sm font-bold text-stone-900 dark:text-white">
+                        {col.label}
+                      </h2>
+                      <span className="font-mono text-xs font-semibold text-stone-500 dark:text-stone-400">
+                        {colTasks.length}
+                      </span>
                     </div>
 
                     <button
-                      onClick={() => setActiveAddingStep(isAdding ? null : step.id)}
-                      className="bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-[10px] font-mono font-black uppercase px-3 py-1.5 rounded-xl transition-all flex items-center gap-1 shrink-0 cursor-pointer"
+                      type="button"
+                      onClick={() => {
+                        setKanbanTargetCol(col.id);
+                        setIsAddingKanbanTask(true);
+                      }}
+                      title={`Add task to ${col.label}`}
+                      className="p-1 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 text-stone-500 dark:text-stone-400 hover:text-stone-950 dark:hover:text-white transition-colors cursor-pointer"
                     >
-                      <Plus size={12} /> Add Milestone
+                      <Plus size={14} />
                     </button>
                   </div>
 
-                  {/* Form to add custom task */}
-                  {isAdding && (
-                    <div className="bg-slate-900/90 p-4 rounded-2xl border border-amber-500/30 shadow-inner flex flex-col sm:flex-row gap-2">
-                      <input
-                        type="text"
-                        placeholder="e.g. Purchase solar freezer or inspect water well..."
-                        value={newTaskInput[step.id] || ''}
-                        onChange={(e) => setNewTaskInput({ ...newTaskInput, [step.id]: e.target.value })}
-                        onKeyDown={(e) => e.key === 'Enter' && handleAddCustomTask(step.id)}
-                        className="flex-1 bg-slate-950 text-white placeholder:text-slate-500 px-4 py-2 rounded-xl border border-white/10 text-xs font-medium focus:outline-none focus:ring-2 ring-amber-400"
-                      />
-                      <div className="flex gap-2">
+                  <p className="text-[11px] text-stone-500 dark:text-stone-400 line-clamp-1">
+                    {col.description}
+                  </p>
+
+                  {/* Tasks List in Column */}
+                  <div className="flex flex-col gap-3">
+                    {colTasks.length === 0 ? (
+                      <div className="p-6 rounded-2xl border border-dashed border-stone-300 dark:border-white/10 text-center text-xs text-stone-400 dark:text-stone-500 flex flex-col items-center gap-1.5">
+                        <span>No tasks in this stage</span>
                         <button
-                          onClick={() => handleAddCustomTask(step.id)}
-                          className="bg-amber-500 text-slate-950 px-4 py-2 rounded-xl text-xs font-mono font-bold uppercase shadow-sm hover:bg-amber-400 cursor-pointer"
+                          type="button"
+                          onClick={() => {
+                            setKanbanTargetCol(col.id);
+                            setIsAddingKanbanTask(true);
+                          }}
+                          className="text-amber-500 hover:underline font-semibold"
                         >
-                          Save
-                        </button>
-                        <button
-                          onClick={() => setActiveAddingStep(null)}
-                          className="bg-white/10 text-slate-300 px-3 py-2 rounded-xl text-xs font-mono font-bold uppercase hover:bg-white/20 cursor-pointer"
-                        >
-                          Cancel
+                          + Add a task
                         </button>
                       </div>
-                    </div>
-                  )}
-
-                  {/* Task List */}
-                  <div className="grid grid-cols-1 gap-3 mt-2">
-                    {step.subtasks.map(task => (
-                      <div
-                        key={task.id}
-                        className={cn(
-                          "flex items-center justify-between gap-4 p-4 rounded-2xl transition-all border group",
-                          task.completed 
-                            ? "bg-emerald-950/50 text-emerald-300 border-emerald-500/30" 
-                            : "bg-slate-900/40 text-slate-200 border-white/5 hover:border-amber-500/30 hover:bg-slate-900/70"
-                        )}
-                      >
-                        <button
-                          onClick={() => toggleSubtask(step.id, task.id)}
-                          className="flex items-center gap-3.5 flex-1 text-left cursor-pointer"
-                        >
-                          {task.completed ? (
-                            <CheckCircle2 size={20} className="shrink-0 text-emerald-400" />
-                          ) : (
-                            <Circle size={20} className="shrink-0 text-slate-500 group-hover:text-amber-400" />
+                    ) : (
+                      colTasks.map((task) => (
+                        <div
+                          key={task.id}
+                          className={cn(
+                            'group p-4 rounded-2xl border transition-all flex flex-col gap-2.5 shadow-sm hover:shadow-md relative overflow-hidden',
+                            isCharcoal
+                              ? 'bg-[#18181B] border-white/10 hover:border-amber-400/40 text-stone-100'
+                              : 'bg-white dark:bg-[#1A1A1E] border-stone-200 dark:border-white/10 hover:border-emerald-500/40'
                           )}
-                          <span className={cn("text-xs font-mono font-bold uppercase tracking-wide", task.completed && "line-through opacity-50")}>
-                            {task.label}
-                          </span>
-                        </button>
-
-                        <button
-                          onClick={() => handleDeleteSubtask(step.id, task.id)}
-                          className="text-slate-500 hover:text-rose-400 transition-colors p-1 cursor-pointer"
-                          title="Delete milestone task"
                         >
-                          <Trash2 size={14} />
-                        </button>
+                          {/* Optional Architectural / Permaculture Preview Banner (Equier Style) */}
+                          {task.image && (
+                            <div className="w-full h-28 rounded-xl overflow-hidden relative">
+                              <img
+                                src={task.image}
+                                alt={task.label}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                              <span className="absolute bottom-2 left-2 text-[10px] font-mono text-white/90 font-semibold px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-xs">
+                                Blueprint Preview
+                              </span>
+                            </div>
+                          )}
+
+                          {/* Top Row: Unboxed Priority & Phase Metadata */}
+                          <div className="flex items-center justify-between gap-2 text-xs">
+                            <div className="flex items-center gap-1.5">
+                              <span
+                                className={cn(
+                                  'w-2 h-2 rounded-full',
+                                  task.priority === 'high'
+                                    ? 'bg-rose-500'
+                                    : task.priority === 'medium'
+                                    ? 'bg-amber-400'
+                                    : 'bg-cyan-400'
+                                )}
+                              />
+                              <span className="font-mono text-[11px] font-semibold text-stone-500 dark:text-stone-400">
+                                {task.priority.toUpperCase()} · {task.stepTitle}
+                              </span>
+                            </div>
+
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteSubtask(task.stepId, task.id)}
+                              title="Delete task"
+                              className="text-stone-400 hover:text-rose-500 transition-colors p-0.5 cursor-pointer opacity-0 group-hover:opacity-100"
+                            >
+                              <Trash2 size={12} />
+                            </button>
+                          </div>
+
+                          {/* Task Description */}
+                          <div className="flex items-start gap-2.5">
+                            <button
+                              type="button"
+                              onClick={() => toggleSubtask(task.stepId, task.id)}
+                              className="mt-0.5 shrink-0 cursor-pointer"
+                              title={task.completed ? 'Mark incomplete' : 'Mark completed'}
+                            >
+                              {task.completed ? (
+                                <CheckCircle2 size={16} className="text-emerald-500" />
+                              ) : (
+                                <Circle size={16} className="text-stone-400 hover:text-emerald-500 transition-colors" />
+                              )}
+                            </button>
+                            <span
+                              className={cn(
+                                'text-xs font-semibold leading-relaxed',
+                                task.completed
+                                  ? 'line-through text-stone-400 dark:text-stone-500'
+                                  : 'text-stone-900 dark:text-stone-100'
+                              )}
+                            >
+                              {task.label}
+                            </span>
+                          </div>
+
+                          {/* Card Footer: District Tag & Move Stage Button */}
+                          <div className="flex items-center justify-between gap-2 pt-2 border-t border-stone-200/80 dark:border-white/10 text-xs">
+                            <span className="font-mono text-[10px] text-stone-500 dark:text-stone-400 truncate">
+                              Target: {task.districtTag}
+                            </span>
+
+                            <button
+                              type="button"
+                              onClick={() => handleAdvanceTask(task)}
+                              className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 dark:text-amber-400 hover:underline cursor-pointer"
+                            >
+                              <span>Advance Stage</span>
+                              <ArrowRight size={11} />
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {/* ====================================================================
+          3. PERSPECTIVE 02: 3-PHASE STEP CARDS CHECKLIST (EXISTING SUITE)
+      ==================================================================== */}
+      {activePerspective === 'milestones' && (
+        <div className="flex flex-col gap-6">
+          {steps.map((step, index) => {
+            const Icon = ICON_MAP[step.id] || Tent;
+            const isAdding = activeAddingStep === step.id;
+
+            return (
+              <motion.div
+                key={step.id}
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-white dark:bg-[#141417] rounded-3xl border border-stone-200/90 dark:border-white/10 shadow-xs overflow-hidden"
+              >
+                <div className="p-6 sm:p-8 flex flex-col md:flex-row gap-8">
+                  <div className="flex-1 flex flex-col gap-5">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-stone-100 dark:bg-[#1E1E22] text-emerald-800 dark:text-amber-400 border border-stone-200 dark:border-white/10 flex items-center justify-center shrink-0">
+                          <Icon size={24} />
+                        </div>
+                        <div>
+                          <h3 className="font-display text-2xl font-bold text-stone-900 dark:text-stone-50">
+                            {step.title}
+                          </h3>
+                          <p className="text-sm text-stone-600 dark:text-stone-300 font-medium mt-1 leading-relaxed">
+                            {step.description}
+                          </p>
+                        </div>
                       </div>
-                    ))}
+
+                      <button
+                        onClick={() => setActiveAddingStep(isAdding ? null : step.id)}
+                        className="bg-stone-100 hover:bg-stone-200 dark:bg-white/10 dark:hover:bg-white/15 text-stone-800 dark:text-amber-300 border border-stone-300 dark:border-white/15 text-xs font-semibold px-3.5 py-2 rounded-xl transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
+                      >
+                        <Plus size={13} /> Add Milestone
+                      </button>
+                    </div>
+
+                    {isAdding && (
+                      <div className="bg-stone-50 dark:bg-[#1A1A1E] p-4 rounded-2xl border border-stone-200 dark:border-white/15 flex flex-col sm:flex-row gap-2">
+                        <input
+                          type="text"
+                          placeholder="e.g. Purchase solar freezer or inspect water well..."
+                          value={newTaskInput[step.id] || ''}
+                          onChange={(e) => setNewTaskInput({ ...newTaskInput, [step.id]: e.target.value })}
+                          onKeyDown={(e) => e.key === 'Enter' && handleAddCustomTask(step.id)}
+                          className="flex-1 bg-white dark:bg-stone-950 text-stone-900 dark:text-white placeholder:text-stone-400 px-4 py-2 rounded-xl border border-stone-300 dark:border-stone-800 text-xs font-medium focus:outline-none focus:ring-2 ring-emerald-700 dark:ring-amber-400"
+                        />
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleAddCustomTask(step.id)}
+                            className="bg-emerald-900 dark:bg-amber-500 text-white dark:text-stone-950 px-4 py-2 rounded-xl text-xs font-semibold shadow-xs hover:bg-emerald-800 dark:hover:bg-amber-400 cursor-pointer"
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={() => setActiveAddingStep(null)}
+                            className="bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300 px-3 py-2 rounded-xl text-xs font-semibold hover:bg-stone-300 dark:hover:bg-stone-700 cursor-pointer"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="grid grid-cols-1 gap-2.5 mt-1">
+                      {step.subtasks.map((task) => (
+                        <div
+                          key={task.id}
+                          className={cn(
+                            'flex items-center justify-between gap-4 p-3.5 sm:p-4 rounded-2xl transition-all border group',
+                            task.completed
+                              ? 'bg-emerald-50/80 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800/60'
+                              : 'bg-stone-50/90 dark:bg-[#1E1E22] text-stone-800 dark:text-stone-200 border-stone-200/90 dark:border-white/10 hover:border-emerald-700/40 dark:hover:border-amber-500/30'
+                          )}
+                        >
+                          <button
+                            onClick={() => toggleSubtask(step.id, task.id)}
+                            className="flex items-center gap-3.5 flex-1 text-left cursor-pointer"
+                          >
+                            {task.completed ? (
+                              <CheckCircle2 size={20} className="shrink-0 text-emerald-700 dark:text-emerald-400" />
+                            ) : (
+                              <Circle size={20} className="shrink-0 text-stone-400 dark:text-stone-500 group-hover:text-emerald-700 dark:group-hover:text-amber-400" />
+                            )}
+                            <span className={cn('text-sm font-medium leading-snug', task.completed && 'line-through opacity-60')}>
+                              {task.label}
+                            </span>
+                          </button>
+
+                          <button
+                            onClick={() => handleDeleteSubtask(step.id, task.id)}
+                            className="text-stone-400 hover:text-rose-600 dark:hover:text-rose-400 transition-colors p-1 cursor-pointer"
+                            title="Delete milestone task"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Step Radial Progress */}
+                  <div className="md:w-40 flex md:flex-col items-center justify-center gap-5 border-t md:border-t-0 md:border-l border-stone-200 dark:border-white/10 pt-6 md:pt-0">
+                    <div className="relative w-24 h-24 flex items-center justify-center">
+                      <svg className="w-full h-full transform -rotate-90">
+                        <circle
+                          cx="48"
+                          cy="48"
+                          r="42"
+                          stroke="currentColor"
+                          strokeWidth="6"
+                          fill="transparent"
+                          className="text-stone-200 dark:text-stone-800"
+                        />
+                        <motion.circle
+                          cx="48"
+                          cy="48"
+                          r="42"
+                          stroke="currentColor"
+                          strokeWidth="6"
+                          strokeDasharray={264}
+                          initial={{ strokeDashoffset: 264 }}
+                          animate={{ strokeDashoffset: 264 - (calculateProgress(step) / 100 * 264) }}
+                          fill="transparent"
+                          strokeLinecap="round"
+                          className="text-emerald-700 dark:text-amber-400"
+                        />
+                      </svg>
+                      <span className="absolute text-sm font-mono font-bold text-stone-900 dark:text-amber-300 tabular-nums">
+                        {Math.round(calculateProgress(step))}%
+                      </span>
+                    </div>
+                    <div className="flex flex-col items-center gap-0.5 text-center">
+                      <span className="text-xs font-semibold text-stone-500 dark:text-stone-400">Step 0{index + 1}</span>
+                      <span className="text-xs font-mono font-bold text-emerald-800 dark:text-amber-400">Phase {index === 0 ? 'I' : index === 1 ? 'II' : 'III'}</span>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* ====================================================================
+          4. PERSPECTIVE 03: 5-STAGE SPIRIT OF PROPHECY TRANSITION LEDGER
+      ==================================================================== */}
+      {activePerspective === 'readiness-ledger' && (
+        <section>
+          <TransitionReadinessLedger />
+        </section>
+      )}
+
+      {/* ====================================================================
+          MODAL: CREATE NEW KANBAN TASK DIALOG
+      ==================================================================== */}
+      <AnimatePresence>
+        {isAddingKanbanTask && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="w-full max-w-md p-6 rounded-3xl bg-white dark:bg-[#18181B] border border-stone-200 dark:border-white/15 shadow-2xl flex flex-col gap-4 text-stone-900 dark:text-white"
+            >
+              <div className="flex items-center justify-between border-b pb-3 border-stone-200 dark:border-white/10">
+                <div className="flex items-center gap-2">
+                  <LayoutGrid size={18} className="text-amber-400" />
+                  <h3 className="font-display text-lg font-bold">Create Kanban Task</h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsAddingKanbanTask(false)}
+                  className="p-1 rounded-lg text-stone-400 hover:text-white"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+
+              <form onSubmit={handleCreateKanbanTask} className="flex flex-col gap-4">
+                <div>
+                  <label className="block text-xs font-semibold mb-1 text-stone-700 dark:text-stone-300">
+                    Task Description
+                  </label>
+                  <textarea
+                    required
+                    rows={3}
+                    value={newKanbanTaskText}
+                    onChange={(e) => setNewKanbanTaskText(e.target.value)}
+                    placeholder="e.g. Inspect solar inverter warranty or order heirloom maize seeds..."
+                    className="w-full px-3 py-2 rounded-xl bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-white/15 text-xs text-stone-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-amber-400"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold mb-1 text-stone-700 dark:text-stone-300">
+                      Target Column
+                    </label>
+                    <select
+                      value={kanbanTargetCol}
+                      onChange={(e) => setKanbanTargetCol(e.target.value as KanbanColumnId)}
+                      className="w-full px-3 py-2 rounded-xl bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-white/15 text-xs text-stone-900 dark:text-white"
+                    >
+                      <option value="todo">To Do</option>
+                      <option value="scouting">Site Review & Scouting</option>
+                      <option value="inprogress">In Progress</option>
+                      <option value="completed">Completed</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold mb-1 text-stone-700 dark:text-stone-300">
+                      Priority
+                    </label>
+                    <select
+                      value={newKanbanPriority}
+                      onChange={(e) => setNewKanbanPriority(e.target.value as any)}
+                      className="w-full px-3 py-2 rounded-xl bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-white/15 text-xs text-stone-900 dark:text-white"
+                    >
+                      <option value="high">High Priority</option>
+                      <option value="medium">Medium Priority</option>
+                      <option value="normal">Normal</option>
+                    </select>
                   </div>
                 </div>
 
-                {/* Step Progress Radial Gauge */}
-                <div className="md:w-40 flex md:flex-col items-center justify-center gap-6 border-t md:border-t-0 md:border-l border-white/10 pt-8 md:pt-0">
-                  <div className="relative w-24 h-24 flex items-center justify-center">
-                    <svg className="w-full h-full transform -rotate-90">
-                      <circle
-                        cx="48"
-                        cy="48"
-                        r="42"
-                        stroke="currentColor"
-                        strokeWidth="6"
-                        fill="transparent"
-                        className="text-slate-800"
-                      />
-                      <motion.circle
-                        cx="48"
-                        cy="48"
-                        r="42"
-                        stroke="currentColor"
-                        strokeWidth="6"
-                        strokeDasharray={264}
-                        initial={{ strokeDashoffset: 264 }}
-                        animate={{ strokeDashoffset: 264 - (calculateProgress(step) / 100 * 264) }}
-                        fill="transparent"
-                        strokeLinecap="round"
-                        className="text-amber-400"
-                      />
-                    </svg>
-                    <span className="absolute text-sm font-mono font-black text-amber-300">
-                      {Math.round(calculateProgress(step))}%
-                    </span>
-                  </div>
-                  <div className="flex flex-col items-center gap-1">
-                    <span className="text-[10px] font-mono uppercase tracking-[0.2em] font-black text-slate-400">Step {index + 1}</span>
-                    <span className="text-[9px] font-mono font-bold text-amber-400 uppercase">Phase {index === 0 ? 'I' : index === 1 ? 'II' : 'III'}</span>
-                  </div>
+                <div className="flex items-center justify-end gap-2 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsAddingKanbanTask(false)}
+                    className="px-4 py-2 rounded-xl text-xs font-semibold text-stone-600 dark:text-stone-400 hover:text-white"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs shadow-md"
+                  >
+                    Save Task
+                  </button>
                 </div>
-              </div>
+              </form>
             </motion.div>
-          );
-        })}
-      </div>
+          </div>
+        )}
+      </AnimatePresence>
 
       <OnboardingWizard
         isOpen={showWizard}
