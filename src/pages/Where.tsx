@@ -14,6 +14,7 @@ import { CountryIcon } from '@/components/icons/CountryIcons';
 import { LandReadinessCards } from '@/components/outpost/LandReadinessCards';
 import { PropertySuitabilityCalculator } from '@/components/outpost/PropertySuitabilityCalculator';
 import { CustomaryLandChecklist } from '@/components/outpost/CustomaryLandChecklist';
+import { CustomaryLandTenureWizard } from '@/components/land/CustomaryLandTenureWizard';
 import { ChichewaFieldPhrasebook } from '@/components/outpost/ChichewaFieldPhrasebook';
 import { ActiveDistrictContextBar } from '@/components/common/ActiveDistrictContextBar';
 
@@ -526,6 +527,9 @@ Generated from OUTPOST: Country Living Matrix
                 Land tenure rules in Malawi are subject to the Customary Land Act (2016) and recent Land Amendment Acts. Customary estate grants require official gazetted Land Clerks, local CLC quorum, and formal District Registry recording. Prospective homesteaders must verify all title claims, boundaries, and zoning restrictions directly with the District Commissioner's Lands Desk, the Ministry of Lands, and a certified Malawian legal practitioner before executing agreements or paying acquisition fees.
               </p>
             </div>
+
+            {/* Comprehensive 4-Stage Legal Acquisition & Application Letter Wizard */}
+            <CustomaryLandTenureWizard className="mt-2" />
           </div>
         </div>
       </section>

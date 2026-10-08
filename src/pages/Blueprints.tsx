@@ -1,7 +1,16 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
-import { Building2, Heart, HeartPulse, GraduationCap } from 'lucide-react';
+import {
+  Building2,
+  Heart,
+  HeartPulse,
+  GraduationCap,
+  Wrench,
+  Layers,
+} from 'lucide-react';
 import { OutpostCenterBlueprints } from '@/components/outpost/OutpostCenterBlueprints';
+import { FieldEngineeringDiagrams } from '@/components/outpost/FieldEngineeringDiagrams';
+import { VisualSoilSwatchGuide } from '@/components/outpost/VisualSoilSwatchGuide';
 import { ActiveDistrictContextBar } from '@/components/common/ActiveDistrictContextBar';
 import { cn } from '@/lib/utils';
 
@@ -11,7 +20,7 @@ const MedicalMissionarySanitarium = lazy(() =>
   }))
 );
 
-type BlueprintsTab = 'site-plans' | 'sanitarium' | 'education';
+type BlueprintsTab = 'site-plans' | 'sanitarium' | 'education' | 'engineering' | 'soil-swatches';
 
 export default function Blueprints() {
   const location = useLocation();
@@ -27,6 +36,12 @@ export default function Blueprints() {
     if (searchParams.get('tab') === 'education') {
       return 'education';
     }
+    if (searchParams.get('tab') === 'engineering') {
+      return 'engineering';
+    }
+    if (searchParams.get('tab') === 'soil-swatches') {
+      return 'soil-swatches';
+    }
     return 'site-plans';
   });
 
@@ -38,6 +53,10 @@ export default function Blueprints() {
       setActiveTab('sanitarium');
     } else if (searchParams.get('tab') === 'education') {
       setActiveTab('education');
+    } else if (searchParams.get('tab') === 'engineering') {
+      setActiveTab('engineering');
+    } else if (searchParams.get('tab') === 'soil-swatches') {
+      setActiveTab('soil-swatches');
     } else if (location.pathname.startsWith('/blueprints') && !searchParams.get('tab')) {
       setActiveTab('site-plans');
     }
@@ -53,7 +72,7 @@ export default function Blueprints() {
                 <span>The Divine Pattern for Outpost Ministry (2SM 358 · MH 127)</span>
                 <span aria-hidden="true">·</span>
                 <span className="text-stone-500 dark:text-stone-400 font-normal">
-                  Site Architecture · NEWSTART Sanitarium &amp; Hydrotherapy · Avondale Youth Curriculum
+                  Site Architecture · NEWSTART Sanitarium · Illustrated Engineering Schematics
                 </span>
               </div>
               <h1 className="serif text-2xl sm:text-3xl font-bold text-stone-950 dark:text-stone-50 tracking-tight">
@@ -61,6 +80,10 @@ export default function Blueprints() {
                   ? 'Medical Missionary Sanitarium, Hydrotherapy & Charcoal Apothecary'
                   : activeTab === 'education'
                   ? 'True Education & Madison / Avondale Family Homestead Curriculum'
+                  : activeTab === 'engineering'
+                  ? 'Field Engineering Schematics & Illustrated Construction Blueprints'
+                  : activeTab === 'soil-swatches'
+                  ? 'Malawi Soil Mineral Swatches & Ribbon Texture Field Guide'
                   : 'Rural Outpost, Sanitarium & Agricultural School Blueprints'}
               </h1>
             </div>
@@ -74,7 +97,7 @@ export default function Blueprints() {
             </Link>
           </div>
 
-          {/* 3-Tab Outpost & Sanitarium Workbench Switcher */}
+          {/* 5-Tab Outpost, Sanitarium & Field Engineering Workbench Switcher */}
           <div className="flex flex-wrap items-center gap-1.5 bg-stone-100 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/80 dark:border-stone-800 self-start">
             {(
               [
@@ -92,6 +115,16 @@ export default function Blueprints() {
                   id: 'education',
                   label: '03. True Education & Youth Curriculum',
                   icon: GraduationCap,
+                },
+                {
+                  id: 'engineering',
+                  label: '04. Illustrated Field Schematics',
+                  icon: Wrench,
+                },
+                {
+                  id: 'soil-swatches',
+                  label: '05. Soil Swatch & Ribbon Diagnostics',
+                  icon: Layers,
                 },
               ] as const
             ).map((tab) => {
@@ -120,10 +153,14 @@ export default function Blueprints() {
         </header>
 
         {/* Active Workbench Body */}
-        <div className="bg-white dark:bg-[#0D1D13] p-6 sm:p-8 rounded-3xl border border-stone-200/90 dark:border-emerald-900/60 shadow-md">
-          {activeTab === 'site-plans' ? (
+        {activeTab === 'site-plans' && (
+          <div className="bg-white dark:bg-[#0D1D13] p-6 sm:p-8 rounded-3xl border border-stone-200/90 dark:border-emerald-900/60 shadow-md">
             <OutpostCenterBlueprints />
-          ) : (
+          </div>
+        )}
+
+        {(activeTab === 'sanitarium' || activeTab === 'education') && (
+          <div className="bg-white dark:bg-[#0D1D13] p-6 sm:p-8 rounded-3xl border border-stone-200/90 dark:border-emerald-900/60 shadow-md">
             <Suspense
               fallback={
                 <div className="p-8 text-center text-xs font-mono text-stone-500">
@@ -135,8 +172,18 @@ export default function Blueprints() {
                 initialSection={activeTab === 'education' ? 'education' : 'newstart'}
               />
             </Suspense>
-          )}
-        </div>
+          </div>
+        )}
+
+        {activeTab === 'engineering' && (
+          <FieldEngineeringDiagrams />
+        )}
+
+        {activeTab === 'soil-swatches' && (
+          <div className="bg-white dark:bg-[#0D1D13] p-6 sm:p-8 rounded-3xl border border-stone-200/90 dark:border-emerald-900/60 shadow-md">
+            <VisualSoilSwatchGuide />
+          </div>
+        )}
       </main>
     </div>
   );

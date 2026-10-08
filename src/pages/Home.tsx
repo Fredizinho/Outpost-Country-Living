@@ -20,6 +20,10 @@ import {
   UtensilsCrossed,
   ChevronDown,
   CloudSun,
+  Search,
+  Copy,
+  Check,
+  FileText,
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
@@ -67,6 +71,11 @@ const OnboardingWizard = lazy(() =>
 const BeginnerGlossaryModal = lazy(() =>
   import('@/components/common/BeginnerGlossaryModal').then((m) => ({
     default: m.BeginnerGlossaryModal,
+  }))
+);
+const HomesteadMasterplanModal = lazy(() =>
+  import('@/components/home/HomesteadMasterplanModal').then((m) => ({
+    default: m.HomesteadMasterplanModal,
   }))
 );
 
@@ -367,6 +376,7 @@ export default function Home() {
   const [showBeginnerWizard, setShowBeginnerWizard] = useState(false);
   const [showBeginnerGlossary, setShowBeginnerGlossary] = useState(false);
   const [glossaryInitialTab, setGlossaryInitialTab] = useState<'glossary' | 'visual-guide'>('glossary');
+  const [isMasterplanOpen, setIsMasterplanOpen] = useState(false);
 
   const [selectedClimateZone, setSelectedClimateZone] = useState<ClimateLifestyleId>('highlands');
   const [selectedAgeTrack, setSelectedAgeTrack] = useState<YouthAgeTrack>('ages-4-8');
@@ -403,6 +413,19 @@ export default function Home() {
       CLIMATE_LIFESTYLE_ZONES[0]
     );
   }, [selectedClimateZone]);
+
+  const [districtSearchQuery, setDistrictSearchQuery] = useState<string>('');
+
+  const searchableDistricts = useMemo(() => {
+    const q = districtSearchQuery.trim().toLowerCase();
+    if (!q) return activeClimateZone.districts;
+    return DISTRICT_LIST.filter(
+      (d) =>
+        d.name.toLowerCase().includes(q) ||
+        d.region.toLowerCase().includes(q) ||
+        d.primarySoil.toLowerCase().includes(q)
+    ).map((d) => ({ id: d.id, name: d.name, rainfallMm: d.rainfallAnnualMm }));
+  }, [districtSearchQuery, activeClimateZone]);
 
   useEffect(() => {
     let cancelled = false;
@@ -473,6 +496,39 @@ export default function Home() {
       totalBiocharKg,
     };
   }, [quickFamilySize, quickDistrict, quickRoofAreaSqm, quickPitSpec, sizerLiveTelemetry]);
+
+  const [copiedSizerPlan, setCopiedSizerPlan] = useState(false);
+
+  const autonomyIndex = useMemo(() => {
+    const targetAnnualWater = quickFamilySize * 100 * 365;
+    const waterScore = Math.min(100, Math.round((quickEstimates.annualRainwaterLiters / targetAnnualWater) * 100));
+    const solarScore = Math.min(100, Math.round((quickEstimates.effectiveSunHours / 5.2) * 100));
+    const landScore = Math.min(100, Math.round((quickEstimates.totalAcres / (quickFamilySize * 0.6)) * 100));
+    return Math.min(99, Math.max(68, Math.round(waterScore * 0.4 + solarScore * 0.35 + landScore * 0.25)));
+  }, [quickEstimates, quickFamilySize]);
+
+  const handleCopySizerPlan = () => {
+    const text = `OUTPOST LIVING — HOMESTEAD SPECIFICATION
+Target District: ${quickDistrict.name} (${quickDistrict.region} Region)
+Annual Rainfall: ${quickDistrict.rainfallAnnualMm} mm/yr | Soil: ${quickDistrict.primarySoil}
+Household Size: ${quickFamilySize} people | Roof Catchment: ${quickRoofAreaSqm} m²
+
+ESTIMATED AUTONOMY & CAPACITY:
+• Land Required: ${quickEstimates.totalAcres} acres (${quickEstimates.stapleAcres}ac crops, ${quickEstimates.orchardAcres}ac orchard)
+• 3×3×3ft Planting Pits: ${quickEstimates.orchardPitCount} pits (${quickEstimates.totalBiocharKg} kg biochar)
+• Annual Rainwater: ~${Math.round(quickEstimates.annualRainwaterLiters / 1000)}k Liters (~${Math.max(1, Math.round(quickEstimates.annualRainwaterLiters / (quickFamilySize * 100 * 30)))} mos dry reserve)
+• Off-Grid Solar PV: ${quickEstimates.recommendedSolarKw} kWp array
+• Battery Storage: ${quickEstimates.recommendedBatteryKwh} kWh 48V bank
+• Autonomy Resilience Score: ${autonomyIndex}%
+
+Generated via Outpost Living Malawi (Avondale Model & DCCMS/FAO Standards)`;
+
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setCopiedSizerPlan(true);
+      setTimeout(() => setCopiedSizerPlan(false), 2500);
+    }
+  };
 
   const todayDevotional = DAILY_DEVOTIONALS[devotionalIndex % DAILY_DEVOTIONALS.length];
 
@@ -585,7 +641,48 @@ export default function Home() {
             aria-hidden="true"
           />
 
-          <div className="px-5 sm:px-8 py-7 lg:py-9 relative z-10">
+          <div className="px-5 sm:px-8 py-6 lg:py-8 relative z-10">
+            {/* Panoramic Scenic Vista Switcher Bar */}
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-3 border-b border-white/10">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-[11px] font-mono uppercase tracking-wider text-amber-300 font-bold flex items-center gap-1.5">
+                  <Mountain size={13} />
+                  <span>Panoramic Scenery:</span>
+                </span>
+                <div className="flex items-center gap-1 bg-black/40 backdrop-blur-md p-1 rounded-xl border border-white/15">
+                  {[
+                    { id: 'highlands' as const, label: 'Mount Mulanje Highlands', icon: Mountain },
+                    { id: 'lakeshore' as const, label: 'Lake Malawi Waters', icon: Waves },
+                    { id: 'mid-hills' as const, label: 'Highland Sanctuary', icon: Trees },
+                  ].map((v) => {
+                    const Icon = v.icon;
+                    const isActive = selectedClimateZone === v.id;
+                    return (
+                      <button
+                        key={v.id}
+                        type="button"
+                        onClick={() => setSelectedClimateZone(v.id)}
+                        className={cn(
+                          'px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer',
+                          isActive
+                            ? 'bg-amber-400 text-stone-950 font-bold shadow-xs'
+                            : 'text-stone-300 hover:text-white hover:bg-white/10'
+                        )}
+                      >
+                        <Icon size={12} />
+                        <span>{v.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="hidden sm:flex items-center gap-2 text-[11px] font-mono text-emerald-300">
+                <ShieldCheck size={13} />
+                <span>Malawi Country Living Standard · 28 Districts</span>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               {/* LEFT (7 Cols): Clean Left-Axis Command Stage with High Contrast & Scenic Depth */}
               <motion.div
@@ -594,7 +691,12 @@ export default function Home() {
                 transition={{ duration: 0.5, ease: 'easeOut' }}
                 className="lg:col-span-7 flex flex-col justify-between gap-5 text-left"
               >
-                <div className="p-4 sm:p-5 rounded-2xl bg-stone-950/20 backdrop-blur-[1.5px] border border-white/10 shadow-lg">
+                <div className="p-4 sm:p-5 rounded-2xl bg-stone-950/30 backdrop-blur-md border border-white/15 shadow-xl">
+                  <div className="flex items-center gap-2 mb-2 text-xs font-mono font-bold text-amber-300 uppercase tracking-widest">
+                    <span>Inspired Country Living</span>
+                    <span aria-hidden="true">·</span>
+                    <span>Malawi Outpost Sanctuary Blueprint</span>
+                  </div>
                   <h1 className="font-display text-3xl sm:text-4xl lg:text-[2.65rem] font-bold text-white tracking-tight leading-[1.1] text-balance drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
                     Meet Outpost — Your Modular Command Center for Country Living in Malawi
                   </h1>
@@ -604,7 +706,7 @@ export default function Home() {
                 </div>
 
                 {/* Clean Hairline EGW Counsel Blockquote with High-Contrast Background */}
-                <blockquote className="border-l-4 border-amber-400 pl-4 py-2.5 text-xs sm:text-sm italic font-serif max-w-[60ch] text-stone-100 bg-stone-950/30 backdrop-blur-sm rounded-r-2xl border-y border-r border-white/10 shadow-md">
+                <blockquote className="border-l-4 border-amber-400 pl-4 py-2.5 text-xs sm:text-sm italic font-serif max-w-[60ch] text-stone-100 bg-stone-950/40 backdrop-blur-md rounded-r-2xl border-y border-r border-white/10 shadow-md">
                   “Get out of the cities as soon as possible and purchase a little piece of land, where you can have a garden, where your children can watch the flowers growing, and learn from them lessons of simplicity and purity.”
                   <span className="not-italic font-mono text-xs text-amber-300 font-bold ml-2 block sm:inline mt-1 sm:mt-0">
                     — Ellen G. White, Country Living, p. 24.2
@@ -613,23 +715,23 @@ export default function Home() {
 
                 {/* Purposeful Action Buttons */}
                 <div className="flex flex-wrap items-center gap-3 pt-1">
-                  <button
-                    type="button"
-                    onClick={() => setShowBeginnerWizard(true)}
-                    className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/25 text-white font-semibold text-xs transition-all inline-flex items-center gap-2 cursor-pointer backdrop-blur-md shadow-sm"
-                  >
-                    <Sparkles size={14} className="text-amber-300" />
-                    <span>Getting Started: 60-Sec District Quiz</span>
-                  </button>
-
                   <Link
                     to="/scout-map"
-                    className="px-4 py-2.5 rounded-xl bg-amber-400 text-stone-950 hover:bg-amber-300 font-bold text-xs shadow-lg transition-all inline-flex items-center gap-1.5 cursor-pointer"
+                    className="px-4 py-2.5 rounded-xl bg-amber-400 text-stone-950 hover:bg-amber-300 font-bold text-xs shadow-lg transition-all inline-flex items-center gap-1.5 cursor-pointer shadow-amber-400/20"
                   >
                     <Compass size={14} />
                     <span>Explore 28-District GIS Map</span>
                     <ArrowRight size={13} />
                   </Link>
+
+                  <button
+                    type="button"
+                    onClick={() => setShowBeginnerWizard(true)}
+                    className="px-4 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/25 text-white font-semibold text-xs transition-all inline-flex items-center gap-2 cursor-pointer backdrop-blur-md shadow-sm"
+                  >
+                    <Sparkles size={14} className="text-amber-300" />
+                    <span>Getting Started: 60-Sec District Quiz</span>
+                  </button>
 
                   <button
                     type="button"
@@ -640,15 +742,15 @@ export default function Home() {
                     className="px-2.5 py-2 text-xs font-semibold text-stone-100 hover:text-amber-300 underline underline-offset-4 inline-flex items-center gap-1.5 cursor-pointer transition-colors"
                   >
                     <BookOpen size={13} className="text-amber-300" />
-                    <span>Field Glossary &amp; Protocols</span>
+                    <span>Field Protocols &amp; Glossary</span>
                   </button>
                 </div>
               </motion.div>
 
               {/* RIGHT (5 Cols): Live Sizer Deck & Integrated Command Tray */}
-              <div className="lg:col-span-5 flex flex-col justify-center min-h-[330px]">
+              <div id="hero-sizer" className="lg:col-span-5 flex flex-col justify-center min-h-[330px]">
                 {/* Live Homestead Sizer Control Console with Integrated Quick Suites Tray */}
-                <div className="p-5 rounded-2xl bg-stone-950/45 backdrop-blur-xl border border-white/20 flex flex-col gap-3.5 shadow-2xl">
+                <div className="p-5 rounded-2xl bg-stone-950/50 backdrop-blur-xl border border-white/20 flex flex-col gap-3.5 shadow-2xl">
                   {/* Integrated Command Tray: 5 Quick Suites */}
                   <div className="flex items-center justify-between gap-1.5 pb-2 border-b border-white/12">
                     <span className="text-[10px] font-mono text-amber-300 font-bold uppercase tracking-wider">
@@ -680,9 +782,14 @@ export default function Home() {
 
                   <div className="flex items-center justify-between gap-2 pb-1 border-b border-white/10">
                     <div>
-                      <span className="text-xs font-mono text-amber-300 font-semibold block">
-                        Live Homestead Sizer · Updates Quick Stats Below
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-mono text-amber-300 font-semibold block">
+                          Live Homestead Sizer · Updates Quick Stats
+                        </span>
+                        <span className="px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono font-bold">
+                          {autonomyIndex}% Autonomy
+                        </span>
+                      </div>
                       <h2 className="font-display text-base font-bold text-white">
                         Configure Target District &amp; Household
                       </h2>
@@ -715,24 +822,69 @@ export default function Home() {
                       </select>
                     </div>
 
-                    <div className="grid grid-cols-[130px_1fr] items-center gap-3">
-                      <label htmlFor="hero-family-range" className="text-stone-200 font-medium">
-                        2. Household Size
-                      </label>
-                      <div className="flex items-center gap-2.5 w-full">
-                        <input
-                          id="hero-family-range"
-                          type="range"
-                          min={1}
-                          max={12}
-                          step={1}
-                          value={quickFamilySize}
-                          onChange={(e) => setQuickFamilySize(Number(e.target.value))}
-                          className="w-full accent-amber-400 cursor-pointer"
-                        />
-                        <span className="font-mono font-bold text-amber-300 tabular-nums w-16 text-right shrink-0">
-                          {quickFamilySize} {quickFamilySize === 1 ? 'person' : 'people'}
-                        </span>
+                    <div className="flex flex-col gap-1.5">
+                      <div className="grid grid-cols-[130px_1fr] items-center gap-3">
+                        <label htmlFor="hero-family-range" className="text-stone-200 font-medium">
+                          2. Household Size
+                        </label>
+                        <div className="flex items-center gap-2 w-full">
+                          <button
+                            type="button"
+                            aria-label="Decrease household size"
+                            onClick={() => setQuickFamilySize(Math.max(1, quickFamilySize - 1))}
+                            className="w-6 h-6 rounded-md bg-white/10 hover:bg-white/20 text-stone-200 hover:text-white flex items-center justify-center font-bold text-xs cursor-pointer border border-white/10 shrink-0"
+                          >
+                            -
+                          </button>
+                          <input
+                            id="hero-family-range"
+                            type="range"
+                            min={1}
+                            max={16}
+                            step={1}
+                            value={quickFamilySize}
+                            onChange={(e) => setQuickFamilySize(Number(e.target.value))}
+                            className="w-full accent-amber-400 cursor-pointer"
+                          />
+                          <button
+                            type="button"
+                            aria-label="Increase household size"
+                            onClick={() => setQuickFamilySize(Math.min(16, quickFamilySize + 1))}
+                            className="w-6 h-6 rounded-md bg-white/10 hover:bg-white/20 text-stone-200 hover:text-white flex items-center justify-center font-bold text-xs cursor-pointer border border-white/10 shrink-0"
+                          >
+                            +
+                          </button>
+                          <span className="font-mono font-bold text-amber-300 tabular-nums w-16 text-right shrink-0">
+                            {quickFamilySize} {quickFamilySize === 1 ? 'person' : 'people'}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Quick Household Presets */}
+                      <div className="flex items-center justify-end gap-1.5 pl-[130px]">
+                        {[
+                          { label: 'Couple: 2', size: 2, roof: 50 },
+                          { label: 'Family: 5', size: 5, roof: 90 },
+                          { label: 'Homestead: 8', size: 8, roof: 110 },
+                          { label: 'Outpost: 12', size: 12, roof: 140 },
+                        ].map((preset) => (
+                          <button
+                            key={preset.label}
+                            type="button"
+                            onClick={() => {
+                              setQuickFamilySize(preset.size);
+                              setQuickRoofAreaSqm(preset.roof);
+                            }}
+                            className={cn(
+                              'px-2 py-0.5 rounded text-[10px] font-mono transition-colors cursor-pointer',
+                              quickFamilySize === preset.size
+                                ? 'bg-amber-400 text-stone-950 font-bold'
+                                : 'bg-white/10 text-stone-300 hover:text-white hover:bg-white/20'
+                            )}
+                          >
+                            {preset.label}
+                          </button>
+                        ))}
                       </div>
                     </div>
 
@@ -762,6 +914,28 @@ export default function Home() {
                     </div>
                   </div>
 
+                  {/* Live Autonomy Metrics HUD */}
+                  <div className="grid grid-cols-3 gap-1.5 p-2 rounded-xl bg-black/50 border border-white/12 text-[11px] font-mono shadow-inner">
+                    <div className="flex flex-col">
+                      <span className="text-stone-400 text-[9px] uppercase tracking-wider">Water Reserve</span>
+                      <span className="text-sky-300 font-bold tabular-nums">
+                        ~{Math.max(1, Math.round(quickEstimates.annualRainwaterLiters / (quickFamilySize * 100 * 30)))} mos dry
+                      </span>
+                    </div>
+                    <div className="flex flex-col border-x border-white/10 px-1.5">
+                      <span className="text-stone-400 text-[9px] uppercase tracking-wider">Off-Grid Solar</span>
+                      <span className="text-amber-300 font-bold tabular-nums">
+                        {quickEstimates.recommendedSolarKw}kWp · {quickEstimates.recommendedBatteryKwh}kWh
+                      </span>
+                    </div>
+                    <div className="flex flex-col pl-1">
+                      <span className="text-stone-400 text-[9px] uppercase tracking-wider">Land / Pits</span>
+                      <span className="text-emerald-300 font-bold tabular-nums">
+                        {quickEstimates.totalAcres}ac · {quickEstimates.orchardPitCount} pits
+                      </span>
+                    </div>
+                  </div>
+
                   <div className="flex items-center justify-between text-xs text-stone-300 pt-2 border-t border-white/12">
                     <span className="truncate">
                       <strong className="text-white">{quickDistrict.name}:</strong> {quickDistrict.primarySoil} · Well ~{quickDistrict.aquiferDepthM}m
@@ -769,12 +943,41 @@ export default function Home() {
                         <RefreshCw size={10} className="inline ml-1.5 animate-spin text-amber-300" />
                       )}
                     </span>
-                    <Link
-                      to={`/scout-map?district=${quickDistrict.id}`}
-                      className="text-amber-300 hover:underline shrink-0 font-semibold ml-2"
-                    >
-                      GIS Map →
-                    </Link>
+                    <div className="flex items-center gap-2 shrink-0 ml-2">
+                      <button
+                        type="button"
+                        onClick={() => setIsMasterplanOpen(true)}
+                        title="Open comprehensive Outpost Masterplan Blueprint"
+                        className="px-2 py-0.5 rounded-md bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold font-mono text-[10px] inline-flex items-center gap-1 transition-all cursor-pointer shadow-xs"
+                      >
+                        <FileText size={10} />
+                        <span>Masterplan →</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleCopySizerPlan}
+                        title="Copy itemized outpost specifications to clipboard"
+                        className="px-2 py-0.5 rounded-md bg-white/10 hover:bg-white/20 text-stone-200 hover:text-amber-300 font-mono text-[10px] inline-flex items-center gap-1 transition-all cursor-pointer border border-white/10"
+                      >
+                        {copiedSizerPlan ? (
+                          <>
+                            <Check size={10} className="text-emerald-400" />
+                            <span className="text-emerald-400 font-semibold">Copied!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy size={10} />
+                            <span>Export Spec</span>
+                          </>
+                        )}
+                      </button>
+                      <Link
+                        to={`/scout-map?district=${quickDistrict.id}`}
+                        className="text-amber-300 hover:underline font-semibold"
+                      >
+                        GIS Map →
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -786,13 +989,60 @@ export default function Home() {
       {/* ====================================================================
           2. NEURONEST-GUIDED PASTEL BENTO QUICK STATS & 2-COLUMN COMMAND SPLIT
       ==================================================================== */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-7 flex flex-col gap-7 w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 flex flex-col gap-6 w-full">
+        {/* HOMESTEAD COMMAND DOCK: QUICK-JUMP SECTION SWITCHER */}
+        <nav
+          aria-label="Homestead Sections Quick Jump"
+          className="flex items-center justify-between gap-2 overflow-x-auto p-1.5 rounded-2xl bg-white/90 dark:bg-[#0D1D13]/90 backdrop-blur-md border border-stone-200/90 dark:border-emerald-900/60 shadow-xs text-xs font-mono"
+        >
+          <div className="flex items-center gap-1">
+            {[
+              { id: 'hero-sizer', label: '01. Sizer & Blueprint', icon: Calculator },
+              { id: 'quick-stats', label: '02. Baseline Stats', icon: Layers },
+              { id: 'workbenches', label: '03. Workbenches & Altar', icon: Sparkles },
+              { id: 'four-pillars', label: '04. The 4 Pillars', icon: ShieldCheck },
+              { id: 'districts-explorer', label: '05. 28 Districts GIS', icon: Compass },
+            ].map((sec) => {
+              const Icon = sec.icon;
+              return (
+                <button
+                  key={sec.id}
+                  type="button"
+                  onClick={() => {
+                    const el = document.getElementById(sec.id);
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="px-3 py-1.5 rounded-xl text-stone-700 dark:text-stone-300 hover:text-stone-950 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-white/10 transition-colors inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap font-medium"
+                >
+                  <Icon size={12} className="text-amber-500 dark:text-amber-400" />
+                  <span>{sec.label}</span>
+                </button>
+              );
+            })}
+          </div>
+          <div className="hidden md:flex items-center gap-2 pr-2 text-[11px] text-stone-500 dark:text-stone-400">
+            <span>District: <strong className="text-stone-900 dark:text-white font-bold">{quickDistrict.name}</strong></span>
+            <span aria-hidden="true">·</span>
+            <span className="text-amber-700 dark:text-amber-300 font-bold">{autonomyIndex}% Autonomy</span>
+          </div>
+        </nav>
+
         {/* 2A. QUICK STATS: 4 SOFT PASTEL BENTO CARDS (EXACT NEURONEST PROPORTIONS) */}
-        <section aria-label="Quick Stats Family Homestead Baseline" className="flex flex-col gap-3.5">
+        <section id="quick-stats" aria-label="Quick Stats Family Homestead Baseline" className="flex flex-col gap-3.5">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <h2 className="font-display text-xl sm:text-2xl font-bold text-stone-900 dark:text-white tracking-tight">
-              Quick Stats
-            </h2>
+            <div className="flex items-center gap-3">
+              <h2 className="font-display text-xl sm:text-2xl font-bold text-stone-900 dark:text-white tracking-tight">
+                Quick Stats
+              </h2>
+              <button
+                type="button"
+                onClick={() => setIsMasterplanOpen(true)}
+                className="text-xs font-mono font-semibold text-amber-700 dark:text-amber-400 hover:underline inline-flex items-center gap-1 cursor-pointer"
+              >
+                <FileText size={12} />
+                <span>Open Full Masterplan Blueprint →</span>
+              </button>
+            </div>
             <span className="text-xs font-mono font-semibold text-stone-700 dark:text-stone-300">
               Live Sizing for {quickDistrict.name} ({quickDistrict.rainfallAnnualMm}mm/yr) · {quickFamilySize} Members · {quickRoofAreaSqm}m² Roof
             </span>
@@ -900,8 +1150,9 @@ export default function Home() {
 
         {/* 2B. 2-COLUMN MODULAR SPLIT: QUICK LAUNCH WORKBENCHES & SANCTUARY ACTIVITY (NEURONEST LAYOUT) */}
         <section
+          id="workbenches"
           aria-label="Quick Launch Workbenches and Sanctuary Activity"
-          className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch scroll-mt-20"
         >
           {/* LEFT CONTAINER (6 Cols): Quick Launch Workbenches (Matte Charcoal Cards + Active Pills) */}
           <div
@@ -1112,7 +1363,7 @@ export default function Home() {
 
         {/* 2. INTERACTIVE CLIMATE ZONE & 28-DISTRICT EXPLORER */}
         <section
-          id="climate-explorer-section"
+          id="districts-explorer"
           aria-label="Malawi Climate Zones and 28-District Explorer"
           className={cn('p-5 sm:p-6 rounded-2xl flex flex-col gap-4 scroll-mt-20', glassSurfaceClass)}
         >
@@ -1225,27 +1476,57 @@ export default function Home() {
 
             <div
               className={cn(
-                'lg:col-span-4 flex flex-col gap-1.5 lg:border-l lg:pl-4',
+                'lg:col-span-4 flex flex-col gap-2 lg:border-l lg:pl-4',
                 isSapphire
                   ? 'lg:border-sky-200/80 dark:lg:border-sky-800/50'
                   : 'lg:border-stone-200/80 dark:lg:border-emerald-900/60'
               )}
             >
-              <span className="text-stone-500 dark:text-stone-400">
-                Inspect District on GIS Map:
-              </span>
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-                {activeClimateZone.districts.map((dist) => (
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-stone-500 dark:text-stone-400 font-medium">
+                  Search &amp; Inspect Districts:
+                </span>
+                {districtSearchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setDistrictSearchQuery('')}
+                    className="text-[10px] text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 underline cursor-pointer"
+                  >
+                    Clear Filter
+                  </button>
+                )}
+              </div>
+
+              {/* Instant Search Bar */}
+              <div className="relative">
+                <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder="Type district, region, or soil..."
+                  value={districtSearchQuery}
+                  onChange={(e) => setDistrictSearchQuery(e.target.value)}
+                  className="w-full pl-7 pr-2.5 py-1.5 rounded-xl bg-stone-100/90 dark:bg-stone-900/90 border border-stone-200/90 dark:border-white/10 text-xs text-stone-900 dark:text-stone-100 placeholder:text-stone-400 focus:outline-none focus:ring-1 focus:ring-amber-400"
+                />
+              </div>
+
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 max-h-24 overflow-y-auto pr-1">
+                {searchableDistricts.map((dist) => (
                   <Link
                     key={dist.id}
                     to={`/scout-map?district=${dist.id}`}
+                    onClick={() => setQuickDistrictId(dist.id)}
+                    title={`Inspect ${dist.name} on GIS Map`}
                     className={cn(
-                      'text-xs font-semibold hover:underline inline-flex items-center gap-0.5',
-                      isSapphire ? 'text-sky-800 dark:text-sky-300' : 'text-emerald-800 dark:text-amber-300'
+                      'text-xs font-semibold hover:underline inline-flex items-center gap-1 px-2 py-0.5 rounded-md transition-colors',
+                      dist.id === quickDistrictId
+                        ? 'bg-amber-400/25 text-amber-800 dark:text-amber-300 font-bold border border-amber-400/40'
+                        : isSapphire
+                        ? 'text-sky-800 dark:text-sky-300 hover:bg-sky-50 dark:hover:bg-sky-950/40'
+                        : 'text-emerald-800 dark:text-amber-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40'
                     )}
                   >
                     <span>{dist.name}</span>
-                    <span aria-hidden="true">→</span>
+                    <span aria-hidden="true" className="text-[10px] opacity-75">→</span>
                   </Link>
                 ))}
               </div>
@@ -1282,7 +1563,11 @@ export default function Home() {
         </section>
 
         {/* 3. THE FOUR PILLARS OF COUNTRY LIVING (ZERO NESTED CARD BORDERS) */}
-        <section aria-label="The Four Pillars of Country Living" className="flex flex-col gap-3.5">
+        <section
+          id="four-pillars"
+          aria-label="The Four Pillars of Country Living"
+          className="flex flex-col gap-3.5 scroll-mt-20"
+        >
           <div>
             <h2 className="font-display text-xl sm:text-2xl font-bold text-stone-900 dark:text-white tracking-tight">
               The Four Pillars of Sanctuary Living
@@ -1579,6 +1864,20 @@ export default function Home() {
             isOpen={showBeginnerGlossary}
             onClose={() => setShowBeginnerGlossary(false)}
             initialTab={glossaryInitialTab}
+          />
+        </Suspense>
+      )}
+      {isMasterplanOpen && (
+        <Suspense fallback={null}>
+          <HomesteadMasterplanModal
+            isOpen={isMasterplanOpen}
+            onClose={() => setIsMasterplanOpen(false)}
+            districtId={quickDistrictId}
+            familySize={quickFamilySize}
+            roofAreaSqm={quickRoofAreaSqm}
+            onUpdateDistrictId={setQuickDistrictId}
+            onUpdateFamilySize={setQuickFamilySize}
+            onUpdateRoofArea={setQuickRoofAreaSqm}
           />
         </Suspense>
       )}

@@ -37,24 +37,23 @@ interface LandscapePaletteConfig {
 }
 
 /**
- * Authentic Malawian Highland Dawn Palette — Enhanced Visibility & Vibrancy
- * Natural, luminous sunrise with live animated rising sun.
- * All surface highlights, water reflections, and cast shadows strictly
- * emanate from the rising sun at the eastern mountain horizon.
+ * Authentic Malawian Highland Dawn Palette
+ * Luminous mountain sunrise with subtle glowing celestial ring behind Mount Mulanje,
+ * crisp granite inselberg batholith facets, and enriched foreground permaculture terraces.
  */
 const CANONICAL_MALAWI_LANDSCAPE: LandscapePaletteConfig = {
-  skyTop: '#0B1E36',
-  skyMid: '#1D3B64',
-  skyCoral: '#C2410C',
+  skyTop: '#08192E',
+  skyMid: '#16365C',
+  skyCoral: '#BE380A',
   skyHorizon: '#F97316',
   sunCore: '#FFFFFF',
   sunHalo: '#F59E0B',
-  sunAtmosphere: 'rgba(251, 191, 36, 0.40)',
+  sunAtmosphere: 'rgba(251, 191, 36, 0.45)',
   distantPeak: '#1E293B',
-  distantPeakRidge: '#475569',
+  distantPeakRidge: '#64748B',
   midMountainFar: '#14532D',
   midMountainNear: '#166534',
-  mistColor: 'rgba(254, 243, 199, 0.35)',
+  mistColor: 'rgba(254, 243, 199, 0.40)',
   lakeWaterTop: '#0284C7',
   lakeWaterBottom: '#075985',
   lakeShimmer: '#FEF08A',
@@ -78,7 +77,7 @@ export function HomeSceneryBackground({
   const c = CANONICAL_MALAWI_LANDSCAPE;
   const uid = React.useId().replace(/:/g, '');
 
-  // Rising Sun Coordinates (Positioned in the open mountain saddle vista between hero left text and right sizer deck)
+  // Rising Sun Coordinates (Golden-ratio saddle vista between left command card and right sizer deck)
   const sunCenterX =
     activeScene === 'waters' ? 940 : activeScene === 'sanctuary' ? 1010 : 970;
   const sunCenterY = activeScene === 'waters' ? 268 : 252;
@@ -97,26 +96,47 @@ export function HomeSceneryBackground({
           {/* Panoramic Dawn Sky Gradient (Deep Twilight to Luminous Amber Horizon) */}
           <linearGradient id={`sky-${uid}`} x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor={c.skyTop} />
-            <stop offset="30%" stopColor={c.skyMid} />
-            <stop offset="60%" stopColor={c.skyCoral} />
-            <stop offset="80%" stopColor={c.skyHorizon} />
+            <stop offset="28%" stopColor={c.skyMid} />
+            <stop offset="56%" stopColor={c.skyCoral} />
+            <stop offset="78%" stopColor={c.skyHorizon} />
             <stop offset="100%" stopColor="#FBBF24" stopOpacity="0.99" />
           </linearGradient>
 
-          {/* Living Atmospheric Solar Bloom at the Mountain Horizon */}
+          {/* Clean Radiant Sun Core Disc Gradient (Brilliant Celestial Light) */}
           <radialGradient
-            id={`sun-glow-core-${uid}`}
-            cx={sunCenterX}
-            cy={sunCenterY}
-            r="460"
+            id={`sun-core-disc-${uid}`}
+            cx="0"
+            cy="0"
+            r="38"
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0%" stopColor={c.sunCore} stopOpacity="1" />
-            <stop offset="18%" stopColor="#FFF8D6" stopOpacity="0.92" />
-            <stop offset="38%" stopColor="#FDE047" stopOpacity="0.65" />
-            <stop offset="62%" stopColor="#F59E0B" stopOpacity="0.30" />
-            <stop offset="82%" stopColor="#D97706" stopOpacity="0.10" />
-            <stop offset="100%" stopColor="#B45309" stopOpacity="0" />
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
+            <stop offset="50%" stopColor="#FFFDF0" stopOpacity="1" />
+            <stop offset="80%" stopColor="#FEF08A" stopOpacity="0.98" />
+            <stop offset="100%" stopColor="#FBBF24" stopOpacity="0.95" />
+          </radialGradient>
+
+          {/* Subtly Glowing Solar Halo Ring Gradient */}
+          <linearGradient id={`sun-halo-ring-${uid}`} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.95" />
+            <stop offset="35%" stopColor="#FEF08A" stopOpacity="0.85" />
+            <stop offset="70%" stopColor="#FDE047" stopOpacity="0.60" />
+            <stop offset="100%" stopColor="#F59E0B" stopOpacity="0.40" />
+          </linearGradient>
+
+          {/* Smooth Diffuse Atmospheric Aura (No Harsh Concentric Steps) */}
+          <radialGradient
+            id={`sun-soft-aura-${uid}`}
+            cx="0"
+            cy="0"
+            r="220"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0%" stopColor="#FFFDF0" stopOpacity="0.55" />
+            <stop offset="22%" stopColor="#FEF08A" stopOpacity="0.38" />
+            <stop offset="50%" stopColor="#FDE047" stopOpacity="0.18" />
+            <stop offset="75%" stopColor="#F59E0B" stopOpacity="0.06" />
+            <stop offset="100%" stopColor="#D97706" stopOpacity="0" />
           </radialGradient>
 
           {/* Broad Ambient Sunrise Horizon Haze along the Mountain Saddle */}
@@ -127,8 +147,8 @@ export function HomeSceneryBackground({
             r="750"
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0%" stopColor="#FDE047" stopOpacity="0.42" />
-            <stop offset="30%" stopColor="#F59E0B" stopOpacity="0.25" />
+            <stop offset="0%" stopColor="#FDE047" stopOpacity="0.40" />
+            <stop offset="30%" stopColor="#F59E0B" stopOpacity="0.22" />
             <stop offset="65%" stopColor="#D97706" stopOpacity="0.08" />
             <stop offset="100%" stopColor="#9A3412" stopOpacity="0" />
           </radialGradient>
@@ -137,205 +157,198 @@ export function HomeSceneryBackground({
           <linearGradient id={`sun-horizon-flare-${uid}`} x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#F59E0B" stopOpacity="0" />
             <stop offset="25%" stopColor="#FDE047" stopOpacity="0.35" />
-            <stop offset="50%" stopColor="#FFFDF5" stopOpacity="0.85" />
+            <stop offset="50%" stopColor="#FFFDF5" stopOpacity="0.90" />
             <stop offset="75%" stopColor="#FDE047" stopOpacity="0.35" />
             <stop offset="100%" stopColor="#F59E0B" stopOpacity="0" />
           </linearGradient>
 
-          {/* Mount Mulanje Granite Massif Shading — Enhanced Violet-Slate to Emerald Contrast */}
+          {/* Mount Mulanje Granite Massif Shading — Crisp Violet-Slate to Deep Highland Emerald */}
           <linearGradient id={`mulanje-base-${uid}`} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#253549" stopOpacity="1" />
-            <stop offset="45%" stopColor="#1E293B" stopOpacity="1" />
-            <stop offset="80%" stopColor="#14532D" stopOpacity="1" />
-            <stop offset="100%" stopColor="#0F381E" stopOpacity="1" />
+            <stop offset="0%" stopColor="#2D3E56" stopOpacity="1" />
+            <stop offset="38%" stopColor="#1E293B" stopOpacity="1" />
+            <stop offset="72%" stopColor="#14532D" stopOpacity="1" />
+            <stop offset="100%" stopColor="#0B3018" stopOpacity="1" />
           </linearGradient>
 
-          {/* Sunlit Granite Facets Facing Toward the Sunrise (East-facing slopes) */}
+          {/* Sharpened Granite Facets Facing Toward Sunrise (East-facing sheer cliffs) */}
           <linearGradient id={`mulanje-sunlit-east-${uid}`} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FFFBEB" stopOpacity="0.95" />
-            <stop offset="22%" stopColor="#FDE047" stopOpacity="0.85" />
-            <stop offset="55%" stopColor="#F59E0B" stopOpacity="0.65" />
-            <stop offset="80%" stopColor="#34D399" stopOpacity="0.45" />
-            <stop offset="100%" stopColor="#065F46" stopOpacity="0.25" />
+            <stop offset="0%" stopColor="#FFFDF0" stopOpacity="0.98" />
+            <stop offset="20%" stopColor="#FDE047" stopOpacity="0.90" />
+            <stop offset="50%" stopColor="#F59E0B" stopOpacity="0.75" />
+            <stop offset="78%" stopColor="#34D399" stopOpacity="0.55" />
+            <stop offset="100%" stopColor="#065F46" stopOpacity="0.30" />
           </linearGradient>
 
-          {/* Sunlit Granite Facets Facing West (For peaks to the right of the sun) */}
+          {/* Sunlit Granite Facets Facing West */}
           <linearGradient id={`mulanje-sunlit-west-${uid}`} x1="100%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#FFFBEB" stopOpacity="0.90" />
-            <stop offset="28%" stopColor="#FDE047" stopOpacity="0.80" />
-            <stop offset="65%" stopColor="#D97706" stopOpacity="0.55" />
-            <stop offset="100%" stopColor="#15803D" stopOpacity="0.25" />
+            <stop offset="0%" stopColor="#FFFDF0" stopOpacity="0.95" />
+            <stop offset="26%" stopColor="#FDE047" stopOpacity="0.85" />
+            <stop offset="60%" stopColor="#D97706" stopOpacity="0.60" />
+            <stop offset="100%" stopColor="#15803D" stopOpacity="0.30" />
           </linearGradient>
 
-          {/* Deep Granite Crevasses & Ruo Gorge Shadows */}
+          {/* Deep Granite Crevasses & Ruo Gorge Shadows (Sharp contrast) */}
           <linearGradient id={`mulanje-cleft-shadow-${uid}`} x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#0B132B" stopOpacity="0.95" />
-            <stop offset="100%" stopColor="#1E293B" stopOpacity="0.40" />
+            <stop offset="0%" stopColor="#080E1C" stopOpacity="0.98" />
+            <stop offset="100%" stopColor="#1A2436" stopOpacity="0.50" />
           </linearGradient>
 
-          {/* Mountain Waterfalls (Lichenya & Ruo Cascades) */}
+          {/* Mountain Waterfalls (Lichenya & Ruo Cascades with Foaming White Highlights) */}
           <linearGradient id={`falls-${uid}`} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.95" />
-            <stop offset="40%" stopColor="#E0F2FE" stopOpacity="0.90" />
-            <stop offset="85%" stopColor="#BAE6FD" stopOpacity="0.75" />
-            <stop offset="100%" stopColor="#38BDF8" stopOpacity="0.60" />
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
+            <stop offset="35%" stopColor="#E0F2FE" stopOpacity="0.95" />
+            <stop offset="75%" stopColor="#BAE6FD" stopOpacity="0.85" />
+            <stop offset="100%" stopColor="#38BDF8" stopOpacity="0.70" />
           </linearGradient>
 
           {/* Mountain Gorge Swirling Cloud Mist */}
           <linearGradient id={`mist-${uid}`} x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#FEF3C7" stopOpacity="0" />
-            <stop offset="50%" stopColor="#FFFBEB" stopOpacity="0.35" />
+            <stop offset="50%" stopColor="#FFFBEB" stopOpacity="0.40" />
             <stop offset="100%" stopColor="#FEF3C7" stopOpacity="0" />
           </linearGradient>
 
           {/* Lake Malawi Clear Azure Depth */}
           <linearGradient id={`lake-${uid}`} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#0369A1" />
-            <stop offset="35%" stopColor="#0284C7" />
-            <stop offset="70%" stopColor="#0E7490" />
-            <stop offset="100%" stopColor="#065F46" />
+            <stop offset="0%" stopColor="#0284C7" />
+            <stop offset="30%" stopColor="#0369A1" />
+            <stop offset="68%" stopColor="#075985" />
+            <stop offset="100%" stopColor="#042F2E" />
           </linearGradient>
 
-          {/* Lake Malawi Dawn Sun Reflection Glade */}
+          {/* Lake Malawi Dawn Sun Reflection Glade strictly aligned with sunCenterX */}
           <radialGradient
             id={`lake-glade-${uid}`}
             cx={sunCenterX}
             cy="580"
-            rx="160"
-            ry="30"
+            rx="180"
+            ry="32"
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0%" stopColor="#FFFDF5" stopOpacity="0.90" />
-            <stop offset="25%" stopColor="#FEF08A" stopOpacity="0.75" />
-            <stop offset="60%" stopColor="#F59E0B" stopOpacity="0.40" />
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.95" />
+            <stop offset="22%" stopColor="#FEF08A" stopOpacity="0.82" />
+            <stop offset="55%" stopColor="#F59E0B" stopOpacity="0.45" />
             <stop offset="100%" stopColor="#0284C7" stopOpacity="0" />
           </radialGradient>
 
           {/* Terraced Tea Hill Green Gradient */}
           <linearGradient id={`terrace-slope-${uid}`} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#15803D" />
-            <stop offset="50%" stopColor="#166534" />
+            <stop offset="0%" stopColor="#16A34A" />
+            <stop offset="45%" stopColor="#15803D" />
             <stop offset="100%" stopColor="#14532D" />
+          </linearGradient>
+
+          {/* Natural Stone Masonry Retaining Wall Gradient */}
+          <linearGradient id={`stone-retaining-${uid}`} x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#57534E" />
+            <stop offset="50%" stopColor="#44403C" />
+            <stop offset="100%" stopColor="#292524" />
+          </linearGradient>
+
+          {/* Winding Red Laterite Garden Footpath */}
+          <linearGradient id={`laterite-path-${uid}`} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#B45309" />
+            <stop offset="50%" stopColor="#9A3412" />
+            <stop offset="100%" stopColor="#78350F" />
           </linearGradient>
 
           {/* Front Agroforestry Promontory Gradient */}
           <linearGradient id={`foreground-promontory-${uid}`} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#166534" />
-            <stop offset="45%" stopColor="#14532D" />
-            <stop offset="100%" stopColor="#0F381E" />
+            <stop offset="0%" stopColor="#15803D" />
+            <stop offset="40%" stopColor="#14532D" />
+            <stop offset="100%" stopColor="#0B3018" />
           </linearGradient>
 
           {/* Homestead Terracotta Roof Sunlit Gradient */}
           <linearGradient id={`roof-sunlit-${uid}`} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#F97316" />
-            <stop offset="50%" stopColor="#EA580C" />
+            <stop offset="0%" stopColor="#FB923C" />
+            <stop offset="45%" stopColor="#EA580C" />
             <stop offset="100%" stopColor="#C2410C" />
           </linearGradient>
 
-          {/* Off-Grid Solar PV Glass Specular Glint */}
+          {/* Off-Grid Solar PV Monocrystalline Glass with Crisp Conductive Glint */}
           <linearGradient id={`solar-sheen-${uid}`} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.95" />
-            <stop offset="25%" stopColor="#BAE6FD" stopOpacity="0.85" />
-            <stop offset="65%" stopColor="#0284C7" stopOpacity="0.90" />
-            <stop offset="100%" stopColor="#03436A" stopOpacity="0.95" />
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
+            <stop offset="20%" stopColor="#BAE6FD" stopOpacity="0.95" />
+            <stop offset="60%" stopColor="#0284C7" stopOpacity="0.95" />
+            <stop offset="100%" stopColor="#033A5E" stopOpacity="0.98" />
           </linearGradient>
 
-          {/* Gentle Editorial Scrim (Enhanced visibility: light feathered gradient so scenery pops) */}
+          {/* Gentle Editorial Scrim (Light feathered gradient for text contrast) */}
           <linearGradient id={`left-scrim-${uid}`} x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#020805" stopOpacity="0.28" />
-            <stop offset="25%" stopColor="#020805" stopOpacity="0.18" />
-            <stop offset="45%" stopColor="#020805" stopOpacity="0.06" />
+            <stop offset="0%" stopColor="#020805" stopOpacity="0.22" />
+            <stop offset="25%" stopColor="#020805" stopOpacity="0.12" />
+            <stop offset="45%" stopColor="#020805" stopOpacity="0.04" />
             <stop offset="60%" stopColor="#020805" stopOpacity="0" />
           </linearGradient>
 
           {/* Mobile/Compact Protective Gradient */}
           <linearGradient id={`mobile-vertical-scrim-${uid}`} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#020805" stopOpacity="0.10" />
-            <stop offset="60%" stopColor="#020805" stopOpacity="0.22" />
-            <stop offset="100%" stopColor="#020805" stopOpacity="0.55" />
+            <stop offset="0%" stopColor="#020805" stopOpacity="0.08" />
+            <stop offset="60%" stopColor="#020805" stopOpacity="0.18" />
+            <stop offset="100%" stopColor="#020805" stopOpacity="0.45" />
           </linearGradient>
 
           {/* Bottom Ground Transition Vignette */}
           <linearGradient id={`bottom-vignette-${uid}`} x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#020A05" stopOpacity="0" />
-            <stop offset="70%" stopColor="#020A05" stopOpacity="0.20" />
-            <stop offset="100%" stopColor="#020A05" stopOpacity="0.65" />
+            <stop offset="70%" stopColor="#020A05" stopOpacity="0.15" />
+            <stop offset="100%" stopColor="#020A05" stopOpacity="0.55" />
           </linearGradient>
 
-          {/* Living Scenery & Rising Sun Animations */}
+          {/* Rock-solid, organic animations: gentle float & subtle glowing ring breath */}
           <style>{`
-            /* ANIMATED RISING SUN: Majestic Dawn Ascent & Radiant Solar Expansion */
-            @keyframes scenerySunAscent {
-              0% {
-                transform: translate(${sunCenterX}px, ${sunCenterY + 48}px) scale(0.92);
-              }
-              22% {
-                transform: translate(${sunCenterX}px, ${sunCenterY - 26}px) scale(1.08);
-              }
-              38% {
-                transform: translate(${sunCenterX}px, ${sunCenterY - 32}px) scale(1.10);
-              }
-              60% {
-                transform: translate(${sunCenterX}px, ${sunCenterY - 28}px) scale(1.08);
-              }
-              80% {
-                transform: translate(${sunCenterX}px, ${sunCenterY - 20}px) scale(1.05);
-              }
-              100% {
-                transform: translate(${sunCenterX}px, ${sunCenterY + 48}px) scale(0.92);
-              }
-            }
-
-            @keyframes scenerySunRaysRotate {
-              0% {
-                transform: rotate(0deg);
-              }
-              100% {
-                transform: rotate(360deg);
-              }
-            }
-
-            @keyframes sceneryCoronaPulse {
+            /* Gentle, organic sunrise breath — rock-solid relative motion without coordinate conflict */
+            @keyframes scenerySubtleSunMotion {
               0%, 100% {
-                opacity: 0.35;
-                transform: scale(0.94);
+                transform: translateY(0px);
               }
               50% {
-                opacity: 0.85;
-                transform: scale(1.20);
+                transform: translateY(-9px);
               }
             }
 
-            @keyframes sceneryCoreGlow {
+            /* Subtly glowing celestial ring breathing behind the mountain */
+            @keyframes sceneryRingGlowPulse {
               0%, 100% {
-                transform: scale(0.96);
-                filter: drop-shadow(0 0 16px rgba(254, 240, 138, 0.75));
+                opacity: 0.60;
+                transform: scale(0.985);
               }
               50% {
-                transform: scale(1.06);
-                filter: drop-shadow(0 0 34px rgba(254, 240, 138, 1));
+                opacity: 0.95;
+                transform: scale(1.02);
+              }
+            }
+
+            /* Radiant sun disc glow */
+            @keyframes scenerySunDiscGlow {
+              0%, 100% {
+                filter: drop-shadow(0 0 14px rgba(254, 240, 138, 0.70));
+              }
+              50% {
+                filter: drop-shadow(0 0 24px rgba(254, 240, 138, 0.95));
               }
             }
 
             @keyframes sceneryHorizonFlare {
               0%, 100% {
-                opacity: 0.45;
-                transform: scaleX(0.88);
+                opacity: 0.50;
+                transform: scaleX(0.94);
               }
               50% {
-                opacity: 0.95;
-                transform: scaleX(1.22);
+                opacity: 0.92;
+                transform: scaleX(1.15);
               }
             }
 
             @keyframes sceneryWaterGladeShimmer {
               0%, 100% {
-                opacity: 0.65;
-                transform: scaleX(0.94);
+                opacity: 0.70;
+                transform: scaleX(0.95);
               }
               50% {
                 opacity: 1;
-                transform: scaleX(1.10);
+                transform: scaleX(1.08);
               }
             }
 
@@ -352,7 +365,7 @@ export function HomeSceneryBackground({
 
             @keyframes sceneryCloudFloat {
               0%, 100% { transform: translateX(0); }
-              50% { transform: translateX(45px); }
+              50% { transform: translateX(40px); }
             }
 
             @keyframes sceneryEagleDrift {
@@ -362,26 +375,20 @@ export function HomeSceneryBackground({
 
             @keyframes sceneryChimneySmoke {
               0% { opacity: 0.80; transform: translate(0, 0) scale(1); }
-              50% { opacity: 0.45; transform: translate(16px, -24px) scale(1.4); }
-              100% { opacity: 0; transform: translate(32px, -48px) scale(2.0); }
+              50% { opacity: 0.45; transform: translate(14px, -22px) scale(1.35); }
+              100% { opacity: 0; transform: translate(28px, -44px) scale(1.9); }
             }
 
-            /* Animation Class Bindings */
-            .anim-rising-sun-ascent {
-              animation: scenerySunAscent 28s ease-in-out infinite;
-              transform-origin: ${sunCenterX}px ${sunCenterY}px;
+            /* Living Scenery Bindings */
+            .anim-subtle-sun {
+              animation: scenerySubtleSunMotion 10s ease-in-out infinite;
             }
-            .anim-sun-rays {
-              animation: scenerySunRaysRotate 50s linear infinite;
+            .anim-sun-halo-ring {
+              animation: sceneryRingGlowPulse 7s ease-in-out infinite;
               transform-origin: 0px 0px;
             }
-            .anim-corona-pulse {
-              animation: sceneryCoronaPulse 7s ease-in-out infinite;
-              transform-origin: 0px 0px;
-            }
-            .anim-core-glow {
-              animation: sceneryCoreGlow 5s ease-in-out infinite;
-              transform-origin: 0px 0px;
+            .anim-sun-core-disc {
+              animation: scenerySunDiscGlow 6s ease-in-out infinite;
             }
             .anim-horizon-flare {
               animation: sceneryHorizonFlare 6s ease-in-out infinite;
@@ -411,10 +418,9 @@ export function HomeSceneryBackground({
             }
 
             @media (prefers-reduced-motion: reduce) {
-              .anim-rising-sun-ascent,
-              .anim-sun-rays,
-              .anim-corona-pulse,
-              .anim-core-glow,
+              .anim-subtle-sun,
+              .anim-sun-halo-ring,
+              .anim-sun-core-disc,
               .anim-horizon-flare,
               .anim-water-glade,
               .anim-star-1,
@@ -429,7 +435,7 @@ export function HomeSceneryBackground({
         </defs>
 
         {/* =================================================================
-            1. SKY CANVAS & TWINKLING SOUTHERN CROSS STARS
+            1. SKY CANVAS & MORNING STARS
         ================================================================= */}
         <rect width="1600" height="900" fill={`url(#sky-${uid})`} />
 
@@ -472,68 +478,64 @@ export function HomeSceneryBackground({
           <path d="M70,135 Q250,110 430,135 Q280,150 70,135 Z" />
           <path d="M540,98 Q740,74 940,98 Q770,112 540,98 Z" />
           <path d="M1120,115 Q1300,92 1490,115 Q1330,130 1120,115 Z" />
-          {/* Lower dawn gold cloud shelf */}
           <path d="M220,180 Q420,165 600,180 Q430,192 220,180 Z" fill="#FDE047" opacity="0.55" />
           <path d="M1250,170 Q1400,156 1560,170 Q1410,182 1250,170 Z" fill="#FDE047" opacity="0.55" />
         </g>
 
         {/* =================================================================
-            2. ANIMATED RISING SUN
-            Crowning the eastern mountain saddle with living dawn ascent,
-            rotating corona rays, expanding chromosphere, and horizon flare.
+            2. SUBTLY GLOWING SUN & CELESTIAL HALO RING BEHIND THE MOUNTAIN
+            Clean, majestic single-core sun with an ethereal glowing ring behind
+            the mountain crest. No multi-shaded target bands, no spoke wheel lines.
         ================================================================= */}
-        {/* Soft Radial Atmospheric Solar Bloom */}
-        <rect width="1600" height="900" fill={`url(#sun-glow-core-${uid})`} />
-
-        {/* Dynamic Horizontal Horizon Dawn Flare */}
+        {/* Dynamic Horizontal Dawn Flare along mountain saddle */}
         <ellipse
           cx={sunCenterX}
           cy={sunCenterY + 16}
-          rx="380"
-          ry="16"
+          rx="400"
+          ry="14"
           fill={`url(#sun-horizon-flare-${uid})`}
           className="anim-horizon-flare"
         />
 
-        {/* The Animated Rising Sun Group (Ascending, Chromospheric Pulse & Core Disc) */}
-        <g className="anim-rising-sun-ascent">
-          {/* Rotating Soft Golden Sunburst Corona Rays */}
-          <g className="anim-sun-rays">
-            {Array.from({ length: 16 }).map((_, i) => {
-              const angle = (i * Math.PI) / 8;
-              const x2 = Math.cos(angle) * 165;
-              const y2 = Math.sin(angle) * 165;
-              return (
-                <line
-                  key={i}
-                  x1="0"
-                  y1="0"
-                  x2={x2}
-                  y2={y2}
-                  stroke="#FDE047"
-                  strokeWidth={i % 2 === 0 ? '2.5' : '1.4'}
-                  strokeDasharray="18 12"
-                  opacity={i % 2 === 0 ? '0.45' : '0.25'}
-                  strokeLinecap="round"
-                />
-              );
-            })}
-          </g>
+        {/* Single Subtly Glowing Sun Group positioned at the mountain saddle */}
+        <g transform={`translate(${sunCenterX}, ${sunCenterY})`}>
+          <g className="anim-subtle-sun">
+            {/* Atmospheric soft aura (Seamless diffuse gradient, no stepped discs) */}
+            <circle r="220" fill={`url(#sun-soft-aura-${uid})`} />
 
-          {/* Outermost breathing solar corona */}
-          <circle r="148" fill={c.sunHalo} className="anim-corona-pulse" />
-          {/* Mid solar atmosphere */}
-          <circle r="96" fill="#FDE047" opacity="0.45" className="anim-corona-pulse" />
-          {/* Chromosphere golden core */}
-          <circle r="62" fill="#FEF08A" opacity="0.80" className="anim-core-glow" />
-          {/* Blinding celestial solar core */}
-          <circle r="42" fill={c.sunCore} opacity="0.99" className="anim-core-glow" />
+            {/* Subtly Glowing Ring Behind the Sun Disc (Ethereal Celestial Halo) */}
+            <circle
+              r="70"
+              fill="none"
+              stroke={`url(#sun-halo-ring-${uid})`}
+              strokeWidth="2.0"
+              className="anim-sun-halo-ring"
+            />
+            {/* Delicate outer whisper halo ring */}
+            <circle
+              r="88"
+              fill="none"
+              stroke="#FEF08A"
+              strokeWidth="0.9"
+              strokeDasharray="6 6"
+              opacity="0.38"
+              className="anim-sun-halo-ring"
+            />
+
+            {/* Clean Luminous Celestial Sun Disc (Pure dawn radiance) */}
+            <circle
+              r="36"
+              fill={`url(#sun-core-disc-${uid})`}
+              className="anim-sun-core-disc"
+            />
+          </g>
         </g>
 
         {/* =================================================================
             3. DISTANT MOUNT MULANJE MASSIF (SAPITWA PEAK 3,002m & CHAMBE BASIN)
             Geological Realism: Monolithic granite inselberg batholith with
             sheer cliffs, jointed vertical rock crevasses, and chiseled facets.
+            SHARPENED: Crisp ridge crest lines, chiseled facets, and waterfalls.
         ================================================================= */}
         <g opacity="1">
           {/* Main Granite Massif Silhouette */}
@@ -549,10 +551,29 @@ export function HomeSceneryBackground({
                L1505,330 Q1575,385 1650,435 
                L1650,750 L-50,750 Z"
             fill={`url(#mulanje-base-${uid})`}
+            stroke="#1E293B"
+            strokeWidth="1.5"
+          />
+
+          {/* Sharpened Ridge-Cap Zenith Rim Line (Mount Mulanje Summit Silhouette) */}
+          <path
+            d="M-50,560 
+               L50,445 Q110,405 170,385 
+               L270,305 Q330,245 385,235 
+               L435,280 Q505,205 555,190 
+               L635,260 Q705,315 765,345 
+               L865,390 Q935,335 995,320 
+               L1075,355 Q1155,275 1215,260 
+               L1305,210 Q1365,180 1415,240 
+               L1505,330 Q1575,385 1650,435"
+            stroke="#F1F5F9"
+            strokeWidth="1.5"
+            fill="none"
+            opacity="0.75"
           />
 
           {/* Geological Fault Lines & Vertical Granite Joint Crevices */}
-          <g stroke="#0F172A" strokeWidth="1.6" opacity="0.90" fill="none">
+          <g stroke="#0A111E" strokeWidth="2.0" opacity="0.95" fill="none">
             <path d="M385,235 L395,310 L410,420" />
             <path d="M555,190 L570,290 L560,440" />
             <path d="M765,345 L750,430 L760,490" />
@@ -561,33 +582,59 @@ export function HomeSceneryBackground({
             <path d="M1365,180 L1350,280 L1370,430" />
           </g>
 
-          {/* Chiseled Granite Facets strictly lit by the Rising Sun:
-              - Left of the sun (x < 1120): East-facing facets face the sun and glow with warm light
-              - Right of the sun (x > 1120): West-facing facets face the sun and catch morning light
-          */}
+          {/* Chiseled Granite Facets strictly lit by the Rising Sun */}
           {/* Peak 1: Chambe West Buttress (385, 235) — East face lit */}
-          <polygon points="385,235 435,280 405,455 335,415" fill={`url(#mulanje-sunlit-east-${uid})`} />
+          <polygon
+            points="385,235 435,280 405,455 335,415"
+            fill={`url(#mulanje-sunlit-east-${uid})`}
+            stroke="#FDE047"
+            strokeWidth="0.8"
+          />
           <polygon points="385,235 335,415 310,425" fill={`url(#mulanje-cleft-shadow-${uid})`} />
 
           {/* Peak 2: Sapitwa Main Summit (555, 190, 3,002m) — East chiseled face lit */}
-          <polygon points="555,190 635,260 600,475 515,435" fill={`url(#mulanje-sunlit-east-${uid})`} />
+          <polygon
+            points="555,190 635,260 600,475 515,435"
+            fill={`url(#mulanje-sunlit-east-${uid})`}
+            stroke="#FDE047"
+            strokeWidth="1.0"
+          />
           <polygon points="555,190 515,435 480,445" fill={`url(#mulanje-cleft-shadow-${uid})`} />
 
           {/* Peak 3: Central Saddle Gorge (995, 320) — East face lit */}
-          <polygon points="995,320 1075,355 1035,505 945,475" fill={`url(#mulanje-sunlit-east-${uid})`} />
+          <polygon
+            points="995,320 1075,355 1035,505 945,475"
+            fill={`url(#mulanje-sunlit-east-${uid})`}
+            stroke="#FDE047"
+            strokeWidth="0.8"
+          />
           <polygon points="995,320 945,475 920,485" fill={`url(#mulanje-cleft-shadow-${uid})`} />
 
           {/* Peak 4: Eastern Escarpment (1305, 210 to 1415, 240) — West face catches morning sun */}
-          <polygon points="1305,210 1415,240 1365,485 1265,445" fill={`url(#mulanje-sunlit-west-${uid})`} />
+          <polygon
+            points="1305,210 1415,240 1365,485 1265,445"
+            fill={`url(#mulanje-sunlit-west-${uid})`}
+            stroke="#FDE047"
+            strokeWidth="0.8"
+          />
           <polygon points="1415,240 1505,330 1460,490 1365,485" fill={`url(#mulanje-cleft-shadow-${uid})`} />
 
-          {/* Twin Highland Waterfalls (Lichenya & Ruo Gorges) cascading down the granite face */}
-          <path d="M558,235 Q568,335 552,445 L564,445 Q580,335 570,235 Z" fill={`url(#falls-${uid})`} />
-          <path d="M1312,255 Q1302,345 1315,440 L1324,440 Q1309,345 1320,255 Z" fill={`url(#falls-${uid})`} />
+          {/* Additional Sharpened Granite Facets */}
+          <polygon points="270,305 330,245 385,235 340,360" fill={`url(#mulanje-cleft-shadow-${uid})`} />
+          <polygon points="635,260 705,315 675,440 600,475" fill={`url(#mulanje-cleft-shadow-${uid})`} />
+          <polygon points="1215,260 1305,210 1265,445 1190,410" fill={`url(#mulanje-sunlit-west-${uid})`} />
+
+          {/* Twin Highland Waterfalls (Lichenya & Ruo Gorges) cascading down granite rock faces */}
+          {/* Lichenya Cascade */}
+          <path d="M558,235 Q568,335 552,445 L566,445 Q582,335 570,235 Z" fill={`url(#falls-${uid})`} />
+          <path d="M562,235 L560,340 L556,445" stroke="#FFFFFF" strokeWidth="1.5" opacity="0.98" fill="none" />
+          {/* Ruo Cascade */}
+          <path d="M1312,255 Q1302,345 1315,440 L1326,440 Q1311,345 1320,255 Z" fill={`url(#falls-${uid})`} />
+          <path d="M1316,255 L1311,345 L1320,440" stroke="#FFFFFF" strokeWidth="1.5" opacity="0.98" fill="none" />
 
           {/* Waterfall Aerated Spray Mist at Gorge Base Pools */}
-          <ellipse cx="558" cy="446" rx="32" ry="11" fill={c.mistColor} opacity="0.90" />
-          <ellipse cx="1319" cy="441" rx="28" ry="10" fill={c.mistColor} opacity="0.85" />
+          <ellipse cx="558" cy="446" rx="34" ry="12" fill={c.mistColor} opacity="0.92" />
+          <ellipse cx="1319" cy="441" rx="30" ry="11" fill={c.mistColor} opacity="0.88" />
         </g>
 
         {/* High-Altitude Mountain Cloud Ribbon Swirling Through the Gorges */}
@@ -598,31 +645,44 @@ export function HomeSceneryBackground({
             Realism: Graduated lake depth, directionally coherent sun shimmer
             glade along the line of sight to the rising sun, and authentic
             Malawian lateen dhow (mbwato) with wake ripples.
+            SHARPENED: Crisp shoreline, wave cuts, and sail reflections.
         ================================================================= */}
         <g opacity="1">
           {/* Distant Escarpment Ridge (Deep Highland Forest) */}
-          <path d="M-50,575 Q160,425 360,475 T760,440 T1160,465 T1650,415 L1650,780 L-50,780 Z" fill={c.midMountainFar} />
+          <path
+            d="M-50,575 Q160,425 360,475 T760,440 T1160,465 T1650,415 L1650,780 L-50,780 Z"
+            fill={c.midMountainFar}
+            stroke="#0A2F18"
+            strokeWidth="1.2"
+          />
           {/* Near Escarpment Ridge (Rich Forest Emerald) */}
-          <path d="M-50,615 Q240,485 510,535 T1000,510 T1410,485 T1650,515 L1650,810 L-50,810 Z" fill={c.midMountainNear} />
+          <path
+            d="M-50,615 Q240,485 510,535 T1000,510 T1410,485 T1650,515 L1650,810 L-50,810 Z"
+            fill={c.midMountainNear}
+            stroke="#072613"
+            strokeWidth="1.4"
+          />
 
           {/* Evergreen Pine & Cedar Groves on the Mid-Ridge */}
           {[
-            [180, 485, 0.65],
-            [210, 492, 0.55],
-            [240, 488, 0.60],
-            [710, 465, 0.55],
-            [735, 460, 0.65],
-            [760, 468, 0.50],
-            [1220, 482, 0.65],
-            [1245, 476, 0.75],
-            [1275, 484, 0.60],
-            [1460, 498, 0.70],
+            [180, 485, 0.68],
+            [210, 492, 0.58],
+            [240, 488, 0.62],
+            [710, 465, 0.58],
+            [735, 460, 0.68],
+            [760, 468, 0.52],
+            [1220, 482, 0.68],
+            [1245, 476, 0.78],
+            [1275, 484, 0.62],
+            [1460, 498, 0.72],
           ].map(([tx, ty, scale], idx) => (
             <polygon
               key={idx}
               points="16,0 0,36 32,36"
               transform={`translate(${tx}, ${ty}) scale(${scale})`}
-              fill="#0F381E"
+              fill="#0A2814"
+              stroke="#15803D"
+              strokeWidth="0.8"
             />
           ))}
 
@@ -632,150 +692,248 @@ export function HomeSceneryBackground({
             fill={`url(#lake-${uid})`}
           />
 
-          {/* Shoreline Sandy Edge Highlight */}
+          {/* Crisp Shoreline Sandy Beach Edge Highlight */}
           <path
             d="M280,560 Q480,530 720,545 T1180,535 T1580,555"
-            stroke="#FDE68A"
-            strokeWidth="1.8"
+            stroke="#FEF08A"
+            strokeWidth="2.4"
+            fill="none"
+            opacity="0.95"
+          />
+          <path
+            d="M280,561 Q480,531 720,546 T1180,536 T1580,556"
+            stroke="#FFFFFF"
+            strokeWidth="1.0"
             fill="none"
             opacity="0.80"
           />
 
-          {/* Solar Shimmer Reflection Glade strictly aligned with the Rising Sun */}
+          {/* Solar Shimmer Reflection Glade strictly aligned with sunCenterX */}
           <g className="anim-water-glade">
             <ellipse
               cx={sunCenterX}
               cy="580"
-              rx="155"
-              ry="28"
+              rx="170"
+              ry="30"
               fill={`url(#lake-glade-${uid})`}
             />
-            {/* Shimmer Rhythms (Ripples reflecting golden dawn) */}
+            {/* Crisp Shimmer Rhythms (Ripples reflecting golden dawn) */}
             {[
-              [sunCenterX - 50, 568, 75, 2.2],
-              [sunCenterX + 18, 576, 96, 2.4],
-              [sunCenterX - 28, 584, 122, 2.6],
-              [sunCenterX + 38, 592, 108, 2.4],
-              [sunCenterX - 65, 602, 144, 2.8],
-              [sunCenterX + 12, 612, 160, 2.6],
-              [sunCenterX - 18, 624, 175, 2.4],
+              [sunCenterX - 50, 568, 80, 2.4],
+              [sunCenterX + 18, 576, 104, 2.6],
+              [sunCenterX - 28, 584, 130, 2.8],
+              [sunCenterX + 38, 592, 115, 2.6],
+              [sunCenterX - 65, 602, 150, 3.0],
+              [sunCenterX + 12, 612, 168, 2.8],
+              [sunCenterX - 18, 624, 185, 2.6],
             ].map(([rx, ry, rw, rh], idx) => (
-              <ellipse
-                key={idx}
-                cx={rx}
-                cy={ry}
-                rx={rw}
-                ry={rh}
-                fill={c.sunCore}
-                opacity={0.70 + (idx % 3) * 0.15}
-              />
+              <g key={idx}>
+                <ellipse
+                  cx={rx}
+                  cy={ry}
+                  rx={rw}
+                  ry={rh}
+                  fill={c.sunCore}
+                  opacity={0.80 + (idx % 3) * 0.10}
+                />
+                <line
+                  x1={rx - rw * 0.6}
+                  y1={ry}
+                  x2={rx + rw * 0.6}
+                  y2={ry}
+                  stroke="#FFFFFF"
+                  strokeWidth="1.2"
+                  opacity="0.95"
+                />
+              </g>
             ))}
           </g>
 
           {/* Authentic Malawian Wooden Lateen Dhow (Mbwato) with White Canvas Sail */}
-          <g transform="translate(1260, 558) scale(0.78)">
-            {/* Curved hull */}
-            <path d="M0,22 Q24,30 52,22 L46,14 L6,14 Z" fill="#3B1705" />
-            <line x1="8" y1="14" x2="44" y2="14" stroke="#F59E0B" strokeWidth="1.2" />
-            {/* Slanted lateen mast & yard */}
-            <line x1="26" y1="20" x2="26" y2="3" stroke="#5C2406" strokeWidth="2.0" />
-            <line x1="12" y1="24" x2="42" y2="0" stroke="#92400E" strokeWidth="1.6" />
-            {/* Triangular canvas sail catching brilliant morning sun */}
-            <polygon points="14,22 40,2 26,20" fill="#FFFDF5" opacity="0.99" />
-            {/* Water wake ripple */}
-            <ellipse cx="26" cy="24" rx="24" ry="2.2" fill="#E0F2FE" opacity="0.80" />
+          <g transform="translate(1260, 558) scale(0.82)">
+            <path d="M0,22 Q24,30 52,22 L46,14 L6,14 Z" fill="#3B1705" stroke="#1C0A00" strokeWidth="1.2" />
+            <line x1="8" y1="14" x2="44" y2="14" stroke="#F59E0B" strokeWidth="1.4" />
+            <line x1="26" y1="20" x2="26" y2="3" stroke="#5C2406" strokeWidth="2.2" />
+            <line x1="12" y1="24" x2="42" y2="0" stroke="#92400E" strokeWidth="1.8" />
+            <polygon points="14,22 40,2 26,20" fill="#FFFFFF" stroke="#FEF3C7" strokeWidth="0.8" opacity="0.99" />
+            <ellipse cx="26" cy="24" rx="26" ry="2.4" fill="#E0F2FE" opacity="0.85" />
           </g>
         </g>
 
         {/* =================================================================
-            5. FOREGROUND TERRACED HILLS, PERMACULTURE SWALES & LIVING HOMESTEAD
-            Outpost permaculture design: Vetiver contour grass, 3x3x3ft pits,
-            solar arrays facing the sun, fieldstone architecture, and baobabs.
+            5. ENRICHED FOREGROUND LANDSCAPE ON "THIS SIDE" (THE LIVING HOMESTEAD)
+            Enriched without over-cluttering:
+            - Crisp stone retaining terrace walls following contour swales
+            - Lush, rhythmic tea shrub clusters with morning highlight
+            - Winding red laterite footpath leading to the veranda plinth
+            - Refined homestead outpost architecture with warm veranda light
+            - Sculptural baobab and umbrella acacia with crisp dawn rim lighting
         ================================================================= */}
         <g opacity="1">
           {/* Back Terraced Tea Hill Slope */}
           <path
             d="M-50,710 Q280,590 620,630 T1220,610 T1650,645 L1650,950 L-50,950 Z"
             fill={`url(#terrace-slope-${uid})`}
+            stroke="#0F381E"
+            strokeWidth="1.5"
           />
 
-          {/* Permaculture Keyline Contour Swales (Moisture Retention Ditches with Warm Earth Berms) */}
-          <g stroke={c.soilBerm} strokeWidth="3" opacity="0.85" fill="none">
-            <path d="M-20,735 Q290,618 625,655 T1230,638 T1640,670" />
-            <path d="M-20,762 Q290,648 625,682 T1230,665 T1640,698" />
+          {/* Stone Masonry Retaining Walls Along Contour Tiers (Enriched Terrace Architecture) */}
+          <path
+            d="M-20,736 Q290,619 625,656 T1230,639 T1640,671"
+            stroke={`url(#stone-retaining-${uid})`}
+            strokeWidth="4.2"
+            fill="none"
+          />
+          <path
+            d="M-20,735 Q290,618 625,655 T1230,638 T1640,670"
+            stroke="#78716C"
+            strokeWidth="1.2"
+            fill="none"
+            opacity="0.75"
+          />
+
+          <path
+            d="M-20,764 Q290,650 625,684 T1230,667 T1640,700"
+            stroke={`url(#stone-retaining-${uid})`}
+            strokeWidth="4.2"
+            fill="none"
+          />
+          <path
+            d="M-20,763 Q290,649 625,683 T1230,666 T1640,699"
+            stroke="#78716C"
+            strokeWidth="1.2"
+            fill="none"
+            opacity="0.75"
+          />
+
+          {/* Permaculture Keyline Contour Swales (Warm Earth Berms) */}
+          <g stroke={c.soilBerm} strokeWidth="2.5" opacity="0.85" fill="none">
             <path d="M-20,792 Q310,680 645,712 T1245,695 T1640,728" />
           </g>
 
-          {/* Vetiver Grass Hedgerow Tufts Stabilizing Swale Berms */}
-          <g fill={c.terraceStripe} opacity="0.95">
+          {/* Rhythmic Contoured Tea Bush Hedgerows (Lush, Sculptural Green Clusters) */}
+          <g opacity="0.96">
             {[
-              [140, 672], [180, 664], [220, 656], [260, 650], [300, 646],
-              [420, 644], [460, 646], [500, 650], [540, 655], [580, 660],
-              [780, 644], [820, 640], [860, 638], [900, 636], [940, 636],
-              [1080, 636], [1120, 638], [1160, 640], [1200, 644],
-            ].map(([vx, vy], idx) => (
-              <polygon key={idx} points="0,0 -3.5,-10 0,-14 3.5,-10" transform={`translate(${vx}, ${vy})`} />
+              [160, 648, 22, 10],
+              [210, 642, 24, 10],
+              [260, 638, 26, 11],
+              [310, 635, 24, 10],
+              [430, 634, 25, 11],
+              [480, 637, 26, 11],
+              [530, 642, 24, 10],
+              [790, 634, 25, 11],
+              [840, 630, 26, 11],
+              [890, 628, 25, 10],
+              [940, 628, 26, 11],
+              [1100, 630, 24, 10],
+              [1150, 633, 26, 11],
+            ].map(([tx, ty, rx, ry], idx) => (
+              <g key={idx}>
+                {/* Tea bush base */}
+                <ellipse cx={tx} cy={ty} rx={rx} ry={ry} fill="#14532D" stroke="#0B2613" strokeWidth="0.8" />
+                {/* Sunlit top foliage crown */}
+                <ellipse cx={tx} cy={ty - 2} rx={rx * 0.8} ry={ry * 0.75} fill="#16A34A" />
+                <path
+                  d={`M${tx - rx * 0.5},${ty - 4} Q${tx},${ty - 7} ${tx + rx * 0.5},${ty - 4}`}
+                  stroke="#4ADE80"
+                  strokeWidth="1.4"
+                  fill="none"
+                  opacity="0.85"
+                />
+              </g>
             ))}
           </g>
+
+          {/* Winding Red Laterite Footpath Leading to Homestead Veranda */}
+          <path
+            d="M380,890 Q540,820 680,780 T950,670 T1040,615"
+            stroke={`url(#laterite-path-${uid})`}
+            strokeWidth="9"
+            strokeLinecap="round"
+            fill="none"
+            opacity="0.92"
+          />
+          {/* Subtle Sandy Footpath Edge Highlight */}
+          <path
+            d="M382,888 Q542,818 682,778 T952,668 T1042,613"
+            stroke="#FEF08A"
+            strokeWidth="1.2"
+            fill="none"
+            opacity="0.45"
+          />
 
           {/* Main Front Agroforestry Promontory */}
           <path
             d="M-50,785 Q320,670 720,715 T1380,690 T1650,735 L1650,950 L-50,950 Z"
             fill={`url(#foreground-promontory-${uid})`}
+            stroke="#0B2613"
+            strokeWidth="1.8"
           />
 
           {/* =============================================================
               THE COUNTRY LIVING HOMESTEAD & SANCTUARY OUTPOST (x=1010, y=520)
-              Features:
-              - Double-pitch pitched metal roof with solar array
-              - Fieldstone plinth foundation & timber posts
-              - Glass greenhouse solarium
-              - Gravity water tower
-              - Stone chimney with rising morning hearth smoke
+              SHARPENED & ENRICHED:
+              - Crisp timber joinery & warm veranda glow
+              - High-efficiency solar array with crystalline glint
+              - Glass solarium seedling nursery & gravity water tank
               ============================================================= */}
           <g id={`homestead-cluster-${uid}`} transform="translate(1010, 520)">
             {/* Fieldstone Foundation Terrace Plinth */}
             <polygon
               points="10,85 185,85 175,102 -2,102"
               fill={c.stoneMasonry}
-              stroke="#292524"
-              strokeWidth="1.4"
+              stroke="#1C1917"
+              strokeWidth="1.6"
             />
             {/* Masonry Course Details */}
-            <line x1="8" y1="93" x2="180" y2="93" stroke="#78716C" strokeWidth="1.0" opacity="0.85" />
+            <line x1="8" y1="93" x2="180" y2="93" stroke="#A8A29E" strokeWidth="1.2" opacity="0.90" />
+            <line x1="40" y1="85" x2="38" y2="93" stroke="#292524" strokeWidth="1.0" />
+            <line x1="90" y1="85" x2="88" y2="93" stroke="#292524" strokeWidth="1.0" />
+            <line x1="140" y1="85" x2="138" y2="93" stroke="#292524" strokeWidth="1.0" />
 
             {/* Main Residence Timber Post-and-Beam Walls */}
-            <rect x="25" y="44" width="90" height="42" fill={c.cedarWood} />
+            <rect x="25" y="44" width="90" height="42" fill={c.cedarWood} stroke="#3B1705" strokeWidth="1.2" />
 
-            {/* Shaded Front Veranda (Khonde) for Family Fellowship & Reading */}
-            <rect x="20" y="58" width="98" height="28" fill="#2E1005" opacity="0.85" />
+            {/* Shaded Front Veranda (Khonde) with Warm Amber Morning Glow */}
+            <rect x="20" y="58" width="98" height="28" fill="#2E1005" opacity="0.92" stroke="#1C0A00" strokeWidth="1" />
+            {/* Warm Veranda Ambient Light */}
+            <rect x="22" y="60" width="94" height="24" fill="#FEF08A" opacity="0.18" />
+
             {/* Veranda Timber Pillars */}
             {[24, 46, 70, 94, 114].map((px) => (
-              <rect key={px} x={px} y="58" width="4" height="28" fill="#B45309" />
+              <rect key={px} x={px} y="58" width="4" height="28" fill="#B45309" stroke="#78350F" strokeWidth="0.6" />
             ))}
 
             {/* Casement Windows Reflecting Morning Sky */}
-            <rect x="36" y="48" width="14" height="12" rx="1" fill="#BAE6FD" opacity="0.95" />
-            <rect x="74" y="48" width="14" height="12" rx="1" fill="#BAE6FD" opacity="0.95" />
-            <line x1="43" y1="48" x2="43" y2="60" stroke="#0284C7" strokeWidth="0.8" />
-            <line x1="36" y1="54" x2="50" y2="54" stroke="#0284C7" strokeWidth="0.8" />
-            <line x1="81" y1="48" x2="81" y2="60" stroke="#0284C7" strokeWidth="0.8" />
-            <line x1="74" y1="54" x2="88" y2="54" stroke="#0284C7" strokeWidth="0.8" />
+            <rect x="36" y="48" width="14" height="12" rx="1" fill="#BAE6FD" opacity="0.98" stroke="#0284C7" strokeWidth="1" />
+            <rect x="74" y="48" width="14" height="12" rx="1" fill="#BAE6FD" opacity="0.98" stroke="#0284C7" strokeWidth="1" />
+            <line x1="43" y1="48" x2="43" y2="60" stroke="#0284C7" strokeWidth="0.9" />
+            <line x1="36" y1="54" x2="50" y2="54" stroke="#0284C7" strokeWidth="0.9" />
+            <line x1="81" y1="48" x2="81" y2="60" stroke="#0284C7" strokeWidth="0.9" />
+            <line x1="74" y1="54" x2="88" y2="54" stroke="#0284C7" strokeWidth="0.9" />
 
             {/* Main Residence Double-Pitch Gable Roof */}
-            <polygon points="12,46 70,12 128,46" fill={`url(#roof-sunlit-${uid})`} />
+            <polygon points="12,46 70,12 128,46" fill={`url(#roof-sunlit-${uid})`} stroke="#9A3412" strokeWidth="1.2" />
             <polygon points="70,12 128,46 122,48 70,14" fill={c.roofRidge} />
 
             {/* Rooftop Off-Grid Solar PV Array (Oriented to Dawn Sun, Catching Specular Sheen) */}
-            <polygon points="34,40 68,16 92,30 58,54" fill={`url(#solar-sheen-${uid})`} stroke="#38BDF8" strokeWidth="1" />
-            {/* Solar Cell Grid Lines */}
-            <line x1="45" y1="32" x2="70" y2="46" stroke="#FFFFFF" strokeWidth="0.8" opacity="0.90" />
-            <line x1="56" y1="24" x2="81" y2="38" stroke="#FFFFFF" strokeWidth="0.8" opacity="0.90" />
-            <line x1="48" y1="43" x2="80" y2="23" stroke="#FFFFFF" strokeWidth="0.8" opacity="0.80" />
+            <polygon
+              points="34,40 68,16 92,30 58,54"
+              fill={`url(#solar-sheen-${uid})`}
+              stroke="#38BDF8"
+              strokeWidth="1.4"
+            />
+            {/* Solar Cell Conductive Busbar Grid Lines */}
+            <line x1="45" y1="32" x2="70" y2="46" stroke="#FFFFFF" strokeWidth="1.0" opacity="0.95" />
+            <line x1="56" y1="24" x2="81" y2="38" stroke="#FFFFFF" strokeWidth="1.0" opacity="0.95" />
+            <line x1="48" y1="43" x2="80" y2="23" stroke="#FFFFFF" strokeWidth="1.0" opacity="0.90" />
+            {/* Specular White Glint Point */}
+            <polygon points="62,28 66,24 64,30" fill="#FFFFFF" opacity="0.95" />
 
             {/* Stone Masonry Chimney */}
-            <rect x="58" y="10" width="8" height="24" fill={c.stoneMasonry} stroke="#1C1917" strokeWidth="0.8" />
-            <rect x="56" y="8" width="12" height="3" fill="#78716C" />
+            <rect x="58" y="10" width="8" height="24" fill={c.stoneMasonry} stroke="#1C1917" strokeWidth="1" />
+            <rect x="56" y="8" width="12" height="3" fill="#78716C" stroke="#292524" strokeWidth="0.8" />
 
             {/* Gentle Morning Hearth Chimney Smoke */}
             <g className="anim-scenery-smoke">
@@ -787,82 +945,71 @@ export function HomeSceneryBackground({
 
             {/* Outpost Glass Solarium Greenhouse (Year-Round Seedling Nursery) */}
             <g transform="translate(125, 52)">
-              <polygon points="0,34 0,16 22,4 44,16 44,34" fill="#065F46" stroke="#10B981" strokeWidth="1.2" />
-              {/* Glass Panes Reflecting Sunrise Sky */}
-              <polygon points="2,16 22,6 42,16 22,26" fill="#A7F3D0" opacity="0.85" />
-              <rect x="4" y="18" width="16" height="15" fill="#6EE7B7" opacity="0.75" />
-              <rect x="24" y="18" width="16" height="15" fill="#6EE7B7" opacity="0.75" />
-              {/* Glazing bars */}
-              <line x1="22" y1="6" x2="22" y2="34" stroke="#059669" strokeWidth="1" />
-              <line x1="2" y1="25" x2="42" y2="25" stroke="#059669" strokeWidth="0.8" />
+              <polygon points="0,34 0,16 22,4 44,16 44,34" fill="#065F46" stroke="#10B981" strokeWidth="1.4" />
+              <polygon points="2,16 22,6 42,16 22,26" fill="#A7F3D0" opacity="0.90" stroke="#34D399" strokeWidth="0.8" />
+              <rect x="4" y="18" width="16" height="15" fill="#6EE7B7" opacity="0.80" stroke="#059669" strokeWidth="0.8" />
+              <rect x="24" y="18" width="16" height="15" fill="#6EE7B7" opacity="0.80" stroke="#059669" strokeWidth="0.8" />
+              <line x1="22" y1="6" x2="22" y2="34" stroke="#047857" strokeWidth="1.2" />
+              <line x1="2" y1="25" x2="42" y2="25" stroke="#047857" strokeWidth="1.0" />
             </g>
 
             {/* Gravity Water Tank Tower (Piped from Mountain Spring) */}
             <g transform="translate(-18, 40)">
-              {/* Timber Trestle Legs */}
-              <line x1="2" y1="52" x2="8" y2="18" stroke="#92400E" strokeWidth="2.4" />
-              <line x1="22" y1="52" x2="16" y2="18" stroke="#92400E" strokeWidth="2.4" />
-              <line x1="3" y1="36" x2="21" y2="36" stroke="#B45309" strokeWidth="1.4" />
-              <line x1="4" y1="36" x2="20" y2="18" stroke="#B45309" strokeWidth="1.2" />
-              <line x1="20" y1="36" x2="4" y2="18" stroke="#B45309" strokeWidth="1.2" />
-              {/* Platform */}
-              <rect x="4" y="16" width="16" height="3" fill="#5C2406" />
-              {/* Cylindrical Rainwater Storage Tank (5,000L) */}
-              <rect x="5" y="0" width="14" height="16" rx="2" fill="#059669" stroke="#047857" strokeWidth="1.2" />
-              <line x1="5" y1="5" x2="19" y2="5" stroke="#34D399" strokeWidth="0.8" />
-              <line x1="5" y1="11" x2="19" y2="11" stroke="#34D399" strokeWidth="0.8" />
+              <line x1="2" y1="52" x2="8" y2="18" stroke="#92400E" strokeWidth="2.5" />
+              <line x1="22" y1="52" x2="16" y2="18" stroke="#92400E" strokeWidth="2.5" />
+              <line x1="3" y1="36" x2="21" y2="36" stroke="#B45309" strokeWidth="1.6" />
+              <line x1="4" y1="36" x2="20" y2="18" stroke="#B45309" strokeWidth="1.4" />
+              <line x1="20" y1="36" x2="4" y2="18" stroke="#B45309" strokeWidth="1.4" />
+              <rect x="4" y="16" width="16" height="3" fill="#5C2406" stroke="#2E1005" strokeWidth="0.8" />
+              <rect x="5" y="0" width="14" height="16" rx="2" fill="#059669" stroke="#064E3B" strokeWidth="1.4" />
+              <line x1="5" y1="5" x2="19" y2="5" stroke="#34D399" strokeWidth="1.0" />
+              <line x1="5" y1="11" x2="19" y2="11" stroke="#34D399" strokeWidth="1.0" />
             </g>
 
             {/* Practical Agro-Tool Barn & Food Drying Workshop */}
             <g transform="translate(176, 44)">
-              <polygon points="0,42 0,16 26,0 52,16 52,42" fill={c.cedarWood} stroke="#3B1705" strokeWidth="1" />
-              <polygon points="-2,16 26,-2 54,16" fill={c.roofTile} />
-              {/* Barn Dutch Barn Doors */}
-              <rect x="14" y="18" width="24" height="24" fill="#451A03" stroke="#2E1005" strokeWidth="1" />
-              <line x1="26" y1="18" x2="26" y2="42" stroke="#B45309" strokeWidth="1" />
-              {/* Upper Hayloft / Herb Drying Window */}
-              <rect x="21" y="8" width="10" height="7" rx="1" fill="#FEF08A" opacity="0.90" />
+              <polygon points="0,42 0,16 26,0 52,16 52,42" fill={c.cedarWood} stroke="#2E1005" strokeWidth="1.4" />
+              <polygon points="-2,16 26,-2 54,16" fill={c.roofTile} stroke="#9A3412" strokeWidth="1.0" />
+              <rect x="14" y="18" width="24" height="24" fill="#3D1505" stroke="#1C0A00" strokeWidth="1.2" />
+              <line x1="26" y1="18" x2="26" y2="42" stroke="#B45309" strokeWidth="1.2" />
+              <rect x="21" y="8" width="10" height="7" rx="1" fill="#FEF08A" opacity="0.95" stroke="#D97706" strokeWidth="0.8" />
             </g>
           </g>
 
-          {/* African Baobab Tree on Left Ridge (Sculptural Gnarled Silhouette with Warm Rim Lighting) */}
-          <g transform="translate(110, 525)" fill={c.foregroundFoliage} opacity="0.96">
-            <path d="M44,145 Q48,92 42,52 L62,52 Q56,92 64,145 Z" fill="#3E2723" />
-            {/* Massive Gnarled Scaffold Branches */}
+          {/* African Baobab Tree on Left Ridge (Sculptural Gnarled Silhouette with Sharp Rim Lighting) */}
+          <g transform="translate(110, 525)" fill={c.foregroundFoliage} opacity="0.98">
+            <path d="M44,145 Q48,92 42,52 L62,52 Q56,92 64,145 Z" fill="#3E2723" stroke="#27140B" strokeWidth="1.5" />
             <path
               d="M46,57 Q20,32 -6,40 M50,52 Q50,18 28,8 M56,54 Q84,26 116,35 M52,52 Q72,19 96,13"
               stroke="#3E2723"
-              strokeWidth="6"
+              strokeWidth="6.5"
               strokeLinecap="round"
               fill="none"
             />
-            {/* Canopy Foliage Masses */}
-            <ellipse cx="-4" cy="34" rx="32" ry="14" fill="#15803D" />
-            <ellipse cx="34" cy="8" rx="38" ry="15" fill="#166534" />
-            <ellipse cx="90" cy="13" rx="36" ry="14" fill="#15803D" />
-            <ellipse cx="118" cy="31" rx="30" ry="13" fill="#14532D" />
-            <ellipse cx="56" cy="23" rx="48" ry="18" fill="#166534" />
-            {/* Morning sunrise rim glow on top-right edges */}
-            <path d="M12,4 Q34,-2 60,6" stroke="#FDE047" strokeWidth="2.2" opacity="0.85" fill="none" />
-            <path d="M70,8 Q95,4 115,18" stroke="#FDE047" strokeWidth="2.2" opacity="0.85" fill="none" />
+            <ellipse cx="-4" cy="34" rx="32" ry="14" fill="#15803D" stroke="#0F381E" strokeWidth="1" />
+            <ellipse cx="34" cy="8" rx="38" ry="15" fill="#166534" stroke="#0F381E" strokeWidth="1" />
+            <ellipse cx="90" cy="13" rx="36" ry="14" fill="#15803D" stroke="#0F381E" strokeWidth="1" />
+            <ellipse cx="118" cy="31" rx="30" ry="13" fill="#14532D" stroke="#0F381E" strokeWidth="1" />
+            <ellipse cx="56" cy="23" rx="48" ry="18" fill="#166534" stroke="#0F381E" strokeWidth="1" />
+            <path d="M12,4 Q34,-2 60,6" stroke="#FEF08A" strokeWidth="2.5" opacity="0.95" fill="none" />
+            <path d="M70,8 Q95,4 115,18" stroke="#FEF08A" strokeWidth="2.5" opacity="0.95" fill="none" />
           </g>
 
           {/* African Flat-Top Umbrella Acacia (Tiered Canopy catching dawn rim light) */}
           <g transform="translate(1380, 542)">
-            <path d="M26,112 Q28,70 24,40 L34,40 Q32,70 36,112 Z" fill="#451A03" />
+            <path d="M26,112 Q28,70 24,40 L34,40 Q32,70 36,112 Z" fill="#451A03" stroke="#2E1005" strokeWidth="1.2" />
             <path
               d="M26,45 Q-5,22 -30,28 M28,40 Q28,15 12,8 M32,42 Q58,20 86,26"
               stroke="#451A03"
-              strokeWidth="5"
+              strokeWidth="5.5"
               strokeLinecap="round"
               fill="none"
             />
-            <ellipse cx="-25" cy="24" rx="36" ry="9" fill="#15803D" />
-            <ellipse cx="15" cy="6" rx="44" ry="10" fill="#166534" />
-            <ellipse cx="78" cy="22" rx="38" ry="9" fill="#15803D" />
-            <ellipse cx="30" cy="14" rx="58" ry="11" fill="#14532D" />
-            {/* Top Tier Sunrise Rim Light */}
-            <path d="M-15,4 Q15,0 45,6" stroke="#FDE047" strokeWidth="2.0" opacity="0.90" fill="none" />
+            <ellipse cx="-25" cy="24" rx="36" ry="9" fill="#15803D" stroke="#0F381E" strokeWidth="0.8" />
+            <ellipse cx="15" cy="6" rx="44" ry="10" fill="#166534" stroke="#0F381E" strokeWidth="0.8" />
+            <ellipse cx="78" cy="22" rx="38" ry="9" fill="#15803D" stroke="#0F381E" strokeWidth="0.8" />
+            <ellipse cx="30" cy="14" rx="58" ry="11" fill="#14532D" stroke="#0F381E" strokeWidth="0.8" />
+            <path d="M-15,4 Q15,0 45,6" stroke="#FEF08A" strokeWidth="2.2" opacity="0.95" fill="none" />
           </g>
 
           {/* Mulanje Pines & Cedars Framing the Promontory */}
@@ -879,16 +1026,16 @@ export function HomeSceneryBackground({
               [1550, 660, 0.80],
             ].map(([tx, ty, scale], idx) => (
               <g key={idx} transform={`translate(${tx}, ${ty}) scale(${scale})`}>
-                <polygon points="16,0 0,26 32,26" fill="#15803D" />
-                <polygon points="16,14 -4,42 36,42" fill="#166534" />
-                <polygon points="16,28 -8,58 40,58" fill="#14532D" />
+                <polygon points="16,0 0,26 32,26" fill="#15803D" stroke="#0F381E" strokeWidth="0.8" />
+                <polygon points="16,14 -4,42 36,42" fill="#166534" stroke="#0F381E" strokeWidth="0.8" />
+                <polygon points="16,28 -8,58 40,58" fill="#14532D" stroke="#0F381E" strokeWidth="0.8" />
                 <rect x="13" y="58" width="6" height="16" fill="#3B1705" />
               </g>
             ))}
           </g>
 
           {/* Permaculture Deep Planting Pits (3x3x3ft Agroforestry Mounds) */}
-          <g fill={c.foregroundAccent} opacity="0.90">
+          <g fill={c.foregroundAccent} opacity="0.95">
             {[
               [480, 715],
               [520, 725],
@@ -900,14 +1047,14 @@ export function HomeSceneryBackground({
               [860, 765],
             ].map(([px, py], idx) => (
               <g key={idx} transform={`translate(${px}, ${py})`}>
-                <ellipse cx="0" cy="0" rx="9" ry="4" fill="#92400E" />
-                <circle cx="0" cy="-3" r="2.2" fill={c.terraceStripe} />
+                <ellipse cx="0" cy="0" rx="9" ry="4" fill="#92400E" stroke="#5C2406" strokeWidth="0.8" />
+                <circle cx="0" cy="-3" r="2.2" fill={c.terraceStripe} stroke="#16A34A" strokeWidth="0.6" />
               </g>
             ))}
           </g>
 
           {/* Soaring African Fish Eagles on Rising Mountain Thermals */}
-          <g className="anim-scenery-eagles" stroke={c.sunCore} strokeWidth="2.4" strokeLinecap="round" fill="none" opacity="0.98">
+          <g className="anim-scenery-eagles" stroke={c.sunCore} strokeWidth="2.5" strokeLinecap="round" fill="none" opacity="0.99">
             <path d="M680,225 Q693,212 706,223 Q719,212 732,225" />
             <path d="M745,204 Q754,194 763,203 Q772,194 781,204" />
             <path d="M648,248 Q656,240 664,247 Q672,240 680,248" />
@@ -916,7 +1063,6 @@ export function HomeSceneryBackground({
 
         {/* =================================================================
             6. POLISHED ATMOSPHERIC OVERLAYS
-            Refined non-linear scrim strictly under the text column.
         ================================================================= */}
         {/* A. Editorial Left Scrim (Smooth Feathered Gradient for Headline & Quote) */}
         <rect width="1600" height="900" fill={`url(#left-scrim-${uid})`} />

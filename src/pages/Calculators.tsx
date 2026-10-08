@@ -10,6 +10,7 @@ import { saveStoredSavedSpecs } from '@/lib/offlineStorage';
 import { getActiveHomesteadDistrictId, setActiveHomesteadDistrictId } from '@/lib/activeDistrictSync';
 import { OffGridSizingTools } from '@/components/outpost/OffGridSizingTools';
 import { HomesteadBoQEstimator } from '@/components/outpost/HomesteadBoQEstimator';
+import { SeasonalWaterBalanceSimulator } from '@/components/water/SeasonalWaterBalanceSimulator';
 import { ActiveDistrictContextBar } from '@/components/common/ActiveDistrictContextBar';
 import { HomeSceneryBackground } from '@/components/home/HomeSceneryBackground';
 import { CountryIcon } from '@/components/icons/CountryIcons';
@@ -1050,6 +1051,15 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Embedded 12-Month Seasonal Water Balance Hydrograph */}
+            <div className="mt-8">
+              <SeasonalWaterBalanceSimulator
+                initialDistrictId={districtPreset}
+                initialFamilySize={initialMembers}
+                initialRoofAreaSqm={roofAreaM2}
+              />
             </div>
           </div>
         </motion.div>
