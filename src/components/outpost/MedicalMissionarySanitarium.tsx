@@ -19,6 +19,7 @@ import {
   Thermometer,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { TropicalSanitariumDispensary } from '@/components/health/TropicalSanitariumDispensary';
 
 interface NewstartLaw {
   id: string;
@@ -375,9 +376,9 @@ const YOUTH_STORAGE_KEY = 'outpost_youth_curriculum_v1';
 export function MedicalMissionarySanitarium({
   initialSection = 'newstart',
 }: {
-  initialSection?: 'newstart' | 'hydrotherapy' | 'apothecary' | 'education';
+  initialSection?: 'newstart' | 'hydrotherapy' | 'apothecary' | 'dispensary' | 'education';
 }) {
-  const [activeSubTab, setActiveSubTab] = useState<'newstart' | 'hydrotherapy' | 'apothecary' | 'education'>(
+  const [activeSubTab, setActiveSubTab] = useState<'newstart' | 'hydrotherapy' | 'apothecary' | 'dispensary' | 'education'>(
     initialSection
   );
   const [selectedHydroId, setSelectedHydroId] = useState<string>(HYDROTHERAPY_PROTOCOLS[0].id);
@@ -435,7 +436,8 @@ export function MedicalMissionarySanitarium({
             { id: 'newstart', label: '01. 8 NEWSTART Laws Tracker', icon: HeartPulse },
             { id: 'hydrotherapy', label: '02. Rational Hydrotherapy Protocols', icon: Droplets },
             { id: 'apothecary', label: '03. Charcoal & Botanical Apothecary', icon: Leaf },
-            { id: 'education', label: '04. True Education & Youth Curriculum', icon: GraduationCap },
+            { id: 'dispensary', label: '04. Tropical Dispensary & Natural Pharmacopeia', icon: Sparkles },
+            { id: 'education', label: '05. True Education & Youth Curriculum', icon: GraduationCap },
           ] as const).map((tab) => {
             const Icon = tab.icon;
             const isActive = activeSubTab === tab.id;
@@ -726,7 +728,14 @@ export function MedicalMissionarySanitarium({
       )}
 
       {/* ====================================================================
-          TAB 4: TRUE EDUCATION & MADISON / AVONDALE YOUTH CURRICULUM
+          TAB 4: TROPICAL SANITARIUM DISPENSARY & EDENIC KITCHEN PROTOCOLS
+      ==================================================================== */}
+      {activeSubTab === 'dispensary' && (
+        <TropicalSanitariumDispensary />
+      )}
+
+      {/* ====================================================================
+          TAB 5: TRUE EDUCATION & MADISON / AVONDALE YOUTH CURRICULUM
       ==================================================================== */}
       {activeSubTab === 'education' && (
         <div className="flex flex-col gap-6">

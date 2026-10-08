@@ -41,13 +41,16 @@ export default function Where() {
   const [showSurveyModal, setShowSurveyModal] = useState(false);
   const [activeTipModal, setActiveTipModal] = useState<string | null>(null);
   const [hasCopiedDossier, setHasCopiedDossier] = useState(false);
-  const [activePerspective, setActivePerspective] = useState<'districts' | 'customary-law' | 'evaluator'>(() => {
+  const [activePerspective, setActivePerspective] = useState<'districts' | 'readiness-cards' | 'customary-law' | 'evaluator'>(() => {
     if (
       location.pathname.startsWith('/suitability') ||
       location.pathname.startsWith('/property-evaluator') ||
       searchParams.get('tab') === 'evaluator'
     ) {
       return 'evaluator';
+    }
+    if (searchParams.get('tab') === 'readiness-cards' || searchParams.get('tab') === 'readiness') {
+      return 'readiness-cards';
     }
     if (searchParams.get('tab') === 'customary-law' || searchParams.get('tab') === 'law') {
       return 'customary-law';
@@ -62,6 +65,8 @@ export default function Where() {
       searchParams.get('tab') === 'evaluator'
     ) {
       setActivePerspective('evaluator');
+    } else if (searchParams.get('tab') === 'readiness-cards' || searchParams.get('tab') === 'readiness') {
+      setActivePerspective('readiness-cards');
     } else if (searchParams.get('tab') === 'customary-law' || searchParams.get('tab') === 'law') {
       setActivePerspective('customary-law');
     } else if (searchParams.get('tab') === 'districts') {
@@ -219,8 +224,9 @@ Generated from OUTPOST: Country Living Matrix
           <div className="flex flex-wrap items-center gap-1.5 bg-stone-100 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/80 dark:border-stone-800">
             {([
               { id: 'districts', label: '01. District & Aquifers' },
-              { id: 'customary-law', label: '02. Customary Land Law & Protocols' },
-              { id: 'evaluator', label: '03. Property Evaluator & Checklist' },
+              { id: 'readiness-cards', label: '02. 28-District Readiness Cards' },
+              { id: 'customary-law', label: '03. Customary Land Law & Protocols' },
+              { id: 'evaluator', label: '04. Property Evaluator & Checklist' },
             ] as const).map((tab) => {
               const active = activePerspective === tab.id;
               return (
@@ -663,6 +669,13 @@ Generated from OUTPOST: Country Living Matrix
           </div>
         </aside>
       </div>
+      )}
+
+      {/* 28-District Readiness Cards & Live DCCMS/FAO Telemetry */}
+      {activePerspective === 'readiness-cards' && (
+        <section>
+          <LandReadinessCards />
+        </section>
       )}
 
       {/* Interactive Customary Land Act (2016) 5-Step Acquisition Tracker */}

@@ -14,6 +14,7 @@ import { CountryIcon, CountryIconName } from '@/components/icons';
 import { COUNTRY_IMAGES } from '@/assets/images';
 import { HomeSceneryBackground } from '@/components/home/HomeSceneryBackground';
 import { SkillStepVectorDiagram } from '@/components/outpost/SkillStepVectorDiagram';
+import { TropicalSanitariumDispensary } from '@/components/health/TropicalSanitariumDispensary';
 
 export default function Skills() {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
@@ -21,7 +22,7 @@ export default function Skills() {
   const [expandedSkillId, setExpandedSkillId] = useState<string | null>(null);
   const [bookmarksUpdated, setBookmarksUpdated] = useState(0);
   const [activeSdaTab, setActiveSdaTab] = useState<'education' | 'sustenance' | 'remedies'>('education');
-  const [activePerspective, setActivePerspective] = useState<'all-guides' | 'sda-foundations' | 'homestead-zones'>('all-guides');
+  const [activePerspective, setActivePerspective] = useState<'all-guides' | 'sda-foundations' | 'dispensary' | 'homestead-zones'>('all-guides');
   const [viewLayout, setViewLayout] = useState<'split' | 'cards'>('split');
 
   const skills = getCachedSkills();
@@ -91,6 +92,7 @@ export default function Skills() {
             {([
               { id: 'all-guides', label: `01. All ${skills.length} Field Manuals & Filters` },
               { id: 'sda-foundations', label: '02. True Education, Diet & Natural Remedies' },
+              { id: 'dispensary', label: '03. Tropical Dispensary & Natural Pharmacy' },
             ] as const).map((tab) => {
               const active = activePerspective === tab.id;
               return (
@@ -392,6 +394,11 @@ export default function Skills() {
           </div>
         )}
       </section>
+      )}
+
+      {/* Perspective 03: Tropical Sanitarium Dispensary & Natural Pharmacy */}
+      {activePerspective === 'dispensary' && (
+        <TropicalSanitariumDispensary />
       )}
 
       {/* Perspective 01: Interactive Filter Controls & Horizontal Split Skill Blueprints */}
