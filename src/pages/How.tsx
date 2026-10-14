@@ -117,21 +117,21 @@ export default function How() {
 
             <div className="grid grid-cols-2 gap-3 pt-2 border-t border-stone-200/70 dark:border-emerald-900/40 font-mono text-xs tabular-nums">
               <div>
-                <span className="text-[11px] text-stone-500 dark:text-stone-400 block">Dimensions</span>
+                <span className="text-caption text-stone-500 dark:text-stone-400 block">Dimensions</span>
                 <span className="font-bold text-stone-900 dark:text-white">{activePit.dimensionString}</span>
               </div>
               <div>
-                <span className="text-[11px] text-stone-500 dark:text-stone-400 block">Moisture Retention</span>
+                <span className="text-caption text-stone-500 dark:text-stone-400 block">Moisture Retention</span>
                 <span className="font-bold text-emerald-800 dark:text-emerald-400">{activePit.waterRetentionLiters} L / pit</span>
               </div>
               <div>
-                <span className="text-[11px] text-stone-500 dark:text-stone-400 block">Biochar / Compost</span>
+                <span className="text-caption text-stone-500 dark:text-stone-400 block">Biochar / Compost</span>
                 <span className="font-bold text-stone-900 dark:text-white">
                   {activePit.biocharKgPerPit} kg · {activePit.compostWheelbarrows} barrows
                 </span>
               </div>
               <div>
-                <span className="text-[11px] text-stone-500 dark:text-stone-400 block">Est. Field Labor</span>
+                <span className="text-caption text-stone-500 dark:text-stone-400 block">Est. Field Labor</span>
                 <span className="font-bold text-stone-900 dark:text-white">{activePit.laborHoursEstimate}</span>
               </div>
             </div>

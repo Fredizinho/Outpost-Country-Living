@@ -94,7 +94,7 @@ export function CompactRegionPicker({
         <button
           onClick={() => onToggleMode(activeMode === 'regional' ? 'parcels' : 'regional')}
           className={cn(
-            "h-10 px-2.5 rounded-2xl font-mono text-[11px] font-bold transition-all hidden sm:flex items-center gap-1.5 border shadow-2xl backdrop-blur-2xl cursor-pointer select-none",
+            "h-10 px-2.5 rounded-2xl font-mono text-caption font-bold transition-all hidden sm:flex items-center gap-1.5 border shadow-2xl backdrop-blur-2xl cursor-pointer select-none",
             activeMode === 'regional'
               ? "bg-[#07140D]/92 text-amber-300 border-amber-500/30 hover:border-amber-400"
               : "bg-emerald-950/92 text-emerald-300 border-emerald-500/40 hover:border-emerald-400"
@@ -129,7 +129,7 @@ export function CompactRegionPicker({
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div>
                 <h4 className="serif text-base font-bold text-white">Geographic Focus</h4>
-                <p className="text-[10px] font-mono text-slate-400">Select regional territory or district</p>
+                <p className="text-caption font-mono text-slate-400">Select regional territory or district</p>
               </div>
               <div className="flex items-center gap-1.5">
                 {(activeDistrict || activeFocusRegion !== 'all') && (
@@ -156,7 +156,7 @@ export function CompactRegionPicker({
 
             {/* Region Selector Tabs */}
             <div className="flex flex-col gap-1.5">
-              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+              <span className="text-caption font-mono font-bold uppercase tracking-wider text-slate-400">
                 Macro Geographic Region:
               </span>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
@@ -187,7 +187,7 @@ export function CompactRegionPicker({
 
             {/* Mode Switcher */}
             <div className="flex flex-col gap-1.5">
-              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+              <span className="text-caption font-mono font-bold uppercase tracking-wider text-slate-400">
                 Layer Mode:
               </span>
               <div className="grid grid-cols-2 gap-2">
@@ -203,7 +203,7 @@ export function CompactRegionPicker({
                   <Wheat size={15} className="text-amber-400 shrink-0" />
                   <div className="truncate">
                     <span className="font-bold block">Climate Zones</span>
-                    <span className="text-[10px] text-slate-400">28 Agro-Ecology Zones</span>
+                    <span className="text-caption text-slate-400">28 Agro-Ecology Zones</span>
                   </div>
                 </button>
                 <button
@@ -218,7 +218,7 @@ export function CompactRegionPicker({
                   <Sprout size={15} className="text-emerald-400 shrink-0" />
                   <div className="truncate">
                     <span className="font-bold block">Agro Stations</span>
-                    <span className="text-[10px] text-slate-400">Research Benchmarks</span>
+                    <span className="text-caption text-slate-400">Research Benchmarks</span>
                   </div>
                 </button>
               </div>
@@ -227,7 +227,7 @@ export function CompactRegionPicker({
             {/* Districts List for Active Region */}
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+                <span className="text-caption font-mono font-bold uppercase tracking-wider text-slate-400">
                   {currentRegionSpec.label} Districts ({regionDistricts.length}):
                 </span>
                 {activeDistrict && (
@@ -236,7 +236,7 @@ export function CompactRegionPicker({
                       onSelectDistrict(null);
                       setIsOpen(false);
                     }}
-                    className="text-[10px] font-mono text-amber-400 hover:underline"
+                    className="text-caption font-mono text-amber-400 hover:underline"
                   >
                     Clear District Selection
                   </button>
@@ -260,7 +260,7 @@ export function CompactRegionPicker({
                       )}
                     >
                       <span className="text-xs font-mono font-bold truncate">{d.name}</span>
-                      <span className="text-[10px] font-mono text-slate-400 truncate">
+                      <span className="text-caption font-mono text-slate-400 truncate">
                         {d.rainfallAnnualMm}mm • Gr {d.feasibilityGrade}
                       </span>
                     </button>

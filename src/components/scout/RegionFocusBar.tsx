@@ -109,7 +109,7 @@ export function RegionFocusBar({
             </button>
 
             {/* Quick Status Tag */}
-            <div className="hidden md:flex items-center gap-1.5 text-[11px] font-mono text-slate-300 bg-white/5 border border-white/10 px-2.5 py-1 rounded-xl shrink-0">
+            <div className="hidden md:flex items-center gap-1.5 text-caption font-mono text-slate-300 bg-white/5 border border-white/10 px-2.5 py-1 rounded-xl shrink-0">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span className="text-slate-300">
                 {activeDistrict 
@@ -165,7 +165,7 @@ export function RegionFocusBar({
             >
               <Layers size={13} className="text-amber-400" />
               <span className="hidden sm:inline">Layers</span>
-              <span className="bg-amber-500/20 text-amber-300 text-[10px] px-1.5 py-0.2 rounded-full border border-amber-500/40 font-mono">
+              <span className="bg-amber-500/20 text-amber-300 text-caption px-1.5 py-0.2 rounded-full border border-amber-500/40 font-mono">
                 {activeLayerCount}
               </span>
             </button>
@@ -228,7 +228,7 @@ export function RegionFocusBar({
               {/* Row 1: Region Selection Tabs */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-amber-400 flex items-center gap-1 shrink-0">
+                  <span className="text-caption font-mono font-bold uppercase tracking-widest text-amber-400 flex items-center gap-1 shrink-0">
                     <Globe size={12} className="text-amber-400" /> Region:
                   </span>
                 </div>
@@ -260,7 +260,7 @@ export function RegionFocusBar({
                         <Icon size={13} className={isActive ? "text-slate-950" : "text-amber-400"} />
                         <span className="truncate">{tab.label}</span>
                         <span className={cn(
-                          "text-[9px] px-1 py-0.2 rounded font-sans hidden lg:inline",
+                          "text-caption px-1 py-0.2 rounded font-sans hidden lg:inline",
                           isActive ? "bg-slate-950/20 text-slate-950 font-bold" : "bg-white/5 text-slate-400"
                         )}>
                           {tab.badge}
@@ -275,7 +275,7 @@ export function RegionFocusBar({
               <div className="bg-slate-900/90 border border-white/10 rounded-xl p-2 flex items-center gap-2 overflow-x-auto scrollbar-thin">
                 <div className="flex items-center gap-1.5 shrink-0 border-r border-white/10 pr-2.5">
                   <Target size={12} className="text-amber-400" />
-                  <span className="text-[10px] font-mono font-bold uppercase text-amber-300">
+                  <span className="text-caption font-mono font-bold uppercase text-amber-300">
                     Districts:
                   </span>
                 </div>
@@ -284,7 +284,7 @@ export function RegionFocusBar({
                 <button
                   onClick={() => onSelectDistrict(null)}
                   className={cn(
-                    "px-2.5 py-1 rounded-lg text-[11px] font-mono transition-all border shrink-0 cursor-pointer flex items-center gap-1",
+                    "px-2.5 py-1 rounded-lg text-caption font-mono transition-all border shrink-0 cursor-pointer flex items-center gap-1",
                     activeDistrict === null
                       ? "bg-amber-500 text-slate-950 font-black border-amber-300 shadow-sm"
                       : "bg-slate-900 text-slate-400 border-white/5 hover:text-white hover:border-slate-700"
@@ -301,7 +301,7 @@ export function RegionFocusBar({
                       key={d.id}
                       onClick={() => onSelectDistrict(isSelected ? null : d)}
                       className={cn(
-                        "px-2.5 py-1 rounded-lg text-[11px] font-mono transition-all border shrink-0 cursor-pointer flex items-center gap-1.5",
+                        "px-2.5 py-1 rounded-lg text-caption font-mono transition-all border shrink-0 cursor-pointer flex items-center gap-1.5",
                         isSelected
                           ? "bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-black border-amber-300 shadow-md ring-2 ring-amber-400/40"
                           : "bg-slate-950 text-slate-300 border-slate-800 hover:text-white hover:border-slate-600"
@@ -311,7 +311,7 @@ export function RegionFocusBar({
                       <MapPin size={10} className={isSelected ? "text-slate-950" : "text-amber-400"} />
                       <span className="font-semibold">{d.name}</span>
                       <span className={cn(
-                        "text-[9px] px-1 py-0.2 rounded font-sans",
+                        "text-caption px-1 py-0.2 rounded font-sans",
                         isSelected ? "bg-slate-950/25 text-slate-950 font-black" : "text-emerald-400 bg-emerald-950/50"
                       )}>
                         {d.feasibilityGrade.charAt(0)}
@@ -322,7 +322,7 @@ export function RegionFocusBar({
               </div>
 
               {/* Bottom Retract Bar Button */}
-              <div className="flex items-center justify-end pt-1 border-t border-white/5 text-[11px] font-mono">
+              <div className="flex items-center justify-end pt-1 border-t border-white/5 text-caption font-mono">
                 <button
                   onClick={() => setIsExpanded(false)}
                   className="text-amber-400 hover:text-amber-300 flex items-center gap-1 font-bold cursor-pointer"

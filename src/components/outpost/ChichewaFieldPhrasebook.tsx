@@ -168,7 +168,7 @@ export function ChichewaFieldPhrasebook() {
             className="p-5 rounded-2xl bg-[#06180E] border border-emerald-800/80 hover:border-amber-400/50 transition-all flex flex-col justify-between gap-3"
           >
             <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between gap-2 text-[10px] font-mono uppercase tracking-wider text-amber-300">
+              <div className="flex items-center justify-between gap-2 text-caption font-mono uppercase tracking-wider text-amber-300">
                 <span>{p.category}</span>
                 <span className="text-emerald-300">Chichewa Standard</span>
               </div>

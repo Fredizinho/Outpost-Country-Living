@@ -106,7 +106,7 @@ export const PWAInstallButton: React.FC<{ className?: string }> = ({ className }
             </button>
 
             <div className="flex flex-col gap-1">
-              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+              <span className="text-caption font-mono font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
                 <HardDrive size={13} /> Offline-Ready Desktop &amp; Mobile Deployment
               </span>
               <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-white">

@@ -67,10 +67,10 @@ export function MapCompassAndScale({
       >
         {/* Subtle Cardinal Ticks */}
         <div className="absolute inset-0.5 rounded-full border border-white/10 flex items-center justify-center">
-          <span className="absolute -top-0.5 text-[8px] font-black text-rose-400 font-mono">N</span>
-          <span className="absolute -bottom-0.5 text-[7px] font-bold text-slate-500 font-mono">S</span>
-          <span className="absolute -left-0.5 text-[7px] font-bold text-slate-500 font-mono">W</span>
-          <span className="absolute -right-0.5 text-[7px] font-bold text-slate-500 font-mono">E</span>
+          <span className="absolute -top-0.5 text-caption font-black text-rose-400 font-mono">N</span>
+          <span className="absolute -bottom-0.5 text-caption font-bold text-slate-500 font-mono">S</span>
+          <span className="absolute -left-0.5 text-caption font-bold text-slate-500 font-mono">W</span>
+          <span className="absolute -right-0.5 text-caption font-bold text-slate-500 font-mono">E</span>
           
           {/* Compass Needle (Red North, Silver South) */}
           <svg className="w-5 h-5 drop-shadow-[0_0_4px_rgba(244,63,94,0.6)]" viewBox="0 0 24 24" fill="none">
@@ -89,7 +89,7 @@ export function MapCompassAndScale({
         className="bg-slate-950/90 backdrop-blur-md border border-white/20 rounded-xl px-2.5 py-1 shadow-xl flex flex-col items-center justify-center gap-0.5"
         title={`Visual Scale: 0 to ${scaleInfo.displayValue}`}
       >
-        <div className="flex items-center justify-between text-[9px] text-slate-300 w-full px-0.5">
+        <div className="flex items-center justify-between text-caption text-slate-300 w-full px-0.5">
           <span>0</span>
           <span className="font-bold text-amber-400">{scaleInfo.displayValue}</span>
         </div>

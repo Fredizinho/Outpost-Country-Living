@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Search, X, Plus, Minus, Globe, Target, SlidersHorizontal,
-  Satellite, Map as MapIcon, WifiOff, Bot, Sparkles
+  Satellite, Map as MapIcon, WifiOff, Bot, Sparkles, RotateCcw
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MalawiDistrictSpec } from '@/data/malawiDistrictData';
@@ -134,8 +134,7 @@ export function UnifiedMapHud({
             title="Field Map Scout & Grounded Telemetry"
           >
             <Bot size={18} />
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-400" />
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-400 ring-2 ring-slate-950" />
           </button>
         )}
 
@@ -152,7 +151,7 @@ export function UnifiedMapHud({
         >
           <SlidersHorizontal size={17} />
           {activeLayerCount > 0 && (
-            <span className="absolute -top-1 -right-1 bg-amber-400 text-stone-950 text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow">
+            <span className="absolute -top-1 -right-1 bg-amber-400 text-stone-950 text-caption font-bold w-4 h-4 rounded-full flex items-center justify-center shadow">
               {activeLayerCount}
             </span>
           )}
@@ -212,13 +211,14 @@ export function UnifiedMapHud({
           <Minus size={17} />
         </button>
 
-        {/* 6. RESET TO ALL MALAWI */}
+        {/* 6. RESET VIEW */}
         <button
           onClick={onResetMapView}
-          className="w-10 h-10 rounded-xl flex items-center justify-center hover:bg-stone-800 text-stone-300 hover:text-emerald-300 transition-colors cursor-pointer"
-          title="Show All of Malawi"
+          className="w-10 h-10 rounded-xl flex items-center justify-center hover:bg-stone-800 text-stone-300 hover:text-amber-300 transition-colors cursor-pointer group"
+          title="Reset view (Center on Malawi)"
+          aria-label="Reset view"
         >
-          <Globe size={16} />
+          <RotateCcw size={16} className="group-hover:-rotate-45 transition-transform" />
         </button>
 
         {/* 7. FOCUS DISTRICT (IF ACTIVE) */}

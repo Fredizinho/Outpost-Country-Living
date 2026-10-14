@@ -94,7 +94,7 @@ export function SeasonGaugeDial({ activeSeason, onSelectSeason, className }: Sea
       {/* Left Text & Active Indicator (5 Cols) */}
       <div className="lg:col-span-5 flex flex-col gap-3 relative z-10">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-[10px] font-mono font-black uppercase tracking-widest px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1.5">
+          <span className="text-caption font-mono font-black uppercase tracking-widest px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1.5">
             <Sparkles size={12} className="text-amber-400" />
             <span>{activeSegment.chichewaName} Season</span>
           </span>
@@ -137,7 +137,7 @@ export function SeasonGaugeDial({ activeSeason, onSelectSeason, className }: Sea
                 </div>
                 <div className="flex flex-col truncate">
                   <span className="truncate">{phase.label}</span>
-                  <span className="text-[9px] opacity-70 font-normal">{phase.chichewaName} · {phase.shortMonths}</span>
+                  <span className="text-caption opacity-70 font-normal">{phase.chichewaName} · {phase.shortMonths}</span>
                 </div>
               </button>
             );
@@ -148,7 +148,7 @@ export function SeasonGaugeDial({ activeSeason, onSelectSeason, className }: Sea
       {/* Center: Panoramic Season Lithograph Illustration (4 Cols) */}
       <div className="lg:col-span-4 relative z-10 flex flex-col gap-2">
         <div className="rounded-3xl bg-[#07130C] border border-emerald-800/60 p-4 flex flex-col items-center justify-center relative overflow-hidden shadow-inner min-h-[210px]">
-          <div className="absolute top-3 left-3.5 right-3.5 flex items-center justify-between text-[9px] font-mono uppercase tracking-widest text-emerald-400/80">
+          <div className="absolute top-3 left-3.5 right-3.5 flex items-center justify-between text-caption font-mono uppercase tracking-widest text-emerald-400/80">
             <span>Malawi Almanac Plate</span>
             <span className="text-amber-300 font-bold">{activeSegment.chichewaName}</span>
           </div>
@@ -158,7 +158,7 @@ export function SeasonGaugeDial({ activeSeason, onSelectSeason, className }: Sea
               className="w-full h-36 object-contain drop-shadow-md transition-all duration-300"
             />
           </div>
-          <span className="text-[10px] font-mono text-emerald-200/80 text-center">
+          <span className="text-caption font-mono text-emerald-200/80 text-center">
             {activeSegment.label} ({activeSegment.shortMonths})
           </span>
         </div>
@@ -251,7 +251,7 @@ export function SeasonGaugeDial({ activeSeason, onSelectSeason, className }: Sea
               })}
             </div>
 
-            <span className="text-[10px] font-mono font-black uppercase tracking-widest text-amber-300">
+            <span className="text-caption font-mono font-black uppercase tracking-widest text-amber-300">
               {activeSegment.shortMonths}
             </span>
             <span className="text-xs font-bold text-white max-w-[120px] truncate">
@@ -260,10 +260,10 @@ export function SeasonGaugeDial({ activeSeason, onSelectSeason, className }: Sea
           </div>
 
           {/* Month Marker Ring Badges */}
-          <div className="absolute top-2 text-[9px] font-mono font-bold text-slate-400">OCT / NOV</div>
-          <div className="absolute bottom-2 text-[9px] font-mono font-bold text-slate-400">APR / MAY</div>
-          <div className="absolute left-2 text-[9px] font-mono font-bold text-slate-400">JUL</div>
-          <div className="absolute right-2 text-[9px] font-mono font-bold text-slate-400">JAN</div>
+          <div className="absolute top-2 text-caption font-mono font-bold text-slate-400">OCT / NOV</div>
+          <div className="absolute bottom-2 text-caption font-mono font-bold text-slate-400">APR / MAY</div>
+          <div className="absolute left-2 text-caption font-mono font-bold text-slate-400">JUL</div>
+          <div className="absolute right-2 text-caption font-mono font-bold text-slate-400">JAN</div>
         </div>
       </div>
     </div>

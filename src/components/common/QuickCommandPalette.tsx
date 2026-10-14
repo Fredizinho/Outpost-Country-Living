@@ -478,7 +478,7 @@ export function QuickCommandPalette({
                   <X size={16} />
                 </button>
               ) : (
-                <kbd className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold text-stone-500 dark:text-stone-400 bg-stone-100 dark:bg-emerald-950 border border-stone-200 dark:border-emerald-800">
+                <kbd className="hidden sm:inline-block px-2 py-0.5 rounded text-caption font-mono font-bold text-stone-500 dark:text-stone-400 bg-stone-100 dark:bg-emerald-950 border border-stone-200 dark:border-emerald-800">
                   ESC
                 </kbd>
               )}
@@ -487,7 +487,7 @@ export function QuickCommandPalette({
             {/* Recently Visited Quick-Jump Chips (when query is empty) */}
             {!query.trim() && recentCommandItems.length > 0 && (
               <div className="px-4 sm:px-6 py-2.5 bg-stone-100/70 dark:bg-[#06110A] flex items-center gap-2 overflow-x-auto no-scrollbar">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 shrink-0">
+                <span className="text-caption font-mono font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 shrink-0">
                   Recent:
                 </span>
                 {recentCommandItems.map((rec) => {
@@ -563,7 +563,7 @@ export function QuickCommandPalette({
                             >
                               {item.title}
                             </span>
-                            <span className="text-[10px] font-mono text-stone-500 dark:text-emerald-300/70 hidden sm:inline">
+                            <span className="text-caption font-mono text-stone-500 dark:text-emerald-300/70 hidden sm:inline">
                               · {item.category}
                             </span>
                           </div>
@@ -577,7 +577,7 @@ export function QuickCommandPalette({
 
                       <div className="flex items-center gap-2 shrink-0 ml-3">
                         {item.shortcut && (
-                          <kbd className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[10px] font-mono text-stone-500 dark:text-stone-300 bg-white dark:bg-black/40 border border-stone-200 dark:border-emerald-800">
+                          <kbd className="hidden sm:inline-block px-1.5 py-0.5 rounded text-caption font-mono text-stone-500 dark:text-stone-300 bg-white dark:bg-black/40 border border-stone-200 dark:border-emerald-800">
                             {item.shortcut}
                           </kbd>
                         )}
@@ -598,7 +598,7 @@ export function QuickCommandPalette({
             </div>
 
             {/* Footer Bar */}
-            <div className="px-4 sm:px-6 py-2.5 bg-white dark:bg-[#08150D] flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-stone-500 dark:text-stone-400">
+            <div className="px-4 sm:px-6 py-2.5 bg-white dark:bg-[#08150D] flex flex-wrap items-center justify-between gap-2 text-caption font-mono text-stone-500 dark:text-stone-400">
               <div className="flex items-center gap-3">
                 <span>↑↓ Navigate</span>
                 <span>↵ Open</span>

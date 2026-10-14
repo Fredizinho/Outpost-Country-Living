@@ -476,7 +476,7 @@ export function PropertySuitabilityCalculator({ className }: { className?: strin
             <span className={cn('font-bold uppercase tracking-wider px-3 py-1 rounded-lg border', verdict.colorClass)}>
               {verdict.badge}
             </span>
-            <span className="text-stone-500 dark:text-stone-400 font-mono">· EGW Criteria Compliance</span>
+            <span className="text-stone-500 dark:text-stone-400 font-mono">· EGW Criteria Alignment</span>
           </div>
           <h3 className="serif text-xl sm:text-2xl font-bold text-stone-900 dark:text-stone-50">
             Parcel Suitability Index: {totalScore} / 100
@@ -494,7 +494,7 @@ export function PropertySuitabilityCalculator({ className }: { className?: strin
           <span className="text-3xl font-black font-mono text-stone-900 dark:text-stone-50 tabular-nums">
             {totalScore}
           </span>
-          <span className="text-[10px] uppercase font-bold text-stone-500 dark:text-stone-400 tracking-wider">
+          <span className="text-caption uppercase font-bold text-stone-500 dark:text-stone-400 tracking-wider">
             Out of 100
           </span>
         </div>
@@ -511,8 +511,9 @@ export function PropertySuitabilityCalculator({ className }: { className?: strin
             <span>Save This Evaluation to Candidate Parcel Comparison</span>
           </div>
           {saveNotice && (
-            <span className="text-xs font-mono font-bold text-emerald-700 dark:text-emerald-300">
-              ✓ {saveNotice}
+            <span className="text-xs font-mono font-bold text-emerald-700 dark:text-emerald-300 inline-flex items-center gap-1">
+              <CheckCircle2 size={16} strokeWidth={1.75} />
+              <span>{saveNotice}</span>
             </span>
           )}
         </div>
@@ -574,7 +575,7 @@ export function PropertySuitabilityCalculator({ className }: { className?: strin
         <div className="rounded-2xl border border-stone-200/90 dark:border-emerald-900/60 bg-[#FAF8F5] dark:bg-[#112319] p-5 sm:p-6 flex flex-col gap-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <span className="text-[11px] font-mono uppercase tracking-wider text-emerald-800 dark:text-amber-300 font-bold">
+              <span className="text-caption font-mono uppercase tracking-wider text-emerald-800 dark:text-amber-300 font-bold">
                 Side-by-Side Field Ledger · {savedParcels.length} Saved Candidate Plots
               </span>
               <h3 className="serif text-lg sm:text-xl font-bold text-stone-900 dark:text-stone-50">
@@ -589,7 +590,7 @@ export function PropertySuitabilityCalculator({ className }: { className?: strin
           <div className="overflow-x-auto custom-scrollbar">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="border-b border-stone-200 dark:border-emerald-900/60 text-stone-500 dark:text-stone-400 font-mono text-[11px]">
+                <tr className="border-b border-stone-200 dark:border-emerald-900/60 text-stone-500 dark:text-stone-400 font-mono text-caption">
                   <th className="py-2.5 pr-4 font-bold">Candidate Plot & District</th>
                   <th className="py-2.5 px-3 font-bold text-center">Score</th>
                   {EGW_PROPERTY_CRITERIA.map((c) => (
@@ -611,7 +612,7 @@ export function PropertySuitabilityCalculator({ className }: { className?: strin
                         <MapPin size={13} className="text-emerald-700 dark:text-amber-400 shrink-0" />
                         <span>{parcel.name}</span>
                       </div>
-                      <p className="text-[11px] text-stone-500 dark:text-stone-400 mt-0.5 line-clamp-1">
+                      <p className="text-caption text-stone-500 dark:text-stone-400 mt-0.5 line-clamp-1">
                         {parcel.district} · {parcel.notes}
                       </p>
                     </td>
@@ -693,7 +694,7 @@ export function PropertySuitabilityCalculator({ className }: { className?: strin
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono font-bold uppercase text-stone-500 dark:text-stone-400">
+                        <span className="text-caption font-mono font-bold uppercase text-stone-500 dark:text-stone-400">
                           CRITERION #{cIndex + 1} · {criteria.weight}% WEIGHT
                         </span>
                       </div>
@@ -758,7 +759,7 @@ export function PropertySuitabilityCalculator({ className }: { className?: strin
                           </span>
                           <span
                             className={cn(
-                              'text-[10px] font-mono font-bold px-1.5 py-0.5 rounded tabular-nums',
+                              'text-caption font-mono font-bold px-1.5 py-0.5 rounded tabular-nums',
                               isSelected
                                 ? 'bg-white/20 text-emerald-100'
                                 : 'bg-stone-200 dark:bg-emerald-950/80 text-stone-700 dark:text-stone-300'

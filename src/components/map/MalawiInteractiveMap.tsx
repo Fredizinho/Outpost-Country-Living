@@ -698,10 +698,10 @@ Generated from Malawi Permaculture Sanctuary Builder
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-emerald-800/40 pb-6">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-terracotta-700 font-black uppercase text-[10px] tracking-[0.25em] bg-terracotta-100 px-3 py-0.5 rounded-full border border-terracotta-200">
+            <span className="text-terracotta-700 font-black uppercase text-caption tracking-[0.25em] bg-terracotta-100 px-3 py-0.5 rounded-full border border-terracotta-200">
               High-Precision Cartography Vector Engine
             </span>
-            <span className="bg-emerald-100 text-emerald-800 text-[9px] font-black uppercase px-2.5 py-0.5 rounded-full flex items-center gap-1 border border-emerald-200">
+            <span className="bg-emerald-100 text-emerald-800 text-caption font-black uppercase px-2.5 py-0.5 rounded-full flex items-center gap-1 border border-emerald-200">
               <HardDrive size={10} /> Saved Offline
             </span>
           </div>
@@ -739,7 +739,7 @@ Generated from Malawi Permaculture Sanctuary Builder
             >
               <Table size={14} /> Compare Table
               <span className={cn(
-                "px-1.5 py-0.2 rounded-full text-[9px] font-black",
+                "px-1.5 py-0.2 rounded-full text-caption font-black",
                 viewMode === 'matrix' ? "bg-slate-950 text-amber-300" : "bg-slate-800 text-slate-300"
               )}>
                 {filteredSpots.length}
@@ -773,7 +773,7 @@ Generated from Malawi Permaculture Sanctuary Builder
             <button
               onClick={() => setActiveLayer('feasibility')}
               className={cn(
-                "px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1",
+                "px-3 py-1.5 rounded-xl text-caption font-black uppercase tracking-wider transition-all flex items-center gap-1",
                 activeLayer === 'feasibility'
                   ? "bg-emerald-800 text-white shadow-md"
                   : "text-slate-600 hover:text-emerald-900 hover:bg-slate-100"
@@ -785,7 +785,7 @@ Generated from Malawi Permaculture Sanctuary Builder
             <button
               onClick={() => setActiveLayer('topography')}
               className={cn(
-                "px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1",
+                "px-3 py-1.5 rounded-xl text-caption font-black uppercase tracking-wider transition-all flex items-center gap-1",
                 activeLayer === 'topography'
                   ? "bg-amber-700 text-white shadow-md"
                   : "text-slate-600 hover:text-emerald-900 hover:bg-slate-100"
@@ -797,7 +797,7 @@ Generated from Malawi Permaculture Sanctuary Builder
             <button
               onClick={() => setActiveLayer('catchments')}
               className={cn(
-                "px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1",
+                "px-3 py-1.5 rounded-xl text-caption font-black uppercase tracking-wider transition-all flex items-center gap-1",
                 activeLayer === 'catchments'
                   ? "bg-sky-700 text-white shadow-md"
                   : "text-slate-600 hover:text-emerald-900 hover:bg-slate-100"
@@ -809,7 +809,7 @@ Generated from Malawi Permaculture Sanctuary Builder
             <button
               onClick={() => setActiveLayer('escarpments')}
               className={cn(
-                "px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1",
+                "px-3 py-1.5 rounded-xl text-caption font-black uppercase tracking-wider transition-all flex items-center gap-1",
                 activeLayer === 'escarpments'
                   ? "bg-rose-700 text-white shadow-md"
                   : "text-slate-600 hover:text-emerald-900 hover:bg-slate-100"
@@ -821,7 +821,7 @@ Generated from Malawi Permaculture Sanctuary Builder
             <button
               onClick={() => setActiveLayer('elevation')}
               className={cn(
-                "px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1",
+                "px-3 py-1.5 rounded-xl text-caption font-black uppercase tracking-wider transition-all flex items-center gap-1",
                 activeLayer === 'elevation'
                   ? "bg-terracotta-700 text-white shadow-md"
                   : "text-slate-600 hover:text-emerald-900 hover:bg-slate-100"
@@ -833,7 +833,7 @@ Generated from Malawi Permaculture Sanctuary Builder
             <button
               onClick={() => setActiveLayer('water')}
               className={cn(
-                "px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1",
+                "px-3 py-1.5 rounded-xl text-caption font-black uppercase tracking-wider transition-all flex items-center gap-1",
                 activeLayer === 'water'
                   ? "bg-teal-700 text-white shadow-md"
                   : "text-slate-600 hover:text-emerald-900 hover:bg-slate-100"
@@ -845,7 +845,7 @@ Generated from Malawi Permaculture Sanctuary Builder
             <button
               onClick={() => setActiveLayer('soil')}
               className={cn(
-                "px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1",
+                "px-3 py-1.5 rounded-xl text-caption font-black uppercase tracking-wider transition-all flex items-center gap-1",
                 activeLayer === 'soil'
                   ? "bg-amber-800 text-white shadow-md"
                   : "text-slate-600 hover:text-emerald-900 hover:bg-slate-100"
@@ -857,7 +857,7 @@ Generated from Malawi Permaculture Sanctuary Builder
             <button
               onClick={() => setActiveLayer('highways')}
               className={cn(
-                "px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1",
+                "px-3 py-1.5 rounded-xl text-caption font-black uppercase tracking-wider transition-all flex items-center gap-1",
                 activeLayer === 'highways'
                   ? "bg-amber-500 text-slate-950 font-black shadow-md"
                   : "text-slate-600 hover:text-emerald-900 hover:bg-slate-100"
@@ -934,7 +934,7 @@ Generated from Malawi Permaculture Sanctuary Builder
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-1.5">
               <Filter size={13} className="text-terracotta-700" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Region:</span>
+              <span className="text-caption font-black uppercase tracking-widest text-slate-500">Region:</span>
               <select
                 value={regionFilter}
                 onChange={(e: any) => setRegionFilter(e.target.value)}
@@ -949,7 +949,7 @@ Generated from Malawi Permaculture Sanctuary Builder
 
             <div className="flex items-center gap-1.5">
               <Mountain size={13} className="text-emerald-700" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Altitude:</span>
+              <span className="text-caption font-black uppercase tracking-widest text-slate-500">Altitude:</span>
               <select
                 value={altitudeFilter}
                 onChange={(e: any) => setAltitudeFilter(e.target.value)}
@@ -963,7 +963,7 @@ Generated from Malawi Permaculture Sanctuary Builder
             </div>
           </div>
 
-          <div className="text-[10px] font-black uppercase text-slate-500 tracking-wider">
+          <div className="text-caption font-black uppercase text-slate-500 tracking-wider">
             Showing <span className="text-emerald-800 font-extrabold">{filteredSpots.length}</span> / {SCOUTING_HOTSPOTS.length} Hotspots
           </div>
         </div>
@@ -971,13 +971,13 @@ Generated from Malawi Permaculture Sanctuary Builder
         {/* Quick Presets & Crop Filter Chips */}
         <div className="flex flex-col gap-2 pt-2 border-t border-slate-200/60">
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-[9px] font-black uppercase text-terracotta-700 tracking-wider mr-1 flex items-center gap-1">
+            <span className="text-caption font-black uppercase text-terracotta-700 tracking-wider mr-1 flex items-center gap-1">
               <Sparkles size={11} /> Quick Presets:
             </span>
             <button
               onClick={() => { setQuickPreset('all'); setCropFilter('all'); setRegionFilter('all'); setAltitudeFilter('all'); }}
               className={cn(
-                "px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all",
+                "px-2.5 py-1 rounded-lg text-caption font-bold transition-all",
                 quickPreset === 'all' && cropFilter === 'all' && regionFilter === 'all' && altitudeFilter === 'all'
                   ? "bg-slate-900 text-white shadow-sm"
                   : "bg-white/80 text-slate-600 hover:bg-white hover:text-slate-900 border border-slate-200"
@@ -988,7 +988,7 @@ Generated from Malawi Permaculture Sanctuary Builder
             <button
               onClick={() => setQuickPreset(quickPreset === 'grade_a' ? 'all' : 'grade_a')}
               className={cn(
-                "px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1",
+                "px-2.5 py-1 rounded-lg text-caption font-bold transition-all flex items-center gap-1",
                 quickPreset === 'grade_a'
                   ? "bg-emerald-800 text-white shadow-sm font-extrabold"
                   : "bg-white/80 text-emerald-900 hover:bg-emerald-50 border border-emerald-200"
@@ -999,7 +999,7 @@ Generated from Malawi Permaculture Sanctuary Builder
             <button
               onClick={() => setQuickPreset(quickPreset === 'high_rain' ? 'all' : 'high_rain')}
               className={cn(
-                "px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1",
+                "px-2.5 py-1 rounded-lg text-caption font-bold transition-all flex items-center gap-1",
                 quickPreset === 'high_rain'
                   ? "bg-sky-800 text-white shadow-sm font-extrabold"
                   : "bg-white/80 text-sky-900 hover:bg-sky-50 border border-sky-200"
@@ -1010,7 +1010,7 @@ Generated from Malawi Permaculture Sanctuary Builder
             <button
               onClick={() => setQuickPreset(quickPreset === 'high_alt' ? 'all' : 'high_alt')}
               className={cn(
-                "px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1",
+                "px-2.5 py-1 rounded-lg text-caption font-bold transition-all flex items-center gap-1",
                 quickPreset === 'high_alt'
                   ? "bg-terracotta-800 text-white shadow-sm font-extrabold"
                   : "bg-white/80 text-terracotta-900 hover:bg-terracotta-50 border border-terracotta-200"
@@ -1021,7 +1021,7 @@ Generated from Malawi Permaculture Sanctuary Builder
             <button
               onClick={() => setQuickPreset(quickPreset === 'shallow_water' ? 'all' : 'shallow_water')}
               className={cn(
-                "px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1",
+                "px-2.5 py-1 rounded-lg text-caption font-bold transition-all flex items-center gap-1",
                 quickPreset === 'shallow_water'
                   ? "bg-teal-800 text-white shadow-sm font-extrabold"
                   : "bg-white/80 text-teal-900 hover:bg-teal-50 border border-teal-200"
@@ -1032,7 +1032,7 @@ Generated from Malawi Permaculture Sanctuary Builder
             <button
               onClick={() => setQuickPreset(quickPreset === 'volcanic_soil' ? 'all' : 'volcanic_soil')}
               className={cn(
-                "px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1",
+                "px-2.5 py-1 rounded-lg text-caption font-bold transition-all flex items-center gap-1",
                 quickPreset === 'volcanic_soil'
                   ? "bg-amber-800 text-white shadow-sm font-extrabold"
                   : "bg-white/80 text-amber-900 hover:bg-amber-50 border border-amber-200"
@@ -1043,7 +1043,7 @@ Generated from Malawi Permaculture Sanctuary Builder
           </div>
 
           <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-slate-200/40">
-            <span className="text-[9px] font-black uppercase text-slate-400 tracking-wider mr-1">
+            <span className="text-caption font-black uppercase text-slate-400 tracking-wider mr-1">
               Crop Focus:
             </span>
             {POPULAR_CROPS.map((crop) => (
@@ -1051,7 +1051,7 @@ Generated from Malawi Permaculture Sanctuary Builder
                 key={crop}
                 onClick={() => setCropFilter(crop)}
                 className={cn(
-                  "px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all",
+                  "px-2.5 py-1 rounded-lg text-caption font-bold transition-all",
                   cropFilter === crop
                     ? "bg-emerald-900 text-white shadow-sm"
                     : "bg-white/80 text-slate-600 hover:bg-white hover:text-emerald-950 border border-slate-200"
@@ -1074,7 +1074,7 @@ Generated from Malawi Permaculture Sanctuary Builder
         >
           <div className="flex items-center justify-between border-b border-emerald-800 pb-4">
             <div>
-              <span className="text-amber-400 font-black uppercase text-[9px] tracking-widest block">
+              <span className="text-amber-400 font-black uppercase text-caption tracking-widest block">
                 Side by Side
               </span>
               <h4 className="serif text-2xl font-bold text-white mt-0.5 flex items-center gap-2">
@@ -1103,10 +1103,10 @@ Generated from Malawi Permaculture Sanctuary Builder
 
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded bg-emerald-800 text-amber-300 border border-emerald-700">
+                    <span className="text-caption font-black uppercase px-2 py-0.5 rounded bg-emerald-800 text-amber-300 border border-emerald-700">
                       Grade {spot.feasibilityGrade}
                     </span>
-                    <span className="text-[9px] font-medium text-emerald-300">{spot.district}</span>
+                    <span className="text-caption font-medium text-emerald-300">{spot.district}</span>
                   </div>
                   <h5 className="serif text-xl font-bold text-white mt-1">{spot.name}</h5>
                 </div>
@@ -1160,7 +1160,7 @@ Generated from Malawi Permaculture Sanctuary Builder
           {/* Matrix Analytics Ribbon */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div className="bg-white p-4 rounded-2xl border border-[#E6DFD1] shadow-2xs">
-              <span className="text-[10px] font-black uppercase text-slate-500 tracking-wider block">
+              <span className="text-caption font-black uppercase text-slate-500 tracking-wider block">
                 Total Matching Sites
               </span>
               <div className="text-2xl font-extrabold text-emerald-950 mt-1">
@@ -1169,7 +1169,7 @@ Generated from Malawi Permaculture Sanctuary Builder
             </div>
 
             <div className="bg-white p-4 rounded-2xl border border-[#E6DFD1] shadow-2xs">
-              <span className="text-[10px] font-black uppercase text-emerald-800 tracking-wider block">
+              <span className="text-caption font-black uppercase text-emerald-800 tracking-wider block">
                 Grade A / A+ Prime
               </span>
               <div className="text-2xl font-extrabold text-emerald-800 mt-1">
@@ -1178,7 +1178,7 @@ Generated from Malawi Permaculture Sanctuary Builder
             </div>
 
             <div className="bg-white p-4 rounded-2xl border border-[#E6DFD1] shadow-2xs">
-              <span className="text-[10px] font-black uppercase text-sky-700 tracking-wider block">
+              <span className="text-caption font-black uppercase text-sky-700 tracking-wider block">
                 Avg Annual Rainfall
               </span>
               <div className="text-2xl font-extrabold text-sky-900 mt-1">
@@ -1189,7 +1189,7 @@ Generated from Malawi Permaculture Sanctuary Builder
             </div>
 
             <div className="bg-white p-4 rounded-2xl border border-[#E6DFD1] shadow-2xs">
-              <span className="text-[10px] font-black uppercase text-amber-800 tracking-wider block">
+              <span className="text-caption font-black uppercase text-amber-800 tracking-wider block">
                 Avg Elevation
               </span>
               <div className="text-2xl font-extrabold text-amber-900 mt-1">
@@ -1244,7 +1244,7 @@ Generated from Malawi Permaculture Sanctuary Builder
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="bg-slate-100/75 border-b border-[#E6DFD1] text-[11px] font-black text-slate-700 uppercase tracking-wider">
+                  <tr className="bg-slate-100/75 border-b border-[#E6DFD1] text-caption font-black text-slate-700 uppercase tracking-wider">
                     <th className="py-3.5 px-4">Hotspot & Region</th>
                     <th className="py-3.5 px-3 text-center">Grade</th>
                     <th className="py-3.5 px-3">Elevation</th>
@@ -1279,7 +1279,7 @@ Generated from Malawi Permaculture Sanctuary Builder
                               <div className="font-extrabold text-emerald-950 text-sm">
                                 {spot.name}
                               </div>
-                              <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+                              <div className="text-caption text-slate-500 font-bold uppercase tracking-wider">
                                 {spot.regionName}
                               </div>
                             </div>
@@ -1301,7 +1301,7 @@ Generated from Malawi Permaculture Sanctuary Builder
                           <div className="font-extrabold text-slate-800">
                             {spot.altitudeMeters.toLocaleString()} m
                           </div>
-                          <div className="text-[10px] text-slate-500">
+                          <div className="text-caption text-slate-500">
                             {spot.altitudeLabel}
                           </div>
                         </td>
@@ -1322,7 +1322,7 @@ Generated from Malawi Permaculture Sanctuary Builder
                           <div className="font-bold text-slate-800">
                             {spot.waterTableDepth}
                           </div>
-                          <div className="text-[10px] text-emerald-800 font-medium">
+                          <div className="text-caption text-emerald-800 font-medium">
                             Yield: {spot.boreholeSuccess}
                           </div>
                         </td>
@@ -1331,13 +1331,13 @@ Generated from Malawi Permaculture Sanctuary Builder
                           <div className="font-bold text-slate-800 line-clamp-1 max-w-[140px]" title={spot.soilType}>
                             {spot.soilType}
                           </div>
-                          <div className="text-[10px] text-slate-500">
+                          <div className="text-caption text-slate-500">
                             pH: <span className="font-bold text-emerald-900">{spot.soilpH}</span>
                           </div>
                         </td>
 
                         <td className="py-3.5 px-3">
-                          <span className="font-black text-amber-900 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-md text-[11px]">
+                          <span className="font-black text-amber-900 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-md text-caption">
                             {spot.landCostMwk}
                           </span>
                         </td>
@@ -1345,12 +1345,12 @@ Generated from Malawi Permaculture Sanctuary Builder
                         <td className="py-3.5 px-3">
                           <div className="flex flex-wrap gap-1 max-w-[180px]">
                             {spot.topCrops.slice(0, 2).map((c, i) => (
-                              <span key={i} className="text-[9px] font-bold bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded">
+                              <span key={i} className="text-caption font-bold bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded">
                                 {c}
                               </span>
                             ))}
                             {spot.topCrops.length > 2 && (
-                              <span className="text-[9px] text-slate-400 font-bold">
+                              <span className="text-caption text-slate-400 font-bold">
                                 +{spot.topCrops.length - 2}
                               </span>
                             )}
@@ -1365,14 +1365,14 @@ Generated from Malawi Permaculture Sanctuary Builder
                                 handleSelectSpot(spot);
                                 setViewMode('map');
                               }}
-                              className="px-3 py-1.5 bg-emerald-800 hover:bg-emerald-700 text-white rounded-lg text-[11px] font-black uppercase tracking-wider transition-all shadow-2xs flex items-center gap-1"
+                              className="px-3 py-1.5 bg-emerald-800 hover:bg-emerald-700 text-white rounded-lg text-caption font-black uppercase tracking-wider transition-all shadow-2xs flex items-center gap-1"
                             >
                               <Map size={11} /> Map View
                             </button>
                             <Link
                               to={`/regions/${spot.regionId}`}
                               onClick={(e) => e.stopPropagation()}
-                              className="px-2.5 py-1.5 bg-terracotta-50 hover:bg-terracotta-100 text-terracotta-800 border border-terracotta-200 rounded-lg text-[11px] font-bold transition-all"
+                              className="px-2.5 py-1.5 bg-terracotta-50 hover:bg-terracotta-100 text-terracotta-800 border border-terracotta-200 rounded-lg text-caption font-bold transition-all"
                             >
                               Region
                             </Link>
@@ -1418,13 +1418,13 @@ Generated from Malawi Permaculture Sanctuary Builder
           {/* Top Bar on Map Viewport: High-Resolution Satellite & Style Selector */}
           <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 text-white/90 bg-emerald-900/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-emerald-700/60 text-xs font-bold shadow-md">
             <div className="flex items-center gap-2">
-              <Compass size={18} className="text-amber-400 animate-spin-slow" />
+              <Compass size={18} className="text-amber-400" />
               <div className="flex flex-col">
-                <span className="uppercase tracking-wider text-[11px] font-black text-amber-300 flex items-center gap-1.5">
+                <span className="uppercase tracking-wider text-caption font-black text-amber-300 flex items-center gap-1.5">
                   Style: {mapImageryStyle.toUpperCase()}
-                  {show3dRelief && <span className="text-[9px] bg-amber-500/20 text-amber-300 border border-amber-500/40 px-1.5 py-0.2 rounded-full">+ 3D RELIEF</span>}
+                  {show3dRelief && <span className="text-caption bg-amber-500/20 text-amber-300 border border-amber-500/40 px-1.5 py-0.2 rounded-full">+ 3D RELIEF</span>}
                 </span>
-                <span className="text-[9px] text-emerald-300 font-semibold">
+                <span className="text-caption text-emerald-300 font-semibold">
                   Layer: {activeLayer.toUpperCase()} • {filteredSpots.length} Sites Active
                 </span>
               </div>
@@ -1435,7 +1435,7 @@ Generated from Malawi Permaculture Sanctuary Builder
               <button
                 onClick={() => setMapImageryStyle('vector')}
                 className={cn(
-                  "px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase transition-all flex items-center gap-1",
+                  "px-2.5 py-1 rounded-lg text-caption font-bold uppercase transition-all flex items-center gap-1",
                   mapImageryStyle === 'vector'
                     ? "bg-emerald-600 text-white shadow-sm"
                     : "text-slate-300 hover:text-white"
@@ -1448,7 +1448,7 @@ Generated from Malawi Permaculture Sanctuary Builder
               <button
                 onClick={() => setMapImageryStyle('satellite')}
                 className={cn(
-                  "px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase transition-all flex items-center gap-1",
+                  "px-2.5 py-1 rounded-lg text-caption font-bold uppercase transition-all flex items-center gap-1",
                   mapImageryStyle === 'satellite'
                     ? "bg-emerald-500 text-slate-950 font-black shadow-sm"
                     : "text-slate-300 hover:text-white"
@@ -1461,7 +1461,7 @@ Generated from Malawi Permaculture Sanctuary Builder
               <button
                 onClick={() => setMapImageryStyle('hybrid')}
                 className={cn(
-                  "px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase transition-all flex items-center gap-1",
+                  "px-2.5 py-1 rounded-lg text-caption font-bold uppercase transition-all flex items-center gap-1",
                   mapImageryStyle === 'hybrid'
                     ? "bg-amber-400 text-slate-950 font-black shadow-sm"
                     : "text-slate-300 hover:text-white"
@@ -1478,7 +1478,7 @@ Generated from Malawi Permaculture Sanctuary Builder
                   setShowContours(true);
                 }}
                 className={cn(
-                  "px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase transition-all flex items-center gap-1",
+                  "px-2.5 py-1 rounded-lg text-caption font-bold uppercase transition-all flex items-center gap-1",
                   mapImageryStyle === 'relief3d'
                     ? "bg-amber-600 text-white font-black shadow-sm"
                     : "text-slate-300 hover:text-white"
@@ -1491,8 +1491,8 @@ Generated from Malawi Permaculture Sanctuary Builder
           </div>
 
           {/* Micro-GIS & Topographic Overlays Quick Toggle Ribbon */}
-          <div className="relative z-10 mt-2 flex flex-wrap items-center justify-between gap-1.5 bg-emerald-950/90 backdrop-blur-md px-3.5 py-2 rounded-xl border border-emerald-800 text-[10px]">
-            <span className="text-emerald-400 font-extrabold uppercase tracking-wider text-[9px] flex items-center gap-1">
+          <div className="relative z-10 mt-2 flex flex-wrap items-center justify-between gap-1.5 bg-emerald-950/90 backdrop-blur-md px-3.5 py-2 rounded-xl border border-emerald-800 text-caption">
+            <span className="text-emerald-400 font-extrabold uppercase tracking-wider text-caption flex items-center gap-1">
               <Activity size={12} className="text-amber-400" /> Overlays:
             </span>
 
@@ -2263,17 +2263,17 @@ Generated from Malawi Permaculture Sanctuary Builder
                 >
                   <div className="flex items-center justify-between pb-2 border-b border-emerald-700/80">
                     <div>
-                      <span className="text-[10px] font-black uppercase text-amber-400 tracking-wider">
+                      <span className="text-caption font-black uppercase text-amber-400 tracking-wider">
                         {hoveredSpot.district}
                       </span>
                       <h5 className="serif font-bold text-base text-white">{hoveredSpot.name}</h5>
                     </div>
-                    <span className="text-[10px] font-black uppercase bg-emerald-800 text-emerald-200 px-2.5 py-1 rounded-lg border border-emerald-600">
+                    <span className="text-caption font-black uppercase bg-emerald-800 text-emerald-200 px-2.5 py-1 rounded-lg border border-emerald-600">
                       Grade {hoveredSpot.feasibilityGrade}
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 mt-3 text-[11px]">
+                  <div className="grid grid-cols-2 gap-2 mt-3 text-caption">
                     <div className="bg-emerald-900/80 p-2 rounded-xl border border-emerald-800">
                       <span className="text-emerald-400 font-medium">Altitude:</span>
                       <div className="font-extrabold text-white">{hoveredSpot.altitudeMeters}m</div>
@@ -2292,7 +2292,7 @@ Generated from Malawi Permaculture Sanctuary Builder
                     </div>
                   </div>
 
-                  <div className="mt-2.5 text-[10px] font-semibold text-emerald-300/90 flex items-center justify-between pt-2 border-t border-emerald-800">
+                  <div className="mt-2.5 text-caption font-semibold text-emerald-300/90 flex items-center justify-between pt-2 border-t border-emerald-800">
                     <span>Top Crops: {hoveredSpot.topCrops.slice(0, 2).join(', ')}</span>
                     <span className="text-amber-400 font-bold">Click to Inspect →</span>
                   </div>
@@ -2304,10 +2304,10 @@ Generated from Malawi Permaculture Sanctuary Builder
           {/* Map Footer Legend & Controls */}
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3 bg-emerald-900/90 backdrop-blur-md p-4 rounded-2xl border border-emerald-700/60 text-white text-xs">
             <div className="flex flex-wrap items-center gap-3 font-semibold">
-              <span className="text-slate-300 font-bold uppercase text-[10px]">Legend:</span>
+              <span className="text-slate-300 font-bold uppercase text-caption">Legend:</span>
               
               {activeLayer === 'feasibility' && (
-                <div className="flex flex-wrap items-center gap-3 text-[11px]">
+                <div className="flex flex-wrap items-center gap-3 text-caption">
                   <span className="flex items-center gap-1.5">
                     <span className="w-3.5 h-3.5 rounded-full bg-emerald-500 border border-emerald-200 shadow-sm inline-block" />
                     <span>A+ (Prime Outpost)</span>
@@ -2324,7 +2324,7 @@ Generated from Malawi Permaculture Sanctuary Builder
               )}
 
               {activeLayer === 'topography' && (
-                <div className="flex flex-wrap items-center gap-3 text-[11px]">
+                <div className="flex flex-wrap items-center gap-3 text-caption">
                   <span className="flex items-center gap-1.5">
                     <span className="w-3 h-3 bg-amber-900 border border-amber-400 rounded-sm inline-block" />
                     <span>Highland & Massif (&gt;1,800m)</span>
@@ -2341,7 +2341,7 @@ Generated from Malawi Permaculture Sanctuary Builder
               )}
 
               {activeLayer === 'catchments' && (
-                <div className="flex flex-wrap items-center gap-3 text-[11px]">
+                <div className="flex flex-wrap items-center gap-3 text-caption">
                   <span className="flex items-center gap-1.5">
                     <span className="w-3 h-3 bg-sky-500 rounded-sm inline-block opacity-80" />
                     <span>Lake Malawi Basin</span>
@@ -2358,7 +2358,7 @@ Generated from Malawi Permaculture Sanctuary Builder
               )}
 
               {activeLayer === 'escarpments' && (
-                <div className="flex flex-wrap items-center gap-3 text-[11px]">
+                <div className="flex flex-wrap items-center gap-3 text-caption">
                   <span className="flex items-center gap-1.5">
                     <span className="w-4 h-1 bg-red-500 inline-block" />
                     <span>Active Fault Slope (&gt;20% Grade)</span>
@@ -2370,7 +2370,7 @@ Generated from Malawi Permaculture Sanctuary Builder
               )}
 
               {activeLayer === 'highways' && (
-                <div className="flex flex-wrap items-center gap-3 text-[11px]">
+                <div className="flex flex-wrap items-center gap-3 text-caption">
                   <span className="flex items-center gap-1.5">
                     <span className="w-4 h-1 bg-amber-400 inline-block" />
                     <span>M1 North-South Spine</span>
@@ -2383,7 +2383,7 @@ Generated from Malawi Permaculture Sanctuary Builder
               )}
 
               {activeLayer === 'elevation' && (
-                <div className="flex flex-wrap items-center gap-3 text-[11px]">
+                <div className="flex flex-wrap items-center gap-3 text-caption">
                   <span className="flex items-center gap-1.5">
                     <span className="w-3.5 h-3.5 rounded-full bg-emerald-950 border border-emerald-400 inline-block" />
                     <span>High (&gt;1,600m - Cold)</span>
@@ -2400,7 +2400,7 @@ Generated from Malawi Permaculture Sanctuary Builder
               )}
 
               {activeLayer === 'water' && (
-                <div className="flex flex-wrap items-center gap-3 text-[11px]">
+                <div className="flex flex-wrap items-center gap-3 text-caption">
                   <span className="flex items-center gap-1.5">
                     <span className="w-3.5 h-3.5 rounded-full bg-sky-500 border-2 border-sky-200 inline-block" />
                     <span>High Rainfall (&gt;1,400mm)</span>
@@ -2413,7 +2413,7 @@ Generated from Malawi Permaculture Sanctuary Builder
               )}
 
               {activeLayer === 'soil' && (
-                <div className="flex flex-wrap items-center gap-3 text-[11px]">
+                <div className="flex flex-wrap items-center gap-3 text-caption">
                   <span className="flex items-center gap-1.5">
                     <span className="w-3.5 h-3.5 bg-terracotta-600 border border-terracotta-200 rounded-full inline-block" />
                     <span>Volcanic Loam (pH 6.0)</span>
@@ -2437,7 +2437,7 @@ Generated from Malawi Permaculture Sanctuary Builder
               </button>
               <button
                 onClick={() => setZoomLevel(1)}
-                className="px-3 py-1.5 bg-emerald-800 hover:bg-emerald-700 rounded-xl text-[10px] font-bold tracking-widest uppercase transition-all"
+                className="px-3 py-1.5 bg-emerald-800 hover:bg-emerald-700 rounded-xl text-caption font-bold tracking-widest uppercase transition-all"
               >
                 Reset
               </button>
@@ -2462,10 +2462,10 @@ Generated from Malawi Permaculture Sanctuary Builder
             <div className="flex items-start justify-between gap-3 border-b border-slate-200/80 pb-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[9px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                  <span className="text-caption font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
                     {selectedSpot.district}
                   </span>
-                  <span className="text-[9px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-terracotta-100 text-terracotta-800 border border-terracotta-200">
+                  <span className="text-caption font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-terracotta-100 text-terracotta-800 border border-terracotta-200">
                     Grade {selectedSpot.feasibilityGrade}
                   </span>
                 </div>
@@ -2513,7 +2513,7 @@ Generated from Malawi Permaculture Sanctuary Builder
               <button
                 onClick={() => setInspectorTab('overview')}
                 className={cn(
-                  "flex-1 py-2 rounded-xl text-[10px] uppercase font-black tracking-wider transition-all flex items-center justify-center gap-1",
+                  "flex-1 py-2 rounded-xl text-caption uppercase font-black tracking-wider transition-all flex items-center justify-center gap-1",
                   inspectorTab === 'overview'
                     ? "bg-white text-emerald-950 shadow-sm"
                     : "text-slate-500 hover:text-slate-800"
@@ -2525,7 +2525,7 @@ Generated from Malawi Permaculture Sanctuary Builder
               <button
                 onClick={() => setInspectorTab('microgis')}
                 className={cn(
-                  "flex-1 py-2 rounded-xl text-[10px] uppercase font-black tracking-wider transition-all flex items-center justify-center gap-1",
+                  "flex-1 py-2 rounded-xl text-caption uppercase font-black tracking-wider transition-all flex items-center justify-center gap-1",
                   inspectorTab === 'microgis'
                     ? "bg-white text-emerald-950 shadow-sm"
                     : "text-slate-500 hover:text-slate-800"
@@ -2537,7 +2537,7 @@ Generated from Malawi Permaculture Sanctuary Builder
               <button
                 onClick={() => setInspectorTab('logistics')}
                 className={cn(
-                  "flex-1 py-2 rounded-xl text-[10px] uppercase font-black tracking-wider transition-all flex items-center justify-center gap-1",
+                  "flex-1 py-2 rounded-xl text-caption uppercase font-black tracking-wider transition-all flex items-center justify-center gap-1",
                   inspectorTab === 'logistics'
                     ? "bg-white text-emerald-950 shadow-sm"
                     : "text-slate-500 hover:text-slate-800"
@@ -2549,7 +2549,7 @@ Generated from Malawi Permaculture Sanctuary Builder
               <button
                 onClick={() => setInspectorTab('crops')}
                 className={cn(
-                  "flex-1 py-2 rounded-xl text-[10px] uppercase font-black tracking-wider transition-all flex items-center justify-center gap-1",
+                  "flex-1 py-2 rounded-xl text-caption uppercase font-black tracking-wider transition-all flex items-center justify-center gap-1",
                   inspectorTab === 'crops'
                     ? "bg-white text-emerald-950 shadow-sm"
                     : "text-slate-500 hover:text-slate-800"
@@ -2584,7 +2584,7 @@ Generated from Malawi Permaculture Sanctuary Builder
                   {/* Topographic Relief Specs */}
                   <div className="bg-emerald-950 text-white p-4 rounded-2xl border border-emerald-800 flex flex-col gap-2.5 shadow-md">
                     <div className="flex items-center justify-between border-b border-emerald-800 pb-2">
-                      <span className="text-[10px] font-black uppercase text-amber-400 tracking-wider flex items-center gap-1.5">
+                      <span className="text-caption font-black uppercase text-amber-400 tracking-wider flex items-center gap-1.5">
                         <Mountain size={13} /> Topographic Relief & Altitude
                       </span>
                       <span className="text-emerald-300 font-extrabold text-xs">
@@ -2594,13 +2594,13 @@ Generated from Malawi Permaculture Sanctuary Builder
 
                     <div className="grid grid-cols-2 gap-2 text-xs">
                       <div className="bg-emerald-900/80 p-2.5 rounded-xl border border-emerald-800">
-                        <span className="text-[9px] text-emerald-400 font-bold block uppercase">Elevation Band</span>
+                        <span className="text-caption text-emerald-400 font-bold block uppercase">Elevation Band</span>
                         <span className="text-white font-extrabold text-xs">
                           {selectedSpot.altitudeMeters > 1500 ? 'Montane Highland' : selectedSpot.altitudeMeters > 900 ? 'Mid-Plateau Ridge' : 'Rift Floor / Shore'}
                         </span>
                       </div>
                       <div className="bg-emerald-900/80 p-2.5 rounded-xl border border-emerald-800">
-                        <span className="text-[9px] text-emerald-400 font-bold block uppercase">Thermal Amplitude</span>
+                        <span className="text-caption text-emerald-400 font-bold block uppercase">Thermal Amplitude</span>
                         <span className="text-white font-extrabold text-xs">
                           {selectedSpot.altitudeMeters > 1500 ? '12°C - 24°C (Frost-free)' : '18°C - 32°C (Warm)'}
                         </span>
@@ -2611,7 +2611,7 @@ Generated from Malawi Permaculture Sanctuary Builder
                   {/* River Catchment Basin */}
                   <div className="bg-sky-950 text-white p-4 rounded-2xl border border-sky-800 flex flex-col gap-2.5 shadow-md">
                     <div className="flex items-center justify-between border-b border-sky-800 pb-2">
-                      <span className="text-[10px] font-black uppercase text-sky-400 tracking-wider flex items-center gap-1.5">
+                      <span className="text-caption font-black uppercase text-sky-400 tracking-wider flex items-center gap-1.5">
                         <Droplets size={13} /> Catchment Basin & Hydrology
                       </span>
                       <span className="text-sky-300 font-extrabold text-xs">
@@ -2619,27 +2619,27 @@ Generated from Malawi Permaculture Sanctuary Builder
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-2 text-[11px]">
+                    <div className="grid grid-cols-3 gap-2 text-caption">
                       <div className="bg-sky-900/70 p-2 rounded-xl border border-sky-800 text-center">
-                        <span className="text-[8px] text-sky-400 font-bold block uppercase">Discharge</span>
+                        <span className="text-caption text-sky-400 font-bold block uppercase">Discharge</span>
                         <span className="text-white font-black">{matchedBasin.dischargeM3PerSec} m³/s</span>
                       </div>
                       <div className="bg-sky-900/70 p-2 rounded-xl border border-sky-800 text-center">
-                        <span className="text-[8px] text-sky-400 font-bold block uppercase">Area</span>
+                        <span className="text-caption text-sky-400 font-bold block uppercase">Area</span>
                         <span className="text-amber-300 font-black">{matchedBasin.areaKm2.toLocaleString()} km²</span>
                       </div>
                       <div className="bg-sky-900/70 p-2 rounded-xl border border-sky-800 text-center">
-                        <span className="text-[8px] text-sky-400 font-bold block uppercase">Drainage</span>
-                        <span className="text-sky-200 font-bold text-[9px] truncate">{matchedBasin.majorRivers[0]}</span>
+                        <span className="text-caption text-sky-400 font-bold block uppercase">Drainage</span>
+                        <span className="text-sky-200 font-bold text-caption truncate">{matchedBasin.majorRivers[0]}</span>
                       </div>
                     </div>
 
-                    <div className="bg-sky-900/40 p-2.5 rounded-xl border border-sky-800 text-[10px] text-sky-200 flex items-center justify-between">
+                    <div className="bg-sky-900/40 p-2.5 rounded-xl border border-sky-800 text-caption text-sky-200 flex items-center justify-between">
                       <div className="flex items-center gap-1.5">
                         <Zap size={11} className="text-amber-300 shrink-0" />
                         <span><span className="font-bold text-sky-100">Hydro Generation:</span> {matchedBasin.microHydroPotential}</span>
                       </div>
-                      <span className="bg-sky-500/20 text-sky-300 font-extrabold px-2 py-0.5 rounded-md border border-sky-500/40 text-[9px]">
+                      <span className="bg-sky-500/20 text-sky-300 font-extrabold px-2 py-0.5 rounded-md border border-sky-500/40 text-caption">
                         ~12 - 45 kW Pot.
                       </span>
                     </div>
@@ -2648,7 +2648,7 @@ Generated from Malawi Permaculture Sanctuary Builder
                   {/* Escarpment Fault & Swale Plan */}
                   <div className="bg-amber-950 text-white p-4 rounded-2xl border border-amber-800 flex flex-col gap-2.5 shadow-md">
                     <div className="flex items-center justify-between border-b border-amber-800 pb-2">
-                      <span className="text-[10px] font-black uppercase text-amber-400 tracking-wider flex items-center gap-1.5">
+                      <span className="text-caption font-black uppercase text-amber-400 tracking-wider flex items-center gap-1.5">
                         <Zap size={13} /> Escarpment Fault & Swale Specs
                       </span>
                       <span className="text-amber-300 font-extrabold text-xs">
@@ -2658,14 +2658,14 @@ Generated from Malawi Permaculture Sanctuary Builder
 
                     <div className="flex flex-col gap-1.5 text-xs">
                       <div className="flex items-center justify-between bg-amber-900/70 p-2 rounded-xl border border-amber-800">
-                        <span className="text-amber-200 font-semibold text-[10px]">Slope Gradient:</span>
+                        <span className="text-amber-200 font-semibold text-caption">Slope Gradient:</span>
                         <span className="text-white font-extrabold">{matchedEscarpment.averageSlopePct}%</span>
                       </div>
                       <div className="flex items-center justify-between bg-amber-900/70 p-2 rounded-xl border border-amber-800">
-                        <span className="text-amber-200 font-semibold text-[10px]">Erosion Risk:</span>
+                        <span className="text-amber-200 font-semibold text-caption">Erosion Risk:</span>
                         <span className="text-rose-400 font-extrabold">{matchedEscarpment.erosionVulnerability} Risk</span>
                       </div>
-                      <div className="bg-amber-900/50 p-2.5 rounded-xl border border-amber-700/80 text-[10px] text-amber-100 font-medium flex items-center gap-1.5">
+                      <div className="bg-amber-900/50 p-2.5 rounded-xl border border-amber-700/80 text-caption text-amber-100 font-medium flex items-center gap-1.5">
                         <Sprout size={12} className="text-emerald-400 shrink-0" />
                         <span><span className="font-bold text-amber-300">Farming Tip:</span> {matchedEscarpment.swaleDesignSpec}</span>
                       </div>
@@ -2675,7 +2675,7 @@ Generated from Malawi Permaculture Sanctuary Builder
                   {/* High-Resolution Canopy & Parcel Demarcation */}
                   <div className="bg-emerald-950 text-white p-4 rounded-2xl border border-emerald-800 flex flex-col gap-2.5 shadow-md">
                     <div className="flex items-center justify-between border-b border-emerald-800 pb-2">
-                      <span className="text-[10px] font-black uppercase text-teal-400 tracking-wider flex items-center gap-1.5">
+                      <span className="text-caption font-black uppercase text-teal-400 tracking-wider flex items-center gap-1.5">
                         <Trees size={13} /> Satellite Canopy Cover & Parcel Demarcation
                       </span>
                       <span className="text-emerald-300 font-extrabold text-xs">
@@ -2685,25 +2685,25 @@ Generated from Malawi Permaculture Sanctuary Builder
 
                     <div className="grid grid-cols-2 gap-2 text-xs">
                       <div className="bg-emerald-900/70 p-2.5 rounded-xl border border-emerald-800">
-                        <span className="text-[9px] text-emerald-400 font-bold block uppercase">Canopy Index</span>
+                        <span className="text-caption text-emerald-400 font-bold block uppercase">Canopy Index</span>
                         <span className="text-white font-black text-sm">
                           {selectedSpot.altitudeMeters > 1400 ? '78% Forest' : '45% Agro-Silvo'}
                         </span>
                       </div>
                       <div className="bg-emerald-900/70 p-2.5 rounded-xl border border-emerald-800">
-                        <span className="text-[9px] text-emerald-400 font-bold block uppercase">Thermal Buffer</span>
+                        <span className="text-caption text-emerald-400 font-bold block uppercase">Thermal Buffer</span>
                         <span className="text-emerald-300 font-black text-sm">
                           -3.2°C Cooling
                         </span>
                       </div>
                     </div>
 
-                    <div className="bg-emerald-900/40 p-2.5 rounded-xl border border-emerald-800 text-[10px] text-emerald-200 flex items-center justify-between">
+                    <div className="bg-emerald-900/40 p-2.5 rounded-xl border border-emerald-800 text-caption text-emerald-200 flex items-center justify-between">
                       <span className="flex items-center gap-1.5">
                         <Sparkles size={11} className="text-amber-400" />
                         <span>High-Contrast Orthophoto GPS Demarcation:</span>
                       </span>
-                      <span className="font-mono text-amber-300 font-bold text-[9px]">
+                      <span className="font-mono text-amber-300 font-bold text-caption">
                         {selectedSpot.lat.toFixed(4)}°S, {selectedSpot.lng.toFixed(4)}°E
                       </span>
                     </div>
@@ -2724,15 +2724,15 @@ Generated from Malawi Permaculture Sanctuary Builder
                 </p>
 
                 <div className="bg-emerald-50/90 p-3.5 rounded-2xl border border-emerald-200/80 flex flex-col gap-1">
-                  <div className="flex items-center justify-between text-[10px] font-black uppercase text-emerald-900">
+                  <div className="flex items-center justify-between text-caption font-black uppercase text-emerald-900">
                     <span className="flex items-center gap-1">
                       <ShieldCheck size={13} className="text-emerald-700" /> Ground Field Audit
                     </span>
-                    <span className="bg-emerald-200/80 text-emerald-950 px-2 py-0.5 rounded-md font-extrabold text-[9px]">
+                    <span className="bg-emerald-200/80 text-emerald-950 px-2 py-0.5 rounded-md font-extrabold text-caption">
                       {selectedSpot.lastVerified}
                     </span>
                   </div>
-                  <p className="text-[10px] font-medium text-slate-600 leading-tight mt-0.5">
+                  <p className="text-caption font-medium text-slate-600 leading-tight mt-0.5">
                     {selectedSpot.dataConfidence}
                   </p>
                 </div>
@@ -2762,7 +2762,7 @@ Generated from Malawi Permaculture Sanctuary Builder
 
                 {/* Terrain Elevation Profile */}
                 <div className="bg-emerald-950 text-white p-4 rounded-2xl border border-emerald-800 flex flex-col gap-2">
-                  <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-emerald-300">
+                  <div className="flex items-center justify-between text-caption font-black uppercase tracking-wider text-emerald-300">
                     <span className="flex items-center gap-1">
                       <Mountain size={13} className="text-amber-400" /> Topographic Slope Profile
                     </span>
@@ -2783,7 +2783,7 @@ Generated from Malawi Permaculture Sanctuary Builder
                         stroke="#34d399"
                         strokeWidth="1.5"
                       />
-                      <g transform="translate(100, 24)" className="animate-bounce">
+                      <g transform="translate(100, 24)">
                         <circle cx="0" cy="0" r="4" fill="#dc5c23" stroke="#ffffff" strokeWidth="1" />
                         <text x="0" y="-7" fill="#fde68a" fontSize="7" fontWeight="900" textAnchor="middle">Site Zone</text>
                       </g>
@@ -2792,7 +2792,7 @@ Generated from Malawi Permaculture Sanctuary Builder
                     </svg>
                   </div>
 
-                  <div className="flex justify-between text-[9px] font-bold text-emerald-300/80">
+                  <div className="flex justify-between text-caption font-bold text-emerald-300/80">
                     <span className="flex items-center gap-1">
                       <Mountain size={9} />
                       <span>Peak Ridge (High Rain)</span>
@@ -2811,28 +2811,28 @@ Generated from Malawi Permaculture Sanctuary Builder
                 {/* Technical Scouting Metrics Grid */}
                 <div className="grid grid-cols-2 gap-3">
                   <div className="bg-emerald-50/80 p-3 rounded-2xl border border-emerald-100 flex flex-col gap-0.5">
-                    <span className="text-[9px] font-black uppercase text-emerald-800/60 flex items-center gap-1">
+                    <span className="text-caption font-black uppercase text-emerald-800/60 flex items-center gap-1">
                       <Mountain size={11} /> Altitude
                     </span>
                     <span className="font-extrabold text-xs text-emerald-950">{selectedSpot.altitudeLabel}</span>
                   </div>
 
                   <div className="bg-emerald-50/80 p-3 rounded-2xl border border-emerald-100 flex flex-col gap-0.5">
-                    <span className="text-[9px] font-black uppercase text-emerald-800/60 flex items-center gap-1">
+                    <span className="text-caption font-black uppercase text-emerald-800/60 flex items-center gap-1">
                       <Droplets size={11} /> Rainfall
                     </span>
                     <span className="font-extrabold text-xs text-emerald-950">{selectedSpot.rainfallMm} mm / year</span>
                   </div>
 
                   <div className="bg-emerald-50/80 p-3 rounded-2xl border border-emerald-100 flex flex-col gap-0.5">
-                    <span className="text-[9px] font-black uppercase text-emerald-800/60 flex items-center gap-1">
+                    <span className="text-caption font-black uppercase text-emerald-800/60 flex items-center gap-1">
                       <Compass size={11} /> Water Table
                     </span>
                     <span className="font-extrabold text-xs text-emerald-950">{selectedSpot.waterTableDepth}</span>
                   </div>
 
                   <div className="bg-emerald-50/80 p-3 rounded-2xl border border-emerald-100 flex flex-col gap-0.5">
-                    <span className="text-[9px] font-black uppercase text-emerald-800/60 flex items-center gap-1">
+                    <span className="text-caption font-black uppercase text-emerald-800/60 flex items-center gap-1">
                       <Layers size={11} /> Soil Acidity
                     </span>
                     <span className="font-extrabold text-xs text-emerald-950">{selectedSpot.soilpH}</span>
@@ -2841,7 +2841,7 @@ Generated from Malawi Permaculture Sanctuary Builder
 
                 {matchedSkills.length > 0 && (
                   <div className="flex flex-col gap-1.5 pt-1 border-t border-slate-200/60">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-1">
+                    <span className="text-caption font-black uppercase tracking-widest text-slate-500 flex items-center gap-1">
                       <Sparkles size={11} className="text-amber-600" /> Recommended Permaculture Modules:
                     </span>
                     <div className="flex flex-wrap gap-1.5">
@@ -2849,7 +2849,7 @@ Generated from Malawi Permaculture Sanctuary Builder
                         <Link
                           key={skill.id}
                           to={`/skills?highlight=${skill.id}`}
-                          className="bg-emerald-100/90 hover:bg-emerald-200 text-emerald-950 border border-emerald-300 text-[10px] font-bold px-2.5 py-1 rounded-xl transition-all flex items-center gap-1 shadow-xs"
+                          className="bg-emerald-100/90 hover:bg-emerald-200 text-emerald-950 border border-emerald-300 text-caption font-bold px-2.5 py-1 rounded-xl transition-all flex items-center gap-1 shadow-xs"
                         >
                           <span>{skill.title}</span>
                           <ArrowRight size={10} className="text-emerald-700" />
@@ -2869,7 +2869,7 @@ Generated from Malawi Permaculture Sanctuary Builder
                 className="flex flex-col gap-3"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                  <span className="text-caption font-black uppercase tracking-widest text-slate-500">
                     Calculate Access From Urban Hub:
                   </span>
                 </div>
@@ -2882,14 +2882,14 @@ Generated from Malawi Permaculture Sanctuary Builder
                         key={hubKey}
                         onClick={() => setSelectedHubKey(hubKey)}
                         className={cn(
-                          "py-2.5 px-2 rounded-xl text-[10px] font-extrabold transition-all border text-center flex flex-col items-center gap-0.5",
+                          "py-2.5 px-2 rounded-xl text-caption font-extrabold transition-all border text-center flex flex-col items-center gap-0.5",
                           isSelected
                             ? "bg-emerald-900 text-white border-emerald-800 shadow-md"
                             : "bg-white text-slate-700 border-slate-200 hover:bg-emerald-50"
                         )}
                       >
                         <span>{hubKey.toUpperCase()}</span>
-                        <span className={cn("text-[8px] font-medium", isSelected ? "text-emerald-300" : "text-slate-400")}>
+                        <span className={cn("text-caption font-medium", isSelected ? "text-emerald-300" : "text-slate-400")}>
                           {hubKey === 'lilongwe' ? 'Central' : hubKey === 'blantyre' ? 'Southern' : 'Northern'}
                         </span>
                       </button>
@@ -2906,27 +2906,27 @@ Generated from Malawi Permaculture Sanctuary Builder
                   return (
                     <div className="bg-gradient-to-br from-emerald-900 to-emerald-950 text-white p-5 rounded-2xl border border-emerald-800 shadow-lg flex flex-col gap-3">
                       <div className="flex items-center justify-between border-b border-emerald-800 pb-2">
-                        <span className="text-[10px] font-black uppercase text-amber-400 tracking-wider flex items-center gap-1">
+                        <span className="text-caption font-black uppercase text-amber-400 tracking-wider flex items-center gap-1">
                           <Truck size={13} /> Route to {currentHub.name}
                         </span>
-                        <span className="text-[10px] font-extrabold text-emerald-300">
+                        <span className="text-caption font-extrabold text-emerald-300">
                           {distKm} km
                         </span>
                       </div>
 
                       <div className="grid grid-cols-2 gap-2 text-xs font-bold">
                         <div className="bg-emerald-950/80 p-3 rounded-xl border border-emerald-800">
-                          <span className="text-[9px] font-normal text-emerald-300 block">Estimated Drive:</span>
+                          <span className="text-caption font-normal text-emerald-300 block">Estimated Drive:</span>
                           <span className="text-white text-base font-black">{approxHours} Hours</span>
                         </div>
 
                         <div className="bg-emerald-950/80 p-3 rounded-xl border border-emerald-800">
-                          <span className="text-[9px] font-normal text-emerald-300 block">4x4 Fuel Est:</span>
+                          <span className="text-caption font-normal text-emerald-300 block">4x4 Fuel Est:</span>
                           <span className="text-amber-300 text-base font-black">~{fuelLiters} Liters</span>
                         </div>
                       </div>
 
-                      <div className="text-[10px] text-emerald-200/90 leading-normal bg-emerald-950/60 p-3 rounded-xl border border-emerald-800/80">
+                      <div className="text-caption text-emerald-200/90 leading-normal bg-emerald-950/60 p-3 rounded-xl border border-emerald-800/80">
                         <span className="font-black text-amber-300">Highway & Access Note: </span>
                         {selectedSpot.altitudeMeters > 1500
                           ? 'Highland access requiring all-weather 4WD during heavy rainy seasons (Nov-March).'
@@ -2946,17 +2946,17 @@ Generated from Malawi Permaculture Sanctuary Builder
                 className="flex flex-col gap-3"
               >
                 <div className="bg-amber-500/10 p-4 rounded-2xl border border-amber-300/40 text-slate-800 text-xs flex flex-col gap-1">
-                  <span className="font-black text-emerald-950 text-[10px] uppercase tracking-wider flex items-center gap-1">
+                  <span className="font-black text-emerald-950 text-caption uppercase tracking-wider flex items-center gap-1">
                     <Layers size={13} className="text-amber-600" /> Soil Profile & pH Compatibility
                   </span>
                   <div className="font-bold text-xs text-emerald-900 mt-1">{selectedSpot.soilType}</div>
-                  <div className="text-[10px] text-slate-600 font-medium">
+                  <div className="text-caption text-slate-600 font-medium">
                     Acidity Range: <span className="font-bold text-emerald-800">{selectedSpot.soilpH}</span> (Ideal for nitrogen-fixing legumes & perennials)
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                  <span className="text-caption font-black uppercase tracking-widest text-slate-500">
                     Key Crop Recommendations:
                   </span>
                   <div className="flex flex-col gap-1.5 max-h-[180px] overflow-y-auto pr-1">
@@ -2966,7 +2966,7 @@ Generated from Malawi Permaculture Sanctuary Builder
                         className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs flex items-center justify-between text-xs"
                       >
                         <span className="font-bold text-emerald-950">{crop}</span>
-                        <span className="text-[9px] font-black uppercase bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full">
+                        <span className="text-caption font-black uppercase bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full">
                           High Yield
                         </span>
                       </div>
@@ -2980,14 +2980,14 @@ Generated from Malawi Permaculture Sanctuary Builder
           {/* Action Link Footer */}
           <div className="pt-4 border-t border-slate-200/80 flex items-center justify-between gap-3 mt-4">
             <div className="flex flex-col gap-0.5">
-              <span className="text-[10px] text-slate-500 font-bold">
+              <span className="text-caption text-slate-500 font-bold">
                 {selectedSpot.distanceFromMajorCity}
               </span>
               <a
                 href={`https://www.google.com/maps/search/?api=1&query=${selectedSpot.lat},${selectedSpot.lng}`}
                 target="_blank"
                 rel="noreferrer"
-                className="text-[10px] text-terracotta-700 hover:underline font-black flex items-center gap-1"
+                className="text-caption text-terracotta-700 hover:underline font-black flex items-center gap-1"
               >
                 <Navigation size={10} /> View in Google Maps <ExternalLink size={8} />
               </a>

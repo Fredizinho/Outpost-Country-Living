@@ -90,15 +90,15 @@ export function MalawiCropExplorer() {
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full md:w-auto shrink-0 text-center">
             <div className="bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-white/10">
               <div className="text-2xl font-bold font-serif text-emerald-300">{MALAWI_CROPS_DATABASE.length}</div>
-              <div className="text-[10px] font-bold text-emerald-200 uppercase tracking-wider">Viable Crops</div>
+              <div className="text-caption font-bold text-emerald-200 uppercase tracking-wider">Viable Crops</div>
             </div>
             <div className="bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-white/10">
               <div className="text-2xl font-bold font-serif text-amber-300">100%</div>
-              <div className="text-[10px] font-bold text-emerald-200 uppercase tracking-wider">Local Chichewa</div>
+              <div className="text-caption font-bold text-emerald-200 uppercase tracking-wider">Local Chichewa</div>
             </div>
             <div className="bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-white/10 col-span-2 sm:col-span-1">
               <div className="text-2xl font-bold font-serif text-emerald-300">28</div>
-              <div className="text-[10px] font-bold text-emerald-200 uppercase tracking-wider">Districts Covered</div>
+              <div className="text-caption font-bold text-emerald-200 uppercase tracking-wider">Districts Covered</div>
             </div>
           </div>
         </div>
@@ -224,10 +224,10 @@ export function MalawiCropExplorer() {
                 >
                   <div>
                     <div className="flex items-center gap-2 mb-1.5">
-                      <span className="font-mono text-[10px] font-bold uppercase text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-lg border border-emerald-200 inline-block">
+                      <span className="font-mono text-caption font-bold uppercase text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-lg border border-emerald-200 inline-block">
                         {crop.category}
                       </span>
-                      <span className="font-mono text-[10px] text-slate-500">
+                      <span className="font-mono text-caption text-slate-500">
                         {crop.scientificName}
                       </span>
                     </div>
@@ -239,7 +239,7 @@ export function MalawiCropExplorer() {
 
                   <div className="flex items-center gap-2 shrink-0">
                     {/* Right-aligned micro badge */}
-                    <span className="font-mono text-[10px] text-amber-700 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                    <span className="font-mono text-caption text-amber-700 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
                       {crop.maturityPeriod} • {crop.accessibilityScore.toUpperCase()}
                     </span>
 
@@ -265,7 +265,7 @@ export function MalawiCropExplorer() {
                 </p>
 
                 {/* Quick Agronomy Badges */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] bg-emerald-50/70 p-3 rounded-2xl border border-emerald-100/80 font-medium text-emerald-950">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-caption bg-emerald-50/70 p-3 rounded-2xl border border-emerald-100/80 font-medium text-emerald-950">
                   <div className="flex items-center gap-1.5 truncate">
                     <Layers size={13} className="text-emerald-700 shrink-0" />
                     <span className="truncate">{crop.ridgeSpacing.split(',')[0]}</span>
@@ -304,14 +304,14 @@ export function MalawiCropExplorer() {
                               <Sparkles size={14} className="text-emerald-700" />
                               Key Growing Steps
                             </span>
-                            <span className="font-mono text-[10px] text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200">
+                            <span className="font-mono text-caption text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200">
                               Growing Guide
                             </span>
                           </div>
 
                           <ul className="flex flex-col gap-2.5">
                             <li className="flex items-start gap-2.5 bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 text-xs">
-                              <span className="w-5 h-5 rounded-lg bg-emerald-900 text-amber-300 font-mono text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                              <span className="w-5 h-5 rounded-lg bg-emerald-900 text-amber-300 font-mono text-caption font-bold flex items-center justify-center shrink-0 mt-0.5">
                                 1
                               </span>
                               <div>
@@ -321,7 +321,7 @@ export function MalawiCropExplorer() {
                             </li>
 
                             <li className="flex items-start gap-2.5 bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 text-xs">
-                              <span className="w-5 h-5 rounded-lg bg-emerald-900 text-amber-300 font-mono text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                              <span className="w-5 h-5 rounded-lg bg-emerald-900 text-amber-300 font-mono text-caption font-bold flex items-center justify-center shrink-0 mt-0.5">
                                 2
                               </span>
                               <div>
@@ -332,7 +332,7 @@ export function MalawiCropExplorer() {
 
                             {crop.companionPlanting && (
                               <li className="flex items-start gap-2.5 bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 text-xs">
-                                <span className="w-5 h-5 rounded-lg bg-emerald-900 text-amber-300 font-mono text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                                <span className="w-5 h-5 rounded-lg bg-emerald-900 text-amber-300 font-mono text-caption font-bold flex items-center justify-center shrink-0 mt-0.5">
                                   3
                                 </span>
                                 <div>
@@ -351,31 +351,31 @@ export function MalawiCropExplorer() {
                               <Wrench size={14} className="text-emerald-700" />
                               Required Equipment & Metrics
                             </span>
-                            <span className="font-mono text-[10px] text-amber-800 bg-amber-100 px-2 py-0.5 rounded border border-amber-200">
+                            <span className="font-mono text-caption text-amber-800 bg-amber-100 px-2 py-0.5 rounded border border-amber-200">
                               Agronomy Specs
                             </span>
                           </div>
 
                           <div className="flex flex-col gap-2 font-mono text-xs">
                             <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
-                              <span className="text-[9px] uppercase text-slate-500 block mb-0.5 font-bold">Soil pH & Texture</span>
-                              <span className="text-emerald-950 font-bold text-[11px] block">{crop.soilTypeAndPh}</span>
+                              <span className="text-caption uppercase text-slate-500 block mb-0.5 font-bold">Soil pH & Texture</span>
+                              <span className="text-emerald-950 font-bold text-caption block">{crop.soilTypeAndPh}</span>
                             </div>
 
                             <div className="grid grid-cols-2 gap-2">
                               <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
-                                <span className="text-[9px] uppercase text-slate-500 block mb-0.5 font-bold">Seed Rate</span>
-                                <span className="text-emerald-900 font-bold text-[11px] block truncate">{crop.seedRateOrPropagation}</span>
+                                <span className="text-caption uppercase text-slate-500 block mb-0.5 font-bold">Seed Rate</span>
+                                <span className="text-emerald-900 font-bold text-caption block truncate">{crop.seedRateOrPropagation}</span>
                               </div>
                               <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
-                                <span className="text-[9px] uppercase text-slate-500 block mb-0.5 font-bold">Yield Potential</span>
-                                <span className="text-amber-800 font-bold text-[11px] block truncate">{crop.yieldPotential}</span>
+                                <span className="text-caption uppercase text-slate-500 block mb-0.5 font-bold">Yield Potential</span>
+                                <span className="text-amber-800 font-bold text-caption block truncate">{crop.yieldPotential}</span>
                               </div>
                             </div>
 
                             <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
-                              <span className="text-[9px] uppercase text-slate-500 block mb-0.5 font-bold">Target Malawi Regions</span>
-                              <span className="text-slate-700 text-[11px] font-sans font-medium">{crop.malawiRegions.join(', ')}</span>
+                              <span className="text-caption uppercase text-slate-500 block mb-0.5 font-bold">Target Malawi Regions</span>
+                              <span className="text-slate-700 text-caption font-sans font-medium">{crop.malawiRegions.join(', ')}</span>
                             </div>
                           </div>
                         </div>
@@ -414,7 +414,7 @@ export function MalawiCropExplorer() {
 
                 <button
                   onClick={() => setActiveModalCrop(crop)}
-                  className="bg-emerald-950 text-amber-300 hover:bg-emerald-900 px-3.5 py-1.5 rounded-xl font-mono text-[11px] font-bold tracking-wide flex items-center gap-1 transition-all shadow-xs cursor-pointer"
+                  className="bg-emerald-950 text-amber-300 hover:bg-emerald-900 px-3.5 py-1.5 rounded-xl font-mono text-caption font-bold tracking-wide flex items-center gap-1 transition-all shadow-xs cursor-pointer"
                 >
                   <span>Interactive Modal</span>
                   <ArrowUpRight size={13} />
@@ -446,7 +446,7 @@ export function MalawiCropExplorer() {
               {/* Modal Header */}
               <div className="flex flex-col gap-2 border-b border-slate-100 pb-5 pr-10">
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">
+                  <span className="text-caption font-black uppercase tracking-widest text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">
                     {activeModalCrop.category}
                   </span>
                   <span className="text-xs font-bold text-slate-400">
@@ -470,7 +470,7 @@ export function MalawiCropExplorer() {
               {/* Deep Agronomy Specs Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-medium">
                 <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 flex flex-col gap-1">
-                  <div className="flex items-center gap-2 text-emerald-800 font-bold uppercase tracking-wider text-[11px]">
+                  <div className="flex items-center gap-2 text-emerald-800 font-bold uppercase tracking-wider text-caption">
                     <Layers size={14} />
                     <span>Ridge & Plant Spacing</span>
                   </div>
@@ -480,7 +480,7 @@ export function MalawiCropExplorer() {
                 </div>
 
                 <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 flex flex-col gap-1">
-                  <div className="flex items-center gap-2 text-emerald-800 font-bold uppercase tracking-wider text-[11px]">
+                  <div className="flex items-center gap-2 text-emerald-800 font-bold uppercase tracking-wider text-caption">
                     <Sprout size={14} />
                     <span>Seed Rate & Propagation</span>
                   </div>
@@ -490,7 +490,7 @@ export function MalawiCropExplorer() {
                 </div>
 
                 <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 flex flex-col gap-1">
-                  <div className="flex items-center gap-2 text-emerald-800 font-bold uppercase tracking-wider text-[11px]">
+                  <div className="flex items-center gap-2 text-emerald-800 font-bold uppercase tracking-wider text-caption">
                     <Shield size={14} />
                     <span>Soil pH & Soil Type</span>
                   </div>
@@ -500,7 +500,7 @@ export function MalawiCropExplorer() {
                 </div>
 
                 <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 flex flex-col gap-1">
-                  <div className="flex items-center gap-2 text-emerald-800 font-bold uppercase tracking-wider text-[11px]">
+                  <div className="flex items-center gap-2 text-emerald-800 font-bold uppercase tracking-wider text-caption">
                     <Droplets size={14} />
                     <span>Water & Rainfall Needs</span>
                   </div>
@@ -510,7 +510,7 @@ export function MalawiCropExplorer() {
                 </div>
 
                 <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 flex flex-col gap-1">
-                  <div className="flex items-center gap-2 text-emerald-800 font-bold uppercase tracking-wider text-[11px]">
+                  <div className="flex items-center gap-2 text-emerald-800 font-bold uppercase tracking-wider text-caption">
                     <Calendar size={14} />
                     <span>Maturity & Harvest Window</span>
                   </div>
@@ -520,7 +520,7 @@ export function MalawiCropExplorer() {
                 </div>
 
                 <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 flex flex-col gap-1">
-                  <div className="flex items-center gap-2 text-emerald-800 font-bold uppercase tracking-wider text-[11px]">
+                  <div className="flex items-center gap-2 text-emerald-800 font-bold uppercase tracking-wider text-caption">
                     <TrendingUp size={14} />
                     <span>Malawi Yield Potential</span>
                   </div>
@@ -560,7 +560,7 @@ export function MalawiCropExplorer() {
 
               {/* Modal Footer */}
               <div className="flex justify-between items-center pt-2">
-                <div className="text-[11px] text-slate-500 font-medium">
+                <div className="text-caption text-slate-500 font-medium">
                   Primary Zones: <span className="font-bold text-slate-700">{activeModalCrop.malawiRegions.join(', ')}</span>
                 </div>
                 <button

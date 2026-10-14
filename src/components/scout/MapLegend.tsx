@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Layers, ChevronDown, ChevronUp, Droplets, ShieldCheck, Mountain, MapPin, Eye, Compass } from 'lucide-react';
+import { Layers, ChevronDown, ChevronUp, Droplets, ShieldCheck, Mountain, MapPin, Eye, Compass, Church, Home } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface MapLegendProps {
@@ -46,11 +46,11 @@ export function MapLegend({ isAutoHidden = false, onWakeUp }: MapLegendProps) {
 
             {/* Section 1: Groundwater & Water Reliability */}
             <div className="flex flex-col gap-1.5">
-              <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1.5">
+              <span className="text-caption uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1.5">
                 <Droplets size={11} className="text-sky-400" />
                 <span>Groundwater & Aquifer Table</span>
               </span>
-              <div className="grid grid-cols-1 gap-1 text-[11px] pl-1">
+              <div className="grid grid-cols-1 gap-1 text-caption pl-1">
                 <div className="flex items-center gap-2">
                   <span className="w-3 h-3 rounded-full bg-emerald-500 border border-emerald-300 shadow-sm shrink-0" />
                   <span className="text-emerald-300 font-semibold">Green:</span>
@@ -71,11 +71,11 @@ export function MapLegend({ isAutoHidden = false, onWakeUp }: MapLegendProps) {
 
             {/* Section 2: Differentiated Boundaries & Vectors */}
             <div className="flex flex-col gap-1.5 border-t border-white/10 pt-2">
-              <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1.5">
+              <span className="text-caption uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1.5">
                 <ShieldCheck size={11} className="text-emerald-400" />
                 <span>Boundaries & Tenure Vectors</span>
               </span>
-              <div className="flex flex-col gap-1.5 text-[11px] pl-1">
+              <div className="flex flex-col gap-1.5 text-caption pl-1">
                 <div className="flex items-center gap-2">
                   <span className="w-5 h-1 rounded bg-cyan-400 shadow-[0_0_8px_#22d3ee] shrink-0" />
                   <span className="text-cyan-300 font-bold">Thick Cyan Glow:</span>
@@ -91,16 +91,21 @@ export function MapLegend({ isAutoHidden = false, onWakeUp }: MapLegendProps) {
                   <span className="text-white font-bold">Emerald & White:</span>
                   <span className="text-slate-300">Surveyed Agricultural Parcel</span>
                 </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded-full border-2 border-dashed border-amber-400 bg-slate-950/70 shrink-0" />
+                  <span className="text-amber-300 font-bold">Dashed Outline:</span>
+                  <span className="text-slate-300">Dashed = illustrative example, not a listing</span>
+                </div>
               </div>
             </div>
 
             {/* Section 3: Topographic Contours & Ridges */}
             <div className="flex flex-col gap-1.5 border-t border-white/10 pt-2">
-              <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1.5">
+              <span className="text-caption uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1.5">
                 <Mountain size={11} className="text-amber-400" />
                 <span>Topography & Elevation</span>
               </span>
-              <div className="flex flex-col gap-1 text-[11px] pl-1">
+              <div className="flex flex-col gap-1 text-caption pl-1">
                 <div className="flex items-center gap-2">
                   <span className="w-4 h-0.5 border-t-2 border-dotted border-cyan-300 shrink-0" />
                   <span className="text-cyan-200">Cyan Dotted:</span>
@@ -116,18 +121,22 @@ export function MapLegend({ isAutoHidden = false, onWakeUp }: MapLegendProps) {
 
             {/* Section 4: Thematic Layers & Settlements */}
             <div className="flex flex-col gap-1.5 border-t border-white/10 pt-2">
-              <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1.5">
+              <span className="text-caption uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1.5">
                 <MapPin size={11} className="text-amber-400" />
                 <span>Thematic Settlements & Soil</span>
               </span>
-              <div className="flex flex-col gap-1 text-[11px] pl-1">
+              <div className="flex flex-col gap-1 text-caption pl-1">
                 <div className="flex items-center gap-2">
-                  <span className="w-4 h-4 rounded bg-amber-900/80 border border-amber-400 flex items-center justify-center text-[9px] shrink-0">⛪</span>
+                  <span className="w-5 h-5 rounded bg-amber-900/80 border border-amber-400 flex items-center justify-center shrink-0">
+                    <Church size={16} strokeWidth={1.75} className="text-amber-300" />
+                  </span>
                   <span className="text-amber-300 font-bold">Church Pin:</span>
                   <span className="text-slate-300">Adventist Outpost & Mission Hub</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-4 h-4 rounded bg-emerald-950 border border-emerald-400 flex items-center justify-center text-[9px] shrink-0">🏡</span>
+                  <span className="w-5 h-5 rounded bg-emerald-950 border border-emerald-400 flex items-center justify-center shrink-0">
+                    <Home size={16} strokeWidth={1.75} className="text-emerald-300" />
+                  </span>
                   <span className="text-emerald-300 font-bold">House Pin:</span>
                   <span className="text-slate-300">Highland Homestead Cluster</span>
                 </div>
@@ -140,19 +149,43 @@ export function MapLegend({ isAutoHidden = false, onWakeUp }: MapLegendProps) {
             </div>
 
             {/* Section 5: District Badges & Clusters */}
-            <div className="flex items-center justify-between border-t border-white/10 pt-2 text-[10px] text-slate-400">
-              <div className="flex items-center gap-1.5">
-                <div className="w-4 h-4 rounded-full bg-slate-900 border border-amber-400 flex items-center justify-center text-[8px] font-black text-amber-300">
-                  A+
-                </div>
-                <span>District Grade & Water Table Badge</span>
+            <div className="flex flex-col gap-2 border-t border-white/10 pt-2 text-caption">
+              <div className="flex items-center justify-between">
+                <span className="text-caption uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1.5">
+                  <Compass size={11} className="text-amber-400" />
+                  <span>District Centroid Badges</span>
+                </span>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="text-amber-400 hover:underline cursor-pointer text-caption"
+                >
+                  Hide
+                </button>
               </div>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="text-amber-400 hover:underline cursor-pointer"
-              >
-                Hide
-              </button>
+              <div className="flex flex-col gap-1.5 pl-1">
+                <div className="flex items-start gap-2">
+                  <div className="w-5 h-5 rounded-full bg-slate-900 border border-amber-400 flex items-center justify-center text-[10px] font-black text-amber-300 shrink-0 mt-0.5">
+                    A+
+                  </div>
+                  <div>
+                    <span className="text-amber-300 font-bold">Grade Letters (A+, A, B+):</span>
+                    <span className="text-slate-300 ml-1">
+                      Outpost Agro-Feasibility Rating based on rainfall (&gt;900mm), arable Katondo loam soil, and water security.
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <div className="px-1.5 py-0.5 rounded bg-sky-950/80 border border-sky-400/50 text-[10px] font-mono font-bold text-sky-300 shrink-0 mt-0.5">
+                    15m
+                  </div>
+                  <div>
+                    <span className="text-sky-300 font-bold">"15m" Depth:</span>
+                    <span className="text-slate-300 ml-1">
+                      Median static groundwater / aquifer depth to water table for shallow well or borehole drilling.
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </motion.div>
         ) : (
@@ -166,7 +199,7 @@ export function MapLegend({ isAutoHidden = false, onWakeUp }: MapLegendProps) {
             title="Open Map Cartographic Legend"
           >
             <Layers size={13} className="text-amber-400 group-hover:rotate-12 transition-transform" />
-            <span className="font-bold text-[11px]">Map Legend</span>
+            <span className="font-bold text-caption">Map Legend</span>
             <div className="flex items-center gap-1 ml-0.5">
               <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-sm" />
               <span className="w-2 h-2 rounded-full bg-amber-400 shadow-sm" />

@@ -324,16 +324,16 @@ Generated from OUTPOST: Country Living Matrix
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
                     <h3 className="serif text-2xl sm:text-3xl font-bold text-white">{analyzedDistrict.name}</h3>
-                    <span className="bg-emerald-800/80 text-emerald-200 border border-emerald-600/60 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md">
+                    <span className="bg-emerald-800/80 text-emerald-200 border border-emerald-600/60 text-caption font-bold uppercase tracking-wider px-2 py-0.5 rounded-md">
                       {analyzedDistrict.region} Region
                     </span>
                     {analyzedDistrict.verificationStatus === 'partial' ? (
-                      <span className="inline-flex items-center gap-1 bg-amber-500/20 text-amber-200 border border-amber-400/40 text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md">
+                      <span className="inline-flex items-center gap-1 bg-amber-500/20 text-amber-200 border border-amber-400/40 text-caption font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md">
                         <AlertCircle size={11} className="text-amber-300" />
                         Regional Interpolation ({analyzedDistrict.unverifiedFields?.join(', ') || 'Field Check Required'})
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 bg-emerald-500/20 text-emerald-200 border border-emerald-400/40 text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md">
+                      <span className="inline-flex items-center gap-1 bg-emerald-500/20 text-emerald-200 border border-emerald-400/40 text-caption font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md">
                         <ShieldCheck size={11} className="text-emerald-300" />
                         WMO / FAO Verified Baseline
                       </span>
@@ -344,33 +344,33 @@ Generated from OUTPOST: Country Living Matrix
                   </p>
                 </div>
                 <div className="flex flex-col items-end">
-                  <span className="text-[10px] uppercase font-bold tracking-widest text-emerald-300 font-sans">Outpost Score</span>
+                  <span className="text-caption uppercase font-bold tracking-widest text-emerald-300 font-sans">Outpost Score</span>
                   <span className="text-3xl font-bold text-amber-300 font-sans">{analyzedDistrict.suitabilityScore}<span className="text-sm font-normal text-white/60">/10</span></span>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-[#06180E] p-4 rounded-2xl border border-emerald-900 text-xs">
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-[10px] uppercase font-bold text-emerald-300/80 font-sans">Altitude & Rain</span>
+                  <span className="text-caption uppercase font-bold text-emerald-300/80 font-sans">Altitude & Rain</span>
                   <span className="font-bold text-white">{analyzedDistrict.altitude}</span>
-                  <span className="text-[11px] text-emerald-200">{analyzedDistrict.rainfall}</span>
+                  <span className="text-caption text-emerald-200">{analyzedDistrict.rainfall}</span>
                 </div>
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-[10px] uppercase font-bold text-emerald-300/80 font-sans">FAO HWSD v2.0 Soil & pH</span>
+                  <span className="text-caption uppercase font-bold text-emerald-300/80 font-sans">FAO HWSD v2.0 Soil & pH</span>
                   <span className="font-bold text-white">{analyzedDistrict.soil}</span>
-                  <span className="text-[11px] text-emerald-200">{analyzedDistrict.soilPh}</span>
+                  <span className="text-caption text-emerald-200">{analyzedDistrict.soilPh}</span>
                 </div>
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-[10px] uppercase font-bold text-emerald-300/80 font-sans">Well & Borehole Water Depth</span>
+                  <span className="text-caption uppercase font-bold text-emerald-300/80 font-sans">Well & Borehole Water Depth</span>
                   <span className="font-bold text-white">{analyzedDistrict.groundwaterDepthM}</span>
-                  <span className="text-[11px] text-emerald-200">
+                  <span className="text-caption text-emerald-200">
                     {analyzedDistrict.verificationStatus === 'partial' ? 'Watershed Interpolated (Test On-Site)' : 'FAO AQUASTAT Baseline'}
                   </span>
                 </div>
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-[10px] uppercase font-bold text-amber-300 font-sans">Indicative Survey & Allocation Est.</span>
+                  <span className="text-caption uppercase font-bold text-amber-300 font-sans">Indicative Survey & Allocation Est.</span>
                   <span className="font-bold text-amber-300">{analyzedDistrict.landCostBallpark}</span>
-                  <span className="text-[10px] text-stone-300">Unverified field est. • Customary Land Act (2016)</span>
+                  <span className="text-caption text-stone-300">Unverified field est. • Customary Land Act (2016)</span>
                 </div>
               </div>
 
@@ -386,7 +386,7 @@ Generated from OUTPOST: Country Living Matrix
               )}
 
               <div className="bg-emerald-950/80 p-3.5 rounded-2xl border border-emerald-800 text-xs flex flex-col gap-1.5">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-300 flex items-center gap-1 font-sans">
+                <span className="text-caption font-bold uppercase tracking-wider text-emerald-300 flex items-center gap-1 font-sans">
                   <MapPin size={11} className="text-amber-300" /> Underground Water & Well Profile:
                 </span>
                 <p className="text-emerald-100 leading-relaxed font-normal">
@@ -395,7 +395,7 @@ Generated from OUTPOST: Country Living Matrix
               </div>
 
               <div>
-                <span className="text-[10px] uppercase font-bold text-emerald-300/80 block mb-1.5 font-sans">Recommended Crops</span>
+                <span className="text-caption uppercase font-bold text-emerald-300/80 block mb-1.5 font-sans">Recommended Crops</span>
                 <div className="flex flex-wrap gap-1.5">
                   {analyzedDistrict.bestCrops.map(crop => (
                     <span key={crop} className="bg-emerald-800/80 border border-emerald-600/60 text-emerald-100 px-3 py-1 rounded-xl text-xs font-semibold">
@@ -413,7 +413,7 @@ Generated from OUTPOST: Country Living Matrix
                   <button
                     onClick={handleCopyDossier}
                     className={cn(
-                      "px-3 py-1.5 rounded-xl text-[10px] font-sans font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 border cursor-pointer active:scale-95",
+                      "px-3 py-1.5 rounded-xl text-caption font-sans font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 border cursor-pointer active:scale-95",
                       hasCopiedDossier
                         ? "bg-emerald-700 border-emerald-500 text-white"
                         : "bg-white/10 hover:bg-white/20 text-amber-200 border-white/20"
@@ -425,19 +425,19 @@ Generated from OUTPOST: Country Living Matrix
 
                   <Link
                     to={`/scout?district=${encodeURIComponent(analyzedDistrict.id || analyzedDistrict.name.replace(' District', '').toLowerCase())}`}
-                    className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3 py-1.5 rounded-xl text-[10px] font-sans font-black uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-sm"
+                    className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3 py-1.5 rounded-xl text-caption font-sans font-black uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-sm"
                   >
                     <Compass size={12} /> Scout on GIS Map
                   </Link>
 
                   <Link
                     to={`/calculators?tab=solar&district=${analyzedDistrict.name.replace(' District', '').toLowerCase()}`}
-                    className="bg-amber-500/25 hover:bg-amber-500/35 text-amber-200 border border-amber-400/40 px-3 py-1.5 rounded-xl text-[10px] font-sans font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all"
+                    className="bg-amber-500/25 hover:bg-amber-500/35 text-amber-200 border border-amber-400/40 px-3 py-1.5 rounded-xl text-caption font-sans font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all"
                   >
                     <Calculator size={12} /> Size Solar Pump
                   </Link>
 
-                  <span className="text-[10px] font-sans text-emerald-300 bg-black/40 px-2 py-1 rounded-md border border-emerald-800 shrink-0">
+                  <span className="text-caption font-sans text-emerald-300 bg-black/40 px-2 py-1 rounded-md border border-emerald-800 shrink-0">
                     Ref: {analyzedDistrict.dccmsSourceRef}
                   </span>
                 </div>
@@ -528,10 +528,13 @@ Generated from OUTPOST: Country Living Matrix
             </div>
 
             <div className="bg-amber-50/90 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-700/50 rounded-2xl p-3.5 text-xs sm:text-sm text-amber-950 dark:text-amber-100 flex items-start gap-2">
-              <span className="font-bold text-amber-800 dark:text-amber-300 shrink-0">⚠️ Legal Note:</span>
-              <p className="leading-relaxed">
-                Land tenure rules in Malawi are subject to the Customary Land Act (2016) and recent Land Amendment Acts. Customary estate grants require official gazetted Land Clerks, local CLC quorum, and formal District Registry recording. Prospective homesteaders must verify all title claims, boundaries, and zoning restrictions directly with the District Commissioner's Lands Desk, the Ministry of Lands, and a certified Malawian legal practitioner before executing agreements or paying acquisition fees.
-              </p>
+              <AlertCircle size={16} className="text-amber-800 dark:text-amber-300 shrink-0 mt-0.5" />
+              <div>
+                <strong className="font-bold text-amber-800 dark:text-amber-300 mr-1">Legal Note:</strong>
+                <span className="leading-relaxed">
+                  Land tenure rules in Malawi are subject to the Customary Land Act (2016) and recent Land Amendment Acts. Customary estate grants require official gazetted Land Clerks, local CLC quorum, and formal District Registry recording. Prospective homesteaders must verify all title claims, boundaries, and zoning restrictions directly with the District Commissioner's Lands Desk, the Ministry of Lands, and a certified Malawian legal practitioner before executing agreements or paying acquisition fees.
+                </span>
+              </div>
             </div>
 
             {/* Comprehensive 4-Stage Legal Acquisition & Application Letter Wizard */}
@@ -747,7 +750,7 @@ Generated from OUTPOST: Country Living Matrix
               </button>
 
               <div className="flex flex-col gap-2">
-                <span className="text-amber-300 font-sans font-bold uppercase text-[11px] tracking-wider">Sanctuary Scout Report</span>
+                <span className="text-amber-300 font-sans font-bold uppercase text-caption tracking-wider">Sanctuary Scout Report</span>
                 <h3 className="serif text-3xl font-bold text-white">Malawi Land Scouting Survey</h3>
               </div>
 

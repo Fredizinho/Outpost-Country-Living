@@ -270,7 +270,7 @@ export function HomesteadMasterplanModal({
         {/* Live Config Bar (Quick Adjustments & Archetypes) */}
         <div className="px-5 py-3 bg-stone-950/40 border-b border-stone-800/80 flex flex-col gap-2.5 text-xs">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <span className="text-stone-400 font-mono text-[11px] uppercase tracking-wider">
+            <span className="text-stone-400 font-mono text-caption uppercase tracking-wider">
               Quick Archetypes:
             </span>
             <div className="flex flex-wrap items-center gap-1.5">
@@ -287,7 +287,7 @@ export function HomesteadMasterplanModal({
                     onUpdateRoofArea?.(arch.roof);
                   }}
                   className={cn(
-                    'px-2.5 py-1 rounded-md font-mono text-[11px] transition-all cursor-pointer',
+                    'px-2.5 py-1 rounded-md font-mono text-caption transition-all cursor-pointer',
                     familySize === arch.size && roofAreaSqm === arch.roof
                       ? 'bg-amber-400 text-stone-950 font-bold shadow-xs'
                       : 'bg-stone-800/80 text-stone-300 hover:bg-stone-700 hover:text-white'
@@ -395,7 +395,7 @@ export function HomesteadMasterplanModal({
                   <span className="text-2xl font-bold text-white tabular-nums">
                     {metrics.totalLandAcres} <span className="text-sm font-normal text-stone-400">Acres</span>
                   </span>
-                  <span className="text-[11px] text-stone-400 mt-1 block">
+                  <span className="text-caption text-stone-400 mt-1 block">
                     {metrics.stapleAcres}ac staple + {metrics.orchardAcres}ac orchard
                   </span>
                 </div>
@@ -405,7 +405,7 @@ export function HomesteadMasterplanModal({
                   <span className="text-2xl font-bold text-sky-400 tabular-nums">
                     {Math.round(metrics.annualRainwaterLiters / 1000)}k <span className="text-sm font-normal text-stone-400">Liters</span>
                   </span>
-                  <span className="text-[11px] text-stone-400 mt-1 block">
+                  <span className="text-caption text-stone-400 mt-1 block">
                     ~{metrics.waterIndependenceMonths} months dry reserve
                   </span>
                 </div>
@@ -415,7 +415,7 @@ export function HomesteadMasterplanModal({
                   <span className="text-2xl font-bold text-amber-400 tabular-nums">
                     {metrics.recommendedSolarKw} <span className="text-sm font-normal text-stone-400">kWp</span>
                   </span>
-                  <span className="text-[11px] text-stone-400 mt-1 block">
+                  <span className="text-caption text-stone-400 mt-1 block">
                     {metrics.batteryKwh} kWh LiFePO4 bank
                   </span>
                 </div>
@@ -425,7 +425,7 @@ export function HomesteadMasterplanModal({
                   <span className="text-2xl font-bold text-emerald-400 tabular-nums">
                     {metrics.orchardPitCount} <span className="text-sm font-normal text-stone-400">Pits</span>
                   </span>
-                  <span className="text-[11px] text-stone-400 mt-1 block">
+                  <span className="text-caption text-stone-400 mt-1 block">
                     {metrics.totalBiocharKg} kg biochar amended
                   </span>
                 </div>
@@ -678,19 +678,19 @@ export function HomesteadMasterplanModal({
                 </h4>
                 <div className="space-y-1.5 text-xs text-stone-300">
                   <div className="flex items-start gap-2">
-                    <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-[11px] font-bold">1</span>
+                    <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-caption font-bold">1</span>
                     <span><strong>Base Layer (Depth 2.5–3.0 ft):</strong> Small basalt/granite stones, bone pieces, and coarse woody biomass for subsoil drainage and long-term mineral release.</span>
                   </div>
                   <div className="flex items-start gap-2">
-                    <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-[11px] font-bold">2</span>
+                    <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-caption font-bold">2</span>
                     <span><strong>Nutrient Matrix (Depth 1.0–2.5 ft):</strong> 50% Katondo topsoil blended with 30% decomposed compost, 15kg inoculated biochar, and wood ash.</span>
                   </div>
                   <div className="flex items-start gap-2">
-                    <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-[11px] font-bold">3</span>
+                    <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-caption font-bold">3</span>
                     <span><strong>Root Zone (Depth 0–1.0 ft):</strong> Fine friable topsoil mound with seedling root flare set 2 inches above ground level to avoid collar rot.</span>
                   </div>
                   <div className="flex items-start gap-2">
-                    <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-[11px] font-bold">4</span>
+                    <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-caption font-bold">4</span>
                     <span><strong>Surface Mulch:</strong> 4-inch deep dry grass mulch ring kept 3 inches clear of the tree trunk to prevent fungal pests.</span>
                   </div>
                 </div>
@@ -704,7 +704,7 @@ export function HomesteadMasterplanModal({
               <div className="p-4 rounded-xl bg-stone-950/60 border border-stone-800 text-xs">
                 <div className="flex justify-between items-center mb-2">
                   <strong className="text-sm font-bold text-white">Itemized Outpost Bill of Quantities (BoQ)</strong>
-                  <span className="text-stone-400 font-mono text-[11px]">Estimates in USD / MWK</span>
+                  <span className="text-stone-400 font-mono text-caption">Estimates in USD / MWK</span>
                 </div>
                 <p className="text-stone-400 text-xs leading-relaxed">
                   Budget allocations based on local Lilongwe/Blantyre hardware distributors, DCCMS hydrology data, and Malawian agricultural supply pricing.

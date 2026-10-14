@@ -298,7 +298,7 @@ export function RegionalWeatherWidget() {
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-emerald-800/80 pb-6 relative z-10">
         <div>
           <div className="flex items-center gap-2">
-            <span className="bg-amber-400/20 text-amber-300 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full border border-amber-400/30">
+            <span className="bg-amber-400/20 text-amber-300 text-caption font-black uppercase px-2.5 py-0.5 rounded-full border border-amber-400/30">
               Real-Time Satellite & Agro-Met
             </span>
             <span className="text-xs text-emerald-300 font-semibold">Live Malawi Forecasts</span>
@@ -319,7 +319,7 @@ export function RegionalWeatherWidget() {
                 key={reg}
                 onClick={() => setRegionFilter(reg)}
                 className={cn(
-                  "px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all",
+                  "px-3 py-1.5 rounded-xl text-caption font-black uppercase tracking-wider transition-all",
                   regionFilter === reg
                     ? "bg-amber-400 text-slate-950 font-extrabold shadow"
                     : "text-emerald-200 hover:text-white hover:bg-emerald-800/50"
@@ -345,11 +345,11 @@ export function RegionalWeatherWidget() {
       {/* District Selection Chips */}
       <div className="flex flex-col gap-2 relative z-10">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400/80">
+          <span className="text-caption font-black uppercase tracking-widest text-emerald-400/80">
             Select Malawi Location Spot ({filteredLocations.length}):
           </span>
           {weatherData && (
-            <span className="text-[10px] font-medium text-emerald-300/60">
+            <span className="text-caption font-medium text-emerald-300/60">
               Updated: {weatherData.lastUpdated} CAT
             </span>
           )}
@@ -371,7 +371,7 @@ export function RegionalWeatherWidget() {
               >
                 <MapPin size={13} className={isSelected ? "text-slate-950" : "text-amber-400"} />
                 <span>{loc.name}</span>
-                <span className={cn("text-[9px] px-1.5 py-0.2 rounded font-black uppercase", isSelected ? "bg-slate-950/20 text-slate-900" : "bg-emerald-950 text-emerald-300")}>
+                <span className={cn("text-caption px-1.5 py-0.2 rounded font-black uppercase", isSelected ? "bg-slate-950/20 text-slate-900" : "bg-emerald-950 text-emerald-300")}>
                   {loc.altitude}
                 </span>
               </button>
@@ -474,31 +474,31 @@ export function RegionalWeatherWidget() {
             {/* Environmental Indicators Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-emerald-800/80">
               <div className="bg-emerald-950/60 p-3 rounded-2xl border border-emerald-800 flex flex-col gap-1">
-                <span className="text-[9px] font-black uppercase text-emerald-400 flex items-center gap-1">
+                <span className="text-caption font-black uppercase text-emerald-400 flex items-center gap-1">
                   <Droplets size={12} /> Humidity
                 </span>
                 <span className="font-extrabold text-white text-base">{weatherData.current.humidity}%</span>
               </div>
 
               <div className="bg-emerald-950/60 p-3 rounded-2xl border border-emerald-800 flex flex-col gap-1">
-                <span className="text-[9px] font-black uppercase text-emerald-400 flex items-center gap-1">
+                <span className="text-caption font-black uppercase text-emerald-400 flex items-center gap-1">
                   <Wind size={12} /> Wind
                 </span>
-                <span className="font-extrabold text-white text-base">{weatherData.current.windSpeedKmH} <span className="text-[10px] font-normal text-emerald-300">km/h</span></span>
+                <span className="font-extrabold text-white text-base">{weatherData.current.windSpeedKmH} <span className="text-caption font-normal text-emerald-300">km/h</span></span>
               </div>
 
               <div className="bg-emerald-950/60 p-3 rounded-2xl border border-emerald-800 flex flex-col gap-1">
-                <span className="text-[9px] font-black uppercase text-emerald-400 flex items-center gap-1">
+                <span className="text-caption font-black uppercase text-emerald-400 flex items-center gap-1">
                   <Gauge size={12} /> Pressure
                 </span>
-                <span className="font-extrabold text-white text-base">{weatherData.current.surfacePressureHpa} <span className="text-[10px] font-normal text-emerald-300">hPa</span></span>
+                <span className="font-extrabold text-white text-base">{weatherData.current.surfacePressureHpa} <span className="text-caption font-normal text-emerald-300">hPa</span></span>
               </div>
 
               <div className="bg-emerald-950/60 p-3 rounded-2xl border border-emerald-800 flex flex-col gap-1">
-                <span className="text-[9px] font-black uppercase text-emerald-400 flex items-center gap-1">
+                <span className="text-caption font-black uppercase text-emerald-400 flex items-center gap-1">
                   <Umbrella size={12} /> Precip.
                 </span>
-                <span className="font-extrabold text-amber-300 text-base">{weatherData.current.precipitationMm} <span className="text-[10px] font-normal text-emerald-300">mm</span></span>
+                <span className="font-extrabold text-amber-300 text-base">{weatherData.current.precipitationMm} <span className="text-caption font-normal text-emerald-300">mm</span></span>
               </div>
             </div>
 
@@ -522,7 +522,7 @@ export function RegionalWeatherWidget() {
                 <span className="text-xs font-black uppercase tracking-widest text-emerald-300 flex items-center gap-1.5">
                   <Calendar size={14} className="text-amber-400" /> 5-Day Regional Forecast
                 </span>
-                <span className="text-[10px] font-bold text-emerald-400/80">
+                <span className="text-caption font-bold text-emerald-400/80">
                   {weatherData.districtName}
                 </span>
               </div>
@@ -542,7 +542,7 @@ export function RegionalWeatherWidget() {
                     <div className="my-1">
                       {renderWeatherIcon(day.weatherIcon, "w-7 h-7")}
                     </div>
-                    <span className="text-[10px] font-bold text-emerald-200 line-clamp-1 leading-tight h-6">
+                    <span className="text-caption font-bold text-emerald-200 line-clamp-1 leading-tight h-6">
                       {day.weatherLabel}
                     </span>
 
@@ -551,7 +551,7 @@ export function RegionalWeatherWidget() {
                       <span className="text-emerald-400/60 font-medium">{day.tempMinC}°</span>
                     </div>
 
-                    <div className="flex items-center gap-1 text-[9px] font-bold text-sky-300">
+                    <div className="flex items-center gap-1 text-caption font-bold text-sky-300">
                       <Umbrella size={10} /> {day.precipSumMm}mm ({day.precipProbMax}%)
                     </div>
                   </div>
@@ -568,7 +568,7 @@ export function RegionalWeatherWidget() {
               <p className="text-xs text-emerald-100 font-medium leading-relaxed">
                 {weatherData.agriculturalAdvice}
               </p>
-              <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-emerald-800/80 text-[10px] font-bold text-emerald-300">
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-emerald-800/80 text-caption font-bold text-emerald-300">
                 <span>Recommended Crop Focus: Highland Vegetables, Maize, Legumes, Fruit Orchards</span>
                 <span className="text-amber-300 flex items-center gap-1">
                   Solar Pump Capacity: High Efficiency

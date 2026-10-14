@@ -52,16 +52,16 @@ export function PersonalizedHomeSection() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-emerald-800/80 pb-6 relative z-10">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="bg-terracotta-900/80 text-terracotta-200 border border-terracotta-700/80 text-[10px] font-black uppercase px-3 py-1 rounded-full flex items-center gap-1">
+            <span className="bg-terracotta-900/80 text-terracotta-200 border border-terracotta-700/80 text-caption font-black uppercase px-3 py-1 rounded-full flex items-center gap-1">
               <Compass size={12} className="text-terracotta-400" /> Tailored Country Blueprint
             </span>
-            <span className="bg-emerald-900/80 text-emerald-300 border border-emerald-700/80 text-[10px] font-bold uppercase px-3 py-1 rounded-full flex items-center gap-1">
+            <span className="bg-emerald-900/80 text-emerald-300 border border-emerald-700/80 text-caption font-bold uppercase px-3 py-1 rounded-full flex items-center gap-1">
               <MapPin size={12} /> {district} District, {region} Region
             </span>
-            <span className="bg-emerald-900/80 text-amber-300 border border-emerald-700/80 text-[10px] font-bold uppercase px-3 py-1 rounded-full flex items-center gap-1">
+            <span className="bg-emerald-900/80 text-amber-300 border border-emerald-700/80 text-caption font-bold uppercase px-3 py-1 rounded-full flex items-center gap-1">
               {user?.familyMembers || 4} Members • {user?.landSizeAcres || 2.5} Acres
             </span>
-            <span className="bg-emerald-900/80 text-sky-300 border border-emerald-700/80 text-[10px] font-bold uppercase px-3 py-1 rounded-full flex items-center gap-1">
+            <span className="bg-emerald-900/80 text-sky-300 border border-emerald-700/80 text-caption font-bold uppercase px-3 py-1 rounded-full flex items-center gap-1">
               {user?.currentSeason || 'Rainy Planting'}
             </span>
           </div>
@@ -90,7 +90,7 @@ export function PersonalizedHomeSection() {
         {/* District Climate & Soil Profile */}
         <div className="bg-emerald-900/50 backdrop-blur-md p-6 rounded-[2rem] border border-emerald-700/50 flex flex-col justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-amber-300 text-[10px] font-black uppercase tracking-widest mb-1">
+            <div className="flex items-center gap-2 text-amber-300 text-caption font-black uppercase tracking-widest mb-1">
               <Sun size={14} /> District Soil & Climate
             </div>
             <h4 className="serif text-2xl font-bold text-white">{intel.zone}</h4>
@@ -99,11 +99,11 @@ export function PersonalizedHomeSection() {
 
           <div className="flex flex-col gap-2.5 text-xs">
             <div className="bg-emerald-950/80 p-3 rounded-xl border border-emerald-800">
-              <span className="text-[10px] uppercase font-bold text-emerald-400 block mb-0.5">Topsoil & Drainage</span>
+              <span className="text-caption uppercase font-bold text-emerald-400 block mb-0.5">Topsoil & Drainage</span>
               <p className="text-emerald-100 font-medium">{intel.soil}</p>
             </div>
             <div className="bg-emerald-950/80 p-3 rounded-xl border border-emerald-800">
-              <span className="text-[10px] uppercase font-bold text-emerald-400 block mb-0.5">Groundwater & Springs</span>
+              <span className="text-caption uppercase font-bold text-emerald-400 block mb-0.5">Groundwater & Springs</span>
               <p className="text-emerald-100 font-medium">{intel.water}</p>
             </div>
           </div>
@@ -112,7 +112,7 @@ export function PersonalizedHomeSection() {
         {/* Tailored Crop Recommendations */}
         <div className="bg-emerald-900/50 backdrop-blur-md p-6 rounded-[2rem] border border-emerald-700/50 flex flex-col justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-emerald-400 text-[10px] font-black uppercase tracking-widest mb-1">
+            <div className="flex items-center gap-2 text-emerald-400 text-caption font-black uppercase tracking-widest mb-1">
               <Sprout size={14} /> Ideal Crops for {district}
             </div>
             <h4 className="serif text-2xl font-bold text-white">Recommended Sowing</h4>
@@ -131,7 +131,7 @@ export function PersonalizedHomeSection() {
           </div>
 
           <div className="bg-terracotta-950/60 border border-terracotta-800/80 p-3 rounded-xl text-xs text-terracotta-100/90">
-            <strong className="text-terracotta-300 block text-[10px] uppercase tracking-wider mb-0.5">Homestead Goal Focus</strong>
+            <strong className="text-terracotta-300 block text-caption uppercase tracking-wider mb-0.5">Homestead Goal Focus</strong>
             "{goal}"
           </div>
         </div>
@@ -139,7 +139,7 @@ export function PersonalizedHomeSection() {
         {/* Off-Grid System Advice & Tracker Shortcut */}
         <div className="bg-emerald-900/50 backdrop-blur-md p-6 rounded-[2rem] border border-emerald-700/50 flex flex-col justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-cyan-300 text-[10px] font-black uppercase tracking-widest mb-1">
+            <div className="flex items-center gap-2 text-cyan-300 text-caption font-black uppercase tracking-widest mb-1">
               <Droplets size={14} /> Off-Grid & Household Sizing
             </div>
             <h4 className="serif text-2xl font-bold text-white">Solar & Water Strategy</h4>

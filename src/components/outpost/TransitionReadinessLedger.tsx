@@ -154,7 +154,7 @@ export function TransitionReadinessLedger({ className }: { className?: string })
             >
               <div className="flex items-center justify-between">
                 <span className={cn(
-                  "text-[10px] font-mono font-bold px-2 py-0.5 rounded-md",
+                  "text-caption font-mono font-bold px-2 py-0.5 rounded-md",
                   isActive ? "bg-white/20 text-emerald-100" : "bg-stone-200/70 dark:bg-emerald-950/80 text-stone-700 dark:text-stone-300"
                 )}>
                   STAGE {stage.stageNumber}
@@ -234,7 +234,7 @@ export function TransitionReadinessLedger({ className }: { className?: string })
 
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 bg-emerald-100/60 dark:bg-emerald-950/60 px-2 py-0.5 rounded">
+                        <span className="text-caption font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 bg-emerald-100/60 dark:bg-emerald-950/60 px-2 py-0.5 rounded">
                           {milestone.category}
                         </span>
                         <span className="text-xs text-stone-400 dark:text-stone-400 font-mono">

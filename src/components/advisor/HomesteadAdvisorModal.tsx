@@ -176,7 +176,7 @@ export function HomesteadAdvisorModal({
       {
         id: 'welcome',
         role: 'assistant',
-        content: `### 🌿 Chat Reset\n\nHow can I assist your country living sanctuary journey today? Choose a question below or ask anything about land, water, crops, or solar power in Malawi.`,
+        content: `### Chat Reset\n\nHow can I assist your country living sanctuary journey today? Choose a question below or ask anything about land, water, crops, or solar power in Malawi.`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }
     ];
@@ -209,7 +209,7 @@ export function HomesteadAdvisorModal({
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="font-display text-xl sm:text-2xl font-bold text-[#FAF8F5]">Homestead Field Advisor</h3>
-                  <span className="text-[11px] font-mono text-emerald-300">
+                  <span className="text-caption font-mono text-emerald-300">
                     · 28-District Telemetry
                   </span>
                 </div>
@@ -224,7 +224,7 @@ export function HomesteadAdvisorModal({
                 className="p-2 rounded-xl text-slate-400 hover:text-amber-300 hover:bg-white/5 transition-all text-xs font-mono flex items-center gap-1 cursor-pointer"
               >
                 <RotateCcw size={15} />
-                <span className="hidden sm:inline text-[10px] uppercase tracking-wider">Reset</span>
+                <span className="hidden sm:inline text-caption uppercase tracking-wider">Reset</span>
               </button>
               <button
                 onClick={onClose}
@@ -238,7 +238,7 @@ export function HomesteadAdvisorModal({
 
           {/* Quick Starter Chips */}
           <div className="px-5 py-3 bg-slate-950/60 border-b border-white/5 overflow-x-auto no-scrollbar flex items-center gap-2 shrink-0">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 whitespace-nowrap mr-1">
+            <span className="text-caption font-mono uppercase tracking-wider text-slate-400 whitespace-nowrap mr-1">
               Quick Inquiries:
             </span>
             {SUGGESTED_QUESTIONS.map((q, idx) => {
@@ -307,7 +307,7 @@ export function HomesteadAdvisorModal({
                       )}
                     </div>
                     <span className={cn(
-                      "text-[9px] font-mono text-slate-500 px-2",
+                      "text-caption font-mono text-slate-500 px-2",
                       !isAssistant && "text-right"
                     )}>
                       {m.timestamp}
@@ -363,7 +363,7 @@ export function HomesteadAdvisorModal({
                 <Send size={13} />
               </button>
             </form>
-            <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 px-2 mt-2">
+            <div className="flex items-center justify-between text-caption font-mono text-slate-500 px-2 mt-2">
               <span>Grounded in Malawi DCCMS data, FAO agro-zones & off-grid engineering principles.</span>
               <span className="hidden sm:inline">Press Enter to Send</span>
             </div>

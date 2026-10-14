@@ -286,7 +286,7 @@ export function GisLayerDeck({
               <p className="italic leading-relaxed">
                 "An abundance of pure water, fresh air, and fertile soil are among the greatest physical blessings we can secure in country living."
               </p>
-              <span className="text-[11px] font-semibold text-emerald-300">
+              <span className="text-caption font-semibold text-emerald-300">
                 — Ellen G. White, Country Living
               </span>
             </div>
@@ -300,7 +300,7 @@ export function GisLayerDeck({
                 <span className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
                   <Sparkles size={13} /> Quick Choices
                 </span>
-                <span className="text-[11px] text-stone-400">1-click setups</span>
+                <span className="text-caption text-stone-400">1-click setups</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -323,13 +323,13 @@ export function GisLayerDeck({
                           <span>{p.label}</span>
                         </span>
                         <span className={cn(
-                          "text-[9px] px-2 py-0.5 rounded-full font-semibold",
+                          "text-caption px-2 py-0.5 rounded-full font-semibold",
                           p.highlight ? "bg-emerald-800 text-emerald-200" : "bg-stone-700 text-stone-300"
                         )}>
                           {p.tag}
                         </span>
                       </div>
-                      <span className="text-[11px] text-stone-300 leading-snug">
+                      <span className="text-caption text-stone-300 leading-snug">
                         {p.desc}
                       </span>
                     </button>
@@ -346,7 +346,7 @@ export function GisLayerDeck({
                 </span>
                 <button
                   onClick={() => onApplyPreset('clean')}
-                  className="text-[11px] text-stone-400 hover:text-stone-200 underline cursor-pointer"
+                  className="text-caption text-stone-400 hover:text-stone-200 underline cursor-pointer"
                 >
                   Clear all
                 </button>
@@ -377,7 +377,7 @@ export function GisLayerDeck({
                           <span className={cn("text-xs font-bold leading-tight", layer.active ? "text-white" : "text-stone-400")}>
                             {layer.name}
                           </span>
-                          <span className="text-[11px] text-stone-300 leading-snug mt-0.5">
+                          <span className="text-caption text-stone-300 leading-snug mt-0.5">
                             {layer.desc}
                           </span>
                         </div>
@@ -433,7 +433,7 @@ export function GisLayerDeck({
                         {isSelected && <Check size={13} className="text-emerald-400" strokeWidth={3} />}
                       </div>
                       <span className="text-xs font-bold text-white leading-tight mt-0.5">{b.label}</span>
-                      <span className="text-[10px] text-stone-400 leading-tight line-clamp-2">{b.desc}</span>
+                      <span className="text-caption text-stone-400 leading-tight line-clamp-2">{b.desc}</span>
                     </button>
                   );
                 })}

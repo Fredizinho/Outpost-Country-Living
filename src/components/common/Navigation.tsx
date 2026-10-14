@@ -77,9 +77,9 @@ export const DESKTOP_MODULE_CATALOG: CatalogRouteMeta[] = [
   {
     id: 'home',
     basePath: '/',
-    title: 'Sanctuary Home',
+    title: 'Home',
     pillar: 'Overview',
-    wittyNote: 'Sanctuary overview & family acreage sizer',
+    wittyNote: 'Home overview & family acreage sizer',
     iconKey: 'home',
     icon: HomeIcon,
     accentClass: 'text-amber-300',
@@ -228,7 +228,7 @@ export const DESKTOP_MODULE_CATALOG: CatalogRouteMeta[] = [
     basePath: '/tracker',
     title: 'Transition Tracker',
     pillar: 'Sanctuary Path',
-    wittyNote: 'Equier-guided Kanban & milestone ledger',
+    wittyNote: 'Interactive Kanban & milestone ledger',
     iconKey: 'check',
     icon: CheckCircle2,
     accentClass: 'text-amber-300',
@@ -276,7 +276,7 @@ const DEFAULT_OPEN_TABS: WorkspaceTabDefinition[] = [
     id: 'home',
     basePath: '/',
     currentPath: '/',
-    title: 'Sanctuary Home',
+    title: 'Home',
     pillar: 'Overview',
     iconKey: 'home',
     pinned: true,
@@ -363,10 +363,10 @@ export function Navigation({
   onOpenSettings,
 }: NavigationProps) {
   const { user, isFirebaseAuthenticated, signInWithGoogle, signOut } = useAuth();
-  const { palette } = useTheme();
-  const isSapphire = palette === 'sapphire' || palette === 'midnight';
-  const isSienna = palette === 'sienna';
-  const isCharcoal = palette === 'charcoal';
+  const { theme, isLight, isDark, isField } = useTheme();
+  const isSapphire = false;
+  const isSienna = false;
+  const isCharcoal = false;
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -388,6 +388,51 @@ export function Navigation({
 
   const userMenuRef = useRef<HTMLDivElement>(null);
   const newTabMenuRef = useRef<HTMLDivElement>(null);
+  const tabStripRef = useRef<HTMLDivElement>(null);
+  const moreTabsMenuRef = useRef<HTMLDivElement>(null);
+  const [isMoreTabsOpen, setIsMoreTabsOpen] = useState(false);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  // Check and update scroll boundaries for tab strip
+  const checkTabScroll = () => {
+    const el = tabStripRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 6);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 6);
+  };
+
+  useEffect(() => {
+    checkTabScroll();
+    const el = tabStripRef.current;
+    if (!el) return;
+    el.addEventListener('scroll', checkTabScroll);
+    window.addEventListener('resize', checkTabScroll);
+    return () => {
+      el.removeEventListener('scroll', checkTabScroll);
+      window.removeEventListener('resize', checkTabScroll);
+    };
+  }, [openTabs]);
+
+  const handleScrollTabs = (direction: 'left' | 'right') => {
+    const el = tabStripRef.current;
+    if (!el) return;
+    const delta = direction === 'left' ? -200 : 200;
+    el.scrollBy({ left: delta, behavior: 'smooth' });
+  };
+
+  // Close more tabs dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (moreTabsMenuRef.current && !moreTabsMenuRef.current.contains(e.target as Node)) {
+        setIsMoreTabsOpen(false);
+      }
+    }
+    if (isMoreTabsOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [isMoreTabsOpen]);
 
   // Persist open tabs
   useEffect(() => {
@@ -462,8 +507,15 @@ export function Navigation({
     }
   };
 
-  const handleResetDefaultTabs = () => {
-    setOpenTabs(DEFAULT_OPEN_TABS);
+  const handleCloseOtherTabs = () => {
+    setOpenTabs((prev) => {
+      const activeTab = prev.find((t) => t.id === activeMeta.id);
+      const pinned = prev.filter((t) => t.pinned);
+      if (activeTab && !pinned.some((p) => p.id === activeTab.id)) {
+        return [...pinned, activeTab];
+      }
+      return pinned.length > 0 ? pinned : [prev[0]];
+    });
     setIsNewTabMenuOpen(false);
   };
 
@@ -515,64 +567,31 @@ export function Navigation({
   }, []);
 
   return (
-    <header
+    <>
+      <header
       id="outpost-main-header"
       className={cn(
         'shrink-0 w-full z-50 flex flex-col select-none',
-        isSapphire ? 'glass-depth-nav' : 'glass-depth-nav-emerald'
+        isField ? 'bg-black border-b-2 border-white' : 'glass-depth-nav-emerald'
       )}
       aria-label="Application Navigation and Workspace Tabs"
     >
       <div
         className={cn(
-          'h-12 px-2.5 sm:px-3.5 flex items-center justify-between gap-2 bg-gradient-to-r',
-          isCharcoal
-            ? 'from-[#121215]/98 via-[#18181C]/96 to-[#121215]/98'
-            : isSienna
-            ? 'from-[#1F0B05]/96 via-[#2E1108]/94 to-[#1F0B05]/96'
-            : isSapphire
-            ? 'from-[#030F1E]/96 via-[#06182E]/94 to-[#030F1E]/96'
-            : 'from-[#03110A]/96 via-[#071F12]/94 to-[#03110A]/96'
+          'h-12 px-2.5 sm:px-3.5 flex items-center justify-between gap-2',
+          isField
+            ? 'bg-black text-white'
+            : isLight
+            ? 'bg-[#FAF6F0] text-[#1A1612] border-b border-[#E3D8CC]'
+            : 'bg-gradient-to-r from-[#03110A]/96 via-[#071F12]/94 to-[#03110A]/96 text-[#FEF3C7]'
         )}
       >
         {/* ===================================================================
-            LEFT ZONE: DESKTOP WINDOW CHROME + EXPLORER + MINIMALIST LOGO
+            LEFT ZONE: EXPLORER + MINIMALIST LOGO (DECORATIVE DOTS REMOVED)
         =================================================================== */}
         <div className="flex items-center gap-2 shrink-0">
-          {/* Native Desktop Window Dots (Traffic Lights) */}
-          <div className="hidden sm:flex items-center gap-1.5 px-1 py-1 rounded-lg bg-black/25 border border-white/5 mr-0.5">
-            <button
-              type="button"
-              onClick={() => navigate('/')}
-              title="Return to Sanctuary Home"
-              aria-label="Home"
-              className="w-2.5 h-2.5 rounded-full bg-rose-500/80 hover:bg-rose-500 transition-colors cursor-pointer"
-            />
-            <button
-              type="button"
-              onClick={() => {
-                const el = document.documentElement;
-                if (!document.fullscreenElement) {
-                  el.requestFullscreen?.().catch(() => {});
-                } else {
-                  document.exitFullscreen?.().catch(() => {});
-                }
-              }}
-              title="Toggle Fullscreen Zen Mode (⌘F)"
-              aria-label="Fullscreen Zen Mode"
-              className="w-2.5 h-2.5 rounded-full bg-amber-500/80 hover:bg-amber-500 transition-colors cursor-pointer"
-            />
-            <button
-              type="button"
-              onClick={handleToggleDirectory}
-              title="Toggle Field Directory Sidebar (⌘B)"
-              aria-label="Toggle Sidebar"
-              className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 hover:bg-emerald-500 transition-colors cursor-pointer"
-            />
-          </div>
-
-          {/* Unified Window Control Capsule (Sidebar Toggle + Back/Forward) */}
-          <div className="inline-flex items-center rounded-xl bg-white/[0.04] border border-white/12 p-0.5 shadow-inner">
+          {/* Unified Window Control Capsule (Sidebar Toggle + Back/Forward) - Desktop Only */}
+          <div className="hidden md:inline-flex items-center rounded-xl bg-white/[0.04] border border-white/12 p-0.5 shadow-inner">
             <button
               id="outpost-drawer-toggle"
               type="button"
@@ -623,91 +642,213 @@ export function Navigation({
 
         {/* ===================================================================
             CENTER ZONE: SCULPTED 3D GLASS WORKSPACE TABS + COMPACT LAUNCHER
+            Hidden on mobile (< 768px) in favor of bottom tab bar
         =================================================================== */}
-        <div
-          role="tablist"
-          aria-label="Open Workspace Tabs"
-          className="flex-1 flex items-center gap-1.5 overflow-x-auto no-scrollbar min-w-0 px-1"
-        >
-          {openTabs.map((tab) => {
-            const catalogEntry =
-              DESKTOP_MODULE_CATALOG.find((m) => m.id === tab.id) ||
-              DESKTOP_MODULE_CATALOG[0];
-            const Icon = catalogEntry.icon;
-            const isActive = activeMeta.id === tab.id;
-
-            return (
-              <div
-                key={tab.id}
-                role="tab"
-                aria-selected={isActive}
-                onClick={() => navigate(tab.currentPath)}
-                onAuxClick={(e) => {
-                  if (e.button === 1 && !tab.pinned) {
-                    handleCloseTab(e, tab.id);
-                  }
-                }}
-                onMouseEnter={() => prefetchRoute(tab.basePath)}
-                title={`${tab.title} — ${catalogEntry.wittyNote}${
-                  catalogEntry.shortcut ? ` (${catalogEntry.shortcut})` : ''
-                }`}
-                className={cn(
-                  'group relative h-8 pl-1.5 pr-2.5 rounded-xl border flex items-center gap-1.5 text-xs transition-all cursor-pointer shrink-0 max-w-[195px]',
-                  isActive
-                    ? isSapphire
-                      ? 'bg-gradient-to-b from-sky-500/30 via-blue-900/65 to-slate-950/90 text-white border-sky-400/60 shadow-[0_4px_14px_rgba(14,165,233,0.28),inset_0_1px_0_rgba(255,255,255,0.3)] font-bold'
-                      : 'bg-gradient-to-b from-emerald-500/30 via-emerald-950/75 to-stone-950/90 text-white border-emerald-400/60 shadow-[0_4px_14px_rgba(16,185,129,0.28),inset_0_1px_0_rgba(255,255,255,0.3)] font-bold'
-                    : 'bg-white/[0.03] hover:bg-white/[0.09] text-stone-200/80 hover:text-white border-white/10 hover:border-white/25 font-medium'
-                )}
+        <div className="hidden md:flex flex-1 items-center min-w-0 gap-1.5 px-1">
+          {/* Left Scroll Arrow (Own Flex-None Slot) */}
+          {canScrollLeft && (
+            <div className="flex-none shrink-0">
+              <button
+                type="button"
+                onClick={() => handleScrollTabs('left')}
+                className="h-8 w-6 rounded-lg bg-slate-950/90 hover:bg-slate-900 border border-white/20 text-stone-300 hover:text-white flex items-center justify-center transition-all shadow-md cursor-pointer"
+                title="Scroll tabs left"
+                aria-label="Scroll tabs left"
               >
-                {/* Jewelled Mini Symbol Badge inside Tab */}
-                <span
+                <ChevronLeft size={13} />
+              </button>
+            </div>
+          )}
+
+          {/* Scrollable Tabs Track (Flex-1 with Min-W-0) */}
+          <div
+            ref={tabStripRef}
+            role="tablist"
+            aria-label="Open Workspace Tabs"
+            className="flex-1 flex items-center gap-1.5 overflow-x-auto no-scrollbar min-w-0 px-0.5 scroll-smooth"
+          >
+            {openTabs.map((tab) => {
+              const catalogEntry =
+                DESKTOP_MODULE_CATALOG.find((m) => m.id === tab.id) ||
+                DESKTOP_MODULE_CATALOG[0];
+              const Icon = catalogEntry.icon;
+              const isActive = activeMeta.id === tab.id;
+
+              return (
+                <div
+                  key={tab.id}
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => navigate(tab.currentPath)}
+                  onAuxClick={(e) => {
+                    if (e.button === 1 && !tab.pinned) {
+                      handleCloseTab(e, tab.id);
+                    }
+                  }}
+                  onMouseEnter={() => prefetchRoute(tab.basePath)}
+                  title={tab.title}
                   className={cn(
-                    'w-5 h-5 rounded-lg border flex items-center justify-center shrink-0 transition-transform group-hover:scale-105',
+                    'group relative h-8 pl-1.5 pr-2 rounded-xl border flex items-center gap-1.5 text-xs transition-all cursor-pointer shrink-0 max-w-[200px]',
                     isActive
-                      ? catalogEntry.badgeBg
-                      : 'bg-white/[0.04] border-white/10'
+                      ? isSapphire
+                        ? 'bg-gradient-to-b from-sky-500/30 via-blue-900/65 to-slate-950/90 text-white border-sky-400/60 shadow-[0_4px_14px_rgba(14,165,233,0.28),inset_0_1px_0_rgba(255,255,255,0.3)] font-bold'
+                        : 'bg-gradient-to-b from-emerald-500/30 via-emerald-950/75 to-stone-950/90 text-white border-emerald-400/60 shadow-[0_4px_14px_rgba(16,185,129,0.28),inset_0_1px_0_rgba(255,255,255,0.3)] font-bold'
+                      : 'bg-white/[0.03] hover:bg-white/[0.09] text-stone-200/80 hover:text-white border-white/10 hover:border-white/25 font-medium'
                   )}
                 >
-                  <Icon
-                    size={11}
+                  {/* Jewelled Mini Symbol Badge inside Tab */}
+                  <span
                     className={cn(
-                      'shrink-0',
-                      isActive ? catalogEntry.accentClass : 'text-stone-300 group-hover:text-white'
-                    )}
-                  />
-                </span>
-
-                <span className="truncate whitespace-nowrap text-xs">
-                  {tab.title}
-                </span>
-
-                {isActive && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24] shrink-0" />
-                )}
-
-                {!tab.pinned && openTabs.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={(e) => handleCloseTab(e, tab.id)}
-                    title="Close Tab"
-                    aria-label={`Close ${tab.title} tab`}
-                    className={cn(
-                      'ml-0.5 p-0.5 rounded hover:bg-white/15 hover:text-amber-300 transition-opacity cursor-pointer',
+                      'w-5 h-5 rounded-lg border flex items-center justify-center shrink-0 transition-transform group-hover:scale-105',
                       isActive
-                        ? 'opacity-80 hover:opacity-100 text-stone-200'
-                        : 'opacity-0 group-hover:opacity-100 text-stone-400'
+                        ? catalogEntry.badgeBg
+                        : 'bg-white/[0.04] border-white/10'
                     )}
                   >
-                    <X size={11} />
-                  </button>
-                )}
-              </div>
-            );
-          })}
+                    <Icon
+                      size={11}
+                      className={cn(
+                        'shrink-0',
+                        isActive ? catalogEntry.accentClass : 'text-stone-300 group-hover:text-white'
+                      )}
+                    />
+                  </span>
 
-          {/* Compact '+' Quick-Launch Popover Trigger */}
-          <div className="relative flex items-center gap-1 shrink-0" ref={newTabMenuRef}>
+                  <span 
+                    className="truncate whitespace-nowrap text-xs max-w-[140px]"
+                    title={tab.title}
+                  >
+                    {tab.title}
+                  </span>
+
+                  {isActive && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24] shrink-0" />
+                  )}
+
+                  {!tab.pinned && openTabs.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={(e) => handleCloseTab(e, tab.id)}
+                      title="Close Tab"
+                      aria-label={`Close ${tab.title} tab`}
+                      className={cn(
+                        'ml-0.5 p-0.5 rounded hover:bg-white/15 hover:text-amber-300 transition-opacity cursor-pointer',
+                        isActive
+                          ? 'opacity-80 hover:opacity-100 text-stone-200'
+                          : 'opacity-0 group-hover:opacity-100 text-stone-400'
+                      )}
+                    >
+                      <X size={11} />
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Right Scroll Arrow (Own Flex-None Slot) */}
+          {canScrollRight && (
+            <div className="flex-none shrink-0">
+              <button
+                type="button"
+                onClick={() => handleScrollTabs('right')}
+                className="h-8 w-6 rounded-lg bg-slate-950/90 hover:bg-slate-900 border border-white/20 text-stone-300 hover:text-white flex items-center justify-center transition-all shadow-md cursor-pointer"
+                title="Scroll tabs right"
+                aria-label="Scroll tabs right"
+              >
+                <ChevronRight size={13} />
+              </button>
+            </div>
+          )}
+
+          {/* "Tabs N" Dropdown Button (Own Flex-None Slot) */}
+          <div className="flex-none shrink-0 relative" ref={moreTabsMenuRef}>
+            <button
+              type="button"
+              onClick={() => setIsMoreTabsOpen((prev) => !prev)}
+              title="View all open tabs"
+              aria-label="More tabs"
+              className={cn(
+                'h-8 px-2.5 rounded-xl flex items-center gap-1.5 border text-xs font-semibold transition-all cursor-pointer',
+                isMoreTabsOpen
+                  ? 'bg-amber-400 text-stone-950 border-amber-300 shadow-md font-bold'
+                  : 'bg-white/[0.04] hover:bg-white/[0.1] text-stone-300 hover:text-white border-white/15'
+              )}
+            >
+              <span className="hidden sm:inline">Tabs</span>
+              <span className="w-4 h-4 rounded-full bg-white/10 text-caption font-mono flex items-center justify-center font-bold">
+                {openTabs.length}
+              </span>
+              <ChevronDown size={11} className={cn("transition-transform duration-150", isMoreTabsOpen && "rotate-180")} />
+            </button>
+
+            {/* "More tabs" Dropdown Popover */}
+            <AnimatePresence>
+              {isMoreTabsOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 6, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute right-0 top-10 w-64 bg-slate-950/95 backdrop-blur-2xl border border-white/20 rounded-2xl p-2 shadow-2xl z-50 flex flex-col gap-1 max-h-80 overflow-y-auto custom-scrollbar"
+                >
+                  <div className="px-2 py-1 text-caption font-mono uppercase text-slate-400 border-b border-white/10 font-bold flex items-center justify-between">
+                    <span>Open Workspace Tabs</span>
+                    <span>{openTabs.length}</span>
+                  </div>
+                  {openTabs.map((tab) => {
+                    const catalogEntry =
+                      DESKTOP_MODULE_CATALOG.find((m) => m.id === tab.id) ||
+                      DESKTOP_MODULE_CATALOG[0];
+                    const Icon = catalogEntry.icon;
+                    const isActive = activeMeta.id === tab.id;
+
+                    return (
+                      <div
+                        key={`more-tab-${tab.id}`}
+                        onClick={() => {
+                          navigate(tab.currentPath);
+                          setIsMoreTabsOpen(false);
+                        }}
+                        className={cn(
+                          "px-2 py-1.5 rounded-xl flex items-center justify-between gap-2 text-xs transition-colors cursor-pointer border",
+                          isActive
+                            ? "bg-amber-400/20 text-white border-amber-400/40 font-bold"
+                            : "bg-white/[0.03] text-stone-300 hover:text-white hover:bg-white/10 border-transparent"
+                        )}
+                      >
+                        <div className="flex items-center gap-2 min-w-0">
+                          <Icon size={12} className={isActive ? "text-amber-300" : "text-stone-400"} />
+                          <span className="truncate">{tab.title}</span>
+                        </div>
+                        <div className="flex items-center gap-1 shrink-0">
+                          {isActive && (
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_#fbbf24]" />
+                          )}
+                          {!tab.pinned && openTabs.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCloseTab(e, tab.id);
+                              }}
+                              className="p-1 rounded text-stone-400 hover:text-rose-300 hover:bg-white/10"
+                              title="Close tab"
+                            >
+                              <X size={10} />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Quick-Launch Popover Trigger & Close other tabs (Own Flex-None Slot) */}
+          <div className="flex-none shrink-0 relative flex items-center gap-1" ref={newTabMenuRef}>
             <button
               type="button"
               onClick={() => setIsNewTabMenuOpen((prev) => !prev)}
@@ -724,15 +865,16 @@ export function Navigation({
               <span className="hidden 2xl:inline">Modules</span>
             </button>
 
-            {openTabs.length > 3 && (
+            {openTabs.length > 1 && (
               <button
                 type="button"
-                onClick={handleResetDefaultTabs}
-                title="Tidy Workspace to 3 Core Tabs"
-                className="hidden xl:inline-flex h-8 px-2 rounded-xl bg-white/[0.03] hover:bg-white/10 border border-white/10 text-[11px] font-mono text-stone-300 hover:text-amber-300 items-center gap-1 transition-colors cursor-pointer"
+                onClick={handleCloseOtherTabs}
+                title="Close other tabs"
+                aria-label="Close other tabs"
+                className="hidden xl:inline-flex h-8 px-2.5 rounded-xl bg-white/[0.03] hover:bg-white/10 border border-white/10 text-caption font-mono text-stone-300 hover:text-amber-300 items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
               >
                 <RotateCcw size={11} />
-                <span>Tidy</span>
+                <span>Close other tabs</span>
               </button>
             )}
           </div>
@@ -752,7 +894,7 @@ export function Navigation({
             >
               <Search size={13} className="text-amber-300 shrink-0" />
               <span className="hidden xl:inline text-stone-300">Search...</span>
-              <kbd className="hidden sm:inline text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/10 border border-white/15 text-amber-300">
+              <kbd className="hidden sm:inline text-caption font-mono px-1.5 py-0.5 rounded bg-white/10 border border-white/15 text-amber-300">
                 ⌘K
               </kbd>
             </button>
@@ -813,7 +955,7 @@ export function Navigation({
             >
               <Settings size={13} className="text-amber-300 shrink-0" />
               <span className="hidden xl:inline text-xs font-semibold">Settings</span>
-              <kbd className="hidden 2xl:inline text-[9px] font-mono px-1.5 py-0.5 rounded bg-white/10 border border-white/15 text-amber-300">
+              <kbd className="hidden 2xl:inline text-caption font-mono px-1.5 py-0.5 rounded bg-white/10 border border-white/15 text-amber-300">
                 ⌘,
               </kbd>
             </button>
@@ -861,8 +1003,8 @@ export function Navigation({
                       <p className="font-bold text-white truncate">
                         {user.displayName || 'Country Steward'}
                       </p>
-                      <p className="text-[11px] text-stone-300 truncate">{user.email}</p>
-                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-300 mt-1">
+                      <p className="text-caption text-stone-300 truncate">{user.email}</p>
+                      <span className="inline-flex items-center gap-1 text-caption font-semibold text-emerald-300 mt-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                         {isFirebaseAuthenticated ? 'Cloud Synced' : 'Local Cache Active'}
                       </span>
@@ -931,14 +1073,14 @@ export function Navigation({
             )}
           >
             <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-white/15">
-              <span className="font-mono font-bold uppercase tracking-wider text-amber-300 text-[11px]">
+              <span className="font-mono font-bold uppercase tracking-wider text-amber-300 text-caption">
                 Module Launcher
               </span>
               <div className="flex items-center gap-1.5">
                 <button
                   type="button"
                   onClick={handleResetDefaultTabs}
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/12 text-[11px] text-stone-200 hover:text-amber-300 cursor-pointer"
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/12 text-caption text-stone-200 hover:text-amber-300 cursor-pointer"
                 >
                   <RotateCcw size={10} />
                   <span>Reset 3 Core Tabs</span>
@@ -965,7 +1107,7 @@ export function Navigation({
                     key={suite.id}
                     className="p-2.5 rounded-xl bg-black/25 border border-white/10 flex flex-col gap-1.5"
                   >
-                    <span className="font-mono font-bold text-amber-300 text-[11px] px-1">
+                    <span className="font-mono font-bold text-amber-300 text-caption px-1">
                       {suite.title}
                     </span>
                     <div className="flex flex-col gap-1">
@@ -1002,7 +1144,7 @@ export function Navigation({
                               <span className="truncate text-xs">{mod.title}</span>
                             </span>
                             {mod.shortcut && (
-                              <kbd className="text-[10px] font-mono px-1 rounded bg-white/10 text-stone-300 shrink-0">
+                              <kbd className="text-caption font-mono px-1 rounded bg-white/10 text-stone-300 shrink-0">
                                 {mod.shortcut}
                               </kbd>
                             )}
@@ -1018,6 +1160,81 @@ export function Navigation({
         )}
       </AnimatePresence>
     </header>
+
+    {/* ===================================================================
+        MOBILE BOTTOM TAB BAR (< 768px): Home · Map · Plan · Learn · More
+        Strictly >= 44px touch targets, sentence-case, active indicator
+    =================================================================== */}
+    <nav
+      aria-label="Mobile Bottom Navigation"
+      className={cn(
+        "md:hidden fixed bottom-0 left-0 right-0 z-50 px-2 py-1 border-t backdrop-blur-xl flex items-center justify-around shadow-overlay select-none transition-colors",
+        isField
+          ? "bg-black text-white border-white"
+          : isLight
+          ? "bg-[#FAF6F0]/95 text-[#1A1612] border-[#E3D8CC]"
+          : "bg-[#071A10]/95 text-[#FEF3C7] border-amber-500/20"
+      )}
+      style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 6px)' }}
+    >
+      {[
+        { id: 'home', label: 'Home', path: '/', icon: HomeIcon },
+        { id: 'map', label: 'Map', path: '/map', icon: Compass },
+        { id: 'plan', label: 'Plan', path: '/blueprints', icon: Calendar },
+        { id: 'learn', label: 'Learn', path: '/skills', icon: BookOpen },
+        { id: 'more', label: 'More', path: '#more', icon: PanelLeft, isAction: true },
+      ].map((item) => {
+        const Icon = item.icon;
+        const isActive =
+          item.id === 'home'
+            ? location.pathname === '/'
+            : item.isAction
+            ? isDrawerOpen
+            : location.pathname.startsWith(item.path);
+
+        return (
+          <button
+            key={item.id}
+            type="button"
+            onClick={() => {
+              if (item.isAction) {
+                handleToggleDirectory();
+              } else {
+                navigate(item.path);
+              }
+            }}
+            className={cn(
+              "min-h-[48px] min-w-[56px] px-2 py-1 rounded-xl flex flex-col items-center justify-center gap-1 transition-all cursor-pointer relative",
+              isActive
+                ? isField
+                  ? "text-amber-400 font-bold"
+                  : isLight
+                  ? "text-[#C85A32] font-semibold"
+                  : "text-amber-300 font-bold"
+                : isField
+                ? "text-white/70 hover:text-white"
+                : isLight
+                ? "text-[#6E6255] hover:text-[#1A1612]"
+                : "text-stone-300/80 hover:text-white"
+            )}
+          >
+            <Icon size={18} className="shrink-0" />
+            <span className="text-[12px] font-medium leading-none tracking-normal">
+              {item.label}
+            </span>
+            {isActive && (
+              <span
+                className={cn(
+                  "absolute bottom-0.5 w-6 h-0.5 rounded-full",
+                  isField ? "bg-amber-400" : isLight ? "bg-[#C85A32]" : "bg-amber-400"
+                )}
+              />
+            )}
+          </button>
+        );
+      })}
+    </nav>
+    </>
   );
 }
 

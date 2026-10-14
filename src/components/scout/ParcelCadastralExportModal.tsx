@@ -88,7 +88,7 @@ export function ParcelCadastralExportModal({
           {/* Header Banner */}
           <div className="border-b-2 border-emerald-500 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 print:text-emerald-700 font-bold block">
+              <span className="text-caption font-mono uppercase tracking-widest text-emerald-400 print:text-emerald-700 font-bold block">
                 Republic of Malawi • Land Buyers & Homesteader Reconnaissance
               </span>
               <h1 className="serif text-2xl font-bold text-white print:text-black mt-1">
@@ -102,7 +102,7 @@ export function ParcelCadastralExportModal({
               <span className="inline-block px-3 py-1 rounded bg-emerald-950 border border-emerald-700 text-emerald-300 print:bg-emerald-100 print:text-emerald-800 text-xs font-bold">
                 {parcel.landTenure}
               </span>
-              <div className="text-[11px] text-slate-400 print:text-slate-600 mt-1">
+              <div className="text-caption text-slate-400 print:text-slate-600 mt-1">
                 Cadastral ID: MW-{parcel.district.substring(0, 3).toUpperCase()}-{parcel.id.replace('parcel-', '')}
               </div>
             </div>
@@ -111,29 +111,29 @@ export function ParcelCadastralExportModal({
           {/* Key Cadastral & Metric Table */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="p-3 rounded-xl bg-slate-950 print:bg-slate-50 border border-slate-800 print:border-slate-300">
-              <span className="text-[9px] font-mono uppercase text-slate-400 print:text-slate-600 block">Total Area</span>
+              <span className="text-caption font-mono uppercase text-slate-400 print:text-slate-600 block">Total Area</span>
               <span className="text-base font-bold text-amber-400 print:text-black font-mono block mt-0.5">{parcel.acres} Acres</span>
-              <span className="text-[10px] text-slate-400 font-mono">{parcel.hectares} ha ({areaM2.toLocaleString()} m²)</span>
+              <span className="text-caption text-slate-400 font-mono">{parcel.hectares} ha ({areaM2.toLocaleString()} m²)</span>
             </div>
 
             <div className="p-3 rounded-xl bg-slate-950 print:bg-slate-50 border border-slate-800 print:border-slate-300">
-              <span className="text-[9px] font-mono uppercase text-slate-400 print:text-slate-600 block">Boundary Perimeter</span>
+              <span className="text-caption font-mono uppercase text-slate-400 print:text-slate-600 block">Boundary Perimeter</span>
               <span className="text-base font-bold text-white print:text-black font-mono block mt-0.5">{perimeterMeters.toLocaleString()} m</span>
-              <span className="text-[10px] text-slate-400 font-mono">{perimeterKm.toFixed(2)} km Malire line</span>
+              <span className="text-caption text-slate-400 font-mono">{perimeterKm.toFixed(2)} km Malire line</span>
             </div>
 
             <div className="p-3 rounded-xl bg-slate-950 print:bg-slate-50 border border-slate-800 print:border-slate-300">
-              <span className="text-[9px] font-mono uppercase text-slate-400 print:text-slate-600 block">Terrain & Slope</span>
+              <span className="text-caption font-mono uppercase text-slate-400 print:text-slate-600 block">Terrain & Slope</span>
               <span className="text-base font-bold text-emerald-400 print:text-emerald-700 font-mono block mt-0.5">{parcel.slopePct || 5}% incline</span>
-              <span className="text-[10px] text-slate-400 font-mono">{parcel.elevationMeters || 1350}m elevation</span>
+              <span className="text-caption text-slate-400 font-mono">{parcel.elevationMeters || 1350}m elevation</span>
             </div>
 
             <div className="p-3 rounded-xl bg-slate-950 print:bg-slate-50 border border-slate-800 print:border-slate-300">
-              <span className="text-[9px] font-mono uppercase text-slate-400 print:text-slate-600 block">Dry Season Aquifer</span>
+              <span className="text-caption font-mono uppercase text-slate-400 print:text-slate-600 block">Dry Season Aquifer</span>
               <span className="text-base font-bold text-sky-400 print:text-sky-700 font-mono block mt-0.5">
                 {district ? district.aquiferDepth.split('(')[0].trim() : '14m – 22m'}
               </span>
-              <span className="text-[10px] text-slate-400 font-mono">
+              <span className="text-caption text-slate-400 font-mono">
                 {district ? `${district.rainfallAnnualMm} mm/yr recharge` : 'Chilimwe viable'}
               </span>
             </div>
@@ -150,8 +150,9 @@ export function ParcelCadastralExportModal({
                 <p className="text-slate-400 print:text-slate-700 leading-relaxed">
                   {parcel.waterReliability}. Perennial gravity stream or borehole drilling target identified in mid-slope swale.
                 </p>
-                <div className="mt-2 text-[11px] text-emerald-400 print:text-emerald-700 font-mono">
-                  ✓ Recommended: 50mm PVC contour swale with vetiver grass silt traps.
+                <div className="mt-2 text-caption text-emerald-400 print:text-emerald-700 font-mono flex items-center gap-1">
+                  <CheckCircle2 size={12} className="shrink-0" />
+                  <span>Recommended: 50mm PVC contour swale with vetiver grass silt traps.</span>
                 </div>
               </div>
 
@@ -160,8 +161,9 @@ export function ParcelCadastralExportModal({
                 <p className="text-slate-400 print:text-slate-700 leading-relaxed">
                   Historical low flow: 140–180 L/min during October peak dry spell. Peak runoff during January: &gt;1,200 L/min.
                 </p>
-                <div className="mt-2 text-[11px] text-sky-400 print:text-sky-700 font-mono">
-                  ✓ Recommended: 1.5 kW DC Submersible Lorentz pump or ram pump.
+                <div className="mt-2 text-caption text-sky-400 print:text-sky-700 font-mono flex items-center gap-1">
+                  <CheckCircle2 size={12} className="shrink-0" />
+                  <span>Recommended: 1.5 kW DC Submersible Lorentz pump or ram pump.</span>
                 </div>
               </div>
             </div>
@@ -173,19 +175,19 @@ export function ParcelCadastralExportModal({
               <Sprout size={13} /> 2. Agronomic Suitability & Soil Horizon
             </h4>
             <div className="p-3 rounded-xl bg-slate-950/60 print:bg-slate-50 border border-slate-800/80 text-xs">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2 font-mono text-[11px]">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2 font-mono text-caption">
                 <div><strong className="text-slate-300 print:text-black">Soil Type:</strong> {parcel.soilProfile || (district ? district.primarySoil : 'Katondo Red Loam')}</div>
                 <div><strong className="text-slate-300 print:text-black">pH Range:</strong> {district ? district.soilPh : 'pH 5.8 – 6.5'}</div>
                 <div><strong className="text-slate-300 print:text-black">Solar Yield:</strong> {district ? `${district.solarKwhDay} kWh/m²/day` : '5.6 kWh/m²/day'}</div>
               </div>
               <div className="mt-2">
-                <strong className="text-amber-300 print:text-amber-800 block text-[11px] uppercase font-mono mb-1">High-Yield Crops for this Horizon:</strong>
+                <strong className="text-amber-300 print:text-amber-800 block text-caption uppercase font-mono mb-1">High-Yield Crops for this Horizon:</strong>
                 <div className="flex flex-wrap gap-1.5">
                   {(district?.topCrops && district.topCrops.length > 0
                     ? district.topCrops
                     : ['Mbatata (Sweet Potato)', 'Anyenzi (Onions)', 'Mtedza (Groundnuts)', 'Nzimbe (Sugarcane)', 'Macadamia Integrifolia', 'Hass Avocado', 'Coffee (Arabica)']
                   ).map((c, i) => (
-                    <span key={i} className="px-2 py-0.5 rounded bg-emerald-950/70 border border-emerald-800 text-emerald-300 print:bg-emerald-100 print:text-emerald-900 text-[11px] font-mono">
+                    <span key={i} className="px-2 py-0.5 rounded bg-emerald-950/70 border border-emerald-800 text-emerald-300 print:bg-emerald-100 print:text-emerald-900 text-caption font-mono">
                       {c}
                     </span>
                   ))}
@@ -200,7 +202,7 @@ export function ParcelCadastralExportModal({
               <Compass size={13} /> 3. Cadastral Boundary GPS Points (WGS 84 / Malire)
             </h4>
             <div className="overflow-x-auto">
-              <table className="w-full text-[11px] font-mono border-collapse">
+              <table className="w-full text-caption font-mono border-collapse">
                 <thead>
                   <tr className="border-b border-slate-800 text-slate-400 print:text-slate-600 text-left">
                     <th className="py-1 px-2">Beacon</th>
@@ -227,10 +229,10 @@ export function ParcelCadastralExportModal({
 
           {/* Section 4: Tenure Protocol Verification Checklist */}
           <div className="p-3.5 rounded-2xl bg-amber-950/20 border border-amber-500/30 text-xs flex flex-col gap-2">
-            <span className="font-bold text-amber-300 print:text-amber-900 font-mono text-[11px] uppercase flex items-center gap-1.5">
-              <ShieldCheck size={14} /> Customary Land Protocol Compliance:
+            <span className="font-bold text-amber-300 print:text-amber-900 font-mono text-caption uppercase flex items-center gap-1.5">
+              <ShieldCheck size={14} /> Customary Land Protocol Verification:
             </span>
-            <ul className="list-disc list-inside text-slate-300 print:text-slate-700 space-y-1 text-[11px]">
+            <ul className="list-disc list-inside text-slate-300 print:text-slate-700 space-y-1 text-caption">
               <li>Hold introductory protocol meeting with TA {parcel.traditionalAuthority} and GVH {parcel.groupVillageHeadman}.</li>
               <li>Perform physical boundary walk (Kuyendera Malire) with adjacent plot elders before signing agreements.</li>
               <li>Ensure 3 original copies of customary land transfer agreement are signed and stamped by the Group Village Headman.</li>
@@ -239,7 +241,7 @@ export function ParcelCadastralExportModal({
           </div>
 
           {/* Signoff block */}
-          <div className="pt-4 border-t border-slate-800 flex justify-between text-[10px] font-mono text-slate-400 print:text-slate-600">
+          <div className="pt-4 border-t border-slate-800 flex justify-between text-caption font-mono text-slate-400 print:text-slate-600">
             <div>
               <span>Report Generated: {new Date().toLocaleDateString()}</span>
               <div>Outpost Malawi GIS Reconnaissance Engine</div>

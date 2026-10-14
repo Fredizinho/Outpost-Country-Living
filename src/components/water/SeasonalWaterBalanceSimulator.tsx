@@ -277,7 +277,7 @@ Recommended Tank Storage: ${simulation.recommendedTankCapacity.toLocaleString()}
           <div className="text-xl font-bold text-white tabular-nums mt-1">
             {Math.round(simulation.annualHarvest / 1000)}k <span className="text-xs font-normal text-stone-400">/ {Math.round(simulation.annualDemand / 1000)}k L</span>
           </div>
-          <span className="text-[11px] text-stone-400 mt-1 block">
+          <span className="text-caption text-stone-400 mt-1 block">
             {simulation.annualHarvest >= simulation.annualDemand ? (
               <span className="text-emerald-400 font-semibold inline-flex items-center gap-1">
                 <CheckCircle2 size={12} /> Surplus Harvest Potential
@@ -299,7 +299,7 @@ Recommended Tank Storage: ${simulation.recommendedTankCapacity.toLocaleString()}
               <span className="text-rose-400">-{simulation.totalDeficit.toLocaleString()} L</span>
             )}
           </div>
-          <span className="text-[11px] text-stone-400 mt-1 block">
+          <span className="text-caption text-stone-400 mt-1 block">
             {simulation.totalDeficit === 0
               ? 'Full 100% Water Autonomy all 12 Months'
               : `Water runs dry in ${simulation.minStoredMonth} (${simulation.deficitMonthsCount} dry months)`}
@@ -311,7 +311,7 @@ Recommended Tank Storage: ${simulation.recommendedTankCapacity.toLocaleString()}
           <div className="text-xl font-bold text-sky-400 tabular-nums mt-1">
             {simulation.recommendedTankCapacity.toLocaleString()} Liters
           </div>
-          <span className="text-[11px] text-stone-400 mt-1 block">
+          <span className="text-caption text-stone-400 mt-1 block">
             Install {simulation.recommendedTanksCount} × 5,000L tanks to ensure 6-mo dry reserve
           </span>
         </div>
@@ -323,7 +323,7 @@ Recommended Tank Storage: ${simulation.recommendedTankCapacity.toLocaleString()}
           <h4 className="font-bold text-white uppercase tracking-wider font-mono">
             Monthly Cistern Reservoir Levels &amp; Rain Inflow
           </h4>
-          <div className="flex items-center gap-3 font-mono text-[11px] text-stone-400">
+          <div className="flex items-center gap-3 font-mono text-caption text-stone-400">
             <span className="inline-flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-sm bg-sky-500 inline-block" /> Rain Harvested
             </span>
@@ -367,12 +367,12 @@ Recommended Tank Storage: ${simulation.recommendedTankCapacity.toLocaleString()}
                 </div>
 
                 {/* Month Label */}
-                <span className="text-[11px] font-mono font-bold text-stone-300">
+                <span className="text-caption font-mono font-bold text-stone-300">
                   {m.month}
                 </span>
 
                 {/* Stored Value Indicator */}
-                <span className="text-[9px] font-mono text-stone-400 tabular-nums">
+                <span className="text-caption font-mono text-stone-400 tabular-nums">
                   {Math.round(m.storedL / 1000)}k
                 </span>
               </div>

@@ -92,8 +92,13 @@ export function HomesteadHeroArtwork() {
           src={COUNTRY_IMAGES.malawiHomesteadSanctuary || COUNTRY_IMAGES.homesteadHighlands}
           alt="Highland Malawi Homestead Sanctuary Archetype"
           referrerPolicy="no-referrer"
-          className="w-full h-full object-cover object-center transform transition-transform duration-1000 group-hover:scale-105"
+          className="w-full h-full object-cover object-[center_30%] country-image-grade transform transition-transform duration-1000 group-hover:scale-105"
         />
+
+        {/* Illustrative image badge */}
+        <span className="absolute bottom-3 right-4 z-20 px-2 py-0.5 rounded-control text-caption font-mono font-medium text-stone-200/90 bg-stone-950/75 backdrop-blur-md border border-white/10 shadow-flat pointer-events-none select-none">
+          Illustrative image
+        </span>
 
         {/* Cinematic Vignette & Atmospheric Grading Overlays */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#041209] via-[#041209]/40 to-transparent" />
@@ -103,8 +108,8 @@ export function HomesteadHeroArtwork() {
         {/* Top Header Floating Label Bar */}
         <div className="absolute top-4 left-4 right-4 sm:top-6 sm:left-6 sm:right-6 flex items-center justify-between z-20 pointer-events-none">
           <div className="flex items-center gap-2.5 bg-slate-950/85 backdrop-blur-xl border border-amber-500/35 px-4 py-1.5 rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.6)] pointer-events-auto">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            <span className="text-[10px] sm:text-xs font-mono font-black uppercase tracking-wider bg-gradient-to-r from-amber-200 via-amber-300 to-amber-400 bg-clip-text text-transparent">
+            <span className="w-2 h-2 rounded-full bg-emerald-400" />
+            <span className="text-caption sm:text-xs font-mono font-black uppercase tracking-wider bg-gradient-to-r from-amber-200 via-amber-300 to-amber-400 bg-clip-text text-transparent">
               Malawi Highland Homestead Archetype
             </span>
           </div>
@@ -144,10 +149,10 @@ export function HomesteadHeroArtwork() {
                 className="relative group/pin p-2.5 cursor-pointer focus:outline-none"
                 aria-label={`Inspect ${spot.title}`}
               >
-                {/* Ping Rings */}
+                {/* Subtle Focus Ring */}
                 <span className={cn(
-                  "absolute inset-0 rounded-full animate-ping opacity-60 pointer-events-none",
-                  isSelected ? "bg-amber-400" : "bg-emerald-400"
+                  "absolute inset-0 rounded-full opacity-40 pointer-events-none ring-2",
+                  isSelected ? "ring-amber-400" : "ring-emerald-400"
                 )} />
                 
                 {/* Pin Core */}
@@ -162,7 +167,7 @@ export function HomesteadHeroArtwork() {
 
                 {/* Micro Label on Hover/Selected */}
                 <div className={cn(
-                  "absolute left-1/2 -translate-x-1/2 top-full mt-2 whitespace-nowrap bg-slate-950/95 text-slate-100 px-3 py-1.5 rounded-xl text-[10px] font-mono font-bold border border-amber-500/35 shadow-2xl transition-all pointer-events-none hidden md:block backdrop-blur-md",
+                  "absolute left-1/2 -translate-x-1/2 top-full mt-2 whitespace-nowrap bg-slate-950/95 text-slate-100 px-3 py-1.5 rounded-xl text-caption font-mono font-bold border border-amber-500/35 shadow-2xl transition-all pointer-events-none hidden md:block backdrop-blur-md",
                   isSelected ? "opacity-100 scale-100" : "opacity-0 scale-95 group-hover/pin:opacity-100 group-hover/pin:scale-100"
                 )}>
                   {spot.title}
@@ -184,7 +189,7 @@ export function HomesteadHeroArtwork() {
             >
               <div className="flex flex-col gap-2 min-w-0">
                 <div className="flex items-center gap-2.5 flex-wrap">
-                  <span className="text-[9px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-black border border-amber-500/40 tracking-wider">
+                  <span className="text-caption font-mono uppercase px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-black border border-amber-500/40 tracking-wider">
                     {activeHotspot.category}
                   </span>
                   <span className="text-base sm:text-lg font-bold font-serif text-[#FAF8F5] truncate">
@@ -198,7 +203,7 @@ export function HomesteadHeroArtwork() {
                   {activeHotspot.specs.map((spec, i) => (
                     <span 
                       key={i} 
-                      className="text-[10px] font-mono bg-emerald-950/80 text-emerald-200 border border-emerald-500/30 px-2.5 py-0.5 rounded-lg shadow-xs"
+                      className="text-caption font-mono bg-emerald-950/80 text-emerald-200 border border-emerald-500/30 px-2.5 py-0.5 rounded-lg shadow-xs"
                     >
                       {spec}
                     </span>

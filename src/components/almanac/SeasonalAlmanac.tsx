@@ -156,15 +156,15 @@ export function SeasonalAlmanac({
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-emerald-800 font-black uppercase text-[10px] tracking-[0.25em] flex items-center gap-1.5">
+            <span className="text-emerald-800 font-black uppercase text-caption tracking-[0.25em] flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-amber-500 stroke-[1.75]" />
               Dynamic Action Engine
             </span>
-            <span className="bg-emerald-100 text-emerald-900 text-[9px] font-black uppercase px-2.5 py-0.5 rounded-full flex items-center gap-1 border border-emerald-300">
+            <span className="bg-emerald-100 text-emerald-900 text-caption font-black uppercase px-2.5 py-0.5 rounded-full flex items-center gap-1 border border-emerald-300">
               <HardDrive className="w-3 h-3 stroke-[1.75]" /> Offline Synced
             </span>
             {selectedDistrict && (
-              <span className="bg-amber-100 text-amber-900 text-[9px] font-black uppercase px-2.5 py-0.5 rounded-full flex items-center gap-1 border border-amber-300">
+              <span className="bg-amber-100 text-amber-900 text-caption font-black uppercase px-2.5 py-0.5 rounded-full flex items-center gap-1 border border-amber-300">
                 <MapPin className="w-3 h-3 stroke-[1.75]" /> District: {climateData.name}
               </span>
             )}
@@ -219,11 +219,11 @@ export function SeasonalAlmanac({
         <div className="w-full bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 border-2 border-blue-400/60 rounded-3xl p-5 shadow-2xl text-white relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-start gap-3.5 relative z-10">
             <div className="p-2 rounded-xl bg-blue-500/20 text-blue-300 border border-blue-400/40 w-11 h-11 flex items-center justify-center shrink-0">
-              <Snowflake className="w-6 h-6 animate-spin-slow stroke-[1.75]" />
+              <Snowflake className="w-6 h-6 stroke-[1.75]" />
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="bg-blue-400 text-slate-950 text-[10px] font-mono font-black uppercase px-2.5 py-0.5 rounded-full">
+                <span className="bg-blue-400 text-slate-950 text-caption font-mono font-black uppercase px-2.5 py-0.5 rounded-full">
                   High-Priority Climate Alert
                 </span>
                 <span className="text-blue-200 text-xs font-mono">

@@ -773,7 +773,7 @@ export function PropheticTimeline1844() {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-                      <span className="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-lg bg-black/75 border border-amber-400/40 font-mono text-[10px] font-bold text-amber-300">
+                      <span className="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-lg bg-black/75 border border-amber-400/40 font-mono text-caption font-bold text-amber-300">
                         STAGE {epoch.stageNumber} · {epoch.eraLabel.split('·')[0].trim()}
                       </span>
                       <button
@@ -791,7 +791,7 @@ export function PropheticTimeline1844() {
                         <h4 className="font-display text-base font-bold text-white leading-snug">
                           {epoch.shortTitle}
                         </h4>
-                        <p className="text-[11px] font-mono text-emerald-300">
+                        <p className="text-caption font-mono text-emerald-300">
                           {epoch.scriptureRef} · {epoch.egwCode}
                         </p>
                       </div>
@@ -807,7 +807,7 @@ export function PropheticTimeline1844() {
                       <p className="font-serif text-xs italic text-stone-200 line-clamp-3 leading-relaxed">
                         “{epoch.egwQuote}”
                       </p>
-                      <p className="text-[11px] text-amber-300 font-semibold">
+                      <p className="text-caption text-amber-300 font-semibold">
                         — {epoch.egwSource}
                       </p>
                     </div>
@@ -828,7 +828,7 @@ export function PropheticTimeline1844() {
 
                     <Link
                       to={epoch.actionLink.to}
-                      className="text-[11px] font-mono text-stone-400 hover:text-white underline"
+                      className="text-caption font-mono text-stone-400 hover:text-white underline"
                     >
                       {epoch.actionLink.label}
                     </Link>
@@ -1018,7 +1018,7 @@ export function PropheticTimeline1844() {
               >
                 <span
                   className={cn(
-                    'text-[10px] font-mono font-bold',
+                    'text-caption font-mono font-bold',
                     isSelected ? 'text-stone-900' : 'text-amber-300'
                   )}
                 >
@@ -1062,13 +1062,13 @@ export function PropheticTimeline1844() {
                     e.stopPropagation();
                     setLightboxEpoch(activeEpoch);
                   }}
-                  className="absolute top-3 right-3 px-2.5 py-1.5 rounded-lg bg-black/70 hover:bg-amber-400 text-amber-200 hover:text-stone-950 border border-white/20 text-[11px] font-mono font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                  className="absolute top-3 right-3 px-2.5 py-1.5 rounded-lg bg-black/70 hover:bg-amber-400 text-amber-200 hover:text-stone-950 border border-white/20 text-caption font-mono font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <Maximize2 size={12} />
                   <span>Enlarge Plate</span>
                 </button>
                 <div className="absolute bottom-0 inset-x-0 p-4 flex flex-col gap-1">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-amber-300 font-bold">
+                  <span className="text-caption font-mono uppercase tracking-wider text-amber-300 font-bold">
                     Prophetic Plate {activeEpoch.stageNumber} · {activeEpoch.scriptureRef}
                   </span>
                   <p className="text-xs text-stone-200 leading-snug">
@@ -1079,7 +1079,7 @@ export function PropheticTimeline1844() {
 
               {/* Companion Custom Vector Schematic */}
               <div className="rounded-2xl border border-emerald-800/70 bg-[#05110A] p-3 flex flex-col gap-1.5">
-                <div className="flex items-center justify-between text-[10px] font-mono text-emerald-300 px-1">
+                <div className="flex items-center justify-between text-caption font-mono text-emerald-300 px-1">
                   <span>PROPHETIC VECTOR DIAGRAM</span>
                   <span className="text-amber-300">{activeEpoch.egwCode}</span>
                 </div>
@@ -1118,7 +1118,7 @@ export function PropheticTimeline1844() {
 
                 {/* KJV Scripture Block */}
                 <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 flex flex-col gap-1">
-                  <span className="text-[11px] font-mono font-bold text-amber-300">
+                  <span className="text-caption font-mono font-bold text-amber-300">
                     BIBLICAL FOUNDATION · {activeEpoch.scriptureRef} (KJV)
                   </span>
                   <p className="font-serif text-sm italic text-stone-100 leading-relaxed">
@@ -1150,7 +1150,7 @@ export function PropheticTimeline1844() {
               {/* Practical Malawi Homestead Action Box */}
               <div className="p-4 rounded-2xl bg-emerald-950/60 border border-emerald-700/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex flex-col gap-1">
-                  <span className="text-[11px] font-mono font-bold text-amber-300 flex items-center gap-1.5">
+                  <span className="text-caption font-mono font-bold text-amber-300 flex items-center gap-1.5">
                     <Compass size={13} />
                     <span>Malawi Country Living Application</span>
                   </span>

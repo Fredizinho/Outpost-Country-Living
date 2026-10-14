@@ -37,10 +37,10 @@ export function UrgentSeasonAlert({
 
         <div className="flex flex-col gap-0.5">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="bg-amber-400 text-slate-950 text-[10px] font-mono font-black uppercase px-2.5 py-0.5 rounded-full flex items-center gap-1">
+            <span className="bg-amber-400 text-slate-950 text-caption font-mono font-black uppercase px-2.5 py-0.5 rounded-full flex items-center gap-1">
               <Clock size={11} /> {daysRemaining ? `~${daysRemaining}-Day Target Window` : 'Priority Seasonal Window'}
             </span>
-            <span className="text-amber-200/70 font-mono text-[10px] uppercase font-bold tracking-wider">
+            <span className="text-amber-200/70 font-mono text-caption uppercase font-bold tracking-wider">
               Critical Path
             </span>
           </div>

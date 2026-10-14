@@ -15,6 +15,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { COUNTRY_IMAGES } from '@/assets/images';
 
 export interface TropicalSanitariumDispensaryProps {
   className?: string;
@@ -184,6 +185,32 @@ export function TropicalSanitariumDispensary({ className = '' }: TropicalSanitar
         </button>
       </div>
 
+      {/* Visual Illustration Plate: Natural Remedies Dispensary */}
+      <div className="relative rounded-2xl overflow-hidden border border-stone-800 bg-stone-950 h-44 sm:h-56 group">
+        <img
+          src={COUNTRY_IMAGES.sanitariumNaturalDispensary}
+          alt="Natural Remedies Sanitarium Dispensary & Herbal Apothecary"
+          loading="lazy"
+          decoding="async"
+          referrerPolicy="no-referrer"
+          className="w-full h-full object-cover object-[center_35%] opacity-90 group-hover:scale-105 transition-transform duration-700"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/40 to-transparent" />
+        <div className="absolute bottom-3 left-4 right-4 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+          <div>
+            <span className="text-caption font-mono uppercase tracking-widest text-amber-300 font-bold block mb-0.5">
+              Ellen G. White Sanitarium Model · MH 127
+            </span>
+            <p className="text-xs sm:text-sm font-bold text-white max-w-xl leading-snug">
+              Clean air, pure mountain water, rational hydrotherapy fomentations, and natural plant pharmacopeia without poisonous drugs.
+            </p>
+          </div>
+          <span className="text-caption font-mono text-emerald-400 font-medium shrink-0">
+            Field Dispensary Standard
+          </span>
+        </div>
+      </div>
+
       {/* 3 Tab Mode Switcher */}
       <div className="grid grid-cols-3 gap-1.5 bg-stone-950/60 p-1 rounded-xl border border-stone-800 text-xs font-mono">
         <button
@@ -237,7 +264,7 @@ export function TropicalSanitariumDispensary({ className = '' }: TropicalSanitar
               <div className="flex items-center justify-between pb-2 border-b border-stone-800">
                 <div>
                   <h4 className="font-bold text-white text-sm tracking-tight">{remedy.name}</h4>
-                  <span className="text-stone-400 font-mono text-[11px]">
+                  <span className="text-stone-400 font-mono text-caption">
                     {remedy.chichewa} · <em className="text-rose-400">{remedy.scientific}</em>
                   </span>
                 </div>
@@ -258,7 +285,7 @@ export function TropicalSanitariumDispensary({ className = '' }: TropicalSanitar
                 <p className="text-stone-300 leading-relaxed">{remedy.dosageSchedule}</p>
               </div>
 
-              <div className="p-2 rounded-lg bg-rose-950/20 border border-rose-900/30 text-rose-300 text-[11px]">
+              <div className="p-2 rounded-lg bg-rose-950/20 border border-rose-900/30 text-rose-300 text-caption">
                 <strong>Safety Caution:</strong> {remedy.safetyCautions}
               </div>
             </div>
@@ -274,9 +301,9 @@ export function TropicalSanitariumDispensary({ className = '' }: TropicalSanitar
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-2 border-b border-stone-800">
                 <div>
                   <h4 className="font-bold text-white text-base tracking-tight">{protocol.title}</h4>
-                  <span className="text-stone-400 font-mono text-[11px]">{protocol.chichewa}</span>
+                  <span className="text-stone-400 font-mono text-caption">{protocol.chichewa}</span>
                 </div>
-                <span className="text-sky-400 font-mono text-[11px] flex items-center gap-1">
+                <span className="text-sky-400 font-mono text-caption flex items-center gap-1">
                   <Clock size={12} /> {protocol.duration}
                 </span>
               </div>
@@ -298,7 +325,7 @@ export function TropicalSanitariumDispensary({ className = '' }: TropicalSanitar
                 <strong className="text-emerald-300 block">Step-by-Step Procedure:</strong>
                 {protocol.steps.map((step, idx) => (
                   <div key={idx} className="flex items-start gap-2 text-stone-300 bg-stone-900/60 p-2 rounded-lg border border-stone-800/60">
-                    <span className="w-4 h-4 rounded-full bg-sky-500/20 text-sky-300 flex items-center justify-center shrink-0 font-bold text-[10px]">
+                    <span className="w-4 h-4 rounded-full bg-sky-500/20 text-sky-300 flex items-center justify-center shrink-0 font-bold text-caption">
                       {idx + 1}
                     </span>
                     <span className="leading-relaxed">{step}</span>
@@ -316,7 +343,7 @@ export function TropicalSanitariumDispensary({ className = '' }: TropicalSanitar
           {/* Card 1: Unfermented Hearth Bread */}
           <div className="p-4 rounded-xl bg-stone-950/60 border border-stone-800 space-y-2">
             <h4 className="font-bold text-white text-sm">Unfermented Hearth Bread (Mkate wa Mgaiwa)</h4>
-            <span className="text-stone-400 font-mono text-[11px] block">100% Whole Grain · Leaven-Free</span>
+            <span className="text-stone-400 font-mono text-caption block">100% Whole Grain · Leaven-Free</span>
             <p className="text-stone-300 leading-relaxed">
               Mix 4 cups freshly milled whole wheat or sorghum flour (*Mphale / Mgaiwa*) with 1.5 cups ice-cold mountain water and 1/2 tsp salt into stiff dough.
             </p>
@@ -328,7 +355,7 @@ export function TropicalSanitariumDispensary({ className = '' }: TropicalSanitar
           {/* Card 2: Sinjiro Groundnut Sauce */}
           <div className="p-4 rounded-xl bg-stone-950/60 border border-stone-800 space-y-2">
             <h4 className="font-bold text-white text-sm">Sinjiro Seed &amp; Mineral Sauce</h4>
-            <span className="text-stone-400 font-mono text-[11px] block">High Protein &amp; Zinc Emulsion</span>
+            <span className="text-stone-400 font-mono text-caption block">High Protein &amp; Zinc Emulsion</span>
             <p className="text-stone-300 leading-relaxed">
               Lightly roast heirloom groundnuts (*Mtedza*) and sunflower seeds. Pound in traditional wooden mortar (*Mtondo*) into a fine oily meal without added vegetable oil.
             </p>
@@ -340,7 +367,7 @@ export function TropicalSanitariumDispensary({ className = '' }: TropicalSanitar
           {/* Card 3: Pounded Cassava Leaves */}
           <div className="p-4 rounded-xl bg-stone-950/60 border border-stone-800 space-y-2">
             <h4 className="font-bold text-white text-sm">Chigwada (Pounded Cassava Greens)</h4>
-            <span className="text-stone-400 font-mono text-[11px] block">Vitamin A &amp; Iron Powerhouse</span>
+            <span className="text-stone-400 font-mono text-caption block">Vitamin A &amp; Iron Powerhouse</span>
             <p className="text-stone-300 leading-relaxed">
               Pick tender young cassava leaves (*Chigwada*). Pound thoroughly with garlic and fresh ginger to break down fibrous cells and remove cyanogenic glucosides.
             </p>

@@ -117,7 +117,7 @@ export function OnboardingWizard({ isOpen, onClose, onComplete }: OnboardingWiza
           {/* Top Header Row */}
           <div className="flex items-center justify-between border-b border-slate-100 pb-4 relative z-10">
             <div className="flex items-center gap-2">
-              <span className="bg-emerald-900 text-white text-[10px] font-black uppercase px-3 py-1 rounded-full flex items-center gap-1.5 shadow-xs">
+              <span className="bg-emerald-900 text-white text-caption font-black uppercase px-3 py-1 rounded-full flex items-center gap-1.5 shadow-xs">
                 <Sparkles size={13} className="text-amber-300" /> One-Time Setup Profile
               </span>
               <span className="text-slate-400 text-xs font-bold">
@@ -142,7 +142,7 @@ export function OnboardingWizard({ isOpen, onClose, onComplete }: OnboardingWiza
                 Active Setup: <strong className="text-white">{district} ({region})</strong> • <strong className="text-amber-300">{familyMembers} Members</strong> • <strong className="text-emerald-300">{landSizeAcres} Acres</strong> • <strong className="text-sky-300">{currentSeason}</strong>
               </span>
             </div>
-            <span className="text-[10px] font-black uppercase text-emerald-400/80 shrink-0 hidden sm:inline-block">
+            <span className="text-caption font-black uppercase text-emerald-400/80 shrink-0 hidden sm:inline-block">
               Compounding Context
             </span>
           </div>
@@ -180,7 +180,7 @@ export function OnboardingWizard({ isOpen, onClose, onComplete }: OnboardingWiza
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-1">
                   <div>
-                    <label className="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1.5">
+                    <label className="block text-caption font-black uppercase tracking-wider text-slate-500 mb-1.5">
                       Malawi Region
                     </label>
                     <select
@@ -195,7 +195,7 @@ export function OnboardingWizard({ isOpen, onClose, onComplete }: OnboardingWiza
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1.5">
+                    <label className="block text-caption font-black uppercase tracking-wider text-slate-500 mb-1.5">
                       Target District / Area
                     </label>
                     <input
@@ -209,7 +209,7 @@ export function OnboardingWizard({ isOpen, onClose, onComplete }: OnboardingWiza
                 </div>
 
                 <div>
-                  <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-2">
+                  <span className="text-caption font-black uppercase tracking-wider text-slate-400 block mb-2">
                     Quick District Presets
                   </span>
                   <div className="flex flex-wrap gap-2">
@@ -229,7 +229,7 @@ export function OnboardingWizard({ isOpen, onClose, onComplete }: OnboardingWiza
                         )}
                       >
                         <span>{preset.name}</span>
-                        <span className="text-[9px] opacity-70 font-normal">({preset.region})</span>
+                        <span className="text-caption opacity-70 font-normal">({preset.region})</span>
                       </button>
                     ))}
                   </div>
@@ -306,7 +306,7 @@ export function OnboardingWizard({ isOpen, onClose, onComplete }: OnboardingWiza
                     ))}
                   </div>
 
-                  <p className="text-[11px] text-emerald-800/80 font-medium">
+                  <p className="text-caption text-emerald-800/80 font-medium">
                     Estimated annual staple grain requirement: <strong className="text-emerald-950 font-extrabold">{familyMembers * 300} kg</strong> (Maize & Beans)
                   </p>
                 </div>
@@ -373,7 +373,7 @@ export function OnboardingWizard({ isOpen, onClose, onComplete }: OnboardingWiza
                         )}
                       >
                         <span className="font-bold text-xs">{preset.label}</span>
-                        <span className={cn("text-[10px]", landSizeAcres === preset.size ? "text-emerald-200" : "text-slate-500")}>
+                        <span className={cn("text-caption", landSizeAcres === preset.size ? "text-emerald-200" : "text-slate-500")}>
                           {preset.desc}
                         </span>
                       </button>
@@ -425,11 +425,11 @@ export function OnboardingWizard({ isOpen, onClose, onComplete }: OnboardingWiza
                             </div>
                             <span className="font-bold text-xs">{opt.label}</span>
                           </div>
-                          <span className={cn("text-[9px] font-black uppercase px-2 py-0.5 rounded-full border", isSelected ? "bg-emerald-800 text-amber-300 border-emerald-700" : "bg-slate-200 text-slate-700 border-slate-300")}>
+                          <span className={cn("text-caption font-black uppercase px-2 py-0.5 rounded-full border", isSelected ? "bg-emerald-800 text-amber-300 border-emerald-700" : "bg-slate-200 text-slate-700 border-slate-300")}>
                             {opt.months}
                           </span>
                         </div>
-                        <p className={cn("text-[11px] leading-snug", isSelected ? "text-emerald-100/90" : "text-slate-600")}>
+                        <p className={cn("text-caption leading-snug", isSelected ? "text-emerald-100/90" : "text-slate-600")}>
                           {opt.desc}
                         </p>
                       </button>

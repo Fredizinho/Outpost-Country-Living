@@ -23,12 +23,28 @@ import sanctuary1844Judgment from '@/assets/images/sanctuary_1844_judgment_17908
 import threeAngelsProclamation from '@/assets/images/three_angels_proclamation_1790840540260.jpg';
 import secondComingDeliverance from '@/assets/images/second_coming_deliverance_1790840555721.jpg';
 
+// Core Four Pillars & Field Manual Master Illustrations
+import malawiHomesteadMorning from '@/assets/images/malawi_homestead_morning_1791425983153.jpg';
+import sanitariumNaturalDispensary from '@/assets/images/sanitarium_natural_dispensary_1791425992162.jpg';
+import permacultureWaterHydraulics from '@/assets/images/permaculture_water_hydraulics_1791426003209.jpg';
+import edenicDeepPlantingPit from '@/assets/images/edenic_deep_planting_pit_1791426013986.jpg';
+import ruralIndustrialSanctuary from '@/assets/images/rural_industrial_sanctuary_1791426024740.jpg';
+import malawiOutpostBotanical from '@/assets/images/malawi_outpost_botanical_1791643568542.jpg';
+
 export const COUNTRY_IMAGES = {
   homesteadHighlands,
   permacultureGarden,
   mountainVista,
   offgridHomesteadWater,
   malawiHomesteadSanctuary,
+  malawiOutpostBotanical,
+
+  // Four Pillars & Outpost Engineering Illustrations
+  malawiHomesteadMorning,
+  sanitariumNaturalDispensary,
+  permacultureWaterHydraulics,
+  edenicDeepPlantingPit,
+  ruralIndustrialSanctuary,
 
   // Prophetic and Spirit of Prophecy imagery
   jerusalemSiege,

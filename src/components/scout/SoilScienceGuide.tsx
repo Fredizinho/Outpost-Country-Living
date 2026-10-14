@@ -121,10 +121,10 @@ export function SoilScienceGuide() {
           </div>
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-[10px] font-black uppercase tracking-widest bg-emerald-900 text-emerald-300 px-2.5 py-0.5 rounded-full border border-emerald-700">
+              <span className="text-caption font-black uppercase tracking-widest bg-emerald-900 text-emerald-300 px-2.5 py-0.5 rounded-full border border-emerald-700">
                 Soil Science & Agronomy
               </span>
-              <span className="text-[10px] font-black uppercase tracking-widest bg-amber-500/20 text-amber-400 px-2.5 py-0.5 rounded-full border border-amber-400/40">
+              <span className="text-caption font-black uppercase tracking-widest bg-amber-500/20 text-amber-400 px-2.5 py-0.5 rounded-full border border-amber-400/40">
                 Stewardship
               </span>
             </div>
@@ -210,12 +210,12 @@ export function SoilScienceGuide() {
                     className="p-6 flex flex-col gap-3 cursor-pointer select-none"
                   >
                     <div className="flex justify-between items-center">
-                      <span className="font-mono text-[10px] uppercase font-bold text-emerald-400 bg-emerald-950 px-2.5 py-0.5 rounded-md border border-emerald-800">
+                      <span className="font-mono text-caption uppercase font-bold text-emerald-400 bg-emerald-950 px-2.5 py-0.5 rounded-md border border-emerald-800">
                         {topic.category}
                       </span>
                       <div className="flex items-center gap-2">
                         {/* Right-aligned micro badge */}
-                        <span className="font-mono text-[10px] text-amber-400/80 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                        <span className="font-mono text-caption text-amber-400/80 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
                           Target: {topic.optimalTarget}
                         </span>
                         <div className={cn(
@@ -267,14 +267,14 @@ export function SoilScienceGuide() {
                                 <Sparkles size={14} className="text-amber-400" />
                                 Key Soil Steps
                               </span>
-                              <span className="font-mono text-[10px] text-emerald-400/80 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                              <span className="font-mono text-caption text-emerald-400/80 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
                                 Soil Field Guide
                               </span>
                             </div>
 
                             <ul className="flex flex-col gap-2.5">
                               <li className="flex items-start gap-2.5 bg-slate-900/80 p-2.5 rounded-xl border border-white/5 text-xs">
-                                <span className="w-5 h-5 rounded-lg bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                                <span className="w-5 h-5 rounded-lg bg-amber-500/20 text-amber-300 font-mono text-caption font-bold flex items-center justify-center shrink-0 mt-0.5">
                                   1
                                 </span>
                                 <div>
@@ -284,7 +284,7 @@ export function SoilScienceGuide() {
                               </li>
 
                               <li className="flex items-start gap-2.5 bg-slate-900/80 p-2.5 rounded-xl border border-white/5 text-xs">
-                                <span className="w-5 h-5 rounded-lg bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                                <span className="w-5 h-5 rounded-lg bg-amber-500/20 text-amber-300 font-mono text-caption font-bold flex items-center justify-center shrink-0 mt-0.5">
                                   2
                                 </span>
                                 <div>
@@ -302,20 +302,20 @@ export function SoilScienceGuide() {
                                 <FlaskConical size={14} className="text-amber-400" />
                                 Required Equipment & Metrics
                               </span>
-                              <span className="font-mono text-[10px] text-amber-400/80 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                              <span className="font-mono text-caption text-amber-400/80 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
                                 Benchmarks
                               </span>
                             </div>
 
                             <div className="flex flex-col gap-2 font-mono text-xs">
                               <div className="bg-slate-900/80 p-2.5 rounded-xl border border-white/10">
-                                <span className="text-[9px] uppercase text-slate-400 block mb-0.5 font-bold">Optimal Target Level</span>
-                                <span className="text-emerald-300 font-bold text-[11px] block">{topic.optimalTarget}</span>
+                                <span className="text-caption uppercase text-slate-400 block mb-0.5 font-bold">Optimal Target Level</span>
+                                <span className="text-emerald-300 font-bold text-caption block">{topic.optimalTarget}</span>
                               </div>
 
                               <div className="bg-slate-900/80 p-2.5 rounded-xl border border-white/10">
-                                <span className="text-[9px] uppercase text-slate-400 block mb-0.5 font-bold">Scientific Citations</span>
-                                <span className="text-slate-300 text-[11px] block truncate">{topic.citations.join(' • ')}</span>
+                                <span className="text-caption uppercase text-slate-400 block mb-0.5 font-bold">Scientific Citations</span>
+                                <span className="text-slate-300 text-caption block truncate">{topic.citations.join(' • ')}</span>
                               </div>
                             </div>
                           </div>
@@ -338,7 +338,7 @@ export function SoilScienceGuide() {
                   {!isExpanded && (
                     <div 
                       onClick={() => setExpandedTopicId(topic.id)}
-                      className="px-6 pb-4 pt-1 border-t border-slate-900 flex justify-between items-center text-[10px] font-mono font-bold text-slate-400 cursor-pointer hover:text-amber-300"
+                      className="px-6 pb-4 pt-1 border-t border-slate-900 flex justify-between items-center text-caption font-mono font-bold text-slate-400 cursor-pointer hover:text-amber-300"
                     >
                       <span className="truncate mr-2">Action: {topic.practicalAction.slice(0, 45)}...</span>
                       <span className="text-amber-400 flex items-center gap-1 shrink-0">Inspect Science <ChevronDown size={12} /></span>
@@ -368,7 +368,7 @@ export function SoilScienceGuide() {
 
             {/* Verified Research Station Benchmark Selectors */}
             <div className="flex flex-col gap-2">
-              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+              <span className="text-caption font-mono font-bold uppercase tracking-wider text-slate-400">
                 Load Station Benchmark:
               </span>
               <div className="grid grid-cols-2 gap-2">
@@ -384,7 +384,7 @@ export function SoilScienceGuide() {
                     )}
                   >
                     <span className="text-xs font-bold font-mono">{b.name}</span>
-                    <span className="text-[10px] text-slate-400 truncate">{b.station}</span>
+                    <span className="text-caption text-slate-400 truncate">{b.station}</span>
                   </button>
                 ))}
               </div>
@@ -414,7 +414,7 @@ export function SoilScienceGuide() {
                 }}
                 className="w-full accent-emerald-500 h-2 bg-slate-800 rounded-lg cursor-pointer"
               />
-              <div className="flex justify-between text-[10px] text-slate-500 uppercase tracking-wider font-semibold">
+              <div className="flex justify-between text-caption text-slate-500 uppercase tracking-wider font-semibold">
                 <span>Strongly Acidic (&lt;5.5)</span>
                 <span>Optimal (6.0-6.8)</span>
                 <span>Alkaline (&gt;7.2)</span>
@@ -547,7 +547,7 @@ export function SoilScienceGuide() {
             <div className="bg-gradient-to-br from-emerald-950 via-slate-950 to-amber-950 p-6 rounded-3xl border border-emerald-500/40 shadow-xl flex flex-col gap-4">
               <div className="flex justify-between items-start">
                 <div>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400 bg-emerald-950 px-2.5 py-1 rounded-md border border-emerald-800">
+                  <span className="text-caption font-black uppercase tracking-widest text-emerald-400 bg-emerald-950 px-2.5 py-1 rounded-md border border-emerald-800">
                     Soil Health Rating
                   </span>
                   <h3 className="serif text-3xl font-bold text-white mt-1">
@@ -560,7 +560,7 @@ export function SoilScienceGuide() {
                     {evaluation.fertilityScore}
                     <span className="text-xl text-slate-400 font-sans">/100</span>
                   </div>
-                  <span className="text-[10px] font-bold text-emerald-300 uppercase tracking-wider block">
+                  <span className="text-caption font-bold text-emerald-300 uppercase tracking-wider block">
                     Stewardship Score
                   </span>
                 </div>
@@ -569,11 +569,11 @@ export function SoilScienceGuide() {
               {/* Status Badges */}
               <div className="grid grid-cols-1 gap-2 text-xs">
                 <div className="bg-slate-900/90 p-3 rounded-xl border border-slate-800 font-medium">
-                  <span className="text-emerald-400 font-bold block text-[10px] uppercase">pH Status & Reaction:</span>
+                  <span className="text-emerald-400 font-bold block text-caption uppercase">pH Status & Reaction:</span>
                   {evaluation.phStatus}
                 </div>
                 <div className="bg-slate-900/90 p-3 rounded-xl border border-slate-800 font-medium">
-                  <span className="text-amber-400 font-bold block text-[10px] uppercase">Humus & Biology Rating:</span>
+                  <span className="text-amber-400 font-bold block text-caption uppercase">Humus & Biology Rating:</span>
                   {evaluation.humusStatus}
                 </div>
               </div>

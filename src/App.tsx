@@ -1,6 +1,8 @@
 import React, { Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, motion, MotionConfig } from 'motion/react';
+import { Skeleton, SkeletonCard, SkeletonText } from '@/components/ui/Skeleton';
+import { fadeUp } from '@/lib/motion';
 import { Shell } from './components/layout/Shell';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -8,6 +10,7 @@ import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { lazyWithRetry } from './lib/lazyWithRetry';
 import { scheduleDesktopIdleRoutePrefetch } from './lib/routePrefetch';
 import Home from './pages/Home';
+import ScoutMapPage from './pages/ScoutMapPage';
 
 // Lazy-loaded routes with auto-retry and chunk fault tolerance
 const Vision = lazyWithRetry(() => import('./pages/Vision'));
@@ -21,20 +24,29 @@ const SeasonalGuide = lazyWithRetry(() => import('./pages/SeasonalGuide'));
 const Skills = lazyWithRetry(() => import('./pages/Skills'));
 const SkillDetail = lazyWithRetry(() => import('./pages/SkillDetail'));
 const Calculators = lazyWithRetry(() => import('./pages/Calculators'));
-const ScoutMapPage = lazyWithRetry(() => import('./pages/ScoutMapPage'));
 const Blueprints = lazyWithRetry(() => import('./pages/Blueprints'));
 const Community = lazyWithRetry(() => import('./pages/Community'));
 const Devotional = lazyWithRetry(() => import('./pages/Devotional'));
 const Agriculture = lazyWithRetry(() => import('./pages/Agriculture'));
+const DevPalette = lazyWithRetry(() => import('./pages/DevPalette'));
 const NotFound = lazyWithRetry(() => import('./pages/NotFound'));
 
 function PageFallback() {
   return (
-    <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3 p-8 text-center text-emerald-950 dark:text-emerald-200">
-      <div className="w-10 h-10 border-4 border-emerald-900 dark:border-emerald-400 border-t-amber-500 rounded-full animate-spin" />
-      <span className="text-xs font-black uppercase tracking-widest text-emerald-900 dark:text-emerald-300">
-        Loading Sanctuary View...
-      </span>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full flex flex-col gap-6 animate-pulse">
+      <div className="rounded-card bg-surface-raised border border-border p-6 flex flex-col justify-between gap-4">
+        <Skeleton className="h-6 w-52 rounded-control bg-stone-300/40 dark:bg-stone-800/60" />
+        <SkeletonText lines={2} className="max-w-xl" />
+        <div className="flex gap-3 pt-2">
+          <Skeleton className="h-9 w-36 rounded-control bg-amber-500/20" />
+          <Skeleton className="h-9 w-28 rounded-control bg-stone-300/40 dark:bg-stone-800/60" />
+        </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <SkeletonCard className="h-44" />
+        <SkeletonCard className="h-44" />
+        <SkeletonCard className="h-44" />
+      </div>
     </div>
   );
 }
@@ -83,10 +95,10 @@ function AnimatedAppRoutes() {
     <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={location.pathname}
-        initial={{ opacity: 0, y: 3 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.11, ease: 'easeOut' }}
+        variants={fadeUp}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
         className="w-full h-full"
       >
         <Routes location={location}>
@@ -122,6 +134,7 @@ function AnimatedAppRoutes() {
           <Route path="/devotionals" element={<Devotional />} />
           <Route path="/agriculture" element={<Agriculture />} />
           <Route path="/edenic-farming" element={<Agriculture />} />
+          <Route path="/dev/palette" element={<DevPalette />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.div>
@@ -134,13 +147,15 @@ export default function App() {
     <ErrorBoundary>
       <ThemeProvider>
         <AuthProvider>
-          <Router>
-            <Shell>
-              <Suspense fallback={<PageFallback />}>
-                <AnimatedAppRoutes />
-              </Suspense>
-            </Shell>
-          </Router>
+          <MotionConfig reducedMotion="user">
+            <Router>
+              <Shell>
+                <Suspense fallback={<PageFallback />}>
+                  <AnimatedAppRoutes />
+                </Suspense>
+              </Shell>
+            </Router>
+          </MotionConfig>
         </AuthProvider>
       </ThemeProvider>
     </ErrorBoundary>

@@ -143,7 +143,7 @@ export function MapFilterDrawer({
                   onChange={(e) => setFilters(prev => ({ ...prev, maxGridDistance: parseFloat(e.target.value) }))}
                   className="w-full accent-amber-500 h-2 bg-slate-800 rounded-lg cursor-pointer"
                 />
-                <div className="flex justify-between text-[10px] font-mono text-slate-400">
+                <div className="flex justify-between text-caption font-mono text-slate-400">
                   <span>0.5 km (Adjacent)</span>
                   <span>5 km</span>
                   <span>10 km</span>
@@ -174,7 +174,7 @@ export function MapFilterDrawer({
                           <div className="text-xs font-bold flex items-center gap-1">
                             {opt.label}
                           </div>
-                          <div className={cn("text-[10px] mt-0.5", isSelected ? "text-sky-300" : "text-slate-400")}>
+                          <div className={cn("text-caption mt-0.5", isSelected ? "text-sky-300" : "text-slate-400")}>
                             {opt.desc}
                           </div>
                         </div>
@@ -207,7 +207,7 @@ export function MapFilterDrawer({
                         <div className="flex items-center gap-2">
                           <span className="text-xs font-bold">{opt.label}</span>
                           <span className={cn(
-                            "text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-md border",
+                            "text-caption font-mono font-bold uppercase px-2 py-0.5 rounded-md border",
                             isSelected ? "bg-emerald-900 text-amber-300 border-emerald-700" : "bg-black/40 text-emerald-400 border-emerald-500/30"
                           )}>
                             {opt.badge}
@@ -269,7 +269,7 @@ export function MapFilterDrawer({
                         )}
                       >
                         <IconComponent size={18} className={isSelected ? "text-amber-400" : "text-slate-400"} />
-                        <span className="text-[11px] font-bold leading-tight">{opt.label}</span>
+                        <span className="text-caption font-bold leading-tight">{opt.label}</span>
                       </button>
                     );
                   })}
@@ -313,7 +313,7 @@ export function MapFilterDrawer({
                     <span className="text-xs font-bold text-white uppercase tracking-wider block font-mono">
                       Research & Model Benchmarks
                     </span>
-                    <span className="text-[11px] text-slate-300 font-medium">
+                    <span className="text-caption text-slate-300 font-medium">
                       Filter to national agricultural research stations & public model sites (Indicative reference only)
                     </span>
                   </div>

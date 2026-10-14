@@ -36,6 +36,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import React, { useState, useRef, FormEvent, ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { Skeleton, SkeletonCard, SkeletonText } from '@/components/ui/Skeleton';
 import { 
   getOfflineSyncStatus, 
   forceSyncOfflineCache, 
@@ -62,8 +63,8 @@ export default function Account() {
     clearAuthError
   } = useAuth();
 
-  const { palette, setPalette, fontPairing, setFontPairing, setTheme } = useTheme();
-  const isCharcoal = palette === 'charcoal';
+  const { theme, setTheme, isField, fontPairing, setFontPairing } = useTheme();
+  const isCharcoal = false;
 
   const [authTab, setAuthTab] = useState<'google' | 'quick' | 'register'>('google');
   const [isEditing, setIsEditing] = useState(false);
@@ -231,9 +232,14 @@ export default function Account() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin text-emerald-600">
-          <RefreshCw size={40} />
+      <div className="px-4 sm:px-6 md:px-8 py-8 max-w-7xl mx-auto flex flex-col gap-6 animate-pulse">
+        <div className="p-6 rounded-card bg-surface-raised border border-border flex flex-col gap-4">
+          <Skeleton className="h-6 w-48 rounded-control" />
+          <SkeletonText lines={2} className="max-w-md" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <SkeletonCard className="h-56" />
+          <SkeletonCard className="h-56" />
         </div>
       </div>
     );
@@ -263,29 +269,27 @@ export default function Account() {
           </span>
           <span>/</span>
           <span className="text-stone-900 dark:text-amber-300 font-bold">
-            {showLoginView ? 'NeuroNest SaaS Login Stage' : 'Steward Profile Console'}
+            {showLoginView ? 'Sign in' : 'Steward Profile Console'}
           </span>
         </div>
 
         <div className="flex items-center gap-2">
-          {/* Quick Charcoal + Inter Theme Launcher Button */}
+          {/* Quick Field Mode Toggle Button */}
           <button
             type="button"
             onClick={() => {
-              setPalette('charcoal');
-              setTheme('dark');
-              setFontPairing('inter');
+              setTheme(theme === 'field' ? 'dark' : 'field');
             }}
-            title="Activate Minimalist Charcoal Studio + Inter UI"
+            title="Toggle Maximum-Contrast Field Mode (18px Body & 48px+ Touch Targets)"
             className={cn(
               'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-mono text-xs transition-all cursor-pointer border',
-              isCharcoal
-                ? 'bg-amber-400 text-stone-950 border-amber-300 font-bold shadow-xs'
+              theme === 'field'
+                ? 'bg-white text-black border-white font-bold shadow-xs'
                 : 'bg-white/[0.06] hover:bg-white/[0.12] text-stone-600 dark:text-stone-300 border-stone-300/80 dark:border-white/10'
             )}
           >
-            <Palette size={12} className={isCharcoal ? 'text-stone-950' : 'text-amber-400'} />
-            <span>{isCharcoal ? 'Charcoal Active' : 'Charcoal + Inter UI'}</span>
+            <Eye size={12} className={theme === 'field' ? 'text-black' : 'text-amber-400'} />
+            <span>{theme === 'field' ? 'Field Mode Active' : 'Field Mode (Max Contrast)'}</span>
           </button>
 
           {/* Toggle between Login view and Profile view if signed in */}
@@ -343,7 +347,7 @@ export default function Account() {
               <div className="flex bg-stone-100 dark:bg-[#1C1C20] p-1 rounded-xl border border-stone-200 dark:border-white/10 text-xs">
                 {[
                   { id: 'google' as const, label: 'Google Cloud' },
-                  { id: 'quick' as const, label: 'One-Click Steward' },
+                  { id: 'quick' as const, label: 'One-Click Sign in' },
                   { id: 'register' as const, label: 'Local Profile' },
                 ].map((tab) => (
                   <button
@@ -411,7 +415,7 @@ export default function Account() {
                 </div>
               )}
 
-              {/* Form Tab 2: One-Click Quick Steward Access */}
+              {/* Form Tab 2: One-Click Quick Sign in */}
               {authTab === 'quick' && (
                 <form onSubmit={handleQuickSignIn} className="flex flex-col gap-4">
                   <div className="flex flex-col gap-1.5">
@@ -466,7 +470,7 @@ export default function Account() {
 
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="text-[11px] font-semibold text-stone-700 dark:text-stone-300">Region</label>
+                      <label className="text-caption font-semibold text-stone-700 dark:text-stone-300">Region</label>
                       <select
                         value={regRegion}
                         onChange={(e) => setRegRegion(e.target.value)}
@@ -478,7 +482,7 @@ export default function Account() {
                       </select>
                     </div>
                     <div>
-                      <label className="text-[11px] font-semibold text-stone-700 dark:text-stone-300">Target District</label>
+                      <label className="text-caption font-semibold text-stone-700 dark:text-stone-300">Target District</label>
                       <input
                         type="text"
                         value={regDistrict}
@@ -504,11 +508,11 @@ export default function Account() {
             <div className="pt-4 border-t border-stone-200 dark:border-white/10 grid grid-cols-2 gap-3 text-xs">
               <div className="flex items-center gap-2 text-stone-600 dark:text-stone-400">
                 <ShieldCheck size={16} className="text-emerald-500 shrink-0" />
-                <span className="text-[11px]">Strict Security Rules</span>
+                <span className="text-caption">Strict Security Rules</span>
               </div>
               <div className="flex items-center gap-2 text-stone-600 dark:text-stone-400">
                 <HardDrive size={16} className="text-amber-400 shrink-0" />
-                <span className="text-[11px]">Offline PWA Mirror</span>
+                <span className="text-caption">Offline PWA Mirror</span>
               </div>
             </div>
           </div>
@@ -524,7 +528,7 @@ export default function Account() {
                 <div className="flex items-center gap-2">
                   <LayoutDashboard size={16} className="text-amber-400" />
                   <span className="font-display text-base font-bold text-stone-950 dark:text-white">
-                    Live Outpost Command Center Preview
+                    Live Outpost Home Preview
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -568,7 +572,7 @@ export default function Account() {
                     return (
                       <div
                         key={m.label}
-                        className="px-2.5 py-1 rounded-xl bg-white/10 border border-white/15 flex items-center gap-1.5 text-[11px] font-mono"
+                        className="px-2.5 py-1 rounded-xl bg-white/10 border border-white/15 flex items-center gap-1.5 text-caption font-mono"
                       >
                         <MIcon size={12} className="text-amber-300" />
                         <span>{m.label}</span>
@@ -584,11 +588,11 @@ export default function Account() {
                 <div className="p-3.5 rounded-2xl bg-[#DCE6F2] text-[#141416] border border-black/5 flex flex-col justify-between min-h-[105px]">
                   <div className="flex items-center justify-between">
                     <Sprout size={16} className="text-stone-900" />
-                    <span className="text-[10px] font-mono font-bold text-stone-700">CROPS</span>
+                    <span className="text-caption font-mono font-bold text-stone-700">CROPS</span>
                   </div>
                   <div>
                     <div className="text-xl font-extrabold tabular-nums">1.5+ ac</div>
-                    <div className="text-[11px] font-medium text-stone-700">Family Land</div>
+                    <div className="text-caption font-medium text-stone-700">Family Land</div>
                   </div>
                 </div>
 
@@ -596,11 +600,11 @@ export default function Account() {
                 <div className="p-3.5 rounded-2xl bg-[#DCF2DE] text-[#141416] border border-black/5 flex flex-col justify-between min-h-[105px]">
                   <div className="flex items-center justify-between">
                     <Droplets size={16} className="text-stone-900" />
-                    <span className="text-[10px] font-mono font-bold text-stone-700">RAIN</span>
+                    <span className="text-caption font-mono font-bold text-stone-700">RAIN</span>
                   </div>
                   <div>
                     <div className="text-xl font-extrabold tabular-nums">81k L</div>
-                    <div className="text-[11px] font-medium text-stone-700">Annual Roof</div>
+                    <div className="text-caption font-medium text-stone-700">Annual Roof</div>
                   </div>
                 </div>
 
@@ -608,11 +612,11 @@ export default function Account() {
                 <div className="p-3.5 rounded-2xl bg-[#FBF3C9] text-[#141416] border border-black/5 flex flex-col justify-between min-h-[105px]">
                   <div className="flex items-center justify-between">
                     <Sun size={16} className="text-stone-900" />
-                    <span className="text-[10px] font-mono font-bold text-stone-700">SOLAR</span>
+                    <span className="text-caption font-mono font-bold text-stone-700">SOLAR</span>
                   </div>
                   <div>
                     <div className="text-xl font-extrabold tabular-nums">1.45 kW</div>
-                    <div className="text-[11px] font-medium text-stone-700">LiFePO4 Array</div>
+                    <div className="text-caption font-medium text-stone-700">LiFePO4 Array</div>
                   </div>
                 </div>
 
@@ -620,11 +624,11 @@ export default function Account() {
                 <div className="p-3.5 rounded-2xl bg-[#EAE2F8] text-[#141416] border border-black/5 flex flex-col justify-between min-h-[105px]">
                   <div className="flex items-center justify-between">
                     <CheckCircle2 size={16} className="text-stone-900" />
-                    <span className="text-[10px] font-mono font-bold text-stone-700">EXODUS</span>
+                    <span className="text-caption font-mono font-bold text-stone-700">EXODUS</span>
                   </div>
                   <div>
                     <div className="text-xl font-extrabold tabular-nums">{trackerData.percentage}%</div>
-                    <div className="text-[11px] font-medium text-stone-700">Readiness</div>
+                    <div className="text-caption font-medium text-stone-700">Readiness</div>
                   </div>
                 </div>
               </div>
@@ -637,14 +641,14 @@ export default function Account() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                   <div className="p-3 rounded-xl bg-stone-50 dark:bg-[#1A1A1E] border border-stone-200 dark:border-white/10 flex items-center justify-between">
                     <span>{previewDistrict.name} Highland GIS</span>
-                    <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-semibold text-[11px]">
+                    <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-semibold text-caption">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                       Running
                     </span>
                   </div>
                   <div className="p-3 rounded-xl bg-stone-50 dark:bg-[#1A1A1E] border border-stone-200 dark:border-white/10 flex items-center justify-between">
                     <span>Off-Grid Solar PV Sizer</span>
-                    <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-semibold text-[11px]">
+                    <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-semibold text-caption">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                       Running
                     </span>
@@ -724,19 +728,19 @@ export default function Account() {
           {/* 3 Status Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="p-5 rounded-3xl bg-[#DCE6F2] text-[#141416] border border-black/5 flex flex-col justify-between">
-              <span className="text-[11px] font-mono font-bold text-stone-700 uppercase">Exodus Journey</span>
+              <span className="text-caption font-mono font-bold text-stone-700 uppercase">Exodus Journey</span>
               <div className="text-3xl font-extrabold tracking-tight mt-2">{trackerData.percentage}% Ready</div>
               <span className="text-xs text-stone-700 mt-1">9 Strategic Relocation Phases</span>
             </div>
 
             <div className="p-5 rounded-3xl bg-[#DCF2DE] text-[#141416] border border-black/5 flex flex-col justify-between">
-              <span className="text-[11px] font-mono font-bold text-stone-700 uppercase">Land Scouting</span>
+              <span className="text-caption font-mono font-bold text-stone-700 uppercase">Land Scouting</span>
               <div className="text-3xl font-extrabold tracking-tight mt-2">{landChecklistData.count} / 5 Criteria</div>
               <span className="text-xs text-stone-700 mt-1">Water &amp; Soil Grounded</span>
             </div>
 
             <div className="p-5 rounded-3xl bg-[#FBF3C9] text-[#141416] border border-black/5 flex flex-col justify-between">
-              <span className="text-[11px] font-mono font-bold text-stone-700 uppercase">Country Pantry</span>
+              <span className="text-caption font-mono font-bold text-stone-700 uppercase">Country Pantry</span>
               <div className="text-3xl font-extrabold tracking-tight mt-2">{pantryData.count} Items Stored</div>
               <span className="text-xs text-stone-700 mt-1">Staple Food Reserves</span>
             </div>

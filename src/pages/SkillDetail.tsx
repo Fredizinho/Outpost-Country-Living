@@ -134,7 +134,7 @@ export default function SkillDetail() {
           <ArrowLeft size={16} /> Back to Skills Manual
         </Link>
 
-        <div className="flex items-center gap-3 text-[11px] font-mono font-bold uppercase text-emerald-800 dark:text-emerald-300">
+        <div className="flex items-center gap-3 text-caption font-mono font-bold uppercase text-emerald-800 dark:text-emerald-300">
           {protocol && (
             <span className="flex items-center gap-1 text-amber-800 dark:text-amber-300">
               <Ruler size={11} /> Full Field Protocol
@@ -212,7 +212,7 @@ export default function SkillDetail() {
               <div className="w-full h-48 sm:h-52 rounded-xl overflow-hidden">
                 <CountryIcon name={skill.iconName as CountryIconName} className="w-full h-full object-cover" />
               </div>
-              <div className="px-2 py-0.5 flex items-center justify-between text-[10px] font-mono text-emerald-300/90">
+              <div className="px-2 py-0.5 flex items-center justify-between text-caption font-mono text-emerald-300/90">
                 <span>FIELD MANUAL PLATE • {skill.category.toUpperCase()}</span>
                 <span className="text-amber-300 font-bold">{skill.difficulty.toUpperCase()}</span>
               </div>
@@ -244,7 +244,7 @@ export default function SkillDetail() {
               </div>
               <div className="flex flex-col">
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-emerald-300">
+                  <span className="text-caption font-black uppercase tracking-widest text-emerald-300">
                     Interactive Engineering Tool
                   </span>
                 </div>
@@ -272,10 +272,10 @@ export default function SkillDetail() {
               </div>
               <div className="flex flex-col">
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-amber-300">
+                  <span className="text-caption font-black uppercase tracking-widest text-amber-300">
                     Seasonal Timing & Almanac
                   </span>
-                  <span className="text-[9px] bg-amber-800/80 px-2 py-0.5 rounded text-amber-200 font-bold">
+                  <span className="text-caption bg-amber-800/80 px-2 py-0.5 rounded text-amber-200 font-bold">
                     {protocol.almanac.monthWindow}
                   </span>
                 </div>
@@ -294,7 +294,7 @@ export default function SkillDetail() {
         </section>
       )}
 
-      {/* SECTION 1: 📐 Technical Blueprint & Metrics */}
+      {/* SECTION 1: Technical Blueprint & Metrics */}
       {protocol ? (
         <section className="bg-white dark:bg-[#0D1D13] p-6 md:p-8 rounded-[2.5rem] border border-stone-200 dark:border-emerald-900/60 shadow-sm flex flex-col gap-6">
           <div className="flex items-center justify-between border-b border-stone-200 dark:border-emerald-900/40 pb-4">
@@ -303,15 +303,15 @@ export default function SkillDetail() {
                 <Ruler size={20} />
               </span>
               <div>
-                <span className="text-[10px] font-black uppercase tracking-widest text-emerald-800 dark:text-amber-300">
+                <span className="text-caption font-black uppercase tracking-widest text-emerald-800 dark:text-amber-300">
                   Engineering Specifications
                 </span>
                 <h3 className="serif text-2xl font-bold text-stone-900 dark:text-stone-50">
-                  📐 Technical Blueprint & Field Metrics
+                  Technical Blueprint & Field Metrics
                 </h3>
               </div>
             </div>
-            <span className="hidden sm:inline-flex text-[10px] font-mono font-bold uppercase text-emerald-800 dark:text-emerald-300">
+            <span className="hidden sm:inline-flex text-caption font-mono font-bold uppercase text-emerald-800 dark:text-emerald-300">
               Precision Standards
             </span>
           </div>
@@ -323,13 +323,13 @@ export default function SkillDetail() {
                 key={idx}
                 className="bg-stone-50 dark:bg-[#14281D] p-4 rounded-2xl border border-stone-200/90 dark:border-emerald-900/60 flex flex-col justify-between gap-1 shadow-2xs"
               >
-                <span className="text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-stone-400">
+                <span className="text-caption font-black uppercase tracking-wider text-stone-500 dark:text-stone-400">
                   {metric.label}
                 </span>
                 <div className="text-base md:text-lg font-black text-emerald-950 dark:text-amber-300 my-0.5 tabular-nums">
                   {metric.value}
                 </div>
-                <p className="text-[10px] font-medium text-stone-600 dark:text-stone-300 leading-tight">
+                <p className="text-caption font-medium text-stone-600 dark:text-stone-300 leading-tight">
                   {metric.detail}
                 </p>
               </div>
@@ -369,7 +369,7 @@ export default function SkillDetail() {
         </section>
       ) : null}
 
-      {/* SECTION 2: 🛠️ Field Tools & Materials Needed */}
+      {/* SECTION 2: Field Tools & Materials Needed */}
       {protocol ? (
         <section className="bg-white dark:bg-[#0D1D13] p-6 md:p-8 rounded-[2.5rem] border border-stone-200 dark:border-emerald-900/60 shadow-sm flex flex-col gap-6">
           <div className="flex items-center justify-between border-b border-stone-200 dark:border-emerald-900/40 pb-4">
@@ -378,15 +378,15 @@ export default function SkillDetail() {
                 <Wrench size={20} />
               </span>
               <div>
-                <span className="text-[10px] font-black uppercase tracking-widest text-amber-800 dark:text-amber-300">
+                <span className="text-caption font-black uppercase tracking-widest text-amber-800 dark:text-amber-300">
                   Local Malawian Inputs & Equipment
                 </span>
                 <h3 className="serif text-2xl font-bold text-stone-900 dark:text-stone-50">
-                  🛠️ Field Tools & Materials Matrix
+                  Field Tools & Materials Matrix
                 </h3>
               </div>
             </div>
-            <span className="text-[10px] font-mono font-bold uppercase text-amber-800 dark:text-amber-300">
+            <span className="text-caption font-mono font-bold uppercase text-amber-800 dark:text-amber-300">
               {protocol.materials.length} Required Inputs
             </span>
           </div>
@@ -401,11 +401,11 @@ export default function SkillDetail() {
                   <h4 className="text-xs font-bold text-stone-900 dark:text-stone-100">
                     {mat.name}
                   </h4>
-                  <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 shrink-0">
+                  <span className="text-caption font-mono font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 shrink-0">
                     {mat.localAvailability}
                   </span>
                 </div>
-                <p className="text-[11px] font-medium text-stone-600 dark:text-stone-300 leading-relaxed">
+                <p className="text-caption font-medium text-stone-600 dark:text-stone-300 leading-relaxed">
                   <strong className="text-stone-800 dark:text-stone-100">Purpose:</strong> {mat.purpose}
                 </p>
               </div>
@@ -445,7 +445,7 @@ export default function SkillDetail() {
 
         {prereqSkills.length > 0 ? (
           <div className="flex flex-col gap-2 mt-1">
-            <span className="text-[10px] font-black uppercase tracking-wider text-amber-900 dark:text-amber-300">
+            <span className="text-caption font-black uppercase tracking-wider text-amber-900 dark:text-amber-300">
               Prerequisite Homestead Skills to Master First:
             </span>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -456,7 +456,7 @@ export default function SkillDetail() {
                   className="bg-white dark:bg-[#0D1D13] hover:bg-amber-100/60 dark:hover:bg-emerald-950/60 p-4 rounded-2xl border border-amber-200/90 dark:border-emerald-800/60 flex items-center justify-between group transition-all shadow-xs"
                 >
                   <div className="flex flex-col gap-1 pr-2">
-                    <span className="text-[9px] font-black uppercase tracking-widest text-emerald-800 dark:text-amber-300">
+                    <span className="text-caption font-black uppercase tracking-widest text-emerald-800 dark:text-amber-300">
                       {prereq.category} · {prereq.difficulty} Level
                     </span>
                     <h4 className="text-xs font-bold text-stone-900 dark:text-stone-100 group-hover:text-emerald-900 dark:group-hover:text-amber-200">
@@ -475,7 +475,7 @@ export default function SkillDetail() {
         )}
       </section>
 
-      {/* SECTION 3: ⚡ Step-by-Step Execution Protocol */}
+      {/* SECTION 3: Step-by-Step Execution Protocol */}
       {protocol ? (
         <section className="bg-white dark:bg-[#0D1D13] p-6 md:p-8 rounded-[2.5rem] border border-stone-200 dark:border-emerald-900/60 shadow-sm flex flex-col gap-6">
           <div className="flex items-center justify-between border-b border-stone-200 dark:border-emerald-900/40 pb-4">
@@ -484,15 +484,15 @@ export default function SkillDetail() {
                 <Zap size={20} />
               </span>
               <div>
-                <span className="text-[10px] font-black uppercase tracking-widest text-emerald-800 dark:text-amber-300">
+                <span className="text-caption font-black uppercase tracking-widest text-emerald-800 dark:text-amber-300">
                   Sequential Field Instructions
                 </span>
                 <h3 className="serif text-2xl font-bold text-stone-900 dark:text-stone-50">
-                  ⚡ Step-by-Step Execution Protocol
+                  Step-by-Step Execution Protocol
                 </h3>
               </div>
             </div>
-            <span className="text-[10px] font-mono font-bold uppercase text-emerald-800 dark:text-emerald-300">
+            <span className="text-caption font-mono font-bold uppercase text-emerald-800 dark:text-emerald-300">
               {protocol.protocol.length} Sequential Steps
             </span>
           </div>
@@ -524,7 +524,7 @@ export default function SkillDetail() {
                       >
                         {isDone ? <Check size={14} /> : step.stepNumber}
                       </button>
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-800 dark:text-amber-300">
+                      <span className="text-caption font-mono font-bold uppercase tracking-wider text-emerald-800 dark:text-amber-300">
                         {step.phase}
                       </span>
                       <h4 className={cn("text-sm font-bold text-stone-900 dark:text-stone-100", isDone && "line-through text-stone-500 dark:text-stone-400")}>
@@ -532,7 +532,7 @@ export default function SkillDetail() {
                       </h4>
                     </div>
 
-                    <div className="flex items-center gap-2 text-[10px] font-mono text-stone-500 dark:text-stone-400">
+                    <div className="flex items-center gap-2 text-caption font-mono text-stone-500 dark:text-stone-400">
                       <span className="inline-flex items-center gap-1">
                         <Clock size={10} /> {step.timing}
                       </span>
@@ -547,7 +547,7 @@ export default function SkillDetail() {
 
                   <div className="bg-amber-50/80 dark:bg-amber-950/40 p-3 rounded-xl border border-amber-200/90 dark:border-amber-800/50 flex items-start gap-2.5">
                     <ShieldAlert size={14} className="text-amber-800 dark:text-amber-400 shrink-0 mt-0.5" />
-                    <p className="text-[11px] font-bold text-amber-950 dark:text-amber-200 leading-tight">
+                    <p className="text-caption font-bold text-amber-950 dark:text-amber-200 leading-tight">
                       <strong className="text-amber-900 dark:text-amber-300 uppercase">Critical Check:</strong> {step.criticalCheck}
                     </p>
                   </div>
@@ -578,7 +578,7 @@ export default function SkillDetail() {
         </section>
       )}
 
-      {/* SECTION 4: ⚠️ Common Pitfalls & Field Troubleshooting */}
+      {/* SECTION 4: Common Pitfalls & Field Troubleshooting */}
       {protocol ? (
         <section className="bg-amber-950 text-amber-100 p-6 md:p-8 rounded-[2.5rem] border border-amber-800/80 shadow-xl flex flex-col gap-6">
           <div className="flex items-center justify-between border-b border-amber-800/80 pb-4">
@@ -587,15 +587,15 @@ export default function SkillDetail() {
                 <AlertTriangle size={20} />
               </span>
               <div>
-                <span className="text-[10px] font-black uppercase tracking-widest text-amber-400">
+                <span className="text-caption font-black uppercase tracking-widest text-amber-400">
                   Mistakes to Avoid & Real-World Diagnostics
                 </span>
                 <h3 className="serif text-2xl font-bold text-white">
-                  ⚠️ Common Pitfalls & Field Troubleshooting
+                  Common Pitfalls & Field Troubleshooting
                 </h3>
               </div>
             </div>
-            <span className="text-[10px] font-mono font-bold uppercase text-amber-300">
+            <span className="text-caption font-mono font-bold uppercase text-amber-300">
               Field Diagnostics
             </span>
           </div>
@@ -633,7 +633,7 @@ export default function SkillDetail() {
       ) : skill.commonMistakes && skill.commonMistakes.length > 0 ? (
         <section className="bg-amber-950/90 text-amber-100 p-8 md:p-10 rounded-[2.5rem] border border-amber-800 shadow-xl flex flex-col gap-6">
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono font-bold uppercase text-amber-300 flex items-center gap-1.5">
+            <span className="text-caption font-mono font-bold uppercase text-amber-300 flex items-center gap-1.5">
               <AlertTriangle size={14} className="text-amber-400" /> Crucial First-Timer Warnings
             </span>
           </div>
@@ -664,7 +664,7 @@ export default function SkillDetail() {
             <h3 className="serif text-2xl font-bold text-stone-900 dark:text-stone-50 flex items-center gap-2">
               <Layers className="text-amber-700 dark:text-amber-400" size={22} /> Core Subskills & Technical Modules
             </h3>
-            <span className="text-[10px] font-mono font-bold uppercase text-amber-800 dark:text-amber-300">
+            <span className="text-caption font-mono font-bold uppercase text-amber-800 dark:text-amber-300">
               {skill.subskills.length} Competencies
             </span>
           </div>
@@ -694,7 +694,7 @@ export default function SkillDetail() {
 
       {/* Inspired Counsel Callout */}
       <div className="bg-emerald-900 dark:bg-[#0F2418] text-white p-8 rounded-[2.5rem] shadow-xl relative overflow-hidden flex flex-col gap-2 border border-emerald-800">
-        <div className="flex items-center gap-2 text-emerald-400 text-[10px] font-black uppercase tracking-widest">
+        <div className="flex items-center gap-2 text-emerald-400 text-caption font-black uppercase tracking-widest">
           <Sparkles size={16} /> Inspired Principle
         </div>
         <p className="serif text-xl italic font-semibold text-emerald-100">
@@ -766,13 +766,13 @@ export default function SkillDetail() {
                 <div>
                   <div className="flex items-center justify-between">
                     <h5 className="font-bold text-xs text-stone-900 dark:text-stone-100">{note.title}</h5>
-                    <span className="text-[10px] font-mono text-stone-400">{note.createdAt}</span>
+                    <span className="text-caption font-mono text-stone-400">{note.createdAt}</span>
                   </div>
                   <p className="text-xs text-stone-700 dark:text-stone-300 mt-1 leading-relaxed font-medium whitespace-pre-wrap">{note.content}</p>
                 </div>
                 <button
                   onClick={() => handleDeleteNote(note.id)}
-                  className="self-end text-rose-600 dark:text-rose-400 hover:text-rose-800 text-[10px] font-bold uppercase flex items-center gap-1 pt-2 cursor-pointer"
+                  className="self-end text-rose-600 dark:text-rose-400 hover:text-rose-800 text-caption font-bold uppercase flex items-center gap-1 pt-2 cursor-pointer"
                 >
                   <Trash2 size={12} /> Delete
                 </button>

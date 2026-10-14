@@ -657,6 +657,26 @@ app.get('/api/verified-scripture', async (req, res) => {
   }
 });
 
+// Helper to strip emoji icons strictly from markdown headings (#, ##, ###, ####)
+function stripHeadingEmojis(text: string): string {
+  if (!text || typeof text !== 'string') return text;
+  return text
+    .split('\n')
+    .map(line => {
+      const match = line.match(/^(#{1,6}\s+)(.*)$/);
+      if (match) {
+        const hashes = match[1];
+        const emojiFree = match[2]
+          .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE00}-\u{FE0F}\u{10000}-\u{10FFFF}]/gu, '')
+          .replace(/^[\s\.\:\-\–\—]+/, '')
+          .trim();
+        return `${hashes}${emojiFree}`;
+      }
+      return line;
+    })
+    .join('\n');
+}
+
 // AI Homestead Advisor Endpoint
 app.post('/api/advisor', async (req, res) => {
   if (!checkRateLimit(req, res)) return;
@@ -683,6 +703,7 @@ Your knowledge covers:
 - Off-grid energy systems (Solar PV arrays sized with Malawi Peak Sun Hours, LiFePO4 batteries, micro-hydro).
 - Inspired homestead counsel (Country Living, Ministry of Healing, 3T 158 3x3x3 ft orchard pit method), Customary Land Act (2016) TLMA procedures, and practical skills.
 ${context ? `\nSteward Homestead Context: ${JSON.stringify(context)}` : ''}
+Formatting rule: Never include emojis in markdown headings (###, ####). Keep all headings clean, professional, and descriptive.
 Provide encouraging, practical, well-formatted markdown responses with actionable steps and local context.`;
 
         const conversationParts = Array.isArray(history) && history.length > 0
@@ -704,7 +725,8 @@ Provide encouraging, practical, well-formatted markdown responses with actionabl
           }
         });
 
-        const reply = response.text || "I recommend evaluating local water access and soil structure before establishing permanent beds.";
+        const rawReply = response.text || "I recommend evaluating local water access and soil structure before establishing permanent beds.";
+        const reply = stripHeadingEmojis(rawReply);
         return res.json({ 
           reply,
           text: reply,
@@ -724,32 +746,32 @@ Provide encouraging, practical, well-formatted markdown responses with actionabl
     let reply = `I am your Outpost Living Advisor (${targetDistrict} Context). Here is guidance based on verified regional sanctuary principles:\n\n`;
 
     if (lower.includes('water') || lower.includes('well') || lower.includes('borehole') || lower.includes('rain') || lower.includes('pump')) {
-      reply += "### 💧 Water Security & Solar Borehole Sizing in Malawi\n" +
+      reply += "### Water Security & Solar Borehole Sizing in Malawi\n" +
         "- **Perennial Streams & Springs**: Priority #1 when scouting land in escarpment districts like Dedza, Mulanje, Rumphi, or Zomba. Look for year-round gravity flow using 25mm–32mm HDPE pipe.\n" +
         "- **Borehole Depth & Pump Sizing**: In Central plateau zones (Lilongwe, Kasungu, Mchinji), static water levels average 25m–45m. Pair a **400W–600W DC helical-rotor submersible pump** with **800Wp of dedicated solar PV** pumping into an elevated 5,000L header tank.\n" +
         "- **Rain Catchment**: A 100 m² metal roof in a 1,000 mm rainfall zone harvests ~85,000 liters per season. Install first-flush diverters and covered storage tanks.";
     } else if (lower.includes('soil') || lower.includes('crop') || lower.includes('maize') || lower.includes('potato') || lower.includes('farm') || lower.includes('plant') || lower.includes('clay') || lower.includes('katondo')) {
-      reply += "### 🌱 Soil Taxonomy (FAO HWSD v2.0) & Bio-Intensive Management\n" +
+      reply += "### Soil Taxonomy (FAO HWSD v2.0) & Bio-Intensive Management\n" +
         "- **Highland Zones (Dedza, Mzimba, Zomba — Humic Acrisols & Eutric Nitisols)**: Cool climate ideal for Irish potatoes (*Mbatata zizungu*), climbing beans (*Nyemba*), macadamia, and deciduous stone fruits.\n" +
         "- **Plateau Red Loams (Chromic Luvisols & Ferric Lixisols, pH 5.5–6.4)**: Build Cation Exchange Capacity (CEC) via deep mulching with vetiver grass, cured compost, biochar, and nitrogen-fixing pigeon pea (*Nandolo*).\n" +
         "- **3×3×3 ft Orchard Pits (*3T 158*)**: Excavate 90×90×90 cm pits, separate topsoil from subsoil, and backfill with 50% topsoil, 50% cured compost, and 2 kg wood ash.";
     } else if (lower.includes('solar') || lower.includes('power') || lower.includes('battery') || lower.includes('electricity')) {
-      reply += "### ☀️ Off-Grid Solar Power in Malawi\n" +
+      reply += "### Off-Grid Solar Power in Malawi\n" +
         "- **Sunlight Potential**: Malawi averages **5.4 to 6.2 Peak Sun Hours (PSH/day)** per NASA POWER satellite climatology.\n" +
         "- **Recommended Homestead Array**: **1.6 kWp to 3.2 kWp Solar PV** paired with a **48V 100Ah (5.12 kWh) LiFePO4 battery bank** and a 3kVA Pure Sine Wave MPPT Inverter.\n" +
         "- **Priority Loads**: DC submersible borehole pump (daytime direct-to-tank), high-efficiency DC chest refrigerator, LED lighting, and solar dehydrator airflow fans.";
     } else if (lower.includes('land') || lower.includes('district') || lower.includes('dedza') || lower.includes('mzimba') || lower.includes('mulanje') || lower.includes('zomba') || lower.includes('orchard')) {
-      reply += "### 📍 Regional Land Scouting in Malawi (DCCMS & FAO HWSD v2.0)\n" +
+      reply += "### Regional Land Scouting in Malawi (DCCMS & FAO HWSD v2.0)\n" +
         "- **Dedza & Ntcheu (1,350m–2,000m)**: 1,020–1,050 mm/yr rainfall, Chromic Luvisols & Humic Acrisols (pH 5.5–6.3). Prime for temperate orchards, seed potatoes, and cool-climate vegetables.\n" +
         "- **Rumphi & Mzimba (1,100m–2,200m)**: Lower rural population density, Ferric Lixisols & Dystric Regosols, strong perennial streams off Nyika/Viphya.\n" +
         "- **Mulanje, Thyolo & Zomba (700m–1,800m)**: 1,280–1,650 mm/yr rainfall, deep Eutric & Humic Nitisols, highest perennial gravity-fed spring density.";
     } else if (lower.includes('law') || lower.includes('customary') || lower.includes('chief') || lower.includes('mfumu') || lower.includes('title') || lower.includes('committee')) {
-      reply += "### 📜 Customary Land Act (2016) Protocols in Malawi\n" +
+      reply += "### Customary Land Act (2016) Protocols in Malawi\n" +
         "1. **Village Headman (*Mfumu ya Mudzi*) & Neighbors**: Walk physical perimeter boundaries (*Malire*) with all adjacent families to confirm zero overlapping lineage claims.\n" +
         "2. **Customary Land Committee (CLC) & Traditional Authority (TA)**: Verify the parcel inside the **Traditional Land Management Area (TLMA)**.\n" +
         "3. **Customary Estate Registration**: File with the **District Land Clerk** for the statutory 30-day public notice, GIS survey, and formal **Certificate of Customary Estate**. *(Note: Customary land is not sold commercially as raw freehold; budget figures cover statutory survey, adjudication, and site development).*";
     } else {
-      reply += "### 🌿 Country Exodus Principles\n" +
+      reply += "### Country Exodus Principles\n" +
         "1. **Secure Land & Perennial Water**: Establish gravity water or a tested borehole before constructing permanent dwellings.\n" +
         "2. **Store Essential Grains & Heirloom Seeds**: Maintain 12 months of staple grains and open-pollinated seeds (*Chimanga cha Makolo*, *Nandolo*, cowpeas).\n" +
         "3. **Master Practical Outpost Skills**: Deep orchard pit preparation (*3T 158*), seed saving, solar food drying (*Mfutso*), and stabilized earth block masonry.";
@@ -757,9 +779,9 @@ Provide encouraging, practical, well-formatted markdown responses with actionabl
 
     const fullReply = "ℹ️ *Notice: Guidance provided from Built-in Regional Sanctuary Knowledge Engine.*\n\n" + reply;
     return res.json({ 
-      reply: fullReply,
-      text: fullReply,
-      isAi: false,
+      reply: stripHeadingEmojis(fullReply),
+      text: stripHeadingEmojis(fullReply),
+      isAi: false, 
       isFallback: true,
       fallback: true,
       source: 'regional-knowledge-base'
@@ -852,7 +874,7 @@ When answering:
    - For Elevation & Escarpments: assess frost-free thermal belts (1,200m - 1,600m), slope terracing, and flood safety.
    - For Customary Malire: explain Customary Land Act procedures (Chief/T.A. allocation, Village Land Committee consent, District Land Registry conversion).
 3. If referencing specific towns, clinics, markets, churches, rivers, mountains, or bomas, mention their real local context.
-4. Structure the response clearly with markdown headers (###, ####), concise bullet points, and practical "Country Living Homestead Recommendations".`;
+4. Structure the response clearly with markdown headers (###, ####), concise bullet points, and practical "Country Living Homestead Recommendations". Never include emojis in markdown headers (###, ####).`;
 
     const fullPrompt = `${systemPrompt}\n\nUser Query: ${prompt}`;
 
@@ -876,7 +898,8 @@ When answering:
             }
           });
 
-          const answer = response.text || 'No response generated from AI Scout.';
+          const rawAnswer = response.text || 'No response generated from AI Scout.';
+          const answer = stripHeadingEmojis(rawAnswer);
 
           // Extract grounding chunks from response
           const groundingSources: Array<{
@@ -965,44 +988,44 @@ When answering:
 
     let specializedSection = '';
     if (qLower.includes('water') || qLower.includes('stream') || qLower.includes('borehole')) {
-      specializedSection = `#### 💧 Hydrogeology & Perennial Water Focus (${targetDistrict})
+      specializedSection = `#### Hydrogeology & Perennial Water Focus (${targetDistrict})
 - **Dry-Season (*Chilimwe*) Verification**: Inspect perennial streams and upland spring heads during **late September to October** before final land commitment. A gravity flow of **≥ 3 L/min** provides **4,320 L/day** without fuel or pump wear.
 - **Borehole Target Horizon**: Fractured basement aquifers in ${targetDistrict} typically yield sweet water between **22m and 48m**; pair a **750W DC solar helical-rotor submersible pump** with a **5,000L elevated header tank**.
 - **Catchment Recharge**: Excavate **contour Vetiver (*Chisale*) swales** on 1.5m vertical intervals above orchard blocks to capture January–March monsoon sheet flow.`;
     } else if (qLower.includes('soil') || qLower.includes('katondo') || qLower.includes('crop')) {
-      specializedSection = `#### 🌱 FAO Soil Pedology & Bio-Intensive Crop Matrix (${targetDistrict})
+      specializedSection = `#### FAO Soil Pedology & Bio-Intensive Crop Matrix (${targetDistrict})
 - **Dominant Soil Horizon**: Deep *Katondo* ferruginous red clay-loam (Chromic Luvisols / Eutric Nitisols · FAO HWSD v2.0) with natural **pH 5.6 – 6.4**.
 - **Prime Outpost Crops**: **${cropsList}**.
 - **3×3×3 ft Orchard Pit Protocol (*3T 158*)**: Separate topsoil from subsoil, loosen the base, and backfill with **50% topsoil + 50% cured thermal compost + 2 kg wood ash (*phulusa*) + biochar** to buffer acidity and lock in moisture.`;
     } else if (qLower.includes('adventist') || qLower.includes('church') || qLower.includes('outpost') || qLower.includes('clinic')) {
-      specializedSection = `#### ⛪ Adventist Outpost & Rural Community Network (${targetDistrict})
+      specializedSection = `#### Adventist Outpost & Rural Community Network (${targetDistrict})
 - **Mission & Congregation Proximity**: ${targetDistrict} features established Seventh-day Adventist congregations, district pastorates, and rural Sabbath School companies within **5 km – 18 km** of prime mid-slope homestead zones.
 - **Health & Medical Access**: Verify all-weather feeder road distance to the **${targetDistrict} District Hospital**, CHAM mission clinics, and Adventist health outposts.
 - **Outpost Sanctuary Balance**: Select acreage **12 km – 30 km outside the main Boma**—quiet enough for family country living and agrarian self-reliance, yet accessible for Sabbath fellowship and medical missionary service.`;
     } else if (qLower.includes('road') || qLower.includes('access') || qLower.includes('altitude')) {
-      specializedSection = `#### 🛣️ Wet-Season Road Access & Thermal Belt Siting (${targetDistrict})
+      specializedSection = `#### Wet-Season Road Access & Thermal Belt Siting (${targetDistrict})
 - **All-Weather Logistics**: Prioritize plots within **3 km – 8 km of graded gravel or tarmac corridors** (M1 / M5 / regional secondary roads), avoiding low-lying *dambo* clay crossings that flood in January–February.
 - **Thermal Belt Advantage (${targetAltitude})**: Mid-slope benches (15m–40m above valley floors) escape nocturnal cold-air drainage and frost pockets while reducing lowland malaria vector density.`;
     }
 
-    const fallbackAnswer = `### 🛰️ Geospatial Scout Analysis: ${targetDistrict} (${targetRegion} Region)
+    const fallbackAnswer = `### Geospatial Scout Analysis: ${targetDistrict} (${targetRegion} Region)
 
 **Target Coordinates**: \`Lat ${lat.toFixed(4)}°S, Lng ${lng.toFixed(4)}°E\` • **Elevation**: ${targetAltitude}
 ${activeLayersContext ? `\n**Evaluated GIS Overlays**: ${activeLayersContext.replace('Active Selected Map Layers:', '').trim()}\n` : ''}
 ${specializedSection ? `${specializedSection}\n` : ''}
-#### 💧 Water Security & Catchment Hydrology
+#### Water Security & Catchment Hydrology
 - **Drainage Network**: Positioned within the Lake Malawi / Shire River Rift catchment system with strong upland recharge.
 - **Borehole & Spring Viability**: Typical borehole drilling depth ranges **22m – 48m** in plateau zones; upland slopes above 1,250m support gravity-fed spring piping via 32mm HDPE lines.
 
-#### 🌱 Soil Pedology (FAO HWSD v2.0) & Crop Suitability
+#### Soil Pedology (FAO HWSD v2.0) & Crop Suitability
 - **Soil Classification**: Deep *Katondo* red clay-loam & sandy-clay loam (pH 5.6–6.5), responsive to *Tephrosia* green manure, deep grass mulching, and wood-ash mineral buffering.
 - **High-Value Crops**: **${cropsList}**.
 
-#### 📜 Customary Land Act (2016) & Outpost Siting Protocol
+#### Customary Land Act (2016) & Outpost Siting Protocol
 - **Boundary Walk (*Malire*)**: Walk physical corners with the **Village Headman (*Nyakwawa*)**, **Group Village Headman (GVH)**, and all adjacent neighbors before filing for a **Customary Estate Certificate** at the ${targetDistrict} District Lands Office.`;
 
     return res.json({
-      answer: fallbackAnswer,
+      answer: stripHeadingEmojis(fallbackAnswer),
       model: 'Google Maps & DCCMS Grounded GIS',
       groundedWithMaps: true,
       groundingSources: [

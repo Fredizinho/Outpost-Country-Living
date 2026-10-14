@@ -26,7 +26,7 @@ export function CitationsModal({ isOpen, onClose }: CitationsModalProps) {
                 <ShieldCheck size={26} />
               </div>
               <div>
-                <span className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-400">
+                <span className="text-caption font-black uppercase tracking-[0.25em] text-emerald-400">
                   Data Audit & Peer Review
                 </span>
                 <h3 className="serif text-2xl md:text-3xl font-bold text-white">
@@ -47,7 +47,7 @@ export function CitationsModal({ isOpen, onClose }: CitationsModalProps) {
             <div className="bg-emerald-950/80 p-4 rounded-2xl border border-emerald-800/80 text-xs font-medium leading-relaxed text-emerald-100 flex items-start gap-3">
               <Award size={20} className="text-amber-400 shrink-0 mt-0.5" />
               <div>
-                <p className="font-bold text-amber-300 uppercase tracking-wider text-[11px] mb-1">
+                <p className="font-bold text-amber-300 uppercase tracking-wider text-caption mb-1">
                   Educational Reference Framework & Data Transparency
                 </p>
                 Agricultural estimates, regional rainfall ranges, groundwater depth models, land acquisition summaries, and devotional principles in OUTPOST: COUNTRY LIVING serve as an educational reference dataset inspired by published public reports from Malawi government ministries, agricultural extensions, and spiritual counsels. Field values serve as planning benchmarks rather than official guarantees.
@@ -61,7 +61,7 @@ export function CitationsModal({ isOpen, onClose }: CitationsModalProps) {
                   className="bg-slate-800/60 p-5 rounded-3xl border border-slate-700/80 flex flex-col gap-3 hover:border-emerald-500/60 transition-all group"
                 >
                   <div className="flex justify-between items-start gap-2">
-                    <span className="bg-emerald-950 text-emerald-400 border border-emerald-800 text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-lg">
+                    <span className="bg-emerald-950 text-emerald-400 border border-emerald-800 text-caption font-black uppercase tracking-widest px-2.5 py-1 rounded-lg">
                       {cit.category}
                     </span>
                     <Landmark size={15} className="text-slate-500 group-hover:text-emerald-400 transition-colors" />
@@ -71,7 +71,7 @@ export function CitationsModal({ isOpen, onClose }: CitationsModalProps) {
                     {cit.title}
                   </h4>
 
-                  <span className="text-[11px] font-bold text-amber-400/90 flex items-center gap-1">
+                  <span className="text-caption font-bold text-amber-400/90 flex items-center gap-1">
                     <Globe size={12} /> {cit.institution}
                   </span>
 
@@ -79,7 +79,7 @@ export function CitationsModal({ isOpen, onClose }: CitationsModalProps) {
                     {cit.description}
                   </p>
 
-                  <div className="mt-auto pt-3 border-t border-slate-700/60 flex items-center justify-between text-[10px] text-slate-400 font-mono">
+                  <div className="mt-auto pt-3 border-t border-slate-700/60 flex items-center justify-between text-caption text-slate-400 font-mono">
                     <span className="truncate max-w-[240px]">Ref: {cit.verifiableURLOrDoc}</span>
                     <FileText size={12} className="text-emerald-400" />
                   </div>
@@ -89,7 +89,7 @@ export function CitationsModal({ isOpen, onClose }: CitationsModalProps) {
           </div>
 
           {/* Footer */}
-          <div className="p-5 bg-slate-950 border-t border-slate-800 flex items-center justify-between text-[11px] font-bold text-slate-400 px-8">
+          <div className="p-5 bg-slate-950 border-t border-slate-800 flex items-center justify-between text-caption font-bold text-slate-400 px-8">
             <span>OUTPOST: COUNTRY LIVING • Peer-Verified Malawi Field Data</span>
             <button
               onClick={onClose}

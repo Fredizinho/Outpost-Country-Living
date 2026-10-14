@@ -173,11 +173,11 @@ export function ScoutTelemetryDrawer({
               <span className="serif text-xs font-bold text-white truncate">
                 {activeDistrict ? `${activeDistrict.name} Summary` : currentRegionSpec.label}
               </span>
-              <span className="text-[9px] font-mono bg-amber-500/20 text-amber-300 px-1.5 py-0.2 rounded border border-amber-500/40 shrink-0">
+              <span className="text-caption font-mono bg-amber-500/20 text-amber-300 px-1.5 py-0.2 rounded border border-amber-500/40 shrink-0">
                 {activeDistrict ? `Grade ${activeDistrict.feasibilityGrade}` : currentRegionSpec.badge}
               </span>
             </div>
-            <span className="text-[10px] font-mono text-slate-400 truncate">
+            <span className="text-caption font-mono text-slate-400 truncate">
               {activeDistrict 
                 ? `${activeDistrict.rainfallAnnualMm} mm/yr • ${activeDistrict.primarySoil.split('(')[0].trim()}: ${activeDistrict.soilPh}` 
                 : `${displayedParcels.length} surveyed stations`}
@@ -228,7 +228,7 @@ export function ScoutTelemetryDrawer({
             <h3 className="serif text-lg font-bold text-white leading-tight">
               {activeDistrict ? `${activeDistrict.name} Summary` : currentRegionSpec.label}
             </h3>
-            <span className="text-[10px] font-mono text-amber-400/90 uppercase tracking-wider block">
+            <span className="text-caption font-mono text-amber-400/90 uppercase tracking-wider block">
               {activeDistrict ? `${activeDistrict.region} Region • Grade ${activeDistrict.feasibilityGrade}` : currentRegionSpec.badge}
             </span>
           </div>
@@ -268,7 +268,7 @@ export function ScoutTelemetryDrawer({
         <button
           onClick={() => setDrawerTab('dossier')}
           className={cn(
-            "py-1.5 px-2 rounded-xl text-[11px] font-mono font-bold transition-all flex flex-col items-center justify-center gap-0.5 cursor-pointer text-center",
+            "py-1.5 px-2 rounded-xl text-caption font-mono font-bold transition-all flex flex-col items-center justify-center gap-0.5 cursor-pointer text-center",
             drawerTab === 'dossier'
               ? "bg-amber-500 text-slate-950 shadow-md font-black"
               : "text-slate-400 hover:text-white"
@@ -281,7 +281,7 @@ export function ScoutTelemetryDrawer({
         <button
           onClick={() => setDrawerTab('parcels')}
           className={cn(
-            "py-1.5 px-2 rounded-xl text-[11px] font-mono font-bold transition-all flex flex-col items-center justify-center gap-0.5 cursor-pointer text-center",
+            "py-1.5 px-2 rounded-xl text-caption font-mono font-bold transition-all flex flex-col items-center justify-center gap-0.5 cursor-pointer text-center",
             drawerTab === 'parcels'
               ? "bg-emerald-600 text-white shadow-md font-black"
               : "text-slate-400 hover:text-white"
@@ -294,7 +294,7 @@ export function ScoutTelemetryDrawer({
         <button
           onClick={() => setDrawerTab('soil')}
           className={cn(
-            "py-1.5 px-2 rounded-xl text-[11px] font-mono font-bold transition-all flex flex-col items-center justify-center gap-0.5 cursor-pointer text-center",
+            "py-1.5 px-2 rounded-xl text-caption font-mono font-bold transition-all flex flex-col items-center justify-center gap-0.5 cursor-pointer text-center",
             drawerTab === 'soil'
               ? "bg-amber-600 text-white shadow-md font-black"
               : "text-slate-400 hover:text-white"
@@ -307,7 +307,7 @@ export function ScoutTelemetryDrawer({
         <button
           onClick={() => setDrawerTab('layers')}
           className={cn(
-            "py-1.5 px-2 rounded-xl text-[11px] font-mono font-bold transition-all flex flex-col items-center justify-center gap-0.5 cursor-pointer text-center",
+            "py-1.5 px-2 rounded-xl text-caption font-mono font-bold transition-all flex flex-col items-center justify-center gap-0.5 cursor-pointer text-center",
             drawerTab === 'layers'
               ? "bg-sky-600 text-white shadow-md font-black"
               : "text-slate-400 hover:text-white"
@@ -327,18 +327,18 @@ export function ScoutTelemetryDrawer({
             <div className="flex items-start justify-between gap-2">
               <div>
                 <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="bg-emerald-500 text-slate-950 px-2 py-0.5 rounded font-mono font-black text-[10px] uppercase">
+                  <span className="bg-emerald-500 text-slate-950 px-2 py-0.5 rounded font-mono font-black text-caption uppercase">
                     Selected Parcel
                   </span>
                   <span className="text-xs font-mono font-bold text-amber-300">
                     {activeParcel.acres} Acres ({activeParcel.hectares} ha)
                   </span>
-                  <span className="text-[10px] font-mono text-slate-300 bg-white/10 px-1.5 py-0.2 rounded">
+                  <span className="text-caption font-mono text-slate-300 bg-white/10 px-1.5 py-0.2 rounded">
                     {activeParcel.landTenure}
                   </span>
                 </div>
                 <h4 className="serif text-base font-bold text-white mt-1.5">{activeParcel.title}</h4>
-                <p className="text-[11px] text-slate-300 font-mono mt-0.5">
+                <p className="text-caption text-slate-300 font-mono mt-0.5">
                   {activeParcel.district} District • TA {activeParcel.traditionalAuthority} • GVH {activeParcel.groupVillageHeadman}
                 </p>
               </div>
@@ -352,27 +352,27 @@ export function ScoutTelemetryDrawer({
               </button>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[10px] font-mono bg-black/50 p-2.5 rounded-xl border border-white/10">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-caption font-mono bg-black/50 p-2.5 rounded-xl border border-white/10">
               <div>
-                <span className="text-slate-400 block text-[9px]">WATER</span>
+                <span className="text-slate-400 block text-caption">WATER</span>
                 <span className="font-bold text-cyan-300 truncate block">{activeParcel.waterReliability.split('(')[0]}</span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[9px]">SOIL</span>
+                <span className="text-slate-400 block text-caption">SOIL</span>
                 <span className="font-bold text-emerald-300 truncate block">{activeParcel.soilProfile.split('/')[0]}</span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[9px]">SLOPE</span>
+                <span className="text-slate-400 block text-caption">SLOPE</span>
                 <span className="font-bold text-amber-300 truncate block">{activeParcel.slopePct || 5}% incline</span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[9px]">ACCESS</span>
+                <span className="text-slate-400 block text-caption">ACCESS</span>
                 <span className="font-bold text-slate-200 truncate block">{activeParcel.rainySeasonAccess ? activeParcel.rainySeasonAccess.split(' ')[0] : 'All-Weather'}</span>
               </div>
             </div>
 
             {activeParcel.scoutNotes && (
-              <p className="text-[11px] text-slate-300 italic bg-white/5 p-2 rounded-lg border border-white/5">
+              <p className="text-caption text-slate-300 italic bg-white/5 p-2 rounded-lg border border-white/5">
                 "{activeParcel.scoutNotes}"
               </p>
             )}
@@ -380,7 +380,7 @@ export function ScoutTelemetryDrawer({
             <div className="flex flex-wrap items-center gap-2 pt-1">
               <button
                 onClick={() => setIsCadastralModalOpen(true)}
-                className="flex-1 py-1.5 px-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl text-[11px] font-mono font-bold uppercase flex items-center justify-center gap-1.5 shadow cursor-pointer transition-all"
+                className="flex-1 py-1.5 px-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl text-caption font-mono font-bold uppercase flex items-center justify-center gap-1.5 shadow cursor-pointer transition-all"
               >
                 <Printer size={12} />
                 <span>Export Dossier</span>
@@ -389,7 +389,7 @@ export function ScoutTelemetryDrawer({
               <button
                 onClick={() => handleSendParcelToEvaluator(activeParcel)}
                 className={cn(
-                  "py-1.5 px-2.5 rounded-xl text-[11px] font-mono font-bold flex items-center justify-center gap-1 cursor-pointer transition-all border",
+                  "py-1.5 px-2.5 rounded-xl text-caption font-mono font-bold flex items-center justify-center gap-1 cursor-pointer transition-all border",
                   sentParcelId === activeParcel.id
                     ? "bg-amber-500 text-slate-950 border-amber-300 font-black"
                     : "bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border-amber-500/40"
@@ -402,7 +402,7 @@ export function ScoutTelemetryDrawer({
 
               <button
                 onClick={() => setIsNdviSplitModalOpen(true)}
-                className="py-1.5 px-2.5 bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/40 rounded-xl text-[11px] font-mono font-bold flex items-center justify-center gap-1 cursor-pointer transition-all"
+                className="py-1.5 px-2.5 bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/40 rounded-xl text-caption font-mono font-bold flex items-center justify-center gap-1 cursor-pointer transition-all"
                 title="Compare Seasons"
               >
                 <SplitSquareVertical size={12} />
@@ -412,7 +412,7 @@ export function ScoutTelemetryDrawer({
               {activeParcel.boundaryPolygon && activeParcel.boundaryPolygon.length > 0 && (
                 <button
                   onClick={() => onCopyCoords([activeParcel.boundaryPolygon[0][1], activeParcel.boundaryPolygon[0][0]])}
-                  className="py-1.5 px-2.5 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-white/10 rounded-xl text-[11px] font-mono flex items-center justify-center gap-1 cursor-pointer"
+                  className="py-1.5 px-2.5 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-white/10 rounded-xl text-caption font-mono flex items-center justify-center gap-1 cursor-pointer"
                   title="Copy GPS"
                 >
                   {copiedCoords ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
@@ -435,7 +435,7 @@ export function ScoutTelemetryDrawer({
                 <span className="serif text-sm font-bold text-white">
                   {activeDistrict ? `${activeDistrict.name} District Summary` : `${currentRegionSpec.label} Summary`}
                 </span>
-                <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded text-[10px] font-mono font-bold">
+                <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded text-caption font-mono font-bold">
                   {climateZone.thermalBeltZone}
                 </span>
               </div>
@@ -447,7 +447,7 @@ export function ScoutTelemetryDrawer({
             {/* LIVE SATELLITE & METEOROLOGICAL API FEED */}
             {liveTelemetry && (
               <div className="p-3 rounded-2xl bg-emerald-950/35 border border-emerald-500/35 flex flex-col gap-2 shadow-sm">
-                <div className="flex items-center justify-between text-[10px] font-mono">
+                <div className="flex items-center justify-between text-caption font-mono">
                   <span className="text-emerald-300 font-bold uppercase flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                     Live Satellite & Weather API
@@ -456,21 +456,21 @@ export function ScoutTelemetryDrawer({
                     {liveTelemetry.source || 'NASA POWER · Open-Meteo'}
                   </span>
                 </div>
-                <div className="grid grid-cols-3 gap-2 text-[11px] font-mono">
+                <div className="grid grid-cols-3 gap-2 text-caption font-mono">
                   <div className="bg-slate-950/70 border border-white/5 rounded-xl p-2">
-                    <span className="text-[9px] text-slate-400 block">LIVE SOLAR PSH</span>
+                    <span className="text-caption text-slate-400 block">LIVE SOLAR PSH</span>
                     <span className="text-amber-300 font-bold">
                       {liveTelemetry.livePeakSunHoursKwh ?? (activeDistrict ? activeDistrict.solarKwhDay : 5.8)} kWh/m²
                     </span>
                   </div>
                   <div className="bg-slate-950/70 border border-white/5 rounded-xl p-2">
-                    <span className="text-[9px] text-slate-400 block">SOIL MOISTURE</span>
+                    <span className="text-caption text-slate-400 block">SOIL MOISTURE</span>
                     <span className="text-cyan-300 font-bold">
                       {liveTelemetry.soilMoisturePct !== undefined ? `${liveTelemetry.soilMoisturePct}% Vol` : '28% Vol'}
                     </span>
                   </div>
                   <div className="bg-slate-950/70 border border-white/5 rounded-xl p-2">
-                    <span className="text-[9px] text-slate-400 block">LIVE WEATHER</span>
+                    <span className="text-caption text-slate-400 block">LIVE WEATHER</span>
                     <span className="text-emerald-300 font-bold truncate block">
                       {liveTelemetry.tempC !== undefined ? `${liveTelemetry.tempC}°C` : '23°C'} {liveTelemetry.condition ? `· ${liveTelemetry.condition}` : ''}
                     </span>
@@ -484,71 +484,71 @@ export function ScoutTelemetryDrawer({
               
               {/* Elevation */}
               <div className="bg-slate-900/90 border border-white/5 p-2.5 rounded-2xl flex flex-col gap-0.5">
-                <div className="flex items-center gap-1.5 text-amber-400 text-[10px] font-mono font-bold uppercase">
+                <div className="flex items-center gap-1.5 text-amber-400 text-caption font-mono font-bold uppercase">
                   <Mountain size={12} /> Elevation
                 </div>
                 <div className="text-sm font-bold text-white font-mono">
                   {activeDistrict ? activeDistrict.elevationRange : selectedRegion.metrics.elevation}
                 </div>
-                <span className="text-[10px] text-slate-400">Highland ridge</span>
+                <span className="text-caption text-slate-400">Highland ridge</span>
               </div>
 
               {/* Rainfall */}
               <div className="bg-slate-900/90 border border-white/5 p-2.5 rounded-2xl flex flex-col gap-0.5">
-                <div className="flex items-center gap-1.5 text-sky-400 text-[10px] font-mono font-bold uppercase">
+                <div className="flex items-center gap-1.5 text-sky-400 text-caption font-mono font-bold uppercase">
                   <Droplets size={12} /> Rainfall
                 </div>
                 <div className="text-sm font-bold text-white font-mono">
                   {activeDistrict ? `${activeDistrict.rainfallAnnualMm} mm/yr` : selectedRegion.metrics.rainfall}
                 </div>
-                <span className="text-[10px] text-slate-400">Nov – Apr rains</span>
+                <span className="text-caption text-slate-400">Nov – Apr rains</span>
               </div>
 
               {/* Temperatures */}
               <div className="bg-slate-900/90 border border-white/5 p-2.5 rounded-2xl flex flex-col gap-0.5">
-                <div className="flex items-center gap-1.5 text-amber-300 text-[10px] font-mono font-bold uppercase">
+                <div className="flex items-center gap-1.5 text-amber-300 text-caption font-mono font-bold uppercase">
                   <Thermometer size={12} /> Temperature
                 </div>
                 <div className="text-sm font-bold text-white font-mono">
                   {climateZone.winterMinC}°C – {climateZone.summerMaxC}°C
                 </div>
-                <span className="text-[10px] text-slate-400">Frost Risk: <strong className={climateZone.frostRisk === 'High' ? 'text-rose-400' : 'text-emerald-400'}>{climateZone.frostRisk}</strong></span>
+                <span className="text-caption text-slate-400">Frost Risk: <strong className={climateZone.frostRisk === 'High' ? 'text-rose-400' : 'text-emerald-400'}>{climateZone.frostRisk}</strong></span>
               </div>
 
               {/* Well Depth */}
               <div className="bg-slate-900/90 border border-white/5 p-2.5 rounded-2xl flex flex-col gap-0.5">
-                <div className="flex items-center gap-1.5 text-teal-400 text-[10px] font-mono font-bold uppercase">
+                <div className="flex items-center gap-1.5 text-teal-400 text-caption font-mono font-bold uppercase">
                   <Waves size={12} /> Well Depth
                 </div>
                 <div className="text-sm font-bold text-white font-mono">
                   {activeDistrict ? activeDistrict.aquiferDepth.split('(')[0].trim() : '14m – 22m'}
                 </div>
-                <span className="text-[10px] text-emerald-400">Shallow well viable</span>
+                <span className="text-caption text-emerald-400">Shallow well viable</span>
               </div>
 
               {/* Soil */}
               <div className="bg-slate-900/90 border border-white/5 p-2.5 rounded-2xl flex flex-col gap-0.5">
-                <div className="flex items-center gap-1.5 text-emerald-400 text-[10px] font-mono font-bold uppercase truncate">
+                <div className="flex items-center gap-1.5 text-emerald-400 text-caption font-mono font-bold uppercase truncate">
                   <Sprout size={12} className="shrink-0" />
                   <span className="truncate">{activeDistrict ? activeDistrict.primarySoil.split('(')[0].trim() : 'Katondo (Red Clay)'}</span>
                 </div>
                 <div className="text-sm font-bold text-white font-mono">
                   {activeDistrict ? activeDistrict.soilPh : 'pH 5.8 – 6.5'}
                 </div>
-                <span className="text-[10px] text-slate-400 truncate">
+                <span className="text-caption text-slate-400 truncate">
                   {activeDistrict ? activeDistrict.faoSoilClassification.split('(')[0].trim() : 'Deep red loam'}
                 </span>
               </div>
 
               {/* Solar Irradiance */}
               <div className="bg-slate-900/90 border border-white/5 p-2.5 rounded-2xl flex flex-col gap-0.5">
-                <div className="flex items-center gap-1.5 text-amber-400 text-[10px] font-mono font-bold uppercase">
+                <div className="flex items-center gap-1.5 text-amber-400 text-caption font-mono font-bold uppercase">
                   <Sun size={12} /> Solar Irradiance
                 </div>
                 <div className="text-sm font-bold text-white font-mono">
                   {activeDistrict ? activeDistrict.solarKwhDay : climateZone.solarRadiationKwhM2Day} kWh/m²/day
                 </div>
-                <span className="text-[10px] text-slate-400">Ideal for solar pumping</span>
+                <span className="text-caption text-slate-400">Ideal for solar pumping</span>
               </div>
             </div>
 
@@ -556,10 +556,10 @@ export function ScoutTelemetryDrawer({
             {/* Recommended Crops */}
             <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-white/10 flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold uppercase text-amber-400 flex items-center gap-1.5">
+                <span className="text-caption font-mono font-bold uppercase text-amber-400 flex items-center gap-1.5">
                   <Sprout size={12} /> {activeDistrict ? `${activeDistrict.name} Prime Crops` : 'Recommended Crops'}
                 </span>
-                <span className="text-[9px] font-mono text-emerald-400">
+                <span className="text-caption font-mono text-emerald-400">
                   {activeDistrict ? `Grade ${activeDistrict.feasibilityGrade} Suitability` : 'Best for maize, beans, and fruit trees'}
                 </span>
               </div>
@@ -581,10 +581,10 @@ export function ScoutTelemetryDrawer({
                 ).map((crop, idx) => (
                   <div key={idx} className="p-2 rounded-xl bg-slate-950/80 border border-white/5 flex items-center justify-between gap-1">
                     <div className="min-w-0">
-                      <div className="text-white font-bold text-[11px] truncate">{crop.name}</div>
-                      <div className="text-[9px] text-slate-400 truncate">{crop.tag}</div>
+                      <div className="text-white font-bold text-caption truncate">{crop.name}</div>
+                      <div className="text-caption text-slate-400 truncate">{crop.tag}</div>
                     </div>
-                    <span className="text-[10px] font-bold text-emerald-400 shrink-0">{crop.score}</span>
+                    <span className="text-caption font-bold text-emerald-400 shrink-0">{crop.score}</span>
                   </div>
                 ))}
               </div>
@@ -593,12 +593,12 @@ export function ScoutTelemetryDrawer({
             {/* Water & Well Viability */}
             <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-white/10 flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold uppercase text-cyan-400 flex items-center gap-1.5">
+                <span className="text-caption font-mono font-bold uppercase text-cyan-400 flex items-center gap-1.5">
                   <Droplets size={12} /> Water Availability
                 </span>
                 <button
                   onClick={() => setIsNdviSplitModalOpen(true)}
-                  className="text-[9px] font-mono text-cyan-300 hover:text-white bg-cyan-950/80 hover:bg-cyan-900 px-2 py-0.5 rounded border border-cyan-700/60 flex items-center gap-1 cursor-pointer transition-all"
+                  className="text-caption font-mono text-cyan-300 hover:text-white bg-cyan-950/80 hover:bg-cyan-900 px-2 py-0.5 rounded border border-cyan-700/60 flex items-center gap-1 cursor-pointer transition-all"
                 >
                   <SplitSquareVertical size={10} />
                   <span>Compare Seasons</span>
@@ -607,21 +607,22 @@ export function ScoutTelemetryDrawer({
 
               <div className="grid grid-cols-2 gap-2 text-xs font-mono">
                 <div className="p-2.5 rounded-xl bg-slate-950/80 border border-cyan-900/40 flex flex-col">
-                  <span className="text-[9px] text-slate-400 uppercase">Chilimwe (Dry Season) Aquifer</span>
+                  <span className="text-caption text-slate-400 uppercase">Chilimwe (Dry Season) Aquifer</span>
                   <span className="text-sm font-bold text-sky-300">
                     {activeDistrict ? activeDistrict.aquiferDepth.split('(')[0].trim() : '14m – 22m Depth'}
                   </span>
-                  <span className="text-[9px] text-emerald-400 mt-0.5 truncate">
-                    ✓ {activeDistrict ? `Target ~${activeDistrict.aquiferDepthM}m borehole` : 'Shallow Well Viable'}
+                  <span className="text-caption text-emerald-400 mt-0.5 truncate flex items-center gap-1">
+                    <Check size={12} className="shrink-0" />
+                    <span>{activeDistrict ? `Target ~${activeDistrict.aquiferDepthM}m borehole` : 'Shallow Well Viable'}</span>
                   </span>
                 </div>
 
                 <div className="p-2.5 rounded-xl bg-slate-950/80 border border-cyan-900/40 flex flex-col">
-                  <span className="text-[9px] text-slate-400 uppercase">Rainfall & Recharge</span>
+                  <span className="text-caption text-slate-400 uppercase">Rainfall & Recharge</span>
                   <span className="text-sm font-bold text-cyan-300">
                     {activeDistrict ? `${activeDistrict.rainfallAnnualMm} mm/yr` : '180 L / min'}
                   </span>
-                  <span className="text-[9px] text-slate-400 mt-0.5 truncate">
+                  <span className="text-caption text-slate-400 mt-0.5 truncate">
                     {activeDistrict ? activeDistrict.rainfallPattern.split('(')[0].trim() : 'Gravity mountain runoff'}
                   </span>
                 </div>
@@ -644,7 +645,7 @@ export function ScoutTelemetryDrawer({
               {showDeepTelemetry && (
                 <div className="flex flex-col gap-3 pt-1">
                   {/* Micro-Catchment & Swales */}
-                  <div className="text-[10px] text-slate-300 bg-cyan-950/30 p-2.5 rounded-xl border border-cyan-800/30 flex flex-col gap-1">
+                  <div className="text-caption text-slate-300 bg-cyan-950/30 p-2.5 rounded-xl border border-cyan-800/30 flex flex-col gap-1">
                     <div className="font-bold text-cyan-200 flex items-center gap-1.5">
                       <Waves size={13} className="text-cyan-400" />
                       <span>Micro-Catchment & Swales:</span>
@@ -657,16 +658,16 @@ export function ScoutTelemetryDrawer({
 
                   {/* Thermal Belt Status */}
                   <div className="p-3 rounded-2xl bg-emerald-950/30 border border-emerald-500/20 flex flex-col gap-1.5 text-xs font-mono">
-                    <span className="text-[10px] text-emerald-400 font-bold uppercase">Thermal Belt Inversion</span>
-                    <p className="text-[11px] text-slate-300 leading-relaxed font-sans">
+                    <span className="text-caption text-emerald-400 font-bold uppercase">Thermal Belt Inversion</span>
+                    <p className="text-caption text-slate-300 leading-relaxed font-sans">
                       Mid-slope elevation avoids valley frost pools and ridge-top winds, providing a stable 12°C–28°C growing environment.
                     </p>
                   </div>
 
                   {/* Solar Pumping & Infrastructure */}
                   <div className="p-3 rounded-2xl bg-amber-950/30 border border-amber-500/20 flex flex-col gap-1.5 text-xs font-mono">
-                    <span className="text-[10px] text-amber-400 font-bold uppercase">Solar Pump Specifications</span>
-                    <div className="grid grid-cols-2 gap-2 text-[11px]">
+                    <span className="text-caption text-amber-400 font-bold uppercase">Solar Pump Specifications</span>
+                    <div className="grid grid-cols-2 gap-2 text-caption">
                       <div><strong className="text-white">Pump:</strong> 1.5 kW DC Submersible</div>
                       <div><strong className="text-white">Array:</strong> 2.4 kWp PV</div>
                       <div><strong className="text-white">Feeder Road:</strong> 2.8 km</div>
@@ -704,7 +705,7 @@ export function ScoutTelemetryDrawer({
               {activeDistrict && (
                 <button
                   onClick={() => onCopyCoords([activeDistrict.centroid[1], activeDistrict.centroid[0]])}
-                  className="w-full py-2 px-3 rounded-xl bg-slate-900/60 hover:bg-slate-800 text-slate-300 border border-white/5 font-mono text-[11px] flex items-center justify-center gap-2 transition-all cursor-pointer"
+                  className="w-full py-2 px-3 rounded-xl bg-slate-900/60 hover:bg-slate-800 text-slate-300 border border-white/5 font-mono text-caption flex items-center justify-center gap-2 transition-all cursor-pointer"
                 >
                   {copiedCoords ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} className="text-amber-400" />}
                   <span>{copiedCoords ? "Coordinates Copied" : "Copy GPS"}</span>
@@ -746,7 +747,7 @@ export function ScoutTelemetryDrawer({
                 <Filter size={13} className="text-amber-400" />
                 <span>Filters</span>
                 {activeFilterCount > 0 && (
-                  <span className="bg-emerald-600 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold">
+                  <span className="bg-emerald-600 text-white text-caption px-1.5 py-0.2 rounded-full font-bold">
                     {activeFilterCount}
                   </span>
                 )}
@@ -781,11 +782,11 @@ export function ScoutTelemetryDrawer({
                         <div className="flex flex-col">
                           <div className="flex items-center gap-1.5">
                             <span className="text-xs font-bold text-white">{p.title}</span>
-                            <span className="text-[10px] font-mono text-amber-400 font-bold bg-amber-500/10 px-1.5 py-0.2 rounded">
+                            <span className="text-caption font-mono text-amber-400 font-bold bg-amber-500/10 px-1.5 py-0.2 rounded">
                               {p.acres} Ac
                             </span>
                           </div>
-                          <span className="text-[10px] text-slate-400 font-mono">
+                          <span className="text-caption text-slate-400 font-mono">
                             {p.district} District • {p.traditionalAuthority}
                           </span>
                         </div>
@@ -806,17 +807,17 @@ export function ScoutTelemetryDrawer({
                         </button>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-1.5 text-[10px] font-mono bg-black/40 p-2 rounded-xl border border-white/5">
+                      <div className="grid grid-cols-3 gap-1.5 text-caption font-mono bg-black/40 p-2 rounded-xl border border-white/5">
                         <div>
-                          <span className="text-slate-400 block text-[9px]">WATER</span>
+                          <span className="text-slate-400 block text-caption">WATER</span>
                           <span className="font-bold text-cyan-300 truncate block">{p.waterReliability.split('(')[0]}</span>
                         </div>
                         <div>
-                          <span className="text-slate-400 block text-[9px]">TENURE</span>
+                          <span className="text-slate-400 block text-caption">TENURE</span>
                           <span className="font-bold text-emerald-300 truncate block">{p.landTenure.split(' ')[0]}</span>
                         </div>
                         <div>
-                          <span className="text-slate-400 block text-[9px]">SOIL</span>
+                          <span className="text-slate-400 block text-caption">SOIL</span>
                           <span className="font-bold text-amber-300 truncate block">{p.soilProfile.split('/')[0]}</span>
                         </div>
                       </div>
@@ -838,7 +839,7 @@ export function ScoutTelemetryDrawer({
               <h4 className="serif text-sm font-bold text-amber-300 flex items-center gap-1.5">
                 <Sprout size={14} /> {activeDistrict ? `${activeDistrict.name} Soil Horizon` : 'Katondo (Red Clay) Profile'}
               </h4>
-              <p className="text-slate-300 text-[11px] leading-relaxed">
+              <p className="text-slate-300 text-caption leading-relaxed">
                 {activeDistrict
                   ? `${activeDistrict.primarySoil} (${activeDistrict.faoSoilClassification}) with ${activeDistrict.soilPh}. Ideal for ${activeDistrict.topCrops.slice(0, 4).join(', ')}.`
                   : 'Deep iron-rich latosol with high drainage and natural moisture retention. Best for macadamia, coffee, and maize.'}
@@ -846,19 +847,19 @@ export function ScoutTelemetryDrawer({
             </div>
 
             <div className="p-3 rounded-2xl bg-slate-900/80 border border-white/10 flex flex-col gap-1">
-              <span className="text-[10px] font-mono font-bold uppercase text-emerald-400">
+              <span className="text-caption font-mono font-bold uppercase text-emerald-400">
                 1. Natural Soil Nutrition & pH Buffering
               </span>
-              <p className="text-slate-300 text-[11px] leading-relaxed">
+              <p className="text-slate-300 text-caption leading-relaxed">
                 Amend {activeDistrict ? activeDistrict.primarySoil.split('(')[0].trim() : 'Katondo (Red Clay)'} with 20–30L cured compost, wood ash, and fermented wild sunflower tea (*Tithonia diversifolia*) to build organic nitrogen and buffer soil pH naturally.
               </p>
             </div>
 
             <div className="p-3 rounded-2xl bg-slate-900/80 border border-white/10 flex flex-col gap-1">
-              <span className="text-[10px] font-mono font-bold uppercase text-sky-400">
+              <span className="text-caption font-mono font-bold uppercase text-sky-400">
                 2. Dambo (Wetland) & Moisture Retention
               </span>
-              <p className="text-slate-300 text-[11px] leading-relaxed">
+              <p className="text-slate-300 text-caption leading-relaxed">
                 {activeDistrict
                   ? `${activeDistrict.name} receives ~${activeDistrict.rainfallAnnualMm} mm/yr (${activeDistrict.rainfallPattern}). Pair mid-slope contour Vetiver swales with valley-margin Dimba beds for year-round Chilimwe harvests.`
                   : 'Dambo (Wetland) valleys retain soil moisture throughout Chilimwe (Dry Season), enabling year-round vegetable yields.'}
@@ -866,10 +867,10 @@ export function ScoutTelemetryDrawer({
             </div>
 
             <div className="p-3 rounded-2xl bg-slate-900/80 border border-white/10 flex flex-col gap-1">
-              <span className="text-[10px] font-mono font-bold uppercase text-amber-400">
+              <span className="text-caption font-mono font-bold uppercase text-amber-400">
                 3. Malire (Boundary) & Traditional Authorities
               </span>
-              <p className="text-slate-300 text-[11px] leading-relaxed">
+              <p className="text-slate-300 text-caption leading-relaxed">
                 {activeDistrict && activeDistrict.traditionalAuthorities.length > 0
                   ? `Key Traditional Authorities in ${activeDistrict.name}: ${activeDistrict.traditionalAuthorities.join(', ')}. Always verify boundaries (Kuyendera Malire) with the GVH and TA before applying for a Customary Estate Certificate.`
                   : 'Customary family parcels are registered with the Traditional Authority (TA) under the Customary Land Act for long-term security.'}
@@ -884,12 +885,12 @@ export function ScoutTelemetryDrawer({
         {drawerTab === 'layers' && (
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-mono font-bold uppercase text-amber-400">
+              <span className="text-caption font-mono font-bold uppercase text-amber-400">
                 Base Map
               </span>
               <button
                 onClick={onOpenLayersModal}
-                className="text-[10px] font-mono text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
+                className="text-caption font-mono text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
               >
                 <span>Layer Settings</span>
                 <ExternalLink size={10} />
@@ -928,7 +929,7 @@ export function ScoutTelemetryDrawer({
             <div className="p-3 rounded-2xl bg-slate-900 border border-white/10 flex items-center justify-between">
               <div className="flex flex-col">
                 <span className="text-xs font-bold text-white">Declutter View</span>
-                <span className="text-[10px] text-slate-400">Clean vector display</span>
+                <span className="text-caption text-slate-400">Clean vector display</span>
               </div>
               <button
                 onClick={onToggleDeclutter}

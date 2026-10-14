@@ -47,8 +47,8 @@ export function HomesteadTelemetryBanner({ telemetry, activeSeasonKey, className
       {/* Header telemetry status */}
       <div className="flex flex-wrap items-center justify-between gap-3 relative z-10 border-b border-emerald-800/60 pb-3.5">
         <div className="flex items-center gap-2.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-          <span className="text-[10px] font-mono font-black uppercase tracking-widest text-emerald-300">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+          <span className="text-caption font-mono font-black uppercase tracking-widest text-emerald-300">
             Live Weather & Farm Conditions • {telemetry.district}
           </span>
         </div>
@@ -56,7 +56,7 @@ export function HomesteadTelemetryBanner({ telemetry, activeSeasonKey, className
         <div className="flex items-center gap-3">
           <Link
             to="/tracker"
-            className="text-[11px] font-mono font-bold text-amber-300 hover:text-amber-200 flex items-center gap-1 transition-colors"
+            className="text-caption font-mono font-bold text-amber-300 hover:text-amber-200 flex items-center gap-1 transition-colors"
           >
             <span>View Exodus Roadmap</span>
             <ArrowUpRight size={13} />
@@ -70,14 +70,14 @@ export function HomesteadTelemetryBanner({ telemetry, activeSeasonKey, className
         {/* Metric 1: Current Phase */}
         <div className="bg-white/5 p-3.5 rounded-2xl border border-white/10 flex flex-col justify-between gap-2">
           <div className="flex items-center justify-between text-emerald-300">
-            <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Current Phase</span>
+            <span className="text-caption font-mono font-bold uppercase tracking-wider text-slate-400">Current Phase</span>
             <Calendar size={14} className="text-amber-400" />
           </div>
           <div>
             <span className="text-xs sm:text-sm font-extrabold text-white block truncate">
               {activeSeasonKey}
             </span>
-            <span className="text-[10px] text-emerald-200/70 font-mono">
+            <span className="text-caption text-emerald-200/70 font-mono">
               {telemetry.zoneName.split('(')[0]}
             </span>
           </div>
@@ -86,14 +86,14 @@ export function HomesteadTelemetryBanner({ telemetry, activeSeasonKey, className
         {/* Metric 2: Target Planting Window */}
         <div className="bg-white/5 p-3.5 rounded-2xl border border-white/10 flex flex-col justify-between gap-2">
           <div className="flex items-center justify-between text-emerald-300">
-            <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Target Planting</span>
+            <span className="text-caption font-mono font-bold uppercase tracking-wider text-slate-400">Target Planting</span>
             <Sprout size={14} className="text-emerald-400" />
           </div>
           <div>
             <span className="text-xs sm:text-sm font-extrabold text-amber-300 block truncate">
               {telemetry.targetPlantingWindow}
             </span>
-            <span className="text-[10px] text-slate-300 font-mono">
+            <span className="text-caption text-slate-300 font-mono">
               {telemetry.soilReadinessPct}% Soil Moisture Ready
             </span>
           </div>
@@ -102,14 +102,14 @@ export function HomesteadTelemetryBanner({ telemetry, activeSeasonKey, className
         {/* Metric 3: Water Demand & Status */}
         <div className="bg-white/5 p-3.5 rounded-2xl border border-white/10 flex flex-col justify-between gap-2">
           <div className="flex items-center justify-between text-sky-300">
-            <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Daily Water Needed</span>
+            <span className="text-caption font-mono font-bold uppercase tracking-wider text-slate-400">Daily Water Needed</span>
             <Droplets size={14} className="text-sky-400" />
           </div>
           <div>
             <span className="text-xs sm:text-sm font-extrabold text-sky-200 block truncate">
               {telemetry.dailyWaterRequirementLitersM2} L/m² / day
             </span>
-            <span className="text-[10px] text-slate-300 font-mono truncate block">
+            <span className="text-caption text-slate-300 font-mono truncate block">
               {telemetry.waterAvailabilityStatus.split('-')[0]}
             </span>
           </div>
@@ -118,14 +118,14 @@ export function HomesteadTelemetryBanner({ telemetry, activeSeasonKey, className
         {/* Metric 4: Soil Prep Focus */}
         <div className="bg-white/5 p-3.5 rounded-2xl border border-white/10 flex flex-col justify-between gap-2">
           <div className="flex items-center justify-between text-amber-300">
-            <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Soil Prep Focus</span>
+            <span className="text-caption font-mono font-bold uppercase tracking-wider text-slate-400">Soil Prep Focus</span>
             <Compass size={14} className="text-amber-400" />
           </div>
           <div>
             <span className="text-xs sm:text-sm font-extrabold text-slate-100 block truncate">
               {telemetry.soilPrepFocus}
             </span>
-            <span className="text-[10px] text-emerald-300/80 font-mono truncate block">
+            <span className="text-caption text-emerald-300/80 font-mono truncate block">
               Frost: {telemetry.frostRisk}
             </span>
           </div>
@@ -134,7 +134,7 @@ export function HomesteadTelemetryBanner({ telemetry, activeSeasonKey, className
         {/* Metric 5: Homestead Readiness Score */}
         <div className="col-span-2 md:col-span-4 lg:col-span-1 bg-gradient-to-br from-amber-500/20 via-emerald-950/40 to-slate-900 p-3.5 rounded-2xl border border-amber-500/40 flex flex-col justify-between gap-2 shadow-inner">
           <div className="flex items-center justify-between">
-            <span className="text-[9px] font-mono font-black uppercase tracking-wider text-amber-300 flex items-center gap-1">
+            <span className="text-caption font-mono font-black uppercase tracking-wider text-amber-300 flex items-center gap-1">
               <Sparkles size={11} className="text-amber-400" /> Readiness Score
             </span>
             <span className="text-xs font-mono font-extrabold text-amber-400">
@@ -152,7 +152,7 @@ export function HomesteadTelemetryBanner({ telemetry, activeSeasonKey, className
             />
           </div>
 
-          <div className="text-[9px] font-mono text-emerald-200/90 truncate">
+          <div className="text-caption font-mono text-emerald-200/90 truncate">
             {readiness.levelLabel.split('(')[0]}
           </div>
         </div>

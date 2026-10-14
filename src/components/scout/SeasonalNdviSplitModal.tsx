@@ -42,7 +42,7 @@ export function SeasonalNdviSplitModal({
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="serif text-lg font-bold text-white">Seasonal Vegetation & NDVI Comparison</h3>
-                <span className="text-[10px] font-mono font-bold uppercase bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-0.5 rounded">
+                <span className="text-caption font-mono font-bold uppercase bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-0.5 rounded">
                   Dual-Pane Time-Series
                 </span>
               </div>
@@ -98,9 +98,9 @@ export function SeasonalNdviSplitModal({
               >
                 <div className="absolute inset-0 opacity-40 mix-blend-overlay bg-[radial-gradient(#d97706_1px,transparent_1px)] [background-size:16px_16px]"></div>
                 <div className="relative z-10 self-end bg-slate-950/80 backdrop-blur border border-amber-500/40 p-3 rounded-xl max-w-xs text-right">
-                  <span className="text-[10px] font-mono text-amber-400 uppercase font-bold block">Chilimwe Dry Baseline</span>
+                  <span className="text-caption font-mono text-amber-400 uppercase font-bold block">Chilimwe Dry Baseline</span>
                   <div className="text-sm font-bold text-white font-mono mt-0.5">Water Table: 18m – 24m</div>
-                  <div className="text-[11px] text-slate-300 mt-0.5">Dambos dry up; only perennial springs flowing.</div>
+                  <div className="text-caption text-slate-300 mt-0.5">Dambos dry up; only perennial springs flowing.</div>
                 </div>
               </div>
 
@@ -119,9 +119,9 @@ export function SeasonalNdviSplitModal({
                 >
                   <div className="absolute inset-0 opacity-40 mix-blend-overlay bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:16px_16px]"></div>
                   <div className="relative z-10 bg-slate-950/80 backdrop-blur border border-emerald-500/40 p-3 rounded-xl max-w-xs">
-                    <span className="text-[10px] font-mono text-emerald-400 uppercase font-bold block">Dzinja Lush Canopy</span>
+                    <span className="text-caption font-mono text-emerald-400 uppercase font-bold block">Dzinja Lush Canopy</span>
                     <div className="text-sm font-bold text-white font-mono mt-0.5">Water Table: 4m – 8m</div>
-                    <div className="text-[11px] text-slate-300 mt-0.5">Heavy runoff; streams at peak 100% velocity.</div>
+                    <div className="text-caption text-slate-300 mt-0.5">Heavy runoff; streams at peak 100% velocity.</div>
                   </div>
                 </div>
               </div>
@@ -158,54 +158,54 @@ export function SeasonalNdviSplitModal({
           {/* Metric Comparison Table */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 flex flex-col gap-1.5">
-              <span className="text-[10px] font-mono font-bold uppercase text-slate-400 flex items-center gap-1.5">
+              <span className="text-caption font-mono font-bold uppercase text-slate-400 flex items-center gap-1.5">
                 <Droplets size={12} className="text-sky-400" /> Groundwater Depth
               </span>
               <div className="flex items-baseline justify-between mt-1">
                 <div>
-                  <span className="text-[10px] text-emerald-400 block font-mono">Dzinja</span>
+                  <span className="text-caption text-emerald-400 block font-mono">Dzinja</span>
                   <span className="text-sm font-bold text-white font-mono">4m – 7m</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10px] text-amber-400 block font-mono">Chilimwe</span>
+                  <span className="text-caption text-amber-400 block font-mono">Chilimwe</span>
                   <span className="text-sm font-bold text-white font-mono">15m – 22m</span>
                 </div>
               </div>
-              <span className="text-[10px] text-slate-500 mt-1">Borehole drilling recommended in October.</span>
+              <span className="text-caption text-slate-500 mt-1">Borehole drilling recommended in October.</span>
             </div>
 
             <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 flex flex-col gap-1.5">
-              <span className="text-[10px] font-mono font-bold uppercase text-slate-400 flex items-center gap-1.5">
+              <span className="text-caption font-mono font-bold uppercase text-slate-400 flex items-center gap-1.5">
                 <Sun size={12} className="text-amber-400" /> Solar Irradiance
               </span>
               <div className="flex items-baseline justify-between mt-1">
                 <div>
-                  <span className="text-[10px] text-emerald-400 block font-mono">Dzinja</span>
+                  <span className="text-caption text-emerald-400 block font-mono">Dzinja</span>
                   <span className="text-sm font-bold text-white font-mono">4.2 kWh/m²</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10px] text-amber-400 block font-mono">Chilimwe</span>
+                  <span className="text-caption text-amber-400 block font-mono">Chilimwe</span>
                   <span className="text-sm font-bold text-white font-mono">6.4 kWh/m²</span>
                 </div>
               </div>
-              <span className="text-[10px] text-slate-500 mt-1">Peak solar pumping output in dry season.</span>
+              <span className="text-caption text-slate-500 mt-1">Peak solar pumping output in dry season.</span>
             </div>
 
             <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 flex flex-col gap-1.5">
-              <span className="text-[10px] font-mono font-bold uppercase text-slate-400 flex items-center gap-1.5">
+              <span className="text-caption font-mono font-bold uppercase text-slate-400 flex items-center gap-1.5">
                 <Layers size={12} className="text-emerald-400" /> Road Accessibility
               </span>
               <div className="flex items-baseline justify-between mt-1">
                 <div>
-                  <span className="text-[10px] text-emerald-400 block font-mono">Dzinja</span>
+                  <span className="text-caption text-emerald-400 block font-mono">Dzinja</span>
                   <span className="text-sm font-bold text-rose-400 font-mono">4x4 Mud Risk</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10px] text-amber-400 block font-mono">Chilimwe</span>
+                  <span className="text-caption text-amber-400 block font-mono">Chilimwe</span>
                   <span className="text-sm font-bold text-emerald-400 font-mono">All-Weather</span>
                 </div>
               </div>
-              <span className="text-[10px] text-slate-500 mt-1">Check feeder bridges before rains start.</span>
+              <span className="text-caption text-slate-500 mt-1">Check feeder bridges before rains start.</span>
             </div>
           </div>
 

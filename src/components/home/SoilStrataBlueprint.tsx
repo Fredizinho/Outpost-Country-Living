@@ -101,10 +101,10 @@ export function SoilStrataBlueprint() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 relative z-10 border-b border-emerald-500/25 pb-6">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-amber-300 bg-amber-950/90 border border-amber-500/40 px-3.5 py-1 rounded-full text-[10px] font-mono font-black uppercase tracking-widest flex items-center gap-1.5 shadow-xs">
+            <span className="text-amber-300 bg-amber-950/90 border border-amber-500/40 px-3.5 py-1 rounded-full text-caption font-mono font-black uppercase tracking-widest flex items-center gap-1.5 shadow-xs">
               <Sparkles size={11} className="text-amber-400" /> Soil Profile & Pedology Matrix
             </span>
-            <span className="text-emerald-300 bg-emerald-950/80 border border-emerald-700/60 px-3 py-1 rounded-full text-[10px] font-mono font-black uppercase tracking-widest hidden sm:inline-block">
+            <span className="text-emerald-300 bg-emerald-950/80 border border-emerald-700/60 px-3 py-1 rounded-full text-caption font-mono font-black uppercase tracking-widest hidden sm:inline-block">
               Malawi Soil & Aquifer Depth
             </span>
           </div>
@@ -129,7 +129,7 @@ export function SoilStrataBlueprint() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10">
         {/* Left Column: Soil Layer Visual Stack (5 Cols) */}
         <div className="lg:col-span-5 flex flex-col gap-3.5">
-          <span className="text-[10px] font-mono font-black uppercase tracking-widest text-emerald-400 flex items-center justify-between">
+          <span className="text-caption font-mono font-black uppercase tracking-widest text-emerald-400 flex items-center justify-between">
             <span>Interactive Soil &amp; Aquifer Cutaway</span>
             <span>Click Any Stratum</span>
           </span>
@@ -304,7 +304,7 @@ export function SoilStrataBlueprint() {
                       )}>
                         {layer.name}
                       </span>
-                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">
+                      <span className="text-caption text-slate-400 font-bold uppercase tracking-wider block">
                         {layer.badge}
                       </span>
                     </div>
@@ -325,7 +325,7 @@ export function SoilStrataBlueprint() {
 
           <div className="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 text-xs text-slate-300 flex items-center gap-3 mt-1">
             <ShieldCheck size={20} className="text-emerald-400 shrink-0" />
-            <p className="font-medium text-[11px] leading-relaxed">
+            <p className="font-medium text-caption leading-relaxed">
               Tested against Neno, Dedza, and Lilongwe soil pedology samples. Ensures long-term productivity without chemical degradation.
             </p>
           </div>
@@ -345,7 +345,7 @@ export function SoilStrataBlueprint() {
               {/* Top Banner inside Card */}
               <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
                 <div>
-                  <span className="text-[10px] font-mono font-black uppercase tracking-widest text-amber-400 block">
+                  <span className="text-caption font-mono font-black uppercase tracking-widest text-amber-400 block">
                     Active Layer Dossier • {activeLayer.depth}
                   </span>
                   <h4 className="serif text-2xl font-bold text-white mt-0.5">
@@ -361,22 +361,22 @@ export function SoilStrataBlueprint() {
               {/* Data Metric Badges */}
               <div className="grid grid-cols-3 gap-3">
                 <div className="bg-slate-900/90 p-3 rounded-2xl border border-slate-800 text-center">
-                  <span className="text-[9px] font-mono font-bold uppercase text-slate-400 block mb-0.5">Target pH</span>
+                  <span className="text-caption font-mono font-bold uppercase text-slate-400 block mb-0.5">Target pH</span>
                   <span className="text-amber-300 font-extrabold text-base font-mono">{activeLayer.ph}</span>
                 </div>
                 <div className="bg-slate-900/90 p-3 rounded-2xl border border-slate-800 text-center">
-                  <span className="text-[9px] font-mono font-bold uppercase text-slate-400 block mb-0.5">Humus (SOM)</span>
+                  <span className="text-caption font-mono font-bold uppercase text-slate-400 block mb-0.5">Humus (SOM)</span>
                   <span className="text-emerald-300 font-extrabold text-base font-mono">{activeLayer.humus}</span>
                 </div>
                 <div className="bg-slate-900/90 p-3 rounded-2xl border border-slate-800 text-center">
-                  <span className="text-[9px] font-mono font-bold uppercase text-slate-400 block mb-0.5">Cationic CEC</span>
+                  <span className="text-caption font-mono font-bold uppercase text-slate-400 block mb-0.5">Cationic CEC</span>
                   <span className="text-cyan-300 font-extrabold text-base font-mono">{activeLayer.cec}</span>
                 </div>
               </div>
 
               {/* Scientific & Ecological Summary */}
               <div className="flex flex-col gap-1.5">
-                <span className="text-[10px] font-mono font-black uppercase tracking-wider text-emerald-400">
+                <span className="text-caption font-mono font-black uppercase tracking-wider text-emerald-400">
                   Pedological & Agronomic Dynamics:
                 </span>
                 <p className="text-xs text-slate-200 leading-relaxed font-medium bg-slate-900/80 p-4 rounded-2xl border border-slate-800/80">
@@ -386,7 +386,7 @@ export function SoilStrataBlueprint() {
 
               {/* Refined Quote Callout Block */}
               <div className="border-l-2 border-amber-500/50 bg-amber-500/5 p-4 rounded-r-xl flex flex-col gap-1.5">
-                <span className="text-[10px] font-mono font-black uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+                <span className="text-caption font-mono font-black uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
                   <BookOpen size={12} className="text-amber-400" /> Inspired Country Living Counsel:
                 </span>
                 <p className="font-serif text-sm italic text-amber-200/90 leading-relaxed">
@@ -396,7 +396,7 @@ export function SoilStrataBlueprint() {
 
               {/* Practical Action Steps */}
               <div className="flex flex-col gap-1.5">
-                <span className="text-[10px] font-mono font-black uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
+                <span className="text-caption font-mono font-black uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
                   <CheckCircle2 size={12} className="text-cyan-400" /> Practical Homestead Action:
                 </span>
                 <p className="text-xs text-slate-200 leading-relaxed font-semibold bg-slate-900/80 p-3.5 rounded-2xl border border-slate-800">
@@ -406,7 +406,7 @@ export function SoilStrataBlueprint() {
 
               {/* Compatible Crops */}
               <div className="flex flex-col gap-2 pt-2 border-t border-slate-800/80">
-                <span className="text-[10px] font-mono font-black uppercase tracking-wider text-slate-400">
+                <span className="text-caption font-mono font-black uppercase tracking-wider text-slate-400">
                   Optimal Crops & Agro-Forestry Compatibility:
                 </span>
                 <div className="flex flex-wrap gap-2">

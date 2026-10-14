@@ -8,6 +8,7 @@
   --font-serif: "Fraunces", Georgia, Cambria, "Times New Roman", Times, serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   
+  /* Brand Core Foundation */
   --color-moss-deep: #071A10;
   --color-forest-earthy: #0D2818;
   --color-amber-warm: #78350F;
@@ -63,24 +64,222 @@
   --color-earth-800: #55483a;
   --color-earth-900: #463c31;
   --color-earth-950: #25201a;
+
+  /* =========================================================================
+     TYPE-SCALE TOKEN SET (Strict Floor: 12px; Plus Jakarta Sans 16px Body; Fraunces Headings)
+     ========================================================================= */
+  --text-caption: 12px;
+  --text-caption--line-height: 1.4;
+  --text-small: 13.5px;
+  --text-small--line-height: 1.45;
+  --text-body: 16px;
+  --text-body--line-height: 1.6;
+  --text-body-guide: 16px;
+  --text-body-guide--line-height: 1.65;
+  --text-lead: 18px;
+  --text-lead--line-height: 1.5;
+  --text-h4: 20px;
+  --text-h4--line-height: 1.25;
+  --text-h3: 24px;
+  --text-h3--line-height: 1.25;
+  --text-h2: 28px;
+  --text-h2--line-height: 1.2;
+  --text-h1: 36px;
+  --text-h1--line-height: 1.15;
+  --text-display: 46px;
+  --text-display--line-height: 1.1;
+
+  /* =========================================================================
+     SEMANTIC BRAND TOKENS (Deep Moss, Forest, Gold, Cream & Terracotta)
+     ========================================================================= */
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-muted: var(--surface-muted);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-hover: var(--accent-hover);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
+
+  /* Terracotta Distinctive Roles */
+  --color-terracotta: var(--terracotta);
+  --color-terracotta-action: var(--terracotta);
+  --color-terracotta-harvest: var(--terracotta-harvest);
+  --color-terracotta-warning: var(--terracotta-warning);
+
+  /* Warmed Neutrals: Remap cold slate/stone to organic earth tones */
+  --color-slate-50: #fdfcfb;
+  --color-slate-100: #f5f2ed;
+  --color-slate-200: #e7e0d5;
+  --color-slate-300: #d3c7b5;
+  --color-slate-400: #b9a78e;
+  --color-slate-500: #a18b6e;
+  --color-slate-600: #826e56;
+  --color-slate-700: #6a5a47;
+  --color-slate-800: #55483a;
+  --color-slate-900: #2c241d;
+  --color-slate-950: #071A10;
+
+  --color-stone-50: #fdfcfb;
+  --color-stone-100: #f5f2ed;
+  --color-stone-200: #e7e0d5;
+  --color-stone-300: #d3c7b5;
+  --color-stone-400: #b9a78e;
+  --color-stone-500: #a18b6e;
+  --color-stone-600: #826e56;
+  --color-stone-700: #6a5a47;
+  --color-stone-800: #55483a;
+  --color-stone-900: #2c241d;
+  --color-stone-950: #071A10;
+
+  /* Remap synthetic sky & rose to semantic info & danger/terracotta */
+  --color-sky-50: #f0f9ff;
+  --color-sky-100: #e0f2fe;
+  --color-sky-200: #bae6fd;
+  --color-sky-300: #7dd3fc;
+  --color-sky-400: #38bdf8;
+  --color-sky-500: #0e7490;
+  --color-sky-600: #086179;
+  --color-sky-700: #0e4e5f;
+  --color-sky-800: #153e4b;
+  --color-sky-900: #16343f;
+
+  --color-rose-50: #fff8f3;
+  --color-rose-100: #ffeedd;
+  --color-rose-200: #ffd7b5;
+  --color-rose-300: #fcae7c;
+  --color-rose-400: #f87171;
+  --color-rose-500: #dc5c23;
+  --color-rose-600: #b91c1c;
+  --color-rose-700: #933113;
+  --color-rose-800: #782a15;
+  --color-rose-900: #622516;
+
+  /* =========================================================================
+     STANDARDIZED THREE RADII (--radius-control 10px, --radius-card 16px, --radius-sheet 28px)
+     ========================================================================= */
+  --radius-control: 10px;
+  --radius-card: 16px;
+  --radius-sheet: 28px;
+
+  /* Map standard Tailwind rounded utilities strictly to the 3 radii */
+  --radius-xs: var(--radius-control);
+  --radius-sm: var(--radius-control);
+  --radius-md: var(--radius-control);
+  --radius-lg: var(--radius-control);
+  --radius-xl: var(--radius-card);
+  --radius-2xl: var(--radius-card);
+  --radius-3xl: var(--radius-sheet);
+
+  /* =========================================================================
+     STANDARDIZED THREE ELEVATIONS (flat, raised, overlay — warm-tinted shadows, not black)
+     ========================================================================= */
+  --shadow-flat: 0 0 0 1px rgba(120, 53, 15, 0.08);
+  --shadow-raised: 0 4px 16px -2px rgba(92, 32, 16, 0.08), 0 2px 6px -1px rgba(120, 53, 15, 0.05);
+  --shadow-overlay: 0 20px 36px -8px rgba(92, 32, 16, 0.16), 0 8px 16px -4px rgba(120, 53, 15, 0.08);
+
+  /* Map all standard Tailwind shadow utilities strictly to the 3 warm elevations */
+  --shadow-none: none;
+  --shadow-2xs: var(--shadow-flat);
+  --shadow-xs: var(--shadow-flat);
+  --shadow-sm: var(--shadow-raised);
+  --shadow: var(--shadow-raised);
+  --shadow-md: var(--shadow-raised);
+  --shadow-lg: var(--shadow-raised);
+  --shadow-xl: var(--shadow-overlay);
+  --shadow-2xl: var(--shadow-overlay);
+  --shadow-inner: inset 0 2px 4px 0 rgba(120, 53, 15, 0.07);
 }
 
-/* Optional Sapphire Night & Celestial Gold Palette Global Token Overrides */
-html.theme-sapphire {
-  --color-moss-deep: #041022;
-  --color-forest-earthy: #071C38;
-  --color-emerald-spark: #38BDF8;
-  --color-emerald-50: #f0f9ff;
-  --color-emerald-100: #e0f2fe;
-  --color-emerald-200: #bae6fd;
-  --color-emerald-300: #7dd3fc;
-  --color-emerald-400: #38bdf8;
-  --color-emerald-500: #0ea5e9;
-  --color-emerald-600: #0284c7;
-  --color-emerald-700: #0369a1;
-  --color-emerald-800: #075985;
-  --color-emerald-900: #0c4a6e;
-  --color-emerald-950: #05162E;
+:root {
+  /* Type Scale Tokens */
+  --text-caption: 12px;
+  --text-small: 13.5px;
+  --text-body: 16px;
+  --text-body-guide: 16px;
+  --text-lead: 18px;
+  --text-h4: 20px;
+  --text-h3: 24px;
+  --text-h2: 28px;
+  --text-h1: 36px;
+  --text-display: 46px;
+
+  /* Semantic Color Tokens - Light Mode */
+  --surface: #FAF6F0; /* Warm organic ivory canvas */
+  --surface-raised: #FFFFFF; /* Crisp elevated card surface */
+  --surface-muted: #F3ECE2; /* Soft warm earth sub-surface */
+  --ink: #1A1612; /* Deep warm espresso bistre */
+  --ink-muted: #6E6255; /* Warm umber (WCAG AA >4.8:1 on #FAF6F0) */
+  --border: #E3D8CC; /* Soft warm earth boundary */
+  --border-subtle: rgba(120, 53, 15, 0.08);
+  --accent: #C85A32; /* Katondo Terracotta primary action in light mode */
+  --accent-ink: #FFFFFF;
+  --accent-hover: #B44A22;
+  --success: #166534; /* Rich botanical forest green */
+  --warning: #D97706; /* Warm golden amber */
+  --danger: #B91C1C; /* Earthen madder rust */
+  --info: #0E7490; /* Deep Malawi water teal */
+
+  /* Terracotta Distinctive Roles */
+  --terracotta: #C85A32; /* Primary action in light mode */
+  --terracotta-harvest: #DC5C23; /* Season & harvest highlights */
+  --terracotta-warning: #933113; /* Destructive-adjacent warnings & deficits */
+
+  --radius-control: 10px;
+  --radius-card: 16px;
+  --radius-sheet: 28px;
+
+  /* Three warm-tinted elevations (warm-tinted, not black) */
+  --elevation-flat: 0 0 0 1px rgba(120, 53, 15, 0.08);
+  --elevation-raised: 0 4px 16px -2px rgba(92, 32, 16, 0.08), 0 2px 6px -1px rgba(120, 53, 15, 0.05);
+  --elevation-overlay: 0 20px 36px -8px rgba(92, 32, 16, 0.16), 0 8px 16px -4px rgba(120, 53, 15, 0.08);
+
+  --shadow-flat: var(--elevation-flat);
+  --shadow-raised: var(--elevation-raised);
+  --shadow-overlay: var(--elevation-overlay);
+
+  /* Standardized Card Padding & Section Gaps */
+  --card-padding-mobile: 16px;
+  --card-padding-desktop: 24px;
+  --section-gap-mobile: 32px;
+  --section-gap-desktop: 48px;
+}
+
+.dark {
+  /* Semantic Color Tokens - Dark Mode */
+  --surface: #071A10; /* Deep Moss Brand Foundation */
+  --surface-raised: #0D2818; /* Forest Earthy Raised Container */
+  --surface-muted: #05140C; /* Deepest Forest Base */
+  --ink: #FEF3C7; /* Brand Cream Warm Parchment */
+  --ink-muted: #A89F91; /* Soft Warm Sand (WCAG AA >5.2:1 on #0D2818) */
+  --border: rgba(245, 158, 11, 0.22); /* Radiant golden spark boundary */
+  --border-subtle: rgba(245, 158, 11, 0.12);
+  --accent: #F59E0B; /* Brand Gold Spark Highlight */
+  --accent-ink: #071A10; /* Deep moss ink on gold */
+  --accent-hover: #FBBF24;
+  --success: #4ADE80; /* Luminous emerald spring sprout */
+  --warning: #FBBF24; /* Golden maize warning */
+  --danger: #F87171; /* Earthen warm coral */
+  --info: #38BDF8; /* Pure lake cyan water */
+
+  /* Terracotta Distinctive Roles in Dark Mode */
+  --terracotta: #E06A3B; /* Radiant warm terracotta */
+  --terracotta-harvest: #F57D42; /* Vibrant harvest alert */
+  --terracotta-warning: #C2542D; /* Destructive-adjacent warning */
+
+  --elevation-flat: 0 0 0 1px rgba(245, 158, 11, 0.15);
+  --elevation-raised: 0 4px 18px -2px rgba(35, 18, 10, 0.7), 0 2px 6px -1px rgba(245, 158, 11, 0.06);
+  --elevation-overlay: 0 22px 44px -8px rgba(35, 18, 10, 0.9), 0 8px 20px -4px rgba(245, 158, 11, 0.12);
+
+  --shadow-flat: var(--elevation-flat);
+  --shadow-raised: var(--elevation-raised);
+  --shadow-overlay: var(--elevation-overlay);
 }
 
 /* Katondo Burnt Sienna, Soft Beige & Sandy Neutrals Theme Overrides */
@@ -101,40 +300,29 @@ html.theme-sienna {
   --color-emerald-950: #24130C;
 }
 
-/* Deep Midnight Blue, Crisp White & Bright Cyan Theme Overrides */
-html.theme-midnight {
-  --color-moss-deep: #040B18;
-  --color-forest-earthy: #08152C;
-  --color-emerald-spark: #22D3EE;
-  --color-emerald-50: #ecfeff;
-  --color-emerald-100: #cffafe;
-  --color-emerald-200: #a5f3fc;
-  --color-emerald-300: #67e8f9;
-  --color-emerald-400: #22d3ee;
-  --color-emerald-500: #06b6d4;
-  --color-emerald-600: #0891b2;
-  --color-emerald-700: #0e7490;
-  --color-emerald-800: #155e75;
-  --color-emerald-900: #164e63;
-  --color-emerald-950: #051226;
-}
-
-/* Minimalist Charcoal Studio (NeuroNest & Equier Graphite Aesthetic) */
-html.theme-charcoal {
-  --color-moss-deep: #121214;
-  --color-forest-earthy: #1A1A1E;
-  --color-emerald-spark: #10B981;
-  --color-emerald-50: #f4f4f5;
-  --color-emerald-100: #e4e4e7;
-  --color-emerald-200: #d4d4d8;
-  --color-emerald-300: #a1a1aa;
-  --color-emerald-400: #34d399;
-  --color-emerald-500: #10b981;
-  --color-emerald-600: #059669;
-  --color-emerald-700: #3f3f46;
-  --color-emerald-800: #27272a;
-  --color-emerald-900: #1f1f23;
-  --color-emerald-950: #141417;
+/* =========================================================================
+   FIELD MODE TOKENS: MAXIMUM-CONTRAST, LARGER TOUCH TARGETS, 18PX BODY
+   ========================================================================= */
+html.theme-field {
+  --color-moss-deep: #000000;
+  --color-forest-earthy: #000000;
+  --color-emerald-spark: #22C55E;
+  --color-surface-base: #000000;
+  --color-surface-raised: #0A0A0A;
+  --color-surface-overlay: #111111;
+  --color-surface-muted: #18181B;
+  --color-ink-base: #FFFFFF;
+  --color-ink-muted: #E4E4E7;
+  --color-ink-faint: #D4D4D8;
+  --color-border-subtle: #FFFFFF;
+  --color-border-strong: #FFFFFF;
+  --color-accent-gold: #FBBF24;
+  --color-primary-terracotta: #F97316;
+  --color-emerald-50: #052e16;
+  --color-emerald-100: #14532d;
+  --color-emerald-400: #4ade80;
+  --color-emerald-500: #22c55e;
+  --color-emerald-950: #000000;
 }
 
 /* Modern Typography Pairing Presets: Top Sans-Serif (UI) & Top Serif (Editorial & Luxury) */
@@ -179,28 +367,17 @@ html.font-swiss {
   }
 
   body {
-    @apply text-stone-800 dark:text-stone-100 antialiased font-sans text-[15.5px] sm:text-base;
+    @apply text-ink antialiased font-sans text-base;
     font-family: var(--font-sans);
-    line-height: 1.65;
-    background-color: #FAF8F5;
-    background-image: linear-gradient(180deg, #FAF8F5 0%, #F8F5EE 50%, #F5F1E8 100%);
-    background-attachment: fixed;
+    font-size: 16px;
+    line-height: 1.6;
+    background-color: var(--surface);
+    color: var(--ink);
     letter-spacing: -0.005em;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background-color 0.3s ease, color 0.3s ease;
-  }
-
-  html.theme-charcoal body {
-    background-color: #F4F4F6;
-    background-image: linear-gradient(180deg, #F7F7F8 0%, #F1F1F4 100%);
-    color: #141416;
-  }
-
-  html.theme-sapphire body {
-    background-color: #F4F8FC;
-    background-image: linear-gradient(180deg, #F6FAFE 0%, #EDF4FB 50%, #E6F0FA 100%);
   }
 
   html.theme-sienna body {
@@ -209,32 +386,11 @@ html.font-swiss {
     color: #2A1C15;
   }
 
-  html.theme-midnight body {
-    background-color: #FFFFFF;
-    background-image: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 55%, #F1F5F9 100%);
-    color: #09152B;
-  }
-
   html.dark body,
   .dark body {
-    background-color: #0A140E;
-    background-image: linear-gradient(180deg, #0A140E 0%, #0C1811 50%, #08110B 100%);
-    color: #F5F3EF;
+    background-color: var(--surface);
+    color: var(--ink);
     letter-spacing: 0.004em;
-  }
-
-  html.theme-charcoal.dark body,
-  html.theme-charcoal .dark body {
-    background-color: #121214;
-    background-image: linear-gradient(180deg, #141417 0%, #101012 100%);
-    color: #F4F4F5;
-  }
-
-  html.theme-sapphire.dark body,
-  html.theme-sapphire .dark body {
-    background-color: #040E1C;
-    background-image: linear-gradient(180deg, #040E1C 0%, #061528 50%, #030A15 100%);
-    color: #F2F7FC;
   }
 
   html.theme-sienna.dark body,
@@ -244,41 +400,67 @@ html.font-swiss {
     color: #F7EFE6;
   }
 
-  html.theme-midnight.dark body,
-  html.theme-midnight .dark body {
-    background-color: #040B18;
-    background-image: linear-gradient(180deg, #040B18 0%, #071329 50%, #02060E 100%);
-    color: #F0F9FF;
+  /* FIELD MODE: Maximum-Contrast, 18px Body, Larger Touch Targets, Thicker Borders */
+  html.theme-field body,
+  html.theme-field .dark body {
+    background-color: #000000 !important;
+    background-image: none !important;
+    color: #FFFFFF !important;
+    font-size: 18px !important;
+    line-height: 1.6 !important;
+    letter-spacing: 0.01em;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    letter-spacing: -0.014em;
-    font-family: var(--font-display);
-    color: #1c1917;
+  /* All H1 and H2 use Fraunces (weight 600, tight leading) */
+  h1, h2 {
+    font-family: var(--font-display) !important;
+    font-weight: 600 !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.024em;
+    color: var(--ink);
     text-wrap: balance;
-    line-height: 1.22;
-  }
-
-  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
-    color: #F5F3EF;
   }
 
   h1 {
-    letter-spacing: -0.024em;
+    font-size: clamp(2rem, 3.5vw, 2.375rem);
+    font-weight: 600 !important;
+    line-height: 1.14 !important;
+    letter-spacing: -0.026em;
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 2.5vw, 1.875rem);
+    font-weight: 600 !important;
+    line-height: 1.18 !important;
+    letter-spacing: -0.02em;
+  }
+
+  h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--ink);
+    letter-spacing: -0.016em;
     text-wrap: balance;
   }
 
-  h2,
-  h3,
-  h4 {
-    letter-spacing: -0.018em;
-    text-wrap: balance;
+  /* Labels: 13–14px sentence case */
+  label,
+  .label,
+  .form-label,
+  .ui-label {
+    font-size: 13.5px;
+    line-height: 1.45;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    font-weight: 500;
+    color: var(--ink);
   }
 
   p,
   li,
   blockquote {
-    line-height: 1.65;
+    line-height: 1.62;
     text-wrap: pretty;
   }
 
@@ -287,6 +469,44 @@ html.font-swiss {
   th {
     font-variant-numeric: tabular-nums;
   }
+}
+
+/* =========================================================================
+   STRICT EYEBROW & TAB CASING RULES
+   - All-caps allowed ONLY for <=2-word eyebrows at 12px with 0.08em tracking.
+   - Eyebrows over 3 words (and any >2 words) must be sentence case.
+   - Remove uppercase from pills and tabs.
+   ========================================================================= */
+.eyebrow-compact,
+.eyebrow-2word {
+  font-size: 12px;
+  line-height: 1.4;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  font-weight: 600;
+}
+
+.eyebrow-sentence,
+.eyebrow-multiword {
+  font-size: 12px;
+  line-height: 1.4;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  font-weight: 600;
+}
+
+/* User rule: Remove uppercase from pills and tabs */
+[role="tab"],
+.tab,
+.tab-button,
+.nav-tab,
+.pill,
+.badge,
+.chip,
+button[role="tab"],
+.segmented-control button {
+  text-transform: none !important;
+  letter-spacing: normal !important;
 }
 
 /* Global Readability Safeguard: Floor sub-12px micro-text to a crisp 12px (0.75rem) minimum */
@@ -356,106 +576,364 @@ html.font-swiss {
   background: radial-gradient(ellipse at 50% 10%, #0F2016 0%, #0A140E 60%, #071009 100%);
 }
 
+/* =========================================================================
+   TYPE-SCALE UTILITY CLASSES
+   ========================================================================= */
+.text-caption {
+  font-size: var(--text-caption) !important;
+  line-height: 1.4 !important;
+}
+
+.text-small {
+  font-size: var(--text-small) !important;
+  line-height: 1.45 !important;
+}
+
+.text-body {
+  font-size: var(--text-body) !important;
+  line-height: 1.6 !important;
+}
+
+.text-body-guide {
+  font-size: var(--text-body-guide) !important;
+  line-height: 1.65 !important;
+}
+
+.text-lead {
+  font-size: var(--text-lead) !important;
+  line-height: 1.5 !important;
+}
+
+.text-h4 {
+  font-family: var(--font-display) !important;
+  font-size: var(--text-h4) !important;
+  line-height: 1.25 !important;
+}
+
+.text-h3 {
+  font-family: var(--font-display) !important;
+  font-size: var(--text-h3) !important;
+  line-height: 1.25 !important;
+}
+
+.text-h2 {
+  font-family: var(--font-display) !important;
+  font-size: var(--text-h2) !important;
+  line-height: 1.2 !important;
+}
+
+.text-h1 {
+  font-family: var(--font-display) !important;
+  font-size: var(--text-h1) !important;
+  line-height: 1.15 !important;
+}
+
+.text-display {
+  font-family: var(--font-display) !important;
+  font-size: var(--text-display) !important;
+  line-height: 1.1 !important;
+}
+
+/* Long-Form Field Guide Prose Scale: 16px */
+.longform-guide,
+.field-guide-prose,
+article.prose {
+  font-size: var(--text-body-guide) !important;
+  line-height: 1.7 !important;
+}
+
+/* Semantic Action Buttons */
+.btn-terracotta {
+  background-color: var(--color-terracotta-action) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  transition: all 0.2s ease !important;
+}
+.btn-terracotta:hover {
+  background-color: var(--color-terracotta-action-hover) !important;
+}
+
+/* =========================================================================
+   EXPLICIT RADIUS, ELEVATION, PADDING & GAP UTILITY CLASSES
+   ========================================================================= */
+.rounded-control {
+  border-radius: var(--radius-control) !important;
+}
+
+.rounded-card {
+  border-radius: var(--radius-card) !important;
+}
+
+.rounded-sheet {
+  border-radius: var(--radius-sheet) !important;
+}
+
+/* Warm-tinted elevations (no cold black shadows) */
+.shadow-flat {
+  box-shadow: var(--elevation-flat) !important;
+}
+
+.shadow-raised {
+  box-shadow: var(--elevation-raised) !important;
+}
+
+.shadow-overlay {
+  box-shadow: var(--elevation-overlay) !important;
+}
+
+/* Standardized Card Padding: 16px mobile, 24px desktop */
+.card-pad {
+  padding: 16px !important;
+}
+
+@media (min-width: 640px) {
+  .card-pad {
+    padding: 24px !important;
+  }
+}
+
+/* Standardized Section Gaps: 32px mobile, 48px desktop */
+.section-gap {
+  gap: 32px !important;
+}
+
+@media (min-width: 640px) {
+  .section-gap {
+    gap: 48px !important;
+  }
+}
+
+.section-spacing {
+  margin-top: 32px !important;
+  margin-bottom: 32px !important;
+}
+
+@media (min-width: 640px) {
+  .section-spacing {
+    margin-top: 48px !important;
+    margin-bottom: 48px !important;
+  }
+}
+
+/* =========================================================================
+   COUNTRY IMAGERY TREATMENT: Subtle warm grade & hero gradient scrim
+   ========================================================================= */
+.country-image-grade {
+  filter: sepia(0.08) saturate(1.06) contrast(1.02);
+}
+
+.hero-scrim-moss {
+  background: linear-gradient(to top, rgba(7, 26, 16, 0.75) 0%, rgba(7, 26, 16, 0.35) 50%, rgba(7, 26, 16, 0) 100%) !important;
+}
+
 /* Tactile Warm Organic Sanctuary Surfaces & Layering */
 .glass-surface,
 .card-standard {
+  border-radius: var(--radius-card);
+  padding: var(--card-padding-mobile);
   @apply bg-white/90 dark:bg-[#0E1D14]/90 backdrop-blur-xl border border-stone-200/90 dark:border-emerald-800/50 text-stone-800 dark:text-stone-100 transition-all duration-300 ease-out;
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.65),
-    0 10px 28px -8px rgba(15, 23, 42, 0.07),
-    0 2px 6px -1px rgba(15, 23, 42, 0.04);
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.75),
+    0 10px 24px -6px rgba(92, 32, 16, 0.08),
+    0 2px 6px -1px rgba(120, 53, 15, 0.04);
+}
+
+@media (min-width: 640px) {
+  .glass-surface,
+  .card-standard {
+    padding: var(--card-padding-desktop);
+  }
 }
 
 .dark .glass-surface,
 .dark .card-standard {
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.12),
-    inset 0 -1px 0 0 rgba(0, 0, 0, 0.45),
-    0 16px 36px -10px rgba(0, 0, 0, 0.55),
-    0 4px 10px -2px rgba(0, 0, 0, 0.35);
+    inset 0 1px 0 0 rgba(245, 158, 11, 0.14),
+    inset 0 -1px 0 0 rgba(4, 20, 10, 0.45),
+    0 16px 36px -10px rgba(4, 20, 10, 0.75),
+    0 4px 10px -2px rgba(245, 158, 11, 0.06);
 }
 
 /* Enhanced 3D Glassmorphism & Specular Depth System */
 .glass-depth-card {
+  border-radius: var(--radius-card);
   @apply bg-white/85 dark:bg-[#0C1B14]/85 backdrop-blur-2xl border border-white/70 dark:border-white/12 transition-all duration-300 ease-out;
   box-shadow:
     inset 0 1px 0 0 rgba(255, 255, 255, 0.8),
-    inset 0 -1px 0 0 rgba(15, 23, 42, 0.05),
-    0 14px 34px -10px rgba(15, 23, 42, 0.09),
-    0 4px 10px -2px rgba(15, 23, 42, 0.05);
+    inset 0 -1px 0 0 rgba(92, 32, 16, 0.04),
+    0 14px 32px -8px rgba(92, 32, 16, 0.09),
+    0 4px 10px -2px rgba(120, 53, 15, 0.05);
 }
 
 .dark .glass-depth-card {
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.16),
-    inset 0 -1px 0 0 rgba(0, 0, 0, 0.5),
-    0 20px 44px -12px rgba(0, 0, 0, 0.65),
-    0 6px 16px -4px rgba(0, 0, 0, 0.4);
+    inset 0 1px 0 0 rgba(245, 158, 11, 0.16),
+    inset 0 -1px 0 0 rgba(4, 20, 10, 0.5),
+    0 20px 42px -12px rgba(4, 20, 10, 0.8),
+    0 6px 16px -4px rgba(245, 158, 11, 0.08);
 }
 
-html.theme-sapphire.dark .glass-surface,
-html.theme-sapphire.dark .card-standard,
-html.theme-sapphire.dark .glass-depth-card {
-  background-color: rgba(7, 25, 48, 0.88) !important;
-  border-color: rgba(56, 189, 248, 0.25) !important;
+/* =========================================================================
+   FIELD MODE UTILITY OVERRIDES:
+   1. Maximum-Contrast & 18px Body Copy
+   2. Larger Touch Targets (min 48px to 52px)
+   3. Thicker Borders (2.5px solid high-contrast)
+   4. No Translucency, No Backdrop-Filter, No Blur
+   5. No Decorative Backgrounds, Glow Orbs, or Radial Gradients
+   ========================================================================= */
+html.theme-field,
+html.theme-field * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  text-shadow: none !important;
 }
 
-html.theme-charcoal.dark .glass-surface,
-html.theme-charcoal.dark .card-standard,
-html.theme-charcoal.dark .glass-depth-card,
-html.theme-charcoal.dark .glass-depth-emerald {
-  background-color: rgba(24, 24, 27, 0.94) !important;
-  border-color: rgba(255, 255, 255, 0.09) !important;
-  box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
-    0 14px 32px -10px rgba(0, 0, 0, 0.65) !important;
+/* 18px body font floor across paragraphs, lists, labels, inputs */
+html.theme-field p,
+html.theme-field li,
+html.theme-field label,
+html.theme-field td,
+html.theme-field th,
+html.theme-field blockquote,
+html.theme-field dl,
+html.theme-field dd,
+html.theme-field dt {
+  font-size: 18px !important;
+  line-height: 1.6 !important;
+  color: #FFFFFF !important;
 }
 
-html.theme-charcoal .glass-depth-emerald-hero {
-  background-color: rgba(20, 20, 23, 0.88) !important;
-  border-color: rgba(255, 255, 255, 0.12) !important;
-  box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
-    0 20px 44px -12px rgba(0, 0, 0, 0.75) !important;
+/* Larger Touch Targets in Field Mode (min 48px height) */
+html.theme-field button,
+html.theme-field a[role="button"],
+html.theme-field input[type="button"],
+html.theme-field input[type="submit"],
+html.theme-field input[type="text"],
+html.theme-field input[type="number"],
+html.theme-field input[type="search"],
+html.theme-field input[type="email"],
+html.theme-field select,
+html.theme-field .touch-target {
+  min-height: 48px !important;
+  touch-action: manipulation;
 }
 
-html.theme-charcoal .glass-depth-nav-emerald {
-  background-color: rgba(18, 18, 20, 0.96) !important;
-  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+/* Thicker High-Contrast Borders (2.5px solid) */
+html.theme-field .border,
+html.theme-field [class*="border-"],
+html.theme-field .card,
+html.theme-field .card-standard,
+html.theme-field .rounded-card,
+html.theme-field .rounded-2xl,
+html.theme-field .rounded-3xl,
+html.theme-field .glass-depth-card,
+html.theme-field .glass-depth-emerald,
+html.theme-field .glass-surface {
+  border-width: 2.5px !important;
+  border-color: #FFFFFF !important;
+  border-style: solid !important;
+  box-shadow: none !important;
+}
+
+html.theme-field button {
+  border-width: 2.5px !important;
+}
+
+/* Solid Opaque Surfaces — Zero Translucency or Blur */
+html.theme-field .glass-surface,
+html.theme-field .card-standard,
+html.theme-field .glass-depth-card,
+html.theme-field .glass-depth-emerald,
+html.theme-field .glass-depth-emerald-hero,
+html.theme-field .glass-depth-nav-emerald,
+html.theme-field [class*="bg-stone-900"],
+html.theme-field [class*="bg-stone-950"],
+html.theme-field [class*="bg-emerald-950"],
+html.theme-field [class*="bg-surface-raised"],
+html.theme-field [class*="bg-white/"],
+html.theme-field [class*="bg-black/"],
+html.theme-field [class*="bg-slate-950/"] {
+  background-color: #0A0A0A !important;
+  background-image: none !important;
+  opacity: 1 !important;
+}
+
+/* Remove Decorative Backgrounds & Glowing Blur Orbs */
+html.theme-field [class*="blur-3xl"],
+html.theme-field [class*="blur-2xl"],
+html.theme-field [class*="blur-xl"],
+html.theme-field .decorative-glow,
+html.theme-field .radial-gradient-mesh {
+  display: none !important;
+}
+
+/* Maximum Contrast for Text Elements */
+html.theme-field h1,
+html.theme-field h2,
+html.theme-field h3,
+html.theme-field h4,
+html.theme-field h5,
+html.theme-field h6 {
+  color: #FFFFFF !important;
+}
+
+html.theme-field .text-stone-400,
+html.theme-field .text-stone-500,
+html.theme-field .text-stone-600,
+html.theme-field .text-slate-400,
+html.theme-field .text-slate-500,
+html.theme-field .text-slate-600,
+html.theme-field .text-ink-muted,
+html.theme-field .text-ink-faint {
+  color: #E4E4E7 !important;
 }
 
 /* Highland Emerald & Golden Dawn 3D Glassmorphic Surface (Default Theme) */
 .glass-depth-emerald {
+  border-radius: var(--radius-card);
   @apply bg-white/90 dark:bg-[#0B1D13]/88 backdrop-blur-2xl border border-stone-200/90 dark:border-emerald-500/25 transition-all duration-300 ease-out;
   box-shadow:
     inset 0 1px 0 0 rgba(255, 255, 255, 0.88),
-    inset 0 -1px 0 0 rgba(20, 83, 45, 0.07),
-    0 16px 38px -10px rgba(6, 78, 59, 0.10),
-    0 4px 12px -2px rgba(28, 25, 23, 0.05);
+    inset 0 -1px 0 0 rgba(120, 53, 15, 0.05),
+    0 16px 36px -10px rgba(92, 32, 16, 0.09),
+    0 4px 12px -2px rgba(120, 53, 15, 0.05);
 }
 
 .dark .glass-depth-emerald {
   box-shadow:
-    inset 0 1px 0 0 rgba(110, 231, 183, 0.22),
-    inset 0 -1px 0 0 rgba(2, 12, 7, 0.65),
-    0 22px 48px -12px rgba(2, 10, 6, 0.78),
-    0 6px 16px -3px rgba(16, 185, 129, 0.16);
+    inset 0 1px 0 0 rgba(245, 158, 11, 0.18),
+    inset 0 -1px 0 0 rgba(35, 18, 10, 0.65),
+    0 22px 46px -12px rgba(35, 18, 10, 0.82),
+    0 6px 16px -3px rgba(245, 158, 11, 0.12);
 }
 
 .glass-depth-emerald-hero {
-  @apply bg-[#05180E]/80 backdrop-blur-2xl border border-emerald-400/25 transition-all duration-300 ease-out;
+  border-radius: var(--radius-sheet);
+  @apply bg-[#FAF6F0] text-[#1A1612] border border-[#E3D8CC] transition-all duration-300 ease-out;
   box-shadow:
-    inset 0 1px 0 0 rgba(167, 243, 208, 0.26),
-    inset 0 -1px 0 0 rgba(2, 10, 6, 0.65),
-    0 24px 52px -12px rgba(2, 10, 6, 0.80),
-    0 6px 18px -4px rgba(16, 185, 129, 0.18);
+    0 12px 36px -8px rgba(92, 32, 16, 0.12),
+    0 4px 12px -2px rgba(120, 53, 15, 0.06);
+}
+
+.dark .glass-depth-emerald-hero {
+  @apply bg-[#05180E]/85 text-[#FEF3C7] border-emerald-400/25;
+  box-shadow:
+    inset 0 1px 0 0 rgba(254, 243, 199, 0.22),
+    inset 0 -1px 0 0 rgba(35, 18, 10, 0.65),
+    0 24px 52px -12px rgba(35, 18, 10, 0.85),
+    0 6px 18px -4px rgba(245, 158, 11, 0.15);
 }
 
 .glass-depth-nav-emerald {
-  @apply bg-[#04130B]/92 backdrop-blur-2xl border-b border-emerald-500/25;
+  @apply bg-[#FAF6F0]/95 backdrop-blur-2xl border-b border-[#E3D8CC] text-[#1A1612];
+  box-shadow: 0 4px 16px -2px rgba(92, 32, 16, 0.06);
+}
+
+.dark .glass-depth-nav-emerald {
+  @apply bg-[#04130B]/92 backdrop-blur-2xl border-b border-emerald-500/25 text-[#FEF3C7];
   box-shadow:
-    inset 0 1px 0 0 rgba(167, 243, 208, 0.16),
-    0 12px 32px -8px rgba(2, 10, 6, 0.65);
+    inset 0 1px 0 0 rgba(254, 243, 199, 0.15),
+    0 12px 30px -8px rgba(35, 18, 10, 0.7);
 }
 
 /* Lake Malawi Sapphire Blue Glassmorphic Surface (Optional Blue Theme) */
@@ -655,6 +1133,16 @@ html.theme-midnight .glass-depth-blue-hero {
   font-family: var(--font-sans) !important;
 }
 
+/* Muted, low-saturation earth-toned basemap tiles so thematic layers stand out */
+.leaflet-tile-pane {
+  filter: saturate(0.38) contrast(1.04) brightness(0.95) sepia(0.08);
+  transition: filter 0.3s ease;
+}
+
+.dark .leaflet-tile-pane {
+  filter: saturate(0.32) contrast(1.08) brightness(0.86) sepia(0.12);
+}
+
 .leaflet-tooltip {
   background: transparent !important;
   border: none !important;
@@ -759,6 +1247,19 @@ html.theme-midnight .glass-depth-blue-hero {
   transform: scale(0.7) translateY(-6px) !important;
 }
 
+/* REQUIREMENT: Full-text labels on hover over district centroid */
+.district-centroid-badge-container:hover .district-badge-nametag,
+.district-centroid-badge-container:hover .district-badge-nametag.collision-hidden {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: scale(1) translateY(0) !important;
+  z-index: 9999 !important;
+  background: rgba(2, 6, 23, 0.98) !important;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.85) !important;
+}
+
 .district-badge-nametag.offset-top {
   transform: translateY(-46px) !important;
   border-color: rgba(56, 189, 248, 0.5) !important;
@@ -807,6 +1308,8 @@ html.theme-midnight .glass-depth-blue-hero {
   pointer-events: auto !important;
   cursor: pointer;
   user-select: none;
+  overflow: visible !important;
+  width: max-content !important;
 }
 
 .parcel-cluster-badge {
@@ -820,6 +1323,9 @@ html.theme-midnight .glass-depth-blue-hero {
   border-radius: 9999px;
   box-shadow: 0 0 16px rgba(16, 185, 129, 0.45), 0 6px 20px rgba(0, 0, 0, 0.7);
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+  overflow: visible !important;
+  white-space: nowrap !important;
+  width: max-content !important;
 }
 
 .parcel-cluster-badge:hover {
@@ -841,15 +1347,19 @@ html.theme-midnight .glass-depth-blue-hero {
   justify-content: center;
   font-family: var(--font-mono);
   box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+  flex-shrink: 0;
 }
 
 .cluster-label-text {
   font-size: 11px;
   font-weight: 700;
   color: #f1f5f9;
-  white-space: nowrap;
+  white-space: nowrap !important;
   letter-spacing: -0.01em;
   font-family: var(--font-sans);
+  overflow: visible !important;
+  text-overflow: clip !important;
+  display: inline-block;
 }
 
 .cluster-glow-ring {
@@ -910,6 +1420,34 @@ html.theme-midnight .glass-depth-blue-hero {
   color: #022c22 !important;
   box-shadow: 0 0 28px rgba(52, 211, 153, 0.95), 0 0 0 4px rgba(52, 211, 153, 0.3);
   transform: scale(1.25);
+}
+
+/* Dashed visual convention: unsourced illustrative markers get dashed outline & 70% fill */
+.parcel-pin-badge.dashed-illustrative {
+  border: 2px dashed #f59e0b !important;
+  background: rgba(2, 6, 23, 0.70) !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.45), 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.parcel-pin-badge.dashed-illustrative:hover {
+  border-color: #fbbf24 !important;
+  box-shadow: 0 0 18px rgba(245, 158, 11, 0.75), 0 6px 18px rgba(0, 0, 0, 0.7);
+}
+
+.parcel-cluster-badge.dashed-illustrative {
+  border: 2px dashed #f59e0b !important;
+  background: rgba(2, 6, 23, 0.70) !important;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.4), 0 6px 16px rgba(0, 0, 0, 0.6);
+}
+
+.parcel-cluster-badge.dashed-illustrative:hover {
+  border-color: #fbbf24 !important;
+  box-shadow: 0 0 22px rgba(245, 158, 11, 0.7), 0 8px 22px rgba(0, 0, 0, 0.75);
+}
+
+.parcel-illustrative-tag,
+.parcel-pin-illustrative-tag {
+  display: none !important;
 }
 
 /* ==========================================================================
@@ -1001,8 +1539,9 @@ path.district-glow-subtle {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
   }
+}/* ==========================================================================
+   DESIGN SYSTEM STANDARDIZED ICONS: STROKE 1.75 & LUCIDE CHROMING
+   ========================================================================== */
+svg.lucide {
+  stroke-width: 1.75;
 }
-
-
-
-

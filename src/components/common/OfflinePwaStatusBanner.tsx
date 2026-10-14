@@ -117,7 +117,7 @@ export function OfflinePwaStatusBanner({ compact = false }: { compact?: boolean 
           onClick={handleSyncOfflineVault}
           disabled={isSyncingVault}
           className={cn(
-            'inline-flex items-center gap-1.5 text-[11px] font-mono transition-colors cursor-pointer hover:text-amber-300',
+            'inline-flex items-center gap-1.5 text-caption font-mono transition-colors cursor-pointer hover:text-amber-300',
             isOnline
               ? 'text-emerald-300'
               : 'text-amber-400 font-semibold'
@@ -172,97 +172,72 @@ export function OfflinePwaStatusBanner({ compact = false }: { compact?: boolean 
 
   return (
     <>
-      {/* Persistent Offline Mode Banner when device loses network connectivity */}
-      {!isOnline && (
-        <div
-          role="status"
-          aria-live="polite"
-          className="w-full bg-amber-500 text-stone-950 px-4 py-2.5 border-b border-amber-600 shadow-sm relative z-40"
-        >
-          <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
-            <div className="flex items-center gap-2.5 font-semibold">
-              <WifiOff size={15} className="shrink-0" />
-              <span>
-                Offline Mode Active — Viewing Cached Outpost Vault ({syncStatus.districtsCount} Malawi Districts,{' '}
-                {syncStatus.soilsCount} FAO HWSD v2.0 Soil Orders, {syncStatus.skillsCount} Field Guides &{' '}
-                {syncStatus.seasonsCount} Seasonal Tasks).
-              </span>
-            </div>
-            <div className="flex items-center gap-3 font-mono text-[11px]">
-              <span>Last Vault Sync: {syncStatus.lastSyncFormatted}</span>
-              <button
-                type="button"
-                onClick={() => setShowVaultDetails((prev) => !prev)}
-                className="px-2.5 py-1 rounded-lg bg-stone-950 text-amber-300 font-semibold hover:bg-stone-800 transition-colors cursor-pointer"
-              >
-                {showVaultDetails ? 'Hide Vault' : 'Inspect Offline Vault'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Interactive Offline Vault & PWA Install Bar */}
-      <div className="w-full bg-[#F2EFE8] dark:bg-[#08130C] border-b border-stone-200/80 dark:border-emerald-950/80 px-4 sm:px-6 py-2 text-xs">
-        <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-2">
-          <div className="flex flex-wrap items-center gap-2 text-stone-700 dark:text-stone-300">
-            <span
-              className={cn(
-                'inline-flex items-center gap-1.5 font-mono font-semibold',
-                isOnline
-                  ? 'text-emerald-800 dark:text-emerald-400'
-                  : 'text-amber-700 dark:text-amber-400'
-              )}
-            >
-              {isOnline ? <Wifi size={13} /> : <WifiOff size={13} />}
-              <span>{isOnline ? 'Online · Offline Vault Synced' : 'Offline · Serving Cached Data'}</span>
-            </span>
-            <span className="text-stone-400 dark:text-stone-600" aria-hidden="true">
-              ·
-            </span>
-            <span className="font-mono text-[11px] text-stone-600 dark:text-stone-400">
-              {syncStatus.districtsCount} Districts · {syncStatus.soilsCount} FAO Soil Orders ·{' '}
-              {syncStatus.pitsCount} Pit Specs · {syncStatus.skillsCount + syncStatus.seasonsCount} Guides Cached
+      {/* Single Unified Offline / Vault Banner */}
+      <div
+        role="status"
+        aria-live="polite"
+        className={cn(
+          'w-full px-4 py-2 text-xs border-b transition-colors relative z-40',
+          !isOnline
+            ? 'bg-amber-500 text-stone-950 border-amber-600 shadow-sm'
+            : 'bg-[#F2EFE8] dark:bg-[#08130C] border-stone-200/80 dark:border-emerald-950/80 text-stone-800 dark:text-stone-200'
+        )}
+      >
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2.5">
+          <div className="flex items-center gap-2 font-semibold">
+            {!isOnline ? <WifiOff size={14} className="shrink-0" /> : <Wifi size={14} className="shrink-0 text-emerald-600 dark:text-emerald-400" />}
+            <span>
+              {!isOnline
+                ? `Offline Mode Active — Cached Outpost Vault (${syncStatus.districtsCount} Districts · ${syncStatus.skillsCount} Field Guides · Synced ${syncStatus.lastSyncFormatted})`
+                : `Offline Vault Ready (${syncStatus.districtsCount} Districts · ${syncStatus.skillsCount} Guides)`}
             </span>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={handleSyncOfflineVault}
               disabled={isSyncingVault}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-stone-900 border border-stone-200 dark:border-emerald-900/60 text-stone-700 dark:text-stone-200 hover:text-emerald-800 dark:hover:text-emerald-300 font-semibold text-[11px] transition-colors cursor-pointer"
-              title="Refresh local offline cache of all 28 district profiles, soil taxonomy, and planting guides"
+              className={cn(
+                'px-2.5 py-1 rounded-lg text-caption font-mono font-semibold inline-flex items-center gap-1 transition-colors cursor-pointer',
+                !isOnline
+                  ? 'bg-amber-600/40 hover:bg-amber-600/60 text-stone-950 border border-stone-950/20'
+                  : 'bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300'
+              )}
             >
-              <RefreshCw size={11} className={cn(isSyncingVault && 'animate-spin')} />
-              <span>{isSyncingVault ? 'Syncing Vault...' : `Vault Synced (${syncStatus.lastSyncFormatted})`}</span>
+              <RefreshCw size={10} className={cn(isSyncingVault && 'animate-spin')} />
+              <span>{isSyncingVault ? 'Syncing...' : 'Sync Vault'}</span>
             </button>
 
             <button
               type="button"
               onClick={() => setShowVaultDetails((prev) => !prev)}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-stone-200/70 dark:bg-emerald-950/60 text-stone-800 dark:text-emerald-300 font-semibold text-[11px] hover:bg-stone-300/70 transition-colors cursor-pointer"
+              className={cn(
+                'px-2.5 py-1 rounded-lg text-caption font-semibold transition-colors cursor-pointer',
+                !isOnline
+                  ? 'bg-stone-950 text-amber-300 hover:bg-stone-800'
+                  : 'bg-emerald-800 hover:bg-emerald-700 text-white'
+              )}
             >
-              <Database size={11} />
-              <span>{showVaultDetails ? 'Close Vault' : 'Offline Vault Status'}</span>
+              <Database size={11} className="inline mr-1" />
+              <span>{showVaultDetails ? 'Close Details' : 'Vault Details'}</span>
             </button>
 
             {!isInstalled && deferredPrompt && (
               <button
                 type="button"
                 onClick={handleInstallClick}
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-800 hover:bg-emerald-700 text-white font-semibold text-[11px] transition-colors cursor-pointer"
+                className="px-2.5 py-1 rounded-lg bg-emerald-900 hover:bg-emerald-800 text-white text-caption font-semibold transition-colors cursor-pointer inline-flex items-center gap-1"
               >
                 <Download size={11} />
-                <span>Install Offline App</span>
+                <span>Install App</span>
               </button>
             )}
-
             {!isInstalled && !deferredPrompt && isIOS && (
               <button
                 type="button"
                 onClick={() => setShowIOSGuide(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-800 hover:bg-emerald-700 text-white font-semibold text-[11px] transition-colors cursor-pointer"
+                className="px-2.5 py-1 rounded-lg bg-emerald-800 hover:bg-emerald-700 text-white font-semibold text-caption transition-colors cursor-pointer inline-flex items-center gap-1"
               >
                 <Download size={11} />
                 <span>Install on iOS</span>
@@ -293,50 +268,54 @@ export function OfflinePwaStatusBanner({ compact = false }: { compact?: boolean 
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
               <div className="p-3 rounded-xl bg-stone-50 dark:bg-stone-900/70 border border-stone-200/70 dark:border-emerald-900/40">
-                <span className="text-[10px] text-stone-500 dark:text-stone-400 block font-sans">
+                <span className="text-caption text-stone-500 dark:text-stone-400 block font-sans">
                   Malawi District Profiles
                 </span>
                 <span className="font-bold text-stone-900 dark:text-white">
                   {syncStatus.districtsCount} / 28 Cached
                 </span>
-                <span className="text-[10px] text-emerald-700 dark:text-emerald-400 block mt-0.5">
-                  ✓ Available Offline
+                <span className="text-caption text-emerald-700 dark:text-emerald-400 flex items-center gap-1 mt-0.5">
+                  <CheckCircle2 size={16} strokeWidth={1.75} className="shrink-0 text-emerald-500" />
+                  <span>Available Offline</span>
                 </span>
               </div>
 
               <div className="p-3 rounded-xl bg-stone-50 dark:bg-stone-900/70 border border-stone-200/70 dark:border-emerald-900/40">
-                <span className="text-[10px] text-stone-500 dark:text-stone-400 block font-sans">
+                <span className="text-caption text-stone-500 dark:text-stone-400 block font-sans">
                   FAO HWSD v2.0 Soil Orders
                 </span>
                 <span className="font-bold text-stone-900 dark:text-white">
                   {syncStatus.soilsCount} Orders & {syncStatus.pitsCount} Pits
                 </span>
-                <span className="text-[10px] text-emerald-700 dark:text-emerald-400 block mt-0.5">
-                  ✓ Available Offline
+                <span className="text-caption text-emerald-700 dark:text-emerald-400 flex items-center gap-1 mt-0.5">
+                  <CheckCircle2 size={16} strokeWidth={1.75} className="shrink-0 text-emerald-500" />
+                  <span>Available Offline</span>
                 </span>
               </div>
 
               <div className="p-3 rounded-xl bg-stone-50 dark:bg-stone-900/70 border border-stone-200/70 dark:border-emerald-900/40">
-                <span className="text-[10px] text-stone-500 dark:text-stone-400 block font-sans">
+                <span className="text-caption text-stone-500 dark:text-stone-400 block font-sans">
                   Planting & Seasonal Guides
                 </span>
                 <span className="font-bold text-stone-900 dark:text-white">
                   {syncStatus.skillsCount} Skills · {syncStatus.seasonsCount} Almanac
                 </span>
-                <span className="text-[10px] text-emerald-700 dark:text-emerald-400 block mt-0.5">
-                  ✓ Available Offline
+                <span className="text-caption text-emerald-700 dark:text-emerald-400 flex items-center gap-1 mt-0.5">
+                  <CheckCircle2 size={16} strokeWidth={1.75} className="shrink-0 text-emerald-500" />
+                  <span>Available Offline</span>
                 </span>
               </div>
 
               <div className="p-3 rounded-xl bg-stone-50 dark:bg-stone-900/70 border border-stone-200/70 dark:border-emerald-900/40">
-                <span className="text-[10px] text-stone-500 dark:text-stone-400 block font-sans">
+                <span className="text-caption text-stone-500 dark:text-stone-400 block font-sans">
                   Weather & Satellite Cache
                 </span>
                 <span className="font-bold text-stone-900 dark:text-white">
                   5 Regions + {syncStatus.telemetryCachedCount} Live Syncs
                 </span>
-                <span className="text-[10px] text-emerald-700 dark:text-emerald-400 block mt-0.5">
-                  ✓ Service Worker v5 Active
+                <span className="text-caption text-emerald-700 dark:text-emerald-400 flex items-center gap-1 mt-0.5">
+                  <CheckCircle2 size={16} strokeWidth={1.75} className="shrink-0 text-emerald-500" />
+                  <span>Service Worker v5 Active</span>
                 </span>
               </div>
             </div>

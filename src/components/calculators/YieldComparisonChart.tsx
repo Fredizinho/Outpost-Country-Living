@@ -6,9 +6,11 @@ import {
 } from 'recharts';
 import { 
   Sprout, TrendingUp, DollarSign, Calendar, Layers, ShieldCheck, 
-  Info, ArrowUpRight, Sparkles, CheckCircle2, ChevronRight, Scale
+  Info, ArrowUpRight, Sparkles, CheckCircle2, ChevronRight, Scale,
+  AlertTriangle
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { CHART_PALETTE_6, CHART_TOKENS } from '@/lib/chartTokens';
 
 export interface CropData {
   id: string;
@@ -180,7 +182,7 @@ export function YieldComparisonChart() {
       revenue: currency === 'USD' ? Math.round(tradRevenueMwk / exchangeRate) : tradRevenueMwk,
       cost: currency === 'USD' ? Math.round(tradCostMwk / exchangeRate) : tradCostMwk,
       netProfit: currency === 'USD' ? Math.round(tradNetProfitMwk / exchangeRate) : tradNetProfitMwk,
-      color: '#e11d48'
+      color: CHART_PALETTE_6[1] // Katondo Terracotta
     },
     {
       method: 'Improved / Regenerative',
@@ -189,7 +191,7 @@ export function YieldComparisonChart() {
       revenue: currency === 'USD' ? Math.round(impRevenueMwk / exchangeRate) : impRevenueMwk,
       cost: currency === 'USD' ? Math.round(impCostMwk / exchangeRate) : impCostMwk,
       netProfit: currency === 'USD' ? Math.round(impNetProfitMwk / exchangeRate) : impNetProfitMwk,
-      color: '#059669'
+      color: CHART_PALETTE_6[0] // Forest Green
     }
   ];
 
@@ -251,17 +253,19 @@ export function YieldComparisonChart() {
     { subject: 'Climate Resilience', Traditional: 20, Improved: 95, fullMark: 100 },
   ];
 
-  // Custom Recharts Tooltip Component
+  // Custom Recharts Tooltip Component styled like a card with warm tones
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-slate-900 text-white p-4 rounded-2xl shadow-2xl border border-slate-700 text-xs font-sans">
-          <p className="font-bold text-amber-400 mb-1">{label}</p>
+        <div className="bg-stone-950/95 text-stone-100 p-4 rounded-card shadow-raised border border-stone-800 text-xs font-sans max-w-xs backdrop-blur-md">
+          <p className="font-bold text-amber-300 font-mono mb-1.5 pb-1 border-b border-white/10 text-sm">{label}</p>
           {payload.map((entry: any, index: number) => (
-            <div key={`item-${index}`} className="flex items-center gap-2 py-0.5">
-              <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: entry.color || entry.fill }} />
-              <span className="text-slate-300 font-medium">{entry.name || entry.dataKey}:</span>
-              <span className="font-extrabold text-white">
+            <div key={`item-${index}`} className="flex items-center justify-between gap-3 py-1">
+              <div className="flex items-center gap-1.5 min-w-0">
+                <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ backgroundColor: entry.color || entry.fill }} />
+                <span className="text-stone-300 font-medium truncate">{entry.name || entry.dataKey}:</span>
+              </div>
+              <span className="font-bold font-mono text-white shrink-0">
                 {typeof entry.value === 'number' && entry.dataKey && entry.dataKey.toLowerCase().includes('revenue')
                   ? formatMoney(entry.value)
                   : typeof entry.value === 'number'
@@ -282,7 +286,7 @@ export function YieldComparisonChart() {
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-slate-200/80 pb-6">
         <div>
           <div className="flex items-center gap-2">
-            <span className="bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full border border-emerald-200">
+            <span className="bg-emerald-100 text-emerald-800 text-caption font-black uppercase px-2.5 py-0.5 rounded-full border border-emerald-200">
               Interactive Agronomic Visualization
             </span>
             <span className="text-xs text-slate-500 font-bold">Malawi Homestead Yield Simulator</span>
@@ -336,7 +340,7 @@ export function YieldComparisonChart() {
 
       {/* Crop Selector Chips */}
       <div className="flex flex-col gap-2">
-        <span className="text-[10px] font-black uppercase text-slate-500 tracking-wider">
+        <span className="text-caption font-black uppercase text-slate-500 tracking-wider">
           Select Crop Profile:
         </span>
         <div className="flex flex-wrap gap-2">
@@ -356,7 +360,7 @@ export function YieldComparisonChart() {
                 <Sprout size={15} className={isSelected ? "text-amber-400" : "text-emerald-700"} />
                 <div className="flex flex-col text-left">
                   <span className="font-extrabold leading-tight">{crop.name}</span>
-                  <span className={cn("text-[9px] font-medium", isSelected ? "text-emerald-200" : "text-slate-400")}>
+                  <span className={cn("text-caption font-medium", isSelected ? "text-emerald-200" : "text-slate-400")}>
                     {crop.chinyanjaName}
                   </span>
                 </div>
@@ -369,7 +373,7 @@ export function YieldComparisonChart() {
       {/* Summary KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-emerald-950 text-white p-5 rounded-3xl border border-emerald-900 shadow-lg flex flex-col justify-between">
-          <span className="text-[9px] font-black uppercase tracking-widest text-emerald-400">
+          <span className="text-caption font-black uppercase tracking-widest text-emerald-400">
             Traditional Harvest ({acres} Acres)
           </span>
           <div className="my-2">
@@ -378,14 +382,14 @@ export function YieldComparisonChart() {
             </span>
             <span className="text-xs text-emerald-300 font-bold ml-2">50kg Bags</span>
           </div>
-          <span className="text-[10px] text-slate-400 font-medium">
+          <span className="text-caption text-slate-400 font-medium">
             ~{(tradTotalBags * 0.05).toFixed(1)} Metric Tonnes
           </span>
         </div>
 
         <div className="bg-emerald-900 text-white p-5 rounded-3xl border border-emerald-700 shadow-lg flex flex-col justify-between relative overflow-hidden">
           <div className="absolute -right-4 -bottom-4 w-20 h-20 bg-emerald-700/40 rounded-full blur-xl" />
-          <span className="text-[9px] font-black uppercase tracking-widest text-amber-300">
+          <span className="text-caption font-black uppercase tracking-widest text-amber-300">
             Improved / Sasakawa Yield
           </span>
           <div className="my-2">
@@ -394,13 +398,13 @@ export function YieldComparisonChart() {
             </span>
             <span className="text-xs text-emerald-200 font-bold ml-2">50kg Bags</span>
           </div>
-          <span className="text-[10px] text-emerald-200 font-bold flex items-center gap-1">
+          <span className="text-caption text-emerald-200 font-bold flex items-center gap-1">
             <TrendingUp size={12} className="text-amber-400" /> +{percentageGain}% Increase (+{bagGain} Bags)
           </span>
         </div>
 
         <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-md flex flex-col justify-between">
-          <span className="text-[9px] font-black uppercase tracking-widest text-slate-500">
+          <span className="text-caption font-black uppercase tracking-widest text-slate-500">
             Gross Harvest Value
           </span>
           <div className="my-2">
@@ -409,13 +413,13 @@ export function YieldComparisonChart() {
             </span>
             <span className="text-xs text-slate-400 font-bold ml-1">Total</span>
           </div>
-          <span className="text-[10px] text-emerald-700 font-extrabold">
+          <span className="text-caption text-emerald-700 font-extrabold">
             vs {formatMoney(tradRevenueMwk)} Traditional
           </span>
         </div>
 
         <div className="bg-amber-500/10 border border-amber-400/40 p-5 rounded-3xl shadow-md flex flex-col justify-between">
-          <span className="text-[9px] font-black uppercase tracking-widest text-amber-800">
+          <span className="text-caption font-black uppercase tracking-widest text-amber-800">
             Net Farmer Profit Gain
           </span>
           <div className="my-2">
@@ -423,7 +427,7 @@ export function YieldComparisonChart() {
               +{formatMoney(netProfitGainMwk)}
             </span>
           </div>
-          <span className="text-[10px] text-amber-900 font-bold">
+          <span className="text-caption text-amber-900 font-bold">
             After deducting extra seeds & compost costs
           </span>
         </div>
@@ -481,7 +485,7 @@ export function YieldComparisonChart() {
           </button>
         </div>
 
-        <div className="text-[10px] font-bold text-slate-500 px-2">
+        <div className="text-caption font-bold text-slate-500 px-2">
           Visualization Mode: <span className="text-emerald-900 uppercase font-black">{chartView}</span>
         </div>
       </div>
@@ -508,9 +512,9 @@ export function YieldComparisonChart() {
             <div className="h-72 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={singleCropBarData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(120, 113, 108, 0.18)" vertical={false} />
                   <XAxis dataKey="method" tick={{ fill: '#0f172a', fontWeight: 'bold', fontSize: 12 }} />
-                  <YAxis tick={{ fill: '#64748b', fontSize: 11 }} label={{ value: currentCrop.unitLabel, angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fill: '#64748b', fontSize: 11 } }} />
+                  <YAxis tick={{ fill: '#475569', fontSize: 12 }} label={{ value: currentCrop.unitLabel, angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fill: '#475569', fontSize: 12 } }} />
                   <Tooltip content={<CustomTooltip />} />
                   <Bar dataKey="yieldBags" name="Harvest Output (50kg Bags)" radius={[12, 12, 0, 0]}>
                     {singleCropBarData.map((entry, index) => (
@@ -526,13 +530,13 @@ export function YieldComparisonChart() {
         {/* VIEW 2: REVENUE & PROFIT COMPARISON */}
         {chartView === 'revenue' && (
           <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-slate-200/80">
               <div>
                 <h4 className="font-bold text-emerald-950 text-base">
-                  Financial Return & Profit Margin ({currentCrop.name})
+                  Financial Return &amp; Profit Margin ({currentCrop.name})
                 </h4>
                 <p className="text-xs text-slate-500">
-                  Comparing Gross Harvest Revenue vs Inputs Cost vs Net Profit ({currency})
+                  Gross Harvest Revenue vs Inputs Cost vs Net Profit ({currency})
                 </p>
               </div>
               <span className="text-xs font-black text-amber-800 bg-amber-100 px-3 py-1 rounded-xl border border-amber-200">
@@ -540,63 +544,85 @@ export function YieldComparisonChart() {
               </span>
             </div>
 
+            {/* Direct Series Labels (<= 4 series) */}
+            <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-slate-700">
+              <span className="flex items-center gap-1.5 font-bold">
+                <span className="w-3 h-3 rounded-sm bg-[#0284c7]" /> Gross Revenue ({currency})
+              </span>
+              <span className="flex items-center gap-1.5 font-bold">
+                <span className="w-3 h-3 rounded-sm bg-[#C85A32]" /> Production Cost ({currency})
+              </span>
+              <span className="flex items-center gap-1.5 font-bold">
+                <span className="w-3 h-3 rounded-sm bg-[#15803D]" /> Net Profit ({currency})
+              </span>
+            </div>
+
             <div className="h-72 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={singleCropBarData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(120, 113, 108, 0.18)" vertical={false} />
                   <XAxis dataKey="method" tick={{ fill: '#0f172a', fontWeight: 'bold', fontSize: 12 }} />
-                  <YAxis tick={{ fill: '#64748b', fontSize: 11 }} />
+                  <YAxis tick={{ fill: '#475569', fontSize: 12 }} />
                   <Tooltip content={<CustomTooltip />} />
-                  <Legend wrapperStyle={{ paddingTop: '10px', fontSize: '12px' }} />
                   <Bar dataKey="revenue" name={`Gross Revenue (${currency})`} fill="#0284c7" radius={[8, 8, 0, 0]} />
-                  <Bar dataKey="cost" name={`Inputs & Production Cost (${currency})`} fill="#f43f5e" radius={[8, 8, 0, 0]} />
-                  <Bar dataKey="netProfit" name={`Net Profit (${currency})`} fill="#10b981" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="cost" name={`Inputs & Production Cost (${currency})`} fill="#C85A32" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="netProfit" name={`Net Profit (${currency})`} fill="#15803D" radius={[8, 8, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
           </div>
         )}
 
-        {/* VIEW 3: 5-YEAR SOIL TRAJECTORY LINE CHART */}
+        {/* VIEW 3: 5-YEAR SOIL TRAJECTORY LINE CHART (MODELLED DATA WITH DASHED LINES & HONESTY BADGE) */}
         {chartView === 'trajectory' && (
           <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-slate-200/80">
               <div>
                 <h4 className="font-bold text-emerald-950 text-base">
-                  5-Year Yield Trajectory & Soil Regeneration Curve
+                  5-Year Yield Trajectory &amp; Soil Regeneration Curve
                 </h4>
                 <p className="text-xs text-slate-500">
                   Conventional soil mining depletes organic matter; regenerative practices compound microbial humus over 5 years.
                 </p>
               </div>
-              <span className="text-xs font-black uppercase text-emerald-800 bg-emerald-50 px-3 py-1 rounded-xl border border-emerald-200">
-                Long-Term Compounding
+              <span className="text-caption font-mono font-bold px-2.5 py-1 rounded-control bg-amber-100 text-amber-900 border border-amber-300">
+                Honesty Badge: 5-Year Modelled Projection (Dashed)
+              </span>
+            </div>
+
+            {/* Direct Series Labels for Line Chart (<= 4 series) */}
+            <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-slate-700">
+              <span className="flex items-center gap-1.5 font-bold text-slate-700">
+                <span className="w-4 border-t-2 border-solid border-[#4B5563]" /> Traditional Baseline (Degrading)
+              </span>
+              <span className="flex items-center gap-1.5 font-bold text-emerald-800">
+                <span className="w-4 border-t-2 border-dashed border-[#15803D]" /> Improved Regenerative (Modelled Humus Buildup)
               </span>
             </div>
 
             <div className="h-72 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={trajectoryData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(120, 113, 108, 0.18)" vertical={false} />
                   <XAxis dataKey="year" tick={{ fill: '#0f172a', fontWeight: 'bold', fontSize: 12 }} />
-                  <YAxis tick={{ fill: '#64748b', fontSize: 11 }} label={{ value: '50kg Bags Harvested', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fill: '#64748b', fontSize: 11 } }} />
+                  <YAxis tick={{ fill: '#475569', fontSize: 12 }} label={{ value: '50kg Bags Harvested', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fill: '#475569', fontSize: 12 } }} />
                   <Tooltip content={<CustomTooltip />} />
-                  <Legend wrapperStyle={{ paddingTop: '10px', fontSize: '12px' }} />
                   <Line 
                     type="monotone" 
                     dataKey="Traditional" 
-                    name="Traditional Method (Soil Depletion)" 
-                    stroke="#e11d48" 
-                    strokeWidth={3} 
-                    dot={{ r: 5, fill: '#e11d48' }} 
+                    name="Traditional Baseline" 
+                    stroke="#4B5563" 
+                    strokeWidth={2.5} 
+                    dot={{ r: 4, fill: '#4B5563' }} 
                   />
                   <Line 
                     type="monotone" 
                     dataKey="Improved" 
-                    name="Improved Regenerative (Humus Buildup)" 
-                    stroke="#059669" 
-                    strokeWidth={4} 
-                    dot={{ r: 6, fill: '#059669' }} 
+                    name="Improved Regenerative (Modelled)" 
+                    stroke="#15803D" 
+                    strokeWidth={3}
+                    strokeDasharray="5 5" 
+                    dot={{ r: 5, fill: '#15803D' }} 
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -604,7 +630,7 @@ export function YieldComparisonChart() {
 
             <div className="grid grid-cols-1 md:grid-cols-5 gap-2 pt-2 border-t border-slate-100">
               {trajectoryData.map((d, i) => (
-                <div key={i} className="bg-slate-50 p-2.5 rounded-xl text-[10px] border border-slate-200/60">
+                <div key={i} className="bg-slate-50 p-2.5 rounded-xl text-caption border border-slate-200/60">
                   <span className="font-extrabold text-emerald-950 block">{d.year}</span>
                   <span className="text-slate-500">{d.note}</span>
                 </div>
@@ -630,11 +656,11 @@ export function YieldComparisonChart() {
             <div className="h-80 w-full flex items-center justify-center">
               <ResponsiveContainer width="100%" height="100%">
                 <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
-                  <PolarGrid stroke="#cbd5e1" />
-                  <PolarAngleAxis dataKey="subject" tick={{ fill: '#0f172a', fontSize: 11, fontWeight: 'bold' }} />
-                  <PolarRadiusAxis angle={30} domain={[0, 100]} stroke="#94a3b8" />
-                  <Radar name="Traditional Monoculture" dataKey="Traditional" stroke="#e11d48" fill="#e11d48" fillOpacity={0.3} />
-                  <Radar name="Regenerative System" dataKey="Improved" stroke="#059669" fill="#059669" fillOpacity={0.5} />
+                  <PolarGrid stroke="rgba(120, 113, 108, 0.25)" />
+                  <PolarAngleAxis dataKey="subject" tick={{ fill: '#0f172a', fontSize: 12, fontWeight: 'bold' }} />
+                  <PolarRadiusAxis angle={30} domain={[0, 100]} stroke="#78716c" tick={{ fontSize: 12 }} />
+                  <Radar name="Traditional Monoculture" dataKey="Traditional" stroke="#C85A32" fill="#C85A32" fillOpacity={0.25} />
+                  <Radar name="Regenerative System" dataKey="Improved" stroke="#15803D" fill="#15803D" fillOpacity={0.45} />
                   <Legend wrapperStyle={{ paddingTop: '10px', fontSize: '12px' }} />
                   <Tooltip content={<CustomTooltip />} />
                 </RadarChart>
@@ -649,7 +675,7 @@ export function YieldComparisonChart() {
         {/* Traditional Practice Box */}
         <div className="bg-rose-50/70 p-6 rounded-3xl border border-rose-200/80 flex flex-col gap-3">
           <div className="flex items-center gap-2">
-            <span className="bg-rose-600 text-white text-[9px] font-black uppercase px-2 py-0.5 rounded-lg">
+            <span className="bg-rose-600 text-white text-caption font-black uppercase px-2 py-0.5 rounded-lg">
               Traditional Farming
             </span>
             <h5 className="font-bold text-rose-950 text-sm">Conventional Farming Pitfalls</h5>
@@ -657,15 +683,16 @@ export function YieldComparisonChart() {
           <p className="text-xs text-slate-700 leading-relaxed font-medium">
             {currentCrop.tradPractice}
           </p>
-          <div className="mt-2 text-[11px] text-rose-900 bg-white/80 p-3 rounded-2xl border border-rose-200 font-semibold">
-            ⚠️ <strong>Soil Impact:</strong> Vulnerable to mid-season dry spells, high weed competition, rapid soil organic matter depletion, and costly annual fertilizer reliance.
+          <div className="mt-2 text-caption text-rose-900 bg-white/80 p-3 rounded-2xl border border-rose-200 font-semibold flex items-start gap-1.5">
+            <AlertTriangle size={16} strokeWidth={1.75} className="text-rose-600 shrink-0 mt-0.5" />
+            <span><strong>Soil Impact:</strong> Vulnerable to mid-season dry spells, high weed competition, rapid soil organic matter depletion, and costly annual fertilizer reliance.</span>
           </div>
         </div>
 
         {/* Improved Practice Box */}
         <div className="bg-emerald-50/80 p-6 rounded-3xl border border-emerald-200/80 flex flex-col gap-3">
           <div className="flex items-center gap-2">
-            <span className="bg-emerald-800 text-amber-300 text-[9px] font-black uppercase px-2 py-0.5 rounded-lg">
+            <span className="bg-emerald-800 text-amber-300 text-caption font-black uppercase px-2 py-0.5 rounded-lg">
               Regenerative Standard
             </span>
             <h5 className="font-bold text-emerald-950 text-sm">Improved Method Innovations</h5>

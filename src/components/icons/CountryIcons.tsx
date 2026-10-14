@@ -3034,7 +3034,156 @@ export function SecondComingEdenIllustration({
 }
 
 /**
- * 42. DYNAMIC ICON DISPATCHER
+ * 42. DOMAIN OBJECT ILLUSTRATION: HYDRAULIC RAM PUMP (WATER)
+ * Zero-electricity perennial water lifting using kinetic stream pressure
+ */
+export function RamPumpIllustration({
+  className = 'w-full h-auto',
+  width = 360,
+  height = 220,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} {...props}>
+      <rect width="360" height="220" rx="16" fill="#031622" />
+      {/* Stream Bed & Drive Pipe */}
+      <path d="M0 180 C80 170 140 190 360 180 L360 220 L0 220 Z" fill="#073B4C" />
+      <path d="M0 160 L140 175" stroke="#38BDF8" strokeWidth="8" strokeLinecap="round" />
+      {/* Ram Pump Steel Body & Air Chamber */}
+      <rect x="135" y="145" width="50" height="40" rx="4" fill="#475569" stroke="#94A3B8" strokeWidth="2" />
+      <path d="M150 145 C150 100 170 100 170 145 Z" fill="#0284C7" stroke="#38BDF8" strokeWidth="2" />
+      {/* Waste Valve Clack & Delivery Pipe Lifting Water Upward */}
+      <circle cx="145" cy="188" r="6" fill="#EF4444" stroke="#FCA5A5" strokeWidth="1.5" />
+      <path d="M170 140 L280 40" stroke="#06B6D4" strokeWidth="4" strokeLinecap="round" strokeDasharray="6 4" />
+      {/* Header Tank at High Elevation */}
+      <rect x="270" y="25" width="60" height="40" rx="6" fill="#0F766E" stroke="#2DD4BF" strokeWidth="2" />
+      <rect x="12" y="12" width="220" height="22" rx="6" fill="#071A10" stroke="#38BDF8" strokeWidth="1" />
+      <text x="20" y="27" fill="#BAE6FD" fontSize="9" fontWeight="800">HYDRAULIC RAM PUMP • GRAVITY LIFT</text>
+    </svg>
+  );
+}
+
+/**
+ * 43. DOMAIN OBJECT ILLUSTRATION: BIOCHAR RETORT KILN (SOIL)
+ * Pyrolyzing agricultural waste to produce activated biochar for Katondo soil
+ */
+export function BiocharRetortIllustration({
+  className = 'w-full h-auto',
+  width = 360,
+  height = 220,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} {...props}>
+      <rect width="360" height="220" rx="16" fill="#1C1608" />
+      {/* Ground & Brick Hearth */}
+      <path d="M0 170 L360 170 L360 220 L0 220 Z" fill="#451A03" />
+      <rect x="110" y="90" width="140" height="85" rx="8" fill="#292524" stroke="#78716C" strokeWidth="2" />
+      {/* Inner Chamber with Glowing Biochar Coals */}
+      <rect x="130" y="115" width="100" height="50" rx="4" fill="#0C0A09" stroke="#F59E0B" strokeWidth="2" />
+      <circle cx="155" cy="140" r="8" fill="#F97316" />
+      <circle cx="180" cy="140" r="10" fill="#EF4444" />
+      <circle cx="205" cy="140" r="8" fill="#FBBF24" />
+      {/* Chimney Flue & Syn-Gas Reburn */}
+      <rect x="165" y="45" width="30" height="45" fill="#57534E" stroke="#A8A29E" strokeWidth="1.5" />
+      <path d="M180 45 Q170 20 185 8 Q195 20 180 45 Z" fill="#FB923C" opacity="0.8" />
+      <rect x="12" y="12" width="220" height="22" rx="6" fill="#071A10" stroke="#F59E0B" strokeWidth="1" />
+      <text x="20" y="27" fill="#FEF08A" fontSize="9" fontWeight="800">BIOCHAR RETORT KILN • SOIL ENRICHMENT</text>
+    </svg>
+  );
+}
+
+/**
+ * 44. DOMAIN OBJECT ILLUSTRATION: VETIVER GRASS HEDGEROW (WATER/SOIL)
+ * Deep-root contour silt barrier protecting hill slopes from rainfall erosion
+ */
+export function VetiverHedgerowIllustration({
+  className = 'w-full h-auto',
+  width = 360,
+  height = 220,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} {...props}>
+      <rect width="360" height="220" rx="16" fill="#061A10" />
+      {/* Hill Slope Contour */}
+      <path d="M0 100 Q180 130 360 90 L360 220 L0 220 Z" fill="#78350F" />
+      <path d="M0 115 Q180 145 360 105" stroke="#92400E" strokeWidth="3" strokeDasharray="6 4" />
+      {/* Deep 3-Meter Vetiver Roots Locking Subsoil */}
+      {[50, 90, 130, 170, 210, 250, 290].map((rx, idx) => (
+        <path key={idx} d={`M${rx} 120 Q${rx - 4} 160 ${rx} 205`} stroke="#D97706" strokeWidth="2" strokeDasharray="3 3" />
+      ))}
+      {/* Dense Vertical Green Blades (Chisale Silt Filter) */}
+      {[35, 55, 75, 95, 115, 135, 155, 175, 195, 215, 235, 255, 275, 295, 315].map((gx, idx) => (
+        <path key={idx} d={`M${gx} 125 L${gx - 6} 50 M${gx} 125 L${gx + 2} 42 M${gx} 125 L${gx + 8} 54`} stroke="#22C55E" strokeWidth="2.5" strokeLinecap="round" />
+      ))}
+      <rect x="12" y="12" width="220" height="22" rx="6" fill="#071A10" stroke="#22C55E" strokeWidth="1" />
+      <text x="20" y="27" fill="#86EFAC" fontSize="9" fontWeight="800">VETIVER HEDGEROW • CONTOUR SILT BARRIER</text>
+    </svg>
+  );
+}
+
+/**
+ * 45. DOMAIN OBJECT ILLUSTRATION: DAMBO WETLAND RIDGE (WATER/SOIL)
+ * Traditional raised bed system for dry-season residual moisture harvesting
+ */
+export function DamboRidgeIllustration({
+  className = 'w-full h-auto',
+  width = 360,
+  height = 220,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} {...props}>
+      <rect width="360" height="220" rx="16" fill="#041E15" />
+      {/* Saturated Dambo Water Table */}
+      <rect x="0" y="150" width="360" height="70" fill="#0369A1" opacity="0.6" />
+      {/* Elevated Earth Ridge Mound (Mounds avoid waterlogged root rot) */}
+      <path d="M40 180 Q90 100 140 180 Q190 100 240 180 Q290 100 340 180" fill="#78350F" stroke="#92400E" strokeWidth="3" />
+      {/* Healthy Crop Canopy (Maize & Sweet Potato Mbatata) */}
+      <circle cx="90" cy="95" r="14" fill="#15803D" />
+      <circle cx="190" cy="95" r="14" fill="#15803D" />
+      <circle cx="290" cy="95" r="14" fill="#15803D" />
+      <path d="M90 95 L90 120 M190 95 L190 120 M290 95 L290 120" stroke="#4ADE80" strokeWidth="3" />
+      <rect x="12" y="12" width="230" height="22" rx="6" fill="#071A10" stroke="#38BDF8" strokeWidth="1" />
+      <text x="20" y="27" fill="#BAE6FD" fontSize="9" fontWeight="800">DAMBO WETLAND RIDGE • CHILIMWE FARMING</text>
+    </svg>
+  );
+}
+
+/**
+ * 46. DOMAIN OBJECT ILLUSTRATION: INTERCROP POLYCULTURE (CROPS)
+ * Three Sisters / African Companion Guild: Maize, Pigeon Pea (Nandolo), and Sweet Potato
+ */
+export function IntercropPolycultureIllustration({
+  className = 'w-full h-auto',
+  width = 360,
+  height = 220,
+  ...props
+}: CountryIllustrationProps) {
+  return (
+    <svg viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} {...props}>
+      <rect width="360" height="220" rx="16" fill="#0F1F10" />
+      {/* Katondo Topsoil Bed */}
+      <path d="M0 150 Q180 140 360 150 L360 220 L0 220 Z" fill="#933113" />
+      {/* Maize Tall Stalk (Overstory) */}
+      <line x1="120" y1="160" x2="120" y2="40" stroke="#65A30D" strokeWidth="4" />
+      <circle cx="120" cy="35" r="10" fill="#FACC15" />
+      <path d="M100 80 Q120 70 140 80" stroke="#4ADE80" strokeWidth="3" />
+      {/* Pigeon Pea (Nandolo - Nitrogen Fixer Midstory) */}
+      <line x1="220" y1="160" x2="220" y2="70" stroke="#15803D" strokeWidth="3.5" />
+      <circle cx="210" cy="65" r="7" fill="#F59E0B" />
+      <circle cx="230" cy="75" r="7" fill="#EA580C" />
+      {/* Ground Cover Vines (Mbatata Sweet Potato Living Mulch) */}
+      <path d="M40 155 Q90 148 140 155 Q190 148 240 155 Q290 148 340 155" stroke="#16A34A" strokeWidth="5" strokeLinecap="round" />
+      <rect x="12" y="12" width="230" height="22" rx="6" fill="#071A10" stroke="#F59E0B" strokeWidth="1" />
+      <text x="20" y="27" fill="#FEF08A" fontSize="9" fontWeight="800">COMPANION POLYCULTURE • NANDOLO &amp; MAIZE</text>
+    </svg>
+  );
+}
+
+/**
+ * 47. DYNAMIC ICON DISPATCHER
  * Allows rendering any country or prophetic illustration by key name with standard props.
  */
 export type CountryIconName =
@@ -3087,6 +3236,11 @@ export type CountryIconName =
   | 'orchard'
   | 'forage'
   | 'hydro'
+  | 'rampump'
+  | 'biochar'
+  | 'vetiver'
+  | 'dambo'
+  | 'intercrop'
   | 'prophecy-1844'
   | 'prophecy-three-angels'
   | 'prophecy-siege'
@@ -3183,6 +3337,16 @@ export function CountryIcon({ name, ...props }: CountryIconDispatcherProps) {
     case 'season-hot':
     case 'season-chizimalupsya':
       return <SeasonHotChilimweIllustration {...props} />;
+    case 'rampump':
+      return <RamPumpIllustration {...props} />;
+    case 'biochar':
+      return <BiocharRetortIllustration {...props} />;
+    case 'vetiver':
+      return <VetiverHedgerowIllustration {...props} />;
+    case 'dambo':
+      return <DamboRidgeIllustration {...props} />;
+    case 'intercrop':
+      return <IntercropPolycultureIllustration {...props} />;
     case 'prophecy-1844':
       return <Sanctuary1844Illustration {...props} />;
     case 'prophecy-three-angels':

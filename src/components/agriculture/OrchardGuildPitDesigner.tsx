@@ -212,57 +212,57 @@ STRATIFIED CROSS-SECTION RECIPE (PER 1M³ PIT):
             <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">
               3×3×3ft (0.91m³) Pit Cross-Section
             </span>
-            <span className="text-[10px] font-mono text-stone-400">Scale: 1m Deep</span>
+            <span className="text-caption font-mono text-stone-400">Scale: 1m Deep</span>
           </div>
 
           {/* Visual Stratified Layers */}
           <div className="flex flex-col gap-1.5">
             {/* Surface Mulch Ring */}
             <div className="p-2.5 rounded-lg bg-amber-950/40 border border-amber-800/40 text-xs">
-              <div className="flex justify-between items-center font-mono text-[11px] font-bold text-amber-300">
+              <div className="flex justify-between items-center font-mono text-caption font-bold text-amber-300">
                 <span>0.0 ft · Surface Mulch Ring</span>
                 <span>4-inch dry grass</span>
               </div>
-              <p className="text-[11px] text-stone-300 mt-0.5">
+              <p className="text-caption text-stone-300 mt-0.5">
                 Mulched with dry veld grass, kept 3 inches from tree trunk to stop fungal collar rot.
               </p>
             </div>
 
             {/* Root Zone Mound */}
             <div className="p-2.5 rounded-lg bg-emerald-950/30 border border-emerald-800/40 text-xs">
-              <div className="flex justify-between items-center font-mono text-[11px] font-bold text-emerald-300">
+              <div className="flex justify-between items-center font-mono text-caption font-bold text-emerald-300">
                 <span>0.0 – 1.0 ft · Friable Topsoil Mound</span>
                 <span>Root Zone</span>
               </div>
-              <p className="text-[11px] text-stone-300 mt-0.5">
+              <p className="text-caption text-stone-300 mt-0.5">
                 Topsoil mound set 2 inches above ground level to compensate for settling.
               </p>
             </div>
 
             {/* Living Matrix */}
             <div className="p-2.5 rounded-lg bg-stone-900 border border-stone-700/80 text-xs">
-              <div className="flex justify-between items-center font-mono text-[11px] font-bold text-emerald-400">
+              <div className="flex justify-between items-center font-mono text-caption font-bold text-emerald-400">
                 <span>1.0 – 2.5 ft · Biochar &amp; Humus Matrix</span>
                 <span>Water Sponge</span>
               </div>
-              <p className="text-[11px] text-stone-300 mt-0.5">
+              <p className="text-caption text-stone-300 mt-0.5">
                 {amendments.biocharKg}kg inoculated biochar + {amendments.compostWheelbarrows} wheelbarrows compost + {amendments.woodAshCups} cups wood ash.
               </p>
             </div>
 
             {/* Base Subsoil Aeration */}
             <div className="p-2.5 rounded-lg bg-stone-950 border border-stone-800 text-xs">
-              <div className="flex justify-between items-center font-mono text-[11px] font-bold text-stone-300">
+              <div className="flex justify-between items-center font-mono text-caption font-bold text-stone-300">
                 <span>2.5 – 3.0 ft · Drainage &amp; Bones Base</span>
                 <span>Mineral Bed</span>
               </div>
-              <p className="text-[11px] text-stone-400 mt-0.5">
+              <p className="text-caption text-stone-400 mt-0.5">
                 Basalt granite stones, animal bone fragments, and coarse woody chunks for subsoil aeration.
               </p>
             </div>
           </div>
 
-          <div className="text-[11px] text-stone-400 font-mono pt-2 border-t border-stone-800">
+          <div className="text-caption text-stone-400 font-mono pt-2 border-t border-stone-800">
             Total Amendments for {pitCount} Pits: <strong className="text-white">{totalBiocharTotalKg} kg Biochar</strong> · <strong className="text-white">~{totalCompostTons} Tons Compost</strong>
           </div>
         </div>
@@ -280,10 +280,10 @@ STRATIFIED CROSS-SECTION RECIPE (PER 1M³ PIT):
             {activeGuild.plants.map((plant, idx) => (
               <div key={idx} className="p-2.5 rounded-lg bg-stone-900/60 border border-stone-800 flex flex-col gap-1">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono font-bold text-emerald-400 text-[11px]">
+                  <span className="font-mono font-bold text-emerald-400 text-caption">
                     {plant.tier}
                   </span>
-                  <span className="font-mono text-stone-400 text-[10px]">
+                  <span className="font-mono text-stone-400 text-caption">
                     {plant.spacing}
                   </span>
                 </div>
@@ -291,7 +291,7 @@ STRATIFIED CROSS-SECTION RECIPE (PER 1M³ PIT):
                   <span>{plant.species}</span>
                   <span className="text-stone-400 font-normal">({plant.chichewa})</span>
                 </div>
-                <p className="text-stone-400 text-[11px]">{plant.role}</p>
+                <p className="text-stone-400 text-caption">{plant.role}</p>
               </div>
             ))}
           </div>

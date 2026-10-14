@@ -429,42 +429,56 @@ export function MedicalMissionarySanitarium({
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Sub-Navigation Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-stone-200/80 dark:border-emerald-900/50">
-        <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-stone-100 dark:bg-[#08150E] border border-stone-200 dark:border-emerald-800/60">
+      {/* Persistent Calm Medical Disclaimer Banner */}
+      <div
+        role="alert"
+        className="p-4 rounded-xl bg-amber-500/10 dark:bg-amber-950/30 border border-amber-600/25 dark:border-amber-400/25 flex items-start gap-3 text-stone-900 dark:text-stone-100 shadow-flat"
+      >
+        <ShieldAlert size={18} className="text-amber-700 dark:text-amber-400 shrink-0 mt-0.5" />
+        <p className="text-[13.5px] leading-relaxed text-ink font-normal">
+          Home-care information, not medical advice. For poisoning, snakebite, blood in stool, high fever, pregnancy or infants, go to the nearest health facility.
+        </p>
+      </div>
+
+      {/* Secondary Sub-Nav Bar - Never Wraps, Horizontal Scroll with Fade Masks */}
+      <div className="relative w-full max-w-full overflow-hidden pb-1 border-b border-border">
+        {/* Left & Right Fade Masks */}
+        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-surface-raised dark:from-[#08150E] to-transparent z-10" />
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-surface-raised dark:from-[#08150E] to-transparent z-10" />
+
+        <div
+          role="tablist"
+          aria-label="Remedies Secondary Navigation"
+          className="flex flex-nowrap items-center gap-1.5 p-1 rounded-xl bg-stone-100/90 dark:bg-[#08150E] border border-border overflow-x-auto no-scrollbar scroll-smooth px-2"
+        >
           {([
-            { id: 'newstart', label: '01. 8 NEWSTART Laws Tracker', icon: HeartPulse },
-            { id: 'hydrotherapy', label: '02. Rational Hydrotherapy Protocols', icon: Droplets },
-            { id: 'apothecary', label: '03. Charcoal & Botanical Apothecary', icon: Leaf },
-            { id: 'dispensary', label: '04. Tropical Dispensary & Natural Pharmacopeia', icon: Sparkles },
-            { id: 'education', label: '05. True Education & Youth Curriculum', icon: GraduationCap },
+            { id: 'newstart', label: 'NEWSTART Laws', icon: HeartPulse },
+            { id: 'hydrotherapy', label: 'Hydrotherapy Protocols', icon: Droplets },
+            { id: 'apothecary', label: 'Charcoal & Botanical Apothecary', icon: Leaf },
+            { id: 'dispensary', label: 'Tropical Dispensary', icon: Sparkles },
+            { id: 'education', label: 'Curriculum', icon: GraduationCap },
           ] as const).map((tab) => {
             const Icon = tab.icon;
             const isActive = activeSubTab === tab.id;
             return (
               <button
                 key={tab.id}
+                role="tab"
+                aria-selected={isActive}
                 type="button"
                 onClick={() => setActiveSubTab(tab.id)}
                 className={cn(
-                  'px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer',
+                  'min-h-[44px] px-3.5 py-2.5 rounded-lg text-xs font-semibold whitespace-nowrap shrink-0 flex items-center gap-1.5 transition-all cursor-pointer normal-case select-none',
                   isActive
-                    ? 'bg-emerald-900 dark:bg-amber-400 text-white dark:text-stone-950 font-bold shadow-xs'
-                    : 'text-stone-700 dark:text-stone-300 hover:bg-white dark:hover:bg-white/10'
+                    ? 'bg-accent text-accent-ink font-bold shadow-xs'
+                    : 'text-ink-muted hover:text-ink hover:bg-surface-raised/70'
                 )}
               >
-                <Icon size={13} />
+                <Icon size={13} className="shrink-0" />
                 <span>{tab.label}</span>
               </button>
             );
           })}
-        </div>
-
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800/70 text-xs font-mono">
-          <CheckCircle2 size={13} className="text-emerald-700 dark:text-amber-300" />
-          <span className="text-stone-700 dark:text-stone-200">
-            Daily NEWSTART Vitality: <strong className="text-emerald-800 dark:text-amber-300">{completedNewstartCount}/8 Laws</strong>
-          </span>
         </div>
       </div>
 
@@ -477,7 +491,7 @@ export function MedicalMissionarySanitarium({
             <div className="flex items-start gap-3">
               <BookOpen size={18} className="text-amber-700 dark:text-amber-300 shrink-0 mt-0.5" />
               <div>
-                <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300 block">
+                <span className="text-caption font-mono font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300 block">
                   THE MINISTRY OF HEALING, P. 127 · THE EIGHT NATURAL REMEDIES
                 </span>
                 <p className="font-display text-sm sm:text-base italic text-stone-800 dark:text-stone-100 mt-0.5">
@@ -580,7 +594,7 @@ export function MedicalMissionarySanitarium({
                   )}
                 >
                   <div>
-                    <span className={cn('text-[10px] font-mono font-bold uppercase block', isSelected ? 'text-amber-300' : 'text-emerald-700 dark:text-amber-300')}>
+                    <span className={cn('text-caption font-mono font-bold uppercase block', isSelected ? 'text-amber-300' : 'text-emerald-700 dark:text-amber-300')}>
                       Clinical Hydrotherapy
                     </span>
                     <h4 className="font-display text-sm font-bold mt-0.5">{proto.title}</h4>
@@ -609,13 +623,13 @@ export function MedicalMissionarySanitarium({
 
               <div className="flex flex-wrap gap-2 shrink-0">
                 <div className="px-3 py-2 rounded-xl bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800/60 text-xs">
-                  <span className="text-[10px] font-mono uppercase text-amber-800 dark:text-amber-300 flex items-center gap-1">
+                  <span className="text-caption font-mono uppercase text-amber-800 dark:text-amber-300 flex items-center gap-1">
                     <Flame size={11} /> Hot Phase
                   </span>
                   <strong className="text-stone-900 dark:text-white block mt-0.5">{activeHydro.hotTemp}</strong>
                 </div>
                 <div className="px-3 py-2 rounded-xl bg-sky-50 dark:bg-sky-950/50 border border-sky-200 dark:border-sky-800/60 text-xs">
-                  <span className="text-[10px] font-mono uppercase text-sky-800 dark:text-sky-300 flex items-center gap-1">
+                  <span className="text-caption font-mono uppercase text-sky-800 dark:text-sky-300 flex items-center gap-1">
                     <Thermometer size={11} /> Cold / Contrast Phase
                   </span>
                   <strong className="text-stone-900 dark:text-white block mt-0.5">{activeHydro.coldTemp}</strong>
@@ -772,7 +786,7 @@ export function MedicalMissionarySanitarium({
                   className="p-5 rounded-2xl bg-white dark:bg-[#091810] border border-stone-200/90 dark:border-emerald-900/60 flex flex-col gap-3.5"
                 >
                   <div className="pb-2.5 border-b border-stone-200 dark:border-emerald-900/50">
-                    <span className="text-[11px] font-mono font-bold uppercase text-emerald-700 dark:text-amber-300">
+                    <span className="text-caption font-mono font-bold uppercase text-emerald-700 dark:text-amber-300">
                       True Education Track
                     </span>
                     <h4 className="font-display text-base font-bold text-stone-900 dark:text-white">
@@ -809,7 +823,7 @@ export function MedicalMissionarySanitarium({
                         <p className="text-xs text-stone-600 dark:text-stone-300">
                           {item.practicalTask}
                         </p>
-                        <span className="text-[10px] font-mono text-emerald-800 dark:text-amber-300/80">
+                        <span className="text-caption font-mono text-emerald-800 dark:text-amber-300/80">
                           Ref: {item.counselRef}
                         </span>
                       </div>

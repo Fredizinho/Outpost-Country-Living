@@ -96,7 +96,7 @@ export function HeroQuickPreviewOverlays({
             >
               <Icon size={13} className={chip.accentColor} />
               <span>{chip.label}</span>
-              <span className="text-[11px] font-mono text-stone-400 hidden sm:inline tabular-nums">
+              <span className="text-caption font-mono text-stone-400 hidden sm:inline tabular-nums">
                 · {chip.metric}
               </span>
             </button>
@@ -161,37 +161,37 @@ export function HeroQuickPreviewOverlays({
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col gap-1">
-                  <span className="font-mono text-[11px] text-sky-300 font-semibold">
+                  <span className="font-mono text-caption text-sky-300 font-semibold">
                     Highland Gravity Springs
                   </span>
                   <span className="font-semibold text-white">
                     Mulanje · Zomba · Dedza · Rumphi
                   </span>
-                  <span className="text-[11px] text-stone-400">
+                  <span className="text-caption text-stone-400">
                     Perennial headwater streams enabling unpowered gravity irrigation
                   </span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col gap-1">
-                  <span className="font-mono text-[11px] text-sky-300 font-semibold">
+                  <span className="font-mono text-caption text-sky-300 font-semibold">
                     Alluvial vs. Basement Depth
                   </span>
                   <span className="font-semibold text-white font-mono tabular-nums">
                     5–20m Alluvial · 25–45m Plateau
                   </span>
-                  <span className="text-[11px] text-stone-400">
+                  <span className="text-caption text-stone-400">
                     Documented in FAO AQUASTAT Malawi Hydrogeological Survey
                   </span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col gap-1">
-                  <span className="font-mono text-[11px] text-sky-300 font-semibold">
+                  <span className="font-mono text-caption text-sky-300 font-semibold">
                     Dambo Seasonal Wetlands
                   </span>
                   <span className="font-semibold text-white">
                     Residual Subsoil Moisture
                   </span>
-                  <span className="text-[11px] text-stone-400">
+                  <span className="text-caption text-stone-400">
                     Supports dry-season winter garden cropping (May–October)
                   </span>
                 </div>
@@ -262,37 +262,37 @@ export function HeroQuickPreviewOverlays({
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col gap-1">
-                  <span className="font-mono text-[11px] text-emerald-300 font-semibold">
+                  <span className="font-mono text-caption text-emerald-300 font-semibold">
                     Eutric & Chromic Nitisols
                   </span>
                   <span className="font-semibold text-white font-mono tabular-nums">
                     pH 5.8 – 6.5 (Katondo Loam)
                   </span>
-                  <span className="text-[11px] text-stone-400">
+                  <span className="text-caption text-stone-400">
                     Dedza, Ntcheu, Lilongwe, Dowa, Mchinji & Zomba
                   </span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col gap-1">
-                  <span className="font-mono text-[11px] text-emerald-300 font-semibold">
+                  <span className="font-mono text-caption text-emerald-300 font-semibold">
                     Humic Acrisols & Ferralsols
                   </span>
                   <span className="font-semibold text-white font-mono tabular-nums">
                     pH 4.8 – 5.7 (Highland Humus)
                   </span>
-                  <span className="text-[11px] text-stone-400">
+                  <span className="text-caption text-stone-400">
                     Mulanje, Thyolo, Nkhata Bay, Rumphi & Misuku Hills
                   </span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col gap-1">
-                  <span className="font-mono text-[11px] text-emerald-300 font-semibold">
+                  <span className="font-mono text-caption text-emerald-300 font-semibold">
                     Eutric Fluvisols (Alluvial)
                   </span>
                   <span className="font-semibold text-white font-mono tabular-nums">
                     pH 6.2 – 7.2 (Mineral Silt)
                   </span>
-                  <span className="text-[11px] text-stone-400">
+                  <span className="text-caption text-stone-400">
                     Salima, Karonga, Nkhotakota & Shire Basin
                   </span>
                 </div>
@@ -363,37 +363,37 @@ export function HeroQuickPreviewOverlays({
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col gap-1">
-                  <span className="font-mono text-[11px] text-amber-300 font-semibold">
+                  <span className="font-mono text-caption text-amber-300 font-semibold">
                     Highland Sanctuary Belt
                   </span>
                   <span className="font-semibold text-white font-mono tabular-nums">
                     1,200m – 2,198m ASL
                   </span>
-                  <span className="text-[11px] text-stone-400">
+                  <span className="text-caption text-stone-400">
                     Dedza Mountain, Zomba Plateau, Viphya & Nyika Foothills
                   </span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col gap-1">
-                  <span className="font-mono text-[11px] text-amber-300 font-semibold">
+                  <span className="font-mono text-caption text-amber-300 font-semibold">
                     Annual Rainfall Normals
                   </span>
                   <span className="font-semibold text-white font-mono tabular-nums">
                     850 – 2,200 mm / year
                   </span>
-                  <span className="text-[11px] text-stone-400">
+                  <span className="text-caption text-stone-400">
                     DCCMS 30-year station climatology (Nov–Apr rains + Chiperoni)
                   </span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col gap-1">
-                  <span className="font-mono text-[11px] text-amber-300 font-semibold">
+                  <span className="font-mono text-caption text-amber-300 font-semibold">
                     Temperate Crop Window
                   </span>
                   <span className="font-semibold text-white font-mono tabular-nums">
                     11°C – 24°C Mean Range
                   </span>
-                  <span className="text-[11px] text-stone-400">
+                  <span className="text-caption text-stone-400">
                     Suited for Irish potatoes, apples, peaches, beans & wheat
                   </span>
                 </div>
@@ -464,37 +464,37 @@ export function HeroQuickPreviewOverlays({
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col gap-1">
-                  <span className="font-mono text-[11px] text-teal-300 font-semibold">
+                  <span className="font-mono text-caption text-teal-300 font-semibold">
                     Malamulo Mission (Makwasa)
                   </span>
                   <span className="font-semibold text-white">
                     Founded 1902 · Thyolo District
                   </span>
-                  <span className="text-[11px] text-stone-400">
+                  <span className="text-caption text-stone-400">
                     Historic rural mission hospital, college of health sciences & farm
                   </span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col gap-1">
-                  <span className="font-mono text-[11px] text-teal-300 font-semibold">
+                  <span className="font-mono text-caption text-teal-300 font-semibold">
                     Lunjika & Luwazi Missions
                   </span>
                   <span className="font-semibold text-white">
                     Mzimba & Nkhata Bay Highlands
                   </span>
-                  <span className="text-[11px] text-stone-400">
+                  <span className="text-caption text-stone-400">
                     Northern rural educational and medical missionary outposts
                   </span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col gap-1">
-                  <span className="font-mono text-[11px] text-teal-300 font-semibold">
+                  <span className="font-mono text-caption text-teal-300 font-semibold">
                     Outpost Distance Principle
                   </span>
                   <span className="font-semibold text-white">
                     "Easy Distance" from Cities
                   </span>
-                  <span className="text-[11px] text-stone-400">
+                  <span className="text-caption text-stone-400">
                     Rural acreage outside Lilongwe, Blantyre, Zomba & Mzuzu
                   </span>
                 </div>

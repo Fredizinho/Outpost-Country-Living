@@ -1,10 +1,85 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-type Theme = 'light' | 'dark';
-export type ColorPalette = 'charcoal' | 'emerald' | 'sienna' | 'midnight' | 'sapphire';
+export type Theme = 'light' | 'dark' | 'field';
+export type ColorPalette = 'emerald';
 export type FontPairing = 'inter' | 'luxury' | 'editorial' | 'warm' | 'swiss';
 
-const PALETTE_ORDER: ColorPalette[] = ['charcoal', 'emerald', 'sienna', 'midnight', 'sapphire'];
+export const THEME_ORDER: Theme[] = ['light', 'dark', 'field'];
+
+export const THEME_META: Record<
+  Theme,
+  {
+    id: Theme;
+    number: string;
+    name: string;
+    label: string;
+    shortLabel: string;
+    tagline: string;
+    description: string;
+    swatches: [string, string, string];
+    touchTargetMin: string;
+    bodyFontSize: string;
+    borderWeight: string;
+    contrastRatio: string;
+    features: string[];
+  }
+> = {
+  light: {
+    id: 'light',
+    number: '01',
+    name: 'Daylight Harvest',
+    label: '01 · Light Mode',
+    shortLabel: '01 · Light',
+    tagline: 'Warm ivory #FAF6F0, Katondo terracotta CTA & rich forest ink',
+    description:
+      'Clean daylight sanctuary aesthetic with warm ivory surfaces, Katondo terracotta primary actions (#C85A32), and comfortable 16px reading body.',
+    swatches: ['#FAF6F0', '#166534', '#C85A32'],
+    touchTargetMin: '44px',
+    bodyFontSize: '16px',
+    borderWeight: '1px',
+    contrastRatio: '8.2:1 (AA)',
+    features: ['Warm ivory parchment surfaces', 'Katondo terracotta primary actions', '4.5:1+ contrast verified'],
+  },
+  dark: {
+    id: 'dark',
+    number: '02',
+    name: 'Highland Sanctuary',
+    label: '02 · Dark Mode',
+    shortLabel: '02 · Dark',
+    tagline: 'Deep moss #071A10, forest depth #0D2818 & gold dawn highlights #F59E0B',
+    description:
+      'Calibrated nocturnal sanctuary mode with deep botanical moss (#071A10), forest container depth (#0D2818), and radiant celestial gold highlights (#F59E0B).',
+    swatches: ['#071A10', '#0D2818', '#F59E0B'],
+    touchTargetMin: '44px',
+    bodyFontSize: '16px',
+    borderWeight: '1px',
+    contrastRatio: '11.4:1 (AAA)',
+    features: ['Deep moss botanical base', 'Forest container depth', 'Golden spark accent highlights'],
+  },
+  field: {
+    id: 'field',
+    number: '03',
+    name: 'Tactical Agro-Field',
+    label: '03 · Field Mode',
+    shortLabel: '03 · Field',
+    tagline: 'Stark jet black #000000, 18px body, 48px+ touch targets & no blur',
+    description:
+      'Purpose-built for outdoor midday sun and farm vehicles: stark jet black (#000000) backdrop, 18px body text, thick 2.5px solid borders, zero translucent glass or blur, no decorative background art, and extra-large 48px+ touch targets for gloved or field operation.',
+    swatches: ['#000000', '#FFFFFF', '#FBBF24'],
+    touchTargetMin: '48px+',
+    bodyFontSize: '18px',
+    borderWeight: '2.5px',
+    contrastRatio: '21:1 (Max AAA)',
+    features: [
+      '18px high-legibility body copy',
+      '48px+ touch targets for outdoor use',
+      'Thick 2.5px solid stark borders',
+      'Zero blur & no decorative backgrounds',
+    ],
+  },
+};
+
+export const PALETTE_ORDER: ColorPalette[] = ['emerald'];
 
 export const PALETTE_META: Record<
   ColorPalette,
@@ -16,40 +91,12 @@ export const PALETTE_META: Record<
     swatches: [string, string, string];
   }
 > = {
-  charcoal: {
-    id: 'charcoal',
-    name: 'Minimalist Charcoal Studio',
-    shortLabel: 'Charcoal',
-    tagline: 'Matte graphite #141416, crisp Inter UI & soft pastel bento accents',
-    swatches: ['#18181B', '#DCE6F2', '#DCF2DE'],
-  },
   emerald: {
     id: 'emerald',
-    name: 'Highland Emerald & Dawn',
-    shortLabel: 'Emerald',
-    tagline: 'Mulanje cedar greens, warm parchment & golden sunrise',
-    swatches: ['#10B981', '#FBBF24', '#F9F6EE'],
-  },
-  sienna: {
-    id: 'sienna',
-    name: 'Burnt Sienna & Sandy Beige',
-    shortLabel: 'Sienna',
-    tagline: 'Katondo terracotta clay, soft beige & warm savannah sand',
-    swatches: ['#C85A32', '#E6B35A', '#F6EFE2'],
-  },
-  midnight: {
-    id: 'midnight',
-    name: 'Midnight Blue & Bright Cyan',
-    shortLabel: 'Midnight',
-    tagline: 'Deep midnight navy, crisp white canvas & electric cyan',
-    swatches: ['#06B6D4', '#0A192F', '#FFFFFF'],
-  },
-  sapphire: {
-    id: 'sapphire',
-    name: 'Lake Malawi Sapphire',
-    shortLabel: 'Sapphire',
-    tagline: 'Cerulean freshwaters, deep azure glass & sunlit gold',
-    swatches: ['#38BDF8', '#0284C7', '#FBBF24'],
+    name: 'Highland Brand Foundation',
+    shortLabel: 'Standard',
+    tagline: 'Deep moss, forest depth, gold spark & Katondo terracotta',
+    swatches: ['#071A10', '#0D2818', '#F59E0B'],
   },
 };
 
@@ -111,6 +158,8 @@ interface ThemeContextType {
   toggleTheme: () => void;
   setTheme: (theme: Theme) => void;
   isDark: boolean;
+  isLight: boolean;
+  isField: boolean;
   palette: ColorPalette;
   togglePalette: () => void;
   setPalette: (palette: ColorPalette) => void;
@@ -128,27 +177,63 @@ const STORAGE_KEY = 'outpost_country_living_theme_v2';
 const PALETTE_STORAGE_KEY = 'outpost_country_living_palette_v2';
 const FONT_STORAGE_KEY = 'outpost_country_living_font_pairing_v2';
 
+function resolveInitialTheme(): Theme {
+  if (typeof window === 'undefined') return 'dark';
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    const legacyPalette = localStorage.getItem(PALETTE_STORAGE_KEY);
+
+    // MIGRATION: Reduce to Light, Dark and Field as three real themes; migrate legacy users
+    if (
+      saved === 'sienna' ||
+      saved === 'charcoal' ||
+      saved === 'sapphire' ||
+      saved === 'midnight' ||
+      legacyPalette === 'sienna' ||
+      legacyPalette === 'charcoal' ||
+      legacyPalette === 'sapphire' ||
+      legacyPalette === 'midnight'
+    ) {
+      localStorage.setItem(STORAGE_KEY, 'dark');
+      try {
+        localStorage.removeItem(PALETTE_STORAGE_KEY);
+        if (typeof document !== 'undefined') {
+          document.documentElement.classList.remove('theme-sienna', 'theme-charcoal', 'theme-sapphire', 'theme-midnight');
+        }
+      } catch {}
+      return 'dark';
+    }
+
+    if (saved === 'light' || saved === 'dark' || saved === 'field') {
+      return saved as Theme;
+    }
+
+    // Respect prefers-contrast and prefers-color-scheme as defaults
+    if (window.matchMedia && window.matchMedia('(prefers-contrast: more)').matches) {
+      return 'field';
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+      return 'light';
+    }
+  } catch {}
+  return 'dark';
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    if (typeof window === 'undefined') return 'dark';
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY) as Theme | null;
-      if (saved === 'light' || saved === 'dark') {
-        return saved;
-      }
-    } catch {}
-    return 'dark';
-  });
+  const [theme, setThemeState] = useState<Theme>(resolveInitialTheme);
 
   const [palette, setPaletteState] = useState<ColorPalette>(() => {
-    if (typeof window === 'undefined') return 'charcoal';
+    if (typeof window === 'undefined') return 'emerald';
     try {
       const saved = localStorage.getItem(PALETTE_STORAGE_KEY) as ColorPalette | null;
-      if (saved && PALETTE_ORDER.includes(saved)) {
+      if (saved && (saved === 'emerald' || saved === 'sienna')) {
         return saved;
       }
     } catch {}
-    return 'charcoal';
+    return 'emerald';
   });
 
   const [fontPairing, setFontPairingState] = useState<FontPairing>(() => {
@@ -168,15 +253,59 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     return 'inter';
   });
 
+  // Listen to prefers-contrast and prefers-color-scheme changes if user hasn't explicitly set a preference
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+    const contrastQuery = window.matchMedia('(prefers-contrast: more)');
+    const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    const handleMediaChange = () => {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (!saved) {
+        if (contrastQuery.matches) {
+          setThemeState('field');
+        } else if (darkQuery.matches) {
+          setThemeState('dark');
+        } else {
+          setThemeState('light');
+        }
+      }
+    };
+
+    try {
+      contrastQuery.addEventListener('change', handleMediaChange);
+      darkQuery.addEventListener('change', handleMediaChange);
+      return () => {
+        contrastQuery.removeEventListener('change', handleMediaChange);
+        darkQuery.removeEventListener('change', handleMediaChange);
+      };
+    } catch {}
+  }, []);
+
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === 'dark') {
-      root.classList.add('dark');
+    // Strip legacy theme classes
+    root.classList.remove(
+      'theme-charcoal',
+      'theme-sapphire',
+      'theme-midnight',
+      'theme-light',
+      'theme-dark',
+      'theme-field'
+    );
+
+    if (theme === 'field') {
+      root.classList.add('dark', 'theme-field');
+      root.style.colorScheme = 'dark';
+    } else if (theme === 'dark') {
+      root.classList.add('dark', 'theme-dark');
       root.style.colorScheme = 'dark';
     } else {
       root.classList.remove('dark');
+      root.classList.add('theme-light');
       root.style.colorScheme = 'light';
     }
+
     try {
       localStorage.setItem(STORAGE_KEY, theme);
     } catch {}
@@ -184,20 +313,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.remove('theme-charcoal', 'theme-sapphire', 'theme-sienna', 'theme-midnight');
-    if (palette === 'charcoal') {
-      root.classList.add('theme-charcoal');
-    } else if (palette === 'sapphire') {
-      root.classList.add('theme-sapphire');
-    } else if (palette === 'sienna') {
-      root.classList.add('theme-sienna');
-    } else if (palette === 'midnight') {
-      root.classList.add('theme-midnight', 'theme-sapphire');
-    }
-    try {
-      localStorage.setItem(PALETTE_STORAGE_KEY, palette);
-    } catch {}
-  }, [palette]);
+    root.classList.remove('theme-sienna');
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -209,7 +326,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [fontPairing]);
 
   const toggleTheme = () => {
-    setThemeState((prev) => (prev === 'light' ? 'dark' : 'light'));
+    setThemeState((prev) => {
+      if (prev === 'light') return 'dark';
+      if (prev === 'dark') return 'field';
+      return 'light';
+    });
   };
 
   const setTheme = (newTheme: Theme) => {
@@ -217,10 +338,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   };
 
   const togglePalette = () => {
-    setPaletteState((prev) => {
-      const nextIdx = (PALETTE_ORDER.indexOf(prev) + 1) % PALETTE_ORDER.length;
-      return PALETTE_ORDER[nextIdx];
-    });
+    setPaletteState('emerald');
   };
 
   const setPalette = (newPalette: ColorPalette) => {
@@ -237,14 +355,16 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         theme,
         toggleTheme,
         setTheme,
-        isDark: theme === 'dark',
+        isDark: theme === 'dark' || theme === 'field',
+        isLight: theme === 'light',
+        isField: theme === 'field',
         palette,
         togglePalette,
         setPalette,
-        isCharcoal: palette === 'charcoal',
-        isSapphire: palette === 'sapphire' || palette === 'midnight',
-        isSienna: palette === 'sienna',
-        isMidnight: palette === 'midnight',
+        isCharcoal: false,
+        isSapphire: false,
+        isSienna: false,
+        isMidnight: false,
         fontPairing,
         setFontPairing,
       }}

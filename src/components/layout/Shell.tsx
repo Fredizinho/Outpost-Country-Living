@@ -17,10 +17,7 @@ import { getCurrentMalawiSeason } from '@/lib/seasonalAlmanac';
 import { useTheme, PALETTE_META } from '@/contexts/ThemeContext';
 
 export function Shell({ children }: { children: ReactNode }) {
-  const { palette, togglePalette } = useTheme();
-  const isSapphire = palette === 'sapphire' || palette === 'midnight';
-  const isSienna = palette === 'sienna';
-  const activePaletteMeta = PALETTE_META[palette];
+  const { theme, isField } = useTheme();
 
   const [showCitationsModal, setShowCitationsModal] = useState(false);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
@@ -229,7 +226,12 @@ export function Shell({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <div className="h-screen w-screen overflow-hidden flex flex-col font-sans bg-[#FAF8F5] dark:bg-[#07120C] text-stone-800 dark:text-stone-100 relative selection:bg-amber-200 dark:selection:bg-emerald-900 selection:text-stone-900 dark:selection:text-amber-200 transition-colors duration-200">
+    <div
+      className={cn(
+        'h-screen w-screen overflow-hidden flex flex-col font-sans relative selection:bg-amber-200 dark:selection:bg-emerald-900 selection:text-stone-900 dark:selection:text-amber-200 transition-colors duration-200',
+        isField ? 'bg-black text-white' : 'bg-[#FAF8F5] dark:bg-[#07120C] text-stone-800 dark:text-stone-100'
+      )}
+    >
       {/* ====================================================================
           1. DESKTOP WINDOW TITLE BAR, MULTI-TAB STRIP & BUNDLED COMMAND MENUS
       ==================================================================== */}
@@ -253,7 +255,8 @@ export function Shell({ children }: { children: ReactNode }) {
         <div
           id="outpost-scroll-Viewport"
           className={cn(
-            'flex-1 flex flex-col min-w-0 h-full relative bg-[#FAF8F5] dark:bg-[#09150E]',
+            'flex-1 flex flex-col min-w-0 h-full relative',
+            isField ? 'bg-black text-white' : 'bg-[#FAF8F5] dark:bg-[#09150E]',
             isScoutMapRoute ? 'overflow-hidden' : 'overflow-y-auto custom-scrollbar'
           )}
         >

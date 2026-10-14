@@ -13,7 +13,8 @@ export function BotanicalEmblemCrestCard({
   className,
 }: BotanicalEmblemCrestCardProps) {
   const uid = useId().replace(/:/g, '');
-  const { isSapphire } = useTheme();
+  const { isField } = useTheme();
+  const isSapphire = false;
 
   const openCitationsModal = () => {
     window.dispatchEvent(new CustomEvent('outpost:open-citations'));
@@ -29,19 +30,20 @@ export function BotanicalEmblemCrestCard({
     <div
       className={cn(
         'relative rounded-3xl overflow-hidden transition-all duration-300',
-        isSapphire ? 'glass-depth-blue-hero' : 'glass-depth-emerald-hero',
-        'card-depth-lift w-full max-w-sm mx-auto flex flex-col text-stone-100 p-6 sm:p-7',
+        isField
+          ? 'bg-black text-white border-[2.5px] border-white shadow-none'
+          : 'glass-depth-emerald-hero text-stone-100',
+        'card-depth-lift w-full max-w-sm mx-auto flex flex-col p-6 sm:p-7',
         className
       )}
     >
-      {/* Ambient Specular Glow Orbs */}
-      <div
-        className={cn(
-          'absolute -top-16 -right-16 w-40 h-40 rounded-full blur-3xl pointer-events-none',
-          isSapphire ? 'bg-sky-400/20' : 'bg-emerald-400/20'
-        )}
-      />
-      <div className="absolute -bottom-16 -left-16 w-40 h-40 rounded-full bg-amber-400/15 blur-3xl pointer-events-none" />
+      {/* Ambient Specular Glow Orbs (Disabled in Field Mode) */}
+      {!isField && (
+        <>
+          <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full blur-3xl pointer-events-none bg-emerald-400/20" />
+          <div className="absolute -bottom-16 -left-16 w-40 h-40 rounded-full bg-amber-400/15 blur-3xl pointer-events-none" />
+        </>
+      )}
 
       {/* Circular Crest: Mountain Peaks, Dawn Sun, Dove & Living Stream */}
       <div className="flex flex-col items-center text-center relative z-10">

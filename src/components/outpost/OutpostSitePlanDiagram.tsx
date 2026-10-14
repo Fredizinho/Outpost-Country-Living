@@ -14,16 +14,16 @@ export function OutpostSitePlanDiagram({ blueprint }: OutpostSitePlanDiagramProp
       label: 'Family Home-School Sanctuary & Children’s Garden Plots',
     },
     'Small Sanitarium': {
-      src: COUNTRY_IMAGES.peacefulMind,
-      label: 'Pine & Highland Air Rural Sanitarium Cottages',
+      src: COUNTRY_IMAGES.sanitariumNaturalDispensary,
+      label: 'Natural Remedies Sanitarium Dispensary & Highland Cottages',
     },
     'Treatment Rooms': {
-      src: COUNTRY_IMAGES.natureSymbols,
-      label: 'Simple Hydrotherapy & Charcoal Remedy Dispensary',
+      src: COUNTRY_IMAGES.sanitariumNaturalDispensary,
+      label: 'Hydrotherapy Fomentations & Charcoal Apothecary Dispensary',
     },
     'Agricultural Training': {
-      src: COUNTRY_IMAGES.openAirLabor,
-      label: 'Avondale-Model Vocational & Agroforestry Training Grounds',
+      src: COUNTRY_IMAGES.ruralIndustrialSanctuary,
+      label: 'Avondale & Madison Vocational Carpentry, Agroforestry & Bakery Campus',
     },
   };
 
@@ -33,7 +33,7 @@ export function OutpostSitePlanDiagram({ blueprint }: OutpostSitePlanDiagramProp
     <div className="rounded-2xl bg-[#07160E] border border-emerald-900/70 p-4 sm:p-6 text-white flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-emerald-900/60 pb-3">
         <div className="flex items-center gap-2">
-          <span className="px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
+          <span className="px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-caption font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
             <Compass size={13} />
             <span>Architectural Site Zoning Plan &amp; Visual Reference</span>
           </span>
@@ -54,7 +54,7 @@ export function OutpostSitePlanDiagram({ blueprint }: OutpostSitePlanDiagramProp
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent" />
           <div className="absolute bottom-0 inset-x-0 p-4 flex flex-col gap-1">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-amber-300 font-bold">
+            <span className="text-caption font-mono uppercase tracking-widest text-amber-300 font-bold">
               {blueprint.type} Atmosphere
             </span>
             <p className="text-xs sm:text-sm font-bold text-white leading-snug">

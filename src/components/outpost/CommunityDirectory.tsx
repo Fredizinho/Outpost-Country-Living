@@ -224,15 +224,15 @@ export function CommunityDirectory({ className }: { className?: string }) {
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <div className="flex flex-wrap items-center gap-1.5">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded">
+                    <span className="text-caption font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded">
                       {entry.primaryRole}
                     </span>
                     {entry.isTemplateExample ? (
-                      <span className="text-[10px] font-mono font-semibold text-amber-900 dark:text-amber-300 bg-amber-100/80 dark:bg-amber-950/60 px-1.5 py-0.5 rounded">
+                      <span className="text-caption font-mono font-semibold text-amber-900 dark:text-amber-300 bg-amber-100/80 dark:bg-amber-950/60 px-1.5 py-0.5 rounded">
                         Illustrative Template
                       </span>
                     ) : (
-                      <span className="text-[10px] font-mono font-semibold text-emerald-900 dark:text-emerald-200 bg-emerald-100/80 dark:bg-emerald-900/60 px-1.5 py-0.5 rounded">
+                      <span className="text-caption font-mono font-semibold text-emerald-900 dark:text-emerald-200 bg-emerald-100/80 dark:bg-emerald-900/60 px-1.5 py-0.5 rounded">
                         Saved Contact
                       </span>
                     )}
@@ -274,7 +274,7 @@ export function CommunityDirectory({ className }: { className?: string }) {
 
               {/* Offerings & Needs */}
               <div className="p-3 rounded-xl bg-[#FAF8F5] dark:bg-[#14281D] border border-stone-200/80 dark:border-emerald-900/60 flex flex-col gap-1.5 text-xs">
-                <span className="text-[10px] uppercase font-bold text-stone-500 dark:text-stone-400">
+                <span className="text-caption uppercase font-bold text-stone-500 dark:text-stone-400">
                   Shared Offerings & Needs:
                 </span>
                 <ul className="flex flex-col gap-1">
@@ -315,7 +315,7 @@ export function CommunityDirectory({ className }: { className?: string }) {
             >
               <div className="flex items-center justify-between pb-3 border-b border-stone-100 dark:border-emerald-900/40">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 dark:text-amber-300">
+                  <span className="text-caption font-bold uppercase tracking-wider text-emerald-800 dark:text-amber-300">
                     Community Registry
                   </span>
                   <h3 className="serif text-xl font-bold text-stone-900 dark:text-stone-50">

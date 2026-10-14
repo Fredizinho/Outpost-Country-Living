@@ -73,19 +73,19 @@ export function ActionableTaskCard({
         <div className="flex flex-wrap items-center justify-between gap-2.5">
           <div className="flex flex-wrap items-center gap-2">
             {/* Domain Tag */}
-            <span className={cn("text-[10px] font-mono font-black uppercase px-2.5 py-0.5 rounded-full border flex items-center gap-1", domainStyle.bg, domainStyle.text, domainStyle.border)}>
+            <span className={cn("text-caption font-mono font-black uppercase px-2.5 py-0.5 rounded-full border flex items-center gap-1", domainStyle.bg, domainStyle.text, domainStyle.border)}>
               <DomainIcon size={11} />
               <span>{task.domain.replace('-', ' ')}</span>
             </span>
 
             {/* Exodus Stage Tag */}
-            <span className="text-[10px] font-mono font-bold uppercase px-2.5 py-0.5 rounded-full bg-black/40 text-emerald-300 border border-emerald-500/30">
+            <span className="text-caption font-mono font-bold uppercase px-2.5 py-0.5 rounded-full bg-black/40 text-emerald-300 border border-emerald-500/30">
               Stage: {task.exodusStage}
             </span>
 
             {/* Priority / Urgency Badge */}
             {task.priority === 'urgent' && (
-              <span className="text-[10px] font-mono font-black uppercase px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1">
+              <span className="text-caption font-mono font-black uppercase px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1">
                 <AlertTriangle size={11} className="text-amber-400" />
                 <span>Urgent Window</span>
               </span>
@@ -93,7 +93,7 @@ export function ActionableTaskCard({
           </div>
 
           {/* Readiness Points Reward */}
-          <span className="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-300 border border-amber-500/30">
+          <span className="text-caption font-mono font-bold uppercase px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-300 border border-amber-500/30">
             +{task.readinessPoints} pts readiness
           </span>
         </div>
@@ -126,7 +126,7 @@ export function ActionableTaskCard({
 
             {/* Urgency Callout if Present */}
             {task.urgencyNotice && !completed && (
-              <div className="text-[11px] font-mono font-bold text-amber-300 flex items-center gap-1.5 mt-1 bg-amber-950/40 p-2 rounded-xl border border-amber-500/30">
+              <div className="text-caption font-mono font-bold text-amber-300 flex items-center gap-1.5 mt-1 bg-amber-950/40 p-2 rounded-xl border border-amber-500/30">
                 <Clock size={13} className="text-amber-400 shrink-0" />
                 <span>{task.urgencyNotice}</span>
               </div>
@@ -134,7 +134,7 @@ export function ActionableTaskCard({
 
             {/* District-specific Note */}
             {districtNote && (
-              <div className="text-[11px] text-emerald-200/90 flex items-center gap-1.5 mt-1 bg-emerald-950/40 p-2 rounded-xl border border-emerald-500/25">
+              <div className="text-caption text-emerald-200/90 flex items-center gap-1.5 mt-1 bg-emerald-950/40 p-2 rounded-xl border border-emerald-500/25">
                 <Compass size={13} className="text-emerald-400 shrink-0" />
                 <span><strong>{selectedDistrict} note:</strong> {districtNote}</span>
               </div>
@@ -153,7 +153,7 @@ export function ActionableTaskCard({
           {task.calculatorLink && (
             <Link
               to={`/calculators?tab=${task.calculatorLink.tab}`}
-              className="bg-amber-500 hover:bg-amber-400 text-slate-950 text-[11px] font-mono font-bold uppercase px-3 py-1.5 rounded-xl transition-all shadow-xs flex items-center gap-1.5"
+              className="bg-amber-500 hover:bg-amber-400 text-slate-950 text-caption font-mono font-bold uppercase px-3 py-1.5 rounded-xl transition-all shadow-xs flex items-center gap-1.5"
               title={task.calculatorLink.tooltip}
             >
               <Wrench size={12} />
@@ -165,7 +165,7 @@ export function ActionableTaskCard({
           {task.fieldGuideLink && (
             <Link
               to={`/how/${task.fieldGuideLink.skillId}`}
-              className="bg-white/10 hover:bg-white/15 text-emerald-200 text-[11px] font-mono font-bold uppercase px-3 py-1.5 rounded-xl border border-white/15 transition-all flex items-center gap-1.5"
+              className="bg-white/10 hover:bg-white/15 text-emerald-200 text-caption font-mono font-bold uppercase px-3 py-1.5 rounded-xl border border-white/15 transition-all flex items-center gap-1.5"
             >
               <BookOpen size={12} className="text-emerald-400" />
               <span>Manual: {task.fieldGuideLink.guideTitle}</span>
@@ -183,7 +183,7 @@ export function ActionableTaskCard({
           <span className="font-serif text-amber-200 text-sm font-semibold">
             {isDrawerOpen ? 'Close Guide' : 'Field Steps'}
           </span>
-          <span className="font-mono text-[10px] text-amber-400/80 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+          <span className="font-mono text-caption text-amber-400/80 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
             {task.howToExecute.steps.length} Steps
           </span>
           <ChevronDown 
@@ -216,7 +216,7 @@ export function ActionableTaskCard({
                     <Sparkles size={14} className="text-amber-400" />
                     Key Farming Steps
                   </span>
-                  <span className="font-mono text-[10px] text-amber-400/80 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                  <span className="font-mono text-caption text-amber-400/80 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
                     Execution Order
                   </span>
                 </div>
@@ -231,7 +231,7 @@ export function ActionableTaskCard({
 
                     return (
                       <li key={idx} className="flex items-start gap-2.5 text-slate-200 leading-relaxed bg-white/5 p-2.5 rounded-xl border border-white/5">
-                        <span className="w-5 h-5 rounded-lg bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold flex items-center justify-center shrink-0 border border-amber-500/30 mt-0.5">
+                        <span className="w-5 h-5 rounded-lg bg-amber-500/20 text-amber-300 font-mono text-caption font-bold flex items-center justify-center shrink-0 border border-amber-500/30 mt-0.5">
                           {idx + 1}
                         </span>
                         <div className="text-xs">
@@ -251,7 +251,7 @@ export function ActionableTaskCard({
                     <Wrench size={14} className="text-amber-400" />
                     Required Equipment & Metrics
                   </span>
-                  <span className="font-mono text-[10px] text-amber-400/80 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                  <span className="font-mono text-caption text-amber-400/80 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
                     Specs
                   </span>
                 </div>
@@ -259,10 +259,10 @@ export function ActionableTaskCard({
                 <div className="flex flex-col gap-2.5 font-mono text-xs">
                   {/* Tools List */}
                   <div className="bg-slate-900/80 p-3 rounded-xl border border-white/10 flex flex-col gap-1.5">
-                    <span className="text-[10px] uppercase text-slate-400 tracking-wider font-bold">
+                    <span className="text-caption uppercase text-slate-400 tracking-wider font-bold">
                       Tools & Materials:
                     </span>
-                    <div className="flex flex-wrap gap-1.5 text-[11px] text-emerald-200 font-medium">
+                    <div className="flex flex-wrap gap-1.5 text-caption text-emerald-200 font-medium">
                       {task.howToExecute.toolsNeeded.map((t, idx) => (
                         <span key={idx} className="bg-emerald-950/60 px-2 py-0.5 rounded-md border border-emerald-500/30">
                           {t}
@@ -274,19 +274,19 @@ export function ActionableTaskCard({
                   {/* Timing & Season Metrics */}
                   <div className="grid grid-cols-2 gap-2">
                     <div className="bg-slate-900/80 p-2.5 rounded-xl border border-white/10">
-                      <span className="text-[9px] uppercase text-slate-400 block mb-0.5">Optimal Window</span>
-                      <span className="text-amber-300 font-bold text-[11px] truncate block">{task.howToExecute.timingWindow}</span>
+                      <span className="text-caption uppercase text-slate-400 block mb-0.5">Optimal Window</span>
+                      <span className="text-amber-300 font-bold text-caption truncate block">{task.howToExecute.timingWindow}</span>
                     </div>
                     <div className="bg-slate-900/80 p-2.5 rounded-xl border border-white/10">
-                      <span className="text-[9px] uppercase text-slate-400 block mb-0.5">Readiness Pts</span>
-                      <span className="text-emerald-300 font-bold text-[11px]">+{task.readinessPoints} Readiness</span>
+                      <span className="text-caption uppercase text-slate-400 block mb-0.5">Readiness Pts</span>
+                      <span className="text-emerald-300 font-bold text-caption">+{task.readinessPoints} Readiness</span>
                     </div>
                   </div>
 
                   {/* Pro-Tip Metric Box */}
                   {task.howToExecute.malawiProTip && (
-                    <div className="bg-amber-950/30 p-2.5 rounded-xl border border-amber-500/20 text-[11px] leading-relaxed text-amber-200/90 font-sans">
-                      <span className="font-mono text-[9px] uppercase tracking-wider text-amber-400 font-bold block mb-1">
+                    <div className="bg-amber-950/30 p-2.5 rounded-xl border border-amber-500/20 text-caption leading-relaxed text-amber-200/90 font-sans">
+                      <span className="font-mono text-caption uppercase tracking-wider text-amber-400 font-bold block mb-1">
                         Malawi Field Metric / Pro-Tip:
                       </span>
                       {task.howToExecute.malawiProTip}

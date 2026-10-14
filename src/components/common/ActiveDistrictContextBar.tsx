@@ -20,8 +20,7 @@ export function ActiveDistrictContextBar({
   className,
   onDistrictSelect,
 }: ActiveDistrictContextBarProps) {
-  const { palette } = useTheme();
-  const isSapphire = palette === 'sapphire';
+  const isSapphire = false;
   const [activeDistrictId, setActiveDistrictId] = useActiveHomesteadDistrict('dedza');
 
   const district =

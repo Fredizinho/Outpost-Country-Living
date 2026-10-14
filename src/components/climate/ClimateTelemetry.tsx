@@ -122,7 +122,7 @@ export function ClimateTelemetry({
               <h3 className="font-serif font-black text-lg sm:text-xl text-amber-200 tracking-tight">
                 Local Weather & Land Guide
               </h3>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+              <span className="px-2 py-0.5 rounded-full text-caption font-mono font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                 Verified Weather Data
               </span>
             </div>
@@ -162,7 +162,7 @@ export function ClimateTelemetry({
         {/* Metric 1: Annual Rainfall & Distribution */}
         <div className="bg-slate-900/80 rounded-2xl p-4 border border-white/10 flex flex-col justify-between gap-3 shadow-inner">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+            <span className="text-caption font-mono font-bold uppercase tracking-wider text-slate-400">
               Yearly Rainfall
             </span>
             <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 w-8 h-8 flex items-center justify-center">
@@ -176,10 +176,10 @@ export function ClimateTelemetry({
               </span>
               <span className="text-xs font-mono text-slate-400">mm / year</span>
             </div>
-            <div className="text-[11px] font-sans text-slate-300 font-medium mt-0.5">
+            <div className="text-caption font-sans text-slate-300 font-medium mt-0.5">
               Normal Range: <strong className="text-white">{climate.rainfallRangeMm}</strong>
             </div>
-            <div className="text-[10px] font-mono text-sky-400/90 mt-1 truncate">
+            <div className="text-caption font-mono text-sky-400/90 mt-1 truncate">
               {climate.wetSeasonMonths}
             </div>
           </div>
@@ -188,7 +188,7 @@ export function ClimateTelemetry({
         {/* Metric 2: Temperatures & Daily Min/Max */}
         <div className="bg-slate-900/80 rounded-2xl p-4 border border-white/10 flex flex-col justify-between gap-3 shadow-inner">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+            <span className="text-caption font-mono font-bold uppercase tracking-wider text-slate-400">
               Temperature Range
             </span>
             <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 w-8 h-8 flex items-center justify-center">
@@ -205,10 +205,10 @@ export function ClimateTelemetry({
                 {adjustedSummerMax}°C
               </span>
             </div>
-            <div className="text-[11px] font-sans text-slate-300 mt-0.5">
+            <div className="text-caption font-sans text-slate-300 mt-0.5">
               Warm Season: {adjustedSummerMin}–{adjustedSummerMax}°C • Cold Season: {adjustedWinterMin}–{adjustedWinterMax}°C
             </div>
-            <div className="text-[10px] font-mono text-amber-400/90 mt-1">
+            <div className="text-caption font-mono text-amber-400/90 mt-1">
               Average Temp: {climate.annualMeanTempC}°C
             </div>
           </div>
@@ -217,7 +217,7 @@ export function ClimateTelemetry({
         {/* Metric 3: Solar Radiation & Peak Hours */}
         <div className="bg-slate-900/80 rounded-2xl p-4 border border-white/10 flex flex-col justify-between gap-3 shadow-inner">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+            <span className="text-caption font-mono font-bold uppercase tracking-wider text-slate-400">
               Solar Sunshine
             </span>
             <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 w-8 h-8 flex items-center justify-center">
@@ -231,10 +231,10 @@ export function ClimateTelemetry({
               </span>
               <span className="text-xs font-mono text-slate-400">kWh/m²/day</span>
             </div>
-            <div className="text-[11px] font-sans text-slate-300 mt-0.5">
+            <div className="text-caption font-sans text-slate-300 mt-0.5">
               Peak Sun Hours: <strong className="text-white">{climate.solarPeakHoursRange}</strong>
             </div>
-            <div className="text-[10px] font-mono text-emerald-400/90 mt-1">
+            <div className="text-caption font-mono text-emerald-400/90 mt-1">
               Solar Water Pump: Ideal conditions
             </div>
           </div>
@@ -243,7 +243,7 @@ export function ClimateTelemetry({
         {/* Metric 4: Frost Risk & Thermal Belt */}
         <div className="bg-slate-900/80 rounded-2xl p-4 border border-white/10 flex flex-col justify-between gap-3 shadow-inner">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+            <span className="text-caption font-mono font-bold uppercase tracking-wider text-slate-400">
               Frost & Cold Air Risk
             </span>
             <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 w-8 h-8 flex items-center justify-center">
@@ -259,10 +259,10 @@ export function ClimateTelemetry({
                 {climate.frostRisk} Risk
               </span>
             </div>
-            <div className="text-[11px] font-sans text-slate-300 mt-1.5 line-clamp-2">
+            <div className="text-caption font-sans text-slate-300 mt-1.5 line-clamp-2">
               {climate.thermalBeltZone}
             </div>
-            <div className="text-[10px] font-mono text-amber-300/80 mt-1">
+            <div className="text-caption font-mono text-amber-300/80 mt-1">
               Warm height zone: {climate.thermalBeltElevationWindow}
             </div>
           </div>
@@ -282,7 +282,7 @@ export function ClimateTelemetry({
               <h4 className="text-xs font-mono font-black uppercase tracking-wider text-slate-200">
                 12-Month Rainfall Pattern ({climate.name})
               </h4>
-              <p className="text-[10px] text-slate-400 font-sans">
+              <p className="text-caption text-slate-400 font-sans">
                 Main rainy season (Nov–Apr) and cool winter mists (Jun–Jul)
               </p>
             </div>
@@ -321,7 +321,7 @@ export function ClimateTelemetry({
                       initial={{ opacity: 0, y: 5 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 5 }}
-                      className="absolute -top-10 z-20 px-2 py-1 rounded-md bg-slate-950 border border-white/20 text-[10px] font-mono font-bold text-sky-300 shadow-xl whitespace-nowrap pointer-events-none"
+                      className="absolute -top-10 z-20 px-2 py-1 rounded-md bg-slate-950 border border-white/20 text-caption font-mono font-bold text-sky-300 shadow-xl whitespace-nowrap pointer-events-none"
                     >
                       {CLIMATE_MONTHS[idx]}: {mm} mm
                     </motion.div>
@@ -330,7 +330,7 @@ export function ClimateTelemetry({
 
                 {/* Amount on top of bar on hover or if high */}
                 <span className={cn(
-                  "text-[9px] font-mono mb-1 transition-opacity",
+                  "text-caption font-mono mb-1 transition-opacity",
                   isHovered ? "opacity-100 text-amber-300 font-bold" : "opacity-60 text-slate-400 hidden sm:inline"
                 )}>
                   {mm}
@@ -349,7 +349,7 @@ export function ClimateTelemetry({
 
                 {/* Month Label */}
                 <span className={cn(
-                  "text-[10px] font-mono mt-2 transition-colors",
+                  "text-caption font-mono mt-2 transition-colors",
                   isHovered ? "text-amber-300 font-bold" : "text-slate-400"
                 )}>
                   {CLIMATE_MONTHS[idx]}
@@ -374,7 +374,7 @@ export function ClimateTelemetry({
                 <h4 className="text-xs font-mono font-black uppercase tracking-wider text-emerald-200">
                   Hill Height & Frost Simulator
                 </h4>
-                <p className="text-[10px] text-slate-400 font-sans">
+                <p className="text-caption text-slate-400 font-sans">
                   See how temperatures change from cold valley bottoms to warm mid-slopes
                 </p>
               </div>
@@ -388,7 +388,7 @@ export function ClimateTelemetry({
 
           {/* Range Slider */}
           <div className="flex flex-col gap-2">
-            <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
+            <div className="flex items-center justify-between text-caption font-mono text-slate-400">
               <span>-300m (Cold Valleys & Wetlands)</span>
               <span className="font-bold text-amber-400">
                 {elevationOffsetM >= 0 ? `+${elevationOffsetM}m` : `${elevationOffsetM}m`} Offset
@@ -410,19 +410,19 @@ export function ClimateTelemetry({
           {/* Thermal Belt Insights Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs bg-black/40 p-3.5 rounded-xl border border-white/5">
             <div className="flex flex-col gap-1">
-              <span className="font-mono font-bold text-amber-300 uppercase text-[10px] flex items-center gap-1.5">
+              <span className="font-mono font-bold text-amber-300 uppercase text-caption flex items-center gap-1.5">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> Best Spot to Build Your Home:
               </span>
-              <p className="text-slate-300 text-[11px] leading-relaxed font-sans">
+              <p className="text-slate-300 text-caption leading-relaxed font-sans">
                 {climate.thermalBeltAdvice}
               </p>
             </div>
 
             <div className="flex flex-col gap-1">
-              <span className="font-mono font-bold text-amber-300 uppercase text-[10px] flex items-center gap-1.5">
+              <span className="font-mono font-bold text-amber-300 uppercase text-caption flex items-center gap-1.5">
                 <Wind className="w-3.5 h-3.5 text-sky-400" /> Wind & Soil Quality:
               </span>
-              <p className="text-slate-300 text-[11px] leading-relaxed font-sans">
+              <p className="text-slate-300 text-caption leading-relaxed font-sans">
                 {climate.windRegime} • <strong className="text-amber-200">{climate.soilType} ({climate.soilPh})</strong>
               </p>
             </div>
@@ -472,14 +472,14 @@ export function ClimateTelemetry({
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-amber-400 animate-pulse" />
-              <span className="text-[10px] font-mono font-black uppercase tracking-wider text-amber-300">
+              <span className="text-caption font-mono font-black uppercase tracking-wider text-amber-300">
                 Current Farming Season Note
               </span>
             </div>
             <h5 className="text-xs font-bold text-white font-serif">
               {climate.seasonalAlert.title}
             </h5>
-            <p className="text-[11px] text-slate-300 font-sans leading-relaxed">
+            <p className="text-caption text-slate-300 font-sans leading-relaxed">
               {climate.seasonalAlert.description}
             </p>
           </div>
@@ -487,14 +487,14 @@ export function ClimateTelemetry({
           <div className="flex items-center gap-2 pt-2 border-t border-white/10">
             <Link
               to={`/seasons?district=${climate.id}`}
-              className="flex-1 py-1.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-[10px] font-mono font-black uppercase tracking-wider text-center transition-colors flex items-center justify-center gap-1"
+              className="flex-1 py-1.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-caption font-mono font-black uppercase tracking-wider text-center transition-colors flex items-center justify-center gap-1"
             >
               <span>Open Almanac</span>
               <ArrowRight className="w-3 h-3" />
             </Link>
             <Link
               to={`/calculators?district=${climate.id}`}
-              className="py-1.5 px-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-emerald-200 text-[10px] font-mono font-bold uppercase transition-colors"
+              className="py-1.5 px-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-emerald-200 text-caption font-mono font-bold uppercase transition-colors"
               title="Calculators for this district"
             >
               <Calculator className="w-3.5 h-3.5" />

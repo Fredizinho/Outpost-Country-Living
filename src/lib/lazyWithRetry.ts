@@ -2,31 +2,41 @@ import { lazy, ComponentType } from 'react';
 
 /**
  * Robust lazy wrapper that retries chunk loading if a dynamic import fails
- * due to network hiccups or Vite asset hash changes after deployment.
+ * due to network hiccups, Vite asset hash updates, or dev server restarts.
  */
-export function lazyWithRetry<T extends ComponentType<unknown>>(
+export function lazyWithRetry<T extends ComponentType<any>>(
   factory: () => Promise<{ default: T }>,
-  retriesLeft = 2,
-  interval = 1000
+  maxRetries = 3,
+  interval = 800
 ): React.LazyExoticComponent<T> {
   return lazy(async () => {
-    try {
-      return await factory();
-    } catch (error) {
-      if (retriesLeft <= 0) {
-        // If out of retries in this session, check if we haven't force-refreshed yet
-        const key = 'vite_chunk_retry_refreshed';
-        const hasRefreshed = sessionStorage.getItem(key);
-        if (!hasRefreshed) {
-          sessionStorage.setItem(key, 'true');
-          window.location.reload();
-          return new Promise<{ default: T }>(() => {});
+    let lastError: unknown;
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        const module = await factory();
+        if (typeof window !== 'undefined') {
+          sessionStorage.removeItem('vite_chunk_retry_refreshed');
         }
-        throw error;
+        return module;
+      } catch (error) {
+        lastError = error;
+        if (attempt < maxRetries) {
+          await new Promise((resolve) => setTimeout(resolve, interval * Math.pow(1.4, attempt)));
+        }
       }
-
-      await new Promise((resolve) => setTimeout(resolve, interval));
-      return factory();
     }
+
+    if (typeof window !== 'undefined') {
+      const key = 'vite_chunk_retry_refreshed';
+      const hasRefreshed = sessionStorage.getItem(key);
+      if (!hasRefreshed) {
+        sessionStorage.setItem(key, 'true');
+        window.location.reload();
+        return new Promise<{ default: T }>(() => {});
+      }
+    }
+
+    throw lastError;
   });
 }
+

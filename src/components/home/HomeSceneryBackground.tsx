@@ -1,6 +1,7 @@
 import React from 'react';
+import { COUNTRY_IMAGES } from '@/assets/images';
 
-export type SceneryTheme = 'highlands' | 'waters' | 'sanctuary';
+export type SceneryTheme = 'highlands' | 'waters' | 'sanctuary' | 'illustrated';
 
 export interface HomeSceneryBackgroundProps {
   activeScene?: SceneryTheme;
@@ -81,6 +82,27 @@ export function HomeSceneryBackground({
   const sunCenterX =
     activeScene === 'waters' ? 940 : activeScene === 'sanctuary' ? 1010 : 970;
   const sunCenterY = activeScene === 'waters' ? 268 : 252;
+
+  if (activeScene === 'illustrated') {
+    return (
+      <div
+        className={`absolute inset-0 z-0 pointer-events-none select-none overflow-hidden ${className}`}
+        aria-hidden="true"
+      >
+        <img
+          src={COUNTRY_IMAGES.malawiHomesteadMorning}
+          alt="Highland Malawi Homestead Morning Illustration"
+          referrerPolicy="no-referrer"
+          className="w-full h-full object-cover object-[center_35%] country-image-grade scale-105 transition-all duration-700"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-stone-950/85 via-stone-950/50 to-stone-950/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#071A10]/80 via-transparent to-[#071A10]/40" />
+        <span className="absolute bottom-3 right-4 z-10 px-2 py-0.5 rounded-control text-caption font-mono font-medium text-stone-200/90 bg-stone-950/75 backdrop-blur-md border border-white/10 shadow-flat">
+          Illustrative image
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div

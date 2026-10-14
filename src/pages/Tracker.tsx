@@ -27,6 +27,7 @@ import {
   ChevronRight,
   Filter,
   Palette,
+  Eye,
   X
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -68,8 +69,8 @@ const KANBAN_COLUMNS: { id: KanbanColumnId; label: string; dotColor: string; des
 
 export default function Tracker() {
   const { user } = useAuth();
-  const { palette, setPalette, setFontPairing, isDark, setTheme } = useTheme();
-  const isCharcoal = palette === 'charcoal';
+  const { theme, setTheme, isField, setFontPairing, isDark } = useTheme();
+  const isCharcoal = false;
   const currentDistrictRecord = getDistrictRecord(user?.district || 'Dedza');
 
   const [showWizard, setShowWizard] = useState(false);
@@ -241,7 +242,7 @@ export default function Tracker() {
           priority = 'medium';
         }
 
-        // Thumbnail previews for flagship architectural / permaculture milestones (Equier aesthetic)
+        // Thumbnail previews for flagship architectural / permaculture milestones
         let image: string | undefined;
         if (st.label.toLowerCase().includes('orchard') || st.label.toLowerCase().includes('pit')) {
           image = COUNTRY_IMAGES.permacultureGarden;
@@ -378,25 +379,23 @@ export default function Tracker() {
             </span>
           </div>
 
-          {/* Quick Charcoal + Inter Theme Launcher Button */}
+          {/* Quick Field Mode Toggle Button */}
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => {
-                setPalette('charcoal');
-                setTheme('dark');
-                setFontPairing('inter');
+                setTheme(theme === 'field' ? 'dark' : 'field');
               }}
-              title="Activate Minimalist Charcoal + Inter UI (Equier & NeuroNest Aesthetic)"
+              title="Toggle Maximum-Contrast Field Mode (18px Body & 48px+ Touch Targets)"
               className={cn(
                 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-mono text-xs transition-all cursor-pointer border',
-                isCharcoal
-                  ? 'bg-amber-400 text-stone-950 border-amber-300 font-bold shadow-xs'
+                theme === 'field'
+                  ? 'bg-white text-black border-white font-bold shadow-xs'
                   : 'bg-white/[0.06] hover:bg-white/[0.12] text-stone-600 dark:text-stone-300 border-stone-300/80 dark:border-white/10'
               )}
             >
-              <Palette size={12} className={isCharcoal ? 'text-stone-950' : 'text-amber-400'} />
-              <span>{isCharcoal ? 'Charcoal Active' : 'Charcoal + Inter UI'}</span>
+              <Eye size={12} className={theme === 'field' ? 'text-black' : 'text-amber-400'} />
+              <span>{theme === 'field' ? 'Field Mode Active' : 'Field Mode (Max Contrast)'}</span>
             </button>
             <button
               onClick={handleExportRoadmap}
@@ -412,7 +411,7 @@ export default function Tracker() {
         <div className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#161619] border border-stone-200/90 dark:border-white/10 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           <div className="flex flex-col gap-1.5">
             <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-emerald-700 dark:text-amber-300">
-              <span>Equier Task Board · Malawi Country Living Sizing</span>
+              <span>Outpost Task Board · Malawi Country Living Sizing</span>
               <span aria-hidden="true">·</span>
               <span className="text-stone-500 dark:text-stone-400 font-normal">
                 {user?.district || 'Dedza'}, {user?.region || 'Central'} ({currentDistrictRecord?.rainfallAnnualMm || 950}mm/yr rain) · {user?.householdSize || '3-5 Members'}
@@ -429,13 +428,13 @@ export default function Tracker() {
           {/* Quick Metrics Capsule */}
           <div className="flex flex-wrap items-center gap-3 shrink-0">
             <div className="p-3 rounded-2xl bg-stone-100 dark:bg-[#1E1E22] border border-stone-200 dark:border-white/10 flex flex-col">
-              <span className="text-[11px] text-stone-500 dark:text-stone-400">Total Completion</span>
+              <span className="text-caption text-stone-500 dark:text-stone-400">Total Completion</span>
               <span className="text-base font-mono font-bold text-emerald-700 dark:text-amber-300 tabular-nums">
                 {Math.round(overallProgress)}% ({totalCompleted}/{totalTasks})
               </span>
             </div>
             <div className="p-3 rounded-2xl bg-stone-100 dark:bg-[#1E1E22] border border-stone-200 dark:border-white/10 flex flex-col">
-              <span className="text-[11px] text-stone-500 dark:text-stone-400">Readiness Score</span>
+              <span className="text-caption text-stone-500 dark:text-stone-400">Readiness Score</span>
               <span className="text-base font-mono font-bold text-stone-900 dark:text-white tabular-nums">
                 {readinessBreakdown.totalScorePct}% Ready
               </span>
@@ -452,10 +451,10 @@ export default function Tracker() {
 
         {/* Perspective Switcher & Search Action Toolbar */}
         <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
-          {/* 3 Perspectives: Kanban (Equier View), Checklist, 5-Stage Ledger */}
+          {/* 3 Perspectives: Kanban Board, Checklist, 5-Stage Ledger */}
           <div className="inline-flex items-center gap-1 bg-stone-200/80 dark:bg-[#1A1A1E] p-1 rounded-xl border border-stone-300/80 dark:border-white/10">
             {[
-              { id: 'kanban' as const, label: '01 · Kanban Board (Equier View)', icon: LayoutGrid },
+              { id: 'kanban' as const, label: '01 · Kanban Board', icon: LayoutGrid },
               { id: 'milestones' as const, label: '02 · 3-Phase Checklist', icon: CheckSquare },
               { id: 'readiness-ledger' as const, label: '03 · 5-Stage Readiness Ledger', icon: Layers },
             ].map((tab) => {
@@ -500,7 +499,7 @@ export default function Tracker() {
                   type="button"
                   onClick={() => setFilterPriority(p)}
                   className={cn(
-                    'px-2 py-1 rounded-lg text-[11px] font-mono capitalize transition-colors cursor-pointer',
+                    'px-2 py-1 rounded-lg text-caption font-mono capitalize transition-colors cursor-pointer',
                     filterPriority === p
                       ? 'bg-stone-900 text-white dark:bg-white dark:text-stone-950 font-bold'
                       : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
@@ -527,7 +526,7 @@ export default function Tracker() {
           2. PERSPECTIVE 01: 4-COLUMN EQUIER KANBAN BOARD
       ==================================================================== */}
       {activePerspective === 'kanban' && (
-        <section aria-label="Equier Kanban Task Board" className="flex flex-col gap-4">
+        <section aria-label="Kanban Task Board" className="flex flex-col gap-4">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 items-start">
             {KANBAN_COLUMNS.map((col) => {
               const colTasks = filteredKanbanTasks.filter((t) => t.status === col.id);
@@ -561,7 +560,7 @@ export default function Tracker() {
                     </button>
                   </div>
 
-                  <p className="text-[11px] text-stone-500 dark:text-stone-400 line-clamp-1">
+                  <p className="text-caption text-stone-500 dark:text-stone-400 line-clamp-1">
                     {col.description}
                   </p>
 
@@ -601,7 +600,7 @@ export default function Tracker() {
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                               />
                               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                              <span className="absolute bottom-2 left-2 text-[10px] font-mono text-white/90 font-semibold px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-xs">
+                              <span className="absolute bottom-2 left-2 text-caption font-mono text-white/90 font-semibold px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-xs">
                                 Blueprint Preview
                               </span>
                             </div>
@@ -620,7 +619,7 @@ export default function Tracker() {
                                     : 'bg-cyan-400'
                                 )}
                               />
-                              <span className="font-mono text-[11px] font-semibold text-stone-500 dark:text-stone-400">
+                              <span className="font-mono text-caption font-semibold text-stone-500 dark:text-stone-400">
                                 {task.priority.toUpperCase()} · {task.stepTitle}
                               </span>
                             </div>
@@ -663,14 +662,14 @@ export default function Tracker() {
 
                           {/* Card Footer: District Tag & Move Stage Button */}
                           <div className="flex items-center justify-between gap-2 pt-2 border-t border-stone-200/80 dark:border-white/10 text-xs">
-                            <span className="font-mono text-[10px] text-stone-500 dark:text-stone-400 truncate">
+                            <span className="font-mono text-caption text-stone-500 dark:text-stone-400 truncate">
                               Target: {task.districtTag}
                             </span>
 
                             <button
                               type="button"
                               onClick={() => handleAdvanceTask(task)}
-                              className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 dark:text-amber-400 hover:underline cursor-pointer"
+                              className="inline-flex items-center gap-1 text-caption font-semibold text-emerald-700 dark:text-amber-400 hover:underline cursor-pointer"
                             >
                               <span>Advance Stage</span>
                               <ArrowRight size={11} />

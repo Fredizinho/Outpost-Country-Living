@@ -425,10 +425,10 @@ Generated from Malawi Outpost Permaculture Cartography
                 <span>Full Malawi Overview</span>
               </button>
             )}
-            <span className="text-amber-800 font-extrabold uppercase text-[10px] tracking-widest bg-amber-100 px-3 py-1 rounded-full border border-amber-300 flex items-center gap-1">
+            <span className="text-amber-800 font-extrabold uppercase text-caption tracking-widest bg-amber-100 px-3 py-1 rounded-full border border-amber-300 flex items-center gap-1">
               <Sparkles size={11} className="text-amber-600" /> Detached Micro-Cartography View
             </span>
-            <span className="bg-emerald-100 text-emerald-800 text-[9px] font-black uppercase px-2.5 py-1 rounded-full border border-emerald-300 flex items-center gap-1">
+            <span className="bg-emerald-100 text-emerald-800 text-caption font-black uppercase px-2.5 py-1 rounded-full border border-emerald-300 flex items-center gap-1">
               <HardDrive size={10} /> 100% Offline Ready
             </span>
           </div>
@@ -571,14 +571,14 @@ Generated from Malawi Outpost Permaculture Cartography
         {/* Layer Quick Presets */}
         <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+            <span className="text-caption font-black uppercase tracking-wider text-slate-400">
               Layer Presets:
             </span>
             <div className="flex flex-wrap gap-1">
               <button
                 onClick={() => applyPreset('all')}
                 className={cn(
-                  "px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1",
+                  "px-2.5 py-1 rounded-lg text-caption font-black uppercase tracking-wider transition-all flex items-center gap-1",
                   activePreset === 'all'
                     ? "bg-emerald-800 text-white shadow-sm"
                     : "bg-slate-100 text-slate-600 hover:bg-slate-200"
@@ -590,7 +590,7 @@ Generated from Malawi Outpost Permaculture Cartography
               <button
                 onClick={() => applyPreset('agro')}
                 className={cn(
-                  "px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1",
+                  "px-2.5 py-1 rounded-lg text-caption font-black uppercase tracking-wider transition-all flex items-center gap-1",
                   activePreset === 'agro'
                     ? "bg-emerald-700 text-white shadow-sm"
                     : "bg-slate-100 text-slate-600 hover:bg-slate-200"
@@ -602,7 +602,7 @@ Generated from Malawi Outpost Permaculture Cartography
               <button
                 onClick={() => applyPreset('hydro')}
                 className={cn(
-                  "px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1",
+                  "px-2.5 py-1 rounded-lg text-caption font-black uppercase tracking-wider transition-all flex items-center gap-1",
                   activePreset === 'hydro'
                     ? "bg-sky-700 text-white shadow-sm"
                     : "bg-slate-100 text-slate-600 hover:bg-slate-200"
@@ -614,7 +614,7 @@ Generated from Malawi Outpost Permaculture Cartography
               <button
                 onClick={() => applyPreset('logistics')}
                 className={cn(
-                  "px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1",
+                  "px-2.5 py-1 rounded-lg text-caption font-black uppercase tracking-wider transition-all flex items-center gap-1",
                   activePreset === 'logistics'
                     ? "bg-amber-700 text-white shadow-sm"
                     : "bg-slate-100 text-slate-600 hover:bg-slate-200"
@@ -626,7 +626,7 @@ Generated from Malawi Outpost Permaculture Cartography
               <button
                 onClick={() => applyPreset('eco')}
                 className={cn(
-                  "px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1",
+                  "px-2.5 py-1 rounded-lg text-caption font-black uppercase tracking-wider transition-all flex items-center gap-1",
                   activePreset === 'eco'
                     ? "bg-teal-800 text-white shadow-sm"
                     : "bg-slate-100 text-slate-600 hover:bg-slate-200"
@@ -638,7 +638,7 @@ Generated from Malawi Outpost Permaculture Cartography
             </div>
           </div>
 
-          <div className="flex items-center gap-1 text-[10px] font-bold text-slate-500">
+          <div className="flex items-center gap-1 text-caption font-bold text-slate-500">
             <span>{allEntities.length} Features Mapped</span>
           </div>
         </div>
@@ -648,7 +648,7 @@ Generated from Malawi Outpost Permaculture Cartography
           <button
             onClick={() => toggleLayerVisibility('terrain')}
             className={cn(
-              "px-2.5 py-1 rounded-xl text-[11px] font-bold transition-all flex items-center gap-1.5 border",
+              "px-2.5 py-1 rounded-xl text-caption font-bold transition-all flex items-center gap-1.5 border",
               visibleLayers.terrain
                 ? "bg-amber-50 text-amber-950 border-amber-300 shadow-xs"
                 : "bg-slate-50 text-slate-400 border-slate-200 opacity-60"
@@ -662,7 +662,7 @@ Generated from Malawi Outpost Permaculture Cartography
           <button
             onClick={() => toggleLayerVisibility('soil')}
             className={cn(
-              "px-2.5 py-1 rounded-xl text-[11px] font-bold transition-all flex items-center gap-1.5 border",
+              "px-2.5 py-1 rounded-xl text-caption font-bold transition-all flex items-center gap-1.5 border",
               visibleLayers.soil
                 ? "bg-amber-100/70 text-amber-950 border-amber-300 shadow-xs"
                 : "bg-slate-50 text-slate-400 border-slate-200 opacity-60"
@@ -676,7 +676,7 @@ Generated from Malawi Outpost Permaculture Cartography
           <button
             onClick={() => toggleLayerVisibility('rainfall')}
             className={cn(
-              "px-2.5 py-1 rounded-xl text-[11px] font-bold transition-all flex items-center gap-1.5 border",
+              "px-2.5 py-1 rounded-xl text-caption font-bold transition-all flex items-center gap-1.5 border",
               visibleLayers.rainfall
                 ? "bg-sky-50 text-sky-950 border-sky-300 shadow-xs"
                 : "bg-slate-50 text-slate-400 border-slate-200 opacity-60"
@@ -690,7 +690,7 @@ Generated from Malawi Outpost Permaculture Cartography
           <button
             onClick={() => toggleLayerVisibility('crops')}
             className={cn(
-              "px-2.5 py-1 rounded-xl text-[11px] font-bold transition-all flex items-center gap-1.5 border",
+              "px-2.5 py-1 rounded-xl text-caption font-bold transition-all flex items-center gap-1.5 border",
               visibleLayers.crops
                 ? "bg-emerald-50 text-emerald-950 border-emerald-300 shadow-xs"
                 : "bg-slate-50 text-slate-400 border-slate-200 opacity-60"
@@ -704,7 +704,7 @@ Generated from Malawi Outpost Permaculture Cartography
           <button
             onClick={() => toggleLayerVisibility('roads')}
             className={cn(
-              "px-2.5 py-1 rounded-xl text-[11px] font-bold transition-all flex items-center gap-1.5 border",
+              "px-2.5 py-1 rounded-xl text-caption font-bold transition-all flex items-center gap-1.5 border",
               visibleLayers.roads
                 ? "bg-amber-50 text-amber-950 border-amber-300 shadow-xs"
                 : "bg-slate-50 text-slate-400 border-slate-200 opacity-60"
@@ -718,7 +718,7 @@ Generated from Malawi Outpost Permaculture Cartography
           <button
             onClick={() => toggleLayerVisibility('rivers')}
             className={cn(
-              "px-2.5 py-1 rounded-xl text-[11px] font-bold transition-all flex items-center gap-1.5 border",
+              "px-2.5 py-1 rounded-xl text-caption font-bold transition-all flex items-center gap-1.5 border",
               visibleLayers.rivers
                 ? "bg-cyan-50 text-cyan-950 border-cyan-300 shadow-xs"
                 : "bg-slate-50 text-slate-400 border-slate-200 opacity-60"
@@ -732,7 +732,7 @@ Generated from Malawi Outpost Permaculture Cartography
           <button
             onClick={() => toggleLayerVisibility('settlements')}
             className={cn(
-              "px-2.5 py-1 rounded-xl text-[11px] font-bold transition-all flex items-center gap-1.5 border",
+              "px-2.5 py-1 rounded-xl text-caption font-bold transition-all flex items-center gap-1.5 border",
               visibleLayers.settlements
                 ? "bg-indigo-50 text-indigo-950 border-indigo-300 shadow-xs"
                 : "bg-slate-50 text-slate-400 border-slate-200 opacity-60"
@@ -746,7 +746,7 @@ Generated from Malawi Outpost Permaculture Cartography
           <button
             onClick={() => toggleLayerVisibility('forests')}
             className={cn(
-              "px-2.5 py-1 rounded-xl text-[11px] font-bold transition-all flex items-center gap-1.5 border",
+              "px-2.5 py-1 rounded-xl text-caption font-bold transition-all flex items-center gap-1.5 border",
               visibleLayers.forests
                 ? "bg-teal-50 text-teal-950 border-teal-300 shadow-xs"
                 : "bg-slate-50 text-slate-400 border-slate-200 opacity-60"
@@ -773,7 +773,7 @@ Generated from Malawi Outpost Permaculture Cartography
             <div className="relative z-10 flex items-center justify-between text-white bg-emerald-900/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-emerald-700/60 text-xs shadow-md">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="font-extrabold uppercase tracking-wider text-amber-300 text-[11px]">
+                <span className="font-extrabold uppercase tracking-wider text-amber-300 text-caption">
                   {regionData.name} Cartography • Scale 1:{regionId === 'northern' ? '350k' : '450k'}
                 </span>
               </div>
@@ -1254,7 +1254,7 @@ Generated from Malawi Outpost Permaculture Cartography
 
               {/* LIVE CURSOR TELEMETRY BADGE */}
               {cursorGeo && (
-                <div className="absolute top-4 left-4 bg-slate-950/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-emerald-500/40 text-[10px] text-emerald-200 pointer-events-none shadow-lg flex items-center gap-2">
+                <div className="absolute top-4 left-4 bg-slate-950/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-emerald-500/40 text-caption text-emerald-200 pointer-events-none shadow-lg flex items-center gap-2">
                   <MapPin size={11} className="text-amber-400" />
                   <span>{cursorGeo.lat}° S, {cursorGeo.lng}° E</span>
                   <span className="text-slate-500">|</span>
@@ -1271,7 +1271,7 @@ Generated from Malawi Outpost Permaculture Cartography
                     exit={{ opacity: 0 }}
                     className="absolute bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 bg-slate-950/90 text-white p-3.5 rounded-2xl border border-emerald-500/60 shadow-2xl backdrop-blur-md z-30 pointer-events-none"
                   >
-                    <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-wider text-amber-400">
+                    <div className="flex items-center gap-1.5 text-caption font-black uppercase tracking-wider text-amber-400">
                       <Sparkles size={11} /> {hoveredEntity.type}
                     </div>
                     <h5 className="serif text-base font-bold text-white mt-0.5">{hoveredEntity.title}</h5>
@@ -1282,7 +1282,7 @@ Generated from Malawi Outpost Permaculture Cartography
             </div>
 
             {/* Canvas Bottom Legend Bar */}
-            <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] text-emerald-200 bg-emerald-900/80 px-4 py-2.5 rounded-xl border border-emerald-700/60">
+            <div className="flex flex-wrap items-center justify-between gap-3 text-caption text-emerald-200 bg-emerald-900/80 px-4 py-2.5 rounded-xl border border-emerald-700/60">
               <div className="flex flex-wrap items-center gap-4">
                 <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block" /> M1 Highway</span>
                 <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-sky-400 inline-block" /> Perennial River</span>
@@ -1316,12 +1316,12 @@ Generated from Malawi Outpost Permaculture Cartography
                   </button>
 
                   <div className="flex items-center justify-between pr-8">
-                    <span className="text-[9px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-md bg-emerald-800 text-amber-300 border border-emerald-700">
+                    <span className="text-caption font-black uppercase tracking-widest px-2.5 py-0.5 rounded-md bg-emerald-800 text-amber-300 border border-emerald-700">
                       {selectedEntity.type.toUpperCase()} DOSSIER
                     </span>
                     <button
                       onClick={() => copySelectedItem(selectedEntity.data.name || selectedEntity.data.label || selectedEntity.data.cropName, JSON.stringify(selectedEntity.data))}
-                      className="text-[10px] text-emerald-300 hover:text-white flex items-center gap-1 bg-emerald-950/60 px-2 py-0.5 rounded-md border border-emerald-800"
+                      className="text-caption text-emerald-300 hover:text-white flex items-center gap-1 bg-emerald-950/60 px-2 py-0.5 rounded-md border border-emerald-800"
                     >
                       <Copy size={10} />
                       <span>{itemCopied ? 'Copied' : 'Copy'}</span>
@@ -1340,22 +1340,22 @@ Generated from Malawi Outpost Permaculture Cartography
                         {/* 3-cell metric tiles */}
                         <div className="grid grid-cols-3 gap-2 text-center">
                           <div className="bg-emerald-950/80 p-2.5 rounded-xl border border-emerald-800">
-                            <span className="text-[9px] uppercase font-bold text-emerald-400 block">Altitude</span>
+                            <span className="text-caption uppercase font-bold text-emerald-400 block">Altitude</span>
                             <span className="font-black text-amber-300 text-sm">{p.altitudeMeters}m</span>
                           </div>
                           <div className="bg-emerald-950/80 p-2.5 rounded-xl border border-emerald-800">
-                            <span className="text-[9px] uppercase font-bold text-emerald-400 block">Imperial</span>
+                            <span className="text-caption uppercase font-bold text-emerald-400 block">Imperial</span>
                             <span className="font-bold text-white text-xs">{Math.round(p.altitudeMeters * 3.28084)} ft</span>
                           </div>
                           <div className="bg-emerald-950/80 p-2.5 rounded-xl border border-emerald-800">
-                            <span className="text-[9px] uppercase font-bold text-emerald-400 block">Relief</span>
+                            <span className="text-caption uppercase font-bold text-emerald-400 block">Relief</span>
                             <span className="font-bold text-emerald-200 text-xs">Alpine</span>
                           </div>
                         </div>
 
                         <p className="text-emerald-100/90 leading-relaxed text-xs">{p.description}</p>
                         
-                        <div className="bg-emerald-950/90 p-3 rounded-xl border border-emerald-800 text-[11px] text-emerald-200">
+                        <div className="bg-emerald-950/90 p-3 rounded-xl border border-emerald-800 text-caption text-emerald-200">
                           <strong className="text-amber-300 block mb-1">Permaculture Insight:</strong>
                           High chill hours and cool nocturnal temperatures create prime niches for apples, pears, and specialty Arabica coffee micro-lots.
                         </div>
@@ -1374,33 +1374,33 @@ Generated from Malawi Outpost Permaculture Cartography
                         
                         <div className="grid grid-cols-3 gap-2 text-center">
                           <div className="bg-emerald-950/80 p-2.5 rounded-xl border border-emerald-800">
-                            <span className="text-[9px] uppercase font-bold text-emerald-400 block">pH Range</span>
+                            <span className="text-caption uppercase font-bold text-emerald-400 block">pH Range</span>
                             <span className="font-black text-amber-300 text-xs">{s.phRange}</span>
                           </div>
                           <div className="bg-emerald-950/80 p-2.5 rounded-xl border border-emerald-800">
-                            <span className="text-[9px] uppercase font-bold text-emerald-400 block">Fertility</span>
+                            <span className="text-caption uppercase font-bold text-emerald-400 block">Fertility</span>
                             <span className="font-bold text-white text-xs">{s.fertility}</span>
                           </div>
                           <div className="bg-emerald-950/80 p-2.5 rounded-xl border border-emerald-800">
-                            <span className="text-[9px] uppercase font-bold text-emerald-400 block">Texture</span>
-                            <span className="font-bold text-emerald-200 text-[10px]">{s.texture.split(' ')[0]}</span>
+                            <span className="text-caption uppercase font-bold text-emerald-400 block">Texture</span>
+                            <span className="font-bold text-emerald-200 text-caption">{s.texture.split(' ')[0]}</span>
                           </div>
                         </div>
 
-                        <div className="flex justify-between border-b border-emerald-800/80 pb-1.5 text-[11px]">
+                        <div className="flex justify-between border-b border-emerald-800/80 pb-1.5 text-caption">
                           <span className="text-emerald-300">Classification:</span>
                           <span className="font-bold text-white">{s.classification}</span>
                         </div>
 
-                        <p className="text-emerald-100/90 leading-relaxed text-[11px]">{s.notes}</p>
+                        <p className="text-emerald-100/90 leading-relaxed text-caption">{s.notes}</p>
                         
                         <div>
-                          <span className="text-[10px] uppercase font-black tracking-wider text-amber-400 block mb-1.5">
+                          <span className="text-caption uppercase font-black tracking-wider text-amber-400 block mb-1.5">
                             Recommended Crops:
                           </span>
                           <div className="flex flex-wrap gap-1">
                             {s.recommendedCrops.map(c => (
-                              <span key={c} className="bg-emerald-950 px-2 py-0.5 rounded-md text-[10px] font-bold text-emerald-200 border border-emerald-800">
+                              <span key={c} className="bg-emerald-950 px-2 py-0.5 rounded-md text-caption font-bold text-emerald-200 border border-emerald-800">
                                 {c}
                               </span>
                             ))}
@@ -1421,18 +1421,18 @@ Generated from Malawi Outpost Permaculture Cartography
                         
                         <div className="grid grid-cols-2 gap-2 text-center">
                           <div className="bg-emerald-950/80 p-2.5 rounded-xl border border-emerald-800">
-                            <span className="text-[9px] uppercase font-bold text-emerald-400 block">Annual Average</span>
+                            <span className="text-caption uppercase font-bold text-emerald-400 block">Annual Average</span>
                             <span className="font-black text-sky-300 text-sm">{r.annualMmAvg} mm</span>
                           </div>
                           <div className="bg-emerald-950/80 p-2.5 rounded-xl border border-emerald-800">
-                            <span className="text-[9px] uppercase font-bold text-emerald-400 block">Drought Risk</span>
+                            <span className="text-caption uppercase font-bold text-emerald-400 block">Drought Risk</span>
                             <span className="font-bold text-white text-xs">{r.droughtVulnerability}</span>
                           </div>
                         </div>
 
-                        <p className="text-emerald-100/90 leading-relaxed text-[11px]">{r.rainyPattern}</p>
+                        <p className="text-emerald-100/90 leading-relaxed text-caption">{r.rainyPattern}</p>
                         
-                        <div className="bg-emerald-950/90 p-3 rounded-xl border border-emerald-800 text-[11px] text-emerald-200">
+                        <div className="bg-emerald-950/90 p-3 rounded-xl border border-emerald-800 text-caption text-emerald-200">
                           <strong className="text-sky-300 block mb-1">Water Strategy:</strong>
                           Pair on-contour swales with keyline ponds to recharge the subsoil sponge during torrential rains.
                         </div>
@@ -1454,20 +1454,20 @@ Generated from Malawi Outpost Permaculture Cartography
                         
                         <div className="grid grid-cols-3 gap-2 text-center">
                           <div className="bg-emerald-950/80 p-2.5 rounded-xl border border-emerald-800">
-                            <span className="text-[9px] uppercase font-bold text-emerald-400 block">Category</span>
-                            <span className="font-bold text-white text-[10px]">{c.category.split(' ')[0]}</span>
+                            <span className="text-caption uppercase font-bold text-emerald-400 block">Category</span>
+                            <span className="font-bold text-white text-caption">{c.category.split(' ')[0]}</span>
                           </div>
                           <div className="bg-emerald-950/80 p-2.5 rounded-xl border border-emerald-800">
-                            <span className="text-[9px] uppercase font-bold text-emerald-400 block">Harvest</span>
-                            <span className="font-bold text-amber-300 text-[10px]">{c.harvestWindow.split('–')[0]}</span>
+                            <span className="text-caption uppercase font-bold text-emerald-400 block">Harvest</span>
+                            <span className="font-bold text-amber-300 text-caption">{c.harvestWindow.split('–')[0]}</span>
                           </div>
                           <div className="bg-emerald-950/80 p-2.5 rounded-xl border border-emerald-800">
-                            <span className="text-[9px] uppercase font-bold text-emerald-400 block">Suitability</span>
-                            <span className="font-bold text-emerald-300 text-[10px]">{c.suitabilityScore}</span>
+                            <span className="text-caption uppercase font-bold text-emerald-400 block">Suitability</span>
+                            <span className="font-bold text-emerald-300 text-caption">{c.suitabilityScore}</span>
                           </div>
                         </div>
 
-                        <p className="text-emerald-100/90 leading-relaxed text-[11px]">{c.notes}</p>
+                        <p className="text-emerald-100/90 leading-relaxed text-caption">{c.notes}</p>
                       </div>
                     );
                   })()}
@@ -1483,21 +1483,21 @@ Generated from Malawi Outpost Permaculture Cartography
                         
                         <div className="grid grid-cols-2 gap-2 text-center">
                           <div className="bg-emerald-950/80 p-2.5 rounded-xl border border-emerald-800">
-                            <span className="text-[9px] uppercase font-bold text-emerald-400 block">Surface</span>
+                            <span className="text-caption uppercase font-bold text-emerald-400 block">Surface</span>
                             <span className="font-bold text-white text-xs">{rd.surface.split(' ')[0]}</span>
                           </div>
                           <div className="bg-emerald-950/80 p-2.5 rounded-xl border border-emerald-800">
-                            <span className="text-[9px] uppercase font-bold text-emerald-400 block">Accessibility</span>
+                            <span className="text-caption uppercase font-bold text-emerald-400 block">Accessibility</span>
                             <span className="font-bold text-amber-300 text-xs">All-Weather</span>
                           </div>
                         </div>
 
-                        <div className="flex flex-col gap-1 border-b border-emerald-800 pb-2 text-[11px]">
+                        <div className="flex flex-col gap-1 border-b border-emerald-800 pb-2 text-caption">
                           <span className="text-emerald-300 font-bold">Transit Corridor:</span>
                           <span className="text-amber-200">{rd.keyStops.join(' → ')}</span>
                         </div>
 
-                        <p className="text-emerald-100/90 leading-relaxed text-[11px]">{rd.freightSuitability}</p>
+                        <p className="text-emerald-100/90 leading-relaxed text-caption">{rd.freightSuitability}</p>
                       </div>
                     );
                   })()}
@@ -1513,18 +1513,18 @@ Generated from Malawi Outpost Permaculture Cartography
                         
                         <div className="grid grid-cols-2 gap-2 text-center">
                           <div className="bg-emerald-950/80 p-2.5 rounded-xl border border-emerald-800">
-                            <span className="text-[9px] uppercase font-bold text-emerald-400 block">Flow Type</span>
+                            <span className="text-caption uppercase font-bold text-emerald-400 block">Flow Type</span>
                             <span className="font-bold text-cyan-300 text-xs">{rv.flowReliability.split(' ')[0]}</span>
                           </div>
                           <div className="bg-emerald-950/80 p-2.5 rounded-xl border border-emerald-800">
-                            <span className="text-[9px] uppercase font-bold text-emerald-400 block">Hydrology</span>
+                            <span className="text-caption uppercase font-bold text-emerald-400 block">Hydrology</span>
                             <span className="font-bold text-white text-xs">{rv.type.split(' ')[0]}</span>
                           </div>
                         </div>
 
-                        <p className="text-emerald-100/90 leading-relaxed text-[11px]">{rv.notes}</p>
+                        <p className="text-emerald-100/90 leading-relaxed text-caption">{rv.notes}</p>
                         
-                        <div className="bg-emerald-950/90 p-3 rounded-xl border border-emerald-800 text-[11px] text-emerald-200">
+                        <div className="bg-emerald-950/90 p-3 rounded-xl border border-emerald-800 text-caption text-emerald-200">
                           <strong className="text-cyan-300 block mb-1">Irrigation Potential:</strong>
                           {rv.irrigationCapacity}
                         </div>
@@ -1543,25 +1543,25 @@ Generated from Malawi Outpost Permaculture Cartography
                         
                         <div className="grid grid-cols-2 gap-2 text-center">
                           <div className="bg-emerald-950/80 p-2.5 rounded-xl border border-emerald-800">
-                            <span className="text-[9px] uppercase font-bold text-emerald-400 block">Hierarchy</span>
+                            <span className="text-caption uppercase font-bold text-emerald-400 block">Hierarchy</span>
                             <span className="font-bold text-white text-xs">{st.type.split('/')[0]}</span>
                           </div>
                           <div className="bg-emerald-950/80 p-2.5 rounded-xl border border-emerald-800">
-                            <span className="text-[9px] uppercase font-bold text-emerald-400 block">Population</span>
+                            <span className="text-caption uppercase font-bold text-emerald-400 block">Population</span>
                             <span className="font-bold text-amber-300 text-xs">{st.populationEstimate}</span>
                           </div>
                         </div>
 
-                        <div className="flex justify-between border-b border-emerald-800 pb-1.5 text-[11px]">
+                        <div className="flex justify-between border-b border-emerald-800 pb-1.5 text-caption">
                           <span className="text-emerald-300 font-bold">Market Days:</span>
                           <span className="font-bold text-emerald-200">{st.marketDays}</span>
                         </div>
 
                         <div>
-                          <span className="text-[10px] uppercase font-black tracking-wider text-amber-400 block mb-1.5">
+                          <span className="text-caption uppercase font-black tracking-wider text-amber-400 block mb-1.5">
                             Hardware & Rural Services:
                           </span>
-                          <ul className="flex flex-col gap-1 text-[11px] text-emerald-100">
+                          <ul className="flex flex-col gap-1 text-caption text-emerald-100">
                             {st.keyAgroServices.map(srv => (
                               <li key={srv} className="flex items-center gap-1.5">
                                 <CheckCircle2 size={12} className="text-emerald-400 shrink-0" />
@@ -1585,24 +1585,24 @@ Generated from Malawi Outpost Permaculture Cartography
                         
                         <div className="grid grid-cols-2 gap-2 text-center">
                           <div className="bg-emerald-950/80 p-2.5 rounded-xl border border-emerald-800">
-                            <span className="text-[9px] uppercase font-bold text-emerald-400 block">Area</span>
+                            <span className="text-caption uppercase font-bold text-emerald-400 block">Area</span>
                             <span className="font-bold text-amber-300 text-xs">{f.hectares}</span>
                           </div>
                           <div className="bg-emerald-950/80 p-2.5 rounded-xl border border-emerald-800">
-                            <span className="text-[9px] uppercase font-bold text-emerald-400 block">Type</span>
+                            <span className="text-caption uppercase font-bold text-emerald-400 block">Type</span>
                             <span className="font-bold text-white text-xs">{f.type.split(' ')[0]}</span>
                           </div>
                         </div>
 
-                        <p className="text-emerald-100/90 leading-relaxed text-[11px]">{f.ecologicalFunction}</p>
+                        <p className="text-emerald-100/90 leading-relaxed text-caption">{f.ecologicalFunction}</p>
                         
                         <div>
-                          <span className="text-[10px] uppercase font-black tracking-wider text-emerald-300 block mb-1">
+                          <span className="text-caption uppercase font-black tracking-wider text-emerald-300 block mb-1">
                             Key Biodiversity:
                           </span>
                           <div className="flex flex-wrap gap-1">
                             {f.keyFloraFauna.map(fl => (
-                              <span key={fl} className="bg-emerald-950 px-2 py-0.5 rounded text-[10px] font-bold text-emerald-200 border border-emerald-800">
+                              <span key={fl} className="bg-emerald-950 px-2 py-0.5 rounded text-caption font-bold text-emerald-200 border border-emerald-800">
                                 {fl}
                               </span>
                             ))}
@@ -1618,7 +1618,7 @@ Generated from Malawi Outpost Permaculture Cartography
             {/* Regional Summary & Agro-Audit Card */}
             <div className="bg-white/80 backdrop-blur-md p-6 rounded-[2.5rem] border border-white/90 shadow-xl flex flex-col gap-5 text-slate-800">
               <div>
-                <span className="text-emerald-800 font-extrabold uppercase text-[10px] tracking-widest block">
+                <span className="text-emerald-800 font-extrabold uppercase text-caption tracking-widest block">
                   Regional Permaculture Audit
                 </span>
                 <h3 className="serif text-2xl font-bold text-emerald-950 mt-0.5">
@@ -1629,25 +1629,25 @@ Generated from Malawi Outpost Permaculture Cartography
               {/* Concise 4-cell stats matrix */}
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
-                  <span className="text-[10px] font-bold text-slate-500 block">Altitude Span</span>
+                  <span className="text-caption font-bold text-slate-500 block">Altitude Span</span>
                   <span className="font-extrabold text-emerald-950 text-xs">{regionData.terrain.altitudeRange.split('(')[0]}</span>
                 </div>
                 <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
-                  <span className="text-[10px] font-bold text-slate-500 block">Water Security</span>
+                  <span className="text-caption font-bold text-slate-500 block">Water Security</span>
                   <span className="font-extrabold text-emerald-700 text-xs">{regionData.waterIndependenceRating.split('(')[0]}</span>
                 </div>
                 <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
-                  <span className="text-[10px] font-bold text-slate-500 block">Primary Highway</span>
+                  <span className="text-caption font-bold text-slate-500 block">Primary Highway</span>
                   <span className="font-extrabold text-amber-700 text-xs">M1 Bitumen</span>
                 </div>
                 <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
-                  <span className="text-[10px] font-bold text-slate-500 block">Urban Capital</span>
+                  <span className="text-caption font-bold text-slate-500 block">Urban Capital</span>
                   <span className="font-extrabold text-emerald-950 text-xs">{regionData.adminCapital}</span>
                 </div>
               </div>
 
               <div className="bg-emerald-50 p-4 rounded-2xl border border-emerald-200 text-xs leading-relaxed text-emerald-950">
-                <strong className="text-emerald-900 font-black uppercase tracking-wider text-[10px] block mb-1">
+                <strong className="text-emerald-900 font-black uppercase tracking-wider text-caption block mb-1">
                   Homestead Strategy Verdict:
                 </strong>
                 {regionData.homesteadVerdict}
@@ -1686,7 +1686,7 @@ Generated from Malawi Outpost Permaculture Cartography
                 >
                   <IconComp size={12} className={catalogCategory === cat.id ? "text-amber-400" : "text-slate-500"} />
                   <span>{cat.label}</span>
-                  <span className="text-[10px] opacity-75 font-normal">({cat.count})</span>
+                  <span className="text-caption opacity-75 font-normal">({cat.count})</span>
                 </button>
               );
             })}
@@ -1701,10 +1701,10 @@ Generated from Malawi Outpost Permaculture Cartography
               >
                 <div className="flex flex-col gap-1.5">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 border border-emerald-200">
+                    <span className="text-caption font-black uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 border border-emerald-200">
                       {item.category}
                     </span>
-                    <span className="text-[10px] font-black text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                    <span className="text-caption font-black text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
                       {item.badge}
                     </span>
                   </div>

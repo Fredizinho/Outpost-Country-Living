@@ -30,6 +30,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { CHART_PALETTE_6, CHART_TOKENS } from '@/lib/chartTokens';
 import {
   DISTRICT_CLIMATE_DATABASE,
   DistrictClimateData,
@@ -267,7 +268,7 @@ export function RegionalClimateChart({
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between text-xs font-mono font-bold uppercase text-stone-600 dark:text-stone-300">
           <span>Select Agro-Ecological Region / District:</span>
-          <span className="text-[11px] text-emerald-800 dark:text-amber-300">
+          <span className="text-caption text-emerald-800 dark:text-amber-300">
             {primaryData.elevationRangeMeters} · {primaryData.region} Malawi
           </span>
         </div>
@@ -287,9 +288,9 @@ export function RegionalClimateChart({
                 )}
               >
                 <div className="text-xs font-bold leading-tight truncate">{reg.name}</div>
-                <div className="flex items-center justify-between text-[10px] font-mono opacity-85">
+                <div className="flex items-center justify-between text-caption font-mono opacity-85">
                   <span>{reg.elevation}</span>
-                  <span className={cn('text-[9px] font-bold px-1 rounded', active ? 'bg-amber-400 text-stone-950' : 'text-stone-500 dark:text-amber-300/90')}>
+                  <span className={cn('text-caption font-bold px-1 rounded', active ? 'bg-amber-400 text-stone-950' : 'text-stone-500 dark:text-amber-300/90')}>
                     {reg.tag}
                   </span>
                 </div>
@@ -302,53 +303,63 @@ export function RegionalClimateChart({
       {/* 4 Summary Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <div className="p-4 rounded-2xl bg-stone-50 dark:bg-[#0F2217] border border-stone-200/90 dark:border-emerald-900/60 flex flex-col justify-between gap-1 shadow-2xs">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 flex items-center gap-1">
+          <span className="text-caption font-mono font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 flex items-center gap-1">
             <CloudRain size={12} className="text-emerald-700 dark:text-emerald-400" />
             <span>Annual Rainfall</span>
           </span>
           <div className="text-2xl font-black text-emerald-950 dark:text-amber-300 tabular-nums my-0.5">
             {totalAnnualRain.toLocaleString()} <span className="text-xs font-normal text-stone-500 dark:text-stone-400">mm/yr</span>
           </div>
-          <span className="text-[10px] text-stone-600 dark:text-stone-300 font-medium">
+          <span className="text-caption text-stone-600 dark:text-stone-300 font-medium">
             Wet Season: {primaryData.wetSeasonMonths}
           </span>
         </div>
 
         <div className="p-4 rounded-2xl bg-stone-50 dark:bg-[#0F2217] border border-stone-200/90 dark:border-emerald-900/60 flex flex-col justify-between gap-1 shadow-2xs">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 flex items-center gap-1">
+          <span className="text-caption font-mono font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 flex items-center gap-1">
             <TrendingUp size={12} className="text-cyan-700 dark:text-cyan-400" />
             <span>Peak Month</span>
           </span>
           <div className="text-2xl font-black text-cyan-900 dark:text-cyan-300 tabular-nums my-0.5">
             {peakRainMonth.month} ({peakRainMonth.mm} <span className="text-xs font-normal text-stone-500 dark:text-stone-400">mm</span>)
           </div>
-          <span className="text-[10px] text-stone-600 dark:text-stone-300 font-medium">
+          <span className="text-caption text-stone-600 dark:text-stone-300 font-medium">
             Requires contour swales &amp; silt traps
           </span>
         </div>
 
         <div className="p-4 rounded-2xl bg-stone-50 dark:bg-[#0F2217] border border-stone-200/90 dark:border-emerald-900/60 flex flex-col justify-between gap-1 shadow-2xs">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 flex items-center gap-1">
+          <span className="text-caption font-mono font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 flex items-center gap-1">
             <Thermometer size={12} className="text-amber-700 dark:text-amber-400" />
             <span>Thermal Range &amp; Frost</span>
           </span>
           <div className="text-2xl font-black text-amber-900 dark:text-amber-300 tabular-nums my-0.5">
             {winterMinimum}°C – {summerMaximum}°C
           </div>
-          <span className={cn('text-[10px] font-bold', winterMinimum <= 5 ? 'text-amber-700 dark:text-amber-300' : 'text-emerald-700 dark:text-emerald-400')}>
-            {winterMinimum <= 5 ? '⚠️ Ground Frost Watch (Jun–Jul)' : '✓ 100% Frost-Free All Year'}
+          <span className={cn('text-caption font-bold inline-flex items-center gap-1.5', winterMinimum <= 5 ? 'text-amber-700 dark:text-amber-300' : 'text-emerald-700 dark:text-emerald-400')}>
+            {winterMinimum <= 5 ? (
+              <>
+                <AlertTriangle size={16} strokeWidth={1.75} className="shrink-0 text-amber-500" />
+                <span>Ground Frost Watch (Jun–Jul)</span>
+              </>
+            ) : (
+              <>
+                <CheckCircle2 size={16} strokeWidth={1.75} className="shrink-0 text-emerald-500" />
+                <span>100% Frost-Free All Year</span>
+              </>
+            )}
           </span>
         </div>
 
         <div className="p-4 rounded-2xl bg-stone-50 dark:bg-[#0F2217] border border-stone-200/90 dark:border-emerald-900/60 flex flex-col justify-between gap-1 shadow-2xs">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 flex items-center gap-1">
+          <span className="text-caption font-mono font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 flex items-center gap-1">
             <Droplets size={12} className="text-blue-700 dark:text-blue-400" />
             <span>100m² Roof Yield</span>
           </span>
           <div className="text-2xl font-black text-blue-900 dark:text-blue-300 tabular-nums my-0.5">
             {rainWaterCapturePer100m2.toLocaleString()} <span className="text-xs font-normal text-stone-500 dark:text-stone-400">Liters</span>
           </div>
-          <span className="text-[10px] text-stone-600 dark:text-stone-300 font-medium">
+          <span className="text-caption text-stone-600 dark:text-stone-300 font-medium">
             Calculated at 85% runoff efficiency
           </span>
         </div>
@@ -356,29 +367,31 @@ export function RegionalClimateChart({
 
       {/* Main Interactive Recharts Canvas */}
       <div className="w-full bg-[#05130A] rounded-3xl p-4 sm:p-6 border border-emerald-900/80 shadow-inner flex flex-col gap-4">
-        {/* Chart Header Bar */}
+        {/* Chart Header Bar with Direct Series Labels & Honesty Badges (<= 4 series) */}
         <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-emerald-200/90 pb-2 border-b border-emerald-900/60">
-          <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-sm bg-emerald-500 inline-block" />
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="flex items-center gap-1.5 font-bold text-white">
+              <span className="w-3 h-3 rounded-sm bg-[#15803D] inline-block shadow-xs" />
               <span>Rainfall (mm)</span>
             </span>
             {(viewMode === 'combined' || viewMode === 'temperature') && (
               <>
-                <span className="flex items-center gap-1.5">
-                  <span className="w-3 h-0.5 bg-amber-400 inline-block" />
+                <span className="flex items-center gap-1.5 font-bold text-[#f59e0b]">
+                  <span className="w-3 h-1 bg-[#C85A32] rounded-full inline-block" />
                   <span>Max Temp (°C)</span>
                 </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="w-3 h-0.5 bg-cyan-400 inline-block" />
+                <span className="flex items-center gap-1.5 font-bold text-[#38bdf8]">
+                  <span className="w-3 h-1 bg-[#0284C7] rounded-full inline-block" />
                   <span>Min Temp (°C)</span>
                 </span>
               </>
             )}
           </div>
-          <div className="flex items-center gap-2 text-[11px] text-stone-400">
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-            <span>Reference Trigger: 25mm Planting Rain Threshold</span>
+          <div className="flex items-center gap-2 text-caption text-stone-300">
+            <span className="inline-block w-4 border-t-2 border-dashed border-[#FBBF24]" />
+            <span className="px-2 py-0.5 rounded-control bg-amber-500/15 border border-amber-500/30 text-amber-200 font-mono text-caption">
+              Honesty Badge: 25mm Modelled Sowing Trigger
+            </span>
           </div>
         </div>
 
@@ -390,73 +403,73 @@ export function RegionalClimateChart({
               margin={{ top: 20, right: 20, bottom: 20, left: 10 }}
             >
               <defs>
-                {/* Rainfall Bar Gradient */}
+                {/* Rainfall Bar Gradient using Token Palette Forest Green */}
                 <linearGradient id="rainGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#10B981" stopOpacity={0.95} />
-                  <stop offset="60%" stopColor="#047857" stopOpacity={0.85} />
-                  <stop offset="100%" stopColor="#064E3B" stopOpacity={0.65} />
+                  <stop offset="0%" stopColor="#15803D" stopOpacity={0.95} />
+                  <stop offset="60%" stopColor="#166534" stopOpacity={0.85} />
+                  <stop offset="100%" stopColor="#052e16" stopOpacity={0.65} />
                 </linearGradient>
 
-                {/* Frost Risk Bar Gradient */}
+                {/* Dry Season Below 25mm Gradient using Token Terracotta/Amber */}
                 <linearGradient id="drySeasonGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#D97706" stopOpacity={0.9} />
-                  <stop offset="100%" stopColor="#78350F" stopOpacity={0.5} />
+                  <stop offset="0%" stopColor="#C85A32" stopOpacity={0.9} />
+                  <stop offset="100%" stopColor="#782A15" stopOpacity={0.6} />
                 </linearGradient>
 
                 {/* Thermal Diurnal Area Gradient */}
                 <linearGradient id="thermalBand" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#F59E0B" stopOpacity={0.25} />
-                  <stop offset="100%" stopColor="#0284C7" stopOpacity={0.05} />
+                  <stop offset="0%" stopColor="#D97706" stopOpacity={0.25} />
+                  <stop offset="100%" stopColor="#0284C7" stopOpacity={0.06} />
                 </linearGradient>
               </defs>
 
-              <CartesianGrid stroke="#064E3B" strokeDasharray="3 3" opacity={0.4} />
+              <CartesianGrid stroke={CHART_TOKENS.grid.stroke} strokeDasharray={CHART_TOKENS.grid.strokeDasharray} vertical={false} />
 
               <XAxis
                 dataKey="month"
-                stroke="#6EE7B7"
+                stroke="#A7F3D0"
                 fontSize={12}
-                fontFamily="monospace"
+                fontFamily="inherit"
                 tickLine={false}
               />
 
-              {/* Left Y-Axis: Rainfall mm */}
+              {/* Left Y-Axis: Rainfall mm (Strict 12px min) */}
               <YAxis
                 yAxisId="left"
-                stroke="#34D399"
-                fontSize={11}
-                fontFamily="monospace"
+                stroke="#6EE7B7"
+                fontSize={12}
+                fontFamily="inherit"
                 domain={[0, (dataMax: number) => Math.max(350, Math.ceil(dataMax / 50) * 50)]}
                 tickFormatter={(val) => `${val}mm`}
                 tickLine={false}
               />
 
-              {/* Right Y-Axis: Temperature °C */}
+              {/* Right Y-Axis: Temperature °C (Strict 12px min) */}
               {(viewMode === 'combined' || viewMode === 'temperature') && (
                 <YAxis
                   yAxisId="right"
                   orientation="right"
-                  stroke="#FBBF24"
-                  fontSize={11}
-                  fontFamily="monospace"
+                  stroke="#FDE68A"
+                  fontSize={12}
+                  fontFamily="inherit"
                   domain={[0, 45]}
                   tickFormatter={(val) => `${val}°C`}
                   tickLine={false}
                 />
               )}
 
-              {/* 25mm Planting Rain Threshold Line */}
+              {/* 25mm Planting Rain Threshold Line (Dashed for Modelled Threshold) */}
               <ReferenceLine
                 yAxisId="left"
                 y={25}
                 stroke="#FBBF24"
-                strokeDasharray="4 4"
-                strokeWidth={1.5}
+                strokeDasharray="5 5"
+                strokeWidth={1.75}
                 label={{
                   value: '25mm Sowing Trigger',
                   fill: '#FDE047',
-                  fontSize: 10,
-                  fontFamily: 'monospace',
+                  fontSize: 12,
+                  fontFamily: 'inherit',
                   position: 'insideBottomRight',
                 }}
               />
@@ -467,54 +480,54 @@ export function RegionalClimateChart({
                   yAxisId="right"
                   y={5}
                   stroke="#38BDF8"
-                  strokeDasharray="3 3"
-                  strokeWidth={1.2}
+                  strokeDasharray="4 4"
+                  strokeWidth={1.5}
                   label={{
                     value: '5°C Ground Frost Risk',
                     fill: '#7DD3FC',
-                    fontSize: 9,
-                    fontFamily: 'monospace',
+                    fontSize: 12,
+                    fontFamily: 'inherit',
                     position: 'insideTopLeft',
                   }}
                 />
               )}
 
-              {/* Custom High-Contrast Tooltip */}
+              {/* Card-Styled Tooltip with Warm Shadows and Rounded-Card */}
               <Tooltip
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
                     const data = payload[0].payload;
                     return (
-                      <div className="bg-[#040E09] border border-emerald-600 rounded-2xl p-3.5 shadow-xl text-white text-xs flex flex-col gap-2 max-w-xs font-sans">
-                        <div className="flex items-center justify-between border-b border-emerald-900/60 pb-1.5">
+                      <div className="bg-stone-950/95 border border-stone-800 rounded-card p-4 shadow-raised text-white text-xs flex flex-col gap-2.5 max-w-xs font-sans backdrop-blur-md">
+                        <div className="flex items-center justify-between border-b border-white/10 pb-2">
                           <span className="font-bold text-amber-300 font-mono text-sm">
                             {data.monthFull}
                           </span>
-                          <span className="text-[10px] font-mono bg-emerald-950 px-2 py-0.5 rounded text-emerald-300 border border-emerald-800">
+                          <span className="text-caption font-mono bg-emerald-950 px-2 py-0.5 rounded-control text-emerald-300 border border-emerald-800">
                             {data.season}
                           </span>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-2 text-[11px] font-mono">
+                        <div className="grid grid-cols-2 gap-2 text-caption font-mono">
                           <div>
-                            <span className="text-stone-400 block text-[9px] uppercase">Rainfall:</span>
-                            <span className="font-bold text-emerald-300 text-sm">{data.rainfall} mm</span>
+                            <span className="text-stone-400 block text-caption uppercase">Rainfall:</span>
+                            <span className="font-bold text-emerald-400 text-sm">{data.rainfall} mm</span>
                           </div>
                           <div>
-                            <span className="text-stone-400 block text-[9px] uppercase">Temp Range:</span>
-                            <span className="font-bold text-amber-300">{data.tempMin}°C – {data.tempMax}°C</span>
+                            <span className="text-stone-400 block text-caption uppercase">Temp Range:</span>
+                            <span className="font-bold text-amber-300 text-sm">{data.tempMin}°C – {data.tempMax}°C</span>
                           </div>
                         </div>
 
                         {data.isFrostRisk && (
-                          <div className="text-[10px] text-amber-300 bg-amber-950/60 p-1.5 rounded-lg border border-amber-800 flex items-center gap-1 font-mono">
-                            <AlertTriangle size={12} className="shrink-0 text-amber-400" />
+                          <div className="text-caption text-amber-300 bg-amber-950/60 p-2 rounded-control border border-amber-800 flex items-center gap-1.5 font-mono">
+                            <AlertTriangle size={14} className="shrink-0 text-amber-400" />
                             <span>Frost Alert: Protect seedlings &amp; mulch roots</span>
                           </div>
                         )}
 
-                        <p className="text-[10px] text-stone-300 leading-snug border-t border-emerald-900/60 pt-1.5 font-normal">
-                          <strong className="text-emerald-300">Field Focus:</strong> {data.focus}
+                        <p className="text-caption text-stone-300 leading-snug border-t border-white/10 pt-2 font-normal">
+                          <strong className="text-emerald-400 font-bold">Field Focus:</strong> {data.focus}
                         </p>
                       </div>
                     );
@@ -581,7 +594,7 @@ export function RegionalClimateChart({
               <div
                 key={i}
                 className={cn(
-                  'p-1.5 rounded-lg border text-[10px] font-mono flex flex-col justify-between gap-0.5',
+                  'p-1.5 rounded-lg border text-caption font-mono flex flex-col justify-between gap-0.5',
                   isRainy && 'bg-emerald-950/80 border-emerald-700/60 text-emerald-200',
                   isHarvest && 'bg-amber-950/60 border-amber-700/60 text-amber-200',
                   isCold && 'bg-sky-950/60 border-sky-700/60 text-sky-200',
@@ -589,8 +602,8 @@ export function RegionalClimateChart({
                 )}
               >
                 <div className="font-bold">{m.month}</div>
-                <div className="text-[9px] opacity-80 tabular-nums">{m.rainfall}mm</div>
-                <div className="text-[8px] font-bold truncate opacity-90">
+                <div className="text-caption opacity-80 tabular-nums">{m.rainfall}mm</div>
+                <div className="text-caption font-bold truncate opacity-90">
                   {isRainy ? 'Monsoon' : isHarvest ? 'Harvest' : isCold ? 'Frost' : 'Hot Dry'}
                 </div>
               </div>
@@ -616,7 +629,7 @@ export function RegionalClimateChart({
         </div>
 
         <div className="shrink-0 flex items-center gap-2">
-          <span className="text-[11px] font-mono text-amber-900 dark:text-amber-300 font-bold bg-amber-200/60 dark:bg-amber-900/60 px-3 py-1.5 rounded-xl border border-amber-300 dark:border-amber-700">
+          <span className="text-caption font-mono text-amber-900 dark:text-amber-300 font-bold bg-amber-200/60 dark:bg-amber-900/60 px-3 py-1.5 rounded-xl border border-amber-300 dark:border-amber-700">
             Soil: {primaryData.soilPh}
           </span>
         </div>

@@ -646,7 +646,7 @@ export default function SeasonalGuide() {
                 <Compass size={14} className={isSelected ? "text-amber-300 dark:text-stone-950" : "text-emerald-700 dark:text-emerald-400"} />
                 <span>{zone.name}</span>
                 {isUserZone && (
-                  <span className="text-[11px] font-mono font-bold opacity-85">
+                  <span className="text-caption font-mono font-bold opacity-85">
                     · Active
                   </span>
                 )}

@@ -205,7 +205,7 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                   <Icon size={16} />
                 </span>
                 <span className={cn(
-                  "text-[10px] font-mono font-bold uppercase",
+                  "text-caption font-mono font-bold uppercase",
                   isActive ? "text-emerald-200 dark:text-emerald-200" : "text-stone-400 dark:text-stone-500"
                 )}>
                   CALC
@@ -261,7 +261,7 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                         type="button"
                         onClick={() => setGravityHeadMeters(preset.val)}
                         className={cn(
-                          "py-1.5 px-2 text-[11px] font-semibold rounded-lg border transition-all cursor-pointer",
+                          "py-1.5 px-2 text-caption font-semibold rounded-lg border transition-all cursor-pointer",
                           gravityHeadMeters === preset.val
                             ? "bg-emerald-900 dark:bg-emerald-800 text-white border-emerald-950"
                             : "bg-stone-50 dark:bg-[#14281D] border-stone-200 dark:border-emerald-900/60 text-stone-700 dark:text-stone-300 hover:bg-stone-100"
@@ -339,7 +339,7 @@ export function OffGridSizingTools({ className }: { className?: string }) {
             {/* Results Column */}
             <div className="lg:col-span-5 flex flex-col justify-between gap-4 bg-white dark:bg-[#0E1D14] p-6 rounded-2xl border border-stone-200 dark:border-emerald-900/60 shadow-xs">
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 dark:text-amber-300">
+                <span className="text-caption font-bold uppercase tracking-wider text-emerald-800 dark:text-amber-300">
                   Calculated Delivery Telemetry
                 </span>
                 <h4 className="serif text-lg font-bold text-stone-900 dark:text-stone-50 mt-1">
@@ -348,13 +348,13 @@ export function OffGridSizingTools({ className }: { className?: string }) {
 
                 <div className="grid grid-cols-2 gap-3 mt-4">
                   <div className="p-3 rounded-xl bg-sky-50 dark:bg-sky-950/40 border border-sky-100 dark:border-sky-800/60">
-                    <div className="text-[10px] uppercase font-bold text-sky-900 dark:text-sky-300">Static Pressure</div>
+                    <div className="text-caption uppercase font-bold text-sky-900 dark:text-sky-300">Static Pressure</div>
                     <div className="text-xl font-black font-mono text-stone-900 dark:text-stone-50 mt-0.5">{gravityResult.staticBar} bar</div>
                     <div className="text-xs text-stone-500 dark:text-stone-400 font-mono">{gravityResult.staticPsi} PSI</div>
                   </div>
 
                   <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-100 dark:border-emerald-800/60">
-                    <div className="text-[10px] uppercase font-bold text-emerald-900 dark:text-emerald-300">Delivery Flow</div>
+                    <div className="text-caption uppercase font-bold text-emerald-900 dark:text-emerald-300">Delivery Flow</div>
                     <div className="text-xl font-black font-mono text-stone-900 dark:text-stone-50 mt-0.5">{gravityResult.qLpm} L/min</div>
                     <div className="text-xs text-stone-500 dark:text-stone-400 font-mono">{gravityResult.qLph.toLocaleString()} L/hr</div>
                   </div>
@@ -406,7 +406,7 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                         type="button"
                         onClick={() => setRoofAreaM2(preset.val)}
                         className={cn(
-                          "py-1.5 px-2 text-[11px] font-semibold rounded-lg border transition-all cursor-pointer",
+                          "py-1.5 px-2 text-caption font-semibold rounded-lg border transition-all cursor-pointer",
                           roofAreaM2 === preset.val
                             ? "bg-emerald-900 dark:bg-emerald-800 text-white border-emerald-950"
                             : "bg-stone-50 dark:bg-[#14281D] border-stone-200 dark:border-emerald-900/60 text-stone-700 dark:text-stone-300 hover:bg-stone-100"
@@ -485,7 +485,7 @@ export function OffGridSizingTools({ className }: { className?: string }) {
             {/* Results Column */}
             <div className="lg:col-span-5 flex flex-col justify-between gap-4 bg-white dark:bg-[#0E1D14] p-6 rounded-2xl border border-stone-200 dark:border-emerald-900/60 shadow-xs">
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 dark:text-amber-300">
+                <span className="text-caption font-bold uppercase tracking-wider text-emerald-800 dark:text-amber-300">
                   Catchment Volume & Storage Sizing
                 </span>
                 <h4 className="serif text-lg font-bold text-stone-900 dark:text-stone-50 mt-1">
@@ -494,13 +494,13 @@ export function OffGridSizingTools({ className }: { className?: string }) {
 
                 <div className="flex flex-col gap-3 mt-4">
                   <div className="p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-100 dark:border-emerald-800/60">
-                    <div className="text-[10px] uppercase font-bold text-emerald-900 dark:text-emerald-300">Total Annual Harvest</div>
+                    <div className="text-caption uppercase font-bold text-emerald-900 dark:text-emerald-300">Total Annual Harvest</div>
                     <div className="text-2xl font-black font-mono text-stone-900 dark:text-stone-50 mt-0.5">{rainResult.totalHarvestableLiters} Liters</div>
                     <div className="text-xs text-emerald-800 dark:text-emerald-300 mt-0.5">≈ {rainResult.drySeasonDailyLiters} Liters / day year-round</div>
                   </div>
 
                   <div className="p-3.5 rounded-xl bg-sky-50 dark:bg-sky-950/40 border border-sky-100 dark:border-sky-800/60">
-                    <div className="text-[10px] uppercase font-bold text-sky-900 dark:text-sky-300">Recommended Dry-Season Tank Storage</div>
+                    <div className="text-caption uppercase font-bold text-sky-900 dark:text-sky-300">Recommended Dry-Season Tank Storage</div>
                     <div className="text-xl font-black font-mono text-stone-900 dark:text-stone-50 mt-0.5">{rainResult.recommendedStorageLiters} Liters</div>
                     <div className="text-xs text-sky-900 dark:text-sky-300 font-semibold mt-1">
                       Equates to {rainResult.tanksCount5000L} × 5,000-Liter storage tanks
@@ -581,7 +581,7 @@ export function OffGridSizingTools({ className }: { className?: string }) {
             {/* Results Column */}
             <div className="lg:col-span-5 flex flex-col justify-between gap-4 bg-white dark:bg-[#0E1D14] p-6 rounded-2xl border border-stone-200 dark:border-emerald-900/60 shadow-xs">
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 dark:text-amber-300">
+                <span className="text-caption font-bold uppercase tracking-wider text-emerald-800 dark:text-amber-300">
                   Solar Array Specification
                 </span>
                 <h4 className="serif text-lg font-bold text-stone-900 dark:text-stone-50 mt-1">
@@ -590,7 +590,7 @@ export function OffGridSizingTools({ className }: { className?: string }) {
 
                 <div className="flex flex-col gap-3 mt-4">
                   <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-100 dark:border-amber-800/60">
-                    <div className="text-[10px] uppercase font-bold text-amber-900 dark:text-amber-300">Required Solar PV Array</div>
+                    <div className="text-caption uppercase font-bold text-amber-900 dark:text-amber-300">Required Solar PV Array</div>
                     <div className="text-2xl font-black font-mono text-stone-900 dark:text-stone-50 mt-0.5">{solarPumpResult.recommendedPvWatts} Watts</div>
                     <div className="text-xs text-amber-900 dark:text-amber-300 font-semibold mt-1">
                       {solarPumpResult.panelCount380W} × 380W Solar Panels (Mono-PERC)
@@ -599,13 +599,13 @@ export function OffGridSizingTools({ className }: { className?: string }) {
 
                   <div className="grid grid-cols-2 gap-2">
                     <div className="p-3 rounded-xl bg-stone-50 dark:bg-[#14281D] border border-stone-200 dark:border-emerald-900/60">
-                      <div className="text-[10px] uppercase font-bold text-stone-600 dark:text-stone-400">Pumping Rate</div>
+                      <div className="text-caption uppercase font-bold text-stone-600 dark:text-stone-400">Pumping Rate</div>
                       <div className="text-base font-bold font-mono text-stone-900 dark:text-stone-100 mt-0.5">{solarPumpResult.hourlyM3} m³/hr</div>
                       <div className="text-xs text-stone-500 dark:text-stone-400">≈ {Math.round(solarPumpResult.hourlyM3 * 1000 / 60)} L/min</div>
                     </div>
 
                     <div className="p-3 rounded-xl bg-stone-50 dark:bg-[#14281D] border border-stone-200 dark:border-emerald-900/60">
-                      <div className="text-[10px] uppercase font-bold text-stone-600 dark:text-stone-400">Pump Motor</div>
+                      <div className="text-caption uppercase font-bold text-stone-600 dark:text-stone-400">Pump Motor</div>
                       <div className="text-base font-bold font-mono text-stone-900 dark:text-stone-100 mt-0.5">{solarPumpResult.electricalWatts} W</div>
                       <div className="text-xs text-stone-500 dark:text-stone-400">DC Brushless Motor</div>
                     </div>
@@ -747,7 +747,7 @@ export function OffGridSizingTools({ className }: { className?: string }) {
             {/* Results Column */}
             <div className="lg:col-span-5 flex flex-col justify-between gap-4 bg-white dark:bg-[#0E1D14] p-6 rounded-2xl border border-stone-200 dark:border-emerald-900/60 shadow-xs">
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 dark:text-amber-300">
+                <span className="text-caption font-bold uppercase tracking-wider text-emerald-800 dark:text-amber-300">
                   Calculated Off-Grid System
                 </span>
                 <h4 className="serif text-lg font-bold text-stone-900 dark:text-stone-50 mt-1">
@@ -756,12 +756,12 @@ export function OffGridSizingTools({ className }: { className?: string }) {
 
                 <div className="flex flex-col gap-3 mt-4">
                   <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-100 dark:border-emerald-800/60">
-                    <div className="text-[10px] uppercase font-bold text-emerald-900 dark:text-emerald-300">Total Daily Energy Consumption</div>
+                    <div className="text-caption uppercase font-bold text-emerald-900 dark:text-emerald-300">Total Daily Energy Consumption</div>
                     <div className="text-xl font-black font-mono text-stone-900 dark:text-stone-50 mt-0.5">{solarPowerResult.totalDailyWh.toLocaleString()} Watt-Hours</div>
                   </div>
 
                   <div className="p-3 rounded-xl bg-sky-50 dark:bg-sky-950/40 border border-sky-100 dark:border-sky-800/60">
-                    <div className="text-[10px] uppercase font-bold text-sky-900 dark:text-sky-300">Battery Capacity Required</div>
+                    <div className="text-caption uppercase font-bold text-sky-900 dark:text-sky-300">Battery Capacity Required</div>
                     <div className="text-xl font-black font-mono text-stone-900 dark:text-stone-50 mt-0.5">
                       {solarPowerResult.requiredAh} Ah @ {solarPowerResult.batteryVoltage}V
                     </div>
@@ -771,7 +771,7 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                   </div>
 
                   <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-100 dark:border-amber-800/60">
-                    <div className="text-[10px] uppercase font-bold text-amber-900 dark:text-amber-300">Recommended Solar Panel Array</div>
+                    <div className="text-caption uppercase font-bold text-amber-900 dark:text-amber-300">Recommended Solar Panel Array</div>
                     <div className="text-lg font-black font-mono text-stone-900 dark:text-stone-50 mt-0.5">{solarPowerResult.pvWattsNeeded} Watts PV</div>
                     <div className="text-xs text-amber-900 dark:text-amber-300 font-semibold mt-0.5">
                       {solarPowerResult.pvPanelsCount400W} × 400W Solar Panels

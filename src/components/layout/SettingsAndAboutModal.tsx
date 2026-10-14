@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   X,
+  Eye,
   Settings,
   Palette,
   Sun,
@@ -26,7 +27,7 @@ import {
   Layers,
   Award,
 } from 'lucide-react';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme, THEME_META, Theme } from '@/contexts/ThemeContext';
 import { useActiveHomesteadDistrict } from '@/lib/activeDistrictSync';
 import { DISTRICT_LIST } from '@/constants';
 import {
@@ -64,8 +65,8 @@ export function SettingsAndAboutModal({
   onToggleInspector,
   isInspectorOpen = false,
 }: SettingsAndAboutModalProps) {
-  const { isDark, setTheme, palette, setPalette, fontPairing, setFontPairing } = useTheme();
-  const isSapphire = palette === 'sapphire' || palette === 'midnight';
+  const { theme, setTheme, isDark, isLight, isField, fontPairing, setFontPairing } = useTheme();
+  const isSapphire = false;
 
   const [activeTab, setActiveTab] = useState<'appearance' | 'data' | 'about'>(() =>
     normalizeSettingsTab(initialTab)
@@ -200,10 +201,12 @@ export function SettingsAndAboutModal({
           transition={{ duration: 0.18, ease: 'easeOut' }}
           onClick={(e) => e.stopPropagation()}
           className={cn(
-            'w-full max-w-4xl max-h-[88vh] rounded-3xl overflow-hidden flex flex-col text-stone-100 border shadow-[0_28px_70px_-12px_rgba(0,0,0,0.85)]',
-            isSapphire
-              ? 'bg-gradient-to-b from-[#06182E] via-[#041122] to-[#030B17] border-sky-400/30'
-              : 'bg-gradient-to-b from-[#071F12] via-[#04140B] to-[#030C07] border-emerald-400/30'
+            'w-full max-w-4xl max-h-[88vh] rounded-3xl overflow-hidden flex flex-col border shadow-[0_28px_70px_-12px_rgba(0,0,0,0.85)] transition-colors',
+            isField
+              ? 'bg-black text-white border-2 border-white'
+              : isLight
+              ? 'bg-[#FAF6F0] text-[#1A1612] border-[#E3D8CC]'
+              : 'bg-gradient-to-b from-[#071F12] via-[#04140B] to-[#030C07] text-stone-100 border-emerald-400/30'
           )}
         >
           {/* =================================================================
@@ -211,18 +214,20 @@ export function SettingsAndAboutModal({
           ================================================================= */}
           <div
             className={cn(
-              'px-5 py-4 border-b flex flex-wrap items-center justify-between gap-3 shrink-0',
-              isSapphire
-                ? 'bg-[#041020]/90 border-sky-400/20'
-                : 'bg-[#04120A]/90 border-emerald-500/20'
+              'px-5 py-4 border-b flex flex-wrap items-center justify-between gap-3 shrink-0 transition-colors',
+              isField
+                ? 'bg-black text-white border-white'
+                : isLight
+                ? 'bg-[#FAF6F0] text-[#1A1612] border-[#E3D8CC]'
+                : 'bg-[#04120A]/90 border-emerald-500/20 text-white'
             )}
           >
             <div className="flex items-center gap-3">
               <div
                 className={cn(
                   'w-10 h-10 rounded-2xl border flex items-center justify-center shadow-inner',
-                  isSapphire
-                    ? 'bg-sky-500/15 border-sky-400/35 text-amber-300'
+                  isLight
+                    ? 'bg-[#C85A32]/10 border-[#C85A32]/30 text-[#C85A32]'
                     : 'bg-emerald-500/15 border-emerald-400/35 text-amber-300'
                 )}
               >
@@ -230,14 +235,14 @@ export function SettingsAndAboutModal({
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="font-display text-lg sm:text-xl font-bold text-white tracking-tight">
+                  <h2 className="font-display text-lg sm:text-xl font-bold tracking-tight">
                     Workstation Preferences &amp; About Outpost
                   </h2>
-                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-amber-400/15 text-amber-300 border border-amber-400/30">
+                  <span className="hidden md:inline-flex text-caption font-mono px-2 py-0.5 rounded-md bg-amber-400/15 text-amber-300 border border-amber-400/30">
                     Desktop Edition
                   </span>
                 </div>
-                <p className="text-xs text-stone-300/85">
+                <p className="text-xs opacity-80">
                   Customize your sanctuary theme, field typography, offline vault, and view developer credentials.
                 </p>
               </div>
@@ -246,10 +251,10 @@ export function SettingsAndAboutModal({
             <button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-xl bg-white/5 hover:bg-white/15 text-stone-300 hover:text-white border border-white/10 transition-colors cursor-pointer"
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center p-2.5 rounded-xl bg-black/10 hover:bg-black/20 dark:bg-white/5 dark:hover:bg-white/15 text-current border border-current/15 transition-colors cursor-pointer"
               aria-label="Close Settings and About Modal"
             >
-              <X size={16} />
+              <X size={18} />
             </button>
           </div>
 
@@ -271,7 +276,7 @@ export function SettingsAndAboutModal({
                   {
                     id: 'appearance' as const,
                     label: 'Workspace & Theme',
-                    sub: 'Emerald, Sapphire & Font',
+                    sub: 'Light, Dark & Field Mode',
                     icon: Palette,
                   },
                   {
@@ -295,7 +300,7 @@ export function SettingsAndAboutModal({
                       type="button"
                       onClick={() => setActiveTab(tab.id)}
                       className={cn(
-                        'flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-left transition-all cursor-pointer border shrink-0 md:w-full',
+                        'min-h-[44px] flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-left transition-all cursor-pointer border shrink-0 md:w-full',
                         active
                           ? isSapphire
                             ? 'bg-gradient-to-r from-sky-500/30 to-blue-900/50 text-white border-sky-400/55 shadow-md'
@@ -314,7 +319,7 @@ export function SettingsAndAboutModal({
                         <div className="text-xs font-bold leading-tight truncate">
                           {tab.label}
                         </div>
-                        <div className="text-[11px] text-stone-400 truncate hidden sm:block">
+                        <div className="text-caption text-stone-400 truncate hidden sm:block">
                           {tab.sub}
                         </div>
                       </div>
@@ -337,7 +342,7 @@ export function SettingsAndAboutModal({
                     style={{ width: `${Math.max(6, readiness.breakdown.exodusScorePct)}%` }}
                   />
                 </div>
-                <span className="text-[11px] text-stone-400 font-mono">
+                <span className="text-caption text-stone-400 font-mono">
                   Target: {activeDistrict.name} ({activeDistrict.region})
                 </span>
               </div>
@@ -357,206 +362,291 @@ export function SettingsAndAboutModal({
               ============================================================= */}
               {activeTab === 'appearance' && (
                 <div className="flex flex-col gap-6">
-                  {/* 1. 4-Theme Color Palette Selection */}
-                  <div className="flex flex-col gap-3">
-                    <div>
-                      <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                        <Palette size={15} className="text-amber-300" />
-                        <span>Sanctuary Color Atmosphere (5 Themes · 60-30-10 Rule)</span>
-                      </h3>
+                  {/* 1. 3-Way Theme & Mode Selector (Light, Dark, Field) */}
+                  <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-1">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                          <Palette size={16} className="text-amber-300" />
+                          <span>Sanctuary Display Mode (Light, Dark &amp; Field Mode)</span>
+                        </h3>
+                        <span className="text-caption font-mono text-amber-300 bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/30">
+                          prefers-contrast &amp; prefers-color-scheme active
+                        </span>
+                      </div>
                       <p className="text-xs text-stone-300/85 mt-0.5">
-                        Themes configure workstation surfaces (60%), structure &amp; cards (30%), and focal highlights (10%). The background vector landscape preserves its canonical Malawian dawn colors across all themes.
+                        Reduced to 3 core operating modes. High-contrast <strong>Field Mode</strong> is specifically engineered for outdoor sunlight and gloved operation. System OS preferences are respected by default.
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {/* Option 0: Minimalist Charcoal Studio (NeuroNest & Equier Graphite) */}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setPalette('charcoal');
-                          setTheme('dark');
-                          setFontPairing('inter');
-                          triggerToast('Switched to Minimalist Charcoal Studio + Inter UI');
-                        }}
-                        className={cn(
-                          'sm:col-span-2 p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex flex-col gap-2.5 relative overflow-hidden',
-                          palette === 'charcoal'
-                            ? 'bg-[#18181B] border-amber-400 shadow-[0_0_25px_rgba(255,255,255,0.12)]'
-                            : 'bg-white/[0.03] hover:bg-white/[0.07] border-white/15'
-                        )}
-                      >
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="text-xs font-bold text-white">
-                            01 · Minimalist Charcoal Studio (NeuroNest &amp; Equier Edition)
-                          </span>
-                          {palette === 'charcoal' && (
-                            <span className="px-2 py-0.5 rounded-md bg-amber-400 text-stone-950 font-mono text-[10px] font-bold">
-                              ACTIVE
-                            </span>
-                          )}
-                        </div>
-                        <div className="h-9 rounded-xl bg-gradient-to-r from-[#121215] via-[#27272A] to-[#DCE6F2] border border-white/20 flex items-center px-3 gap-2">
-                          <span className="w-3.5 h-3.5 rounded-full bg-[#18181B] border border-white/60" />
-                          <span className="w-3.5 h-3.5 rounded-full bg-[#DCE6F2] border border-stone-400" />
-                          <span className="w-3.5 h-3.5 rounded-full bg-[#DCF2DE] border border-stone-400" />
-                          <span className="w-3.5 h-3.5 rounded-full bg-[#FBF3C9] border border-stone-400" />
-                          <span className="text-[10px] font-mono text-stone-900 font-semibold ml-auto">
-                            Matte Graphite &amp; Pastel Bento
-                          </span>
-                        </div>
-                        <p className="text-[11px] text-stone-300 leading-relaxed">
-                          Ultra-clean matte charcoal workspace (`#141416`) paired with soft pastel Bento stat cards and crisp Inter typography.
-                        </p>
-                      </button>
+                    {/* 3-Option Segmented Selector Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      {(['light', 'dark', 'field'] as Theme[]).map((modeKey) => {
+                        const meta = THEME_META[modeKey];
+                        const active = theme === modeKey;
+                        return (
+                          <button
+                            key={modeKey}
+                            type="button"
+                            onClick={() => {
+                              setTheme(modeKey);
+                              triggerToast(`Switched to ${meta.label}`);
+                            }}
+                            className={cn(
+                              'p-4 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-3 relative',
+                              active
+                                ? modeKey === 'field'
+                                  ? 'bg-black text-white border-2 border-white shadow-[0_0_24px_rgba(255,255,255,0.35)] ring-2 ring-amber-400'
+                                  : 'bg-white/10 text-white border-amber-400 shadow-lg ring-1 ring-amber-400/50'
+                                : 'bg-white/[0.03] hover:bg-white/[0.08] text-stone-300 border-white/15'
+                            )}
+                          >
+                            {/* Top Title & Active Badge */}
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="flex items-center gap-2">
+                                {modeKey === 'light' ? (
+                                  <Sun size={17} className="text-amber-400 shrink-0" />
+                                ) : modeKey === 'dark' ? (
+                                  <Moon size={17} className="text-emerald-400 shrink-0" />
+                                ) : (
+                                  <Eye size={17} className="text-white shrink-0" />
+                                )}
+                                <span className="text-xs font-bold text-white tracking-wide">
+                                  {meta.label}
+                                </span>
+                              </div>
+                              {active && (
+                                <span className={cn(
+                                  'px-2 py-0.5 rounded-md font-mono text-caption font-bold',
+                                  modeKey === 'field' ? 'bg-white text-black' : 'bg-amber-400 text-stone-950'
+                                )}>
+                                  ACTIVE
+                                </span>
+                              )}
+                            </div>
 
-                      {/* Option 1: Highland Emerald & Golden Dawn */}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setPalette('emerald');
-                          triggerToast('Switched to Highland Emerald & Golden Dawn palette');
-                        }}
-                        className={cn(
-                          'p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex flex-col gap-2.5 relative overflow-hidden',
-                          palette === 'emerald'
-                            ? 'bg-emerald-950/70 border-amber-400 shadow-[0_0_25px_rgba(16,185,129,0.25)]'
-                            : 'bg-white/[0.03] hover:bg-white/[0.07] border-white/15'
-                        )}
-                      >
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="text-xs font-bold text-white">
-                            01 · Highland Emerald &amp; Dawn
-                          </span>
-                          {palette === 'emerald' && (
-                            <span className="px-2 py-0.5 rounded-md bg-amber-400 text-stone-950 font-mono text-[10px] font-bold">
-                              ACTIVE
-                            </span>
-                          )}
-                        </div>
-                        <div className="h-9 rounded-xl bg-gradient-to-r from-[#04140B] via-[#0B3B24] to-[#F59E0B] border border-white/20 flex items-center px-3 gap-2">
-                          <span className="w-3.5 h-3.5 rounded-full bg-[#10B981] border border-white/60" />
-                          <span className="w-3.5 h-3.5 rounded-full bg-[#FBBF24] border border-white/60" />
-                          <span className="w-3.5 h-3.5 rounded-full bg-[#F9F6EE] border border-white/60" />
-                          <span className="text-[10px] font-mono text-amber-100 ml-auto">
-                            Mulanje Cedar &amp; Sun
-                          </span>
-                        </div>
-                        <p className="text-[11px] text-stone-300 leading-relaxed">
-                          Botanical forest greens, warm parchment &amp; golden sunrise highlights.
-                        </p>
-                      </button>
+                            {/* Color Swatch Bar */}
+                            <div
+                              className={cn(
+                                'h-7 rounded-lg border flex items-center px-2.5 gap-2',
+                                modeKey === 'field' ? 'bg-black border-white' : 'border-white/20'
+                              )}
+                              style={{
+                                background:
+                                  modeKey === 'light'
+                                    ? 'linear-gradient(90deg, #FAF8F5 0%, #166534 60%, #C85A32 100%)'
+                                    : modeKey === 'dark'
+                                    ? 'linear-gradient(90deg, #071A10 0%, #10B981 60%, #F59E0B 100%)'
+                                    : '#000000',
+                              }}
+                            >
+                              {meta.swatches.map((color, idx) => (
+                                <span
+                                  key={idx}
+                                  className="w-3.5 h-3.5 rounded-full border border-black/40 shadow-xs shrink-0"
+                                  style={{ backgroundColor: color }}
+                                />
+                              ))}
+                              <span
+                                className="ml-auto font-mono text-[11px] font-bold px-1.5 py-0.5 rounded bg-black/85 text-white shadow-xs"
+                              >
+                                {meta.contrastRatio}
+                              </span>
+                            </div>
 
-                      {/* Option 2: Burnt Sienna, Soft Beige & Sandy Neutrals */}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setPalette('sienna');
-                          triggerToast('Switched to Burnt Sienna, Soft Beige & Sandy Neutrals');
-                        }}
-                        className={cn(
-                          'p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex flex-col gap-2.5 relative overflow-hidden',
-                          palette === 'sienna'
-                            ? 'bg-[#3B170C]/85 border-amber-400 shadow-[0_0_25px_rgba(200,90,50,0.3)]'
-                            : 'bg-white/[0.03] hover:bg-white/[0.07] border-white/15'
-                        )}
-                      >
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="text-xs font-bold text-white">
-                            02 · Burnt Sienna &amp; Sandy Beige
-                          </span>
-                          {palette === 'sienna' && (
-                            <span className="px-2 py-0.5 rounded-md bg-amber-400 text-stone-950 font-mono text-[10px] font-bold">
-                              ACTIVE
-                            </span>
-                          )}
-                        </div>
-                        <div className="h-9 rounded-xl bg-gradient-to-r from-[#2D120A] via-[#C85A32] to-[#F5EFE4] border border-white/20 flex items-center px-3 gap-2">
-                          <span className="w-3.5 h-3.5 rounded-full bg-[#C85A32] border border-white/60" />
-                          <span className="w-3.5 h-3.5 rounded-full bg-[#E6D7C3] border border-white/60" />
-                          <span className="w-3.5 h-3.5 rounded-full bg-[#F5EFE4] border border-white/60" />
-                          <span className="text-[10px] font-mono text-amber-950 font-semibold ml-auto">
-                            Katondo Clay &amp; Sand
-                          </span>
-                        </div>
-                        <p className="text-[11px] text-stone-300 leading-relaxed">
-                          Warm Malawian terracotta earth, soft beige linen &amp; sun-baked sandy neutrals.
-                        </p>
-                      </button>
+                            {/* Description Tagline */}
+                            <p className="text-caption text-stone-300 line-clamp-2 leading-relaxed">
+                              {meta.tagline}
+                            </p>
 
-                      {/* Option 3: Deep Midnight Blue, Crisp White & Bright Cyan */}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setPalette('midnight');
-                          triggerToast('Switched to Deep Midnight Blue, Crisp White & Bright Cyan');
-                        }}
-                        className={cn(
-                          'p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex flex-col gap-2.5 relative overflow-hidden',
-                          palette === 'midnight'
-                            ? 'bg-[#07142B]/90 border-cyan-400 shadow-[0_0_25px_rgba(6,182,212,0.3)]'
-                            : 'bg-white/[0.03] hover:bg-white/[0.07] border-white/15'
-                        )}
-                      >
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="text-xs font-bold text-white">
-                            03 · Midnight Blue &amp; Bright Cyan
-                          </span>
-                          {palette === 'midnight' && (
-                            <span className="px-2 py-0.5 rounded-md bg-cyan-400 text-stone-950 font-mono text-[10px] font-bold">
-                              ACTIVE
-                            </span>
-                          )}
-                        </div>
-                        <div className="h-9 rounded-xl bg-gradient-to-r from-[#0A192F] via-[#06B6D4] to-[#FFFFFF] border border-white/20 flex items-center px-3 gap-2">
-                          <span className="w-3.5 h-3.5 rounded-full bg-[#0A192F] border border-white/60" />
-                          <span className="w-3.5 h-3.5 rounded-full bg-[#06B6D4] border border-white/60" />
-                          <span className="w-3.5 h-3.5 rounded-full bg-[#FFFFFF] border border-stone-400" />
-                          <span className="text-[10px] font-mono text-slate-950 font-semibold ml-auto">
-                            Crisp White &amp; Cyan
-                          </span>
-                        </div>
-                        <p className="text-[11px] text-stone-300 leading-relaxed">
-                          Architectural deep midnight navy paired with crisp pure white daylight surfaces &amp; bright cyan telemetry.
-                        </p>
-                      </button>
+                            {/* Key Spec Badges */}
+                            <div className="flex flex-wrap gap-1.5 pt-2 border-t border-white/10 text-caption font-mono">
+                              <span className="px-2 py-0.5 rounded bg-white/5 text-stone-200">
+                                {meta.touchTargetMin} Target
+                              </span>
+                              <span className="px-2 py-0.5 rounded bg-white/5 text-stone-200">
+                                {meta.bodyFontSize} Body
+                              </span>
+                              <span className="px-2 py-0.5 rounded bg-white/5 text-stone-200">
+                                {meta.borderWeight} Border
+                              </span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
 
-                      {/* Option 4: Lake Malawi Sapphire Blue */}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setPalette('sapphire');
-                          triggerToast('Switched to Lake Malawi Sapphire Blue theme');
-                        }}
+                    {/* =========================================================
+                        LIVE PREVIEW CARD (REAL-TIME RENDERING)
+                        ========================================================= */}
+                    <div className="flex flex-col gap-2 pt-2">
+                      <div className="flex items-center justify-between text-xs font-mono font-bold uppercase tracking-wider text-amber-300">
+                        <span className="flex items-center gap-1.5">
+                          <Sparkles size={14} />
+                          <span>Live Mode Preview · {THEME_META[theme].name}</span>
+                        </span>
+                        <span className="text-stone-400 font-normal">
+                          Instant UI Simulation
+                        </span>
+                      </div>
+
+                      {/* Live Rendered Canvas */}
+                      <div
                         className={cn(
-                          'p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex flex-col gap-2.5 relative overflow-hidden',
-                          palette === 'sapphire'
-                            ? 'bg-sky-950/75 border-amber-400 shadow-[0_0_25px_rgba(14,165,233,0.28)]'
-                            : 'bg-white/[0.03] hover:bg-white/[0.07] border-white/15'
+                          'rounded-2xl p-5 border transition-all duration-300 flex flex-col gap-4 relative overflow-hidden',
+                          theme === 'field'
+                            ? 'bg-black text-white border-[2.5px] border-white shadow-none'
+                            : theme === 'dark'
+                            ? 'bg-[#071A10] text-stone-100 border-emerald-500/35 shadow-xl'
+                            : 'bg-[#FAF8F5] text-stone-900 border-stone-300 shadow-md'
                         )}
                       >
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="text-xs font-bold text-white">
-                            04 · Lake Malawi Sapphire
-                          </span>
-                          {palette === 'sapphire' && (
-                            <span className="px-2 py-0.5 rounded-md bg-amber-400 text-stone-950 font-mono text-[10px] font-bold">
-                              ACTIVE
-                            </span>
+                        {/* Preview Header Strip */}
+                        <div
+                          className={cn(
+                            'flex flex-wrap items-center justify-between gap-2 pb-3 border-b',
+                            theme === 'field'
+                              ? 'border-white'
+                              : theme === 'dark'
+                              ? 'border-emerald-800/60'
+                              : 'border-stone-200'
                           )}
-                        </div>
-                        <div className="h-9 rounded-xl bg-gradient-to-r from-[#041122] via-[#0284C7] to-[#38BDF8] border border-white/20 flex items-center px-3 gap-2">
-                          <span className="w-3.5 h-3.5 rounded-full bg-[#38BDF8] border border-white/60" />
-                          <span className="w-3.5 h-3.5 rounded-full bg-[#0284C7] border border-white/60" />
-                          <span className="w-3.5 h-3.5 rounded-full bg-[#FBBF24] border border-white/60" />
-                          <span className="text-[10px] font-mono text-sky-100 ml-auto">
-                            Living Waters Azure
+                        >
+                          <div className="flex items-center gap-2">
+                            <span
+                              className={cn(
+                                'w-3 h-3 rounded-full',
+                                theme === 'field'
+                                  ? 'bg-[#FBBF24]'
+                                  : theme === 'dark'
+                                  ? 'bg-emerald-400'
+                                  : 'bg-emerald-600'
+                              )}
+                            />
+                            <span
+                              className={cn(
+                                'font-mono font-bold text-xs uppercase tracking-wider',
+                                theme === 'field'
+                                  ? 'text-white'
+                                  : theme === 'dark'
+                                  ? 'text-amber-300'
+                                  : 'text-emerald-900'
+                              )}
+                            >
+                              Borehole Hydro-Telemetry · Dedza Highlands
+                            </span>
+                          </div>
+                          <span
+                            className={cn(
+                              'px-2.5 py-0.5 rounded-full font-mono text-caption font-bold',
+                              theme === 'field'
+                                ? 'bg-white text-black border border-white'
+                                : theme === 'dark'
+                                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                                : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                            )}
+                          >
+                            {THEME_META[theme].contrastRatio}
                           </span>
                         </div>
-                        <p className="text-[11px] text-stone-300 leading-relaxed">
-                          Cerulean hydro-cartographic glass inspired by Lake Malawi’s deep waters and mountain springs.
-                        </p>
-                      </button>
+
+                        {/* Preview Heading & Body Text */}
+                        <div className="flex flex-col gap-1.5">
+                          <h4
+                            className={cn(
+                              'font-bold leading-tight',
+                              theme === 'field'
+                                ? 'text-xl text-white font-mono'
+                                : 'text-lg',
+                              theme === 'dark'
+                                ? 'text-stone-100'
+                                : theme === 'light'
+                                ? 'text-stone-950'
+                                : ''
+                            )}
+                          >
+                            Perennial Basalt Aquifer Confirmed at 14m Depth
+                          </h4>
+                          <p
+                            className={cn(
+                              'leading-relaxed transition-all',
+                              theme === 'field'
+                                ? 'text-[18px] text-white font-normal'
+                                : 'text-[15.5px]',
+                              theme === 'dark'
+                                ? 'text-stone-300'
+                                : theme === 'light'
+                                ? 'text-stone-700'
+                                : ''
+                            )}
+                          >
+                            Aquifer recharge rate measured at 2,400 L/hr. Ideal for gravity-fed drip swales and solar DC submersible pump arrays across high-sunlight agro-forestry parcels.
+                          </p>
+                        </div>
+
+                        {/* Interactive Buttons Simulation */}
+                        <div
+                          className={cn(
+                            'flex flex-wrap items-center justify-between gap-3 pt-3 border-t',
+                            theme === 'field'
+                              ? 'border-white'
+                              : theme === 'dark'
+                              ? 'border-emerald-800/60'
+                              : 'border-stone-200'
+                          )}
+                        >
+                          <div className="flex flex-wrap items-center gap-2.5">
+                            {/* Simulated Primary Button with Theme Touch Targets */}
+                            <button
+                              type="button"
+                              className={cn(
+                                'px-5 font-bold transition-all flex items-center justify-center gap-2 cursor-pointer',
+                                theme === 'field'
+                                  ? 'min-h-[48px] bg-white text-black border-2 border-white rounded-xl text-[16px] hover:bg-amber-300'
+                                  : theme === 'dark'
+                                  ? 'min-h-[40px] bg-amber-400 text-stone-950 rounded-xl text-xs hover:bg-amber-300 shadow-md'
+                                  : 'min-h-[40px] bg-emerald-800 text-white rounded-xl text-xs hover:bg-emerald-900 shadow-sm'
+                              )}
+                            >
+                              <span>Inspect Hydro Strata</span>
+                              <Check size={theme === 'field' ? 18 : 14} />
+                            </button>
+
+                            {/* Simulated Secondary Button */}
+                            <button
+                              type="button"
+                              className={cn(
+                                'px-4 font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer',
+                                theme === 'field'
+                                  ? 'min-h-[48px] bg-black text-white border-2 border-white rounded-xl text-[16px] hover:bg-stone-900'
+                                  : theme === 'dark'
+                                  ? 'min-h-[40px] bg-stone-900 text-stone-200 border border-emerald-500/25 rounded-xl text-xs hover:bg-stone-800'
+                                  : 'min-h-[40px] bg-stone-100 text-stone-700 border border-stone-200 rounded-xl text-xs hover:bg-stone-200'
+                              )}
+                            >
+                              <span>Soil Physics</span>
+                            </button>
+                          </div>
+
+                          {/* Live Specs Readout */}
+                          <div
+                            className={cn(
+                              'flex items-center gap-2.5 font-mono text-caption',
+                              theme === 'field'
+                                ? 'text-white font-bold'
+                                : theme === 'dark'
+                                ? 'text-stone-400'
+                                : 'text-stone-600'
+                            )}
+                          >
+                            <span>Target: {THEME_META[theme].touchTargetMin}</span>
+                            <span>·</span>
+                            <span>Body: {THEME_META[theme].bodyFontSize}</span>
+                            <span>·</span>
+                            <span>Border: {THEME_META[theme].borderWeight}</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -622,13 +712,13 @@ export function SettingsAndAboutModal({
                             )}
                           >
                             <div className="flex items-center justify-between gap-1">
-                              <span className="text-[10px] font-mono uppercase tracking-wider text-amber-300">
+                              <span className="text-caption font-mono uppercase tracking-wider text-amber-300">
                                 {fp.badge}
                               </span>
                               {active && <Check size={12} className="text-amber-300 shrink-0" />}
                             </div>
                             <div className="text-xs font-bold text-white">{fp.title}</div>
-                            <p className="text-[11px] text-stone-400 leading-snug">{fp.desc}</p>
+                            <p className="text-caption text-stone-400 leading-snug">{fp.desc}</p>
                           </button>
                         );
                       })}
@@ -765,7 +855,7 @@ export function SettingsAndAboutModal({
                       <p className="text-xs text-stone-300/85 mt-1">
                         All 28 Malawi districts, 25 country skill manuals, and EGW citations are cached locally for zero-signal bush scouting.
                       </p>
-                      <span className="inline-block font-mono text-[11px] text-amber-300 mt-1.5">
+                      <span className="inline-block font-mono text-caption text-amber-300 mt-1.5">
                         Last Verified Cache Sync: {syncStatus.lastSyncFormatted}
                       </span>
                     </div>
@@ -871,7 +961,7 @@ export function SettingsAndAboutModal({
                       </div>
                       <div>
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="text-[11px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-md bg-amber-400/20 text-amber-300 border border-amber-400/30 font-bold">
+                          <span className="text-caption font-mono uppercase tracking-wider px-2 py-0.5 rounded-md bg-amber-400/20 text-amber-300 border border-amber-400/30 font-bold">
                             Creator &amp; Lead Architect
                           </span>
                           <span className="text-xs font-mono text-emerald-300">
@@ -978,7 +1068,7 @@ export function SettingsAndAboutModal({
                           className="px-2.5 py-2 rounded-xl bg-black/40 border border-white/10 flex items-center justify-between gap-2"
                         >
                           <span className="text-stone-300 truncate">{sc.label}</span>
-                          <kbd className="font-mono text-[11px] px-1.5 py-0.5 rounded bg-white/10 text-amber-300 shrink-0">
+                          <kbd className="font-mono text-caption px-1.5 py-0.5 rounded bg-white/10 text-amber-300 shrink-0">
                             {sc.keys}
                           </kbd>
                         </div>

@@ -48,19 +48,19 @@ export interface DirectoryItem {
 }
 
 const DIRECTORY_CATEGORIES = [
-  '01 · Sanctuary & Prophecy',
-  '02 · Land, Water & Agronomy',
-  '03 · Sanitarium & Kitchen',
-  '04 · Engineering & Outposts',
+  'Sanctuary',
+  'Land & Water',
+  'Health & Kitchen',
+  'Engineering & Outposts',
 ] as const;
 
 export const DIRECTORY_ITEMS: DirectoryItem[] = [
-  // 01 · Sanctuary & Prophecy
+  // Sanctuary
   {
     id: 'devotional',
     name: 'Daily Scripture & Devotional',
     shortName: 'Daily Devotional',
-    category: '01 · Sanctuary & Prophecy',
+    category: 'Sanctuary',
     path: '/devotional',
     icon: Feather,
     iconColor: 'text-amber-600 dark:text-amber-300',
@@ -72,7 +72,7 @@ export const DIRECTORY_ITEMS: DirectoryItem[] = [
     id: 'vision',
     name: 'Spirit of Prophecy Archive',
     shortName: 'EGW Archive',
-    category: '01 · Sanctuary & Prophecy',
+    category: 'Sanctuary',
     path: '/vision',
     icon: BookOpen,
     iconColor: 'text-emerald-600 dark:text-emerald-300',
@@ -83,21 +83,21 @@ export const DIRECTORY_ITEMS: DirectoryItem[] = [
     id: 'tracker',
     name: 'Transition Readiness Tracker',
     shortName: 'Transition Tracker',
-    category: '01 · Sanctuary & Prophecy',
+    category: 'Sanctuary',
     path: '/tracker',
     icon: CheckCircle2,
     iconColor: 'text-amber-600 dark:text-amber-300',
     iconBg: 'bg-amber-500/15 border-amber-400/35',
-    description: 'Equier-guided Kanban board with 15 sequential milestones and weighted readiness scoring.',
+    description: 'Interactive Kanban board with 15 sequential milestones and weighted readiness scoring.',
     badge: 'Kanban',
   },
 
-  // 02 · Land, Water & Agronomy
+  // Land & Water
   {
     id: 'scout-map',
     name: 'District GIS & Hydrogeology Map',
     shortName: 'GIS District Map',
-    category: '02 · Land, Water & Agronomy',
+    category: 'Land & Water',
     path: '/scout-map',
     icon: Compass,
     iconColor: 'text-cyan-600 dark:text-cyan-300',
@@ -109,12 +109,12 @@ export const DIRECTORY_ITEMS: DirectoryItem[] = [
     id: 'where',
     name: 'Land Tenure & Property Evaluation',
     shortName: 'Land & Evaluation',
-    category: '02 · Land, Water & Agronomy',
+    category: 'Land & Water',
     path: '/where',
     icon: MapPin,
     iconColor: 'text-emerald-600 dark:text-emerald-300',
     iconBg: 'bg-emerald-500/15 border-emerald-400/35',
-    description: 'Customary Land Act compliance, community protocols, and weighted plot evaluation.',
+    description: 'Customary Land Act procedures, community protocols, and weighted plot evaluation.',
     subAction: {
       label: 'Plot Evaluator',
       path: '/where?tab=evaluator',
@@ -124,7 +124,7 @@ export const DIRECTORY_ITEMS: DirectoryItem[] = [
     id: 'what',
     name: 'Agronomy, Soil Profiles & Crops',
     shortName: 'Agronomy & Soils',
-    category: '02 · Land, Water & Agronomy',
+    category: 'Land & Water',
     path: '/what',
     icon: Sprout,
     iconColor: 'text-emerald-600 dark:text-emerald-300',
@@ -135,7 +135,7 @@ export const DIRECTORY_ITEMS: DirectoryItem[] = [
     id: 'agriculture',
     name: 'Bio-Intensive Farming Manual',
     shortName: 'Edenic Farming',
-    category: '02 · Land, Water & Agronomy',
+    category: 'Land & Water',
     path: '/agriculture',
     icon: Sun,
     iconColor: 'text-amber-600 dark:text-amber-300',
@@ -146,7 +146,7 @@ export const DIRECTORY_ITEMS: DirectoryItem[] = [
     id: 'seasons',
     name: 'Seasonal Planting & Weather Almanac',
     shortName: 'Seasonal Almanac',
-    category: '02 · Land, Water & Agronomy',
+    category: 'Land & Water',
     path: '/seasons',
     icon: Calendar,
     iconColor: 'text-lime-600 dark:text-lime-300',
@@ -154,12 +154,12 @@ export const DIRECTORY_ITEMS: DirectoryItem[] = [
     description: 'Malawi planting and harvest calendars for Dzinja, Masika, and Chilimwe cycles.',
   },
 
-  // 03 · Sanitarium & Kitchen
+  // Health & Kitchen
   {
     id: 'sanitarium',
     name: 'Sanitarium & Lifestyle Medicine',
     shortName: 'Sanitarium & Health',
-    category: '03 · Sanitarium & Kitchen',
+    category: 'Health & Kitchen',
     path: '/sanitarium',
     icon: HeartPulse,
     iconColor: 'text-rose-600 dark:text-rose-300',
@@ -171,7 +171,7 @@ export const DIRECTORY_ITEMS: DirectoryItem[] = [
     id: 'kitchen',
     name: 'Country Kitchen & Food Preservation',
     shortName: 'Country Kitchen',
-    category: '03 · Sanitarium & Kitchen',
+    category: 'Health & Kitchen',
     path: '/kitchen',
     icon: UtensilsCrossed,
     iconColor: 'text-amber-600 dark:text-amber-300',
@@ -179,12 +179,12 @@ export const DIRECTORY_ITEMS: DirectoryItem[] = [
     description: 'Unfermented whole-grain baking, seed-protein sinjiro emulsions, and solar dehydrating.',
   },
 
-  // 04 · Engineering & Outposts
+  // Engineering & Outposts
   {
     id: 'calculators',
     name: 'Homestead Engineering Calculators',
     shortName: 'Calculators & BoQ',
-    category: '04 · Engineering & Outposts',
+    category: 'Engineering & Outposts',
     path: '/calculators',
     icon: Calculator,
     iconColor: 'text-amber-600 dark:text-amber-300',
@@ -196,7 +196,7 @@ export const DIRECTORY_ITEMS: DirectoryItem[] = [
     id: 'how',
     name: 'Build Schematics & Blueprints',
     shortName: 'Build Schematics',
-    category: '04 · Engineering & Outposts',
+    category: 'Engineering & Outposts',
     path: '/how',
     icon: Hammer,
     iconColor: 'text-sky-600 dark:text-sky-300',
@@ -207,7 +207,7 @@ export const DIRECTORY_ITEMS: DirectoryItem[] = [
     id: 'skills',
     name: 'Self-Reliance Country Skills',
     shortName: 'Country Skills',
-    category: '04 · Engineering & Outposts',
+    category: 'Engineering & Outposts',
     path: '/skills',
     icon: Layers,
     iconColor: 'text-emerald-600 dark:text-emerald-300',
@@ -218,7 +218,7 @@ export const DIRECTORY_ITEMS: DirectoryItem[] = [
     id: 'blueprints',
     name: 'Outpost Campus Architecture',
     shortName: 'Outpost Blueprints',
-    category: '04 · Engineering & Outposts',
+    category: 'Engineering & Outposts',
     path: '/blueprints',
     icon: Building2,
     iconColor: 'text-amber-600 dark:text-amber-300',
@@ -229,7 +229,7 @@ export const DIRECTORY_ITEMS: DirectoryItem[] = [
     id: 'community',
     name: 'Homestead Steward Registry',
     shortName: 'Steward Registry',
-    category: '04 · Engineering & Outposts',
+    category: 'Engineering & Outposts',
     path: '/community',
     icon: Users,
     iconColor: 'text-teal-600 dark:text-teal-300',
@@ -254,7 +254,7 @@ const MASTER_DOCK_SYMBOLS: DockSymbolMeta[] = [
   {
     id: 'sanctuary',
     title: 'Sanctuary & Vision',
-    subtitle: 'Command center, Daily Manna & 1844 chart',
+    subtitle: 'Home, Daily Manna & 1844 chart',
     shortcut: 'Alt+1',
     primaryPath: '/',
     matchPrefixes: ['/devotional', '/vision'],
@@ -481,9 +481,8 @@ function CustomSymbolGlyph({ id, isActive }: { id: SymbolGlyphId; isActive: bool
 }
 
 export function LeftSymbolDirectory() {
-  const { palette } = useTheme();
-  const isSapphire = palette === 'sapphire' || palette === 'midnight';
-  const isCharcoal = palette === 'charcoal';
+  const isSapphire = false;
+  const isCharcoal = false;
 
   const [isExplorerOpen, setIsExplorerOpen] = useState<boolean>(() => {
     try {
@@ -620,11 +619,11 @@ export function LeftSymbolDirectory() {
                     <span className="font-bold text-xs text-white tracking-tight">
                       {sym.title}
                     </span>
-                    <kbd className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                    <kbd className="font-mono text-caption px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30">
                       {sym.shortcut}
                     </kbd>
                   </div>
-                  <p className="text-[11px] text-stone-300/85 mt-0.5 leading-snug">
+                  <p className="text-caption text-stone-300/85 mt-0.5 leading-snug">
                     {sym.subtitle}
                   </p>
                 </div>
@@ -662,11 +661,11 @@ export function LeftSymbolDirectory() {
                 <span className="font-bold text-xs text-white">
                   {isExplorerOpen ? 'Collapse Directory' : 'Field Manual Directory'}
                 </span>
-                <kbd className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                <kbd className="font-mono text-caption px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30">
                   ⌘B
                 </kbd>
               </div>
-              <p className="text-[11px] text-stone-300/85 mt-0.5">
+              <p className="text-caption text-stone-300/85 mt-0.5">
                 Browse 16 field manual modules &amp; tools
               </p>
             </div>
@@ -693,11 +692,11 @@ export function LeftSymbolDirectory() {
               role="navigation"
               aria-label="Outpost Workspace Explorer"
               initial={{ width: 0, opacity: 0 }}
-              animate={{ width: 272, opacity: 1 }}
+              animate={{ width: 300, opacity: 1 }}
               exit={{ width: 0, opacity: 0 }}
               transition={{ duration: 0.16, ease: 'easeOut' }}
               className={cn(
-                'fixed md:static top-0 bottom-0 left-0 z-50 md:z-20 w-[272px] shrink-0 h-full backdrop-blur-2xl border-r flex flex-col overflow-hidden select-none shadow-2xl md:shadow-[8px_0_30px_rgba(2,8,23,0.2)]',
+                'fixed md:static top-0 bottom-0 left-0 z-50 md:z-20 w-[300px] shrink-0 h-full backdrop-blur-2xl border-r flex flex-col overflow-hidden select-none shadow-2xl md:shadow-[8px_0_30px_rgba(2,8,23,0.2)]',
                 isCharcoal
                   ? 'bg-[#F4F4F6]/96 dark:bg-[#161619]/96 border-stone-300/80 dark:border-white/10'
                   : isSapphire
@@ -719,7 +718,7 @@ export function LeftSymbolDirectory() {
                 <div className="flex items-center justify-between px-0.5">
                   <span
                     className={cn(
-                      'text-[11px] font-mono font-bold uppercase tracking-wider',
+                      'text-caption font-mono font-bold uppercase tracking-wider',
                       isSapphire
                         ? 'text-sky-900 dark:text-amber-300'
                         : 'text-emerald-950 dark:text-amber-300'
@@ -787,7 +786,7 @@ export function LeftSymbolDirectory() {
                     <span className="w-6 h-6 rounded-lg bg-amber-500/20 border border-amber-400/40 flex items-center justify-center shrink-0">
                       <HomeIcon size={13} className="text-amber-500 dark:text-amber-300" />
                     </span>
-                    <span className="truncate">Sanctuary Command Center</span>
+                    <span className="truncate">Home</span>
                   </span>
                   <ChevronRight size={12} className="opacity-60 shrink-0" />
                 </Link>
@@ -803,7 +802,7 @@ export function LeftSymbolDirectory() {
                         type="button"
                         onClick={() => toggleGroupCollapse(category)}
                         className={cn(
-                          'px-2 py-1 rounded-lg flex items-center justify-between text-[11px] font-mono font-bold uppercase tracking-wider hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer',
+                          'px-2 py-1 rounded-lg flex items-center justify-between text-caption font-mono font-bold uppercase tracking-wider hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer',
                           isSapphire
                             ? 'text-sky-800 dark:text-sky-300/90'
                             : 'text-emerald-800 dark:text-emerald-300/90'
@@ -866,45 +865,16 @@ export function LeftSymbolDirectory() {
                                 </span>
 
                                 <div className="flex items-center gap-1 shrink-0">
-                                  {item.subAction ? (
-                                    <span
-                                      role="button"
-                                      tabIndex={0}
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        navigate(item.subAction!.path);
-                                      }}
-                                      onKeyDown={(e) => {
-                                        if (e.key === 'Enter' || e.key === ' ') {
-                                          e.preventDefault();
-                                          e.stopPropagation();
-                                          navigate(item.subAction!.path);
-                                        }
-                                      }}
-                                      className={cn(
-                                        'text-[10px] font-mono px-1.5 py-0.5 rounded-md border transition-colors cursor-pointer',
-                                        isActive
-                                          ? 'bg-amber-400 text-stone-950 border-amber-300 font-bold'
-                                          : 'bg-amber-500/15 hover:bg-amber-500/25 text-amber-700 dark:text-amber-300 border-amber-400/30'
-                                      )}
-                                      title="Jump straight to the Property Evaluator"
-                                    >
-                                      {item.subAction.label}
-                                    </span>
-                                  ) : item.badge ? (
+                                  {(item.subAction || item.badge) ? (
                                     <span
                                       className={cn(
-                                        'text-[10px] font-mono px-1.5 py-0.5 rounded-md border',
+                                        'w-1.5 h-1.5 rounded-full shrink-0 transition-colors',
                                         isActive
-                                          ? 'bg-black/25 text-amber-200 border-amber-300/40'
-                                          : isSapphire
-                                          ? 'bg-sky-100/80 dark:bg-sky-950/80 text-sky-800 dark:text-sky-300 border-sky-200 dark:border-sky-800'
-                                          : 'bg-emerald-100/80 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
+                                          ? 'bg-amber-400 shadow-[0_0_6px_#fbbf24]'
+                                          : 'bg-emerald-400/70 group-hover:bg-amber-300'
                                       )}
-                                    >
-                                      {item.badge}
-                                    </span>
+                                      title={item.subAction?.label || item.badge}
+                                    />
                                   ) : null}
                                 </div>
                               </Link>

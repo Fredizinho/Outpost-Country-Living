@@ -227,13 +227,13 @@ Traditional Authority (TA): ________________ Signature/Seal: ____________ Date: 
               )}
             >
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono uppercase font-bold text-amber-400">
+                <span className="text-caption font-mono uppercase font-bold text-amber-400">
                   Stage 0{stage.stageNumber}
                 </span>
                 {isActive && <CheckCircle2 size={12} className="text-amber-400" />}
               </div>
               <span className="text-xs font-bold truncate block">{stage.title}</span>
-              <span className="text-[10px] text-stone-400 truncate block font-mono">
+              <span className="text-caption text-stone-400 truncate block font-mono">
                 {stage.chichewaTitle}
               </span>
             </button>
@@ -276,7 +276,7 @@ Traditional Authority (TA): ________________ Signature/Seal: ____________ Date: 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
           {/* Required Documents */}
           <div className="p-3.5 rounded-xl bg-stone-900/80 border border-stone-800 space-y-2 text-xs">
-            <span className="font-mono font-bold text-sky-400 flex items-center gap-1.5 uppercase text-[11px]">
+            <span className="font-mono font-bold text-sky-400 flex items-center gap-1.5 uppercase text-caption">
               <FileText size={13} />
               Required Documentation
             </span>
@@ -289,7 +289,7 @@ Traditional Authority (TA): ________________ Signature/Seal: ____________ Date: 
 
           {/* Common Pitfalls */}
           <div className="p-3.5 rounded-xl bg-rose-950/20 border border-rose-900/40 space-y-2 text-xs text-rose-200">
-            <span className="font-mono font-bold text-rose-300 flex items-center gap-1.5 uppercase text-[11px]">
+            <span className="font-mono font-bold text-rose-300 flex items-center gap-1.5 uppercase text-caption">
               <AlertTriangle size={13} />
               Critical Legal Pitfalls to Avoid
             </span>

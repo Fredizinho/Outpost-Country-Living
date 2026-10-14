@@ -36,7 +36,7 @@ export function DistrictMicroclimateSelector({
             District Micro-Climate & Soil Readiness Filter
           </span>
         </div>
-        <span className="text-[10px] font-mono text-slate-400">
+        <span className="text-caption font-mono text-slate-400">
           Syncs GIS Parcel telemetry with active seasonal calendar
         </span>
       </div>
@@ -65,7 +65,7 @@ export function DistrictMicroclimateSelector({
       {/* Active District Quick Dossier Card */}
       <div className="bg-black/30 p-4 rounded-2xl border border-white/10 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
         <div className="flex flex-col gap-1">
-          <span className="text-[9px] font-mono uppercase text-slate-400 flex items-center gap-1">
+          <span className="text-caption font-mono uppercase text-slate-400 flex items-center gap-1">
             <Mountain size={11} className="text-emerald-400" /> Zone & Elevation
           </span>
           <span className="font-bold text-white leading-tight">
@@ -74,7 +74,7 @@ export function DistrictMicroclimateSelector({
         </div>
 
         <div className="flex flex-col gap-1">
-          <span className="text-[9px] font-mono uppercase text-slate-400 flex items-center gap-1">
+          <span className="text-caption font-mono uppercase text-slate-400 flex items-center gap-1">
             <Sprout size={11} className="text-emerald-400" /> Soil Readiness Status
           </span>
           <div className="flex items-center gap-2">
@@ -84,23 +84,23 @@ export function DistrictMicroclimateSelector({
                 style={{ width: `${activeTelemetry.soilReadinessPct}%` }}
               />
             </div>
-            <span className="font-extrabold text-amber-300 text-[11px]">
+            <span className="font-extrabold text-amber-300 text-caption">
               {activeTelemetry.soilReadinessPct}%
             </span>
           </div>
-          <span className="text-[10px] text-emerald-200/80 font-mono">
+          <span className="text-caption text-emerald-200/80 font-mono">
             {activeTelemetry.currentSoilReadiness}
           </span>
         </div>
 
         <div className="flex flex-col gap-1">
-          <span className="text-[9px] font-mono uppercase text-slate-400 flex items-center gap-1">
+          <span className="text-caption font-mono uppercase text-slate-400 flex items-center gap-1">
             <Droplets size={11} className="text-sky-400" /> Water Availability
           </span>
           <span className="font-bold text-sky-200 leading-tight">
             {activeTelemetry.waterAvailabilityStatus}
           </span>
-          <span className="text-[10px] text-slate-400 font-mono">
+          <span className="text-caption text-slate-400 font-mono">
             Target: {activeTelemetry.targetPlantingWindow}
           </span>
         </div>

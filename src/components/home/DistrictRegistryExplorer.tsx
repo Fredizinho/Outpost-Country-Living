@@ -10,6 +10,8 @@ import {
   AlertTriangle,
   WifiOff,
   Database,
+  CheckCircle2,
+  Clock,
 } from 'lucide-react';
 import {
   DISTRICT_LIST,
@@ -334,7 +336,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                         <span aria-hidden="true">·</span>
                         <span
                           className={cn(
-                            'font-sans text-[10px] font-semibold',
+                            'font-sans text-caption font-semibold inline-flex items-center gap-1',
                             dist.verificationStatus === 'verified'
                               ? isSelected
                                 ? 'text-emerald-300'
@@ -344,7 +346,17 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                                 : 'text-amber-700 dark:text-amber-400'
                           )}
                         >
-                          {dist.verificationStatus === 'verified' ? '✓ Verified' : '◐ Partial'}
+                          {dist.verificationStatus === 'verified' ? (
+                            <>
+                              <CheckCircle2 size={16} strokeWidth={1.75} className="shrink-0" />
+                              <span>Verified</span>
+                            </>
+                          ) : (
+                            <>
+                              <Clock size={16} strokeWidth={1.75} className="shrink-0" />
+                              <span>Partial</span>
+                            </>
+                          )}
                         </span>
                       </div>
                     </button>
@@ -378,19 +390,19 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                 </div>
 
                 <div className="flex flex-col sm:items-end gap-1.5 shrink-0">
-                  <span className="text-[11px] text-stone-500 dark:text-stone-400">
+                  <span className="text-caption text-stone-500 dark:text-stone-400">
                     Agro-Ecological Classification
                   </span>
                   <span className="font-mono text-sm font-bold text-emerald-800 dark:text-amber-300">
                     {selectedDistrict.feasibilityGrade}
                   </span>
                   {selectedDistrict.verificationStatus === 'verified' ? (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-700/60 text-[11px] font-semibold">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-700/60 text-caption font-semibold">
                       <ShieldCheck size={12} />
                       <span>Institutional Sources Verified</span>
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 border border-amber-300/80 dark:border-amber-700/60 text-[11px] font-semibold">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 border border-amber-300/80 dark:border-amber-700/60 text-caption font-semibold">
                       <AlertTriangle size={12} />
                       <span>Partial Station Coverage · Field Verification Advised</span>
                     </span>
@@ -401,55 +413,55 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
               {/* Unified 8-Cell Telemetry Matrix (DCCMS, FAO HWSD, AQUASTAT & Live ECMWF) */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 <div className="p-3 rounded-xl bg-stone-50 dark:bg-stone-900/70 border border-stone-200/70 dark:border-emerald-900/40">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 block">
+                  <span className="text-caption font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 block">
                     DCCMS Rainfall
                   </span>
                   <span className="font-mono text-base font-bold text-stone-900 dark:text-white tabular-nums">
                     {selectedDistrict.rainfallAnnualMm} mm/yr
                   </span>
-                  <span className="text-[10px] text-stone-500 dark:text-stone-400 block truncate mt-0.5">
+                  <span className="text-caption text-stone-500 dark:text-stone-400 block truncate mt-0.5">
                     {selectedDistrict.rainfallPattern}
                   </span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-stone-50 dark:bg-stone-900/70 border border-stone-200/70 dark:border-emerald-900/40">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 block">
+                  <span className="text-caption font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 block">
                     FAO HWSD Soil pH
                   </span>
                   <span className="font-mono text-base font-bold text-stone-900 dark:text-white tabular-nums">
                     {selectedDistrict.soilPh}
                   </span>
-                  <span className="text-[10px] text-stone-500 dark:text-stone-400 block truncate mt-0.5">
+                  <span className="text-caption text-stone-500 dark:text-stone-400 block truncate mt-0.5">
                     {selectedDistrict.primarySoil}
                   </span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-stone-50 dark:bg-stone-900/70 border border-stone-200/70 dark:border-emerald-900/40">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 block">
+                  <span className="text-caption font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 block">
                     AQUASTAT Aquifer
                   </span>
                   <span className="font-mono text-base font-bold text-stone-900 dark:text-white tabular-nums">
                     ~{selectedDistrict.aquiferDepthM}m
                   </span>
-                  <span className="text-[10px] text-stone-500 dark:text-stone-400 block truncate mt-0.5">
+                  <span className="text-caption text-stone-500 dark:text-stone-400 block truncate mt-0.5">
                     {selectedDistrict.waterRating}
                   </span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-stone-50 dark:bg-stone-900/70 border border-stone-200/70 dark:border-emerald-900/40">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 block">
+                  <span className="text-caption font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 block">
                     Solar Insolation
                   </span>
                   <span className="font-mono text-base font-bold text-stone-900 dark:text-white tabular-nums">
                     {selectedDistrict.solarKwhDay} kWh/m²
                   </span>
-                  <span className="text-[10px] text-stone-500 dark:text-stone-400 block truncate mt-0.5">
+                  <span className="text-caption text-stone-500 dark:text-stone-400 block truncate mt-0.5">
                     {selectedDistrict.elevationRange}
                   </span>
                 </div>
 
                 <div className="p-2.5 rounded-xl bg-emerald-50/40 dark:bg-stone-950/60 border border-stone-200/60 dark:border-emerald-900/40 font-mono tabular-nums">
-                  <span className="text-[10px] text-stone-500 block font-sans">
+                  <span className="text-caption text-stone-500 block font-sans">
                     Root Moisture (3–9cm)
                   </span>
                   <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300">
@@ -462,7 +474,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                 </div>
 
                 <div className="p-2.5 rounded-xl bg-emerald-50/40 dark:bg-stone-950/60 border border-stone-200/60 dark:border-emerald-900/40 font-mono tabular-nums">
-                  <span className="text-[10px] text-stone-500 block font-sans">
+                  <span className="text-caption text-stone-500 block font-sans">
                     Soil / Air Temp (6cm)
                   </span>
                   <span className="text-xs font-bold text-stone-900 dark:text-white">
@@ -473,7 +485,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                 </div>
 
                 <div className="p-2.5 rounded-xl bg-emerald-50/40 dark:bg-stone-950/60 border border-stone-200/60 dark:border-emerald-900/40 font-mono tabular-nums">
-                  <span className="text-[10px] text-stone-500 block font-sans">
+                  <span className="text-caption text-stone-500 block font-sans">
                     FAO-56 ET₀ Demand
                   </span>
                   <span className="text-xs font-bold text-sky-700 dark:text-sky-300">
@@ -484,7 +496,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                 </div>
 
                 <div className="p-2.5 rounded-xl bg-emerald-50/40 dark:bg-stone-950/60 border border-stone-200/60 dark:border-emerald-900/40 font-mono tabular-nums">
-                  <span className="text-[10px] text-stone-500 block font-sans">
+                  <span className="text-caption text-stone-500 block font-sans">
                     Live Shortwave Flux
                   </span>
                   <span className="text-xs font-bold text-amber-700 dark:text-amber-300">
@@ -511,7 +523,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                           type="button"
                           onClick={() => setActiveDossierTab(tab.id)}
                           className={cn(
-                            'px-3 py-1.5 rounded-lg text-[11px] font-mono font-bold transition-all cursor-pointer',
+                            'px-3 py-1.5 rounded-lg text-caption font-mono font-bold transition-all cursor-pointer',
                             active
                               ? 'bg-emerald-800 text-white dark:bg-amber-400 dark:text-stone-950 shadow-xs'
                               : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
@@ -523,7 +535,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                     })}
                   </div>
 
-                  <div className="flex items-center gap-2.5 text-[11px]">
+                  <div className="flex items-center gap-2.5 text-caption">
                     <button
                       type="button"
                       onClick={() => setShowGlossary(true)}
@@ -549,7 +561,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                       <div className="flex flex-col gap-3.5">
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
                           <div className="p-2.5 rounded-xl bg-white dark:bg-stone-900 border border-stone-200/70 dark:border-emerald-900/40">
-                            <strong className="text-stone-900 dark:text-amber-300 block mb-0.5 text-[11px] uppercase tracking-wider font-mono">
+                            <strong className="text-stone-900 dark:text-amber-300 block mb-0.5 text-caption uppercase tracking-wider font-mono">
                               Climate & Comfort
                             </strong>
                             <span className="text-stone-700 dark:text-stone-300 leading-relaxed">
@@ -557,7 +569,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                             </span>
                           </div>
                           <div className="p-2.5 rounded-xl bg-white dark:bg-stone-900 border border-stone-200/70 dark:border-emerald-900/40">
-                            <strong className="text-stone-900 dark:text-amber-300 block mb-0.5 text-[11px] uppercase tracking-wider font-mono">
+                            <strong className="text-stone-900 dark:text-amber-300 block mb-0.5 text-caption uppercase tracking-wider font-mono">
                               Water Access
                             </strong>
                             <span className="text-stone-700 dark:text-stone-300 leading-relaxed">
@@ -565,7 +577,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                             </span>
                           </div>
                           <div className="p-2.5 rounded-xl bg-white dark:bg-stone-900 border border-stone-200/70 dark:border-emerald-900/40">
-                            <strong className="text-stone-900 dark:text-amber-300 block mb-0.5 text-[11px] uppercase tracking-wider font-mono">
+                            <strong className="text-stone-900 dark:text-amber-300 block mb-0.5 text-caption uppercase tracking-wider font-mono">
                               Soil & Care
                             </strong>
                             <span className="text-stone-700 dark:text-stone-300 leading-relaxed">
@@ -576,7 +588,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-stone-200/70 dark:border-emerald-900/40">
                           <div>
-                            <span className="text-[10px] font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 block mb-1">
+                            <span className="text-caption font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 block mb-1">
                               Documented Staple & Orchard Crops
                             </span>
                             <p className="text-xs font-semibold text-stone-800 dark:text-stone-200 leading-relaxed">
@@ -584,7 +596,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                             </p>
                           </div>
                           <div>
-                            <span className="text-[10px] font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 block mb-1">
+                            <span className="text-caption font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 block mb-1">
                               Traditional Authorities (TLMA Jurisdictions)
                             </span>
                             <p className="text-xs font-semibold text-stone-800 dark:text-stone-200 leading-relaxed">
@@ -600,10 +612,10 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                       <div className="p-3.5 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-800/50 flex flex-col gap-1.5">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-900 dark:text-emerald-300">
+                          <span className="text-caption font-mono font-bold uppercase tracking-wider text-emerald-900 dark:text-emerald-300">
                             FAO HWSD v2.0 Soil Prescription
                           </span>
-                          <span className="text-[11px] font-mono text-stone-600 dark:text-stone-400">
+                          <span className="text-caption font-mono text-stone-600 dark:text-stone-400">
                             {selectedDistrict.soilPh}
                           </span>
                         </div>
@@ -620,7 +632,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                           <span className="text-xs font-bold text-stone-900 dark:text-white">
                             {matchedPit.name} ({matchedPit.dimensionString})
                           </span>
-                          <span className="font-mono text-[11px] text-amber-800 dark:text-amber-300">
+                          <span className="font-mono text-caption text-amber-800 dark:text-amber-300">
                             {matchedPit.waterRetentionLiters}L · {matchedPit.biocharKgPerPit}kg Biochar
                           </span>
                         </div>
@@ -628,7 +640,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                           {matchedPit.layers.map((layer, idx) => (
                             <div
                               key={idx}
-                              className="flex items-start gap-1.5 text-[11px] text-stone-700 dark:text-stone-300"
+                              className="flex items-start gap-1.5 text-caption text-stone-700 dark:text-stone-300"
                             >
                               <span className="font-mono font-bold text-emerald-700 dark:text-emerald-400 shrink-0">
                                 0{idx + 1}.
@@ -657,7 +669,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                           </span>
                         </span>
                         {(!isOnline || activeCachedAt) && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-800 dark:text-amber-300 font-mono text-[10px] font-semibold">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-800 dark:text-amber-300 font-mono text-caption font-semibold">
                             <Database size={11} />
                             <span>{!isOnline ? 'Offline Vault' : 'Cached Telemetry'}</span>
                           </span>
@@ -665,12 +677,12 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                       </div>
 
                       {selectedDistrict.verificationNote && (
-                        <p className="text-[11px] text-amber-900 dark:text-amber-200 leading-relaxed">
+                        <p className="text-caption text-amber-900 dark:text-amber-200 leading-relaxed">
                           <strong>Note:</strong> {selectedDistrict.verificationNote}
                         </p>
                       )}
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 text-[11px] font-mono text-stone-600 dark:text-stone-300 pt-1">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 text-caption font-mono text-stone-600 dark:text-stone-300 pt-1">
                         <span>
                           • <strong>Rainfall:</strong> {selectedDistrict.rainfallSource || 'WMO Station Normal'}
                         </span>
@@ -695,7 +707,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                   <span className="text-stone-500 dark:text-stone-400 font-medium">
                     {selectedDistrict.landCostBallpark}
                   </span>
-                  <div className="flex flex-wrap items-center gap-3 font-mono text-[11px] pt-0.5">
+                  <div className="flex flex-wrap items-center gap-3 font-mono text-caption pt-0.5">
                     <a
                       href="https://malawilii.org/akn/mw/act/2016/19/eng@2016-09-01"
                       target="_blank"
@@ -773,7 +785,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                 </p>
 
                 <div className="flex flex-col gap-1.5 pt-2 border-t border-stone-100 dark:border-emerald-950">
-                  <span className="text-[11px] font-semibold text-stone-500 dark:text-stone-400">
+                  <span className="text-caption font-semibold text-stone-500 dark:text-stone-400">
                     Layer-by-Layer Horizon Profile:
                   </span>
                   {pit.layers.map((layer, i) => (
@@ -795,7 +807,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                   <span>Biochar: {pit.biocharKgPerPit} kg</span>
                   <span>Compost: {pit.compostWheelbarrows} barrows</span>
                 </div>
-                <p className="text-[11px] text-stone-500 dark:text-stone-400 truncate">
+                <p className="text-caption text-stone-500 dark:text-stone-400 truncate">
                   Crops: {pit.idealCrops.join(' · ')}
                 </p>
               </div>

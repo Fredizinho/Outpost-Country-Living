@@ -75,7 +75,7 @@ export function OffGridSystemSchematics({
     <div className="rounded-2xl bg-[#08150E] border border-emerald-900/70 p-4 sm:p-6 text-white flex flex-col gap-4 shadow-md">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-emerald-900/60 pb-3">
         <div className="flex items-center gap-2">
-          <span className="px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[11px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
+          <span className="px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-caption font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
             <Layers size={13} />
             <span>Live Vector Engineering Schematic</span>
           </span>
@@ -83,7 +83,7 @@ export function OffGridSystemSchematics({
             • Updates dynamically as you adjust sliders above
           </span>
         </div>
-        <span className="text-[11px] font-mono text-emerald-300 bg-emerald-950/80 px-2.5 py-1 rounded-lg border border-emerald-800">
+        <span className="text-caption font-mono text-emerald-300 bg-emerald-950/80 px-2.5 py-1 rounded-lg border border-emerald-800">
           {readyImageMap.badge}
         </span>
       </div>
@@ -99,7 +99,7 @@ export function OffGridSystemSchematics({
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent" />
           <div className="absolute bottom-0 inset-x-0 p-4 flex flex-col gap-1">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-amber-300 font-bold">
+            <span className="text-caption font-mono uppercase tracking-widest text-amber-300 font-bold">
               Field Reference Visual
             </span>
             <p className="text-xs sm:text-sm font-bold text-white leading-snug">
@@ -173,7 +173,7 @@ export function OffGridSystemSchematics({
               <rect x="0" y="0" width="640" height="240" rx="10" fill="#07170F" />
               {/* Raindrops */}
               <text x="115" y="26" textAnchor="middle" fill="#38BDF8" fontSize="11" fontWeight="bold" fontFamily="monospace">
-                🌧️ {rainwater.annualRainfallMm} mm/yr District Rain
+                RAIN: {rainwater.annualRainfallMm} mm/yr District Rain
               </text>
 
               {/* Homestead Roof */}
@@ -236,7 +236,7 @@ export function OffGridSystemSchematics({
               <polygon points="40,75 145,40 155,48 50,83" fill="#1D4ED8" stroke="#60A5FA" strokeWidth="2" />
               <line x1="95" y1="65" x2="95" y2="95" stroke="#94A3B8" strokeWidth="4" />
               <text x="100" y="28" textAnchor="middle" fill="#FDE047" fontSize="11" fontWeight="bold" fontFamily="monospace">
-                ☀️ {solarPump.panelCount380W} × 380W Panels ({solarPump.recommendedPvWatts}W PV)
+                SOLAR PV: {solarPump.panelCount380W} × 380W Panels ({solarPump.recommendedPvWatts}W PV)
               </text>
 
               {/* Borehole Shaft & Submersible Pump */}

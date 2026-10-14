@@ -179,7 +179,7 @@ function generateOfflineFieldAdvisorResponse(
   const familySize = context?.familySize || 4;
 
   if (q.includes('water') || q.includes('spring') || q.includes('borehole') || q.includes('pump')) {
-    return `### 💧 Malawi Water Security & Solar Borehole Counsel (${district})
+    return `### Malawi Water Security & Solar Borehole Counsel (${district})
 
 **1. Inspired Benchmark (*The Ministry of Healing*, p. 274):**
 > *"Pure water to drink and abundant sunshine and fresh air... are the Heaven-appointed remedies."*
@@ -192,11 +192,11 @@ function generateOfflineFieldAdvisorResponse(
   - **Elevated Tank**: **5,000L – 10,000L** tank on a 4m brick/steel stand or uphill knoll to provide gravity pressure to the house and drip lines.
 - **Biosand & First-Flush Roof Harvesting**: Every 100 m² of IBR corrugated roofing in a 1,000 mm rainfall zone captures **~85,000 Liters/season**. Always install a **200L first-flush diverter** before your ferro-cement cistern.
 
-*📡 Source: Offline Sanctuary Field Vault (DCCMS / Malawi Water Resources).*`;
+*Source: Offline Sanctuary Field Vault (DCCMS / Malawi Water Resources).*`;
   }
 
   if (q.includes('soil') || q.includes('katondo') || q.includes('clay') || q.includes('compost') || q.includes('makande') || q.includes('pit')) {
-    return `### 🌱 Malawi Soil Restoration & Bio-Intensive Fertility Protocol
+    return `### Malawi Soil Restoration & Bio-Intensive Fertility Protocol
 
 **1. Identifying Your Malawi Soil Order:**
 - **Ferruginous Red Clay Loam (*Katondo* — Lilongwe, Dedza, Ntcheu, Mzimba)**: Rich in iron/aluminum oxides, pH 5.4–6.3. Prone to surface crusting if left bare. Never burn crop residues; apply **10–15 cm of dry Hyparrhenia grass mulch** and incorporate *Tephrosia vogelii* or *Crotalaria* green manure.
@@ -207,11 +207,11 @@ function generateOfflineFieldAdvisorResponse(
 - Excavate **90cm × 90cm × 90cm**, separating red topsoil (*Horizon A*) from subsoil (*Horizon B*).
 - Loosen the bottom 15cm with a pickaxe, line with small porous stones and **3 kg crushed hardwood biochar**, then backfill topsoil mixed with **2 wheelbarrows of 18-day thermal compost** and **2 double-handfuls of wood ash** (*phulusa*).
 
-*📡 Source: Offline Sanctuary Field Vault (Malawi DARS Pedology & EGW Agronomy).*`;
+*Source: Offline Sanctuary Field Vault (Malawi DARS Pedology & EGW Agronomy).*`;
   }
 
   if (q.includes('customary') || q.includes('chief') || q.includes('mfumu') || q.includes('legal') || q.includes('land') || q.includes('title')) {
-    return `### 📜 Malawi Customary Land Act (2016) & Chief (*Mfumu*) Protocol
+    return `### Malawi Customary Land Act (2016) & Chief (*Mfumu*) Protocol
 
 **1. Five Mandatory Verification Steps Before Any Payment:**
 1. **Courtesy Audience with Village Headman (*Nyakwawa*) & *Mwini Mbumba***: In matrilineal zones (Central/Southern Malawi), the maternal clan uncle (*Mwini Mbumba*) and all senior female clan members must explicitly consent to the allocation.
@@ -223,11 +223,11 @@ function generateOfflineFieldAdvisorResponse(
 **2. Inspired Financial Safeguard (*Selected Messages*, Book 2, p. 329):**
 > *"Counsel together, and obey the word: 'Owe no man anything.'"* Avoid high-interest urban mortgages when securing rural acreage.
 
-*📡 Source: Offline Sanctuary Field Vault (Malawi Customary Land Act & Chichewa Field Protocol).*`;
+*Source: Offline Sanctuary Field Vault (Malawi Customary Land Act & Chichewa Field Protocol).*`;
   }
 
   if (q.includes('solar') || q.includes('battery') || q.includes('power') || q.includes('inverter') || q.includes('off-grid')) {
-    return `### ☀️ Off-Grid Solar PV & LiFePO4 Sizing for Malawi Homesteads
+    return `### Off-Grid Solar PV & LiFePO4 Sizing for Malawi Homesteads
 
 **1. Malawi Solar Irradiance Advantage:**
 Malawi receives **5.4 to 6.1 Peak Sun Hours (kWh/m²/day)** across most plateaus and valleys.
@@ -238,10 +238,10 @@ Malawi receives **5.4 to 6.1 Peak Sun Hours (kWh/m²/day)** across most plateaus
 - **Hybrid Inverter**: **3.5 kW – 5.0 kW 48V Pure Sine Wave MPPT** with built-in surge protection and earth-rod grounding (< 5 Ohms) before November lightning storms.
 - **Load Segregation**: Run borehole/booster pumps and grain mills directly during peak sunshine (**09:30 – 14:30**) so nighttime battery capacity is preserved for LED lighting, chest freezer, and communications.
 
-*📡 Source: Offline Sanctuary Field Vault (Calculators & Off-Grid Engineering).*`;
+*Source: Offline Sanctuary Field Vault (Calculators & Off-Grid Engineering).*`;
   }
 
-  return `### 🌿 Outpost Sanctuary Field Guidance (${district})
+  return `### Outpost Sanctuary Field Guidance (${district})
 
 **1. Core Country Living Principle (*Country Living*, p. 24):**
 > *"Get as suitable a place as your means will allow, where you can have a garden and cultivate the land to raise your own fruit and vegetables."*
@@ -251,7 +251,7 @@ Malawi receives **5.4 to 6.1 Peak Sun Hours (kWh/m²/day)** across most plateaus
 - **Staple & Protein Self-Reliance**: Plant **75cm × 25cm Sasakawa ridges** intercropped with Open-Pollinated Maize (*Chimanga*), Pigeon Peas (*Nandolo* — deep biological plow), Bambara Groundnuts (*Nzama*), and orange-fleshed Sweet Potatoes (*Mbatata*).
 - **Sabbath & Kitchen Preparation**: Construct an insulated clay Rocket Stove and a rice-hull Fireless Thermal Cooker (*Wonderbag*) to keep Friday-cooked legumes hot (>68°C) through Sabbath afternoon (*6T* 355.3).
 
-*💡 Tip: You can explore interactive calculators in **/calculators**, 28-district GIS layers in **/scout-map**, or ask me specifically about **water/boreholes**, **Katondo soil**, **solar sizing**, or **Customary Land law**.*`;
+*Tip: You can explore interactive calculators in **/calculators**, 28-district GIS layers in **/scout-map**, or ask me specifically about **water/boreholes**, **Katondo soil**, **solar sizing**, or **Customary Land law**.*`;
 }
 
 /**

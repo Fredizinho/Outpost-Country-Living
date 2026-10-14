@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { 
   Sparkles, Bot, Send, X, ExternalLink, MapPin, 
   Droplets, Sprout, Compass, RefreshCw, ChevronDown, 
-  ChevronUp, CheckCircle2, ShieldAlert, ArrowRight, Layers
+  ChevronUp, CheckCircle2, ShieldAlert, ArrowRight, Layers,
+  Church, Mountain
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { cn } from '@/lib/utils';
@@ -46,39 +47,44 @@ export function MapScoutAiDrawer({
   const activeLayerEntries = activeLayers ? Object.entries(activeLayers).filter(([_, v]) => Boolean(v)) : [];
   const activeLayerLabels = activeLayerEntries.map(([key]) => {
     switch (key) {
-      case 'waterSources': return '💧 Perennial Water';
-      case 'arableLand': return '🌱 Arable Katondo Soil';
-      case 'communitySettlements': return '⛪ Adventist Outposts & Communities';
-      case 'rainfallIsohyets': return '🌧️ Rainfall Isohyets';
-      case 'soilPedology': return '🧪 Soil pH Pedology';
-      case 'elevationTiers': return '⛰️ Elevation Tiers';
-      case 'catchmentBasins': return '🌊 Catchment Basins';
-      case 'riftEscarpments': return '⚠️ Rift Escarpments';
-      case 'customaryBoundaries': return '📜 Customary Land Malire';
+      case 'waterSources': return 'Perennial Water';
+      case 'arableLand': return 'Arable Katondo Soil';
+      case 'communitySettlements': return 'Adventist Outposts & Communities';
+      case 'rainfallIsohyets': return 'Rainfall Isohyets';
+      case 'soilPedology': return 'Soil pH Pedology';
+      case 'elevationTiers': return 'Elevation Tiers';
+      case 'catchmentBasins': return 'Catchment Basins';
+      case 'riftEscarpments': return 'Rift Escarpments';
+      case 'customaryBoundaries': return 'Customary Land Malire';
       default: return key;
     }
   });
 
   // Quick prompt templates
-  const quickPrompts = [
+  const quickPrompts: { label: string; query: string; icon: React.ElementType }[] = [
     ...(activeLayerEntries.length > 0 ? [{
-      label: `✨ Layer Insights (${activeLayerEntries.length} Active)`,
+      label: `Layer Insights (${activeLayerEntries.length} Active)`,
+      icon: Sparkles,
       query: `Analyze current map view data for ${activeDistrict?.name || 'Central Malawi'}. Selected active layers: ${activeLayerLabels.join(', ')}. Provide practical country living recommendations, homestead water security, Katondo arable soil practices, off-grid siting, and community outpost guidance based on these selected layers.`
     }] : []),
     {
-      label: '💧 Perennial Water & Streams',
+      label: 'Perennial Water & Streams',
+      icon: Droplets,
       query: `Analyze perennial water sources, mountain streams, and borehole aquifer depth for country homesteading in ${activeDistrict?.name || 'this district'}.`
     },
     {
-      label: '🌱 Katondo Soil & Crops',
+      label: 'Katondo Soil & Crops',
+      icon: Sprout,
       query: `Evaluate soil fertility (pH, Katondo red loam, dambo wetlands) and best organic crops for ${activeDistrict?.name || 'this district'}.`
     },
     {
-      label: '⛪ Outposts & Adventist Hubs',
+      label: 'Outposts & Adventist Hubs',
+      icon: Church,
       query: `What are the nearest Seventh-day Adventist churches, rural health clinics, and trading bomas near ${activeDistrict?.name || 'this district'}?`
     },
     {
-      label: '🛣️ Road Access & Altitude',
+      label: 'Road Access & Altitude',
+      icon: Mountain,
       query: `Examine wet-season road access, elevation/cooling benefits, and flood safety around ${activeDistrict?.name || 'this district'}.`
     }
   ];
@@ -159,12 +165,12 @@ export function MapScoutAiDrawer({
               <h3 className="serif font-bold text-sm text-white tracking-wide">
                 AI Map Scout
               </h3>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40 flex items-center gap-1">
+              <span className="text-caption font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40 flex items-center gap-1">
                 <Sparkles size={9} />
                 <span>Maps Grounded</span>
               </span>
             </div>
-            <p className="text-[11px] text-slate-400 font-sans truncate">
+            <p className="text-caption text-slate-400 font-sans truncate">
               {activeDistrict ? `${activeDistrict.name} District (${activeDistrict.region})` : 'Malawi Geospatial Intelligence'}
             </p>
           </div>
@@ -199,7 +205,7 @@ export function MapScoutAiDrawer({
             <span className="font-semibold text-white truncate">
               {activeParcelTitle ? activeParcelTitle : `${activeDistrict?.name || 'Dedza'} • ${activeDistrict?.elevationRange || 'Highland'}`}
             </span>
-            <span className="text-[10px] font-mono text-slate-400 hidden sm:inline">
+            <span className="text-caption font-mono text-slate-400 hidden sm:inline">
               ({(currentCoordinates?.lat ?? activeDistrict?.centroid?.[0] ?? -14.38).toFixed(3)}, {(currentCoordinates?.lng ?? activeDistrict?.centroid?.[1] ?? 34.33).toFixed(3)})
             </span>
           </div>
@@ -209,7 +215,7 @@ export function MapScoutAiDrawer({
               href={`https://www.google.com/maps/search/?api=1&query=${currentCoordinates?.lat ?? activeDistrict?.centroid?.[0] ?? -14.38},${currentCoordinates?.lng ?? activeDistrict?.centroid?.[1] ?? 34.33}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[10px] font-mono text-amber-300 hover:text-amber-200 flex items-center gap-1 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 rounded-lg transition-colors"
+              className="text-caption font-mono text-amber-300 hover:text-amber-200 flex items-center gap-1 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 rounded-lg transition-colors"
               title="Open coordinates in Google Maps"
             >
               <span>Google Maps</span>
@@ -222,7 +228,7 @@ export function MapScoutAiDrawer({
                   const lng = currentCoordinates?.lng ?? activeDistrict?.centroid?.[1] ?? 34.33;
                   onFlyToCoordinates(lat, lng);
                 }}
-                className="text-[10px] font-mono text-emerald-400 hover:text-emerald-300 underline shrink-0 cursor-pointer"
+                className="text-caption font-mono text-emerald-400 hover:text-emerald-300 underline shrink-0 cursor-pointer"
               >
                 Recenter
               </button>
@@ -233,12 +239,12 @@ export function MapScoutAiDrawer({
         {/* Active Layer Pills */}
         {activeLayerEntries.length > 0 && (
           <div className="flex flex-wrap items-center gap-1.5 p-2 rounded-xl bg-slate-900/50 border border-white/5">
-            <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
+            <span className="text-caption font-mono text-slate-400 flex items-center gap-1">
               <Layers size={11} className="text-emerald-400" />
               <span>Active Layers:</span>
             </span>
             {activeLayerLabels.map((lbl, idx) => (
-              <span key={idx} className="px-2 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-200 font-mono text-[10px] shadow-2xs">
+              <span key={idx} className="px-2 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-200 font-mono text-caption shadow-2xs">
                 {lbl}
               </span>
             ))}
@@ -247,7 +253,7 @@ export function MapScoutAiDrawer({
 
         {/* Quick Question Chips */}
         <div className="space-y-1.5">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
+          <span className="text-caption font-mono uppercase tracking-wider text-slate-400 font-semibold">
             Scouting Inquiries
           </span>
           <div className="grid grid-cols-2 gap-1.5">
@@ -256,7 +262,7 @@ export function MapScoutAiDrawer({
                 key={idx}
                 onClick={() => handleRunQuery(item.query)}
                 disabled={isLoading}
-                className="text-left p-2 rounded-lg bg-slate-900/60 hover:bg-emerald-950/40 border border-white/10 hover:border-emerald-500/40 text-slate-300 hover:text-white transition-all text-[11px] leading-tight cursor-pointer disabled:opacity-50"
+                className="text-left p-2 rounded-lg bg-slate-900/60 hover:bg-emerald-950/40 border border-white/10 hover:border-emerald-500/40 text-slate-300 hover:text-white transition-all text-caption leading-tight cursor-pointer disabled:opacity-50"
               >
                 {item.label}
               </button>
@@ -266,12 +272,15 @@ export function MapScoutAiDrawer({
 
         {/* Loading Indicator */}
         {isLoading && (
-          <div className="p-4 rounded-xl bg-emerald-950/30 border border-emerald-500/30 flex items-center gap-3">
-            <div className="w-5 h-5 rounded-full border-2 border-emerald-400 border-t-transparent animate-spin shrink-0" />
-            <div className="text-xs">
-              <span className="font-bold text-white block">Analyzing Topographic & Agronomic Layers...</span>
-              <span className="text-slate-400 text-[11px]">Evaluating catchment hydrology, soil latosols, and local infrastructure</span>
+          <div className="p-4 rounded-xl bg-emerald-950/30 border border-emerald-500/30 flex flex-col gap-2.5 animate-pulse">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+              <span className="text-xs font-bold text-white">Analyzing Topographic &amp; Agronomic Layers...</span>
             </div>
+            <div className="h-3 w-3/4 rounded bg-emerald-500/20" />
+            <div className="h-3 w-full rounded bg-emerald-500/15" />
+            <div className="h-3 w-1/2 rounded bg-emerald-500/10" />
+            <span className="text-slate-400 text-caption mt-1">Evaluating catchment hydrology, soil latosols, and local infrastructure</span>
           </div>
         )}
 
@@ -288,7 +297,7 @@ export function MapScoutAiDrawer({
           <div className="space-y-4">
             
             {/* Grounding Attribution Badge */}
-            <div className="flex items-center justify-between bg-slate-900/90 border border-white/10 rounded-xl px-3 py-2 text-[11px]">
+            <div className="flex items-center justify-between bg-slate-900/90 border border-white/10 rounded-xl px-3 py-2 text-caption">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 <span className="font-mono text-emerald-300 font-semibold">
@@ -296,7 +305,7 @@ export function MapScoutAiDrawer({
                 </span>
                 <span className="text-slate-400">• Google Maps Grounded</span>
               </div>
-              <span className="text-[10px] font-mono text-slate-400">
+              <span className="text-caption font-mono text-slate-400">
                 {analysisResult.groundingSources?.length || 0} Sources
               </span>
             </div>
@@ -308,8 +317,8 @@ export function MapScoutAiDrawer({
                   h3: ({ node, ...props }) => <h3 className="serif font-bold text-sm text-emerald-300 mt-2 mb-1 border-b border-emerald-500/20 pb-1" {...props} />,
                   h4: ({ node, ...props }) => <h4 className="font-bold text-xs text-amber-300 mt-2 mb-0.5" {...props} />,
                   ul: ({ node, ...props }) => <ul className="list-disc pl-4 space-y-1 my-1 text-slate-300" {...props} />,
-                  li: ({ node, ...props }) => <li className="text-[11px] leading-relaxed" {...props} />,
-                  p: ({ node, ...props }) => <p className="text-[11px] my-1 text-slate-200" {...props} />,
+                  li: ({ node, ...props }) => <li className="text-caption leading-relaxed" {...props} />,
+                  p: ({ node, ...props }) => <p className="text-caption my-1 text-slate-200" {...props} />,
                   strong: ({ node, ...props }) => <strong className="font-bold text-white" {...props} />
                 }}
               >
@@ -344,14 +353,14 @@ export function MapScoutAiDrawer({
                         className="flex items-start justify-between gap-2 p-2 rounded-lg bg-slate-950/80 hover:bg-emerald-950/30 border border-white/10 hover:border-emerald-500/40 text-emerald-300 hover:text-emerald-200 transition-colors group"
                       >
                         <div className="min-w-0">
-                          <div className="font-medium text-[11px] truncate flex items-center gap-1.5">
-                            <span className="text-[9px] uppercase px-1 rounded bg-emerald-500/20 text-emerald-300 font-mono">
+                          <div className="font-medium text-caption truncate flex items-center gap-1.5">
+                            <span className="text-caption uppercase px-1 rounded bg-emerald-500/20 text-emerald-300 font-mono">
                               {source.sourceType}
                             </span>
                             <span className="truncate">{source.title || 'View on Google Maps'}</span>
                           </div>
                           {source.snippet && (
-                            <p className="text-[10px] text-slate-400 line-clamp-1 mt-0.5 font-sans">
+                            <p className="text-caption text-slate-400 line-clamp-1 mt-0.5 font-sans">
                               {source.snippet}
                             </p>
                           )}
@@ -367,7 +376,7 @@ export function MapScoutAiDrawer({
             {/* Suggested Follow-Up Actions */}
             {analysisResult.suggestedActions && analysisResult.suggestedActions.length > 0 && (
               <div className="space-y-1.5">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
+                <span className="text-caption font-mono uppercase tracking-wider text-slate-400 font-semibold">
                   Suggested Investigations
                 </span>
                 <div className="space-y-1">
@@ -376,7 +385,7 @@ export function MapScoutAiDrawer({
                       key={aIdx}
                       onClick={() => handleRunQuery(action)}
                       disabled={isLoading}
-                      className="w-full text-left p-2 rounded-xl bg-slate-900/50 hover:bg-slate-900 border border-white/5 hover:border-emerald-500/30 text-slate-300 hover:text-white transition-all text-[11px] flex items-center justify-between gap-2 group cursor-pointer"
+                      className="w-full text-left p-2 rounded-xl bg-slate-900/50 hover:bg-slate-900 border border-white/5 hover:border-emerald-500/30 text-slate-300 hover:text-white transition-all text-caption flex items-center justify-between gap-2 group cursor-pointer"
                     >
                       <span className="truncate">{action}</span>
                       <ArrowRight size={12} className="text-slate-500 group-hover:text-emerald-400 shrink-0 transition-colors" />

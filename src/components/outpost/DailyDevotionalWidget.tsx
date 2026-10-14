@@ -128,7 +128,7 @@ export function DailyDevotionalWidget() {
                 <SabbathRestIcon className="w-6 h-6" />
               </div>
               <div>
-                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[#E6B655]">
+                <div className="flex items-center gap-2 text-caption font-bold uppercase tracking-[0.22em] text-[#E6B655]">
                   <span>Morning Watch & Country Counsel</span>
                   <span aria-hidden="true">·</span>
                   <span className="text-white/80">{currentDevotional.theme}</span>
@@ -186,7 +186,7 @@ export function DailyDevotionalWidget() {
                       <button
                         onClick={handleVerifyLiveScripture}
                         disabled={verifyingScripture}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10 hover:bg-[#C89B3C]/30 text-[10px] font-bold uppercase tracking-wider text-[#E6B655] transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10 hover:bg-[#C89B3C]/30 text-caption font-bold uppercase tracking-wider text-[#E6B655] transition-colors cursor-pointer"
                       >
                         <RefreshCw className={`w-3 h-3 ${verifyingScripture ? 'animate-spin' : ''}`} />
                         {verifiedVerse ? 'Verified Live' : 'Verify Live API'}
@@ -201,7 +201,7 @@ export function DailyDevotionalWidget() {
                       — {verifiedVerse ? verifiedVerse.reference : currentDevotional.scripture.reference}
                     </div>
                     {verifiedVerse && (
-                      <span className="inline-flex items-center gap-1 text-[10px] text-[#86EFAC] font-mono">
+                      <span className="inline-flex items-center gap-1 text-caption text-[#86EFAC] font-mono">
                         <CheckCircle2 className="w-3 h-3" /> {verifiedVerse.source}
                       </span>
                     )}
@@ -217,7 +217,7 @@ export function DailyDevotionalWidget() {
                         <span>Spirit of Prophecy Counsel</span>
                       </div>
                       {currentDevotional.egwQuote.egwCode && (
-                        <span className="inline-flex items-center gap-1 text-[11px] font-mono text-[#E6B655]">
+                        <span className="inline-flex items-center gap-1 text-caption font-mono text-[#E6B655]">
                           <ShieldCheck className="w-3 h-3" /> {currentDevotional.egwQuote.egwCode}
                         </span>
                       )}
@@ -236,7 +236,7 @@ export function DailyDevotionalWidget() {
                         href={currentDevotional.egwQuote.verifiedUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-white/80 hover:text-[#E6B655] transition-colors"
+                        className="inline-flex items-center gap-1 text-caption font-bold uppercase tracking-wider text-white/80 hover:text-[#E6B655] transition-colors"
                       >
                         <span>EGW Estate</span>
                         <ExternalLink className="w-3 h-3" />
@@ -277,7 +277,7 @@ export function DailyDevotionalWidget() {
                     <span>Personal & Family Worship Journal</span>
                   </div>
                   {savedEntry?.updatedAt && (
-                    <span className="text-[11px] font-mono text-white/60">
+                    <span className="text-caption font-mono text-white/60">
                       Last saved: {savedEntry.updatedAt}
                     </span>
                   )}
@@ -292,7 +292,7 @@ export function DailyDevotionalWidget() {
                 />
 
                 <div className="flex items-center justify-between gap-3">
-                  <span className="text-[11px] text-white/50 font-mono">
+                  <span className="text-caption text-white/50 font-mono">
                     Included automatically in Sanctuary JSON Backups
                   </span>
                   <button
@@ -300,8 +300,17 @@ export function DailyDevotionalWidget() {
                     onClick={handleSaveReflection}
                     className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#C89B3C] hover:bg-[#d8ab4c] text-[#141D17] text-xs font-bold uppercase tracking-wider transition-all cursor-pointer"
                   >
-                    <Save className="w-3.5 h-3.5" />
-                    <span>{savedNotice ? 'Saved to Vault ✓' : 'Save Reflection'}</span>
+                    {savedNotice ? (
+                      <>
+                        <CheckCircle2 size={16} strokeWidth={1.75} />
+                        <span>Saved to Vault</span>
+                      </>
+                    ) : (
+                      <>
+                        <Save size={16} strokeWidth={1.75} />
+                        <span>Save Reflection</span>
+                      </>
+                    )}
                   </button>
                 </div>
               </div>

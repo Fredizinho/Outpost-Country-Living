@@ -142,7 +142,7 @@ export function DesktopReferenceInspector({
       </div>
 
       {/* Inspector Mode Tabs */}
-      <div className="grid grid-cols-3 gap-1 p-1.5 bg-stone-200/70 dark:bg-[#050E09] border-b border-stone-300/70 dark:border-emerald-950 text-[11px] font-semibold">
+      <div className="grid grid-cols-3 gap-1 p-1.5 bg-stone-200/70 dark:bg-[#050E09] border-b border-stone-300/70 dark:border-emerald-950 text-caption font-semibold">
         <button
           type="button"
           onClick={() => setActiveTab('sizer')}
@@ -196,7 +196,7 @@ export function DesktopReferenceInspector({
                 >
                   Target District
                 </label>
-                <span className="font-mono text-[10px] text-emerald-700 dark:text-emerald-400">
+                <span className="font-mono text-caption text-emerald-700 dark:text-emerald-400">
                   {selectedDistrict.region} Region
                 </span>
               </div>
@@ -252,53 +252,53 @@ export function DesktopReferenceInspector({
             {/* Instant Computed Readout */}
             <div className="grid grid-cols-2 gap-2">
               <div className="p-2.5 rounded-xl bg-white dark:bg-[#0C1D13] border border-stone-200/90 dark:border-emerald-900/60">
-                <div className="flex items-center justify-between text-[11px] text-stone-500 dark:text-stone-400">
+                <div className="flex items-center justify-between text-caption text-stone-500 dark:text-stone-400">
                   <span>Arable Land</span>
                   <Sprout size={13} className="text-emerald-600 dark:text-emerald-400" />
                 </div>
                 <div className="font-mono text-base font-bold text-stone-900 dark:text-white tabular-nums mt-0.5">
                   {metrics.totalAcres} ac
                 </div>
-                <div className="text-[10px] font-mono text-stone-500 dark:text-stone-400 tabular-nums">
+                <div className="text-caption font-mono text-stone-500 dark:text-stone-400 tabular-nums">
                   ≈ {(metrics.totalAcres * 0.4047).toFixed(2)} ha
                 </div>
               </div>
 
               <div className="p-2.5 rounded-xl bg-white dark:bg-[#0C1D13] border border-stone-200/90 dark:border-emerald-900/60">
-                <div className="flex items-center justify-between text-[11px] text-stone-500 dark:text-stone-400">
+                <div className="flex items-center justify-between text-caption text-stone-500 dark:text-stone-400">
                   <span>Roof Harvest</span>
                   <Droplets size={13} className="text-sky-600 dark:text-sky-400" />
                 </div>
                 <div className="font-mono text-base font-bold text-stone-900 dark:text-white tabular-nums mt-0.5">
                   {(metrics.rainwaterLiters / 1000).toFixed(1)}k L
                 </div>
-                <div className="text-[10px] font-mono text-stone-500 dark:text-stone-400 tabular-nums">
+                <div className="text-caption font-mono text-stone-500 dark:text-stone-400 tabular-nums">
                   {Math.round(metrics.rainwaterLiters / 365)} L/day
                 </div>
               </div>
 
               <div className="p-2.5 rounded-xl bg-white dark:bg-[#0C1D13] border border-stone-200/90 dark:border-emerald-900/60">
-                <div className="flex items-center justify-between text-[11px] text-stone-500 dark:text-stone-400">
+                <div className="flex items-center justify-between text-caption text-stone-500 dark:text-stone-400">
                   <span>Solar Array</span>
                   <Sun size={13} className="text-amber-600 dark:text-amber-400" />
                 </div>
                 <div className="font-mono text-base font-bold text-stone-900 dark:text-white tabular-nums mt-0.5">
                   {metrics.solarKw} kW
                 </div>
-                <div className="text-[10px] font-mono text-stone-500 dark:text-stone-400 tabular-nums">
+                <div className="text-caption font-mono text-stone-500 dark:text-stone-400 tabular-nums">
                   {selectedDistrict.solarKwhDay} PSH/day
                 </div>
               </div>
 
               <div className="p-2.5 rounded-xl bg-white dark:bg-[#0C1D13] border border-stone-200/90 dark:border-emerald-900/60">
-                <div className="flex items-center justify-between text-[11px] text-stone-500 dark:text-stone-400">
+                <div className="flex items-center justify-between text-caption text-stone-500 dark:text-stone-400">
                   <span>3×3×3ft Pits</span>
                   <Layers size={13} className="text-emerald-600 dark:text-emerald-400" />
                 </div>
                 <div className="font-mono text-base font-bold text-stone-900 dark:text-white tabular-nums mt-0.5">
                   {metrics.treePits} Pits
                 </div>
-                <div className="text-[10px] font-mono text-stone-500 dark:text-stone-400 tabular-nums">
+                <div className="text-caption font-mono text-stone-500 dark:text-stone-400 tabular-nums">
                   {metrics.biocharKg}kg Biochar
                 </div>
               </div>
@@ -306,16 +306,16 @@ export function DesktopReferenceInspector({
 
             {/* Quick Unit Converter (Hectares <-> Acres & Meters <-> Feet) */}
             <div className="p-3 rounded-xl bg-white dark:bg-[#0C1D13] border border-stone-200/90 dark:border-emerald-900/60 flex flex-col gap-2">
-              <div className="flex items-center justify-between text-[11px] font-bold text-stone-700 dark:text-stone-200">
+              <div className="flex items-center justify-between text-caption font-bold text-stone-700 dark:text-stone-200">
                 <span className="flex items-center gap-1.5">
                   <ArrowRightLeft size={12} className="text-emerald-700 dark:text-amber-400" />
                   <span>Land Unit Converter</span>
                 </span>
-                <span className="font-mono text-[10px] text-stone-500">1 ha = 2.471 ac</span>
+                <span className="font-mono text-caption text-stone-500">1 ha = 2.471 ac</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex-1">
-                  <label className="text-[10px] text-stone-500 block mb-0.5">Hectares (ha)</label>
+                  <label className="text-caption text-stone-500 block mb-0.5">Hectares (ha)</label>
                   <input
                     type="number"
                     min={0.1}
@@ -326,7 +326,7 @@ export function DesktopReferenceInspector({
                   />
                 </div>
                 <div className="flex-1">
-                  <label className="text-[10px] text-stone-500 block mb-0.5">Acres (ac)</label>
+                  <label className="text-caption text-stone-500 block mb-0.5">Acres (ac)</label>
                   <div className="px-2 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300/60 dark:border-emerald-800/60 font-mono text-xs font-bold text-emerald-900 dark:text-amber-300 tabular-nums">
                     {(hectaresInput * 2.47105).toFixed(2)} ac
                   </div>
@@ -339,14 +339,14 @@ export function DesktopReferenceInspector({
         {activeTab === 'notes' && (
           <div className="flex-1 flex flex-col gap-2.5 h-full">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-stone-700 dark:text-stone-200">
+              <span className="text-caption font-bold text-stone-700 dark:text-stone-200">
                 Persistent Field Scratchpad
               </span>
               <div className="flex items-center gap-1">
                 <button
                   type="button"
                   onClick={handleCopyNotes}
-                  className="px-2 py-1 rounded-md bg-white dark:bg-emerald-950 border border-stone-300 dark:border-emerald-800 text-[10px] font-semibold text-stone-700 dark:text-emerald-200 flex items-center gap-1 cursor-pointer"
+                  className="px-2 py-1 rounded-md bg-white dark:bg-emerald-950 border border-stone-300 dark:border-emerald-800 text-caption font-semibold text-stone-700 dark:text-emerald-200 flex items-center gap-1 cursor-pointer"
                 >
                   {copiedNotes ? <Check size={11} /> : <Copy size={11} />}
                   <span>{copiedNotes ? 'Copied' : 'Copy'}</span>
@@ -368,7 +368,7 @@ export function DesktopReferenceInspector({
               placeholder="Jot down parcel coordinates, borehole depths, Chief (Mfumu) names, or seed lists while switching across tabs..."
               className="w-full flex-1 min-h-[280px] p-3 rounded-xl bg-white dark:bg-[#07130C] border border-stone-300 dark:border-emerald-900/80 text-xs font-mono text-stone-800 dark:text-stone-100 leading-relaxed resize-none focus:outline-none focus:ring-2 focus:ring-emerald-600 select-text"
             />
-            <span className="text-[10px] font-mono text-stone-500 dark:text-stone-400">
+            <span className="text-caption font-mono text-stone-500 dark:text-stone-400">
               Auto-saved locally to your device offline vault.
             </span>
           </div>
@@ -376,7 +376,7 @@ export function DesktopReferenceInspector({
 
         {activeTab === 'shortcuts' && (
           <div className="flex flex-col gap-2">
-            <span className="text-[11px] font-bold text-stone-700 dark:text-stone-200">
+            <span className="text-caption font-bold text-stone-700 dark:text-stone-200">
               Desktop Keyboard Shortcuts
             </span>
             {[
@@ -396,10 +396,10 @@ export function DesktopReferenceInspector({
                 key={item.keys}
                 className="flex items-center justify-between gap-2 p-2 rounded-lg bg-white dark:bg-[#0C1D13] border border-stone-200/80 dark:border-emerald-900/60"
               >
-                <span className="text-[11px] text-stone-700 dark:text-stone-300">
+                <span className="text-caption text-stone-700 dark:text-stone-300">
                   {item.label}
                 </span>
-                <kbd className="px-1.5 py-0.5 rounded bg-stone-100 dark:bg-[#06120B] border border-stone-300 dark:border-emerald-800 font-mono text-[10px] font-bold text-stone-800 dark:text-amber-300 shrink-0">
+                <kbd className="px-1.5 py-0.5 rounded bg-stone-100 dark:bg-[#06120B] border border-stone-300 dark:border-emerald-800 font-mono text-caption font-bold text-stone-800 dark:text-amber-300 shrink-0">
                   {item.keys}
                 </kbd>
               </div>

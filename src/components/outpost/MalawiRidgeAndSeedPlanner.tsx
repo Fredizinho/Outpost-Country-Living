@@ -278,7 +278,7 @@ export function MalawiRidgeAndSeedPlanner() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-900/70 border border-stone-200/80 dark:border-emerald-900/50">
-                <span className="text-[11px] font-mono font-bold text-amber-700 dark:text-amber-300 uppercase">
+                <span className="text-caption font-mono font-bold text-amber-700 dark:text-amber-300 uppercase">
                   1. Primary Ridge Crop [C]
                 </span>
                 <h4 className="font-display text-sm font-bold text-stone-900 dark:text-white mt-0.5">
@@ -288,7 +288,7 @@ export function MalawiRidgeAndSeedPlanner() {
               </div>
 
               <div className="p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-900/70 border border-stone-200/80 dark:border-emerald-900/50">
-                <span className="text-[11px] font-mono font-bold text-emerald-700 dark:text-emerald-300 uppercase">
+                <span className="text-caption font-mono font-bold text-emerald-700 dark:text-emerald-300 uppercase">
                   2. Nitrogen / Taproot Partner [N]
                 </span>
                 <h4 className="font-display text-sm font-bold text-stone-900 dark:text-white mt-0.5">
@@ -298,7 +298,7 @@ export function MalawiRidgeAndSeedPlanner() {
               </div>
 
               <div className="p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-900/70 border border-stone-200/80 dark:border-emerald-900/50">
-                <span className="text-[11px] font-mono font-bold text-emerald-800 dark:text-emerald-400 uppercase">
+                <span className="text-caption font-mono font-bold text-emerald-800 dark:text-emerald-400 uppercase">
                   3. Living Ground Carpet [G]
                 </span>
                 <h4 className="font-display text-sm font-bold text-stone-900 dark:text-white mt-0.5">
@@ -308,7 +308,7 @@ export function MalawiRidgeAndSeedPlanner() {
               </div>
 
               <div className="p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-900/70 border border-stone-200/80 dark:border-emerald-900/50">
-                <span className="text-[11px] font-mono font-bold text-teal-700 dark:text-teal-300 uppercase">
+                <span className="text-caption font-mono font-bold text-teal-700 dark:text-teal-300 uppercase">
                   4. Contour Hedge Barrier
                 </span>
                 <h4 className="font-display text-sm font-bold text-stone-900 dark:text-white mt-0.5">

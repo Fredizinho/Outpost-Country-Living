@@ -102,7 +102,7 @@ export function VisualSoilSwatchGuide() {
                   <h5 className="font-display text-sm font-bold text-stone-900 dark:text-white leading-tight">
                     {swatch.englishName}
                   </h5>
-                  <span className="text-[11px] text-stone-500 dark:text-stone-400 font-mono">
+                  <span className="text-caption text-stone-500 dark:text-stone-400 font-mono">
                     {swatch.faoClass}
                   </span>
                 </div>

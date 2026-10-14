@@ -331,6 +331,47 @@ export function ScoutingMap({
   // Live telemetry state on cursor movement
   const [liveCursorCoords, setLiveCursorCoords] = useState<{ lat: number; lng: number } | null>(null);
 
+  // Persistent dismissible banner for dashed illustrative marker convention
+  const [isIllustrativeBannerDismissed, setIsIllustrativeBannerDismissed] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('outpost_map_illustrative_banner_dismissed') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  const handleDismissIllustrativeBanner = () => {
+    setIsIllustrativeBannerDismissed(true);
+    try {
+      localStorage.setItem('outpost_map_illustrative_banner_dismissed', 'true');
+    } catch {}
+  };
+
+  // Helper to fit map bounds to all of Malawi with left padding equal to Thematic Controls panel width
+  const fitAllMalawiBounds = useCallback((animate = true) => {
+    if (!mapInstanceRef.current) return;
+    const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 768;
+    // Thematic Controls panel width is ~340px + 12px margin = 352px. Use 360px left padding on desktop so Malawi centers in visible area
+    const leftPad = isDesktop ? 360 : 16;
+    const bounds = L.latLngBounds(
+      MALAWI_STRICT_BOUNDS.southWest,
+      MALAWI_STRICT_BOUNDS.northEast
+    );
+
+    if (animate) {
+      mapInstanceRef.current.flyToBounds(bounds, {
+        paddingTopLeft: [leftPad, 24],
+        paddingBottomRight: [24, 24],
+        duration: 1.2
+      });
+    } else {
+      mapInstanceRef.current.fitBounds(bounds, {
+        paddingTopLeft: [leftPad, 24],
+        paddingBottomRight: [24, 24]
+      });
+    }
+  }, []);
+
   // Live Verified Satellite & Weather API Telemetry for the active district
   const [liveDistrictTelemetry, setLiveDistrictTelemetry] = useState<{
     livePeakSunHoursKwh?: number;
@@ -909,6 +950,9 @@ export function ScoutingMap({
             if (matched && matched.centroid) {
               mapInstanceRef.current.flyTo(matched.centroid as L.LatLngTuple, matched.optimalZoom || 10.5, { duration: 1.1 });
             }
+          } else {
+            // Center Malawi in the visible area with left padding equal to Thematic Controls panel width
+            fitAllMalawiBounds(false);
           }
           updateViewTelemetry();
         } catch {
@@ -1289,12 +1333,14 @@ export function ScoutingMap({
       });
 
       crestLine.bindTooltip(`
-        <div style="font-family: sans-serif; padding: 6px 8px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid #ea580c; box-shadow: 0 8px 16px rgba(0,0,0,0.6);">
-          <div style="font-weight: 800; color: #fb923c; font-size: 12px; display: flex; align-items: center; gap: 5px;">
-            <span>⚠️</span> ${scarp.name}
+        <div style="font-family: inherit; padding: 10px 12px; background: #071A10; color: #f8fafc; border-radius: 16px; border: 1px solid #c85a32; box-shadow: 0 10px 25px rgba(0,0,0,0.65); min-width: 190px;">
+          <div style="font-weight: 800; color: #f59e0b; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+            <span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#c85a32;"></span>
+            ${scarp.name}
           </div>
-          <div style="font-size: 10px; color: #fde047; font-weight: bold; margin-top: 3px;">Geological Drop: ${scarp.dropElevationMeters}</div>
-          <div style="font-size: 9px; color: #cbd5e1; margin-top: 2px;">Terracing: ${scarp.swaleDesignSpec}</div>
+          <div style="font-size: 12px; color: #fde047; font-weight: bold; margin-top: 4px;">Geological Drop: ${scarp.dropElevationMeters}</div>
+          <div style="font-size: 12px; color: #d6d3d1; margin-top: 2px;">Terracing: ${scarp.swaleDesignSpec}</div>
+          <div style="font-size: 11px; color: #f59e0b; font-family: monospace; margin-top: 5px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.15);">Honesty: Geological Scarp Model</div>
         </div>
       `, { sticky: true });
 
@@ -1580,7 +1626,10 @@ export function ScoutingMap({
       }
 
       // District Centroid Badge (Water Table Depth & Agro Feasibility Grade)
-      if (district.centroid) {
+      // REQUIREMENT: Show district labels ONLY at zoom <= 8
+      const showDistrictCentroidLabels = currentZoom <= 8;
+
+      if (showDistrictCentroidLabels && district.centroid) {
         const gradeLetter = district.feasibilityGrade ? district.feasibilityGrade.split(' ')[0] : 'A';
         const depthText = district.aquiferDepth ? (district.aquiferDepth.match(/\d+m/)?.[0] || '15m') : '15m';
         const isExpanded = isSelected || expandedDistrictId === district.id;
@@ -1588,7 +1637,7 @@ export function ScoutingMap({
         const centroidIcon = L.divIcon({
           className: 'district-centroid-badge-container',
           html: `
-            <div class="district-centroid-badge ${isExpanded ? 'active-district expanded-badge' : ''}" data-district-id="${district.id}">
+            <div class="district-centroid-badge ${isExpanded ? 'active-district expanded-badge' : ''}" data-district-id="${district.id}" title="${district.name} District (${district.region})">
               <span class="district-badge-grade">${gradeLetter}</span>
               <span class="district-badge-depth">${depthText}</span>
             </div>
@@ -1616,6 +1665,16 @@ export function ScoutingMap({
           mapInstanceRef.current?.flyTo(district.centroid as L.LatLngTuple, district.optimalZoom || 10.5, { duration: 1.2 });
         });
 
+        // Full-text labels on hover
+        badgeMarker.bindTooltip(`
+          <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 7px 10px; background: rgba(6, 19, 12, 0.96); color: #f8fafc; border-radius: 9px; border: 1.5px solid rgba(52, 211, 153, 0.45); box-shadow: 0 8px 20px rgba(0,0,0,0.75);">
+            <div style="font-weight: 700; color: #6ee7b7; font-size: 13px;">${district.name} District</div>
+            <div style="font-size: 10px; color: #d6d3d1; margin-top: 1px;">${district.region} Region · ${district.elevationRange}</div>
+            <div style="font-family: monospace; font-size: 10px; color: #fde68a; font-weight: 700; margin-top: 2px;">Suitability Grade: ${district.feasibilityGrade}</div>
+            <div style="font-family: monospace; font-size: 9.5px; color: #7dd3fc; margin-top: 1px;">Aquifer Depth: ${district.aquiferDepth.split('(')[0]}</div>
+          </div>
+        `, { sticky: true });
+
         districtBadgesLayerRef.current?.addLayer(badgeMarker);
       }
 
@@ -1632,7 +1691,7 @@ export function ScoutingMap({
         activeDistrictBeaconRef.current?.addLayer(beaconCircle);
       }
     });
-  }, [showDistrictBoundaries, activeDistrict, expandedDistrictId]);
+  }, [showDistrictBoundaries, activeDistrict, expandedDistrictId, currentZoom]);
 
   // -------------------------------------------------------------
   // 12. RENDER COMMUNITY SETTLEMENTS & ADVENTIST MISSION HUBS
@@ -1792,8 +1851,9 @@ export function ScoutingMap({
 
     if (!showParcelBoundary) return;
 
-    // When zoomed out (< 9), dynamically group parcels into district cluster badges
-    if (currentZoom < 9) {
+    // When zoomed out (<= 8), dynamically group parcels into district cluster badges
+    // REQUIREMENT: Show parcel markers as clusters at zoom <= 8, individual pins at higher zoom.
+    if (currentZoom <= 8) {
       // Group parcels by district
       const groupedByDistrict: Record<string, ScoutParcelFeature[]> = {};
       filteredFeatures.forEach(feat => {
@@ -1804,34 +1864,50 @@ export function ScoutingMap({
 
       Object.entries(groupedByDistrict).forEach(([distName, feats]) => {
         if (feats.length === 0) return;
-        // Average coordinates of parcels in this district
+        const dSpec = getDistrictByIdOrName(distName);
+        
+        // Calculate average coordinates, and OFFSET parcel chips so they never cover district labels
         const avgLat = feats.reduce((acc, f) => acc + f.geometry.coordinates[1], 0) / feats.length;
         const avgLng = feats.reduce((acc, f) => acc + f.geometry.coordinates[0], 0) / feats.length;
+
+        // Offset safely south-east so the centroid badge & district nametag are completely unobstructed
+        let clusterLat = avgLat;
+        let clusterLng = avgLng;
+        if (dSpec && dSpec.centroid) {
+          clusterLat = dSpec.centroid[0] - 0.08;
+          clusterLng = dSpec.centroid[1] + 0.08;
+        }
+
+        const hasVerified = feats.some(f => {
+          const p = f.properties;
+          return (p.dataClassification as string) === 'Verified Survey Record' ||
+            p.legalStatus === 'Public National Research Station' ||
+            p.legalStatus === 'Public University Benchmark';
+        });
 
         const clusterIcon = L.divIcon({
           className: 'parcel-cluster-container',
           html: `
-            <div class="parcel-cluster-badge">
+            <div class="parcel-cluster-badge ${!hasVerified ? 'dashed-illustrative' : ''}">
               <div class="cluster-glow-ring"></div>
               <div class="cluster-count-circle">${feats.length}</div>
-              <span class="cluster-label-text">${feats.length === 1 ? '1 Parcel' : `${feats.length} Parcels`} in ${distName}</span>
+              <span class="cluster-label-text">${feats.length === 1 ? '1 Plot' : `${feats.length} Plots`}</span>
             </div>
           `,
-          iconSize: [140, 36],
-          iconAnchor: [70, 18]
+          iconSize: [110, 36],
+          iconAnchor: [55, 18]
         });
 
-        const clusterMarker = L.marker([avgLat, avgLng], { icon: clusterIcon });
+        const clusterMarker = L.marker([clusterLat, clusterLng], { icon: clusterIcon });
         clusterMarker.on('click', () => {
-          mapInstanceRef.current?.flyTo([avgLat, avgLng], 10.5, { duration: 1.2 });
-          const dSpec = getDistrictByIdOrName(distName);
+          mapInstanceRef.current?.flyTo([clusterLat, clusterLng], 10.5, { duration: 1.2 });
           if (dSpec) handleFocusDistrict(dSpec);
         });
 
         clusterMarker.bindTooltip(`
-          <div style="font-family: sans-serif; padding: 6px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid #10b981; box-shadow: 0 8px 16px rgba(0,0,0,0.6);">
-            <div style="font-weight: 800; color: #34d399; font-size: 12px;">${feats.length} Surveyed Agricultural Parcels</div>
-            <div style="font-size: 10px; color: #94a3b8; margin-top: 2px;">District: ${distName} • Click to expand & view plots</div>
+          <div style="font-family: sans-serif; padding: 7px 9px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1.5px solid ${hasVerified ? '#10b981' : '#f59e0b'}; box-shadow: 0 8px 18px rgba(0,0,0,0.7);">
+            <div style="font-weight: 800; color: ${hasVerified ? '#34d399' : '#fde68a'}; font-size: 12px;">${feats.length} Agricultural Plots</div>
+            <div style="font-size: 10px; color: #cbd5e1; margin-top: 2px;">District: ${distName} • Click to zoom to individual plots</div>
           </div>
         `, { sticky: true });
 
@@ -1840,14 +1916,14 @@ export function ScoutingMap({
       return;
     }
 
-    // When zoomed in (>= 9), render individual high-accuracy parcel polygons & markers
+    // When zoomed in (> 8), render individual high-accuracy parcel polygons & markers
+    // REQUIREMENT: Run collision detection on markers; when two overlap, merge into a count cluster ("3 plots") that expands on click.
+    // Visual convention: unsourced markers get a dashed outline and 70% opacity fill; never clip marker text; markers must not overlap district labels.
+
+    // 1. Render boundary polygons
     filteredFeatures.forEach((feat) => {
       const p = feat.properties;
-      const [lng, lat] = feat.geometry.coordinates;
       const isSelected = activeParcel?.id === p.id;
-      const isBookmarked = bookmarkedIds.includes(p.id);
-
-      // Boundary polygon: Semi-transparent emerald with high-contrast white/cyan stroke
       if (p.boundaryPolygon && p.boundaryPolygon.length > 0) {
         const latLngs = p.boundaryPolygon as L.LatLngTuple[];
         const boundaryPoly = L.polygon(latLngs, {
@@ -1866,51 +1942,156 @@ export function ScoutingMap({
 
         boundaryLayerRef.current?.addLayer(boundaryPoly);
       }
+    });
 
-      // Individual Parcel Marker with glowing pin
-      const iconInnerSvg = isBookmarked
-        ? `<svg width="${isSelected ? '20' : '15'}" height="${isSelected ? '20' : '15'}" viewBox="0 0 24 24" fill="${isSelected ? '#022c22' : '#f59e0b'}" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
-        : `<svg width="${isSelected ? '20' : '15'}" height="${isSelected ? '20' : '15'}" viewBox="0 0 24 24" fill="none" stroke="${isSelected ? '#022c22' : '#34d399'}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>`;
+    // 2. Group markers that overlap on screen (collision detection threshold: 38px)
+    interface LocalCluster {
+      features: ScoutParcelFeature[];
+      lat: number;
+      lng: number;
+    }
 
-      const customIcon = L.divIcon({
-        className: 'parcel-pin-container',
-        html: `
-          <div class="parcel-pin-badge ${isSelected ? 'selected' : ''}" style="
-            width: ${isSelected ? '38px' : '30px'};
-            height: ${isSelected ? '38px' : '30px'};
-            display: flex;
-            align-items: center;
-            justify-content: center;
-          ">
-            ${iconInnerSvg}
+    const localClusters: LocalCluster[] = [];
+    const collisionRadiusPx = 38;
+
+    filteredFeatures.forEach((feat) => {
+      const [lng, lat] = feat.geometry.coordinates;
+      const pt = mapInstanceRef.current ? mapInstanceRef.current.latLngToContainerPoint([lat, lng]) : null;
+
+      let merged = false;
+      if (pt) {
+        for (const cluster of localClusters) {
+          const clusterPt = mapInstanceRef.current.latLngToContainerPoint([cluster.lat, cluster.lng]);
+          const distancePx = Math.hypot(pt.x - clusterPt.x, pt.y - clusterPt.y);
+          if (distancePx < collisionRadiusPx) {
+            cluster.features.push(feat);
+            cluster.lat = cluster.features.reduce((acc, f) => acc + f.geometry.coordinates[1], 0) / cluster.features.length;
+            cluster.lng = cluster.features.reduce((acc, f) => acc + f.geometry.coordinates[0], 0) / cluster.features.length;
+            merged = true;
+            break;
+          }
+        }
+      }
+
+      if (!merged) {
+        localClusters.push({
+          features: [feat],
+          lat,
+          lng
+        });
+      }
+    });
+
+    // 3. Prevent markers from overlapping district centroid labels by offsetting if proximity < 0.04°
+    localClusters.forEach((cluster) => {
+      for (const d of MALAWI_DISTRICTS) {
+        if (!d.centroid) continue;
+        const [cLat, cLng] = d.centroid;
+        if (Math.abs(cluster.lat - cLat) < 0.04 && Math.abs(cluster.lng - cLng) < 0.04) {
+          cluster.lat -= 0.038;
+          cluster.lng += 0.038;
+          break;
+        }
+      }
+    });
+
+    // 4. Render markers: count cluster if > 1 feature, individual pin if 1 feature
+    localClusters.forEach((cluster) => {
+      if (cluster.features.length > 1) {
+        const count = cluster.features.length;
+        const hasVerified = cluster.features.some(f => {
+          const p = f.properties;
+          return (p.dataClassification as string) === 'Verified Survey Record' ||
+            p.legalStatus === 'Public National Research Station' ||
+            p.legalStatus === 'Public University Benchmark';
+        });
+
+        const clusterIcon = L.divIcon({
+          className: 'parcel-cluster-container',
+          html: `
+            <div class="parcel-cluster-badge ${!hasVerified ? 'dashed-illustrative' : ''}" style="padding: 3px 9px 3px 6px;">
+              <div class="cluster-count-circle" style="width: 22px; height: 22px; font-size: 11px;">${count}</div>
+              <span class="cluster-label-text" style="font-size: 11px; white-space: nowrap; overflow: visible;">${count} plots</span>
+            </div>
+          `,
+          iconSize: [120, 36],
+          iconAnchor: [60, 18]
+        });
+
+        const clusterMarker = L.marker([cluster.lat, cluster.lng], { icon: clusterIcon });
+        clusterMarker.on('click', () => {
+          // Expands cluster on click by zooming in
+          const nextZoom = Math.min(16, currentZoom + 2);
+          mapInstanceRef.current?.flyTo([cluster.lat, cluster.lng], nextZoom, { duration: 0.8 });
+          setActiveParcel(cluster.features[0].properties);
+          setIsSidebarOpen(true);
+        });
+
+        clusterMarker.bindTooltip(`
+          <div style="font-family: sans-serif; padding: 7px 10px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1.5px solid ${hasVerified ? '#10b981' : '#f59e0b'}; box-shadow: 0 8px 18px rgba(0,0,0,0.7);">
+            <div style="font-weight: 800; color: ${hasVerified ? '#34d399' : '#fde68a'}; font-size: 12px;">${count} plots merged</div>
+            <div style="font-size: 10px; color: #cbd5e1; margin-top: 2px;">Click to zoom and expand individual plots</div>
           </div>
-        `,
-        iconSize: [isSelected ? 38 : 30, isSelected ? 38 : 30],
-        iconAnchor: [isSelected ? 19 : 15, isSelected ? 19 : 15],
-      });
+        `, { sticky: true });
 
-      const marker = L.marker([lat, lng], { icon: customIcon });
+        markersLayerRef.current?.addLayer(clusterMarker);
+      } else {
+        const feat = cluster.features[0];
+        const p = feat.properties;
+        const isSelected = activeParcel?.id === p.id;
+        const isBookmarked = bookmarkedIds.includes(p.id);
 
-      marker.bindTooltip(`
-        <div style="font-family: sans-serif; padding: 8px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1.5px solid #10b981; box-shadow: 0 10px 25px rgba(0,0,0,0.7); min-width: 170px;">
-          <div style="font-weight: 800; color: #34d399; font-size: 13px;">${p.title}</div>
-          <div style="font-size: 10px; color: #cbd5e1; margin-top: 2px;">${p.district} • <strong>${p.acres} Acres (${p.hectares} ha)</strong></div>
-          <div style="font-size: 9px; color: #38bdf8; font-weight: bold; margin-top: 3px; display: flex; items-center; gap: 4px;">
-            <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#38bdf8;margin-right:4px;"></span>
-            Water: ${p.waterReliability.split('(')[0]}
+        const isVerifiedSource = Boolean(
+          (p.dataClassification as string) === 'Verified Survey Record' ||
+          p.legalStatus === 'Public National Research Station' ||
+          p.legalStatus === 'Public University Benchmark'
+        );
+
+        const iconInnerSvg = isBookmarked
+          ? `<svg width="${isSelected ? '20' : '15'}" height="${isSelected ? '20' : '15'}" viewBox="0 0 24 24" fill="${isSelected ? '#022c22' : '#f59e0b'}" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
+          : `<svg width="${isSelected ? '20' : '15'}" height="${isSelected ? '20' : '15'}" viewBox="0 0 24 24" fill="none" stroke="${isSelected ? '#022c22' : isVerifiedSource ? '#34d399' : '#f59e0b'}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>`;
+
+        const customIcon = L.divIcon({
+          className: 'parcel-pin-container',
+          html: `
+            <div class="parcel-pin-badge ${isSelected ? 'selected' : ''} ${!isVerifiedSource ? 'dashed-illustrative' : ''}" style="
+              width: ${isSelected ? '38px' : '30px'};
+              height: ${isSelected ? '38px' : '30px'};
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              position: relative;
+            ">
+              ${iconInnerSvg}
+            </div>
+          `,
+          iconSize: [isSelected ? 38 : 30, isSelected ? 38 : 30],
+          iconAnchor: [isSelected ? 19 : 15, isSelected ? 19 : 15],
+        });
+
+        const marker = L.marker([cluster.lat, cluster.lng], { icon: customIcon });
+
+        marker.bindTooltip(`
+          <div style="font-family: sans-serif; padding: 8px 10px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1.5px solid ${isVerifiedSource ? '#10b981' : '#f59e0b'}; box-shadow: 0 10px 25px rgba(0,0,0,0.7); min-width: 175px;">
+            <div style="font-weight: 800; color: ${isVerifiedSource ? '#34d399' : '#fde68a'}; font-size: 13px;">${p.title}</div>
+            <div style="font-size: 10px; color: #cbd5e1; margin-top: 2px;">${p.district} • <strong>${p.acres} Acres (${p.hectares} ha)</strong></div>
+            <div style="font-size: 9px; color: #38bdf8; font-weight: bold; margin-top: 3px; display: flex; align-items: center; gap: 4px;">
+              <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#38bdf8;margin-right:4px;"></span>
+              Water: ${p.waterReliability.split('(')[0]}
+            </div>
+            <div style="font-size: 9px; color: #f59e0b; margin-top: 1px;">Tenure: ${p.landTenure}</div>
           </div>
-          <div style="font-size: 9px; color: #f59e0b; margin-top: 1px;">Tenure: ${p.landTenure}</div>
-        </div>
-      `, { sticky: true });
+        `, { sticky: true });
 
-      marker.on('click', () => {
-        setActiveParcel(p);
-        setIsSidebarOpen(true);
-        setIsDrawerMinimized(true);
-        mapInstanceRef.current?.flyTo([lat, lng], 13.5, { duration: 1.2 });
-      });
+        marker.on('click', () => {
+          setActiveParcel(p);
+          setIsSidebarOpen(true);
+          setIsDrawerMinimized(true);
+          mapInstanceRef.current?.flyTo([cluster.lat, cluster.lng], 13.5, { duration: 1.2 });
+        });
 
-      markersLayerRef.current?.addLayer(marker);
+        markersLayerRef.current?.addLayer(marker);
+      }
     });
   }, [filteredFeatures, activeParcel, bookmarkedIds, showParcelBoundary, currentZoom]);
 
@@ -2021,16 +2202,42 @@ export function ScoutingMap({
           {(!isOnlineState || isForceOfflineState || tileStyle === 'offline-vector') && !isDetailsAutoHidden && (
             <div className="absolute top-16 left-3 z-20 bg-amber-950/90 border border-amber-500/50 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-lg flex items-center gap-2 pointer-events-auto text-xs text-amber-200">
               <WifiOff size={13} className="text-amber-400 animate-pulse" />
-              <span className="font-mono text-[11px]">
+              <span className="font-mono text-caption">
                 <strong>Offline Vector Map:</strong> 28 districts available offline
               </span>
               <button
                 onClick={() => setIsOfflineModalOpen(true)}
-                className="underline text-[10px] text-amber-300 hover:text-white font-mono cursor-pointer ml-1"
+                className="underline text-caption text-amber-300 hover:text-white font-mono cursor-pointer ml-1"
               >
                 Settings
               </button>
             </div>
+          )}
+
+          {/* Dismissible Banner: Dashed Outline Illustrative Marker Visual Convention */}
+          {!isIllustrativeBannerDismissed && !isDetailsAutoHidden && (
+            <aside 
+              aria-label="Map Marker Convention Notice"
+              className="absolute top-3.5 left-1/2 -translate-x-1/2 z-25 pointer-events-auto max-w-[92vw] sm:max-w-md w-full px-2"
+            >
+              <div className="bg-slate-950/95 backdrop-blur-xl border border-amber-500/40 py-1.5 px-3 rounded-full shadow-2xl flex items-center justify-between gap-2.5 text-xs text-white">
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="w-3.5 h-3.5 rounded-full border-2 border-dashed border-amber-400 bg-slate-900/80 shrink-0" />
+                  <span className="font-mono text-[11px] sm:text-caption text-slate-200 truncate">
+                    <strong className="text-amber-300">Dashed</strong> = illustrative example, not a listing
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleDismissIllustrativeBanner}
+                  className="p-1 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors shrink-0 cursor-pointer"
+                  title="Dismiss notification"
+                  aria-label="Dismiss map convention notice"
+                >
+                  <X size={13} />
+                </button>
+              </div>
+            </aside>
           )}
         </>
       )}
@@ -2071,7 +2278,7 @@ export function ScoutingMap({
                       <div className="flex items-center gap-1 shrink-0">
                         <button 
                           onClick={() => setIsSpotlightMinimized(false)}
-                          className="text-[11px] font-mono text-emerald-400 hover:text-emerald-300 px-2 py-0.5 rounded bg-white/5 hover:bg-white/10"
+                          className="text-caption font-mono text-emerald-400 hover:text-emerald-300 px-2 py-0.5 rounded bg-white/5 hover:bg-white/10"
                         >
                           Expand
                         </button>
@@ -2092,10 +2299,10 @@ export function ScoutingMap({
                       <div className="flex items-start justify-between gap-2">
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-full font-bold uppercase">
+                            <span className="text-caption font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-full font-bold uppercase">
                               {activeParcel.district} District
                             </span>
-                            <span className="text-[10px] font-mono text-slate-400">
+                            <span className="text-caption font-mono text-slate-400">
                               {activeParcel.acres} Acres
                             </span>
                           </div>
@@ -2121,17 +2328,17 @@ export function ScoutingMap({
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-2 text-[11px] font-mono py-1 border-y border-white/10 text-slate-300">
+                      <div className="grid grid-cols-3 gap-2 text-caption font-mono py-1 border-y border-white/10 text-slate-300">
                         <div>
-                          <span className="text-slate-500 text-[9px] block">Water Reliability</span>
+                          <span className="text-slate-500 text-caption block">Water Reliability</span>
                           <span className="text-sky-300 font-bold truncate block">{activeParcel.waterReliability.split('(')[0]}</span>
                         </div>
                         <div>
-                          <span className="text-slate-500 text-[9px] block">Soil Profile</span>
+                          <span className="text-slate-500 text-caption block">Soil Profile</span>
                           <span className="text-emerald-300 font-bold truncate block">{activeParcel.soilProfile.split(',')[0]}</span>
                         </div>
                         <div>
-                          <span className="text-slate-500 text-[9px] block">Land Tenure</span>
+                          <span className="text-slate-500 text-caption block">Land Tenure</span>
                           <span className="text-amber-300 font-bold truncate block">{activeParcel.landTenure}</span>
                         </div>
                       </div>
@@ -2191,10 +2398,10 @@ export function ScoutingMap({
                           <span className="text-amber-300 font-bold text-xs tracking-tight truncate">
                             {activeDistrict.name} District
                           </span>
-                          <span className="text-[10px] font-mono bg-amber-500/20 text-amber-300 border border-amber-500/40 px-1.5 py-0.5 rounded font-bold shrink-0">
+                          <span className="text-caption font-mono bg-amber-500/20 text-amber-300 border border-amber-500/40 px-1.5 py-0.5 rounded font-bold shrink-0">
                             Grade {activeDistrict.feasibilityGrade}
                           </span>
-                          <span className="text-slate-400 text-[11px] font-mono hidden md:inline truncate">
+                          <span className="text-slate-400 text-caption font-mono hidden md:inline truncate">
                             {activeDistrict.rainfallAnnualMm}mm/yr • pH {activeDistrict.soilPh} • Aquifer: {activeDistrict.aquiferDepth.split('(')[0]}
                           </span>
                         </div>
@@ -2236,10 +2443,10 @@ export function ScoutingMap({
                             <span className="serif text-lg font-bold text-amber-300">
                               {activeDistrict.name} District
                             </span>
-                            <span className="text-[10px] font-mono bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-500/40 font-bold">
+                            <span className="text-caption font-mono bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-500/40 font-bold">
                               Grade {activeDistrict.feasibilityGrade}
                             </span>
-                            <span className="text-[10px] font-mono text-slate-400 hidden sm:inline">
+                            <span className="text-caption font-mono text-slate-400 hidden sm:inline">
                               {activeDistrict.region} Region
                             </span>
                           </div>
@@ -2263,21 +2470,21 @@ export function ScoutingMap({
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-4 gap-2 text-[11px] font-mono py-1.5 border-y border-white/10 text-slate-300">
+                      <div className="grid grid-cols-4 gap-2 text-caption font-mono py-1.5 border-y border-white/10 text-slate-300">
                         <div>
-                          <span className="text-slate-500 text-[9px] block">Rainfall</span>
+                          <span className="text-slate-500 text-caption block">Rainfall</span>
                           <span className="text-sky-300 font-bold">{activeDistrict.rainfallAnnualMm}mm/yr</span>
                         </div>
                         <div>
-                          <span className="text-slate-500 text-[9px] block">Soil & pH</span>
+                          <span className="text-slate-500 text-caption block">Soil & pH</span>
                           <span className="text-emerald-300 font-bold truncate block">{activeDistrict.soilPh}</span>
                         </div>
                         <div>
-                          <span className="text-slate-500 text-[9px] block">Aquifer Depth</span>
+                          <span className="text-slate-500 text-caption block">Aquifer Depth</span>
                           <span className="text-amber-300 font-bold truncate block">{activeDistrict.aquiferDepth.split('(')[0]}</span>
                         </div>
                         <div>
-                          <span className="text-slate-500 text-[9px] block">Live API</span>
+                          <span className="text-slate-500 text-caption block">Live API</span>
                           <span className="text-emerald-300 font-bold truncate block">
                             {liveDistrictTelemetry?.tempC !== undefined ? `${liveDistrictTelemetry.tempC}°C` : '23°C'} · {liveDistrictTelemetry?.livePeakSunHoursKwh ?? activeDistrict.solarKwhDay} PSH
                           </span>
@@ -2344,13 +2551,13 @@ export function ScoutingMap({
                       <X size={12} />
                     </button>
                   </div>
-                  <div className="text-[10px] text-slate-300">
+                  <div className="text-caption text-slate-300">
                     {droppedWaypoint.lat.toFixed(4)}°S, {droppedWaypoint.lng.toFixed(4)}°E • {droppedWaypoint.rainfallMm}mm/yr • {droppedWaypoint.soilPh} • Aquifer: {droppedWaypoint.aquiferDepth}
                   </div>
                   <div className="flex items-center gap-1.5 pt-0.5">
                     <button
                       onClick={() => handleSaveWaypoint(droppedWaypoint)}
-                      className="px-2 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/40 text-cyan-200 text-[10px] font-bold cursor-pointer"
+                      className="px-2 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/40 text-cyan-200 text-caption font-bold cursor-pointer"
                     >
                       + Save Waypoint ({savedWaypoints.length})
                     </button>
@@ -2362,13 +2569,13 @@ export function ScoutingMap({
                           `GPS ${droppedWaypoint.lat.toFixed(4)}°, ${droppedWaypoint.lng.toFixed(4)}° • ${droppedWaypoint.aquiferDepth}`
                         )
                       }
-                      className="px-2 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-300 text-[10px] font-bold cursor-pointer"
+                      className="px-2 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-300 text-caption font-bold cursor-pointer"
                     >
                       Evaluate Plot
                     </button>
                     <button
                       onClick={() => handleCopyCoords([droppedWaypoint.lng, droppedWaypoint.lat])}
-                      className="px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 text-[10px] cursor-pointer"
+                      className="px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 text-caption cursor-pointer"
                     >
                       {copiedCoords ? 'Copied!' : 'Copy GPS'}
                     </button>
@@ -2376,7 +2583,7 @@ export function ScoutingMap({
                 </div>
               )}
 
-              <div className="bg-slate-950/85 backdrop-blur-md border border-white/15 px-3 py-1.5 rounded-xl shadow-xl flex items-center gap-2.5 text-[11px] font-mono text-slate-300">
+              <div className="bg-slate-950/85 backdrop-blur-md border border-white/15 px-3 py-1.5 rounded-xl shadow-xl flex items-center gap-2.5 text-caption font-mono text-slate-300">
                 <div className="flex items-center gap-1.5">
                   <Navigation size={12} className="text-amber-400 rotate-45" />
                   <span>
@@ -2390,7 +2597,7 @@ export function ScoutingMap({
                   {tileStyle === 'offline-vector' ? 'Offline Vector' : tileStyle.toUpperCase()}
                 </span>
                 <span className="text-slate-600 hidden lg:inline">|</span>
-                <span className="text-[10px] text-slate-400 hidden lg:inline" title="Desktop Shortcuts: L (Layers), F (Filters), A (AI Scout), D (Dossier)">
+                <span className="text-caption text-slate-400 hidden lg:inline" title="Desktop Shortcuts: L (Layers), F (Filters), A (AI Scout), D (Dossier)">
                   Keys: <strong className="text-amber-300">L</strong> Layers · <strong className="text-amber-300">F</strong> Filter · <strong className="text-amber-300">A</strong> AI · <strong className="text-amber-300">D</strong> Intel
                 </span>
               </div>
@@ -2406,7 +2613,7 @@ export function ScoutingMap({
             onWakeUp={wakeUpControls}
           />
 
-          {/* Quick Thematic Map Layers UI Control Panel (Water Sources, Arable Land, Community Settlements) */}
+          {/* 8 Thematic Map Layers UI Control Panel */}
           <ThematicLayerControlPanel
             waterSources={showRivers && showCatchmentBasins}
             onToggleWaterSources={(active) => {
@@ -2420,6 +2627,26 @@ export function ScoutingMap({
             communitySettlements={showCommunitySettlements}
             onToggleCommunitySettlements={(active) => {
               setShowCommunitySettlements(active);
+            }}
+            rainfallIsohyets={showRainfallLayer}
+            onToggleRainfallIsohyets={(active) => {
+              setShowRainfallLayer(active);
+            }}
+            elevationTiers={showElevationLayer}
+            onToggleElevationTiers={(active) => {
+              setShowElevationLayer(active);
+            }}
+            catchmentBasins={showCatchmentBasins}
+            onToggleCatchmentBasins={(active) => {
+              setShowCatchmentBasins(active);
+            }}
+            riftEscarpments={showEscarpments}
+            onToggleRiftEscarpments={(active) => {
+              setShowEscarpments(active);
+            }}
+            districtBoundaries={showDistrictBoundaries}
+            onToggleDistrictBoundaries={(active) => {
+              setShowDistrictBoundaries(active);
             }}
             onOpenAdvancedLayers={() => setIsLayersDeckOpen(true)}
             onOpenAiScout={() => {
@@ -2471,7 +2698,7 @@ export function ScoutingMap({
                   >
                     <div>
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-mono font-bold uppercase text-emerald-300 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
+                        <span className="text-caption font-mono font-bold uppercase text-emerald-300 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
                           {p.district} District
                         </span>
                         <span className="text-xs font-mono font-bold text-amber-400">

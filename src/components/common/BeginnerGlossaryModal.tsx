@@ -429,7 +429,7 @@ export function BeginnerGlossaryModal({
                           <Icon size={14} />
                           <span>PATHWAY {item.step}</span>
                         </span>
-                        <span className="text-[11px] font-mono text-stone-500 dark:text-stone-400">
+                        <span className="text-caption font-mono text-stone-500 dark:text-stone-400">
                           {item.chichewaContext}
                         </span>
                       </div>
@@ -514,7 +514,7 @@ export function BeginnerGlossaryModal({
                     <h3 className="font-display text-base sm:text-lg font-bold text-stone-900 dark:text-white">
                       {entry.term}
                     </h3>
-                    <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-md bg-emerald-100/80 dark:bg-emerald-950 text-emerald-900 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60">
+                    <span className="text-caption font-mono px-2.5 py-0.5 rounded-md bg-emerald-100/80 dark:bg-emerald-950 text-emerald-900 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60">
                       Technical / Local: {entry.localOrTechnicalName}
                     </span>
                   </div>

@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { 
   Droplets, Sprout, Users, ChevronDown, ChevronUp, 
   Eye, EyeOff, Sparkles, Check, Info, ShieldCheck, 
-  Mountain, Compass, Waves, Crosshair, ArrowRight, ExternalLink
+  Mountain, Compass, Waves, Crosshair, ArrowRight, ExternalLink,
+  Church, HeartPulse, Home
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -95,7 +96,7 @@ export function InteractiveSymbologyLegend({
         <div className="w-16 h-8 flex items-center justify-center relative rounded-md bg-slate-950/80 border border-sky-500/30">
           <div className="w-14 h-3 bg-sky-500/20 rounded-full absolute" />
           <div className="w-14 h-1 border-t-2 border-dotted border-sky-300 relative" />
-          <span className="absolute text-[8px] font-mono text-sky-200 bottom-0.5 right-1">&lt;15m</span>
+          <span className="absolute text-caption font-mono text-sky-200 bottom-0.5 right-1">&lt;15m</span>
         </div>
       ),
       summary: 'Broad, grass-covered valley depressions that store wet-season precipitation like subterranean sponges.',
@@ -116,9 +117,9 @@ export function InteractiveSymbologyLegend({
       toggleLayer: () => onToggleWaterSources?.(!showWaterSources),
       symbolPreview: (
         <div className="w-16 h-8 flex items-center justify-center gap-1 rounded-md bg-slate-950/80 border border-white/10 px-1">
-          <span className="w-3.5 h-3.5 rounded-full bg-emerald-500 border border-emerald-300 text-[8px] font-bold text-slate-950 flex items-center justify-center">S</span>
-          <span className="w-3.5 h-3.5 rounded-full bg-amber-500 border border-amber-300 text-[8px] font-bold text-slate-950 flex items-center justify-center">M</span>
-          <span className="w-3.5 h-3.5 rounded-full bg-rose-500 border border-rose-300 text-[8px] font-bold text-white flex items-center justify-center">D</span>
+          <span className="w-3.5 h-3.5 rounded-full bg-emerald-500 border border-emerald-300 text-caption font-bold text-slate-950 flex items-center justify-center">S</span>
+          <span className="w-3.5 h-3.5 rounded-full bg-amber-500 border border-amber-300 text-caption font-bold text-slate-950 flex items-center justify-center">M</span>
+          <span className="w-3.5 h-3.5 rounded-full bg-rose-500 border border-rose-300 text-caption font-bold text-white flex items-center justify-center">D</span>
         </div>
       ),
       summary: 'Borehole drilling difficulty and static water table depth based on geological catchment surveys.',
@@ -145,7 +146,7 @@ export function InteractiveSymbologyLegend({
         <div className="w-16 h-8 flex items-center justify-center relative rounded-md bg-[#2d120a] border border-amber-600/50 overflow-hidden">
           <div className="w-full h-full bg-gradient-to-br from-amber-700/60 via-red-900/70 to-emerald-950/40" />
           <div className="absolute inset-0 border border-dashed border-amber-400/40" />
-          <span className="absolute text-[8px] font-mono font-bold text-amber-200">pH 6.2</span>
+          <span className="absolute text-caption font-mono font-bold text-amber-200">pH 6.2</span>
         </div>
       ),
       summary: 'Premier agricultural soil of Malawi. Deep, highly weathered, well-drained red clay loam with excellent structure.',
@@ -168,7 +169,7 @@ export function InteractiveSymbologyLegend({
         <div className="w-16 h-8 flex items-center justify-center relative rounded-md bg-slate-950/80 border border-emerald-500/40">
           <div className="w-14 h-4 bg-emerald-500/20 rounded-sm absolute" />
           <div className="w-14 h-1.5 bg-emerald-400 rounded-sm relative" />
-          <span className="absolute text-[7px] font-mono text-emerald-200 bottom-0.5">1400m</span>
+          <span className="absolute text-caption font-mono text-emerald-200 bottom-0.5">1400m</span>
         </div>
       ),
       summary: 'Thermal inversion ridges situated safely above valley cold-air drainage zones where frost never settles.',
@@ -216,8 +217,8 @@ export function InteractiveSymbologyLegend({
       toggleLayer: () => onToggleCommunitySettlements?.(!showCommunitySettlements),
       symbolPreview: (
         <div className="w-16 h-8 flex items-center justify-center rounded-md bg-amber-950/70 border border-amber-400/50 shadow-sm">
-          <div className="w-6 h-6 rounded-lg bg-amber-500/20 border border-amber-400 flex items-center justify-center text-xs">
-            ⛪
+          <div className="w-6 h-6 rounded-lg bg-amber-500/20 border border-amber-400 flex items-center justify-center">
+            <Church size={16} strokeWidth={1.75} className="text-amber-300" />
           </div>
         </div>
       ),
@@ -239,8 +240,8 @@ export function InteractiveSymbologyLegend({
       toggleLayer: () => onToggleCommunitySettlements?.(!showCommunitySettlements),
       symbolPreview: (
         <div className="w-16 h-8 flex items-center justify-center rounded-md bg-teal-950/70 border border-teal-400/50 shadow-sm">
-          <div className="w-6 h-6 rounded-lg bg-teal-500/20 border border-teal-400 flex items-center justify-center text-xs">
-            🏥
+          <div className="w-6 h-6 rounded-lg bg-teal-500/20 border border-teal-400 flex items-center justify-center">
+            <HeartPulse size={16} strokeWidth={1.75} className="text-teal-300" />
           </div>
         </div>
       ),
@@ -262,8 +263,8 @@ export function InteractiveSymbologyLegend({
       toggleLayer: () => onToggleCommunitySettlements?.(!showCommunitySettlements),
       symbolPreview: (
         <div className="w-16 h-8 flex items-center justify-center rounded-md bg-emerald-950/70 border border-emerald-400/50 shadow-sm">
-          <div className="w-6 h-6 rounded-lg bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-xs">
-            🏡
+          <div className="w-6 h-6 rounded-lg bg-emerald-500/20 border border-emerald-400 flex items-center justify-center">
+            <Home size={16} strokeWidth={1.75} className="text-emerald-300" />
           </div>
         </div>
       ),
@@ -286,7 +287,7 @@ export function InteractiveSymbologyLegend({
       symbolPreview: (
         <div className="w-16 h-8 flex items-center justify-center rounded-md bg-slate-950/80 border border-amber-500/40 relative">
           <div className="w-12 h-6 rounded-full border border-dashed border-amber-400/60 flex items-center justify-center">
-            <span className="text-[7px] font-mono text-amber-300">25km</span>
+            <span className="text-caption font-mono text-amber-300">25km</span>
           </div>
         </div>
       ),
@@ -369,11 +370,11 @@ export function InteractiveSymbologyLegend({
       </div>
 
       {/* Layer Visibility Quick Badges */}
-      <div className="flex items-center justify-between text-[11px] text-slate-400 pt-2 pb-1 px-1">
-        <span className="font-mono uppercase tracking-wider text-[10px] text-slate-400 font-bold">
+      <div className="flex items-center justify-between text-caption text-slate-400 pt-2 pb-1 px-1">
+        <span className="font-mono uppercase tracking-wider text-caption text-slate-400 font-bold">
           Layer Symbology & Guide
         </span>
-        <div className="flex items-center gap-2 font-mono text-[10px]">
+        <div className="flex items-center gap-2 font-mono text-caption">
           <span className="flex items-center gap-1">
             <span className={cn("w-2 h-2 rounded-full", showWaterSources ? "bg-cyan-400" : "bg-slate-700")} />
             <span>Water</span>
@@ -421,7 +422,7 @@ export function InteractiveSymbologyLegend({
                         {item.name}
                       </span>
                     </div>
-                    <span className="text-[10px] text-slate-400 font-sans truncate">
+                    <span className="text-caption text-slate-400 font-sans truncate">
                       {item.summary}
                     </span>
                   </div>
@@ -437,7 +438,7 @@ export function InteractiveSymbologyLegend({
                         item.toggleLayer?.();
                       }}
                       className={cn(
-                        "px-2 py-1 rounded-md text-[10px] font-mono font-semibold flex items-center gap-1 border transition-all cursor-pointer",
+                        "px-2 py-1 rounded-md text-caption font-mono font-semibold flex items-center gap-1 border transition-all cursor-pointer",
                         item.isLayerActive
                           ? "bg-emerald-950/80 border-emerald-500/50 text-emerald-300"
                           : "bg-slate-800 border-slate-700 text-slate-400 hover:text-white"
@@ -466,7 +467,7 @@ export function InteractiveSymbologyLegend({
                     className="border-t border-white/10 bg-slate-950/60 p-3 flex flex-col gap-2.5 text-xs"
                   >
                     {/* Technical Specifications Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 p-2 rounded-lg bg-slate-900/80 border border-white/5 font-mono text-[10px]">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 p-2 rounded-lg bg-slate-900/80 border border-white/5 font-mono text-caption">
                       {item.technicalSpecs.map((spec, sIdx) => (
                         <div key={sIdx} className="flex flex-col">
                           <span className="text-slate-400 uppercase">{spec.label}</span>
@@ -481,10 +482,10 @@ export function InteractiveSymbologyLegend({
                         <Sparkles size={11} className="text-amber-300" />
                       </div>
                       <div className="flex flex-col gap-0.5">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-300">
+                        <span className="text-caption font-bold uppercase tracking-wider text-emerald-300">
                           Homestead Siting Application:
                         </span>
-                        <p className="text-[11px] text-slate-200 leading-relaxed font-sans">
+                        <p className="text-caption text-slate-200 leading-relaxed font-sans">
                           {item.homesteadApplication}
                         </p>
                       </div>
@@ -492,7 +493,7 @@ export function InteractiveSymbologyLegend({
 
                     {/* Key Regions in Malawi */}
                     <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                      <span className="text-[10px] font-mono text-slate-400 mr-1">
+                      <span className="text-caption font-mono text-slate-400 mr-1">
                         Prime Districts:
                       </span>
                       {item.keyRegions.map((reg, rIdx) => (
@@ -500,7 +501,7 @@ export function InteractiveSymbologyLegend({
                           key={rIdx}
                           type="button"
                           onClick={() => onSelectDistrictFocus?.(reg)}
-                          className="px-2 py-0.5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 text-[10px] font-mono border border-white/10 transition-colors cursor-pointer"
+                          className="px-2 py-0.5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 text-caption font-mono border border-white/10 transition-colors cursor-pointer"
                         >
                           {reg}
                         </button>
@@ -512,6 +513,46 @@ export function InteractiveSymbologyLegend({
             </div>
           );
         })}
+
+        {/* Cartographic Visual Conventions & District Badges */}
+        <div className="p-3.5 rounded-xl bg-slate-900/90 border border-white/10 flex flex-col gap-2.5 text-xs">
+          <div className="flex items-center gap-2 border-b border-white/10 pb-1.5">
+            <Compass size={13} className="text-amber-400" />
+            <span className="font-bold text-white font-mono uppercase tracking-wider text-caption">
+              Cartographic Conventions &amp; Ratings
+            </span>
+          </div>
+
+          <div className="flex flex-col gap-2 text-caption">
+            <div className="flex items-start gap-2">
+              <span className="w-4 h-4 rounded-full border-2 border-dashed border-amber-400 bg-slate-950/70 shrink-0 mt-0.5" />
+              <div>
+                <strong className="text-amber-300">Dashed Outline:</strong>
+                <span className="text-slate-300 ml-1">Dashed = illustrative example, not a listing</span>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-2">
+              <div className="w-4 h-4 rounded-full bg-slate-900 border border-amber-400 flex items-center justify-center text-[9px] font-black text-amber-300 shrink-0 mt-0.5">
+                A+
+              </div>
+              <div>
+                <strong className="text-amber-300">Grade Letters (A+, A, B+):</strong>
+                <span className="text-slate-300 ml-1">Outpost Agro-Feasibility Rating based on rainfall (&gt;900mm), arable Katondo loam soil, and water security.</span>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-2">
+              <div className="px-1 py-0.5 rounded bg-sky-950/80 border border-sky-400/50 text-[9px] font-mono font-bold text-sky-300 shrink-0 mt-0.5">
+                15m
+              </div>
+              <div>
+                <strong className="text-sky-300">"15m" Depth:</strong>
+                <span className="text-slate-300 ml-1">Median static groundwater / aquifer depth to water table for borehole or shallow well drilling.</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

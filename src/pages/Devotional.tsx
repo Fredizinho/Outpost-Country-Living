@@ -202,11 +202,11 @@ export default function Devotional() {
           <div className="lg:col-span-5 p-5 sm:p-6 rounded-3xl bg-gradient-to-br from-emerald-950 via-[#072013] to-stone-950 text-white border border-emerald-600/30 shadow-lg flex flex-col justify-between gap-4">
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between gap-2">
-                <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+                <span className="text-caption font-mono font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
                   <Sun size={13} />
                   <span>MALAWI SABBATH EVE SUNSET ({monthName.toUpperCase()})</span>
                 </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/10 text-emerald-200">
+                <span className="text-caption font-mono px-2 py-0.5 rounded bg-white/10 text-emerald-200">
                   CAT (UTC+2)
                 </span>
               </div>
@@ -221,31 +221,31 @@ export default function Devotional() {
 
             <div className="grid grid-cols-3 gap-2.5">
               <div className="p-3 rounded-2xl bg-black/35 border border-white/10 text-center">
-                <span className="text-[10px] font-mono uppercase text-emerald-300 block">
+                <span className="text-caption font-mono uppercase text-emerald-300 block">
                   North (Mzuzu)
                 </span>
                 <strong className="font-mono text-base sm:text-lg text-white block mt-0.5">
                   {sunsetTimes.north}
                 </strong>
-                <span className="text-[10px] text-stone-400">~11.4°S</span>
+                <span className="text-caption text-stone-400">~11.4°S</span>
               </div>
               <div className="p-3 rounded-2xl bg-amber-400/15 border border-amber-400/40 text-center">
-                <span className="text-[10px] font-mono uppercase text-amber-300 block">
+                <span className="text-caption font-mono uppercase text-amber-300 block">
                   Central (Dedza)
                 </span>
                 <strong className="font-mono text-base sm:text-lg text-amber-300 block mt-0.5">
                   {sunsetTimes.central}
                 </strong>
-                <span className="text-[10px] text-amber-200/80">~14.0°S</span>
+                <span className="text-caption text-amber-200/80">~14.0°S</span>
               </div>
               <div className="p-3 rounded-2xl bg-black/35 border border-white/10 text-center">
-                <span className="text-[10px] font-mono uppercase text-emerald-300 block">
+                <span className="text-caption font-mono uppercase text-emerald-300 block">
                   South (Zomba)
                 </span>
                 <strong className="font-mono text-base sm:text-lg text-white block mt-0.5">
                   {sunsetTimes.south}
                 </strong>
-                <span className="text-[10px] text-stone-400">~15.8°S</span>
+                <span className="text-caption text-stone-400">~15.8°S</span>
               </div>
             </div>
 
@@ -262,7 +262,7 @@ export default function Devotional() {
           <div className="lg:col-span-7 p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#0D1D13] border border-stone-200/90 dark:border-emerald-900/60 shadow-sm flex flex-col justify-between gap-4">
             <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-stone-200 dark:border-emerald-900/50">
               <div>
-                <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-800 dark:text-amber-300">
+                <span className="text-caption font-mono font-bold uppercase tracking-wider text-emerald-800 dark:text-amber-300">
                   EXODUS 16:23 · FRIDAY PREPARATION DAY LEDGER
                 </span>
                 <h3 className="font-display text-lg font-bold text-stone-900 dark:text-white">
@@ -308,10 +308,10 @@ export default function Devotional() {
                       <strong className="text-xs font-bold text-stone-900 dark:text-white block leading-snug">
                         {item.title}
                       </strong>
-                      <p className="text-[11px] text-stone-600 dark:text-stone-300 mt-0.5 line-clamp-2">
+                      <p className="text-caption text-stone-600 dark:text-stone-300 mt-0.5 line-clamp-2">
                         {item.subtitle}
                       </p>
-                      <span className="text-[10px] font-mono text-emerald-800 dark:text-amber-300/80 block mt-1">
+                      <span className="text-caption font-mono text-emerald-800 dark:text-amber-300/80 block mt-1">
                         {item.counselRef}
                       </span>
                     </div>
@@ -389,11 +389,11 @@ export default function Devotional() {
                 >
                   <div className="flex flex-col gap-2.5">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-800 dark:text-amber-300 font-bold bg-emerald-100/60 dark:bg-amber-400/10 px-2 py-0.5 rounded">
+                      <span className="text-caption font-mono uppercase tracking-wider text-emerald-800 dark:text-amber-300 font-bold bg-emerald-100/60 dark:bg-amber-400/10 px-2 py-0.5 rounded">
                         {item.theme}
                       </span>
                       {item.egwQuote.egwCode && (
-                        <span className="text-[10px] font-mono text-stone-500 dark:text-stone-400 flex items-center gap-1">
+                        <span className="text-caption font-mono text-stone-500 dark:text-stone-400 flex items-center gap-1">
                           <ShieldCheck size={11} />
                           <span>{item.egwQuote.egwCode}</span>
                         </span>
@@ -408,7 +408,7 @@ export default function Devotional() {
                       “{item.egwQuote.text}”
                     </blockquote>
 
-                    <span className="text-[11px] font-mono text-amber-700 dark:text-amber-300 font-semibold block">
+                    <span className="text-caption font-mono text-amber-700 dark:text-amber-300 font-semibold block">
                       — Ellen G. White, {item.egwQuote.source}
                     </span>
 
@@ -416,7 +416,7 @@ export default function Devotional() {
                       <strong className="text-stone-900 dark:text-white block font-sans mb-0.5">
                         Scripture Anchor: {item.scripture.reference}
                       </strong>
-                      <p className="italic text-[11px] text-stone-500 dark:text-stone-400">
+                      <p className="italic text-caption text-stone-500 dark:text-stone-400">
                         "{item.scripture.verse}"
                       </p>
                     </div>
@@ -432,13 +432,13 @@ export default function Devotional() {
                         href={item.egwQuote.verifiedUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-emerald-800 dark:text-amber-300 hover:underline font-mono text-[11px] inline-flex items-center gap-1"
+                        className="text-emerald-800 dark:text-amber-300 hover:underline font-mono text-caption inline-flex items-center gap-1"
                       >
                         <span>EGW Estate Verified</span>
                         <ExternalLink size={10} />
                       </a>
                     ) : (
-                      <span className="text-[11px] font-mono text-stone-400">Verified Counsel</span>
+                      <span className="text-caption font-mono text-stone-400">Verified Counsel</span>
                     )}
 
                     <button

@@ -59,7 +59,7 @@ export function WhyCountryLivingFeaturette({ className = '' }: { className?: str
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-700 animate-pulse" />
-            <span className="text-[11px] font-sans font-bold uppercase tracking-[0.2em] text-emerald-800">
+            <span className="text-caption font-sans font-bold uppercase tracking-[0.2em] text-emerald-800">
               The Vision & Philosophy
             </span>
           </div>

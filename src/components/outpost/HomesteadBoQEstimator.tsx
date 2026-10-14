@@ -214,7 +214,7 @@ export function HomesteadBoQEstimator({ currency, exchangeRate }: HomesteadBoQEs
       <div className="overflow-x-auto rounded-2xl border border-white/10 bg-black/25">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-white/10 text-[10px] font-mono uppercase tracking-wider text-amber-300/90 bg-black/40">
+            <tr className="border-b border-white/10 text-caption font-mono uppercase tracking-wider text-amber-300/90 bg-black/40">
               <th className="py-3.5 px-4">Item & Chichewa Field Term</th>
               <th className="py-3.5 px-3">Category</th>
               <th className="py-3.5 px-3">Unit</th>
@@ -230,11 +230,11 @@ export function HomesteadBoQEstimator({ currency, exchangeRate }: HomesteadBoQEs
                 <tr key={row.id} className="hover:bg-white/[0.03] transition-colors">
                   <td className="py-3.5 px-4">
                     <div className="font-bold text-white">{row.item}</div>
-                    <div className="text-[11px] font-mono text-amber-300/90 mt-0.5">
+                    <div className="text-caption font-mono text-amber-300/90 mt-0.5">
                       {row.chichewaTerm} · <span className="text-stone-400 font-sans">{row.notes}</span>
                     </div>
                   </td>
-                  <td className="py-3.5 px-3 font-mono text-[11px] text-emerald-300 whitespace-nowrap">
+                  <td className="py-3.5 px-3 font-mono text-caption text-emerald-300 whitespace-nowrap">
                     {row.category}
                   </td>
                   <td className="py-3.5 px-3 font-mono text-stone-300 whitespace-nowrap">
@@ -270,7 +270,7 @@ export function HomesteadBoQEstimator({ currency, exchangeRate }: HomesteadBoQEs
             <strong>Stewardship Procurement Tip:</strong> Purchase HDPE pipe, solar panels, and LiFePO4 batteries from authorized distributors in Lilongwe (Area 4 / Kanengo) or Blantyre (Limbe) before transporting to rural districts.
           </span>
         </div>
-        <span className="font-mono text-[11px] text-amber-300 shrink-0">
+        <span className="font-mono text-caption text-amber-300 shrink-0">
           Rate: 1 USD = K{exchangeRate.toLocaleString()} MWK
         </span>
       </div>

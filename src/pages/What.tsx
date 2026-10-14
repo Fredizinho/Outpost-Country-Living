@@ -373,7 +373,7 @@ export default function What() {
                   <selectedEssential.icon size={26} />
                 </div>
                 <div>
-                  <span className="text-[11px] uppercase font-sans font-bold tracking-wider text-amber-300">Field Specification</span>
+                  <span className="text-caption uppercase font-sans font-bold tracking-wider text-amber-300">Field Specification</span>
                   <h3 className="serif text-2xl font-bold text-white">{selectedEssential.title}</h3>
                 </div>
               </div>
@@ -383,7 +383,7 @@ export default function What() {
                   {selectedEssential.desc}
                 </p>
                 <div className="p-4 bg-[#06180E] rounded-2xl border border-emerald-900/80 text-xs text-emerald-100 leading-relaxed font-medium">
-                  <strong className="text-amber-300 block mb-1 font-sans uppercase text-[10px] tracking-wider">Practical Field Application:</strong> 
+                  <strong className="text-amber-300 block mb-1 font-sans uppercase text-caption tracking-wider">Practical Field Application:</strong> 
                   {selectedEssential.details}
                 </div>
               </div>

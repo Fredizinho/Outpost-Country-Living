@@ -40,7 +40,7 @@ export function OutpostLogo({
   };
 
   const titleSizes = {
-    xs: 'text-[11px] tracking-[0.18em]',
+    xs: 'text-caption tracking-[0.18em]',
     sm: 'text-xs tracking-[0.18em]',
     md: 'text-sm sm:text-base tracking-[0.20em]',
     lg: 'text-lg sm:text-xl tracking-[0.22em]',
@@ -49,10 +49,10 @@ export function OutpostLogo({
   };
 
   const subtitleSizes = {
-    xs: 'text-[7px] tracking-[0.22em]',
-    sm: 'text-[8px] tracking-[0.22em]',
-    md: 'text-[9px] tracking-[0.24em]',
-    lg: 'text-[10px] tracking-[0.26em]',
+    xs: 'text-caption tracking-[0.22em]',
+    sm: 'text-caption tracking-[0.22em]',
+    md: 'text-caption tracking-[0.24em]',
+    lg: 'text-caption tracking-[0.26em]',
     xl: 'text-xs tracking-[0.28em]',
     '2xl': 'text-sm tracking-[0.3em]',
   };
@@ -173,7 +173,7 @@ export function OutpostLogo({
               OUTPOST
             </span>
             <span className="w-1 h-1 rounded-full bg-amber-400 shrink-0" />
-            <span className="font-mono text-[10px] font-bold text-amber-400 uppercase tracking-widest hidden sm:inline">
+            <span className="font-mono text-caption font-bold text-amber-400 uppercase tracking-widest hidden sm:inline">
               MALAWI
             </span>
           </div>

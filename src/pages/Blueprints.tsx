@@ -97,56 +97,48 @@ export default function Blueprints() {
             </Link>
           </div>
 
-          {/* 5-Tab Outpost, Sanitarium & Field Engineering Workbench Switcher */}
-          <div className="flex flex-wrap items-center gap-1.5 bg-stone-100 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/80 dark:border-stone-800 self-start">
-            {(
-              [
-                {
-                  id: 'site-plans',
-                  label: '01. Outpost & Sanitarium Site Plans',
-                  icon: Building2,
-                },
-                {
-                  id: 'sanitarium',
-                  label: '02. Medical Missionary & NEWSTART Apothecary',
-                  icon: HeartPulse,
-                },
-                {
-                  id: 'education',
-                  label: '03. True Education & Youth Curriculum',
-                  icon: GraduationCap,
-                },
-                {
-                  id: 'engineering',
-                  label: '04. Illustrated Field Schematics',
-                  icon: Wrench,
-                },
-                {
-                  id: 'soil-swatches',
-                  label: '05. Soil Swatch & Ribbon Diagnostics',
-                  icon: Layers,
-                },
-              ] as const
-            ).map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setActiveTab(tab.id)}
-                  className={cn(
-                    'px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5',
-                    isActive
-                      ? 'bg-emerald-950 dark:bg-amber-500 text-amber-300 dark:text-stone-950 shadow-xs font-bold'
-                      : 'text-stone-700 dark:text-stone-300 hover:bg-white dark:hover:bg-stone-800'
-                  )}
-                >
-                  <Icon size={13} />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
+          {/* Primary Tab Bar (Plans · Remedies · Education · Schematics · Soil) - Never Wraps, Scrolls with Fade Masks */}
+          <div className="relative w-full max-w-full overflow-hidden">
+            {/* Left & Right Fade Masks */}
+            <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#FAF7F0] dark:from-[#09150E] to-transparent z-10" />
+            <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#FAF7F0] dark:from-[#09150E] to-transparent z-10" />
+
+            <div
+              role="tablist"
+              aria-label="Primary Blueprint Tabs"
+              className="flex flex-nowrap items-center gap-1.5 p-1 rounded-xl bg-stone-100/90 dark:bg-stone-900/90 border border-border overflow-x-auto no-scrollbar scroll-smooth px-3"
+            >
+              {(
+                [
+                  { id: 'site-plans', label: 'Plans', icon: Building2 },
+                  { id: 'sanitarium', label: 'Remedies', icon: HeartPulse },
+                  { id: 'education', label: 'Education', icon: GraduationCap },
+                  { id: 'engineering', label: 'Schematics', icon: Wrench },
+                  { id: 'soil-swatches', label: 'Soil', icon: Layers },
+                ] as const
+              ).map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    role="tab"
+                    aria-selected={isActive}
+                    type="button"
+                    onClick={() => setActiveTab(tab.id)}
+                    className={cn(
+                      'min-h-[44px] px-4 py-2.5 rounded-lg text-xs font-semibold whitespace-nowrap shrink-0 transition-all cursor-pointer flex items-center gap-2 select-none normal-case',
+                      isActive
+                        ? 'bg-accent text-accent-ink shadow-sm font-bold ring-1 ring-accent/30'
+                        : 'text-ink-muted hover:text-ink hover:bg-surface-raised/70'
+                    )}
+                  >
+                    <Icon size={14} className="shrink-0" />
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <ActiveDistrictContextBar />

@@ -5,13 +5,15 @@ import {
   XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend
 } from 'recharts';
 import { 
-  Users, Droplets, Sun, Trees, ChevronUp, ChevronDown, 
+  Users, Droplets, Sun, Zap, Trees, ChevronUp, ChevronDown, 
   Layers, Filter, ArrowUpDown, Sparkles, MapPin, Maximize2, Minimize2, Info, X,
   Sprout, CloudRain, Home as HomeIcon, Tag
 } from 'lucide-react';
 import { MALAWI_DISTRICT_RESOURCES, DistrictResourceStats } from '@/data/districtResourceData';
 import { MalawiDistrictSpec } from '@/data/malawiDistrictData';
 import { cn } from '@/lib/utils';
+import { CHART_PALETTE_6, CHART_TOKENS } from '@/lib/chartTokens';
+import { sheet, fadeUp } from '@/lib/motion';
 
 export interface ResourceDensityBottomSheetProps {
   activeDistrict?: MalawiDistrictSpec | null;
@@ -102,11 +104,11 @@ export function ResourceDensityBottomSheet({
                 <span className="serif text-sm font-bold text-white group-hover:text-amber-300 transition-colors">
                   District People & Resource Comparison
                 </span>
-                <span className="text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-full font-bold">
+                <span className="text-caption font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-full font-bold">
                   28 Districts
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 font-sans hidden sm:block">
+              <p className="text-caption text-slate-400 font-sans hidden sm:block">
                 Compare population crowding, rainfall abundance, and well depth across Malawi
               </p>
             </div>
@@ -149,10 +151,10 @@ export function ResourceDensityBottomSheet({
         <AnimatePresence>
           {isExpanded && (
             <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
               className="overflow-hidden border-t border-white/10 p-4 sm:p-5 flex flex-col gap-4"
             >
               {/* Controls Bar: Metric Switcher + Region Filter + Sort */}
@@ -233,39 +235,39 @@ export function ResourceDensityBottomSheet({
               {/* Top Highlight Summary Cards */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div className="bg-slate-900/80 border border-white/10 p-3 rounded-xl flex flex-col justify-between">
-                  <span className="text-[10px] font-mono uppercase text-slate-400">Total Districts Listed</span>
+                  <span className="text-caption font-mono uppercase text-slate-400">Total Districts Listed</span>
                   <div className="flex items-baseline gap-1 mt-1">
                     <span className="text-xl font-bold font-mono text-white">{chartData.length}</span>
-                    <span className="text-[10px] font-mono text-slate-400">districts</span>
+                    <span className="text-caption font-mono text-slate-400">districts</span>
                   </div>
-                  <span className="text-[10px] text-amber-300 mt-1">Region: {selectedRegion}</span>
+                  <span className="text-caption text-amber-300 mt-1">Region: {selectedRegion}</span>
                 </div>
 
                 <div className="bg-slate-900/80 border border-white/10 p-3 rounded-xl flex flex-col justify-between">
-                  <span className="text-[10px] font-mono uppercase text-slate-400">Highest Space per Person</span>
+                  <span className="text-caption font-mono uppercase text-slate-400">Highest Space per Person</span>
                   <div className="flex items-baseline gap-1 mt-1">
                     <span className="text-xl font-bold font-mono text-emerald-300">Rumphi</span>
-                    <span className="text-[10px] font-mono text-slate-400">(48 / km²)</span>
+                    <span className="text-caption font-mono text-slate-400">(48 / km²)</span>
                   </div>
-                  <span className="text-[10px] text-slate-400 mt-1">Abundant free homestead land</span>
+                  <span className="text-caption text-slate-400 mt-1">Abundant free homestead land</span>
                 </div>
 
                 <div className="bg-slate-900/80 border border-white/10 p-3 rounded-xl flex flex-col justify-between">
-                  <span className="text-[10px] font-mono uppercase text-slate-400">Highest Annual Rainfall</span>
+                  <span className="text-caption font-mono uppercase text-slate-400">Highest Annual Rainfall</span>
                   <div className="flex items-baseline gap-1 mt-1">
                     <span className="text-xl font-bold font-mono text-sky-300">Mulanje</span>
-                    <span className="text-[10px] font-mono text-slate-400">(1,800 mm)</span>
+                    <span className="text-caption font-mono text-slate-400">(1,800 mm)</span>
                   </div>
-                  <span className="text-[10px] text-slate-400 mt-1">Chiperoni tea & fruit belt</span>
+                  <span className="text-caption text-slate-400 mt-1">Chiperoni tea & fruit belt</span>
                 </div>
 
                 <div className="bg-slate-900/80 border border-white/10 p-3 rounded-xl flex flex-col justify-between">
-                  <span className="text-[10px] font-mono uppercase text-slate-400">Easiest Shallow Groundwater</span>
+                  <span className="text-caption font-mono uppercase text-slate-400">Easiest Shallow Groundwater</span>
                   <div className="flex items-baseline gap-1 mt-1">
                     <span className="text-xl font-bold font-mono text-amber-300">Salima / Nkhotakota</span>
-                    <span className="text-[10px] font-mono text-slate-400">(8m - 12m)</span>
+                    <span className="text-caption font-mono text-slate-400">(8m - 12m)</span>
                   </div>
-                  <span className="text-[10px] text-slate-400 mt-1">Low-cost solar pump wells</span>
+                  <span className="text-caption text-slate-400 mt-1">Low-cost solar pump wells</span>
                 </div>
               </div>
 
@@ -285,23 +287,23 @@ export function ResourceDensityBottomSheet({
                         }
                       }}
                     >
-                      <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.4} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(120, 113, 108, 0.2)" opacity={0.5} vertical={false} />
                       <XAxis 
                         dataKey="shortName" 
                         stroke="#94a3b8" 
-                        fontSize={10} 
+                        fontSize={12} 
                         tickLine={false}
                         interval={0}
                         angle={-45}
                         textAnchor="end"
                       />
-                      <YAxis stroke="#94a3b8" fontSize={10} />
+                      <YAxis stroke="#94a3b8" fontSize={12} />
                       <Tooltip 
                         content={({ active, payload }) => {
                           if (active && payload && payload.length) {
                             const d = payload[0].payload as DistrictResourceStats;
                             return (
-                              <div className="bg-slate-950 border border-amber-500/40 p-3 rounded-xl shadow-2xl text-xs font-mono text-white space-y-1">
+                              <div className="bg-stone-950/95 border border-stone-800 p-4 rounded-card shadow-raised text-xs font-mono text-white space-y-1.5 backdrop-blur-md">
                                 <div className="font-bold text-amber-300 text-sm mb-1">{d.name} District ({d.region})</div>
                                 <div className="text-slate-300 flex items-center gap-1.5"><Users size={12} className="text-amber-400 shrink-0" /> Density: <strong className="text-white">{d.densityPerKm2} people / km²</strong></div>
                                 <div className="text-slate-300 flex items-center gap-1.5"><HomeIcon size={12} className="text-amber-400 shrink-0" /> Total Population: <strong className="text-white">{d.population.toLocaleString()}</strong></div>
@@ -317,95 +319,137 @@ export function ResourceDensityBottomSheet({
                       <Bar 
                         dataKey="densityPerKm2" 
                         name="People per km²" 
-                        fill="#f59e0b"
+                        fill={CHART_PALETTE_6[3]}
                         radius={[4, 4, 0, 0]}
                         cursor="pointer"
                       />
                     </BarChart>
                   ) : activeTab === 'water' ? (
-                    <ComposedChart 
-                      data={chartData} 
-                      margin={{ top: 10, right: 10, left: -20, bottom: 25 }}
-                      onClick={(e: any) => {
-                        if (e && e.activePayload && e.activePayload.length) {
-                          const d = e.activePayload[0].payload as DistrictResourceStats;
-                          if (onSelectDistrictByName) onSelectDistrictByName(d.name);
-                          if (onSelectDistrict) onSelectDistrict(d.id);
-                        }
-                      }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.4} />
-                      <XAxis 
-                        dataKey="shortName" 
-                        stroke="#94a3b8" 
-                        fontSize={10} 
-                        tickLine={false}
-                        interval={0}
-                        angle={-45}
-                        textAnchor="end"
-                      />
-                      <YAxis yAxisId="left" stroke="#38bdf8" fontSize={10} unit="mm" />
-                      <YAxis yAxisId="right" orientation="right" stroke="#34d399" fontSize={10} unit="m" />
-                      <Tooltip 
-                        content={({ active, payload }) => {
-                          if (active && payload && payload.length) {
-                            const d = payload[0].payload as DistrictResourceStats;
-                            return (
-                              <div className="bg-slate-950 border border-sky-500/40 p-3 rounded-xl shadow-2xl text-xs font-mono text-white space-y-1">
-                                <div className="font-bold text-sky-300 text-sm mb-1">{d.name} District ({d.region})</div>
-                                <div className="text-sky-300 flex items-center gap-1.5"><CloudRain size={12} className="text-sky-400 shrink-0" /> Annual Rainfall: <strong className="text-white">{d.rainfallMm} mm / year</strong></div>
-                                <div className="text-emerald-400 flex items-center gap-1.5"><Droplets size={12} className="text-emerald-400 shrink-0" /> Average Well Depth: <strong className="text-white">{d.aquiferDepthM} meters</strong></div>
-                                <div className="text-amber-300 flex items-center gap-1.5"><Sparkles size={12} className="text-amber-400 shrink-0" /> Water Profile: {d.waterRating}</div>
-                              </div>
-                            );
-                          }
-                          return null;
-                        }}
-                      />
-                      <Legend verticalAlign="top" height={36} wrapperStyle={{ fontSize: '11px', color: '#94a3b8' }} />
-                      <Bar yAxisId="left" dataKey="rainfallMm" name="Annual Rainfall (mm)" fill="#0284c7" radius={[4, 4, 0, 0]} cursor="pointer" />
-                      <Line yAxisId="right" type="monotone" dataKey="aquiferDepthM" name="Well Depth (m)" stroke="#10b981" strokeWidth={2.5} dot={{ r: 3 }} cursor="pointer" />
-                    </ComposedChart>
+                    <div className="flex flex-col gap-2 w-full h-full">
+                      {/* Direct Series Labels instead of Legend (<= 4 series) */}
+                      <div className="flex flex-wrap items-center justify-between gap-2 px-1 pb-1 border-b border-white/10 text-xs font-mono">
+                        <div className="flex items-center gap-3">
+                          <span className="flex items-center gap-1.5 font-bold text-sky-300">
+                            <span className="w-3 h-3 rounded-sm bg-[#0284c7]" /> Annual Rainfall (mm)
+                          </span>
+                          <span className="flex items-center gap-1.5 font-bold text-emerald-400">
+                            <span className="w-4 border-t-2 border-dashed border-[#15803D]" /> Modelled Aquifer Depth (m)
+                          </span>
+                        </div>
+                        <span className="text-caption font-mono text-amber-300 px-2 py-0.5 rounded-control bg-amber-500/15 border border-amber-500/30">
+                          Honesty Badge: Hydro-GIS Modelled Aquifer (Dashed)
+                        </span>
+                      </div>
+
+                      <div className="w-full h-64 sm:h-72">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <ComposedChart 
+                            data={chartData} 
+                            margin={{ top: 10, right: 10, left: -10, bottom: 25 }}
+                            onClick={(e: any) => {
+                              if (e && e.activePayload && e.activePayload.length) {
+                                const d = e.activePayload[0].payload as DistrictResourceStats;
+                                if (onSelectDistrictByName) onSelectDistrictByName(d.name);
+                                if (onSelectDistrict) onSelectDistrict(d.id);
+                              }
+                            }}
+                          >
+                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(120, 113, 108, 0.2)" opacity={0.5} vertical={false} />
+                            <XAxis 
+                              dataKey="shortName" 
+                              stroke="#94a3b8" 
+                              fontSize={12} 
+                              tickLine={false}
+                              interval={0}
+                              angle={-45}
+                              textAnchor="end"
+                            />
+                            <YAxis yAxisId="left" stroke="#38bdf8" fontSize={12} unit="mm" />
+                            <YAxis yAxisId="right" orientation="right" stroke="#34d399" fontSize={12} unit="m" />
+                            <Tooltip 
+                              content={({ active, payload }) => {
+                                if (active && payload && payload.length) {
+                                  const d = payload[0].payload as DistrictResourceStats;
+                                  return (
+                                    <div className="bg-stone-950/95 border border-stone-800 p-4 rounded-card shadow-raised text-xs font-mono text-white space-y-1.5 backdrop-blur-md">
+                                      <div className="font-bold text-sky-300 text-sm mb-1">{d.name} District ({d.region})</div>
+                                      <div className="text-sky-300 flex items-center gap-1.5"><CloudRain size={12} className="text-sky-400 shrink-0" /> Annual Rainfall: <strong className="text-white">{d.rainfallMm} mm / year</strong></div>
+                                      <div className="text-emerald-400 flex items-center gap-1.5"><Droplets size={12} className="text-emerald-400 shrink-0" /> Average Well Depth: <strong className="text-white">{d.aquiferDepthM} meters</strong></div>
+                                      <div className="text-amber-300 flex items-center gap-1.5"><Sparkles size={12} className="text-amber-400 shrink-0" /> Water Profile: {d.waterRating}</div>
+                                    </div>
+                                  );
+                                }
+                                return null;
+                              }}
+                            />
+                            <Bar yAxisId="left" dataKey="rainfallMm" name="Annual Rainfall (mm)" fill={CHART_PALETTE_6[2]} radius={[4, 4, 0, 0]} cursor="pointer" />
+                            <Line yAxisId="right" type="monotone" dataKey="aquiferDepthM" name="Well Depth (m)" stroke={CHART_PALETTE_6[0]} strokeWidth={2.5} strokeDasharray="5 5" dot={{ r: 3 }} cursor="pointer" />
+                          </ComposedChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
                   ) : (
-                    <AreaChart 
-                      data={chartData} 
-                      margin={{ top: 10, right: 10, left: -20, bottom: 25 }}
-                      onClick={(e: any) => {
-                        if (e && e.activePayload && e.activePayload.length) {
-                          const d = e.activePayload[0].payload as DistrictResourceStats;
-                          if (onSelectDistrictByName) onSelectDistrictByName(d.name);
-                          if (onSelectDistrict) onSelectDistrict(d.id);
-                        }
-                      }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.4} />
-                      <XAxis 
-                        dataKey="shortName" 
-                        stroke="#94a3b8" 
-                        fontSize={10} 
-                        tickLine={false}
-                        interval={0}
-                        angle={-45}
-                        textAnchor="end"
-                      />
-                      <YAxis stroke="#94a3b8" fontSize={10} unit=" hrs" />
-                      <Tooltip 
-                        content={({ active, payload }) => {
-                          if (active && payload && payload.length) {
-                            const d = payload[0].payload as DistrictResourceStats;
-                            return (
-                              <div className="bg-slate-950 border border-emerald-500/40 p-3 rounded-xl shadow-2xl text-xs font-mono text-white">
-                                <div className="font-bold text-emerald-300 text-sm mb-1">{d.name} District ({d.region})</div>
-                                <div className="text-amber-300">☀️ Daily Solar Energy: <strong className="text-white">{d.solarKwhDay} kWh / m² / day</strong></div>
-                                <div className="text-slate-300">⚡ Solar Pump Feasibility: <strong className="text-emerald-400">Excellent (Year-Round)</strong></div>
-                              </div>
-                            );
-                          }
-                          return null;
-                        }}
-                      />
-                      <Area type="monotone" dataKey="solarKwhDay" name="Daily Solar Energy (kWh/m²/day)" stroke="#10b981" fill="#059669" fillOpacity={0.4} />
-                    </AreaChart>
+                    <div className="flex flex-col gap-2 w-full h-full">
+                      {/* Direct Series Labels for Solar (<= 4 series) */}
+                      <div className="flex flex-wrap items-center justify-between gap-2 px-1 pb-1 border-b border-white/10 text-xs font-mono">
+                        <div className="flex items-center gap-2 font-bold text-amber-300">
+                          <span className="w-3 h-3 rounded-sm bg-[#D97706]" /> Daily Solar Energy (kWh/m²/day)
+                        </div>
+                        <span className="text-caption font-mono text-amber-300 px-2 py-0.5 rounded-control bg-amber-500/15 border border-amber-500/30">
+                          Honesty Badge: NASA SSE Modelled Solar Telemetry (Dashed)
+                        </span>
+                      </div>
+
+                      <div className="w-full h-64 sm:h-72">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <AreaChart 
+                            data={chartData} 
+                            margin={{ top: 10, right: 10, left: -20, bottom: 25 }}
+                            onClick={(e: any) => {
+                              if (e && e.activePayload && e.activePayload.length) {
+                                const d = e.activePayload[0].payload as DistrictResourceStats;
+                                if (onSelectDistrictByName) onSelectDistrictByName(d.name);
+                                if (onSelectDistrict) onSelectDistrict(d.id);
+                              }
+                            }}
+                          >
+                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(120, 113, 108, 0.2)" opacity={0.5} vertical={false} />
+                            <XAxis 
+                              dataKey="shortName" 
+                              stroke="#94a3b8" 
+                              fontSize={12} 
+                              tickLine={false}
+                              interval={0}
+                              angle={-45}
+                              textAnchor="end"
+                            />
+                            <YAxis stroke="#94a3b8" fontSize={12} unit=" hrs" />
+                            <Tooltip 
+                              content={({ active, payload }) => {
+                                if (active && payload && payload.length) {
+                                  const d = payload[0].payload as DistrictResourceStats;
+                                  return (
+                                    <div className="bg-stone-950/95 border border-stone-800 p-4 rounded-card shadow-raised text-xs font-mono text-white backdrop-blur-md">
+                                      <div className="font-bold text-emerald-300 text-sm mb-1">{d.name} District ({d.region})</div>
+                                      <div className="text-amber-300 flex items-center gap-1.5">
+                                        <Sun size={14} className="text-amber-400 shrink-0" />
+                                        <span>Daily Solar Energy: <strong className="text-white">{d.solarKwhDay} kWh / m² / day</strong></span>
+                                      </div>
+                                      <div className="text-slate-300 flex items-center gap-1.5 mt-0.5">
+                                        <Zap size={14} className="text-emerald-400 shrink-0" />
+                                        <span>Solar Pump Feasibility: <strong className="text-emerald-400">Excellent (Year-Round)</strong></span>
+                                      </div>
+                                    </div>
+                                  );
+                                }
+                                return null;
+                              }}
+                            />
+                            <Area type="monotone" dataKey="solarKwhDay" name="Daily Solar Energy (kWh/m²/day)" stroke={CHART_PALETTE_6[3]} strokeDasharray="4 4" fill={CHART_PALETTE_6[3]} fillOpacity={0.3} />
+                          </AreaChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
                   )}
                 </ResponsiveContainer>
 

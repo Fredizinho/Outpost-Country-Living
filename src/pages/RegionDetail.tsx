@@ -103,7 +103,7 @@ export default function RegionDetail() {
           <ArrowLeft size={16} /> Back to Regional Map
         </Link>
 
-        <span className="text-[11px] font-mono font-bold uppercase text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5">
+        <span className="text-caption font-mono font-bold uppercase text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5">
           <HardDrive size={12} /> Saved Offline
         </span>
       </div>
@@ -299,7 +299,7 @@ export default function RegionDetail() {
                     <h5 className="font-bold text-xs text-stone-900 dark:text-stone-100">
                       {note.title}
                     </h5>
-                    <span className="text-[10px] font-mono text-stone-400">{note.createdAt}</span>
+                    <span className="text-caption font-mono text-stone-400">{note.createdAt}</span>
                   </div>
                   <p className="text-xs text-stone-700 dark:text-stone-300 mt-1 leading-relaxed font-medium whitespace-pre-wrap">
                     {note.content}
@@ -307,7 +307,7 @@ export default function RegionDetail() {
                 </div>
                 <button
                   onClick={() => handleDeleteNote(note.id)}
-                  className="self-end text-rose-600 dark:text-rose-400 hover:text-rose-800 text-[10px] font-bold uppercase flex items-center gap-1 pt-2 cursor-pointer"
+                  className="self-end text-rose-600 dark:text-rose-400 hover:text-rose-800 text-caption font-bold uppercase flex items-center gap-1 pt-2 cursor-pointer"
                 >
                   <Trash2 size={12} /> Delete
                 </button>

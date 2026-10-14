@@ -263,9 +263,9 @@ export function MalawiTopographicInteractiveMap({
                     x={district.cx + 4}
                     y={district.cy + 3}
                     className={cn(
-                      "text-[8px] font-mono font-bold select-none pointer-events-none transition-all",
+                      "text-caption font-mono font-bold select-none pointer-events-none transition-all",
                       isHovered || isSelected
-                        ? "fill-stone-900 dark:fill-white font-black text-[9px]"
+                        ? "fill-stone-900 dark:fill-white font-black text-caption"
                         : "fill-stone-600/70 dark:fill-emerald-400/60"
                     )}
                   >
@@ -281,7 +281,7 @@ export function MalawiTopographicInteractiveMap({
         <g transform="translate(30, 80)" className="opacity-40">
           <circle cx="0" cy="0" r="14" stroke="currentColor" strokeWidth="0.6" className="text-amber-600 dark:text-emerald-500" fill="none" />
           <path d="M 0 -12 L 3 -3 L 12 0 L 3 3 L 0 12 L -3 3 L -12 0 L -3 -3 Z" fill="currentColor" className="text-amber-600/40 dark:text-emerald-500/40" />
-          <text x="-3" y="-14" className="text-[7px] font-mono font-bold fill-amber-700 dark:fill-emerald-400">N</text>
+          <text x="-3" y="-14" className="text-caption font-mono font-bold fill-amber-700 dark:fill-emerald-400">N</text>
         </g>
       </svg>
 
@@ -300,12 +300,12 @@ export function MalawiTopographicInteractiveMap({
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
                 {hoveredDistrict.name} District
               </span>
-              <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-100 dark:bg-emerald-950 text-amber-900 dark:text-emerald-300 font-bold border border-amber-300/60 dark:border-emerald-800/60">
+              <span className="text-caption font-mono px-1.5 py-0.5 rounded bg-amber-100 dark:bg-emerald-950 text-amber-900 dark:text-emerald-300 font-bold border border-amber-300/60 dark:border-emerald-800/60">
                 {hoveredDistrict.region}
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-1 text-[10px] text-stone-600 dark:text-stone-300 font-sans pt-0.5">
+            <div className="grid grid-cols-2 gap-1 text-caption text-stone-600 dark:text-stone-300 font-sans pt-0.5">
               <div className="flex items-center gap-1">
                 <Mountain size={10} className="text-amber-600 dark:text-amber-400 shrink-0" />
                 <span className="truncate">{hoveredDistrict.elevationRange.split('(')[0]}</span>
@@ -316,7 +316,7 @@ export function MalawiTopographicInteractiveMap({
               </div>
             </div>
 
-            <div className="text-[10px] text-emerald-800 dark:text-emerald-300 font-medium font-sans flex items-center gap-1 truncate pt-0.5">
+            <div className="text-caption text-emerald-800 dark:text-emerald-300 font-medium font-sans flex items-center gap-1 truncate pt-0.5">
               <Sprout size={10} className="shrink-0" />
               <span className="truncate">{hoveredDistrict.primarySoil.split('(')[0]}</span>
             </div>

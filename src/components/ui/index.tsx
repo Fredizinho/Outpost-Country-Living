@@ -122,7 +122,7 @@ export function SanctuaryButton({
   };
 
   const sizeClasses = {
-    sm: 'text-[11px] font-mono font-black uppercase tracking-wider px-3 py-1.5 rounded-xl gap-1.5',
+    sm: 'text-caption font-mono font-black uppercase tracking-wider px-3 py-1.5 rounded-xl gap-1.5',
     md: 'text-xs font-mono font-black uppercase tracking-wider px-4 py-2.5 rounded-2xl gap-2',
     lg: 'text-xs font-mono font-black uppercase tracking-wider px-6 py-3.5 rounded-2xl gap-2.5'
   };
@@ -179,8 +179,8 @@ export function SanctuaryBadge({
   };
 
   const sizeClasses = {
-    sm: 'text-[9px] font-mono font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md',
-    md: 'text-[10px] font-mono font-black uppercase tracking-wider px-3 py-1 rounded-lg'
+    sm: 'text-caption font-mono font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md',
+    md: 'text-caption font-mono font-black uppercase tracking-wider px-3 py-1 rounded-lg'
   };
 
   return (
@@ -230,7 +230,7 @@ export function SanctuarySectionHeader({
     >
       <div>
         {eyebrow && (
-          <span className="text-amber-400/90 font-mono font-black uppercase text-[10px] tracking-widest block mb-1">
+          <span className="text-amber-400/90 font-mono font-black uppercase text-caption tracking-widest block mb-1">
             {eyebrow}
           </span>
         )}
@@ -289,7 +289,7 @@ export function SanctuaryBanner({
         <AlertTriangle size={22} className="text-amber-400 shrink-0" />
         <div>
           {title && (
-            <span className="font-mono font-black uppercase tracking-widest text-amber-300 text-[10px] block">
+            <span className="font-mono font-black uppercase tracking-widest text-amber-300 text-caption block">
               {title}
             </span>
           )}
@@ -299,7 +299,7 @@ export function SanctuaryBanner({
 
       <div className="flex items-center gap-2 shrink-0">
         {badgeText && (
-          <span className="bg-amber-500 text-slate-950 text-[10px] font-mono font-black uppercase px-3 py-1.5 rounded-xl tracking-wider shadow-xs">
+          <span className="bg-amber-500 text-slate-950 text-caption font-mono font-black uppercase px-3 py-1.5 rounded-xl tracking-wider shadow-xs">
             {badgeText}
           </span>
         )}
@@ -346,7 +346,7 @@ export function SanctuaryStatBox({
         className
       )}
     >
-      <div className="flex items-center justify-between text-[10px] font-mono font-extrabold uppercase tracking-wider text-emerald-300/80">
+      <div className="flex items-center justify-between text-caption font-mono font-extrabold uppercase tracking-wider text-emerald-300/80">
         <span>{label}</span>
         {Icon && <Icon size={14} className="text-amber-400" />}
       </div>
@@ -354,7 +354,7 @@ export function SanctuaryStatBox({
         {value}
       </div>
       {subtext && (
-        <span className="text-[10px] font-mono font-bold text-emerald-400/80">
+        <span className="text-caption font-mono font-bold text-emerald-400/80">
           {subtext}
         </span>
       )}

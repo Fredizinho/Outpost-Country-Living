@@ -72,11 +72,11 @@ export function SeasonalAlmanacBar({ onSeasonChange, className, showJournalNotes
 
             <div className="flex flex-col">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className={cn("text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full border", almanac.palette.badgeBg, almanac.palette.badgeText, almanac.palette.badgeBorder)}>
+                <span className={cn("text-caption font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full border", almanac.palette.badgeBg, almanac.palette.badgeText, almanac.palette.badgeBorder)}>
                   {almanac.currentMonthName} Malawi Almanac
                 </span>
                 {almanac.isCurrentRealMonth && (
-                  <span className="bg-amber-400 text-slate-950 text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-md flex items-center gap-1 shadow-2xs">
+                  <span className="bg-amber-400 text-slate-950 text-caption font-extrabold uppercase px-2 py-0.5 rounded-md flex items-center gap-1 shadow-2xs">
                     <Sparkles size={10} /> Active Season
                   </span>
                 )}
@@ -94,7 +94,7 @@ export function SeasonalAlmanacBar({ onSeasonChange, className, showJournalNotes
 
           {/* Right Season Switcher Pills */}
           <div className="flex flex-col items-start md:items-end gap-2 shrink-0">
-            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-200/70">
+            <span className="text-caption font-black uppercase tracking-wider text-emerald-200/70">
               Switch Seasonal Phase
             </span>
 
@@ -116,7 +116,7 @@ export function SeasonalAlmanacBar({ onSeasonChange, className, showJournalNotes
                   >
                     <ItemIcon size={13} style={{ color: isSelected ? almanac.palette.soilHex : 'currentColor' }} />
                     <span className="hidden sm:inline">{item.label}</span>
-                    <span className="text-[9px] opacity-70 font-mono">({item.months.split(' ')[0]})</span>
+                    <span className="text-caption opacity-70 font-mono">({item.months.split(' ')[0]})</span>
                   </button>
                 );
               })}
@@ -165,7 +165,7 @@ export function SeasonalAlmanacBar({ onSeasonChange, className, showJournalNotes
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Col 1: Practical Tasks */}
                 <div className="bg-black/25 p-4 rounded-2xl border border-white/10 flex flex-col gap-2">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-amber-300 flex items-center gap-1.5">
+                  <span className="text-caption font-black uppercase tracking-widest text-amber-300 flex items-center gap-1.5">
                     <Leaf size={13} /> Priority Field Activities
                   </span>
                   <ul className="flex flex-col gap-1.5 text-xs text-emerald-50">
@@ -180,19 +180,19 @@ export function SeasonalAlmanacBar({ onSeasonChange, className, showJournalNotes
 
                 {/* Col 2: Recommended Crops & Soil Strategy */}
                 <div className="bg-black/25 p-4 rounded-2xl border border-white/10 flex flex-col gap-2">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-teal-300 flex items-center gap-1.5">
+                  <span className="text-caption font-black uppercase tracking-widest text-teal-300 flex items-center gap-1.5">
                     <ShieldCheck size={13} /> Soil & Water Strategy
                   </span>
                   <p className="text-xs text-slate-200 leading-relaxed font-medium">
                     {almanac.soilAdvice}
                   </p>
                   <div className="mt-1">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-300 block mb-1">
+                    <span className="text-caption font-black uppercase tracking-wider text-slate-300 block mb-1">
                       Recommended Crop Varieties:
                     </span>
                     <div className="flex flex-wrap gap-1">
                       {almanac.recommendedCrops.map((c, idx) => (
-                        <span key={idx} className="bg-white/10 px-2 py-0.5 rounded-lg text-[10px] font-bold text-amber-200 border border-white/10">
+                        <span key={idx} className="bg-white/10 px-2 py-0.5 rounded-lg text-caption font-bold text-amber-200 border border-white/10">
                           {c}
                         </span>
                       ))}
@@ -202,13 +202,13 @@ export function SeasonalAlmanacBar({ onSeasonChange, className, showJournalNotes
 
                 {/* Col 3: Inspired Almanac Wisdom & Climate */}
                 <div className="bg-black/25 p-4 rounded-2xl border border-white/10 flex flex-col gap-2">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-sky-300 flex items-center gap-1.5">
+                  <span className="text-caption font-black uppercase tracking-widest text-sky-300 flex items-center gap-1.5">
                     <BookOpen size={13} /> Practical Counsel & Climate
                   </span>
                   <p className="italic font-serif text-xs text-emerald-100/90 leading-relaxed border-l-2 border-amber-400 pl-2">
                     {almanac.almanacWisdom}
                   </p>
-                  <div className="text-[11px] text-slate-300 mt-1 font-mono bg-black/40 p-2.5 rounded-xl border border-white/5 flex items-start gap-2">
+                  <div className="text-caption text-slate-300 mt-1 font-mono bg-black/40 p-2.5 rounded-xl border border-white/5 flex items-start gap-2">
                     <Sun size={14} className="text-amber-400 shrink-0 mt-0.5" />
                     <span>{almanac.climateOverview}</span>
                   </div>

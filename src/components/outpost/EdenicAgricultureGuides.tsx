@@ -5,10 +5,12 @@ import {
   CheckCircle2,
   Sparkles,
   Leaf,
+  X,
 } from 'lucide-react';
 import { EDENIC_AGRICULTURE_GUIDES } from '@/data/outpostFourPillarsData';
 import { CountryIcon, CountryIconName } from '@/components/icons/CountryIcons';
 import { cn } from '@/lib/utils';
+import { COUNTRY_IMAGES } from '@/assets/images';
 import { SkillStepVectorDiagram } from './SkillStepVectorDiagram';
 
 const GUIDE_ILLUSTRATIONS: Record<string, CountryIconName> = {
@@ -82,7 +84,7 @@ export function EdenicAgricultureGuides({ className }: { className?: string }) {
                 </div>
                 <span
                   className={cn(
-                    'text-[10px] font-mono font-bold uppercase',
+                    'text-caption font-mono font-bold uppercase',
                     isSelected ? 'text-amber-300' : 'text-stone-500 dark:text-stone-400'
                   )}
                 >
@@ -101,7 +103,7 @@ export function EdenicAgricultureGuides({ className }: { className?: string }) {
                 </h3>
                 <p
                   className={cn(
-                    'text-[11px] leading-tight line-clamp-2 mt-1',
+                    'text-caption leading-tight line-clamp-2 mt-1',
                     isSelected ? 'text-emerald-200/90' : 'text-stone-500 dark:text-stone-400'
                   )}
                 >
@@ -111,7 +113,7 @@ export function EdenicAgricultureGuides({ className }: { className?: string }) {
 
               <div
                 className={cn(
-                  'text-[11px] font-medium pt-2 border-t',
+                  'text-caption font-medium pt-2 border-t',
                   isSelected
                     ? 'border-white/10 text-amber-300'
                     : 'border-stone-100 dark:border-emerald-900/40 text-emerald-800 dark:text-amber-300'
@@ -143,7 +145,7 @@ export function EdenicAgricultureGuides({ className }: { className?: string }) {
             <div className="p-4 rounded-2xl bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200/70 dark:border-amber-800/50 flex items-start gap-3">
               <BookOpen size={18} className="text-amber-800 dark:text-amber-400 mt-0.5 shrink-0" />
               <div>
-                <span className="text-[10px] font-mono font-bold uppercase text-amber-900 dark:text-amber-300 block">
+                <span className="text-caption font-mono font-bold uppercase text-amber-900 dark:text-amber-300 block">
                   BIBLICAL PRINCIPLE
                 </span>
                 <p className="serif text-xs sm:text-sm text-stone-800 dark:text-stone-200 italic leading-relaxed mt-0.5">
@@ -153,13 +155,19 @@ export function EdenicAgricultureGuides({ className }: { className?: string }) {
             </div>
           </div>
 
-          <div className="lg:col-span-4 rounded-2xl bg-[#FAF6EE] dark:bg-[#07150E] border border-[#E6DFD1] dark:border-emerald-900/70 p-4 flex flex-col items-center justify-center relative overflow-hidden min-h-[180px]">
-            <div className="absolute top-2.5 left-3 right-3 flex items-center justify-between text-[9px] font-mono uppercase tracking-widest text-stone-500 dark:text-emerald-400/75">
-              <span>Agronomy Plate</span>
-              <span>No-Chemical Protocol</span>
-            </div>
-            <div className="w-full max-w-[200px] pt-4 flex items-center justify-center">
-              <CountryIcon name={activeIllustration} className="w-full h-32 object-contain drop-shadow-xs" />
+          <div className="lg:col-span-4 rounded-2xl bg-[#07150E] border border-emerald-900/70 p-1 flex flex-col relative overflow-hidden min-h-[190px] group shadow-inner">
+            <img
+              src={COUNTRY_IMAGES.edenicDeepPlantingPit}
+              alt="Edenic Agroforestry Deep Planting Pit and Living Soil Strata"
+              loading="lazy"
+              decoding="async"
+              referrerPolicy="no-referrer"
+              className="w-full h-44 object-cover rounded-xl opacity-90 group-hover:scale-105 transition-transform duration-500"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent rounded-xl pointer-events-none" />
+            <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-caption font-mono font-bold text-amber-300">
+              <span>Deep Strata · 3×3×3ft</span>
+              <span className="text-emerald-300 font-semibold">No-Chemical Protocol</span>
             </div>
           </div>
         </div>
@@ -221,7 +229,7 @@ export function EdenicAgricultureGuides({ className }: { className?: string }) {
             <ul className="flex flex-col gap-2 text-xs text-stone-800 dark:text-stone-200">
               {activeGuide.commonMistakes.map((mistake, idx) => (
                 <li key={idx} className="flex items-start gap-2 leading-relaxed">
-                  <span className="text-rose-600 dark:text-rose-400 font-bold shrink-0">✕</span>
+                  <X size={16} strokeWidth={1.75} className="text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
                   <span>{mistake}</span>
                 </li>
               ))}

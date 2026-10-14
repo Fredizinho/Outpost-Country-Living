@@ -14,6 +14,7 @@ import {
   Droplets,
   ArrowRight,
   Search,
+  X,
 } from 'lucide-react';
 
 interface UtilityItem {
@@ -255,9 +256,9 @@ export function HomesteadUtilitiesGrid() {
             <button
               type="button"
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 cursor-pointer"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 cursor-pointer"
             >
-              ✕
+              <X size={16} strokeWidth={1.75} />
             </button>
           )}
         </div>

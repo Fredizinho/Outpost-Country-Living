@@ -869,7 +869,7 @@ export function MalawiAgriWeatherForecast({ embedded = false }: { embedded?: boo
                     : 'DCCMS Station Normals'}
               </span>
               {(!isOnline || isServingOfflineCache) && (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-400/50 font-mono text-[10px] font-semibold">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-400/50 font-mono text-caption font-semibold">
                   <WifiOff size={11} />
                   <span>Offline Mode · Cached Data</span>
                 </span>
@@ -940,7 +940,7 @@ export function MalawiAgriWeatherForecast({ embedded = false }: { embedded?: boo
                   </div>
                   <span
                     className={cn(
-                      'text-[11px] font-mono mt-0.5 truncate max-w-[185px] tabular-nums',
+                      'text-caption font-mono mt-0.5 truncate max-w-[185px] tabular-nums',
                       isSelected ? 'text-emerald-200' : 'text-stone-500 dark:text-stone-400'
                     )}
                   >
@@ -997,7 +997,7 @@ export function MalawiAgriWeatherForecast({ embedded = false }: { embedded?: boo
               {/* Precipitation & FAO ET0 */}
               <div className="p-3.5 rounded-xl bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-emerald-950/80 flex flex-col justify-between">
                 <div className="flex items-center justify-between text-sky-600 dark:text-sky-400 mb-1">
-                  <span className="text-[11px] font-medium text-stone-500 dark:text-stone-400">
+                  <span className="text-caption font-medium text-stone-500 dark:text-stone-400">
                     Precipitation
                   </span>
                   <CloudRain size={15} />
@@ -1008,7 +1008,7 @@ export function MalawiAgriWeatherForecast({ embedded = false }: { embedded?: boo
                   </span>
                   <span className="text-xs text-stone-500">({activeDay.rainMm} mm)</span>
                 </div>
-                <span className="text-[11px] text-stone-500 mt-1 font-mono tabular-nums">
+                <span className="text-caption text-stone-500 mt-1 font-mono tabular-nums">
                   ET₀: {activeDay.faoEt0Mm ?? region.faoEt0Mm} mm/d
                 </span>
               </div>
@@ -1016,7 +1016,7 @@ export function MalawiAgriWeatherForecast({ embedded = false }: { embedded?: boo
               {/* Root-Zone Volumetric Soil Moisture (0-9cm) */}
               <div className="p-3.5 rounded-xl bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-emerald-950/80 flex flex-col justify-between">
                 <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400 mb-1">
-                  <span className="text-[11px] font-medium text-stone-500 dark:text-stone-400">
+                  <span className="text-caption font-medium text-stone-500 dark:text-stone-400">
                     Soil Moisture (0–9cm)
                   </span>
                   <Droplets size={15} />
@@ -1029,7 +1029,7 @@ export function MalawiAgriWeatherForecast({ embedded = false }: { embedded?: boo
                     Vol.
                   </span>
                 </div>
-                <span className="text-[11px] text-stone-500 mt-1 font-mono tabular-nums">
+                <span className="text-caption text-stone-500 mt-1 font-mono tabular-nums">
                   Root Temp: {region.soilTempRootC}°C
                 </span>
               </div>
@@ -1037,7 +1037,7 @@ export function MalawiAgriWeatherForecast({ embedded = false }: { embedded?: boo
               {/* Solar Insolation */}
               <div className="p-3.5 rounded-xl bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-emerald-950/80 flex flex-col justify-between">
                 <div className="flex items-center justify-between text-amber-600 dark:text-amber-400 mb-1">
-                  <span className="text-[11px] font-medium text-stone-500 dark:text-stone-400">
+                  <span className="text-caption font-medium text-stone-500 dark:text-stone-400">
                     Solar Insolation
                   </span>
                   <Sun size={15} />
@@ -1048,7 +1048,7 @@ export function MalawiAgriWeatherForecast({ embedded = false }: { embedded?: boo
                   </span>
                   <span className="text-xs text-stone-500">kWh/m²</span>
                 </div>
-                <span className="text-[11px] text-stone-500 mt-1 font-mono tabular-nums">
+                <span className="text-caption text-stone-500 mt-1 font-mono tabular-nums">
                   {activeDay.solarHours}h sunshine
                 </span>
               </div>
@@ -1056,7 +1056,7 @@ export function MalawiAgriWeatherForecast({ embedded = false }: { embedded?: boo
               {/* Wind & Humidity */}
               <div className="p-3.5 rounded-xl bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-emerald-950/80 flex flex-col justify-between">
                 <div className="flex items-center justify-between text-teal-600 dark:text-teal-400 mb-1">
-                  <span className="text-[11px] font-medium text-stone-500 dark:text-stone-400">
+                  <span className="text-caption font-medium text-stone-500 dark:text-stone-400">
                     Wind & Humidity
                   </span>
                   <Wind size={15} />
@@ -1067,7 +1067,7 @@ export function MalawiAgriWeatherForecast({ embedded = false }: { embedded?: boo
                   </span>
                   <span className="text-xs text-stone-500">km/h</span>
                 </div>
-                <span className="text-[11px] text-stone-500 mt-1 font-mono tabular-nums">
+                <span className="text-caption text-stone-500 mt-1 font-mono tabular-nums">
                   {region.humidity}% rel. humidity
                 </span>
               </div>
@@ -1109,7 +1109,7 @@ export function MalawiAgriWeatherForecast({ embedded = false }: { embedded?: boo
                   <div className="flex items-center justify-between gap-1">
                     <span className="text-xs font-bold truncate">{forecast.day}</span>
                     {forecast.isSabbath && (
-                      <span className="text-[10px] font-mono font-semibold opacity-85 shrink-0">
+                      <span className="text-caption font-mono font-semibold opacity-85 shrink-0">
                         Rest
                       </span>
                     )}
@@ -1121,11 +1121,11 @@ export function MalawiAgriWeatherForecast({ embedded = false }: { embedded?: boo
                     </div>
                     <div className="flex flex-col font-mono tabular-nums">
                       <span className="font-bold text-sm">{forecast.tempHigh}°</span>
-                      <span className="text-[11px] opacity-75">{forecast.tempLow}°C</span>
+                      <span className="text-caption opacity-75">{forecast.tempLow}°C</span>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between text-[11px] pt-1 border-t border-current/10 font-mono tabular-nums">
+                  <div className="flex items-center justify-between text-caption pt-1 border-t border-current/10 font-mono tabular-nums">
                     <span className="flex items-center gap-1">
                       <CloudRain size={11} />
                       {forecast.rainProbability}%
@@ -1174,7 +1174,7 @@ export function MalawiAgriWeatherForecast({ embedded = false }: { embedded?: boo
           </div>
         </div>
 
-        {/* 5. Verifiable Source Attribution & Inspired Counsel Bar */}
+        {/* 5. Verifiable Source Attribution & Agricultural Guidance Bar */}
         <div className="mt-4 pt-4 border-t border-stone-200/80 dark:border-emerald-950/80 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 relative z-10 text-xs">
           <div className="flex items-start sm:items-center gap-2">
             <Feather size={14} className="text-amber-600 dark:text-amber-400 shrink-0 mt-0.5 sm:mt-0" />
@@ -1183,7 +1183,7 @@ export function MalawiAgriWeatherForecast({ embedded = false }: { embedded?: boo
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 shrink-0 font-mono text-[11px]">
+          <div className="flex flex-wrap items-center gap-3 shrink-0 font-mono text-caption">
             <a
               href={region.agronomicAdvisory.scriptureOrEgw.verifiedUrl}
               target="_blank"

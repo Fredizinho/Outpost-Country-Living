@@ -78,7 +78,7 @@ export function OutpostCenterBlueprints({ className }: { className?: string }) {
                   <CountryIcon name={iconName} className="w-full h-full object-contain" />
                 </div>
                 <span className={cn(
-                  "text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded",
+                  "text-caption font-mono font-bold uppercase px-2 py-0.5 rounded",
                   isSelected ? "bg-white/20 text-emerald-100" : "bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300"
                 )}>
                   {bp.type}
@@ -108,7 +108,7 @@ export function OutpostCenterBlueprints({ className }: { className?: string }) {
         <div className="flex flex-col gap-4 pb-6 border-b border-stone-200/80 dark:border-emerald-900/40">
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded">
+              <span className="text-caption font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded">
                 {activeBlueprint.type} Operational Blueprint
               </span>
               <h3 className="serif text-2xl sm:text-3xl font-bold text-stone-900 dark:text-stone-50 mt-1">
@@ -129,7 +129,7 @@ export function OutpostCenterBlueprints({ className }: { className?: string }) {
           <div className="p-4 sm:p-5 rounded-2xl bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200/70 dark:border-amber-800/60 flex items-start gap-3">
             <BookOpen size={18} className="text-amber-800 dark:text-amber-400 mt-0.5 shrink-0" />
             <div>
-              <span className="text-[10px] font-mono font-bold uppercase text-amber-900 dark:text-amber-300 block">
+              <span className="text-caption font-mono font-bold uppercase text-amber-900 dark:text-amber-300 block">
                 SPIRIT OF PROPHECY COUNSEL
               </span>
               <p className="serif text-xs sm:text-sm text-stone-800 dark:text-stone-200 italic leading-relaxed mt-0.5">
@@ -159,7 +159,7 @@ export function OutpostCenterBlueprints({ className }: { className?: string }) {
                   key={idx}
                   className="p-3.5 rounded-xl bg-[#FAF8F5] dark:bg-[#14281D] border border-stone-200/80 dark:border-emerald-900/60 flex items-start gap-3"
                 >
-                  <span className="w-5 h-5 rounded-full bg-emerald-800 dark:bg-emerald-700 text-white text-[11px] font-mono font-bold flex items-center justify-center shrink-0 mt-0.5">
+                  <span className="w-5 h-5 rounded-full bg-emerald-800 dark:bg-emerald-700 text-white text-caption font-mono font-bold flex items-center justify-center shrink-0 mt-0.5">
                     {idx + 1}
                   </span>
                   <span className="text-xs sm:text-sm text-stone-800 dark:text-stone-200 leading-relaxed">

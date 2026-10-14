@@ -191,7 +191,7 @@ export function SkillStepVectorDiagram({
       {/* Top Header */}
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-emerald-900/60 pb-3.5">
         <div className="flex items-center gap-2">
-          <span className="px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
+          <span className="px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-caption font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
             <Layers size={12} />
             <span>Visual Skill Schematic &amp; Step Flow</span>
           </span>
@@ -199,7 +199,7 @@ export function SkillStepVectorDiagram({
             {visualConfig.diagramTitle}
           </span>
         </div>
-        <span className="text-[11px] font-mono text-emerald-300 bg-emerald-950/80 px-2.5 py-1 rounded-lg border border-emerald-800">
+        <span className="text-caption font-mono text-emerald-300 bg-emerald-950/80 px-2.5 py-1 rounded-lg border border-emerald-800">
           {steps.length} Sequential Steps
         </span>
       </div>
@@ -216,7 +216,7 @@ export function SkillStepVectorDiagram({
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
           <div className="absolute bottom-0 inset-x-0 p-4">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-amber-300 font-bold block">
+            <span className="text-caption font-mono uppercase tracking-widest text-amber-300 font-bold block">
               {category} Reference
             </span>
             <p className="text-xs sm:text-sm font-bold text-white leading-snug mt-0.5">
@@ -681,7 +681,7 @@ export function SkillStepVectorDiagram({
               {/* Sloped Solar Collector */}
               <polygon points="25,175 195,115 195,135 25,195" fill="#18181B" stroke="#F59E0B" strokeWidth="2" />
               <text x="110" y="135" textAnchor="middle" fill="#FDE047" fontSize="9" fontWeight="bold" fontFamily="monospace">
-                ☀️ Black Collector (52°C)
+                SOLAR: Black Collector (52°C)
               </text>
               {/* Vertical Drying Cabinet */}
               <rect x="195" y="30" width="120" height="155" rx="6" fill="#3E2723" stroke="#D97706" strokeWidth="2" />
@@ -808,11 +808,11 @@ export function SkillStepVectorDiagram({
       {!compact && steps.length > 0 && (
         <div className="pt-4 border-t border-emerald-900/60 flex flex-col gap-3">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-mono uppercase tracking-wider text-amber-300 font-bold">
+            <span className="text-caption font-mono uppercase tracking-wider text-amber-300 font-bold">
               Step-by-Step Execution Flowchart
             </span>
             {toolsNeeded.length > 0 && (
-              <span className="text-[11px] font-mono text-emerald-300 flex items-center gap-1">
+              <span className="text-caption font-mono text-emerald-300 flex items-center gap-1">
                 <Wrench size={12} /> {toolsNeeded.slice(0, 3).join(' · ')}
               </span>
             )}
@@ -836,7 +836,7 @@ export function SkillStepVectorDiagram({
                   className="p-3.5 rounded-2xl bg-white/[0.04] border border-emerald-800/50 flex flex-col justify-between gap-2 relative"
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <span className="px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 font-mono text-[10px] font-extrabold">
+                    <span className="px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 font-mono text-caption font-extrabold">
                       STEP 0{idx + 1}
                     </span>
                     {idx < 3 && (
@@ -846,7 +846,7 @@ export function SkillStepVectorDiagram({
                   <h5 className="text-xs font-bold text-amber-200 leading-snug">
                     {stepHeading}
                   </h5>
-                  <p className="text-[11px] text-emerald-100/80 leading-relaxed line-clamp-3">
+                  <p className="text-caption text-emerald-100/80 leading-relaxed line-clamp-3">
                     {stepBody}
                   </p>
                 </div>

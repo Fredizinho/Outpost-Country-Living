@@ -24,13 +24,16 @@ import {
   Copy,
   Check,
   FileText,
+  Calendar,
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { DAILY_DEVOTIONALS } from '@/data/outpostFourPillarsData';
+import { SEASONAL_CALENDAR } from '@/data/skillsAndSeasons';
 import { CountryLivingIntroQuote } from '@/components/home/CountryLivingIntroQuote';
 import { HomeSceneryBackground } from '@/components/home/HomeSceneryBackground';
 import { CountryIcon, CountryIconName } from '@/components/icons/CountryIcons';
+import { CountryImage } from '@/components/common/CountryImage';
 import { COUNTRY_IMAGES } from '@/assets/images';
 import {
   DISTRICT_LIST,
@@ -191,11 +194,64 @@ const POWER_TOOLS_DOCK = [
   },
 ];
 
+const CORE_ENTRY_POINTS = [
+  {
+    title: 'Land & District GIS Scout',
+    description: 'Inspect groundwater aquifers, contour elevations, and customary land tenure protocols across all 28 districts.',
+    to: '/scout-map',
+    icon: Compass,
+    accent: 'text-cyan-600 dark:text-cyan-400',
+    meta: '28 Districts · Hydro-GIS',
+  },
+  {
+    title: 'Off-Grid Sizing Calculators',
+    description: 'Size solar borehole pumps, rainwater cistern storage, food security quotas, and itemized bills of quantities.',
+    to: '/calculators',
+    icon: Calculator,
+    accent: 'text-amber-600 dark:text-amber-400',
+    meta: 'Solar · Water · BoQ',
+  },
+  {
+    title: 'Edenic Agriculture & Living Soil',
+    description: 'Establish deep 3×3×3ft tree planting pits, biochar strata, and drought-resilient bio-intensive orchard guilds.',
+    to: '/agriculture',
+    icon: Sprout,
+    accent: 'text-emerald-600 dark:text-emerald-400',
+    meta: '3×3×3ft Pits · Living Soil',
+  },
+  {
+    title: 'Sanitarium & Natural Health',
+    description: 'Access rational hydrotherapy fomentation guides, charcoal poultices, and NEWSTART health laws.',
+    to: '/sanitarium',
+    icon: HeartPulse,
+    accent: 'text-rose-600 dark:text-rose-400',
+    meta: 'Hydrotherapy · Herbs · Laws',
+  },
+  {
+    title: 'Country Skills & Outpost Blueprints',
+    description: 'Master hydraulic ram pumps, compressed earth brick masonry, solar food dehydration, and seed saving.',
+    to: '/skills',
+    icon: Layers,
+    accent: 'text-sky-600 dark:text-sky-400',
+    meta: '25 Field Manuals · Trades',
+  },
+  {
+    title: 'Prophetic Exodus & Family Altar',
+    description: 'Study 1844 sanctuary blueprints, daily Spirit of Prophecy family altar counsel, and sabbath sunset guards.',
+    to: '/vision',
+    icon: BookOpen,
+    accent: 'text-amber-600 dark:text-amber-400',
+    meta: '1844 Sanctuary · Devotional',
+  },
+];
+
 const FOUR_PILLARS: {
   number: string;
   title: string;
   subtitle: string;
   iconName: CountryIconName;
+  illustrationImage: string;
+  illustrationAlt: string;
   summary: string;
   proofLine: string;
   links: { label: string; to: string }[];
@@ -205,6 +261,8 @@ const FOUR_PILLARS: {
     title: 'Why We Leave the Cities',
     subtitle: 'Prophetic & Family Purpose',
     iconName: 'prophecy-1844',
+    illustrationImage: COUNTRY_IMAGES.jerusalemSiege,
+    illustrationAlt: 'Prophetic exodus and flight to mountain sanctuary',
     summary:
       'Explore the biblical and prophetic foundation for country living, family sanctuaries, and practical rural education.',
     proofLine: 'EGW Estate · Daniel 8:14',
@@ -219,6 +277,8 @@ const FOUR_PILLARS: {
     title: 'Finding Water-Rich, Legal Land',
     subtitle: '28 Districts & Customary Law',
     iconName: 'map',
+    illustrationImage: COUNTRY_IMAGES.permacultureWaterHydraulics,
+    illustrationAlt: 'Off-grid gravity hydraulics, ram pump water lifting, and mountain aquifers',
     summary:
       'Evaluate groundwater aquifers, customary land titles, and community protocols across all 28 districts in Malawi.',
     proofLine: 'Land Act 2016 · AQUASTAT',
@@ -233,6 +293,8 @@ const FOUR_PILLARS: {
     title: 'Growing Food & Harvesting Sun',
     subtitle: 'Permaculture & Off-Grid Sizing',
     iconName: 'soil',
+    illustrationImage: COUNTRY_IMAGES.edenicDeepPlantingPit,
+    illustrationAlt: 'Edenic 3x3x3ft deep planting pit strata and biochar living soil',
     summary:
       'Establish bio-intensive garden guilds, 3×3×3ft tree planting pits, rainwater harvesting, and off-grid solar infrastructure.',
     proofLine: 'DCCMS · FAO HWSD v2.0',
@@ -247,13 +309,15 @@ const FOUR_PILLARS: {
     title: 'Living Debt-Free & Self-Reliant',
     subtitle: 'Practical Skills & Natural Health',
     iconName: 'outpost',
+    illustrationImage: COUNTRY_IMAGES.ruralIndustrialSanctuary,
+    illustrationAlt: 'Avondale Madison trades workshop and rural family sanctuary',
     summary:
       'Develop essential self-reliance skills, medical missionary principles, and sustainable rural outpost campuses.',
     proofLine: 'Avondale Model · 25 Manuals',
     links: [
       { label: 'Outpost Blueprints', to: '/blueprints' },
+      { label: 'Sanitarium Dispensary', to: '/sanitarium' },
       { label: 'Country Skills Manual', to: '/skills' },
-      { label: 'Steward Directory', to: '/community' },
     ],
   },
 ];
@@ -270,7 +334,7 @@ const PROPHETIC_PLATES_PREVIEW = [
     image: COUNTRY_IMAGES.threeAngelsProclamation,
   },
   {
-    epoch: 'CL 9.6',
+    epoch: 'Outposts',
     title: 'Outpost Centers Established',
     image: COUNTRY_IMAGES.outpostMissionCenter,
   },
@@ -366,11 +430,11 @@ const FAMILY_NATURE_CURRICULUM: Record<
 };
 
 export default function Home() {
-  const { palette } = useTheme();
-  const isCharcoal = palette === 'charcoal';
-  const isSapphire = palette === 'sapphire' || palette === 'midnight';
-  const isSienna = palette === 'sienna';
-  const isMidnight = palette === 'midnight';
+  const { theme, isLight, isDark, isField } = useTheme();
+  const isCharcoal = false;
+  const isSapphire = false;
+  const isSienna = false;
+  const isMidnight = false;
 
   const [showWelcomeQuote, setShowWelcomeQuote] = useState(false);
   const [showBeginnerWizard, setShowBeginnerWizard] = useState(false);
@@ -379,6 +443,7 @@ export default function Home() {
   const [isMasterplanOpen, setIsMasterplanOpen] = useState(false);
 
   const [selectedClimateZone, setSelectedClimateZone] = useState<ClimateLifestyleId>('highlands');
+  const [sceneryStyle, setSceneryStyle] = useState<'illustrated' | 'vector'>('illustrated');
   const [selectedAgeTrack, setSelectedAgeTrack] = useState<YouthAgeTrack>('ages-4-8');
   const [showFullDistrictMatrix, setShowFullDistrictMatrix] = useState(false);
   const [showFullPropheticChart, setShowFullPropheticChart] = useState(false);
@@ -544,26 +609,72 @@ Generated via Outpost Living Malawi (Avondale Model & DCCMS/FAO Standards)`;
     };
   }, []);
 
-  const completedMilestonesCount = readinessStats.completedMilestones;
-  const totalPossibleItems = readinessStats.totalMilestones;
   const readinessPercentage = readinessStats.breakdown.exodusScorePct;
 
-  const glassSurfaceClass = isSapphire ? 'glass-depth-blue' : 'glass-depth-emerald';
-  const glassHeroClass = isSapphire ? 'glass-depth-blue-hero' : 'glass-depth-emerald-hero';
+  const hasProgress = useMemo(() => {
+    return (
+      (readinessStats?.breakdown?.exodusScorePct ?? 0) > 0 ||
+      (readinessStats?.totalScorePct ?? 0) > 0 ||
+      (readinessStats?.breakdown?.skillsMasteryPct ?? 0) > 0 ||
+      (readinessStats?.breakdown?.landReadinessPct ?? 0) > 0
+    );
+  }, [readinessStats]);
+
+  const currentSeasonalTask = useMemo(() => {
+    if (currentMonth >= 10 || currentMonth <= 2) {
+      return SEASONAL_CALENDAR.find((s) => s.season === 'Rainy Planting') || SEASONAL_CALENDAR[0];
+    }
+    if (currentMonth >= 3 && currentMonth <= 5) {
+      return SEASONAL_CALENDAR.find((s) => s.season === 'Harvest & Storage') || SEASONAL_CALENDAR[1];
+    }
+    if (currentMonth >= 6 && currentMonth <= 7) {
+      return SEASONAL_CALENDAR.find((s) => s.season === 'Cold Dry Season') || SEASONAL_CALENDAR[2];
+    }
+    return SEASONAL_CALENDAR.find((s) => s.season === 'Hot Dry Preparation') || SEASONAL_CALENDAR[3];
+  }, [currentMonth]);
+
+  const [expandedGuides, setExpandedGuides] = useState<Record<string, boolean>>({
+    sizer: false,
+    districts: false,
+    pillars: false,
+    prophecy: false,
+    hearth: false,
+  });
+
+  const toggleGuide = (key: string) => {
+    setExpandedGuides((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
+  const areAllGuidesExpanded = useMemo(() => {
+    return Object.values(expandedGuides).every(Boolean);
+  }, [expandedGuides]);
+
+  const toggleAllGuides = () => {
+    const nextState = !areAllGuidesExpanded;
+    setExpandedGuides({
+      sizer: nextState,
+      districts: nextState,
+      pillars: nextState,
+      prophecy: nextState,
+      hearth: nextState,
+    });
+  };
+
+  const glassSurfaceClass = isField ? 'bg-black text-white border-2 border-white' : 'glass-depth-emerald';
+  const glassHeroClass = isField ? 'bg-black text-white border-2 border-white' : 'glass-depth-emerald-hero';
 
   return (
     <div
       className={cn(
-        'min-h-full text-stone-800 dark:text-stone-100 flex flex-col pb-14 transition-colors duration-300',
-        isCharcoal
-          ? 'bg-[#F4F4F6] dark:bg-[#121214]'
-          : isMidnight
-          ? 'bg-gradient-to-b from-[#FFFFFF] via-[#F8FAFC] to-[#F0F9FF] dark:from-[#030917] dark:via-[#071426] dark:to-[#040D1A]'
+        'min-h-full flex flex-col pb-14 transition-colors duration-300',
+        isField
+          ? 'bg-black text-white'
           : isSienna
-          ? 'bg-gradient-to-b from-[#F5EFE4] via-[#EFE5D4] to-[#E6D7C3] dark:from-[#120806] dark:via-[#1D0C08] dark:to-[#140805]'
-          : isSapphire
-          ? 'bg-gradient-to-b from-[#EDF5FC] via-[#F4F8FD] to-[#E9F2FA] dark:from-[#041122] dark:via-[#06182E] dark:to-[#040E1C]'
-          : 'bg-gradient-to-b from-[#F9F6EE] via-[#F4EFE4] to-[#EDE6D6] dark:from-[#04140B] dark:via-[#071F12] dark:to-[#041009]'
+          ? 'bg-gradient-to-b from-[#F5EFE4] via-[#EFE5D4] to-[#E6D7C3] dark:from-[#120806] dark:via-[#1D0C08] dark:to-[#140805] text-stone-800 dark:text-stone-100'
+          : 'bg-gradient-to-b from-[#F9F6EE] via-[#F4EFE4] to-[#EDE6D6] dark:from-[#04140B] dark:via-[#071F12] dark:to-[#041009] text-stone-800 dark:text-stone-100'
       )}
     >
       <CountryLivingIntroQuote
@@ -579,19 +690,8 @@ Generated via Outpost Living Malawi (Avondale Model & DCCMS/FAO Standards)`;
         <div className="flex flex-wrap items-center justify-between gap-2.5 pb-3.5 text-xs">
           <div className="flex flex-wrap items-center gap-2">
             <span className="font-semibold text-stone-900 dark:text-stone-100">
-              Outpost Sanctuary Command Center
+              Home
             </span>
-            <span aria-hidden="true" className="text-stone-400 dark:text-white/25">
-              ·
-            </span>
-            <button
-              type="button"
-              onClick={() => setShowWelcomeQuote(true)}
-              className="inline-flex items-center gap-1 text-emerald-800 dark:text-amber-300 hover:underline cursor-pointer font-semibold text-xs"
-            >
-              <Feather size={12} />
-              <span>Inspired Counsel (CL 9.1)</span>
-            </button>
             <span aria-hidden="true" className="text-stone-400 dark:text-white/30">
               ·
             </span>
@@ -599,16 +699,13 @@ Generated via Outpost Living Malawi (Avondale Model & DCCMS/FAO Standards)`;
               to="/account"
               className="inline-flex items-center gap-1 font-bold text-stone-900 dark:text-stone-100 hover:text-amber-400 transition-colors text-xs"
             >
-              <span>Steward Access</span>
+              <span>Sign in</span>
               <ArrowRight size={11} />
             </Link>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-stone-700 dark:text-stone-300">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Sanctuary Engine Live</span>
-            </span>
+          <div className="flex items-center gap-2 text-caption font-mono text-stone-600 dark:text-stone-300">
+            <span>28 Districts</span>
           </div>
         </div>
 
@@ -627,7 +724,9 @@ Generated via Outpost Living Malawi (Avondale Model & DCCMS/FAO Standards)`;
         >
           <HomeSceneryBackground
             activeScene={
-              selectedClimateZone === 'highlands'
+              sceneryStyle === 'illustrated'
+                ? 'illustrated'
+                : selectedClimateZone === 'highlands'
                 ? 'highlands'
                 : selectedClimateZone === 'lakeshore'
                 ? 'waters'
@@ -635,9 +734,9 @@ Generated via Outpost Living Malawi (Avondale Model & DCCMS/FAO Standards)`;
             }
           />
 
-          {/* Polished Subtle Atmospheric Gradient for Text Zone (Non-Muddy, Scenery Fully Visible) */}
+          {/* Gradient Scrim (Bottom-to-Top, Moss-Deep #071A10 0 to 75% for 4.5:1+ Contrast) */}
           <div
-            className="absolute inset-0 pointer-events-none z-[1] bg-gradient-to-r from-stone-950/30 via-transparent to-transparent max-w-xl"
+            className="absolute inset-0 pointer-events-none z-[1] hero-scrim-moss"
             aria-hidden="true"
           />
 
@@ -645,39 +744,73 @@ Generated via Outpost Living Malawi (Avondale Model & DCCMS/FAO Standards)`;
             {/* Panoramic Scenic Vista Switcher Bar */}
             <div className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-3 border-b border-white/10">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-[11px] font-mono uppercase tracking-wider text-amber-300 font-bold flex items-center gap-1.5">
+                <span className="text-caption font-mono uppercase tracking-wider text-amber-300 font-bold flex items-center gap-1.5">
                   <Mountain size={13} />
                   <span>Panoramic Scenery:</span>
                 </span>
-                <div className="flex items-center gap-1 bg-black/40 backdrop-blur-md p-1 rounded-xl border border-white/15">
-                  {[
-                    { id: 'highlands' as const, label: 'Mount Mulanje Highlands', icon: Mountain },
-                    { id: 'lakeshore' as const, label: 'Lake Malawi Waters', icon: Waves },
-                    { id: 'mid-hills' as const, label: 'Highland Sanctuary', icon: Trees },
-                  ].map((v) => {
-                    const Icon = v.icon;
-                    const isActive = selectedClimateZone === v.id;
-                    return (
-                      <button
-                        key={v.id}
-                        type="button"
-                        onClick={() => setSelectedClimateZone(v.id)}
-                        className={cn(
-                          'px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer',
-                          isActive
-                            ? 'bg-amber-400 text-stone-950 font-bold shadow-xs'
-                            : 'text-stone-300 hover:text-white hover:bg-white/10'
-                        )}
-                      >
-                        <Icon size={12} />
-                        <span>{v.label}</span>
-                      </button>
-                    );
-                  })}
+                
+                {/* Style Toggle: Illustrated Masterpiece vs Procedural Vector Dawn */}
+                <div className="flex items-center gap-1 bg-black/50 backdrop-blur-md p-1 rounded-xl border border-white/15">
+                  <button
+                    type="button"
+                    onClick={() => setSceneryStyle('illustrated')}
+                    className={cn(
+                      'px-2.5 py-1 rounded-lg text-caption font-mono font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer',
+                      sceneryStyle === 'illustrated'
+                        ? 'bg-amber-400 text-stone-950 font-bold shadow-xs'
+                        : 'text-stone-300 hover:text-white hover:bg-white/10'
+                    )}
+                  >
+                    <Sparkles size={12} />
+                    <span>Illustrated Homestead</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSceneryStyle('vector')}
+                    className={cn(
+                      'px-2.5 py-1 rounded-lg text-caption font-mono font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer',
+                      sceneryStyle === 'vector'
+                        ? 'bg-amber-400 text-stone-950 font-bold shadow-xs'
+                        : 'text-stone-300 hover:text-white hover:bg-white/10'
+                    )}
+                  >
+                    <Layers size={12} />
+                    <span>Vector Horizons</span>
+                  </button>
                 </div>
+
+                {/* Sub-zone Selector when Vector Horizons is active */}
+                {sceneryStyle === 'vector' && (
+                  <div className="flex items-center gap-1 bg-black/40 backdrop-blur-md p-1 rounded-xl border border-white/15">
+                    {[
+                      { id: 'highlands' as const, label: 'Mulanje Highlands', icon: Mountain },
+                      { id: 'lakeshore' as const, label: 'Lake Waters', icon: Waves },
+                      { id: 'mid-hills' as const, label: 'Mid-Valleys', icon: Trees },
+                    ].map((v) => {
+                      const Icon = v.icon;
+                      const isActive = selectedClimateZone === v.id;
+                      return (
+                        <button
+                          key={v.id}
+                          type="button"
+                          onClick={() => setSelectedClimateZone(v.id)}
+                          className={cn(
+                            'px-2 py-0.5 rounded-lg text-caption font-mono font-semibold transition-all inline-flex items-center gap-1 cursor-pointer',
+                            isActive
+                              ? 'bg-emerald-600 text-white font-bold'
+                              : 'text-stone-300 hover:text-white hover:bg-white/10'
+                          )}
+                        >
+                          <Icon size={11} />
+                          <span>{v.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
-              <div className="hidden sm:flex items-center gap-2 text-[11px] font-mono text-emerald-300">
+              <div className="hidden sm:flex items-center gap-2 text-caption font-mono text-emerald-300">
                 <ShieldCheck size={13} />
                 <span>Malawi Country Living Standard · 28 Districts</span>
               </div>
@@ -693,44 +826,46 @@ Generated via Outpost Living Malawi (Avondale Model & DCCMS/FAO Standards)`;
               >
                 <div className="p-4 sm:p-5 rounded-2xl bg-stone-950/30 backdrop-blur-md border border-white/15 shadow-xl">
                   <div className="flex items-center gap-2 mb-2 text-xs font-mono font-bold text-amber-300 uppercase tracking-widest">
-                    <span>Inspired Country Living</span>
+                    <span>Country Living Guide</span>
                     <span aria-hidden="true">·</span>
-                    <span>Malawi Outpost Sanctuary Blueprint</span>
+                    <span>Malawi Outpost Model</span>
                   </div>
-                  <h1 className="font-display text-3xl sm:text-4xl lg:text-[2.65rem] font-bold text-white tracking-tight leading-[1.1] text-balance drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                    Meet Outpost — Your Modular Command Center for Country Living in Malawi
+                  <h1 className="font-display text-3xl sm:text-4xl lg:text-[2.65rem] font-bold text-white tracking-tight leading-[1.1] text-balance">
+                    Meet Outpost — Your Modular Home for Country Living in Malawi
                   </h1>
-                  <p className="text-sm sm:text-base mt-3 leading-relaxed max-w-[60ch] text-pretty text-stone-100 font-normal drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
-                    Welcome to Outpost — a modular desktop sanctuary built to guide your family’s transition from the city to water-rich, debt-free country land across all 28 districts of Malawi.
+                  <p className="text-sm sm:text-base mt-3 leading-relaxed max-w-[60ch] text-pretty text-stone-100 font-normal">
+                    Welcome to Outpost — a modular desktop home built to guide your family’s transition from the city to water-rich, debt-free country land across all 28 districts of Malawi.
                   </p>
                 </div>
 
-                {/* Clean Hairline EGW Counsel Blockquote with High-Contrast Background */}
-                <blockquote className="border-l-4 border-amber-400 pl-4 py-2.5 text-xs sm:text-sm italic font-serif max-w-[60ch] text-stone-100 bg-stone-950/40 backdrop-blur-md rounded-r-2xl border-y border-r border-white/10 shadow-md">
-                  “Get out of the cities as soon as possible and purchase a little piece of land, where you can have a garden, where your children can watch the flowers growing, and learn from them lessons of simplicity and purity.”
-                  <span className="not-italic font-mono text-xs text-amber-300 font-bold ml-2 block sm:inline mt-1 sm:mt-0">
-                    — Ellen G. White, Country Living, p. 24.2
-                  </span>
-                </blockquote>
-
-                {/* Purposeful Action Buttons */}
+                {/* ONE Primary Action Button in Hero Viewport + Subtle Ghost Triggers */}
                 <div className="flex flex-wrap items-center gap-3 pt-1">
-                  <Link
-                    to="/scout-map"
-                    className="px-4 py-2.5 rounded-xl bg-amber-400 text-stone-950 hover:bg-amber-300 font-bold text-xs shadow-lg transition-all inline-flex items-center gap-1.5 cursor-pointer shadow-amber-400/20"
-                  >
-                    <Compass size={14} />
-                    <span>Explore 28-District GIS Map</span>
-                    <ArrowRight size={13} />
-                  </Link>
+                  {hasProgress ? (
+                    <Link
+                      to="/tracker"
+                      className="px-5 py-3 rounded-control bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs sm:text-sm shadow-raised transition-transform active:scale-95 inline-flex items-center gap-2 cursor-pointer"
+                    >
+                      <Sparkles size={14} />
+                      <span>Continue where you left off</span>
+                      <ArrowRight size={14} />
+                    </Link>
+                  ) : (
+                    <Link
+                      to="/scout-map"
+                      className="px-5 py-3 rounded-control bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs sm:text-sm shadow-raised transition-transform active:scale-95 inline-flex items-center gap-2 cursor-pointer"
+                    >
+                      <Compass size={14} />
+                      <span>Start with your land</span>
+                      <ArrowRight size={14} />
+                    </Link>
+                  )}
 
                   <button
                     type="button"
                     onClick={() => setShowBeginnerWizard(true)}
-                    className="px-4 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/25 text-white font-semibold text-xs transition-all inline-flex items-center gap-2 cursor-pointer backdrop-blur-md shadow-sm"
+                    className="px-3.5 py-2.5 rounded-control bg-white/10 hover:bg-white/20 border border-white/20 text-stone-100 font-semibold text-xs transition-colors inline-flex items-center gap-1.5 cursor-pointer backdrop-blur-md"
                   >
-                    <Sparkles size={14} className="text-amber-300" />
-                    <span>Getting Started: 60-Sec District Quiz</span>
+                    <span>60-Sec District Quiz</span>
                   </button>
 
                   <button
@@ -739,7 +874,7 @@ Generated via Outpost Living Malawi (Avondale Model & DCCMS/FAO Standards)`;
                       setGlossaryInitialTab('glossary');
                       setShowBeginnerGlossary(true);
                     }}
-                    className="px-2.5 py-2 text-xs font-semibold text-stone-100 hover:text-amber-300 underline underline-offset-4 inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+                    className="px-3 py-2 text-xs font-semibold text-stone-200 hover:text-amber-300 underline underline-offset-4 inline-flex items-center gap-1.5 cursor-pointer transition-colors"
                   >
                     <BookOpen size={13} className="text-amber-300" />
                     <span>Field Protocols &amp; Glossary</span>
@@ -747,20 +882,19 @@ Generated via Outpost Living Malawi (Avondale Model & DCCMS/FAO Standards)`;
                 </div>
               </motion.div>
 
-              {/* RIGHT (5 Cols): Live Sizer Deck & Integrated Command Tray */}
-              <div id="hero-sizer" className="lg:col-span-5 flex flex-col justify-center min-h-[330px]">
-                {/* Live Homestead Sizer Control Console with Integrated Quick Suites Tray */}
-                <div className="p-5 rounded-2xl bg-stone-950/50 backdrop-blur-xl border border-white/20 flex flex-col gap-3.5 shadow-2xl">
-                  {/* Integrated Command Tray: 5 Quick Suites */}
-                  <div className="flex items-center justify-between gap-1.5 pb-2 border-b border-white/12">
-                    <span className="text-[10px] font-mono text-amber-300 font-bold uppercase tracking-wider">
+              {/* RIGHT (5 Cols): Compact Active District Pulse & Quick Navigation Dock */}
+              <div id="hero-pulse" className="lg:col-span-5 flex flex-col justify-center">
+                <div className="p-4 sm:p-5 rounded-card bg-stone-950/60 backdrop-blur-xl border border-white/20 flex flex-col gap-3.5 shadow-raised">
+                  {/* Quick Suites Bar */}
+                  <div className="flex items-center justify-between gap-1.5 pb-2.5 border-b border-white/15">
+                    <span className="text-caption font-mono text-amber-300 font-bold uppercase tracking-wider">
                       Quick Suites
                     </span>
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-1.5 flex-wrap">
                       {[
                         { label: '28 GIS', to: '/scout-map', icon: Compass },
                         { label: 'Solar PV', to: '/calculators?tab=solar', icon: Sun },
-                        { label: 'NEWSTART', to: '/sanitarium', icon: HeartPulse },
+                        { label: 'Health', to: '/sanitarium', icon: HeartPulse },
                         { label: '3×3×3ft', to: '/what', icon: Sprout },
                         { label: '1844', to: '/vision', icon: BookOpen },
                       ].map((orb) => {
@@ -770,7 +904,7 @@ Generated via Outpost Living Malawi (Avondale Model & DCCMS/FAO Standards)`;
                             key={orb.label}
                             to={orb.to}
                             title={`Open ${orb.label}`}
-                            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-stone-200 hover:text-amber-300 text-[10px] font-mono font-semibold transition-all inline-flex items-center gap-1 shadow-xs"
+                            className="px-2 py-1 rounded-control bg-white/10 hover:bg-white/20 border border-white/15 text-stone-200 hover:text-amber-300 text-caption font-mono font-semibold transition-colors inline-flex items-center gap-1"
                           >
                             <OrbIcon size={11} className="text-amber-300" />
                             <span>{orb.label}</span>
@@ -780,93 +914,375 @@ Generated via Outpost Living Malawi (Avondale Model & DCCMS/FAO Standards)`;
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between gap-2 pb-1 border-b border-white/10">
+                  {/* Active District Status Readout */}
+                  <div className="flex items-center justify-between gap-2 pb-1">
                     <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-mono text-amber-300 font-semibold block">
-                          Live Homestead Sizer · Updates Quick Stats
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="text-caption font-mono text-amber-300 font-bold uppercase">
+                          Target District Pulse
                         </span>
-                        <span className="px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono font-bold">
-                          {autonomyIndex}% Autonomy
+                        <span className="text-caption font-mono font-bold text-emerald-400">
+                          · {autonomyIndex}% Autonomy
+                        </span>
+                        <span
+                          className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[10px] border border-emerald-500/35 font-semibold"
+                          title="Formula: Water security (40%) + Solar yield (35%) + Land buffer (25%)"
+                        >
+                          Formula Est.
                         </span>
                       </div>
-                      <h2 className="font-display text-base font-bold text-white">
-                        Configure Target District &amp; Household
+                      <h2 className="font-display text-lg font-bold text-white mt-0.5">
+                        {quickDistrict.name} ({quickDistrict.region})
                       </h2>
                     </div>
                     <Link
-                      to="/calculators"
+                      to={`/scout-map?district=${quickDistrict.id}`}
                       className="text-xs font-semibold text-amber-300 hover:text-white underline underline-offset-4 shrink-0"
                     >
-                      Full Suite →
+                      GIS View →
                     </Link>
                   </div>
 
-                  {/* 3 Strict 2-Column Aligned Controls */}
-                  <div className="flex flex-col gap-2.5 text-xs">
-                    <div className="grid grid-cols-[130px_1fr] items-center gap-3">
-                      <label htmlFor="hero-district-select" className="text-stone-200 font-medium">
-                        1. Target District
+                  <div className="grid grid-cols-3 gap-2 p-2.5 rounded-control bg-black/50 border border-white/10 text-xs font-mono">
+                    <div className="flex flex-col">
+                      <div className="flex items-center justify-between gap-1">
+                        <span className="text-stone-400 text-caption uppercase tracking-wider">Rainfall</span>
+                        <span
+                          className="text-[9.5px] text-sky-300/90 font-mono px-1 py-0.2 rounded bg-sky-950/70 border border-sky-400/30"
+                          title="Source: Malawi DCCMS meteorological baseline"
+                        >
+                          DCCMS Est.
+                        </span>
+                      </div>
+                      <span className="text-sky-300 font-bold tabular-nums">
+                        {quickDistrict.rainfallAnnualMm} mm/yr
+                      </span>
+                    </div>
+                    <div className="flex flex-col border-x border-white/10 px-2">
+                      <div className="flex items-center justify-between gap-1">
+                        <span className="text-stone-400 text-caption uppercase tracking-wider">Aquifer</span>
+                        <span
+                          className="text-[9.5px] text-emerald-300/90 font-mono px-1 py-0.2 rounded bg-emerald-950/70 border border-emerald-400/30"
+                          title="Source: National Water Resources Authority groundwater survey"
+                        >
+                          NWRA Est.
+                        </span>
+                      </div>
+                      <span className="text-emerald-300 font-bold tabular-nums">
+                        ~{quickDistrict.aquiferDepthM}m well
+                      </span>
+                    </div>
+                    <div className="flex flex-col pl-1">
+                      <div className="flex items-center justify-between gap-1">
+                        <span className="text-stone-400 text-caption uppercase tracking-wider">Soil Order</span>
+                        <span
+                          className="text-[9.5px] text-amber-300/90 font-mono px-1 py-0.2 rounded bg-amber-950/70 border border-amber-400/30"
+                          title="Source: FAO / HWSD v2.0 global soil classification"
+                        >
+                          FAO Est.
+                        </span>
+                      </div>
+                      <span className="text-amber-300 font-bold truncate">
+                        {quickDistrict.primarySoil.split(' ')[0]}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1 border-t border-white/10 text-xs">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setExpandedGuides((prev) => ({ ...prev, sizer: true }));
+                        document.getElementById('guide-sizer')?.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                      className="text-stone-200 hover:text-amber-300 font-medium inline-flex items-center gap-1 cursor-pointer transition-colors"
+                    >
+                      <Calculator size={12} className="text-amber-400" />
+                      <span>Configure Household &amp; Roof Catchment ↓</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsMasterplanOpen(true)}
+                      className="px-2.5 py-1 rounded-control bg-amber-400/90 hover:bg-amber-300 text-stone-950 font-bold text-caption font-mono cursor-pointer transition-colors"
+                    >
+                      Masterplan
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {/* ====================================================================
+          STANDARDIZED MAIN STACK: CARD PAD (16/24) & SECTION GAPS (32/48)
+      ==================================================================== */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full flex flex-col gap-8 sm:gap-12 mt-8 sm:mt-12">
+        {/* ====================================================================
+            2. A SINGLE "THIS SEASON" CARD FROM THE ALMANAC
+        ==================================================================== */}
+        <section
+          id="this-season"
+          aria-label="Current Season in Malawi"
+          className={cn(
+            'p-4 sm:p-6 rounded-card border transition-all',
+            isCharcoal
+              ? 'bg-white dark:bg-[#161619] border-stone-300/80 dark:border-white/12'
+              : glassSurfaceClass,
+            'shadow-raised'
+          )}
+        >
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-stone-200/80 dark:border-white/10">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-control bg-amber-400/20 dark:bg-amber-400/10 text-amber-800 dark:text-amber-300 flex items-center justify-center shrink-0">
+                <Calendar size={18} />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 text-xs font-mono font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">
+                  <span>This Season in Malawi</span>
+                  <span aria-hidden="true">·</span>
+                  <span>{currentSeasonalTask.months}</span>
+                </div>
+                <h2 className="font-display text-xl sm:text-2xl font-bold text-stone-900 dark:text-white tracking-tight">
+                  {currentSeasonalTask.season}
+                </h2>
+              </div>
+            </div>
+
+            <Link
+              to="/seasons"
+              className="px-3.5 py-1.5 rounded-control border border-stone-300/90 dark:border-white/15 bg-stone-100/80 dark:bg-white/5 hover:bg-stone-200/80 dark:hover:bg-white/10 text-stone-800 dark:text-stone-100 text-xs font-semibold inline-flex items-center gap-1.5 transition-colors self-start lg:self-auto"
+            >
+              <span>Open Full Farm Almanac</span>
+              <ArrowRight size={13} />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-5 pt-4 text-xs sm:text-sm">
+            <div className="md:col-span-7 flex flex-col gap-3">
+              <div>
+                <span className="font-mono text-xs font-bold text-stone-500 dark:text-stone-400 uppercase tracking-wider block">
+                  Priority Agronomy &amp; Homestead Focus:
+                </span>
+                <p className="text-stone-900 dark:text-stone-100 font-semibold mt-0.5 text-base leading-snug">
+                  {currentSeasonalTask.focus}
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <span className="font-mono text-xs font-bold text-stone-500 dark:text-stone-400 uppercase tracking-wider">
+                  Key Field Tasks:
+                </span>
+                <ul className="space-y-1 text-xs text-stone-700 dark:text-stone-300">
+                  {currentSeasonalTask.keyActivities.slice(0, 3).map((act, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span className="text-amber-600 dark:text-amber-400 font-bold shrink-0">·</span>
+                      <span>{act}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className="md:col-span-5 flex flex-col justify-between gap-3 p-3.5 rounded-control bg-amber-500/10 dark:bg-amber-400/5 border border-amber-500/20 dark:border-amber-400/15">
+              <div>
+                <span className="font-mono text-xs font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider block">
+                  Recommended Crops:
+                </span>
+                <div className="flex flex-wrap gap-1.5 mt-1.5">
+                  {currentSeasonalTask.recommendedCrops.map((c) => (
+                    <span
+                      key={c}
+                      className="px-2 py-0.5 rounded-control bg-white/80 dark:bg-black/40 text-stone-800 dark:text-stone-200 font-semibold text-xs border border-stone-200/80 dark:border-white/10"
+                    >
+                      {c}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-amber-500/20 dark:border-amber-400/15 text-xs italic text-stone-800 dark:text-stone-200">
+                “{currentSeasonalTask.proTip}”
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ====================================================================
+            3. A 2-COLUMN GRID OF UP TO SIX ENTRY POINTS
+        ==================================================================== */}
+        <section id="gateways" aria-label="Core Homestead Gateways" className="flex flex-col gap-4">
+          <div>
+            <span className="text-xs font-mono font-bold text-emerald-800 dark:text-emerald-400 uppercase tracking-wider">
+              Essential Pathways
+            </span>
+            <h2 className="font-display text-xl sm:text-2xl font-bold text-stone-900 dark:text-white tracking-tight">
+              Homestead Gateways &amp; Core Manuals
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            {CORE_ENTRY_POINTS.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.title}
+                  to={item.to}
+                  className={cn(
+                    'group p-4 sm:p-6 rounded-card border transition-all duration-200 flex flex-col justify-between gap-3',
+                    isCharcoal
+                      ? 'bg-white dark:bg-[#161619] border-stone-300/80 dark:border-white/12 hover:border-amber-400/60'
+                      : glassSurfaceClass,
+                    'shadow-raised hover:-translate-y-0.5'
+                  )}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-10 h-10 rounded-control bg-stone-100 dark:bg-white/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        <Icon size={20} className={item.accent} />
+                      </div>
+                      <div>
+                        <span className="text-caption font-mono text-stone-500 dark:text-stone-400 font-semibold block">
+                          {item.meta}
+                        </span>
+                        <h3 className="font-display text-base sm:text-lg font-bold text-stone-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-300 transition-colors">
+                          {item.title}
+                        </h3>
+                      </div>
+                    </div>
+                    <ArrowRight
+                      size={16}
+                      className="text-stone-400 group-hover:text-amber-500 group-hover:translate-x-0.5 transition-all shrink-0 mt-1"
+                    />
+                  </div>
+
+                  <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 leading-relaxed">
+                    {item.description}
+                  </p>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* ====================================================================
+            4. EVERYTHING ELSE BEHIND "MORE GUIDES" COLLAPSIBLE SECTIONS
+        ==================================================================== */}
+        <section
+          id="more-guides"
+          aria-label="More Guides and Detailed Workbenches"
+          className="flex flex-col gap-4 pt-2 border-t border-stone-200/80 dark:border-white/10"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <span className="text-xs font-mono font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">
+                Full Technical Suite
+              </span>
+              <h2 className="font-display text-xl sm:text-2xl font-bold text-stone-900 dark:text-white tracking-tight">
+                More Guides &amp; Detailed Workbenches
+              </h2>
+              <p className="text-xs text-stone-600 dark:text-stone-400 mt-0.5">
+                Explore in-depth engineering sizers, 28-district GIS telemetry, the 4 Pillars, 1844 chart, and family hearth.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={toggleAllGuides}
+              className="px-3.5 py-1.5 rounded-control bg-stone-100 dark:bg-white/10 hover:bg-stone-200 dark:hover:bg-white/15 text-stone-800 dark:text-stone-100 text-xs font-semibold cursor-pointer transition-colors inline-flex items-center gap-1.5"
+            >
+              <span>{areAllGuidesExpanded ? 'Collapse All Guides ↑' : 'Expand All Guides ↓'}</span>
+            </button>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            {/* COLLAPSIBLE 1: LIVE DISTRICT & HOUSEHOLD SIZER CONSOLE */}
+            <div
+              id="guide-sizer"
+              className={cn(
+                'rounded-card border transition-all overflow-hidden',
+                isCharcoal
+                  ? 'bg-white dark:bg-[#161619] border-stone-300/80 dark:border-white/12'
+                  : glassSurfaceClass,
+                'shadow-raised'
+              )}
+            >
+              <button
+                type="button"
+                onClick={() => toggleGuide('sizer')}
+                className="w-full p-4 sm:p-5 flex items-center justify-between gap-3 text-left cursor-pointer hover:bg-stone-50 dark:hover:bg-white/5 transition-colors"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-8 h-8 rounded-control bg-amber-400/20 text-amber-800 dark:text-amber-300 flex items-center justify-center shrink-0">
+                    <Calculator size={16} />
+                  </div>
+                  <div>
+                    <h3 className="font-display text-base font-bold text-stone-900 dark:text-white leading-tight">
+                      Live Homestead Sizer &amp; Specification Engine
+                    </h3>
+                    <p className="text-xs text-stone-500 dark:text-stone-400 truncate">
+                      Size water cisterns, solar PV arrays, biochar quota, and land acres for your household.
+                    </p>
+                  </div>
+                </div>
+                <ChevronDown
+                  size={16}
+                  className={cn(
+                    'text-stone-500 transition-transform shrink-0',
+                    expandedGuides.sizer && 'rotate-180'
+                  )}
+                />
+              </button>
+
+              {expandedGuides.sizer && (
+                <div className="p-4 sm:p-6 border-t border-stone-200/80 dark:border-white/10 flex flex-col gap-4 bg-stone-50/50 dark:bg-black/20">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-xs">
+                    {/* District selector */}
+                    <div className="flex flex-col gap-1.5">
+                      <label htmlFor="guide-district-select" className="font-bold text-stone-800 dark:text-stone-200">
+                        1. Target District:
                       </label>
                       <select
-                        id="hero-district-select"
+                        id="guide-district-select"
                         value={quickDistrictId}
                         onChange={(e) => setQuickDistrictId(e.target.value)}
-                        className="w-full px-2.5 py-1.5 rounded-xl bg-black/45 border border-white/20 text-xs font-semibold text-white focus:outline-none focus:ring-1 focus:ring-amber-400 cursor-pointer"
+                        className="w-full px-3 py-2 rounded-control bg-white dark:bg-stone-900 border border-stone-300 dark:border-white/20 text-xs font-semibold text-stone-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-amber-400 cursor-pointer"
                       >
                         {DISTRICT_LIST.map((d) => (
-                          <option key={d.id} value={d.id} className="bg-stone-900 text-white">
-                            {d.name} ({d.rainfallAnnualMm}mm/yr)
+                          <option key={d.id} value={d.id}>
+                            {d.name} ({d.rainfallAnnualMm}mm/yr · {d.primarySoil})
                           </option>
                         ))}
                       </select>
                     </div>
 
+                    {/* Household slider */}
                     <div className="flex flex-col gap-1.5">
-                      <div className="grid grid-cols-[130px_1fr] items-center gap-3">
-                        <label htmlFor="hero-family-range" className="text-stone-200 font-medium">
-                          2. Household Size
+                      <div className="flex justify-between items-center">
+                        <label htmlFor="guide-household-range" className="font-bold text-stone-800 dark:text-stone-200">
+                          2. Household Size:
                         </label>
-                        <div className="flex items-center gap-2 w-full">
-                          <button
-                            type="button"
-                            aria-label="Decrease household size"
-                            onClick={() => setQuickFamilySize(Math.max(1, quickFamilySize - 1))}
-                            className="w-6 h-6 rounded-md bg-white/10 hover:bg-white/20 text-stone-200 hover:text-white flex items-center justify-center font-bold text-xs cursor-pointer border border-white/10 shrink-0"
-                          >
-                            -
-                          </button>
-                          <input
-                            id="hero-family-range"
-                            type="range"
-                            min={1}
-                            max={16}
-                            step={1}
-                            value={quickFamilySize}
-                            onChange={(e) => setQuickFamilySize(Number(e.target.value))}
-                            className="w-full accent-amber-400 cursor-pointer"
-                          />
-                          <button
-                            type="button"
-                            aria-label="Increase household size"
-                            onClick={() => setQuickFamilySize(Math.min(16, quickFamilySize + 1))}
-                            className="w-6 h-6 rounded-md bg-white/10 hover:bg-white/20 text-stone-200 hover:text-white flex items-center justify-center font-bold text-xs cursor-pointer border border-white/10 shrink-0"
-                          >
-                            +
-                          </button>
-                          <span className="font-mono font-bold text-amber-300 tabular-nums w-16 text-right shrink-0">
-                            {quickFamilySize} {quickFamilySize === 1 ? 'person' : 'people'}
-                          </span>
-                        </div>
+                        <span className="font-mono font-bold text-amber-700 dark:text-amber-400">
+                          {quickFamilySize} people
+                        </span>
                       </div>
-
-                      {/* Quick Household Presets */}
-                      <div className="flex items-center justify-end gap-1.5 pl-[130px]">
+                      <input
+                        id="guide-household-range"
+                        type="range"
+                        min={1}
+                        max={16}
+                        step={1}
+                        value={quickFamilySize}
+                        onChange={(e) => setQuickFamilySize(Number(e.target.value))}
+                        className="w-full accent-amber-500 cursor-pointer"
+                      />
+                      <div className="flex items-center justify-between gap-1 pt-1">
                         {[
-                          { label: 'Couple: 2', size: 2, roof: 50 },
-                          { label: 'Family: 5', size: 5, roof: 90 },
-                          { label: 'Homestead: 8', size: 8, roof: 110 },
-                          { label: 'Outpost: 12', size: 12, roof: 140 },
+                          { label: 'Couple (2)', size: 2, roof: 50 },
+                          { label: 'Family (5)', size: 5, roof: 90 },
+                          { label: 'Homestead (8)', size: 8, roof: 110 },
+                          { label: 'Outpost (12)', size: 12, roof: 140 },
                         ].map((preset) => (
                           <button
                             key={preset.label}
@@ -876,10 +1292,10 @@ Generated via Outpost Living Malawi (Avondale Model & DCCMS/FAO Standards)`;
                               setQuickRoofAreaSqm(preset.roof);
                             }}
                             className={cn(
-                              'px-2 py-0.5 rounded text-[10px] font-mono transition-colors cursor-pointer',
+                              'px-2 py-0.5 rounded-control text-caption font-mono transition-colors cursor-pointer border',
                               quickFamilySize === preset.size
-                                ? 'bg-amber-400 text-stone-950 font-bold'
-                                : 'bg-white/10 text-stone-300 hover:text-white hover:bg-white/20'
+                                ? 'bg-amber-400 text-stone-950 font-bold border-amber-500'
+                                : 'bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border-stone-200 dark:border-white/10 hover:bg-stone-100'
                             )}
                           >
                             {preset.label}
@@ -888,9 +1304,10 @@ Generated via Outpost Living Malawi (Avondale Model & DCCMS/FAO Standards)`;
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-[130px_1fr] items-center gap-3">
-                      <span className="text-stone-200 font-medium">3. Roof Catchment</span>
-                      <div className="grid grid-cols-3 rounded-xl bg-black/40 border border-white/15 p-0.5 w-full">
+                    {/* Roof Catchment */}
+                    <div className="flex flex-col gap-1.5">
+                      <span className="font-bold text-stone-800 dark:text-stone-200">3. Roof Catchment:</span>
+                      <div className="grid grid-cols-3 gap-1">
                         {[
                           { label: '50m²', sqm: 50 },
                           { label: '90m²', sqm: 90 },
@@ -901,10 +1318,10 @@ Generated via Outpost Living Malawi (Avondale Model & DCCMS/FAO Standards)`;
                             type="button"
                             onClick={() => setQuickRoofAreaSqm(p.sqm)}
                             className={cn(
-                              'py-1 rounded-lg font-mono text-xs font-semibold transition-colors cursor-pointer text-center',
+                              'py-1.5 rounded-control font-mono text-xs font-semibold transition-colors cursor-pointer text-center border',
                               quickRoofAreaSqm === p.sqm
-                                ? 'bg-white text-stone-950 font-bold'
-                                : 'text-stone-300 hover:text-white'
+                                ? 'bg-stone-900 text-white dark:bg-amber-400 dark:text-stone-950 font-bold border-transparent'
+                                : 'bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-stone-200 dark:border-white/10'
                             )}
                           >
                             {p.label}
@@ -914,939 +1331,519 @@ Generated via Outpost Living Malawi (Avondale Model & DCCMS/FAO Standards)`;
                     </div>
                   </div>
 
-                  {/* Live Autonomy Metrics HUD */}
-                  <div className="grid grid-cols-3 gap-1.5 p-2 rounded-xl bg-black/50 border border-white/12 text-[11px] font-mono shadow-inner">
-                    <div className="flex flex-col">
-                      <span className="text-stone-400 text-[9px] uppercase tracking-wider">Water Reserve</span>
-                      <span className="text-sky-300 font-bold tabular-nums">
-                        ~{Math.max(1, Math.round(quickEstimates.annualRainwaterLiters / (quickFamilySize * 100 * 30)))} mos dry
+                  {/* Telemetry Output HUD */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 p-3 rounded-control bg-white dark:bg-stone-900 border border-stone-200 dark:border-white/10 font-mono text-xs">
+                    <div>
+                      <span className="text-stone-500 text-caption uppercase block">Rainwater</span>
+                      <span className="text-sky-600 dark:text-sky-300 font-bold text-sm">
+                        ~{Math.round(quickEstimates.annualRainwaterLiters / 1000)}k L/yr
                       </span>
                     </div>
-                    <div className="flex flex-col border-x border-white/10 px-1.5">
-                      <span className="text-stone-400 text-[9px] uppercase tracking-wider">Off-Grid Solar</span>
-                      <span className="text-amber-300 font-bold tabular-nums">
+                    <div>
+                      <span className="text-stone-500 text-caption uppercase block">Dry Reserve</span>
+                      <span className="text-emerald-600 dark:text-emerald-300 font-bold text-sm">
+                        ~{Math.max(1, Math.round(quickEstimates.annualRainwaterLiters / (quickFamilySize * 100 * 30)))} mos
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-stone-500 text-caption uppercase block">Solar PV &amp; Bank</span>
+                      <span className="text-amber-600 dark:text-amber-300 font-bold text-sm">
                         {quickEstimates.recommendedSolarKw}kWp · {quickEstimates.recommendedBatteryKwh}kWh
                       </span>
                     </div>
-                    <div className="flex flex-col pl-1">
-                      <span className="text-stone-400 text-[9px] uppercase tracking-wider">Land / Pits</span>
-                      <span className="text-emerald-300 font-bold tabular-nums">
+                    <div>
+                      <span className="text-stone-500 text-caption uppercase block">Land &amp; Pits</span>
+                      <span className="text-stone-900 dark:text-white font-bold text-sm">
                         {quickEstimates.totalAcres}ac · {quickEstimates.orchardPitCount} pits
                       </span>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between text-xs text-stone-300 pt-2 border-t border-white/12">
-                    <span className="truncate">
-                      <strong className="text-white">{quickDistrict.name}:</strong> {quickDistrict.primarySoil} · Well ~{quickDistrict.aquiferDepthM}m
-                      {isLoadingSizerTelemetry && (
-                        <RefreshCw size={10} className="inline ml-1.5 animate-spin text-amber-300" />
-                      )}
+                  <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-stone-200/80 dark:border-white/10 text-xs">
+                    <span className="text-stone-600 dark:text-stone-400">
+                      <strong>{quickDistrict.name}:</strong> {quickDistrict.primarySoil} (Soil Estimate) · Aquifer ~{quickDistrict.aquiferDepthM}m (Depth Estimate)
                     </span>
-                    <div className="flex items-center gap-2 shrink-0 ml-2">
-                      <button
-                        type="button"
-                        onClick={() => setIsMasterplanOpen(true)}
-                        title="Open comprehensive Outpost Masterplan Blueprint"
-                        className="px-2 py-0.5 rounded-md bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold font-mono text-[10px] inline-flex items-center gap-1 transition-all cursor-pointer shadow-xs"
-                      >
-                        <FileText size={10} />
-                        <span>Masterplan →</span>
-                      </button>
+                    <div className="flex items-center gap-2">
                       <button
                         type="button"
                         onClick={handleCopySizerPlan}
-                        title="Copy itemized outpost specifications to clipboard"
-                        className="px-2 py-0.5 rounded-md bg-white/10 hover:bg-white/20 text-stone-200 hover:text-amber-300 font-mono text-[10px] inline-flex items-center gap-1 transition-all cursor-pointer border border-white/10"
+                        className="px-3 py-1.5 rounded-control border border-stone-300 dark:border-white/20 bg-white dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 font-mono text-xs inline-flex items-center gap-1 cursor-pointer"
                       >
-                        {copiedSizerPlan ? (
-                          <>
-                            <Check size={10} className="text-emerald-400" />
-                            <span className="text-emerald-400 font-semibold">Copied!</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy size={10} />
-                            <span>Export Spec</span>
-                          </>
-                        )}
+                        {copiedSizerPlan ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
+                        <span>{copiedSizerPlan ? 'Copied' : 'Export Spec'}</span>
                       </button>
-                      <Link
-                        to={`/scout-map?district=${quickDistrict.id}`}
-                        className="text-amber-300 hover:underline font-semibold"
+                      <button
+                        type="button"
+                        onClick={() => setIsMasterplanOpen(true)}
+                        className="px-3 py-1.5 rounded-control bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs inline-flex items-center gap-1 cursor-pointer"
                       >
-                        GIS Map →
-                      </Link>
+                        <FileText size={12} />
+                        <span>Masterplan Blueprint</span>
+                      </button>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      {/* ====================================================================
-          2. NEURONEST-GUIDED PASTEL BENTO QUICK STATS & 2-COLUMN COMMAND SPLIT
-      ==================================================================== */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 flex flex-col gap-6 w-full">
-        {/* HOMESTEAD COMMAND DOCK: QUICK-JUMP SECTION SWITCHER */}
-        <nav
-          aria-label="Homestead Sections Quick Jump"
-          className="flex items-center justify-between gap-2 overflow-x-auto p-1.5 rounded-2xl bg-white/90 dark:bg-[#0D1D13]/90 backdrop-blur-md border border-stone-200/90 dark:border-emerald-900/60 shadow-xs text-xs font-mono"
-        >
-          <div className="flex items-center gap-1">
-            {[
-              { id: 'hero-sizer', label: '01. Sizer & Blueprint', icon: Calculator },
-              { id: 'quick-stats', label: '02. Baseline Stats', icon: Layers },
-              { id: 'workbenches', label: '03. Workbenches & Altar', icon: Sparkles },
-              { id: 'four-pillars', label: '04. The 4 Pillars', icon: ShieldCheck },
-              { id: 'districts-explorer', label: '05. 28 Districts GIS', icon: Compass },
-            ].map((sec) => {
-              const Icon = sec.icon;
-              return (
-                <button
-                  key={sec.id}
-                  type="button"
-                  onClick={() => {
-                    const el = document.getElementById(sec.id);
-                    if (el) el.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  className="px-3 py-1.5 rounded-xl text-stone-700 dark:text-stone-300 hover:text-stone-950 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-white/10 transition-colors inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap font-medium"
-                >
-                  <Icon size={12} className="text-amber-500 dark:text-amber-400" />
-                  <span>{sec.label}</span>
-                </button>
-              );
-            })}
-          </div>
-          <div className="hidden md:flex items-center gap-2 pr-2 text-[11px] text-stone-500 dark:text-stone-400">
-            <span>District: <strong className="text-stone-900 dark:text-white font-bold">{quickDistrict.name}</strong></span>
-            <span aria-hidden="true">·</span>
-            <span className="text-amber-700 dark:text-amber-300 font-bold">{autonomyIndex}% Autonomy</span>
-          </div>
-        </nav>
-
-        {/* 2A. QUICK STATS: 4 SOFT PASTEL BENTO CARDS (EXACT NEURONEST PROPORTIONS) */}
-        <section id="quick-stats" aria-label="Quick Stats Family Homestead Baseline" className="flex flex-col gap-3.5">
-          <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <div className="flex items-center gap-3">
-              <h2 className="font-display text-xl sm:text-2xl font-bold text-stone-900 dark:text-white tracking-tight">
-                Quick Stats
-              </h2>
-              <button
-                type="button"
-                onClick={() => setIsMasterplanOpen(true)}
-                className="text-xs font-mono font-semibold text-amber-700 dark:text-amber-400 hover:underline inline-flex items-center gap-1 cursor-pointer"
-              >
-                <FileText size={12} />
-                <span>Open Full Masterplan Blueprint →</span>
-              </button>
-            </div>
-            <span className="text-xs font-mono font-semibold text-stone-700 dark:text-stone-300">
-              Live Sizing for {quickDistrict.name} ({quickDistrict.rainfallAnnualMm}mm/yr) · {quickFamilySize} Members · {quickRoofAreaSqm}m² Roof
-            </span>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, delay: 0.15 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
-          >
-            {/* Pastel Card 1: Soft Ice Blue (#DCE6F2 / dark:slate) */}
-            <Link
-              to="/calculators?tab=land"
-              className="group p-5 rounded-3xl bg-[#DCE6F2] dark:bg-[#182333] hover:bg-[#d0ddec] dark:hover:bg-[#1F2E42] text-stone-950 dark:text-stone-100 border border-black/10 dark:border-white/15 dark:ring-1 dark:ring-white/5 shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between min-h-[156px]"
-            >
-              <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-2xl bg-stone-950 text-white dark:bg-sky-500/20 dark:text-sky-300 flex items-center justify-center shadow-xs">
-                  <Sprout size={18} />
-                </div>
-                <span className="text-xs font-mono font-bold text-stone-900 dark:text-sky-300 group-hover:underline">
-                  {quickEstimates.stapleAcres}ac crops + {quickEstimates.orchardAcres}ac trees →
-                </span>
-              </div>
-              <div className="mt-4">
-                <div className="text-3xl sm:text-4xl font-black tracking-tight text-stone-950 dark:text-white tabular-nums">
-                  {quickEstimates.totalAcres}+ ac
-                </div>
-                <div className="text-xs font-bold text-stone-800 dark:text-stone-300 mt-1">
-                  Recommended Family Land
-                </div>
-              </div>
-            </Link>
-
-            {/* Pastel Card 2: Soft Sage Mint (#DCF2DE / dark:emerald) */}
-            <Link
-              to="/calculators?tab=rainwater"
-              className="group p-5 rounded-3xl bg-[#DCF2DE] dark:bg-[#12281D] hover:bg-[#ceebD1] dark:hover:bg-[#183526] text-stone-950 dark:text-stone-100 border border-black/10 dark:border-emerald-600/35 dark:ring-1 dark:ring-white/5 shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between min-h-[156px]"
-            >
-              <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-2xl bg-stone-950 text-white dark:bg-emerald-500/20 dark:text-emerald-300 flex items-center justify-center shadow-xs">
-                  <Droplets size={18} />
-                </div>
-                <span className="text-xs font-mono font-bold text-stone-900 dark:text-emerald-300 group-hover:underline">
-                  ~{Math.max(1, Math.ceil((quickEstimates.annualRainwaterLiters * 0.25) / 5000))} × 5,000L Tanks →
-                </span>
-              </div>
-              <div className="mt-4">
-                <div className="text-3xl sm:text-4xl font-black tracking-tight text-stone-950 dark:text-white tabular-nums">
-                  {Math.round(quickEstimates.annualRainwaterLiters / 1000)}k L
-                </div>
-                <div className="text-xs font-bold text-stone-800 dark:text-stone-300 mt-1">
-                  Annual Roof Rainwater
-                </div>
-              </div>
-            </Link>
-
-            {/* Pastel Card 3: Soft Buttercream Gold (#FBF3C9 / dark:amber) */}
-            <Link
-              to="/calculators?tab=solar"
-              className="group p-5 rounded-3xl bg-[#FBF3C9] dark:bg-[#282110] hover:bg-[#f7ecb4] dark:hover:bg-[#352B15] text-stone-950 dark:text-stone-100 border border-black/10 dark:border-amber-600/35 dark:ring-1 dark:ring-white/5 shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between min-h-[156px]"
-            >
-              <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-2xl bg-stone-950 text-white dark:bg-amber-500/20 dark:text-amber-300 flex items-center justify-center shadow-xs">
-                  <Sun size={18} />
-                </div>
-                <span className="text-xs font-mono font-bold text-stone-900 dark:text-amber-300 group-hover:underline">
-                  {quickEstimates.recommendedBatteryKwh} kWh LiFePO4 →
-                </span>
-              </div>
-              <div className="mt-4">
-                <div className="text-3xl sm:text-4xl font-black tracking-tight text-stone-950 dark:text-white tabular-nums">
-                  {quickEstimates.recommendedSolarKw} kW
-                </div>
-                <div className="text-xs font-bold text-stone-800 dark:text-stone-300 mt-1">
-                  Off-Grid Solar Array
-                </div>
-              </div>
-            </Link>
-
-            {/* Pastel Card 4: Soft Lavender (#EAE2F8 / dark:purple) */}
-            <Link
-              to="/tracker"
-              className="group p-5 rounded-3xl bg-[#EAE2F8] dark:bg-[#231A30] hover:bg-[#dfd4f4] dark:hover:bg-[#2C213D] text-stone-950 dark:text-stone-100 border border-black/10 dark:border-purple-600/35 dark:ring-1 dark:ring-white/5 shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between min-h-[156px]"
-            >
-              <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-2xl bg-stone-950 text-white dark:bg-purple-500/20 dark:text-purple-300 flex items-center justify-center shadow-xs">
-                  <CheckCircle2 size={18} />
-                </div>
-                <span className="text-xs font-mono font-bold text-stone-900 dark:text-purple-300 group-hover:underline">
-                  {completedMilestonesCount}/{totalPossibleItems} Tasks →
-                </span>
-              </div>
-              <div className="mt-4">
-                <div className="text-3xl sm:text-4xl font-black tracking-tight text-stone-950 dark:text-white tabular-nums">
-                  {readinessPercentage}%
-                </div>
-                <div className="text-xs font-bold text-stone-800 dark:text-stone-300 mt-1">
-                  Exodus Readiness Score
-                </div>
-              </div>
-            </Link>
-          </motion.div>
-        </section>
-
-        {/* 2B. 2-COLUMN MODULAR SPLIT: QUICK LAUNCH WORKBENCHES & SANCTUARY ACTIVITY (NEURONEST LAYOUT) */}
-        <section
-          id="workbenches"
-          aria-label="Quick Launch Workbenches and Sanctuary Activity"
-          className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch scroll-mt-20"
-        >
-          {/* LEFT CONTAINER (6 Cols): Quick Launch Workbenches (Matte Charcoal Cards + Active Pills) */}
-          <div
-            className={cn(
-              'lg:col-span-6 p-5 sm:p-6 rounded-3xl border flex flex-col justify-between gap-4',
-              isCharcoal
-                ? 'bg-white dark:bg-[#161619] border-stone-300/80 dark:border-white/12'
-                : glassSurfaceClass
-            )}
-          >
-            <div className="flex items-center justify-between gap-2">
-              <h2 className="font-display text-xl font-bold text-stone-900 dark:text-white tracking-tight">
-                Quick Launch Workbenches
-              </h2>
-              <Link
-                to="/calculators"
-                className="text-xs font-semibold text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white"
-              >
-                All Suites →
-              </Link>
+              )}
             </div>
 
-            <div className="flex flex-col gap-3">
-              {POWER_TOOLS_DOCK.slice(0, 4).map((tool) => {
-                const Icon = tool.icon;
-                return (
-                  <Link
-                    key={tool.title}
-                    to={tool.to}
-                    className="group p-4 rounded-2xl bg-stone-100/90 dark:bg-[#1E1E22] hover:bg-stone-200/80 dark:hover:bg-[#25252A] border border-stone-200/90 dark:border-white/10 transition-all flex flex-col gap-2"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs font-mono text-stone-500 dark:text-stone-400">
-                        {quickDistrict.name} · {tool.meta}
-                      </span>
-                      <span className="inline-flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 text-xs font-semibold">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400" />
-                        <span>Active</span>
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between gap-2">
-                      <h3 className="font-display text-base sm:text-lg font-bold text-stone-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-amber-300 transition-colors">
-                        {tool.title}
-                      </h3>
-                      <Icon size={16} className={cn('shrink-0', tool.accent)} />
-                    </div>
-
-                    <p className="text-xs text-stone-600 dark:text-stone-400 leading-relaxed line-clamp-2">
-                      {tool.desc}
-                    </p>
-
-                    <div className="flex items-center justify-between pt-1 text-xs font-mono">
-                      <span className="inline-flex items-center gap-1.5 text-stone-700 dark:text-stone-300 font-semibold">
-                        <Layers size={12} className="text-stone-400 shrink-0" />
-                        <span>{quickEstimates.orchardPitCount} Pits · {quickDistrict.rainfallAnnualMm}mm/yr</span>
-                      </span>
-                      <span className="text-emerald-700 dark:text-amber-300 font-bold group-hover:underline">
-                        Open Suite →
-                      </span>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* RIGHT CONTAINER (6 Cols): Recent Activity & Adventist Family Hearth (Pastel Cards) */}
-          <div
-            className={cn(
-              'lg:col-span-6 p-5 sm:p-6 rounded-3xl border flex flex-col justify-between gap-4',
-              isCharcoal
-                ? 'bg-white dark:bg-[#161619] border-stone-300/80 dark:border-white/12'
-                : glassSurfaceClass
-            )}
-          >
-            <div className="flex items-center justify-between gap-2">
-              <h2 className="font-display text-xl font-bold text-stone-900 dark:text-white tracking-tight">
-                Family Hearth &amp; Sabbath Watch
-              </h2>
-              <button
-                type="button"
-                onClick={() =>
-                  setDevotionalIndex((prev) => (prev + 1) % DAILY_DEVOTIONALS.length)
-                }
-                className="text-xs font-mono font-semibold text-stone-600 dark:text-stone-300 hover:text-stone-950 dark:hover:text-white inline-flex items-center gap-1 cursor-pointer"
-              >
-                <span>Next Devotional</span>
-                <RefreshCw size={11} />
-              </button>
-            </div>
-
-            <div className="flex flex-col gap-3.5">
-              {/* Pastel Activity Card 1 (Soft Ice Blue #DCE6F2 / dark:slate — Family Worship Altar) */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-[#DCE6F2] dark:bg-[#182333] text-stone-950 dark:text-stone-100 border border-black/10 dark:border-white/15 dark:ring-1 dark:ring-white/5 flex flex-col gap-2.5 shadow-sm">
-                <div className="flex items-center justify-between gap-2 text-xs text-stone-900 dark:text-stone-200 font-bold">
-                  <span>Morning &amp; Evening Altar · {todayDevotional.scripture.reference} (KJV)</span>
-                  <Link
-                    to="/devotional"
-                    title="Open Devotional Treasury"
-                    className="p-1 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 text-stone-950 dark:text-stone-100 font-bold"
-                  >
-                    <BookOpen size={14} />
-                  </Link>
-                </div>
-
-                <h3 className="font-display text-base sm:text-lg font-bold text-stone-950 dark:text-white leading-snug">
-                  “{todayDevotional.scripture.verse}”
-                </h3>
-
-                <p className="text-xs text-stone-900 dark:text-stone-200 font-medium leading-relaxed">
-                  <strong className="text-stone-950 dark:text-white font-bold">{todayDevotional.egwQuote.egwCode}:</strong> “{todayDevotional.egwQuote.text}”
-                </p>
-
-                <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-black/15 dark:border-white/10">
-                  <span className="font-mono text-xs font-bold text-[#1E3A8A] dark:text-sky-300">
-                    Spirit of Prophecy · Family Altar
-                  </span>
-                  <Link
-                    to="/devotional"
-                    className="text-xs font-extrabold text-stone-950 dark:text-amber-300 hover:underline"
-                  >
-                    Read Full Study →
-                  </Link>
-                </div>
-              </div>
-
-              {/* Pastel Activity Card 2 (Soft Sage Mint #DCF2DE / dark:emerald — Malawi Sabbath Sunset) */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-[#DCF2DE] dark:bg-[#12281D] text-stone-950 dark:text-stone-100 border border-black/10 dark:border-emerald-600/35 dark:ring-1 dark:ring-white/5 flex flex-col gap-2.5 shadow-sm">
-                <div className="flex items-center justify-between gap-2 text-xs text-stone-900 dark:text-stone-200 font-bold">
-                  <span>Malawi Sabbath Eve Sunset · {currentMonthName} (CAT UTC+2)</span>
-                  <Sun size={14} className="text-stone-950 dark:text-amber-300" />
-                </div>
-
-                <h3 className="font-display text-base sm:text-lg font-bold text-stone-950 dark:text-white tabular-nums">
-                  North {sabbathSunset.north} · Central {sabbathSunset.central} · South {sabbathSunset.south}
-                </h3>
-
-                <p className="text-xs text-stone-900 dark:text-stone-200 font-medium leading-relaxed">
-                  Friday tool-down: <strong className="text-stone-950 dark:text-white font-bold">{sabbathSunset.guardCentral} CAT</strong>. Before sunset, gather the family to read God’s word, sing and pray (<em>6T 356</em>).
-                </p>
-
-                <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-black/15 dark:border-white/10">
-                  <span className="font-mono text-xs font-bold text-[#14532D] dark:text-emerald-300">
-                    Leviticus 23:32 · 6T 356
-                  </span>
-                  <Link
-                    to="/devotional"
-                    className="text-xs font-extrabold text-stone-950 dark:text-amber-300 hover:underline"
-                  >
-                    Friday Checklist →
-                  </Link>
-                </div>
-              </div>
-
-              {/* Pastel Activity Card 3 (Soft Buttercream #FBF3C9 / dark:amber — Children's Nature Classroom) */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-[#FBF3C9] dark:bg-[#282110] text-stone-950 dark:text-stone-100 border border-black/10 dark:border-amber-600/35 dark:ring-1 dark:ring-white/5 flex flex-col gap-2.5 shadow-sm">
-                <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-stone-900 dark:text-stone-200 font-bold">
-                  <span>Children’s Nature Classroom ({activeYouthTrack.counselRef})</span>
-                  <div className="inline-flex items-center gap-1 bg-black/10 dark:bg-white/10 p-0.5 rounded-lg">
-                    {(['ages-4-8', 'ages-9-13', 'ages-14-18'] as YouthAgeTrack[]).map(
-                      (trackKey) => {
-                        const track = FAMILY_NATURE_CURRICULUM[trackKey];
-                        const active = selectedAgeTrack === trackKey;
-                        return (
-                          <button
-                            key={trackKey}
-                            type="button"
-                            onClick={() => setSelectedAgeTrack(trackKey)}
-                            className={cn(
-                              'px-2 py-0.5 rounded-md font-mono text-xs transition-colors cursor-pointer',
-                              active
-                                ? 'bg-stone-950 dark:bg-amber-400 text-white dark:text-stone-950 font-bold'
-                                : 'text-stone-800 dark:text-stone-300 hover:text-stone-950 dark:hover:text-white font-semibold'
-                            )}
-                          >
-                            {track.label}
-                          </button>
-                        );
-                      }
-                    )}
-                  </div>
-                </div>
-
-                <h3 className="font-display text-base sm:text-lg font-bold text-stone-950 dark:text-white">
-                  {activeYouthTrack.subtitle}
-                </h3>
-
-                <p className="text-xs text-stone-900 dark:text-stone-200 font-medium leading-relaxed">
-                  <strong className="text-stone-950 dark:text-white font-bold">Lesson:</strong> {activeYouthTrack.objectLesson} · <strong className="text-stone-950 dark:text-white font-bold">Trade:</strong> {activeYouthTrack.practicalSkill}
-                </p>
-
-                <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-black/15 dark:border-white/10">
-                  <span className="font-mono text-xs font-bold text-stone-900 dark:text-amber-300">
-                    Avondale Model
-                  </span>
-                  <Link
-                    to={activeYouthTrack.linkTo}
-                    className="text-xs font-extrabold text-stone-950 dark:text-amber-300 hover:underline"
-                  >
-                    {activeYouthTrack.linkLabel} →
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* 2. INTERACTIVE CLIMATE ZONE & 28-DISTRICT EXPLORER */}
-        <section
-          id="districts-explorer"
-          aria-label="Malawi Climate Zones and 28-District Explorer"
-          className={cn('p-5 sm:p-6 rounded-2xl flex flex-col gap-4 scroll-mt-20', glassSurfaceClass)}
-        >
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-            <div>
-              <span
-                className={cn(
-                  'text-xs font-semibold',
-                  isSapphire ? 'text-sky-700 dark:text-sky-300' : 'text-emerald-800 dark:text-amber-300'
-                )}
-              >
-                Malawi Agro-Ecological Zones · 28 Districts
-              </span>
-              <h2 className="font-display text-xl sm:text-2xl font-bold text-stone-900 dark:text-white tracking-tight">
-                Match Your Family to the Right Altitude, Rainfall &amp; Soil
-              </h2>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2">
-              <div
-                className={cn(
-                  'inline-flex items-center gap-1 p-1 rounded-xl border',
-                  isSapphire
-                    ? 'bg-sky-50/90 dark:bg-[#051326]/90 border-sky-200/80 dark:border-sky-800/60'
-                    : 'bg-stone-100/90 dark:bg-[#06150D]/90 border-stone-200/90 dark:border-emerald-800/60'
-                )}
-              >
-                {[
-                  { id: 'highlands' as const, label: 'Cool Highlands', icon: Mountain },
-                  { id: 'mid-hills' as const, label: 'Mid-Valleys', icon: Trees },
-                  { id: 'lakeshore' as const, label: 'Warm Lakeshore', icon: Waves },
-                ].map((zoneBtn) => {
-                  const Icon = zoneBtn.icon;
-                  const active = selectedClimateZone === zoneBtn.id;
-                  return (
-                    <button
-                      key={zoneBtn.id}
-                      type="button"
-                      onClick={() => setSelectedClimateZone(zoneBtn.id)}
-                      className={cn(
-                        'px-3 py-1.5 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 transition-all cursor-pointer',
-                        active
-                          ? isSapphire
-                            ? 'bg-sky-700 text-white dark:bg-sky-500 font-bold shadow-xs'
-                            : 'bg-emerald-800 text-white dark:bg-amber-400 dark:text-stone-950 font-bold shadow-xs'
-                          : 'text-stone-700 dark:text-stone-300 hover:text-stone-950 dark:hover:text-white'
-                      )}
-                    >
-                      <Icon size={13} />
-                      <span>{zoneBtn.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setShowFullDistrictMatrix((prev) => !prev)}
-                className={cn(
-                  'px-3.5 py-2 rounded-xl border text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer transition-colors',
-                  showFullDistrictMatrix
-                    ? 'bg-amber-400 text-stone-950 border-amber-300 font-bold'
-                    : 'bg-white/70 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 text-stone-800 dark:text-stone-100 border-stone-300/80 dark:border-white/15'
-                )}
-              >
-                <span>{showFullDistrictMatrix ? 'Hide 28-District Table' : 'Compare All 28 Districts'}</span>
-                <ChevronDown
-                  size={13}
-                  className={cn('transition-transform', showFullDistrictMatrix && 'rotate-180')}
-                />
-              </button>
-            </div>
-          </div>
-
-          {/* Clean Hairline 3-Column Readout + District Links */}
-          <div
-            className={cn(
-              'grid grid-cols-1 lg:grid-cols-12 gap-4 items-center pt-3.5 border-t text-xs',
-              isSapphire
-                ? 'border-sky-200/70 dark:border-sky-800/50'
-                : 'border-stone-200/80 dark:border-emerald-900/60'
-            )}
-          >
-            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div>
-                <span className="text-stone-500 dark:text-stone-400 block">
-                  {activeClimateZone.title} · <strong className="font-mono text-stone-800 dark:text-stone-200">{activeClimateZone.elevation}</strong>
-                </span>
-                <p className="text-stone-800 dark:text-stone-100 font-medium leading-relaxed mt-1">
-                  {activeClimateZone.feel}
-                </p>
-              </div>
-              <div>
-                <span className="text-stone-500 dark:text-stone-400 block">
-                  Ideal Staples &amp; Orchards
-                </span>
-                <p className="text-stone-800 dark:text-stone-100 font-medium leading-relaxed mt-1">
-                  {activeClimateZone.crops}
-                </p>
-              </div>
-              <div>
-                <span className="text-stone-500 dark:text-stone-400 block">
-                  Aquifers, Springs &amp; Rainfall
-                </span>
-                <p className="text-stone-800 dark:text-stone-100 font-medium leading-relaxed mt-1">
-                  {activeClimateZone.waterNote}
-                </p>
-              </div>
-            </div>
-
+            {/* COLLAPSIBLE 2: 28-DISTRICT AGRO-ECOLOGICAL ZONES & COMPARISON */}
             <div
+              id="guide-districts"
               className={cn(
-                'lg:col-span-4 flex flex-col gap-2 lg:border-l lg:pl-4',
-                isSapphire
-                  ? 'lg:border-sky-200/80 dark:lg:border-sky-800/50'
-                  : 'lg:border-stone-200/80 dark:lg:border-emerald-900/60'
+                'rounded-card border transition-all overflow-hidden',
+                isCharcoal
+                  ? 'bg-white dark:bg-[#161619] border-stone-300/80 dark:border-white/12'
+                  : glassSurfaceClass,
+                'shadow-raised'
               )}
             >
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-stone-500 dark:text-stone-400 font-medium">
-                  Search &amp; Inspect Districts:
-                </span>
-                {districtSearchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => setDistrictSearchQuery('')}
-                    className="text-[10px] text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 underline cursor-pointer"
-                  >
-                    Clear Filter
-                  </button>
-                )}
-              </div>
-
-              {/* Instant Search Bar */}
-              <div className="relative">
-                <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none" />
-                <input
-                  type="text"
-                  placeholder="Type district, region, or soil..."
-                  value={districtSearchQuery}
-                  onChange={(e) => setDistrictSearchQuery(e.target.value)}
-                  className="w-full pl-7 pr-2.5 py-1.5 rounded-xl bg-stone-100/90 dark:bg-stone-900/90 border border-stone-200/90 dark:border-white/10 text-xs text-stone-900 dark:text-stone-100 placeholder:text-stone-400 focus:outline-none focus:ring-1 focus:ring-amber-400"
-                />
-              </div>
-
-              <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 max-h-24 overflow-y-auto pr-1">
-                {searchableDistricts.map((dist) => (
-                  <Link
-                    key={dist.id}
-                    to={`/scout-map?district=${dist.id}`}
-                    onClick={() => setQuickDistrictId(dist.id)}
-                    title={`Inspect ${dist.name} on GIS Map`}
-                    className={cn(
-                      'text-xs font-semibold hover:underline inline-flex items-center gap-1 px-2 py-0.5 rounded-md transition-colors',
-                      dist.id === quickDistrictId
-                        ? 'bg-amber-400/25 text-amber-800 dark:text-amber-300 font-bold border border-amber-400/40'
-                        : isSapphire
-                        ? 'text-sky-800 dark:text-sky-300 hover:bg-sky-50 dark:hover:bg-sky-950/40'
-                        : 'text-emerald-800 dark:text-amber-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40'
-                    )}
-                  >
-                    <span>{dist.name}</span>
-                    <span aria-hidden="true" className="text-[10px] opacity-75">→</span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Expandable Full 28-District Comparison Matrix */}
-          {showFullDistrictMatrix && (
-            <div className="pt-4 border-t border-stone-200/80 dark:border-white/10 flex flex-col gap-3">
-              <Suspense
-                fallback={
-                  <div className="p-6 text-center text-xs font-mono text-stone-500">
-                    Loading 28-District Soil &amp; Water Comparison Matrix...
+              <button
+                type="button"
+                onClick={() => toggleGuide('districts')}
+                className="w-full p-4 sm:p-5 flex items-center justify-between gap-3 text-left cursor-pointer hover:bg-stone-50 dark:hover:bg-white/5 transition-colors"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-8 h-8 rounded-control bg-cyan-400/20 text-cyan-800 dark:text-cyan-300 flex items-center justify-center shrink-0">
+                    <Compass size={16} />
                   </div>
-                }
-              >
-                <DistrictRegistryExplorer embedded />
-              </Suspense>
-              <div className="flex justify-center pt-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowFullDistrictMatrix(false);
-                    document.getElementById('climate-explorer-section')?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  className="px-4 py-2 rounded-xl bg-stone-200/90 dark:bg-stone-800 hover:bg-stone-300 dark:hover:bg-stone-700 text-stone-900 dark:text-stone-100 font-bold text-xs inline-flex items-center gap-1.5 cursor-pointer transition-colors shadow-xs"
-                >
-                  <ChevronDown size={13} className="rotate-180" />
-                  <span>Collapse 28-District Table ↑</span>
-                </button>
-              </div>
-            </div>
-          )}
-        </section>
-
-        {/* 3. THE FOUR PILLARS OF COUNTRY LIVING (ZERO NESTED CARD BORDERS) */}
-        <section
-          id="four-pillars"
-          aria-label="The Four Pillars of Country Living"
-          className="flex flex-col gap-3.5 scroll-mt-20"
-        >
-          <div>
-            <h2 className="font-display text-xl sm:text-2xl font-bold text-stone-900 dark:text-white tracking-tight">
-              The Four Pillars of Sanctuary Living
-            </h2>
-            <p className="text-xs sm:text-sm text-stone-700 dark:text-stone-200 font-medium">
-              Grounded in Spirit of Prophecy counsel, Malawi customary law, and practical agro-engineering.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {FOUR_PILLARS.map((pillar) => (
-              <div
-                key={pillar.number}
-                className={cn(
-                  'p-5 rounded-2xl card-depth-lift flex flex-col sm:flex-row items-stretch gap-5 group',
-                  glassSurfaceClass
-                )}
-              >
-                {/* Unboxed Vector Illustration Showcase */}
-                <div className="w-full sm:w-32 shrink-0 flex flex-col items-center justify-center relative">
-                  <span
-                    className={cn(
-                      'self-start text-xs font-mono font-bold',
-                      isSapphire ? 'text-sky-700 dark:text-sky-300' : 'text-emerald-800 dark:text-amber-300'
-                    )}
-                  >
-                    {pillar.number}.
-                  </span>
-                  <CountryIcon
-                    name={pillar.iconName}
-                    className="w-full h-24 sm:h-28 object-contain group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-
-                {/* Editorial Content + Clean Typographic Links */}
-                <div className="flex-1 flex flex-col justify-between gap-3 min-w-0">
                   <div>
-                    <div className="flex items-center gap-2 text-xs text-stone-600 dark:text-stone-300">
-                      <span
-                        className={cn(
-                          'font-bold',
-                          isSapphire ? 'text-sky-800 dark:text-sky-300' : 'text-emerald-800 dark:text-emerald-300'
-                        )}
-                      >
-                        {pillar.subtitle}
-                      </span>
-                      <span aria-hidden="true">·</span>
-                      <span className="font-semibold text-stone-700 dark:text-stone-200">{pillar.proofLine}</span>
-                    </div>
-
-                    <h3 className="font-display text-lg font-bold text-stone-950 dark:text-white leading-snug mt-1">
-                      {pillar.title}
+                    <h3 className="font-display text-base font-bold text-stone-900 dark:text-white leading-tight">
+                      28-District Agro-Ecological Zones &amp; Soil Matrix
                     </h3>
-
-                    <p className="text-xs text-stone-800 dark:text-stone-100 font-medium leading-relaxed mt-1">
-                      {pillar.summary}
+                    <p className="text-xs text-stone-500 dark:text-stone-400 truncate">
+                      Compare Highlands, Mid-Valleys, and Lakeshore zones; search all 28 Malawian districts.
                     </p>
                   </div>
+                </div>
+                <ChevronDown
+                  size={16}
+                  className={cn(
+                    'text-stone-500 transition-transform shrink-0',
+                    expandedGuides.districts && 'rotate-180'
+                  )}
+                />
+              </button>
 
-                  {/* Clean Unboxed Typographic Navigation Links */}
-                  <div
-                    className={cn(
-                      'pt-2.5 border-t flex flex-wrap items-center gap-x-3 gap-y-1 text-xs',
-                      isSapphire
-                        ? 'border-sky-100 dark:border-sky-900/60'
-                        : 'border-stone-200/80 dark:border-emerald-900/60'
-                    )}
-                  >
-                    {pillar.links.map((item, idx) => (
-                      <React.Fragment key={item.to}>
-                        {idx > 0 && (
-                          <span aria-hidden="true" className="text-stone-400 dark:text-white/30">
-                            ·
-                          </span>
-                        )}
+              {expandedGuides.districts && (
+                <div className="p-4 sm:p-6 border-t border-stone-200/80 dark:border-white/10 flex flex-col gap-4 bg-stone-50/50 dark:bg-black/20">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="inline-flex items-center gap-1 p-1 rounded-control bg-stone-200/80 dark:bg-stone-800 border border-stone-300 dark:border-white/10">
+                      {[
+                        { id: 'highlands' as const, label: 'Cool Highlands', icon: Mountain },
+                        { id: 'mid-hills' as const, label: 'Mid-Valleys', icon: Trees },
+                        { id: 'lakeshore' as const, label: 'Warm Lakeshore', icon: Waves },
+                      ].map((zoneBtn) => {
+                        const Icon = zoneBtn.icon;
+                        const active = selectedClimateZone === zoneBtn.id;
+                        return (
+                          <button
+                            key={zoneBtn.id}
+                            type="button"
+                            onClick={() => setSelectedClimateZone(zoneBtn.id)}
+                            className={cn(
+                              'px-3 py-1 rounded-control text-xs font-semibold inline-flex items-center gap-1 cursor-pointer transition-colors',
+                              active
+                                ? 'bg-amber-400 text-stone-950 font-bold shadow-xs'
+                                : 'text-stone-700 dark:text-stone-300 hover:text-stone-950'
+                            )}
+                          >
+                            <Icon size={12} />
+                            <span>{zoneBtn.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setShowFullDistrictMatrix((prev) => !prev)}
+                      className="px-3 py-1.5 rounded-control border border-stone-300 dark:border-white/15 bg-white dark:bg-stone-800 text-xs font-semibold cursor-pointer"
+                    >
+                      {showFullDistrictMatrix ? 'Hide 28-District Table' : 'Compare All 28 Districts'}
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3.5 rounded-control bg-white dark:bg-stone-900 border border-stone-200 dark:border-white/10 text-xs">
+                    <div>
+                      <span className="font-bold text-stone-900 dark:text-white block">
+                        {activeClimateZone.title} ({activeClimateZone.elevation})
+                      </span>
+                      <p className="text-stone-600 dark:text-stone-300 mt-1">{activeClimateZone.feel}</p>
+                    </div>
+                    <div>
+                      <span className="font-bold text-stone-900 dark:text-white block">Staples &amp; Orchards</span>
+                      <p className="text-stone-600 dark:text-stone-300 mt-1">{activeClimateZone.crops}</p>
+                    </div>
+                    <div>
+                      <span className="font-bold text-stone-900 dark:text-white block">Aquifers &amp; Rainfall</span>
+                      <p className="text-stone-600 dark:text-stone-300 mt-1">{activeClimateZone.waterNote}</p>
+                    </div>
+                  </div>
+
+                  {/* Search Bar & Districts List */}
+                  <div className="flex flex-col gap-2">
+                    <div className="relative">
+                      <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-400" />
+                      <input
+                        type="text"
+                        placeholder="Search district by name or soil order..."
+                        value={districtSearchQuery}
+                        onChange={(e) => setDistrictSearchQuery(e.target.value)}
+                        className="w-full pl-7 pr-3 py-1.5 rounded-control bg-white dark:bg-stone-900 border border-stone-300 dark:border-white/15 text-xs text-stone-900 dark:text-white"
+                      />
+                    </div>
+                    <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
+                      {searchableDistricts.map((d) => (
                         <Link
-                          to={item.to}
+                          key={d.id}
+                          to={`/scout-map?district=${d.id}`}
+                          onClick={() => setQuickDistrictId(d.id)}
                           className={cn(
-                            'font-bold hover:underline inline-flex items-center gap-1',
-                            isSapphire
-                              ? 'text-sky-900 dark:text-sky-300'
-                              : 'text-emerald-900 dark:text-amber-300'
+                            'px-2 py-0.5 rounded-control text-xs font-semibold border transition-colors inline-flex items-center gap-1',
+                            d.id === quickDistrictId
+                              ? 'bg-amber-400 text-stone-950 border-amber-500 font-bold'
+                              : 'bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-stone-200 dark:border-white/10 hover:bg-stone-100'
                           )}
                         >
-                          <span>{item.label}</span>
-                          <span aria-hidden="true">→</span>
+                          <span>{d.name}</span>
+                          <span className="text-caption opacity-70">→</span>
                         </Link>
-                      </React.Fragment>
+                      ))}
+                    </div>
+                  </div>
+
+                  {showFullDistrictMatrix && (
+                    <div className="pt-3 border-t border-stone-200 dark:border-white/10">
+                      <Suspense fallback={<div className="p-4 text-center text-xs">Loading matrix...</div>}>
+                        <DistrictRegistryExplorer embedded />
+                      </Suspense>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* COLLAPSIBLE 3: THE FOUR PILLARS OF SANCTUARY LIVING */}
+            <div
+              id="guide-pillars"
+              className={cn(
+                'rounded-card border transition-all overflow-hidden',
+                isCharcoal
+                  ? 'bg-white dark:bg-[#161619] border-stone-300/80 dark:border-white/12'
+                  : glassSurfaceClass,
+                'shadow-raised'
+              )}
+            >
+              <button
+                type="button"
+                onClick={() => toggleGuide('pillars')}
+                className="w-full p-4 sm:p-5 flex items-center justify-between gap-3 text-left cursor-pointer hover:bg-stone-50 dark:hover:bg-white/5 transition-colors"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-8 h-8 rounded-control bg-emerald-400/20 text-emerald-800 dark:text-emerald-300 flex items-center justify-center shrink-0">
+                    <ShieldCheck size={16} />
+                  </div>
+                  <div>
+                    <h3 className="font-display text-base font-bold text-stone-900 dark:text-white leading-tight">
+                      The Four Pillars of Country Living
+                    </h3>
+                    <p className="text-xs text-stone-500 dark:text-stone-400 truncate">
+                      Grounded in Spirit of Prophecy counsel, Land Act 2016, and Avondale/Madison self-reliance.
+                    </p>
+                  </div>
+                </div>
+                <ChevronDown
+                  size={16}
+                  className={cn(
+                    'text-stone-500 transition-transform shrink-0',
+                    expandedGuides.pillars && 'rotate-180'
+                  )}
+                />
+              </button>
+
+              {expandedGuides.pillars && (
+                <div className="p-4 sm:p-6 border-t border-stone-200/80 dark:border-white/10 grid grid-cols-1 lg:grid-cols-2 gap-4 bg-stone-50/50 dark:bg-black/20">
+                  {FOUR_PILLARS.map((pillar) => (
+                    <div
+                      key={pillar.number}
+                      className="p-4 sm:p-5 rounded-card bg-white dark:bg-stone-900 border border-stone-200 dark:border-white/10 flex flex-col sm:flex-row gap-4 shadow-sm"
+                    >
+                      <div className="w-full sm:w-40 h-36 rounded-control overflow-hidden shrink-0 relative bg-stone-950">
+                        <img
+                          src={pillar.illustrationImage}
+                          alt={pillar.illustrationAlt}
+                          loading="lazy"
+                          decoding="async"
+                          referrerPolicy="no-referrer"
+                          className="w-full h-full object-cover"
+                        />
+                        <span className="absolute top-2 left-2 px-1.5 py-0.5 rounded-control bg-black/75 text-amber-300 font-mono text-xs font-bold border border-white/20">
+                          {pillar.number}
+                        </span>
+                      </div>
+                      <div className="flex-1 flex flex-col justify-between gap-2 min-w-0">
+                        <div>
+                          <div className="flex items-center gap-2 text-xs text-stone-500">
+                            <span className="font-bold text-emerald-700 dark:text-emerald-400">{pillar.subtitle}</span>
+                            <span aria-hidden="true">·</span>
+                            <span>{pillar.proofLine}</span>
+                          </div>
+                          <h4 className="font-display text-base font-bold text-stone-900 dark:text-white mt-0.5">
+                            {pillar.title}
+                          </h4>
+                          <p className="text-xs text-stone-600 dark:text-stone-300 mt-1 leading-relaxed">
+                            {pillar.summary}
+                          </p>
+                        </div>
+                        <div className="flex flex-wrap gap-x-2 gap-y-1 pt-2 border-t border-stone-100 dark:border-white/10 text-xs">
+                          {pillar.links.map((link) => (
+                            <Link
+                              key={link.to}
+                              to={link.to}
+                              className="font-bold text-emerald-800 dark:text-amber-300 hover:underline inline-flex items-center gap-0.5"
+                            >
+                              <span>{link.label}</span>
+                              <span aria-hidden="true">→</span>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* COLLAPSIBLE 4: ILLUSTRATED 1844 PROPHETIC PANORAMA & LIVE AGRO-WEATHER */}
+            <div
+              id="guide-prophecy"
+              className={cn(
+                'rounded-card border transition-all overflow-hidden',
+                isCharcoal
+                  ? 'bg-white dark:bg-[#161619] border-stone-300/80 dark:border-white/12'
+                  : glassSurfaceClass,
+                'shadow-raised'
+              )}
+            >
+              <button
+                type="button"
+                onClick={() => toggleGuide('prophecy')}
+                className="w-full p-4 sm:p-5 flex items-center justify-between gap-3 text-left cursor-pointer hover:bg-stone-50 dark:hover:bg-white/5 transition-colors"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-8 h-8 rounded-control bg-indigo-400/20 text-indigo-800 dark:text-indigo-300 flex items-center justify-center shrink-0">
+                    <Sun size={16} />
+                  </div>
+                  <div>
+                    <h3 className="font-display text-base font-bold text-stone-900 dark:text-white leading-tight">
+                      Illustrated 1844 Prophetic Panorama &amp; Agro-Weather
+                    </h3>
+                    <p className="text-xs text-stone-500 dark:text-stone-400 truncate">
+                      6 masterclass prophetic plates, interactive 1844 timeline, and 7-day farming meteorology.
+                    </p>
+                  </div>
+                </div>
+                <ChevronDown
+                  size={16}
+                  className={cn(
+                    'text-stone-500 transition-transform shrink-0',
+                    expandedGuides.prophecy && 'rotate-180'
+                  )}
+                />
+              </button>
+
+              {expandedGuides.prophecy && (
+                <div className="p-4 sm:p-6 border-t border-stone-200/80 dark:border-white/10 flex flex-col gap-4 bg-stone-50/50 dark:bg-black/20">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="text-xs font-mono font-bold text-amber-700 dark:text-amber-400">
+                      1844 TO THE EARTH MADE NEW · 6 PROPHETIC EPOCHS
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setShowFullPropheticChart((p) => !p)}
+                        className="px-3 py-1.5 rounded-control bg-amber-400 text-stone-950 font-bold text-xs cursor-pointer"
+                      >
+                        {showFullPropheticChart ? 'Hide 1844 Chart' : 'Expand Interactive 1844 Chart'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setActiveDeepTelemetry((p) => (p === 'weather' ? 'none' : 'weather'))
+                        }
+                        className="px-3 py-1.5 rounded-control border border-stone-300 dark:border-white/15 bg-white dark:bg-stone-800 text-xs font-semibold cursor-pointer"
+                      >
+                        {activeDeepTelemetry !== 'none' ? 'Hide Weather' : '7-Day Agro-Weather'}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 6 plates filmstrip */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+                    {PROPHETIC_PLATES_PREVIEW.map((plate) => (
+                      <button
+                        key={plate.epoch}
+                        type="button"
+                        onClick={() => setShowFullPropheticChart((p) => !p)}
+                        className="group relative h-24 rounded-control overflow-hidden border border-stone-200 dark:border-white/10 text-left cursor-pointer"
+                      >
+                        <img
+                          src={plate.image}
+                          alt={plate.title}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-full h-full object-cover opacity-85 group-hover:opacity-100 group-hover:scale-105 transition-all"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent" />
+                        <div className="absolute bottom-1 left-1.5 right-1.5 text-white">
+                          <span className="text-caption font-mono font-bold text-amber-300 block">{plate.epoch}</span>
+                          <span className="text-caption font-semibold leading-tight line-clamp-1">{plate.title}</span>
+                        </div>
+                      </button>
                     ))}
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
 
-        {/* 4. ILLUSTRATED 1844 PROPHETIC PANORAMA & LIVE AGRO-WEATHER */}
-        <section
-          id="prophetic-section"
-          aria-label="Prophetic Panorama and Live Agro-Weather"
-          className={cn('p-5 sm:p-6 rounded-2xl flex flex-col gap-4 text-stone-100 scroll-mt-20', glassHeroClass)}
-        >
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-            <div>
-              <div className="flex items-center gap-2 text-xs text-amber-300 font-semibold">
-                <Sparkles size={13} />
-                <span>Illustrated Prophetic Panorama · 1844 to the Earth Made New</span>
-              </div>
-              <h2 className="font-display text-lg sm:text-xl font-bold text-white mt-0.5">
-                From 1844 to the Final Exodus: Why Packing Before the Siege Beats Waiting for a Traffic Report
-              </h2>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2 shrink-0">
-              <button
-                type="button"
-                onClick={() => setShowFullPropheticChart((prev) => !prev)}
-                className="px-4 py-2 rounded-xl bg-gradient-to-b from-amber-300 to-amber-500 hover:from-amber-200 hover:to-amber-400 text-stone-950 font-bold text-xs inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap shadow-md"
-              >
-                <span>{showFullPropheticChart ? 'Collapse 1844 Chart' : 'Expand Interactive 1844 Chart'}</span>
-                <ChevronDown
-                  size={13}
-                  className={cn('transition-transform', showFullPropheticChart && 'rotate-180')}
-                />
-              </button>
-
-              <button
-                type="button"
-                onClick={() =>
-                  setActiveDeepTelemetry((prev) => (prev === 'weather' ? 'none' : 'weather'))
-                }
-                className={cn(
-                  'px-3.5 py-2 rounded-xl border text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap transition-colors',
-                  activeDeepTelemetry !== 'none'
-                    ? 'bg-white/20 text-white border-amber-300/60'
-                    : 'bg-white/5 hover:bg-white/12 text-stone-200 border-white/15'
-                )}
-              >
-                <CloudSun size={13} className="text-amber-300" />
-                <span>7-Day Weather &amp; Soil Cutaway</span>
-              </button>
-
-              <Link
-                to="/vision"
-                className="px-3 py-2 text-xs font-semibold text-amber-200 hover:text-white underline underline-offset-4 whitespace-nowrap"
-              >
-                EGW Vault →
-              </Link>
-            </div>
-          </div>
-
-          {/* 6-Plate Visual Filmstrip */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
-            {PROPHETIC_PLATES_PREVIEW.map((plate) => (
-              <button
-                key={plate.epoch}
-                type="button"
-                onClick={() => setShowFullPropheticChart((prev) => !prev)}
-                className={cn(
-                  'group relative h-28 rounded-xl overflow-hidden border transition-all text-left cursor-pointer shadow-md',
-                  isSapphire
-                    ? 'border-sky-300/25 hover:border-amber-400 bg-[#030D1A]'
-                    : 'border-emerald-300/25 hover:border-amber-400 bg-[#030E08]'
-                )}
-              >
-                <img
-                  src={plate.image}
-                  alt={plate.title}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover object-[center_22%] opacity-85 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-                <div className="absolute bottom-1.5 left-2 right-2">
-                  <span className="text-xs font-mono font-bold text-amber-300 block">
-                    {plate.epoch}
-                  </span>
-                  <span className="text-xs font-semibold text-white leading-tight line-clamp-1">
-                    {plate.title}
-                  </span>
-                </div>
-              </button>
-            ))}
-          </div>
-
-          {/* Inline Expandable 1844 Prophetic Panorama */}
-          {showFullPropheticChart && (
-            <div className="pt-4 border-t border-white/15 flex flex-col gap-3">
-              <Suspense
-                fallback={
-                  <div className="p-6 text-center text-xs font-mono text-stone-300">
-                    Loading 1844 Prophetic Panorama...
-                  </div>
-                }
-              >
-                <PropheticTimeline1844 />
-              </Suspense>
-              <div className="flex justify-center pt-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowFullPropheticChart(false);
-                    document.getElementById('prophetic-section')?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  className="px-4 py-2 rounded-xl bg-amber-400/90 hover:bg-amber-300 text-stone-950 font-bold text-xs inline-flex items-center gap-1.5 cursor-pointer transition-colors shadow-md"
-                >
-                  <ChevronDown size={13} className="rotate-180" />
-                  <span>Collapse 1844 Panorama ↑</span>
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Inline Expandable 7-Day Agro-Weather & Soil Cutaway */}
-          {activeDeepTelemetry !== 'none' && (
-            <div className="pt-4 border-t border-white/15 flex flex-col gap-3">
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-xs font-mono text-amber-300 font-bold">
-                  LIVE MALAWI AGRO-METEOROLOGY &amp; AQUIFER CUTAWAY
-                </span>
-                <div className="inline-flex items-center rounded-xl bg-black/35 border border-white/15 p-0.5">
-                  <button
-                    type="button"
-                    onClick={() => setActiveDeepTelemetry('weather')}
-                    className={cn(
-                      'px-3 py-1 rounded-lg text-xs font-semibold cursor-pointer',
-                      activeDeepTelemetry === 'weather'
-                        ? 'bg-amber-400 text-stone-950 font-bold'
-                        : 'text-stone-300 hover:text-white'
-                    )}
-                  >
-                    7-Day Farming Weather
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setActiveDeepTelemetry('strata')}
-                    className={cn(
-                      'px-3 py-1 rounded-lg text-xs font-semibold cursor-pointer',
-                      activeDeepTelemetry === 'strata'
-                        ? 'bg-amber-400 text-stone-950 font-bold'
-                        : 'text-stone-300 hover:text-white'
-                    )}
-                  >
-                    Soil &amp; Well Depth Cutaway
-                  </button>
-                </div>
-              </div>
-
-              <div className="text-stone-900 dark:text-stone-100">
-                <Suspense
-                  fallback={
-                    <div className="p-6 text-center text-xs font-mono text-stone-300">
-                      Loading Agro-Weather &amp; Soil Strata Telemetry...
+                  {showFullPropheticChart && (
+                    <div className="pt-3 border-t border-stone-200 dark:border-white/10">
+                      <Suspense fallback={<div className="p-4 text-center text-xs">Loading chart...</div>}>
+                        <PropheticTimeline1844 />
+                      </Suspense>
                     </div>
-                  }
-                >
-                  {activeDeepTelemetry === 'weather' ? (
-                    <MalawiAgriWeatherForecast embedded />
-                  ) : (
-                    <SoilStrataBlueprint />
                   )}
-                </Suspense>
-              </div>
 
-              <div className="flex justify-center pt-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setActiveDeepTelemetry('none');
-                    document.getElementById('prophetic-section')?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  className="px-4 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs inline-flex items-center gap-1.5 cursor-pointer transition-colors shadow-md"
-                >
-                  <ChevronDown size={13} className="rotate-180" />
-                  <span>Collapse Telemetry &amp; Cutaway ↑</span>
-                </button>
-              </div>
+                  {activeDeepTelemetry !== 'none' && (
+                    <div className="pt-3 border-t border-stone-200 dark:border-white/10">
+                      <Suspense fallback={<div className="p-4 text-center text-xs">Loading weather...</div>}>
+                        {activeDeepTelemetry === 'weather' ? (
+                          <MalawiAgriWeatherForecast embedded />
+                        ) : (
+                          <SoilStrataBlueprint />
+                        )}
+                      </Suspense>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
-          )}
+
+            {/* COLLAPSIBLE 5: ADVENTIST FAMILY HEARTH & SABBATH WATCH */}
+            <div
+              id="guide-hearth"
+              className={cn(
+                'rounded-card border transition-all overflow-hidden',
+                isCharcoal
+                  ? 'bg-white dark:bg-[#161619] border-stone-300/80 dark:border-white/12'
+                  : glassSurfaceClass,
+                'shadow-raised'
+              )}
+            >
+              <button
+                type="button"
+                onClick={() => toggleGuide('hearth')}
+                className="w-full p-4 sm:p-5 flex items-center justify-between gap-3 text-left cursor-pointer hover:bg-stone-50 dark:hover:bg-white/5 transition-colors"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-8 h-8 rounded-control bg-rose-400/20 text-rose-800 dark:text-rose-300 flex items-center justify-center shrink-0">
+                    <HeartPulse size={16} />
+                  </div>
+                  <div>
+                    <h3 className="font-display text-base font-bold text-stone-900 dark:text-white leading-tight">
+                      Adventist Family Hearth, Sabbath Watch &amp; Nature Curriculum
+                    </h3>
+                    <p className="text-xs text-stone-500 dark:text-stone-400 truncate">
+                      Morning &amp; evening devotional altar, Malawi Sabbath eve sunset guard, and youth trade lessons.
+                    </p>
+                  </div>
+                </div>
+                <ChevronDown
+                  size={16}
+                  className={cn(
+                    'text-stone-500 transition-transform shrink-0',
+                    expandedGuides.hearth && 'rotate-180'
+                  )}
+                />
+              </button>
+
+              {expandedGuides.hearth && (
+                <div className="p-4 sm:p-6 border-t border-stone-200/80 dark:border-white/10 grid grid-cols-1 md:grid-cols-3 gap-4 bg-stone-50/50 dark:bg-black/20 text-xs">
+                  {/* Card 1: Altar */}
+                  <div className="p-4 rounded-card bg-[#DCE6F2] dark:bg-[#182333] text-stone-900 dark:text-stone-100 flex flex-col justify-between gap-2.5 border border-black/10 dark:border-white/15">
+                    <div>
+                      <div className="flex items-center justify-between text-xs font-bold">
+                        <span>Altar · {todayDevotional.scripture.reference}</span>
+                        <button
+                          type="button"
+                          onClick={() => setDevotionalIndex((p) => (p + 1) % DAILY_DEVOTIONALS.length)}
+                          className="hover:underline cursor-pointer"
+                        >
+                          <RefreshCw size={11} />
+                        </button>
+                      </div>
+                      <h4 className="font-display text-sm font-bold mt-1">“{todayDevotional.scripture.verse}”</h4>
+                      <p className="text-xs mt-1.5 opacity-90">
+                        <strong>{todayDevotional.egwQuote.egwCode}:</strong> “{todayDevotional.egwQuote.text}”
+                      </p>
+                    </div>
+                    <Link to="/devotional" className="font-bold hover:underline pt-2 border-t border-black/10 dark:border-white/10">
+                      Read Devotional Treasury →
+                    </Link>
+                  </div>
+
+                  {/* Card 2: Sabbath Sunset */}
+                  <div className="p-4 rounded-card bg-[#DCF2DE] dark:bg-[#12281D] text-stone-900 dark:text-stone-100 flex flex-col justify-between gap-2.5 border border-black/10 dark:border-emerald-600/35">
+                    <div>
+                      <div className="flex items-center justify-between text-xs font-bold">
+                        <span>Sabbath Eve Sunset · {currentMonthName}</span>
+                        <Sun size={13} />
+                      </div>
+                      <h4 className="font-display text-sm font-bold mt-1">
+                        North {sabbathSunset.north} · Central {sabbathSunset.central} · South {sabbathSunset.south}
+                      </h4>
+                      <p className="text-xs mt-1.5 opacity-90">
+                        Friday tool-down: <strong>{sabbathSunset.guardCentral} CAT</strong>. Gather the family to sing, read, and pray (6T 356).
+                      </p>
+                    </div>
+                    <Link to="/devotional" className="font-bold hover:underline pt-2 border-t border-black/10 dark:border-white/10">
+                      Friday Preparation Checklist →
+                    </Link>
+                  </div>
+
+                  {/* Card 3: Youth Curriculum */}
+                  <div className="p-4 rounded-card bg-[#FBF3C9] dark:bg-[#282110] text-stone-900 dark:text-stone-100 flex flex-col justify-between gap-2.5 border border-black/10 dark:border-amber-600/35">
+                    <div>
+                      <div className="flex items-center justify-between text-xs font-bold">
+                        <span>Children’s Nature Classroom</span>
+                        <div className="flex gap-1">
+                          {(['ages-4-8', 'ages-9-13', 'ages-14-18'] as YouthAgeTrack[]).map((trk) => (
+                            <button
+                              key={trk}
+                              type="button"
+                              onClick={() => setSelectedAgeTrack(trk)}
+                              className={cn(
+                                'px-1.5 py-0.5 rounded-control text-caption font-mono cursor-pointer',
+                                selectedAgeTrack === trk
+                                  ? 'bg-stone-900 text-white dark:bg-amber-400 dark:text-stone-950 font-bold'
+                                  : 'bg-black/10 dark:bg-white/10'
+                              )}
+                            >
+                              {FAMILY_NATURE_CURRICULUM[trk].label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <h4 className="font-display text-sm font-bold mt-1">{activeYouthTrack.subtitle}</h4>
+                      <p className="text-xs mt-1.5 opacity-90">
+                        <strong>Lesson:</strong> {activeYouthTrack.objectLesson} · <strong>Trade:</strong> {activeYouthTrack.practicalSkill}
+                      </p>
+                    </div>
+                    <Link to={activeYouthTrack.linkTo} className="font-bold hover:underline pt-2 border-t border-black/10 dark:border-white/10">
+                      {activeYouthTrack.linkLabel} →
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </section>
       </div>
 

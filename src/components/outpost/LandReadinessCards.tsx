@@ -5,6 +5,7 @@ import {
   RefreshCw,
   ExternalLink,
   CheckCircle2,
+  Check,
   Activity,
   Compass,
   AlertTriangle,
@@ -177,7 +178,7 @@ export function LandReadinessCards() {
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <span
-                        className={`text-[10px] font-bold uppercase tracking-widest ${
+                        className={`text-caption font-bold uppercase tracking-widest ${
                           isSelected ? 'text-[#E6B655]' : 'text-[#2E6F40]'
                         }`}
                       >
@@ -200,7 +201,7 @@ export function LandReadinessCards() {
                       {district.readinessScore}/100
                     </div>
                     <span
-                      className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border mt-1 ${
+                      className={`text-caption font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border mt-1 ${
                         isSelected
                           ? 'bg-white/10 text-white border-white/20'
                           : getBadgeStyle(district.readinessRating)
@@ -268,7 +269,7 @@ export function LandReadinessCards() {
                   </div>
 
                   <div className="bg-[#FAF8F5] px-5 py-3 rounded-2xl border border-[#1A241E]/10 text-center">
-                    <div className="text-[10px] font-bold uppercase tracking-widest text-[#1A241E]/60">
+                    <div className="text-caption font-bold uppercase tracking-widest text-[#1A241E]/60">
                       Outpost Index
                     </div>
                     <div className="text-3xl font-serif font-bold text-[#2E6F40]">
@@ -292,11 +293,11 @@ export function LandReadinessCards() {
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#86EFAC]">
+                          <span className="text-caption font-bold uppercase tracking-[0.2em] text-[#86EFAC]">
                             Live Verified Satellite & Soil Telemetry
                           </span>
                           {liveTelemetry && (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#2E6F40]/40 text-[#86EFAC] text-[10px] font-mono">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#2E6F40]/40 text-[#86EFAC] text-caption font-mono">
                               <CheckCircle2 className="w-3 h-3" /> Verified Live
                             </span>
                           )}
@@ -322,68 +323,68 @@ export function LandReadinessCards() {
                     <>
                       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-4">
                         <div className="bg-white/[0.05] rounded-2xl p-3 border border-white/10">
-                          <div className="text-[10px] uppercase tracking-wider text-white/55">SRTM Elevation</div>
+                          <div className="text-caption uppercase tracking-wider text-white/55">SRTM Elevation</div>
                           <div className="text-lg font-mono font-bold text-[#E6B655] mt-0.5">
                             {liveTelemetry.verifiedElevationMeters ?? '1,150'} m
                           </div>
-                          <div className="text-[10px] text-white/45 font-mono">
+                          <div className="text-caption text-white/45 font-mono">
                             {liveTelemetry.coordinates.lat.toFixed(2)}°, {liveTelemetry.coordinates.lng.toFixed(2)}°
                           </div>
                         </div>
 
                         <div className="bg-white/[0.05] rounded-2xl p-3 border border-white/10">
-                          <div className="text-[10px] uppercase tracking-wider text-white/55">Soil Temp (18cm)</div>
+                          <div className="text-caption uppercase tracking-wider text-white/55">Soil Temp (18cm)</div>
                           <div className="text-lg font-mono font-bold text-[#86EFAC] mt-0.5">
                             {liveTelemetry.liveAgroClimate.soilTempRootZoneC}°C
                           </div>
-                          <div className="text-[10px] text-white/45">
+                          <div className="text-caption text-white/45">
                             Air: {liveTelemetry.liveAgroClimate.airTempC}°C
                           </div>
                         </div>
 
                         <div className="bg-white/[0.05] rounded-2xl p-3 border border-white/10">
-                          <div className="text-[10px] uppercase tracking-wider text-white/55">Root Moisture</div>
+                          <div className="text-caption uppercase tracking-wider text-white/55">Root Moisture</div>
                           <div className="text-lg font-mono font-bold text-[#60A5FA] mt-0.5">
                             {liveTelemetry.liveAgroClimate.soilMoistureRootZonePct}%
                           </div>
-                          <div className="text-[10px] text-white/45">
+                          <div className="text-caption text-white/45">
                             Topsoil: {liveTelemetry.liveAgroClimate.soilMoistureSurfacePct}%
                           </div>
                         </div>
 
                         <div className="bg-white/[0.05] rounded-2xl p-3 border border-white/10">
-                          <div className="text-[10px] uppercase tracking-wider text-white/55">Solar Peak</div>
+                          <div className="text-caption uppercase tracking-wider text-white/55">Solar Peak</div>
                           <div className="text-lg font-mono font-bold text-[#FBBF24] mt-0.5">
                             {liveTelemetry.liveAgroClimate.solarPotentialKwhM2Day} kWh
                           </div>
-                          <div className="text-[10px] text-white/45">
+                          <div className="text-caption text-white/45">
                             {liveTelemetry.liveAgroClimate.solarRadiationWm2} W/m² now
                           </div>
                         </div>
 
                         <div className="bg-white/[0.05] rounded-2xl p-3 border border-white/10">
-                          <div className="text-[10px] uppercase tracking-wider text-white/55">FAO ET₀ Loss</div>
+                          <div className="text-caption uppercase tracking-wider text-white/55">FAO ET₀ Loss</div>
                           <div className="text-lg font-mono font-bold text-white mt-0.5">
                             {liveTelemetry.liveAgroClimate.evapotranspirationMmDay} mm/d
                           </div>
-                          <div className="text-[10px] text-white/45">
+                          <div className="text-caption text-white/45">
                             Humidity: {liveTelemetry.liveAgroClimate.humidityPct}%
                           </div>
                         </div>
 
                         <div className="bg-white/[0.05] rounded-2xl p-3 border border-white/10">
-                          <div className="text-[10px] uppercase tracking-wider text-white/55">14d / +7d Rain</div>
+                          <div className="text-caption uppercase tracking-wider text-white/55">14d / +7d Rain</div>
                           <div className="text-lg font-mono font-bold text-[#38BDF8] mt-0.5">
                             {liveTelemetry.liveAgroClimate.recent14DayRainfallMm} mm
                           </div>
-                          <div className="text-[10px] text-white/45">
+                          <div className="text-caption text-white/45">
                             Next 7d: +{liveTelemetry.liveAgroClimate.forecast7DayRainfallMm} mm
                           </div>
                         </div>
                       </div>
 
                       {/* Verified Data Provenance Links */}
-                      <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-white/10 text-[11px] text-white/60">
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-white/10 text-caption text-white/60">
                         <span className="flex items-center gap-1.5">
                           <Compass className="w-3.5 h-3.5 text-[#C89B3C]" />
                           <span>Verified Providers:</span>
@@ -425,13 +426,13 @@ export function LandReadinessCards() {
                     </div>
                     <div className="space-y-3 text-sm">
                       <div>
-                        <span className="block text-[11px] uppercase tracking-wider text-[#1A241E]/50 font-bold">
+                        <span className="block text-caption uppercase tracking-wider text-[#1A241E]/50 font-bold">
                           Primary Source
                         </span>
                         <span className="font-medium text-[#1A241E]">{activeDistrict.waterProfile.sourceType}</span>
                       </div>
                       <div>
-                        <span className="block text-[11px] uppercase tracking-wider text-[#1A241E]/50 font-bold">
+                        <span className="block text-caption uppercase tracking-wider text-[#1A241E]/50 font-bold">
                           Aquifer Depth
                         </span>
                         <span className="font-mono font-bold text-[#1E5670]">
@@ -439,7 +440,7 @@ export function LandReadinessCards() {
                         </span>
                       </div>
                       <div>
-                        <span className="block text-[11px] uppercase tracking-wider text-[#1A241E]/50 font-bold">
+                        <span className="block text-caption uppercase tracking-wider text-[#1A241E]/50 font-bold">
                           Gravity Flow Potential
                         </span>
                         <span className="text-[#1A241E]/80">{activeDistrict.waterProfile.gravityPotential}</span>
@@ -455,13 +456,13 @@ export function LandReadinessCards() {
                     </div>
                     <div className="space-y-3 text-sm">
                       <div>
-                        <span className="block text-[11px] uppercase tracking-wider text-[#1A241E]/50 font-bold">
+                        <span className="block text-caption uppercase tracking-wider text-[#1A241E]/50 font-bold">
                           Soil Classification
                         </span>
                         <span className="font-medium text-[#1A241E]">{activeDistrict.soilProfile.primaryType}</span>
                       </div>
                       <div>
-                        <span className="block text-[11px] uppercase tracking-wider text-[#1A241E]/50 font-bold">
+                        <span className="block text-caption uppercase tracking-wider text-[#1A241E]/50 font-bold">
                           Natural pH & Fertility
                         </span>
                         <span className="font-mono font-bold text-[#7C4D2B]">
@@ -470,7 +471,7 @@ export function LandReadinessCards() {
                         <span className="text-xs text-[#1A241E]/70">({activeDistrict.soilProfile.fertility})</span>
                       </div>
                       <div>
-                        <span className="block text-[11px] uppercase tracking-wider text-[#1A241E]/50 font-bold">
+                        <span className="block text-caption uppercase tracking-wider text-[#1A241E]/50 font-bold">
                           Edenic Soil Tip
                         </span>
                         <span className="text-[#1A241E]/80">{activeDistrict.soilProfile.organicMatterTip}</span>
@@ -486,7 +487,7 @@ export function LandReadinessCards() {
                     </div>
                     <div className="space-y-3 text-sm">
                       <div>
-                        <span className="block text-[11px] uppercase tracking-wider text-[#1A241E]/50 font-bold">
+                        <span className="block text-caption uppercase tracking-wider text-[#1A241E]/50 font-bold">
                           Annual Rainfall (Rainy Season)
                         </span>
                         <span className="font-mono font-bold text-[#2E6F40]">
@@ -495,7 +496,7 @@ export function LandReadinessCards() {
                         <span className="text-xs text-[#1A241E]/70">({activeDistrict.climateProfile.dzinjaMonths})</span>
                       </div>
                       <div>
-                        <span className="block text-[11px] uppercase tracking-wider text-[#1A241E]/50 font-bold">
+                        <span className="block text-caption uppercase tracking-wider text-[#1A241E]/50 font-bold">
                           Solar Sizing Potential
                         </span>
                         <span className="font-mono font-bold text-[#B8860B]">
@@ -503,7 +504,7 @@ export function LandReadinessCards() {
                         </span>
                       </div>
                       <div>
-                        <span className="block text-[11px] uppercase tracking-wider text-[#1A241E]/50 font-bold">
+                        <span className="block text-caption uppercase tracking-wider text-[#1A241E]/50 font-bold">
                           Dry Season Notes
                         </span>
                         <span className="text-[#1A241E]/80">{activeDistrict.climateProfile.chilimweNotes}</span>
@@ -522,8 +523,8 @@ export function LandReadinessCards() {
                     <ul className="space-y-2.5">
                       {activeDistrict.outpostAdvantages.map((adv, idx) => (
                         <li key={idx} className="flex items-start gap-2.5 text-sm text-[#1A241E]/85">
-                          <span className="w-5 h-5 rounded-full bg-[#2E6F40] text-white text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
-                            ✓
+                          <span className="w-5 h-5 rounded-full bg-[#2E6F40] text-white flex items-center justify-center shrink-0 mt-0.5">
+                            <Check size={16} strokeWidth={1.75} />
                           </span>
                           <span>{adv}</span>
                         </li>
