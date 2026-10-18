@@ -181,198 +181,199 @@ Generated from OUTPOST: Country Living Matrix
     : MALAWI_OUTPOST_ZONES;
 
   return (
-    <div className="px-4 sm:px-6 md:px-10 py-6 max-w-7xl mx-auto flex flex-col gap-6">
-      <header className="glass-depth-card rounded-2xl p-5 sm:p-6 flex flex-col gap-4">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div className="flex flex-col gap-1">
-            <div className="flex flex-wrap items-center gap-2 text-xs text-emerald-800 dark:text-amber-300 font-semibold">
-              <span>Malawi Land &amp; Water Scouting Workbench</span>
-              <span aria-hidden="true">·</span>
-              <span className="text-stone-500 dark:text-stone-400 font-normal">
-                28 Districts · Customary Land Act (2016) · Because buying land without checking the water table is just expensive camping
-              </span>
+    <div className="min-h-screen bg-[#F6F1E7] dark:bg-[#0E1712] text-[#1F2A22] dark:text-[#F6F1E7] pb-16 transition-colors duration-200">
+      <div className="px-4 sm:px-6 md:px-10 py-6 max-w-7xl mx-auto flex flex-col gap-6">
+        <header className="bg-[#FFFDF8] dark:bg-[#17241C] rounded-xl p-5 sm:p-6 border border-[#E4DCCB] dark:border-[#283C30] shadow-sm flex flex-col gap-4 transition-colors">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div className="flex flex-col gap-1">
+              <div className="flex flex-wrap items-center gap-2 text-xs text-[#2B4636] dark:text-[#D4A034] font-semibold">
+                <span>Malawi Land &amp; Water Scouting Workbench</span>
+                <span aria-hidden="true">·</span>
+                <span className="text-[#5A6458] dark:text-[#9FB3A4] font-normal">
+                  28 Districts · Customary Land Act (2016) · Field Hydrology &amp; Soils
+                </span>
+              </div>
+              <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#1F2A22] dark:text-[#FFFDF8] tracking-tight">
+                Find Water-Rich, Legal Land Across All 28 Malawi Districts
+              </h1>
             </div>
-            <h1 className="serif text-2xl sm:text-3xl font-bold text-stone-950 dark:text-stone-50 tracking-tight">
-              Find Water-Rich, Legal Land Across All 28 Malawi Districts
-            </h1>
+
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              <Link
+                to="/scout-map"
+                className="bg-[#B4531F] dark:bg-[#D3672E] hover:opacity-90 text-white font-mono font-bold text-xs uppercase px-3.5 py-2 rounded-lg transition-all shadow-xs flex items-center gap-1.5"
+              >
+                <Compass size={14} /> 28-District GIS Map <ChevronRight size={13} />
+              </Link>
+              <button
+                onClick={() => window.print()}
+                className="bg-[#F6F1E7] dark:bg-[#0E1712] hover:bg-[#EAE2D2] dark:hover:bg-[#1F3325] text-[#1F2A22] dark:text-[#F6F1E7] border border-[#E4DCCB] dark:border-[#283C30] font-mono text-xs font-bold uppercase px-3 py-2 rounded-lg transition-all cursor-pointer flex items-center gap-1.5"
+                title="Print current Field Scouting Dossier"
+              >
+                <Printer size={13} /> Print Dossier
+              </button>
+              <button
+                onClick={() => setShowSurveyModal(true)}
+                className="bg-[#F6F1E7] dark:bg-[#0E1712] hover:bg-[#EAE2D2] dark:hover:bg-[#1F3325] text-[#1F2A22] dark:text-[#F6F1E7] border border-[#E4DCCB] dark:border-[#283C30] font-mono text-xs font-bold uppercase px-3 py-2 rounded-lg transition-all cursor-pointer"
+              >
+                Field Survey Guide
+              </button>
+            </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 shrink-0">
-            <Link
-              to="/scout-map"
-              className="bg-emerald-950 hover:bg-emerald-900 text-amber-300 font-mono font-bold text-xs uppercase px-3.5 py-2 rounded-xl transition-all shadow-xs flex items-center gap-1.5"
-            >
-              <Compass size={14} /> 28-District GIS Map <ChevronRight size={13} />
-            </Link>
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#E4DCCB] dark:border-[#283C30]">
+            <div className="flex flex-wrap items-center gap-1.5 bg-[#F6F1E7] dark:bg-[#0E1712] p-1 rounded-lg border border-[#E4DCCB] dark:border-[#283C30]">
+              {([
+                { id: 'districts', label: '01. District & Aquifers' },
+                { id: 'readiness-cards', label: '02. 28-District Readiness Cards' },
+                { id: 'customary-law', label: '03. Customary Land Law & Protocols' },
+                { id: 'evaluator', label: '04. Property Evaluator & Checklist' },
+              ] as const).map((tab) => {
+                const active = activePerspective === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActivePerspective(tab.id)}
+                    className={cn(
+                      'px-3.5 py-1.5 rounded-md text-xs font-semibold transition-all duration-200 cursor-pointer',
+                      active
+                        ? 'bg-[#2B4636] dark:bg-[#283C30] text-white shadow-xs font-bold'
+                        : 'text-[#5A6458] dark:text-[#9FB3A4] hover:bg-[#FFFDF8] dark:hover:bg-[#17241C] hover:text-[#1F2A22] dark:hover:text-[#F6F1E7]'
+                    )}
+                  >
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
+
             <button
-              onClick={() => window.print()}
-              className="bg-stone-100 dark:bg-stone-900 hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 border border-stone-300 dark:border-stone-700 font-mono text-xs font-bold uppercase px-3 py-2 rounded-xl transition-all cursor-pointer flex items-center gap-1.5"
-              title="Print current Field Scouting Dossier"
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent('outpost:open-citations'))}
+              className="text-xs font-medium text-[#B4531F] dark:text-[#D4A034] hover:underline cursor-pointer"
             >
-              <Printer size={13} /> Print Dossier
-            </button>
-            <button
-              onClick={() => setShowSurveyModal(true)}
-              className="bg-stone-100 dark:bg-stone-900 hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 border border-stone-300 dark:border-stone-700 font-mono text-xs font-bold uppercase px-3 py-2 rounded-xl transition-all cursor-pointer"
-            >
-              Field Survey Guide
+              View {DATA_SOURCES_AND_CITATIONS.length} Verified Authorities (WMO / FAO) →
             </button>
           </div>
-        </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-stone-200/80 dark:border-emerald-900/40">
-          <div className="flex flex-wrap items-center gap-1.5 bg-stone-100 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/80 dark:border-stone-800">
-            {([
-              { id: 'districts', label: '01. District & Aquifers' },
-              { id: 'readiness-cards', label: '02. 28-District Readiness Cards' },
-              { id: 'customary-law', label: '03. Customary Land Law & Protocols' },
-              { id: 'evaluator', label: '04. Property Evaluator & Checklist' },
-            ] as const).map((tab) => {
-              const active = activePerspective === tab.id;
-              return (
+          <ActiveDistrictContextBar onDistrictSelect={(id) => handleDistrictSearch(id)} />
+        </header>
+
+        {/* ------------------------------------------------------------- */}
+        {/* SECTION 1: ESSENTIAL FUNCTION - DISTRICT & ZONE ANALYZER      */}
+        {/* ------------------------------------------------------------- */}
+        {activePerspective === 'districts' && (
+        <section className="bg-[#FFFDF8] dark:bg-[#17241C] text-[#1F2A22] dark:text-[#F6F1E7] p-6 sm:p-8 rounded-xl flex flex-col gap-6 relative shadow-sm border border-[#E4DCCB] dark:border-[#283C30] transition-colors">
+          <div className="relative z-10 flex flex-col gap-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E4DCCB] dark:border-[#283C30] pb-4">
+              <div>
+                <span className="text-[#B4531F] dark:text-[#D4A034] text-xs font-sans font-bold uppercase tracking-wider flex items-center gap-1.5">
+                  <Search size={13} className="text-[#B4531F] dark:text-[#D4A034]" />
+                  01 • DISTRICT FINDER
+                </span>
+                <h2 className="font-serif text-2xl sm:text-3xl font-bold mt-1 text-[#1F2A22] dark:text-[#FFFDF8]">Farming Zone &amp; District Checker</h2>
+                <p className="text-[#5A6458] dark:text-[#9FB3A4] mt-1 text-sm font-medium">Search any district in Malawi to check soil acidity, well water depth, rainfall, and farming conditions.</p>
+              </div>
+              <Link
+                to={analyzedDistrict ? `/scout?district=${encodeURIComponent(analyzedDistrict.id || analyzedDistrict.name.replace(' District', '').toLowerCase())}` : '/scout'}
+                className="self-start sm:self-auto bg-[#F6F1E7] dark:bg-[#0E1712] hover:bg-[#EAE2D2] dark:hover:bg-[#1F3325] text-[#1F2A22] dark:text-[#F6F1E7] border border-[#E4DCCB] dark:border-[#283C30] font-sans text-xs font-semibold uppercase px-4 py-2 rounded-lg transition-all flex items-center gap-2"
+              >
+                <Compass size={14} className="text-[#B4531F] dark:text-[#D4A034]" /> View {analyzedDistrict ? analyzedDistrict.name.replace(' District', '') : ''} on Map
+              </Link>
+            </div>
+
+            {/* Quick District Buttons across all 28 Districts */}
+            <div className="flex flex-wrap gap-1.5">
+              {DISTRICT_LIST.map(dist => (
                 <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setActivePerspective(tab.id)}
+                  key={dist.id}
+                  onClick={() => handleDistrictSearch(dist.name)}
                   className={cn(
-                    'px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer',
-                    active
-                      ? 'bg-emerald-950 dark:bg-amber-500 text-amber-300 dark:text-stone-950 shadow-xs font-bold'
-                      : 'text-stone-700 dark:text-stone-300 hover:bg-white dark:hover:bg-stone-800'
+                    "px-3 py-1.5 rounded-md text-xs font-sans font-semibold tracking-tight transition-all duration-200 border cursor-pointer hover:-translate-y-0.5",
+                    analyzedDistrict?.name.toLowerCase().includes(dist.name.toLowerCase())
+                      ? "bg-[#2B4636] dark:bg-[#283C30] border-[#2B4636] dark:border-[#3A5945] text-white shadow-xs font-bold"
+                      : "bg-[#F6F1E7] dark:bg-[#0E1712] border-[#E4DCCB] dark:border-[#283C30] text-[#1F2A22] dark:text-[#F6F1E7] hover:bg-[#EAE2D2] dark:hover:bg-[#1F3325]"
                   )}
                 >
-                  {tab.label}
+                  {dist.name}
                 </button>
-              );
-            })}
-          </div>
-
-          <button
-            type="button"
-            onClick={() => window.dispatchEvent(new CustomEvent('outpost:open-citations'))}
-            className="text-xs font-medium text-emerald-800 dark:text-emerald-400 hover:underline cursor-pointer"
-          >
-            View {DATA_SOURCES_AND_CITATIONS.length} Verified Authorities (WMO / FAO) →
-          </button>
-        </div>
-
-        <ActiveDistrictContextBar onDistrictSelect={(id) => handleDistrictSearch(id)} />
-      </header>
-
-      {/* ------------------------------------------------------------- */}
-      {/* SECTION 1: ESSENTIAL FUNCTION - DISTRICT & ZONE ANALYZER      */}
-      {/* ------------------------------------------------------------- */}
-      {activePerspective === 'districts' && (
-      <section className="bg-white/95 dark:bg-[#0D1D13] text-stone-900 dark:text-stone-100 p-6 sm:p-8 md:p-10 rounded-3xl flex flex-col gap-6 relative shadow-xs border border-stone-200 dark:border-emerald-900/60">
-        <div className="relative z-10 flex flex-col gap-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-200 dark:border-emerald-900/50 pb-4">
-            <div>
-              <span className="text-emerald-900 dark:text-amber-300 text-xs font-sans font-bold uppercase tracking-wider flex items-center gap-1.5">
-                <Search size={13} className="text-emerald-700 dark:text-amber-400" />
-                01 • DISTRICT FINDER
-              </span>
-              <h2 className="serif text-2xl sm:text-3xl font-bold mt-1 text-stone-900 dark:text-white">Farming Zone & District Checker</h2>
-              <p className="text-stone-700 dark:text-stone-300 mt-1 text-sm font-medium">Search any district in Malawi to check soil acidity, well water depth, rainfall, and farming conditions.</p>
+              ))}
             </div>
-            <Link
-              to={analyzedDistrict ? `/scout?district=${encodeURIComponent(analyzedDistrict.id || analyzedDistrict.name.replace(' District', '').toLowerCase())}` : '/scout'}
-              className="self-start sm:self-auto bg-emerald-50 dark:bg-emerald-950/90 hover:bg-emerald-100 dark:hover:bg-emerald-900 text-emerald-900 dark:text-amber-300 border border-emerald-300 dark:border-emerald-700 font-sans text-xs font-semibold uppercase px-4 py-2.5 rounded-xl transition-all flex items-center gap-2"
-            >
-              <Compass size={14} className="text-emerald-800 dark:text-amber-400" /> View {analyzedDistrict ? analyzedDistrict.name.replace(' District', '') : ''} on Map
-            </Link>
-          </div>
 
-          {/* Quick District Buttons across all 28 Districts */}
-          <div className="flex flex-wrap gap-1.5">
-            {DISTRICT_LIST.map(dist => (
-              <button
-                key={dist.id}
-                onClick={() => handleDistrictSearch(dist.name)}
-                className={cn(
-                  "px-3 py-1.5 rounded-xl text-xs font-sans font-semibold tracking-tight transition-all border cursor-pointer",
-                  analyzedDistrict?.name.toLowerCase().includes(dist.name.toLowerCase())
-                    ? "bg-emerald-900 dark:bg-amber-500 border-emerald-950 dark:border-amber-400 text-white dark:text-stone-950 shadow-xs font-bold"
-                    : "bg-stone-100 dark:bg-stone-900 border-stone-300 dark:border-emerald-900/60 text-stone-800 dark:text-stone-200 hover:bg-stone-200 dark:hover:bg-stone-800"
-                )}
+            <div className="flex gap-3">
+              <div className="relative w-full">
+                <Search className="absolute left-4 top-3.5 text-[#B4531F] dark:text-[#D4A034]" size={16} />
+                <input 
+                  type="text" 
+                  value={districtQuery}
+                  onChange={(e) => handleDistrictSearch(e.target.value)}
+                  placeholder="Type Malawi District name e.g. Dedza, Mzimba, Mulanje, Zomba, Salima..." 
+                  className="bg-[#F6F1E7] dark:bg-[#0E1712] border border-[#E4DCCB] dark:border-[#283C30] rounded-lg pl-11 pr-4 py-2.5 text-sm focus:outline-none focus:border-[#B4531F] dark:focus:border-[#D3672E] w-full placeholder:text-[#5A6458] dark:placeholder:text-[#9FB3A4] text-[#1F2A22] dark:text-[#F6F1E7] font-medium font-sans shadow-xs transition-colors"
+                />
+              </div>
+            </div>
+
+            {/* Display Analyzed District Card */}
+            {analyzedDistrict && (
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-[#FFFDF8] dark:bg-[#132219] border border-[#E4DCCB] dark:border-[#283C30] p-6 sm:p-8 rounded-xl flex flex-col gap-5 shadow-md text-[#1F2A22] dark:text-[#F6F1E7] transition-all"
               >
-                {dist.name}
-              </button>
-            ))}
-          </div>
-
-          <div className="flex gap-3">
-            <div className="relative w-full">
-              <Search className="absolute left-4 top-4 text-emerald-800 dark:text-amber-400" size={18} />
-              <input 
-                type="text" 
-                value={districtQuery}
-                onChange={(e) => handleDistrictSearch(e.target.value)}
-                placeholder="Type Malawi District name e.g. Dedza, Mzimba, Mulanje, Zomba, Salima..." 
-                className="bg-white dark:bg-stone-900 border border-stone-300 dark:border-emerald-800/70 rounded-2xl pl-12 pr-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-800 dark:focus:ring-amber-400 w-full placeholder:text-stone-400 text-stone-900 dark:text-stone-100 font-medium font-sans shadow-xs"
-              />
-            </div>
-          </div>
-
-          {/* Display Analyzed District Card */}
-          {analyzedDistrict && (
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-[#0B2517] border border-emerald-800 p-6 sm:p-8 rounded-3xl flex flex-col gap-5 shadow-xl text-white"
-            >
-              <div className="flex justify-between items-start border-b border-emerald-800 pb-4">
-                <div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="serif text-2xl sm:text-3xl font-bold text-white">{analyzedDistrict.name}</h3>
-                    <span className="bg-emerald-800/80 text-emerald-200 border border-emerald-600/60 text-caption font-bold uppercase tracking-wider px-2 py-0.5 rounded-md">
-                      {analyzedDistrict.region} Region
-                    </span>
-                    {analyzedDistrict.verificationStatus === 'partial' ? (
-                      <span className="inline-flex items-center gap-1 bg-amber-500/20 text-amber-200 border border-amber-400/40 text-caption font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md">
-                        <AlertCircle size={11} className="text-amber-300" />
-                        Regional Interpolation ({analyzedDistrict.unverifiedFields?.join(', ') || 'Field Check Required'})
+                <div className="flex justify-between items-start border-b border-[#E4DCCB] dark:border-[#283C30] pb-4">
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#1F2A22] dark:text-[#FFFDF8]">{analyzedDistrict.name}</h3>
+                      <span className="text-[#5A6458] dark:text-[#9FB3A4] text-xs font-mono">
+                        {analyzedDistrict.region} Region
                       </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 bg-emerald-500/20 text-emerald-200 border border-emerald-400/40 text-caption font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md">
-                        <ShieldCheck size={11} className="text-emerald-300" />
-                        WMO / FAO Verified Baseline
-                      </span>
-                    )}
+                      {analyzedDistrict.verificationStatus === 'partial' ? (
+                        <span className="inline-flex items-center gap-1 text-[#B4531F] dark:text-[#D4A034] text-caption font-mono font-bold uppercase tracking-wider">
+                          <AlertCircle size={11} />
+                          Regional Interpolation
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-[#2B4636] dark:text-[#86EFAC] text-caption font-mono font-bold uppercase tracking-wider">
+                          <ShieldCheck size={11} />
+                          WMO / FAO Verified Baseline
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-[#B4531F] dark:text-[#D4A034] font-medium mt-1">
+                      Market Access: {analyzedDistrict.nearestMarketTown} ({analyzedDistrict.m1DistanceKm})
+                    </p>
                   </div>
-                  <p className="text-xs text-amber-300 font-bold mt-1">
-                    Market Access: {analyzedDistrict.nearestMarketTown} ({analyzedDistrict.m1DistanceKm})
-                  </p>
+                  <div className="flex flex-col items-end">
+                    <span className="text-caption uppercase font-bold tracking-widest text-[#5A6458] dark:text-[#9FB3A4] font-sans">Outpost Score</span>
+                    <span className="text-3xl font-bold text-[#B4531F] dark:text-[#D4A034] font-mono tabular-nums">{analyzedDistrict.suitabilityScore}<span className="text-sm font-normal text-[#5A6458] dark:text-[#9FB3A4]">/10</span></span>
+                  </div>
                 </div>
-                <div className="flex flex-col items-end">
-                  <span className="text-caption uppercase font-bold tracking-widest text-emerald-300 font-sans">Outpost Score</span>
-                  <span className="text-3xl font-bold text-amber-300 font-sans">{analyzedDistrict.suitabilityScore}<span className="text-sm font-normal text-white/60">/10</span></span>
-                </div>
-              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-[#06180E] p-4 rounded-2xl border border-emerald-900 text-xs">
-                <div className="flex flex-col gap-0.5">
-                  <span className="text-caption uppercase font-bold text-emerald-300/80 font-sans">Altitude & Rain</span>
-                  <span className="font-bold text-white">{analyzedDistrict.altitude}</span>
-                  <span className="text-caption text-emerald-200">{analyzedDistrict.rainfall}</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-[#F6F1E7] dark:bg-[#0E1712] p-4 rounded-lg border border-[#E4DCCB] dark:border-[#283C30] text-xs font-mono tabular-nums">
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-caption uppercase font-bold text-[#5A6458] dark:text-[#9FB3A4] font-sans">Altitude &amp; Rain</span>
+                    <span className="font-bold text-[#1F2A22] dark:text-[#FFFDF8]">{analyzedDistrict.altitude}</span>
+                    <span className="text-caption text-[#5A6458] dark:text-[#9FB3A4]">{analyzedDistrict.rainfall}</span>
+                  </div>
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-caption uppercase font-bold text-[#5A6458] dark:text-[#9FB3A4] font-sans">FAO HWSD v2.0 Soil &amp; pH</span>
+                    <span className="font-bold text-[#1F2A22] dark:text-[#FFFDF8]">{analyzedDistrict.soil}</span>
+                    <span className="text-caption text-[#5A6458] dark:text-[#9FB3A4]">{analyzedDistrict.soilPh}</span>
+                  </div>
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-caption uppercase font-bold text-[#5A6458] dark:text-[#9FB3A4] font-sans">Well &amp; Borehole Water Depth</span>
+                    <span className="font-bold text-[#1F2A22] dark:text-[#FFFDF8]">{analyzedDistrict.groundwaterDepthM}</span>
+                    <span className="text-caption text-[#5A6458] dark:text-[#9FB3A4]">
+                      {analyzedDistrict.verificationStatus === 'partial' ? 'Watershed Interpolated (Test On-Site)' : 'FAO AQUASTAT Baseline'}
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-caption uppercase font-bold text-[#B4531F] dark:text-[#D4A034] font-sans">Indicative Survey &amp; Allocation Est.</span>
+                    <span className="font-bold text-[#B4531F] dark:text-[#D4A034]">{analyzedDistrict.landCostBallpark}</span>
+                    <span className="text-caption text-[#5A6458] dark:text-[#9FB3A4]">Customary Land Act (2016)</span>
+                  </div>
                 </div>
-                <div className="flex flex-col gap-0.5">
-                  <span className="text-caption uppercase font-bold text-emerald-300/80 font-sans">FAO HWSD v2.0 Soil & pH</span>
-                  <span className="font-bold text-white">{analyzedDistrict.soil}</span>
-                  <span className="text-caption text-emerald-200">{analyzedDistrict.soilPh}</span>
-                </div>
-                <div className="flex flex-col gap-0.5">
-                  <span className="text-caption uppercase font-bold text-emerald-300/80 font-sans">Well & Borehole Water Depth</span>
-                  <span className="font-bold text-white">{analyzedDistrict.groundwaterDepthM}</span>
-                  <span className="text-caption text-emerald-200">
-                    {analyzedDistrict.verificationStatus === 'partial' ? 'Watershed Interpolated (Test On-Site)' : 'FAO AQUASTAT Baseline'}
-                  </span>
-                </div>
-                <div className="flex flex-col gap-0.5">
-                  <span className="text-caption uppercase font-bold text-amber-300 font-sans">Indicative Survey & Allocation Est.</span>
-                  <span className="font-bold text-amber-300">{analyzedDistrict.landCostBallpark}</span>
-                  <span className="text-caption text-stone-300">Unverified field est. • Customary Land Act (2016)</span>
-                </div>
-              </div>
 
               {analyzedDistrict.verificationStatus === 'partial' && (
                 <div className="bg-amber-950/50 border border-amber-500/40 rounded-2xl p-3 text-xs text-amber-100 flex items-start gap-2">
@@ -786,6 +787,7 @@ Generated from OUTPOST: Country Living Matrix
           </div>
         )}
       </AnimatePresence>
+      </div>
     </div>
   );
 }

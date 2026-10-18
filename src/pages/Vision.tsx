@@ -134,33 +134,33 @@ export default function Vision() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] dark:bg-[#0B1610] text-stone-800 dark:text-[#F7F4EC] pb-20 transition-colors">
+    <div className="min-h-screen bg-[#F6F1E7] dark:bg-[#0E1712] text-[#1F2A22] dark:text-[#F6F1E7] pb-20 transition-colors duration-200">
       {/* Vector-Backed Hero Stage with Un-Squished Sanctuary Illustration */}
-      <div className="relative pt-8 pb-6 px-6 overflow-hidden border-b border-stone-200 dark:border-white/10 bg-[#141D17] text-[#F7F4EC]">
+      <div className="relative pt-8 pb-6 px-6 overflow-hidden border-b border-[#E4DCCB] dark:border-[#1F3325] bg-[#16261C] dark:bg-[#0E1712] text-[#F6F1E7]">
         <HomeSceneryBackground activeScene="sanctuary" />
 
         <div className="max-w-7xl mx-auto relative z-10 flex flex-col gap-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             <div className="lg:col-span-8 flex flex-col gap-3">
-              <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-[#E6B655]">
-                <ShieldCheck className="w-4 h-4 text-[#C89B3C]" />
+              <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-[#D4A034]">
+                <ShieldCheck className="w-4 h-4 text-[#D4A034]" />
                 <span className="font-bold tracking-wider uppercase">
                   SPIRIT OF PROPHECY &amp; 1844 SANCTUARY ATLAS · {EGW_QUOTES.length} VERBATIM PASSAGES
                 </span>
               </div>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-normal tracking-tight text-[#F7F4EC] leading-[1.12]">
-                Why We Leave the Cities: <span className="italic text-[#E6B655]">From 1844 to the Final Refuge</span>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-normal tracking-tight text-[#FFFDF8] leading-[1.12]">
+                Why We Leave the Cities: <span className="italic text-[#D4A034]">From 1844 to the Final Refuge</span>
               </h1>
 
-              <p className="text-sm sm:text-base text-stone-200 max-w-2xl leading-relaxed">
+              <p className="text-sm sm:text-base text-[#D0DAD2] max-w-2xl leading-relaxed">
                 Explore 7 oil-painted prophetic epochs from October 22, 1844 to the Second Coming alongside verbatim Ellen G. White counsels on country living, natural remedies, and raising children in nature.
               </p>
             </div>
 
             {/* Right 4 Cols: Full-Proportion 1844 Sanctuary Vector Plate */}
-            <div className="lg:col-span-4 rounded-2xl bg-stone-950/80 backdrop-blur-xl border border-amber-400/30 p-4 flex flex-col items-center justify-center shadow-xl">
-              <span className="text-caption font-mono font-bold uppercase tracking-widest text-amber-300 mb-1.5">
+            <div className="lg:col-span-4 rounded-xl bg-[#0E1712]/90 backdrop-blur-xl border border-[#283C30] p-4 flex flex-col items-center justify-center shadow-xl">
+              <span className="text-caption font-mono font-bold uppercase tracking-widest text-[#D4A034] mb-1.5">
                 Daniel 8:14 · October 22, 1844
               </span>
               <CountryIcon
@@ -172,14 +172,14 @@ export default function Vision() {
 
           {/* Desktop Perspective Switcher Bar */}
           <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-white/10">
-            <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-stone-950/85 backdrop-blur-xl border border-white/15">
+            <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-[#0E1712]/80 backdrop-blur-md border border-[#283C30]">
               <button
                 type="button"
                 onClick={() => setActiveDesktopTab('prophecy-atlas')}
-                className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-2 ${
+                className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all duration-200 cursor-pointer flex items-center gap-2 ${
                   activeDesktopTab === 'prophecy-atlas'
-                    ? 'bg-amber-400 text-stone-950 font-bold shadow-xs'
-                    : 'text-stone-300 hover:text-white hover:bg-white/5'
+                    ? 'bg-[#B4531F] dark:bg-[#D3672E] text-white font-bold shadow-xs'
+                    : 'text-[#D0DAD2] hover:text-white hover:bg-white/5'
                 }`}
               >
                 <Sparkles className="w-3.5 h-3.5" />
@@ -188,10 +188,10 @@ export default function Vision() {
               <button
                 type="button"
                 onClick={() => setActiveDesktopTab('egw-archive')}
-                className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-2 ${
+                className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all duration-200 cursor-pointer flex items-center gap-2 ${
                   activeDesktopTab === 'egw-archive'
-                    ? 'bg-amber-400 text-stone-950 font-bold shadow-xs'
-                    : 'text-stone-300 hover:text-white hover:bg-white/5'
+                    ? 'bg-[#B4531F] dark:bg-[#D3672E] text-white font-bold shadow-xs'
+                    : 'text-[#D0DAD2] hover:text-white hover:bg-white/5'
                 }`}
               >
                 <BookOpen className="w-3.5 h-3.5" />
@@ -200,10 +200,10 @@ export default function Vision() {
               <button
                 type="button"
                 onClick={() => setActiveDesktopTab('split-all')}
-                className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
                   activeDesktopTab === 'split-all'
-                    ? 'bg-amber-400 text-stone-950 font-bold shadow-xs'
-                    : 'text-stone-300 hover:text-white hover:bg-white/5'
+                    ? 'bg-[#B4531F] dark:bg-[#D3672E] text-white font-bold shadow-xs'
+                    : 'text-[#D0DAD2] hover:text-white hover:bg-white/5'
                 }`}
               >
                 <Layers className="w-3.5 h-3.5" />
@@ -211,7 +211,7 @@ export default function Vision() {
               </button>
             </div>
 
-            <span className="hidden xl:inline text-xs font-mono text-stone-400">
+            <span className="hidden xl:inline text-xs font-mono text-[#9FB3A4]">
               Official EGW Estate Reference Codes · Live KJV Scripture Verification
             </span>
           </div>
@@ -227,21 +227,21 @@ export default function Vision() {
       {(activeDesktopTab === 'egw-archive' || activeDesktopTab === 'split-all') && (
         <div className="max-w-7xl mx-auto px-6 pt-8">
           {/* Search + Category Filter + Progressive Disclosure Control Bar */}
-          <div className="bg-[#1C2820]/95 backdrop-blur-xl p-4 rounded-2xl border border-white/10 shadow-xl mb-6 flex flex-col gap-3.5">
+          <div className="bg-[#FFFDF8] dark:bg-[#17241C] p-4 rounded-xl border border-[#E4DCCB] dark:border-[#283C30] shadow-sm mb-6 flex flex-col gap-3.5 transition-colors">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
               <div className="relative flex-1">
-                <Search className="w-4 h-4 text-[#C89B3C] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <Search className="w-4 h-4 text-[#B4531F] dark:text-[#D4A034] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search by topic, book code (GC 422.1, MH 127.2, CL 9.6), or Scripture..."
-                  className="w-full pl-10 pr-20 py-2.5 rounded-xl bg-black/30 border border-white/15 text-[#F7F4EC] placeholder:text-white/40 text-xs focus:outline-none focus:border-[#C89B3C]"
+                  className="w-full pl-10 pr-20 py-2.5 rounded-lg bg-[#F6F1E7] dark:bg-[#0E1712] border border-[#E4DCCB] dark:border-[#283C30] text-[#1F2A22] dark:text-[#F6F1E7] placeholder:text-[#5A6458] dark:placeholder:text-[#9FB3A4] text-xs focus:outline-none focus:border-[#B4531F] dark:focus:border-[#D3672E] transition-colors"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-caption font-mono font-bold uppercase text-[#E6B655] hover:text-white cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-caption font-mono font-bold uppercase text-[#B4531F] dark:text-[#D4A034] hover:opacity-80 cursor-pointer"
                   >
                     Clear
                   </button>
@@ -249,13 +249,13 @@ export default function Vision() {
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
-                <span className="text-caption font-mono text-white/60">
+                <span className="text-caption font-mono text-[#5A6458] dark:text-[#9FB3A4]">
                   Showing {filteredQuotes.length} of {EGW_QUOTES.length}
                 </span>
                 <button
                   type="button"
                   onClick={() => setExpandAllDetails((prev) => !prev)}
-                  className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-caption font-mono font-bold text-[#E6B655] cursor-pointer transition-colors"
+                  className="px-3 py-2 rounded-lg bg-[#F6F1E7] dark:bg-[#1F3325] hover:bg-[#EAE2D2] dark:hover:bg-[#283C30] border border-[#E4DCCB] dark:border-[#283C30] text-caption font-mono font-bold text-[#1F2A22] dark:text-[#F6F1E7] cursor-pointer transition-colors"
                 >
                   {expandAllDetails ? 'Compact View' : 'Expand All Field Notes'}
                 </button>
@@ -273,17 +273,17 @@ export default function Vision() {
                   <button
                     key={label}
                     onClick={() => setSelectedCategory(label)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-caption font-bold tracking-wide transition-all cursor-pointer ${
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-caption font-semibold tracking-wide transition-all duration-200 cursor-pointer ${
                       isActive
-                        ? 'bg-[#C89B3C] text-[#141D17] shadow-xs'
-                        : 'bg-white/[0.03] text-white/70 hover:bg-white/10 hover:text-white border border-white/5'
+                        ? 'bg-[#2B4636] dark:bg-[#283C30] text-[#FFFDF8] shadow-xs'
+                        : 'bg-[#F6F1E7] dark:bg-[#0E1712] text-[#5A6458] dark:text-[#9FB3A4] hover:bg-[#EAE2D2] dark:hover:bg-[#1F3325] hover:text-[#1F2A22] dark:hover:text-[#F6F1E7] border border-[#E4DCCB] dark:border-[#283C30]'
                     }`}
                   >
-                    <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#141D17]' : 'text-[#C89B3C]'}`} />
+                    <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#D4A034]' : 'text-[#5A6458] dark:text-[#9FB3A4]'}`} />
                     <span>{label}</span>
                     <span
                       className={`px-1.5 py-0.2 rounded text-caption font-mono ${
-                        isActive ? 'bg-[#141D17]/20 text-[#141D17]' : 'bg-white/10 text-white/60'
+                        isActive ? 'bg-white/20 text-white' : 'bg-black/5 dark:bg-white/10 text-[#5A6458] dark:text-[#9FB3A4]'
                       }`}
                     >
                       {count}
@@ -314,12 +314,12 @@ export default function Vision() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.98 }}
                     transition={{ duration: 0.22, delay: Math.min(idx * 0.02, 0.15) }}
-                    className="bg-white dark:bg-[#132018]/95 backdrop-blur-md p-5 rounded-2xl border border-stone-200/90 dark:border-white/10 hover:border-amber-500/60 transition-all flex flex-col justify-between gap-4 relative overflow-hidden group shadow-sm"
+                    className="bg-[#FFFDF8] dark:bg-[#17241C] p-5 rounded-xl border border-[#E4DCCB] dark:border-[#283C30] hover:border-[#B4531F] dark:hover:border-[#D3672E] hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between gap-4 relative overflow-hidden group shadow-sm text-[#1F2A22] dark:text-[#F6F1E7]"
                   >
                     <div className="flex flex-col sm:flex-row items-start gap-4">
                       {/* Left Thumbnail Plate (Un-Squished, Fixed Aspect Ratio) */}
                       {quote.image && (
-                        <div className="w-full sm:w-36 h-36 rounded-xl overflow-hidden border border-stone-200 dark:border-white/15 shrink-0 relative bg-stone-900">
+                        <div className="w-full sm:w-36 h-36 rounded-lg overflow-hidden border border-[#E4DCCB] dark:border-[#283C30] shrink-0 relative bg-[#0E1712]">
                           <img
                             src={quote.image}
                             alt={quote.imageAlt || quote.title || 'Spirit of Prophecy Illustration'}
@@ -330,7 +330,7 @@ export default function Vision() {
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent" />
                           {quote.egwCode && (
-                            <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-black/80 border border-[#C89B3C]/40 text-caption font-mono font-bold text-[#E6B655]">
+                            <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-black/80 border border-[#D4A034]/40 text-caption font-mono font-bold text-[#D4A034]">
                               {quote.egwCode}
                             </span>
                           )}
@@ -340,10 +340,10 @@ export default function Vision() {
                       {/* Right Quote Content */}
                       <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5 text-caption font-mono">
-                          <span className="text-emerald-800 dark:text-[#E6B655] font-bold uppercase tracking-wider">
+                          <span className="text-[#B4531F] dark:text-[#D4A034] font-bold uppercase tracking-wider">
                             {quote.category}
                           </span>
-                          <span className="text-stone-500 dark:text-white/50">
+                          <span className="text-[#5A6458] dark:text-[#9FB3A4]">
                             {quote.egwCode} {quote.yearWritten ? `· ${quote.yearWritten}` : ''}
                           </span>
                         </div>
@@ -363,31 +363,31 @@ export default function Vision() {
                     <div className="flex flex-col gap-2.5">
                       {/* Compact Scripture Bar */}
                       {quote.scriptureCompanion && (
-                        <div className="p-2.5 rounded-xl bg-amber-50/80 dark:bg-[#C89B3C]/[0.07] border border-amber-200 dark:border-[#C89B3C]/25">
+                        <div className="p-2.5 rounded-lg bg-[#F6F1E7]/80 dark:bg-[#0E1712]/90 border border-[#E4DCCB] dark:border-[#283C30]">
                           <div className="flex flex-wrap items-center justify-between gap-2">
-                            <span className="text-caption font-mono font-bold uppercase tracking-wider text-amber-900 dark:text-[#E6B655] flex items-center gap-1">
+                            <span className="text-caption font-mono font-bold uppercase tracking-wider text-[#B4531F] dark:text-[#D4A034] flex items-center gap-1">
                               <Sparkles className="w-3 h-3" /> {quote.scriptureCompanion.reference}
                             </span>
                             <button
                               onClick={() => fetchVerifiedScripture(quote)}
                               disabled={isLoadingVerse}
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-200/70 dark:bg-[#C89B3C]/20 hover:bg-amber-300 dark:hover:bg-[#C89B3C]/35 text-stone-900 dark:text-[#F7F4EC] text-caption font-mono font-bold uppercase transition-colors cursor-pointer disabled:opacity-50"
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#EAE2D2] dark:bg-[#1F3325] hover:bg-[#DDD2BE] dark:hover:bg-[#283C30] text-[#1F2A22] dark:text-[#F6F1E7] text-caption font-mono font-bold uppercase transition-colors cursor-pointer disabled:opacity-50"
                             >
                               <RefreshCw className={`w-2.5 h-2.5 ${isLoadingVerse ? 'animate-spin' : ''}`} />
                               {liveVerse ? 'KJV Verified' : 'Verify KJV'}
                             </button>
                           </div>
 
-                          <p className="text-xs text-stone-700 dark:text-white/85 italic leading-snug mt-1">
+                          <p className="text-xs text-[#5A6458] dark:text-[#D0DAD2] italic leading-snug mt-1">
                             “{liveVerse ? liveVerse.text : quote.scriptureCompanion.verse}”
                           </p>
-                          {verseErr && <p className="text-caption text-amber-700 dark:text-amber-300 mt-1">{verseErr}</p>}
+                          {verseErr && <p className="text-caption text-[#B4531F] dark:text-[#E06A3B] mt-1">{verseErr}</p>}
                         </div>
                       )}
 
                       {/* Progressive Disclosure Drawer + Study Actions + Footer Citation */}
-                      <div className="pt-2.5 border-t border-stone-200 dark:border-white/10 flex flex-wrap items-center justify-between gap-2">
-                        <span className="text-xs text-emerald-900 dark:text-[#E6B655] font-semibold truncate">
+                      <div className="pt-2.5 border-t border-[#E4DCCB] dark:border-[#283C30] flex flex-wrap items-center justify-between gap-2">
+                        <span className="text-xs text-[#2B4636] dark:text-[#D4A034] font-semibold truncate">
                           {quote.source}
                         </span>
 
@@ -396,16 +396,16 @@ export default function Vision() {
                             type="button"
                             onClick={() => handleSaveQuoteToNotes(quote)}
                             title="Save passage to your personal Field Notes (⌘I)"
-                            className="px-2.5 py-1 rounded-lg bg-stone-100 dark:bg-white/5 hover:bg-amber-100 dark:hover:bg-white/10 border border-stone-200 dark:border-white/15 text-caption font-mono font-semibold text-stone-700 dark:text-stone-200 inline-flex items-center gap-1 cursor-pointer transition-colors"
+                            className="px-2.5 py-1 rounded-md bg-[#F6F1E7] dark:bg-[#0E1712] hover:bg-[#EAE2D2] dark:hover:bg-[#1F3325] border border-[#E4DCCB] dark:border-[#283C30] text-caption font-mono font-semibold text-[#1F2A22] dark:text-[#F6F1E7] inline-flex items-center gap-1 cursor-pointer transition-all duration-200"
                           >
                             {isSavedToNotes ? (
                               <>
-                                <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                                <span>Saved to Notes</span>
+                                <Check className="w-3 h-3 text-[#3F6B4E]" />
+                                <span>Saved</span>
                               </>
                             ) : (
                               <>
-                                <Bookmark className="w-3 h-3 text-amber-600 dark:text-[#E6B655]" />
+                                <Bookmark className="w-3 h-3 text-[#B4531F] dark:text-[#D4A034]" />
                                 <span>Pin Note</span>
                               </>
                             )}
@@ -413,23 +413,23 @@ export default function Vision() {
 
                           <Link
                             to={practicalLink.to}
-                            className="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/80 border border-emerald-200 dark:border-emerald-700/50 text-caption font-mono font-semibold text-emerald-900 dark:text-emerald-200 inline-flex items-center gap-1 transition-colors"
+                            className="px-2.5 py-1 rounded-md bg-[#2B4636]/10 dark:bg-[#1F3325] hover:bg-[#2B4636]/20 dark:hover:bg-[#283C30] border border-[#2B4636]/30 dark:border-[#283C30] text-caption font-mono font-semibold text-[#1F2A22] dark:text-[#F6F1E7] inline-flex items-center gap-1 transition-all duration-200"
                           >
                             <span>{practicalLink.label}</span>
-                            <ArrowRight className="w-3 h-3" />
+                            <ArrowRight className="w-3 h-3 text-[#B4531F] dark:text-[#D3672E]" />
                           </Link>
 
                           {(quote.historicalContext || quote.malawiOutpostApplication) && (
                             <button
                               type="button"
                               onClick={() => toggleCardDetail(quote.id)}
-                              className="px-2.5 py-1 rounded-lg bg-stone-100 dark:bg-white/5 hover:bg-stone-200 dark:hover:bg-white/10 border border-stone-200 dark:border-white/15 text-caption font-mono font-semibold text-stone-700 dark:text-stone-200 inline-flex items-center gap-1 cursor-pointer"
+                              className="px-2.5 py-1 rounded-md bg-[#F6F1E7] dark:bg-[#0E1712] hover:bg-[#EAE2D2] dark:hover:bg-[#1F3325] border border-[#E4DCCB] dark:border-[#283C30] text-caption font-mono font-semibold text-[#5A6458] dark:text-[#9FB3A4] inline-flex items-center gap-1 cursor-pointer transition-colors"
                             >
                               <span>{isExpanded ? 'Hide' : 'Context'}</span>
                               {isExpanded ? (
-                                <ChevronUp className="w-3 h-3 text-amber-600 dark:text-[#E6B655]" />
+                                <ChevronUp className="w-3 h-3 text-[#B4531F] dark:text-[#D4A034]" />
                               ) : (
-                                <ChevronDown className="w-3 h-3 text-amber-600 dark:text-[#E6B655]" />
+                                <ChevronDown className="w-3 h-3 text-[#B4531F] dark:text-[#D4A034]" />
                               )}
                             </button>
                           )}
@@ -439,7 +439,7 @@ export default function Vision() {
                               href={quote.verifiedUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-stone-100 dark:bg-white/5 hover:bg-[#C89B3C] text-stone-800 dark:text-white/85 hover:text-[#141D17] border border-stone-200 dark:border-white/15 hover:border-[#C89B3C] text-caption font-mono font-bold uppercase transition-all"
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-[#F6F1E7] dark:bg-[#0E1712] hover:bg-[#B4531F] dark:hover:bg-[#D3672E] text-[#1F2A22] dark:text-[#F6F1E7] hover:text-white dark:hover:text-white border border-[#E4DCCB] dark:border-[#283C30] text-caption font-mono font-bold uppercase transition-all duration-200"
                             >
                               <span>EGW</span>
                               <ExternalLink className="w-3 h-3" />
@@ -451,21 +451,21 @@ export default function Vision() {
                       {isExpanded && (
                         <div className="grid grid-cols-1 gap-2 pt-1">
                           {quote.historicalContext && (
-                            <div className="p-3 rounded-xl bg-stone-50 dark:bg-white/[0.03] border border-stone-200 dark:border-white/10">
-                              <div className="text-caption font-mono font-bold uppercase tracking-wider text-amber-800 dark:text-[#E6B655] mb-0.5">
+                            <div className="p-3 rounded-lg bg-[#F6F1E7] dark:bg-[#0E1712] border border-[#E4DCCB] dark:border-[#283C30]">
+                              <div className="text-caption font-mono font-bold uppercase tracking-wider text-[#B4531F] dark:text-[#D4A034] mb-0.5">
                                 Archival Context
                               </div>
-                              <p className="text-xs text-stone-700 dark:text-white/75 leading-relaxed">
+                              <p className="text-xs text-[#5A6458] dark:text-[#D0DAD2] leading-relaxed">
                                 {quote.historicalContext}
                               </p>
                             </div>
                           )}
                           {quote.malawiOutpostApplication && (
-                            <div className="p-3 rounded-xl bg-emerald-50/70 dark:bg-[#2E6F40]/15 border border-emerald-200 dark:border-[#2E6F40]/35">
-                              <div className="text-caption font-mono font-bold uppercase tracking-wider text-emerald-900 dark:text-[#86EFAC] mb-0.5">
+                            <div className="p-3 rounded-lg bg-[#2B4636]/10 dark:bg-[#1F3325]/40 border border-[#2B4636]/20 dark:border-[#283C30]">
+                              <div className="text-caption font-mono font-bold uppercase tracking-wider text-[#2B4636] dark:text-[#86EFAC] mb-0.5">
                                 Malawi Homestead Application
                               </div>
-                              <p className="text-xs text-stone-800 dark:text-white/85 leading-relaxed">
+                              <p className="text-xs text-[#1F2A22] dark:text-[#F6F1E7] leading-relaxed">
                                 {quote.malawiOutpostApplication}
                               </p>
                             </div>

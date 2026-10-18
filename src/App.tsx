@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion, MotionConfig } from 'motion/react';
 import { Skeleton, SkeletonCard, SkeletonText } from '@/components/ui/Skeleton';
@@ -9,6 +9,7 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { lazyWithRetry } from './lib/lazyWithRetry';
 import { scheduleDesktopIdleRoutePrefetch } from './lib/routePrefetch';
+import { DesktopLaunchSplash } from './components/common/DesktopLaunchSplash';
 import Home from './pages/Home';
 import ScoutMapPage from './pages/ScoutMapPage';
 
@@ -29,6 +30,7 @@ const Community = lazyWithRetry(() => import('./pages/Community'));
 const Devotional = lazyWithRetry(() => import('./pages/Devotional'));
 const Agriculture = lazyWithRetry(() => import('./pages/Agriculture'));
 const DevPalette = lazyWithRetry(() => import('./pages/DevPalette'));
+const SettingsPage = lazyWithRetry(() => import('./pages/SettingsPage'));
 const NotFound = lazyWithRetry(() => import('./pages/NotFound'));
 
 function PageFallback() {
@@ -54,6 +56,29 @@ function PageFallback() {
 function AnimatedAppRoutes() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [splashDone, setSplashDone] = useState(false);
+
+  // Restore previous session's last active tab on initial launch (if at root)
+  useEffect(() => {
+    try {
+      const savedRoute = localStorage.getItem('outpost_desktop_last_active_route_v1');
+      if (savedRoute && savedRoute !== '/' && location.pathname === '/') {
+        navigate(savedRoute, { replace: true });
+      }
+    } catch {}
+  }, []);
+
+  // Track and save active tab route for subsequent session restoration
+  useEffect(() => {
+    try {
+      if (location.pathname) {
+        localStorage.setItem(
+          'outpost_desktop_last_active_route_v1',
+          `${location.pathname}${location.search}`
+        );
+      }
+    } catch {}
+  }, [location.pathname, location.search]);
 
   useEffect(() => {
     const desktopBridge = (
@@ -92,15 +117,19 @@ function AnimatedAppRoutes() {
   }, [location.pathname, location.hash]);
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
-      <motion.div
-        key={location.pathname}
-        variants={fadeUp}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-        className="w-full h-full"
-      >
+    <>
+      {!splashDone && (
+        <DesktopLaunchSplash onReady={() => setSplashDone(true)} />
+      )}
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={location.pathname}
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          className="w-full h-full"
+        >
         <Routes location={location}>
           <Route path="/" element={<Home />} />
           <Route path="/vision" element={<Vision />} />
@@ -134,11 +163,14 @@ function AnimatedAppRoutes() {
           <Route path="/devotionals" element={<Devotional />} />
           <Route path="/agriculture" element={<Agriculture />} />
           <Route path="/edenic-farming" element={<Agriculture />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/preferences" element={<SettingsPage />} />
           <Route path="/dev/palette" element={<DevPalette />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
+    </>
   );
 }
 

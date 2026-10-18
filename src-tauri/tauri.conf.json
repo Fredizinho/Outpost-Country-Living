@@ -13,7 +13,11 @@
     "withGlobalTauri": false,
     "windows": [
       {
-        "title": "OUTPOST: COUNTRY LIVING — Malawi Sanctuary Blueprint",
+        "label": "main",
+        "title": "Outpost",
+        "decorations": false,
+        "titleBarStyle": "Overlay",
+        "hiddenTitle": true,
         "width": 1440,
         "height": 900,
         "minWidth": 1024,
@@ -24,15 +28,23 @@
       }
     ],
     "security": {
-      "csp": null
+      "csp": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' http://localhost:3000 https://ais-dev-nco6gmrub5ghd2zu6654pd-451009979139.europe-west1.run.app https://ais-pre-nco6gmrub5ghd2zu6654pd-451009979139.europe-west1.run.app https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com; media-src 'self' data: blob:; worker-src 'self' blob:;"
     }
+  },
+  "plugins": {
+    "window-state": {}
   },
   "bundle": {
     "active": true,
     "targets": ["msi", "nsis", "dmg", "app", "appimage", "deb"],
     "icon": [
-      "../public/pwa-192x192.png",
-      "../public/pwa-512x512.png"
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/256x256.png",
+      "icons/512x512.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
     ],
     "category": "Education",
     "shortDescription": "Adventist Country Living & Outpost Sanctuary Blueprint for Malawi",

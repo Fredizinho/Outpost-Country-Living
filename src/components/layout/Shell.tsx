@@ -10,6 +10,8 @@ import { QuickCommandPalette } from '../common/QuickCommandPalette';
 import { HomesteadAdvisorModal } from '../advisor/HomesteadAdvisorModal';
 import { LeftSymbolDirectory } from '../navigation/LeftSymbolDirectory';
 import { OfflinePwaStatusBanner } from '../common/OfflinePwaStatusBanner';
+import { WorkspaceStatusBar } from '../common/WorkspaceStatusBar';
+import { ShortcutCheatSheetModal } from '../common/ShortcutCheatSheetModal';
 import { calculateHomesteadReadinessScore } from '@/lib/offlineStorage';
 import { useActiveHomesteadDistrict } from '@/lib/activeDistrictSync';
 import { DISTRICT_LIST } from '@/constants';
@@ -21,14 +23,8 @@ export function Shell({ children }: { children: ReactNode }) {
 
   const [showCitationsModal, setShowCitationsModal] = useState(false);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const [isCheatSheetOpen, setIsCheatSheetOpen] = useState(false);
   const [isAdvisorOpen, setIsAdvisorOpen] = useState(false);
-  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
-  const [settingsModalTab, setSettingsModalTab] = useState<SettingsModalTab>('preferences');
-  const [isDistrictPickerOpen, setIsDistrictPickerOpen] = useState(false);
-  const [activeDistrictId, setActiveDistrictId] = useActiveHomesteadDistrict('dedza');
-  const activeDistrictObj =
-    DISTRICT_LIST.find((d) => d.id === activeDistrictId) || DISTRICT_LIST[0];
-  const activeDistrictName = activeDistrictObj?.name || 'Dedza';
   const [isInspectorOpen, setIsInspectorOpen] = useState<boolean>(() => {
     try {
       return localStorage.getItem('outpost_desktop_inspector_v1') === 'true';
@@ -49,9 +45,8 @@ export function Shell({ children }: { children: ReactNode }) {
     location.pathname
   );
 
-  const openSettings = (tab: SettingsModalTab = 'preferences') => {
-    setSettingsModalTab(tab);
-    setIsSettingsModalOpen(true);
+  const openSettings = (tab: string = 'preferences') => {
+    navigate(`/settings?tab=${tab}`);
   };
 
   const toggleInspector = () => {
@@ -116,7 +111,11 @@ export function Shell({ children }: { children: ReactNode }) {
         (e.key.toLowerCase() === 'b' || e.key.toLowerCase() === 'd')
       ) {
         e.preventDefault();
-        window.dispatchEvent(new CustomEvent('outpost:toggle-left-directory'));
+        if (e.shiftKey) {
+          toggleInspector();
+        } else {
+          window.dispatchEvent(new CustomEvent('outpost:toggle-left-directory'));
+        }
         return;
       }
 
@@ -134,6 +133,12 @@ export function Shell({ children }: { children: ReactNode }) {
         } else {
           document.exitFullscreen?.().catch(() => {});
         }
+        return;
+      }
+
+      if ((e.metaKey || e.ctrlKey) && (e.key === '/' || e.key === '?')) {
+        e.preventDefault();
+        setIsCheatSheetOpen((prev) => !prev);
         return;
       }
 
@@ -212,24 +217,30 @@ export function Shell({ children }: { children: ReactNode }) {
       openSettings(custom.detail?.tab || 'preferences');
     };
 
+    const handleOpenShortcuts = () => setIsCheatSheetOpen(true);
+
     window.addEventListener('outpost:open-citations', handleOpenCitations);
     window.addEventListener('outpost:open-search', handleOpenSearch);
     window.addEventListener('outpost:open-advisor', handleOpenAdvisor);
     window.addEventListener('outpost:open-settings', handleOpenSettings);
+    window.addEventListener('outpost:open-shortcuts', handleOpenShortcuts);
+    window.addEventListener('outpost:open-cheat-sheet', handleOpenShortcuts);
 
     return () => {
       window.removeEventListener('outpost:open-citations', handleOpenCitations);
       window.removeEventListener('outpost:open-search', handleOpenSearch);
       window.removeEventListener('outpost:open-advisor', handleOpenAdvisor);
       window.removeEventListener('outpost:open-settings', handleOpenSettings);
+      window.removeEventListener('outpost:open-shortcuts', handleOpenShortcuts);
+      window.removeEventListener('outpost:open-cheat-sheet', handleOpenShortcuts);
     };
   }, []);
 
   return (
     <div
       className={cn(
-        'h-screen w-screen overflow-hidden flex flex-col font-sans relative selection:bg-amber-200 dark:selection:bg-emerald-900 selection:text-stone-900 dark:selection:text-amber-200 transition-colors duration-200',
-        isField ? 'bg-black text-white' : 'bg-[#FAF8F5] dark:bg-[#07120C] text-stone-800 dark:text-stone-100'
+        'h-screen w-screen overflow-hidden flex flex-col font-chrome select-none relative selection:bg-[#B4531F]/20 selection:text-[#1F2A22] transition-colors duration-200',
+        isField ? 'bg-black text-white' : 'bg-[#F6F1E7] dark:bg-[#0F1813] text-[#1F2A22] dark:text-[#EBF2EC]'
       )}
     >
       {/* ====================================================================
@@ -248,15 +259,15 @@ export function Shell({ children }: { children: ReactNode }) {
           2. MAIN DESKTOP WORKSPACE BODY (ACTIVITY RAIL + EXPLORER + CANVAS + INSPECTOR)
       ==================================================================== */}
       <div className="flex-1 flex min-h-0 min-w-0 relative overflow-hidden">
-        {/* Left Activity Bar & Expandable Workspace Explorer Tree */}
+        {/* Left Activity Bar & Expandable Workspace Explorer Tree (232px moss #16261C) */}
         <LeftSymbolDirectory />
 
         {/* Center Active Tab Canvas Viewport */}
         <div
           id="outpost-scroll-Viewport"
           className={cn(
-            'flex-1 flex flex-col min-w-0 h-full relative',
-            isField ? 'bg-black text-white' : 'bg-[#FAF8F5] dark:bg-[#09150E]',
+            'flex-1 flex flex-col min-w-0 h-full relative select-text transition-colors duration-200',
+            isField ? 'bg-black text-white' : 'bg-[#F6F1E7] dark:bg-[#0F1813] text-[#1F2A22] dark:text-[#EBF2EC]',
             isScoutMapRoute ? 'overflow-hidden' : 'overflow-y-auto custom-scrollbar'
           )}
         >
@@ -280,6 +291,12 @@ export function Shell({ children }: { children: ReactNode }) {
         onOpenAdvisor={() => setIsAdvisorOpen(true)}
       />
 
+      {/* Keyboard Shortcut Cheat Sheet Modal (Ctrl+/) */}
+      <ShortcutCheatSheetModal
+        isOpen={isCheatSheetOpen}
+        onClose={() => setIsCheatSheetOpen(false)}
+      />
+
       {/* AI Sanctuary Advisor Modal */}
       <HomesteadAdvisorModal
         isOpen={isAdvisorOpen}
@@ -292,12 +309,8 @@ export function Shell({ children }: { children: ReactNode }) {
         onClose={() => setShowCitationsModal(false)}
       />
 
-      {/* Workspace Settings, About & Developer Modal */}
-      <SettingsAndAboutModal
-        isOpen={isSettingsModalOpen}
-        onClose={() => setIsSettingsModalOpen(false)}
-        initialTab={settingsModalTab}
-      />
+      {/* Bottom Desktop Workspace Status Bar */}
+      <WorkspaceStatusBar />
     </div>
   );
 }

@@ -51,69 +51,70 @@ export default function Skills() {
   });
 
   return (
-    <div className="px-4 sm:px-6 md:px-10 py-6 max-w-7xl mx-auto flex flex-col gap-6">
-      {/* Compact Practical Manuals Workspace Header */}
-      <header className="glass-depth-card rounded-2xl p-5 sm:p-6 flex flex-col gap-4">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div className="flex flex-col gap-1">
-            <div className="flex flex-wrap items-center gap-2 text-xs text-emerald-800 dark:text-amber-300 font-semibold">
-              <span>Practical Homestead Manuals · 100% Offline Ready</span>
-              <span aria-hidden="true">·</span>
-              <span className="text-stone-500 dark:text-stone-400 font-normal">
-                {skills.length} Field Blueprints — Tested for When You Are 40 km From the Nearest Hardware Shop
-              </span>
+    <div className="min-h-screen bg-[#F6F1E7] dark:bg-[#0E1712] text-[#1F2A22] dark:text-[#F6F1E7] pb-16 transition-colors duration-200">
+      <div className="px-4 sm:px-6 md:px-10 py-6 max-w-7xl mx-auto flex flex-col gap-6">
+        {/* Compact Practical Manuals Workspace Header */}
+        <header className="bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] rounded-2xl p-5 sm:p-6 flex flex-col gap-4 shadow-xs">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div className="flex flex-col gap-1">
+              <div className="flex flex-wrap items-center gap-2 text-xs text-[#B85D36] dark:text-[#E2875A] font-semibold">
+                <span>Practical Homestead Manuals · 100% Offline Ready</span>
+                <span aria-hidden="true">·</span>
+                <span className="text-[#5A6458] dark:text-[#9FB3A4] font-normal">
+                  {skills.length} Field Blueprints — Tested for When You Are 40 km From the Nearest Hardware Shop
+                </span>
+              </div>
+              <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#1F2A22] dark:text-[#FFFDF8] tracking-tight">
+                25 Off-Grid Country Living Skills &amp; Field Manuals
+              </h1>
             </div>
-            <h1 className="serif text-2xl sm:text-3xl font-bold text-stone-950 dark:text-stone-50 tracking-tight">
-              25 Off-Grid Country Living Skills &amp; Field Manuals
-            </h1>
+
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              <Link
+                to="/calculators"
+                className="bg-[#2C4A3E] hover:bg-[#1F352C] dark:bg-[#B85D36] dark:hover:bg-[#A34F2C] text-white font-mono font-bold text-xs uppercase px-3.5 py-2 rounded-xl transition-all shadow-xs flex items-center gap-1.5"
+              >
+                <span>7 Sizing Calculators</span>
+                <ArrowRight size={13} />
+              </Link>
+              <Link
+                to="/seasonal-guide"
+                className="bg-[#F6F1E7] dark:bg-[#102017] hover:bg-[#E4DCCB] dark:hover:bg-[#1E3024] text-[#1F2A22] dark:text-[#F6F1E7] border border-[#E4DCCB] dark:border-[#283C30] font-mono text-xs font-bold uppercase px-3 py-2 rounded-xl transition-all flex items-center gap-1.5"
+              >
+                <Calendar size={13} />
+                <span>Seasonal Calendar</span>
+              </Link>
+            </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 shrink-0">
-            <Link
-              to="/calculators"
-              className="bg-emerald-950 hover:bg-emerald-900 text-amber-300 font-mono font-bold text-xs uppercase px-3.5 py-2 rounded-xl transition-all shadow-xs flex items-center gap-1.5"
-            >
-              <span>7 Sizing Calculators</span>
-              <ArrowRight size={13} />
-            </Link>
-            <Link
-              to="/seasonal-guide"
-              className="bg-stone-100 dark:bg-stone-900 hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 border border-stone-300 dark:border-stone-700 font-mono text-xs font-bold uppercase px-3 py-2 rounded-xl transition-all flex items-center gap-1.5"
-            >
-              <Calendar size={13} />
-              <span>Seasonal Calendar</span>
-            </Link>
+          {/* Perspective Bar */}
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#E4DCCB] dark:border-[#283C30]">
+            <div className="flex flex-wrap items-center gap-1.5 bg-[#F6F1E7] dark:bg-[#102017] p-1 rounded-xl border border-[#E4DCCB] dark:border-[#283C30]">
+              {([
+                { id: 'all-guides', label: `01. All ${skills.length} Field Manuals & Filters` },
+                { id: 'sda-foundations', label: '02. True Education, Diet & Natural Remedies' },
+                { id: 'dispensary', label: '03. Tropical Dispensary & Natural Pharmacy' },
+              ] as const).map((tab) => {
+                const active = activePerspective === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActivePerspective(tab.id)}
+                    className={cn(
+                      'px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer',
+                      active
+                        ? 'bg-[#B85D36] text-white shadow-xs font-bold'
+                        : 'text-[#5A6458] dark:text-[#9FB3A4] hover:bg-[#FFFDF8] dark:hover:bg-[#17241C]'
+                    )}
+                  >
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
-
-        {/* Perspective Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-stone-200/80 dark:border-emerald-900/40">
-          <div className="flex flex-wrap items-center gap-1.5 bg-stone-100 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/80 dark:border-stone-800">
-            {([
-              { id: 'all-guides', label: `01. All ${skills.length} Field Manuals & Filters` },
-              { id: 'sda-foundations', label: '02. True Education, Diet & Natural Remedies' },
-              { id: 'dispensary', label: '03. Tropical Dispensary & Natural Pharmacy' },
-            ] as const).map((tab) => {
-              const active = activePerspective === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setActivePerspective(tab.id)}
-                  className={cn(
-                    'px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer',
-                    active
-                      ? 'bg-emerald-950 dark:bg-amber-500 text-amber-300 dark:text-stone-950 shadow-xs font-bold'
-                      : 'text-stone-700 dark:text-stone-300 hover:bg-white dark:hover:bg-stone-800'
-                  )}
-                >
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </header>
+        </header>
 
       {/* Interactive SDA True Education & Off-Grid Sustenance Matrix */}
       {activePerspective === 'sda-foundations' && (
@@ -916,6 +917,7 @@ export default function Skills() {
       )}
       </>
       )}
+      </div>
     </div>
   );
 }

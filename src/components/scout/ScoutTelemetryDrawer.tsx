@@ -215,106 +215,96 @@ export function ScoutTelemetryDrawer({
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: '100%', opacity: 0 }}
       transition={{ type: 'spring', damping: 28, stiffness: 280 }}
-      className="absolute right-3 top-3 bottom-3 w-[calc(100%-1.5rem)] sm:w-[440px] lg:w-[480px] max-h-[calc(100%-1.5rem)] z-30 bg-slate-950/95 backdrop-blur-2xl text-white rounded-3xl p-4 sm:p-5 shadow-2xl border border-white/20 flex flex-col gap-3.5 overflow-hidden pointer-events-auto"
+      className="absolute right-3 top-3 bottom-3 w-[calc(100%-1.5rem)] sm:w-[420px] lg:w-[460px] max-h-[calc(100%-1.5rem)] z-30 bg-[#FFFDF8] text-[#1F2A22] rounded-[10px] p-4 sm:p-5 shadow-xl border border-[#E4DCCB] flex flex-col gap-3.5 overflow-hidden pointer-events-auto font-chrome select-text"
       id="scout-telemetry-drawer-root"
     >
       {/* 1. DRAWER TOP HEADER */}
-      <div className="flex items-center justify-between border-b border-white/10 pb-3 shrink-0">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500/20 to-emerald-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
-            <Compass size={18} />
-          </div>
-          <div>
-            <h3 className="serif text-lg font-bold text-white leading-tight">
-              {activeDistrict ? `${activeDistrict.name} Summary` : currentRegionSpec.label}
-            </h3>
-            <span className="text-caption font-mono text-amber-400/90 uppercase tracking-wider block">
-              {activeDistrict ? `${activeDistrict.region} Region • Grade ${activeDistrict.feasibilityGrade}` : currentRegionSpec.badge}
-            </span>
-          </div>
+      <div className="flex items-center justify-between border-b border-[#E4DCCB] pb-3 shrink-0">
+        <div>
+          <h3 className="font-serif text-[22px] font-normal text-[#1F2A22] leading-tight">
+            {activeDistrict ? activeDistrict.name : currentRegionSpec.label}
+          </h3>
+          <span className="text-[12px] text-[#5A6458] block mt-0.5">
+            {activeDistrict ? `${activeDistrict.region} region` : currentRegionSpec.badge}
+          </span>
         </div>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5">
           {onOpenAiScout && (
             <button
               onClick={onOpenAiScout}
-              className="px-2.5 py-1 rounded-xl bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-400/50 text-emerald-300 hover:text-white text-xs font-mono flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
+              className="px-2.5 py-1 rounded-[6px] bg-[#F6F1E7] hover:bg-[#E4DCCB] border border-[#E4DCCB] text-[#1F2A22] text-[12px] flex items-center gap-1.5 transition-colors cursor-pointer"
               title="Open AI Map Scout with Google Maps Grounding"
             >
-              <Bot size={13} className="text-emerald-400" />
+              <Bot size={13} className="text-[#3F6B4E]" />
               <span>AI Scout</span>
-              <Sparkles size={11} className="text-amber-400" />
             </button>
           )}
           <button
             onClick={() => setMinimizedState(true)}
-            className="w-8 h-8 rounded-full bg-slate-900 border border-white/10 text-slate-400 hover:text-amber-300 flex items-center justify-center transition-all cursor-pointer"
+            className="w-7 h-7 rounded-[6px] bg-[#F6F1E7] border border-[#E4DCCB] text-[#5A6458] hover:text-[#1F2A22] flex items-center justify-center transition-colors cursor-pointer"
             title="Minimize to Ribbon"
           >
-            <Minimize2 size={14} />
+            <Minimize2 size={13} />
           </button>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-slate-900 border border-white/10 text-slate-400 hover:text-white flex items-center justify-center transition-all cursor-pointer"
+            className="w-7 h-7 rounded-[6px] bg-[#F6F1E7] border border-[#E4DCCB] text-[#5A6458] hover:text-[#1F2A22] flex items-center justify-center transition-colors cursor-pointer"
             title="Close"
           >
-            <X size={15} />
+            <X size={14} />
           </button>
         </div>
       </div>
 
       {/* 2. DRAWER NAVIGATION TABS */}
-      <div className="bg-slate-900/90 border border-white/10 p-1 rounded-2xl grid grid-cols-4 gap-1 shrink-0">
+      <div className="bg-[#F6F1E7] border border-[#E4DCCB] p-0.5 rounded-[6px] grid grid-cols-4 gap-1 shrink-0 text-[12px]">
         <button
           onClick={() => setDrawerTab('dossier')}
           className={cn(
-            "py-1.5 px-2 rounded-xl text-caption font-mono font-bold transition-all flex flex-col items-center justify-center gap-0.5 cursor-pointer text-center",
+            "py-1 px-2 rounded-[4px] font-medium transition-colors cursor-pointer text-center",
             drawerTab === 'dossier'
-              ? "bg-amber-500 text-slate-950 shadow-md font-black"
-              : "text-slate-400 hover:text-white"
+              ? "bg-[#FFFDF8] text-[#1F2A22] shadow-xs font-semibold"
+              : "text-[#5A6458] hover:text-[#1F2A22]"
           )}
         >
-          <Target size={13} />
-          <span className="truncate w-full">Summary</span>
+          <span>Summary</span>
         </button>
 
         <button
           onClick={() => setDrawerTab('parcels')}
           className={cn(
-            "py-1.5 px-2 rounded-xl text-caption font-mono font-bold transition-all flex flex-col items-center justify-center gap-0.5 cursor-pointer text-center",
+            "py-1 px-2 rounded-[4px] font-medium transition-colors cursor-pointer text-center",
             drawerTab === 'parcels'
-              ? "bg-emerald-600 text-white shadow-md font-black"
-              : "text-slate-400 hover:text-white"
+              ? "bg-[#FFFDF8] text-[#1F2A22] shadow-xs font-semibold"
+              : "text-[#5A6458] hover:text-[#1F2A22]"
           )}
         >
-          <MapPin size={13} />
-          <span className="truncate w-full">Parcels ({displayedParcels.length})</span>
+          <span>Parcels ({displayedParcels.length})</span>
         </button>
 
         <button
           onClick={() => setDrawerTab('soil')}
           className={cn(
-            "py-1.5 px-2 rounded-xl text-caption font-mono font-bold transition-all flex flex-col items-center justify-center gap-0.5 cursor-pointer text-center",
+            "py-1 px-2 rounded-[4px] font-medium transition-colors cursor-pointer text-center",
             drawerTab === 'soil'
-              ? "bg-amber-600 text-white shadow-md font-black"
-              : "text-slate-400 hover:text-white"
+              ? "bg-[#FFFDF8] text-[#1F2A22] shadow-xs font-semibold"
+              : "text-[#5A6458] hover:text-[#1F2A22]"
           )}
         >
-          <Sprout size={13} />
-          <span className="truncate w-full">Soil & Crops</span>
+          <span>Soil & Crops</span>
         </button>
 
         <button
           onClick={() => setDrawerTab('layers')}
           className={cn(
-            "py-1.5 px-2 rounded-xl text-caption font-mono font-bold transition-all flex flex-col items-center justify-center gap-0.5 cursor-pointer text-center",
+            "py-1 px-2 rounded-[4px] font-medium transition-colors cursor-pointer text-center",
             drawerTab === 'layers'
-              ? "bg-sky-600 text-white shadow-md font-black"
-              : "text-slate-400 hover:text-white"
+              ? "bg-[#FFFDF8] text-[#1F2A22] shadow-xs font-semibold"
+              : "text-[#5A6458] hover:text-[#1F2A22]"
           )}
         >
-          <Layers size={13} />
-          <span className="truncate w-full">Layers</span>
+          <span>Layers</span>
         </button>
       </div>
 
@@ -678,39 +668,35 @@ export function ScoutTelemetryDrawer({
               )}
             </div>
 
-            {/* DIRECT ACTION BUTTONS (2-3 WORDS MAX, ACTIVE VERBS) */}
-            <div className="flex flex-col gap-2 pt-2 border-t border-white/10">
+            {/* DIRECT ACTION BUTTONS: One primary terracotta button per screen */}
+            <div className="flex flex-col gap-2 pt-3 border-t border-[#E4DCCB]">
               <Link
-                to={`/calculators?tab=solar&district=${activeDistrict ? activeDistrict.id : 'dedza'}`}
-                className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-mono font-black text-xs uppercase tracking-wider shadow-md transition-all flex items-center justify-between"
+                to={`/skills/ram-pump`}
+                className="w-full h-9 px-4 rounded-[6px] bg-[#B4531F] hover:bg-[#9C4416] text-[#FFFDF8] font-medium text-[13px] shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
               >
-                <div className="flex items-center gap-2">
-                  <Sun size={14} />
-                  <span>Calculate Solar Pump Size</span>
-                </div>
-                <ChevronRight size={14} />
+                <Droplets size={14} />
+                <span>Open water guide</span>
               </Link>
 
-              <Link
-                to={`/seasons?district=${activeDistrict ? activeDistrict.id : 'dedza'}`}
-                className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-850 text-emerald-300 border border-emerald-500/40 font-mono font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-between"
+              <button
+                type="button"
+                onClick={() => handleSendParcelToEvaluator(activeParcel || ({
+                  id: activeDistrict?.id || 'dedza',
+                  title: `${activeDistrict?.name || 'Dedza'} Plot`,
+                  district: activeDistrict?.name || 'Dedza',
+                  acres: 10,
+                  hectares: 4,
+                  landTenure: 'Customary Estate',
+                  waterReliability: 'High',
+                  soilProfile: 'Katondo',
+                  slopePct: 4,
+                  rainySeasonAccess: 'All-Weather'
+                } as unknown as ScoutParcelProperties))}
+                className="w-full h-9 px-4 rounded-[6px] border border-[#E4DCCB] hover:bg-[#F6F1E7] text-[#1F2A22] font-medium text-[13px] transition-colors flex items-center justify-center gap-2 cursor-pointer"
               >
-                <div className="flex items-center gap-2">
-                  <Sprout size={14} className="text-emerald-400" />
-                  <span>View Planting Calendar</span>
-                </div>
-                <ExternalLink size={13} />
-              </Link>
-
-              {activeDistrict && (
-                <button
-                  onClick={() => onCopyCoords([activeDistrict.centroid[1], activeDistrict.centroid[0]])}
-                  className="w-full py-2 px-3 rounded-xl bg-slate-900/60 hover:bg-slate-800 text-slate-300 border border-white/5 font-mono text-caption flex items-center justify-center gap-2 transition-all cursor-pointer"
-                >
-                  {copiedCoords ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} className="text-amber-400" />}
-                  <span>{copiedCoords ? "Coordinates Copied" : "Copy GPS"}</span>
-                </button>
-              )}
+                <ShieldCheck size={14} className="text-[#3F6B4E]" />
+                <span>Add to site comparison</span>
+              </button>
             </div>
 
           </div>

@@ -145,94 +145,61 @@ export function ConsolidatedMapHeaderIsland({
         </div>
 
         {/* CENTER SECTION: CONSOLIDATED MAP MODE TOGGLE DOCK */}
-        <div className={cn(
-          "flex items-center gap-1 p-1 rounded-xl border overflow-x-auto custom-scrollbar shrink-1",
-          isField
-            ? "bg-black border-white"
-            : isLight
-            ? "bg-[#F3ECE2] border-[#E3D8CC]"
-            : "bg-slate-900/90 border-white/10"
-        )}>
+        <div className="flex items-center gap-1 p-0.5 rounded-[6px] border border-[#E4DCCB] bg-[#F6F1E7] overflow-x-auto no-scrollbar shrink-1 text-[12.5px]">
           <button
             onClick={() => onTabChange('scout')}
             className={cn(
-              "px-2.5 sm:px-3 py-1.5 sm:py-1 min-h-[44px] sm:min-h-[34px] rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer normal-case select-none",
+              "px-3 py-1 rounded-[4px] font-medium transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer select-none",
               activeTab === 'scout'
-                ? isField
-                  ? "bg-white text-black font-bold shadow-md"
-                  : isLight
-                  ? "bg-[#C85A32] text-white font-bold shadow-md"
-                  : "bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black shadow-md"
-                : isLight
-                ? "text-[#6E6255] hover:text-[#1A1612] hover:bg-white/60"
-                : "text-slate-300 hover:text-white hover:bg-white/5"
+                ? "bg-[#B4531F] text-[#FFFDF8] font-semibold shadow-xs"
+                : "text-[#5A6458] hover:text-[#1F2A22] hover:bg-[#FFFDF8]"
             )}
             title="Interactive GPS Map"
           >
-            <Compass size={14} className={activeTab === 'scout' ? (isLight ? "text-white" : "text-slate-950") : (isLight ? "text-[#C85A32]" : "text-amber-400")} />
+            <Compass size={13} className={activeTab === 'scout' ? "text-white" : "text-[#B4531F]"} />
             <span>Map</span>
           </button>
 
           <button
             onClick={() => onTabChange('parcels')}
             className={cn(
-              "px-2.5 sm:px-3 py-1.5 sm:py-1 min-h-[44px] sm:min-h-[34px] rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer normal-case select-none",
+              "px-3 py-1 rounded-[4px] font-medium transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer select-none",
               activeTab === 'parcels'
-                ? isField
-                  ? "bg-white text-black font-bold shadow-md"
-                  : isLight
-                  ? "bg-[#C85A32] text-white font-bold shadow-md"
-                  : "bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black shadow-md"
-                : isLight
-                ? "text-[#6E6255] hover:text-[#1A1612] hover:bg-white/60"
-                : "text-slate-300 hover:text-white hover:bg-white/5"
+                ? "bg-[#B4531F] text-[#FFFDF8] font-semibold shadow-xs"
+                : "text-[#5A6458] hover:text-[#1F2A22] hover:bg-[#FFFDF8]"
             )}
             title="28 Survey Stations Table"
           >
-            <FileText size={14} className={activeTab === 'parcels' ? (isLight ? "text-white" : "text-slate-950") : (isLight ? "text-[#C85A32]" : "text-amber-400")} />
-            <span className="hidden sm:inline">Stations</span>
-            <span className="sm:hidden">Plots</span>
+            <FileText size={13} />
+            <span>Stations</span>
           </button>
 
           <button
             onClick={() => onTabChange('comparison')}
             className={cn(
-              "px-2.5 sm:px-3 py-1.5 sm:py-1 min-h-[44px] sm:min-h-[34px] rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer normal-case select-none",
+              "px-3 py-1 rounded-[4px] font-medium transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer select-none",
               activeTab === 'comparison'
-                ? isField
-                  ? "bg-white text-black font-bold shadow-md"
-                  : isLight
-                  ? "bg-[#C85A32] text-white font-bold shadow-md"
-                  : "bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black shadow-md"
-                : isLight
-                ? "text-[#6E6255] hover:text-[#1A1612] hover:bg-white/60"
-                : "text-slate-300 hover:text-white hover:bg-white/5"
+                ? "bg-[#B4531F] text-[#FFFDF8] font-semibold shadow-xs"
+                : "text-[#5A6458] hover:text-[#1F2A22] hover:bg-[#FFFDF8]"
             )}
             title="District Comparative Analytics"
           >
-            <BarChart3 size={14} className={activeTab === 'comparison' ? (isLight ? "text-white" : "text-slate-950") : "text-sky-400"} />
+            <BarChart3 size={13} />
             <span>Analytics</span>
           </button>
 
           <button
             onClick={() => onTabChange('soilScience')}
             className={cn(
-              "px-2.5 sm:px-3 py-1.5 sm:py-1 min-h-[44px] sm:min-h-[34px] rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer normal-case select-none",
+              "px-3 py-1 rounded-[4px] font-medium transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer select-none",
               activeTab === 'soilScience'
-                ? isField
-                  ? "bg-white text-black font-bold shadow-md"
-                  : isLight
-                  ? "bg-[#C85A32] text-white font-bold shadow-md"
-                  : "bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black shadow-md"
-                : isLight
-                ? "text-[#6E6255] hover:text-[#1A1612] hover:bg-white/60"
-                : "text-slate-300 hover:text-white hover:bg-white/5"
+                ? "bg-[#B4531F] text-[#FFFDF8] font-semibold shadow-xs"
+                : "text-[#5A6458] hover:text-[#1F2A22] hover:bg-[#FFFDF8]"
             )}
             title="Soil Science & Crops Guide"
           >
-            <Sprout size={14} className={activeTab === 'soilScience' ? (isLight ? "text-white" : "text-slate-950") : "text-emerald-500"} />
-            <span className="hidden sm:inline">Soil Guide</span>
-            <span className="sm:hidden">Soil</span>
+            <Sprout size={13} />
+            <span>Soil Guide</span>
           </button>
         </div>
 

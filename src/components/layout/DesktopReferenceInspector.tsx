@@ -55,6 +55,53 @@ export function DesktopReferenceInspector({
   });
   const [copiedNotes, setCopiedNotes] = useState(false);
 
+  const [inspectorWidth, setInspectorWidth] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('outpost_desktop_inspector_width');
+      if (saved) {
+        const val = parseInt(saved, 10);
+        if (!isNaN(val) && val >= 280 && val <= 600) return val;
+      }
+    } catch {}
+    return 340;
+  });
+  const [isDraggingInspector, setIsDraggingInspector] = useState(false);
+
+  const handleInspectorMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsDraggingInspector(true);
+  };
+
+  const handleInspectorDoubleClick = () => {
+    setInspectorWidth(340);
+    try {
+      localStorage.setItem('outpost_desktop_inspector_width', '340');
+    } catch {}
+  };
+
+  useEffect(() => {
+    if (!isDraggingInspector) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const newWidth = Math.min(600, Math.max(280, window.innerWidth - e.clientX));
+      setInspectorWidth(newWidth);
+    };
+
+    const handleMouseUp = () => {
+      setIsDraggingInspector(false);
+      try {
+        localStorage.setItem('outpost_desktop_inspector_width', String(inspectorWidth));
+      } catch {}
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDraggingInspector, inspectorWidth]);
+
   useEffect(() => {
     try {
       localStorage.setItem(SCRATCHPAD_STORAGE_KEY, notes);
@@ -123,8 +170,21 @@ export function DesktopReferenceInspector({
   return (
     <aside
       aria-label="Desktop Side-by-Side Inspector"
-      className="w-80 xl:w-88 shrink-0 h-full bg-[#F5F2EA] dark:bg-[#08150E] border-l border-stone-300/90 dark:border-emerald-900/80 flex flex-col select-none z-20 shadow-xl"
+      style={{ width: `${inspectorWidth}px` }}
+      className="shrink-0 h-full bg-[#F5F2EA] dark:bg-[#08150E] border-l border-stone-300/90 dark:border-emerald-900/80 flex flex-col select-none z-20 shadow-xl relative"
     >
+      {/* Desktop Drag Handle (Min 280px, Max 600px, Double-click resets to 340px) */}
+      <div
+        onMouseDown={handleInspectorMouseDown}
+        onDoubleClick={handleInspectorDoubleClick}
+        title="Drag to resize Inspector (280-600px) · Double-click resets to 340px"
+        className={cn(
+          'hidden md:block absolute top-0 left-0 w-1.5 h-full cursor-col-resize z-30 transition-colors',
+          isDraggingInspector
+            ? 'bg-amber-400'
+            : 'hover:bg-amber-400/60 active:bg-amber-400'
+        )}
+      />
       {/* Inspector Header Bar */}
       <div className="h-9 px-3 bg-[#EAE5D7] dark:bg-[#06110B] border-b border-stone-300/80 dark:border-emerald-950 flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-stone-800 dark:text-amber-300">

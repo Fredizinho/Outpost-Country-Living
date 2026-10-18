@@ -358,336 +358,332 @@ export default function Tracker() {
   };
 
   return (
-    <div className="px-4 sm:px-6 md:px-8 py-5 max-w-7xl mx-auto flex flex-col gap-6 text-stone-900 dark:text-stone-100">
-      {/* ====================================================================
-          1. EQUIER-GUIDED BREADCRUMB & METRIC HEADER BAR
-      ==================================================================== */}
-      <div className="flex flex-col gap-3">
-        {/* Equier Top Breadcrumbs */}
-        <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
-          <div className="flex items-center gap-1.5 text-stone-500 dark:text-stone-400 font-mono">
-            <Link to="/" className="hover:text-stone-950 dark:hover:text-white transition-colors">
-              Outpost
-            </Link>
-            <ChevronRight size={12} className="text-stone-400" />
-            <span className="text-stone-700 dark:text-stone-300 font-semibold">
-              Homestead Projects
-            </span>
-            <ChevronRight size={12} className="text-stone-400" />
-            <span className="text-stone-900 dark:text-amber-300 font-bold">
-              City-to-Country Relocation Tasks
-            </span>
+    <div className="min-h-screen bg-[#F6F1E7] dark:bg-[#0E1712] text-[#1F2A22] dark:text-[#F6F1E7] pb-16 transition-colors duration-200">
+      <div className="px-4 sm:px-6 md:px-8 py-5 max-w-7xl mx-auto flex flex-col gap-6">
+        {/* ====================================================================
+            1. BREADCRUMB & METRIC HEADER BAR
+        ==================================================================== */}
+        <div className="flex flex-col gap-3">
+          {/* Top Breadcrumbs */}
+          <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-1.5 text-[#5A6458] dark:text-[#9FB3A4] font-mono">
+              <Link to="/" className="hover:text-[#1F2A22] dark:hover:text-[#F6F1E7] transition-colors">
+                Outpost
+              </Link>
+              <ChevronRight size={12} className="text-[#5A6458] dark:text-[#9FB3A4]" />
+              <span className="text-[#1F2A22] dark:text-[#F6F1E7] font-semibold">
+                Homestead Projects
+              </span>
+              <ChevronRight size={12} className="text-[#5A6458] dark:text-[#9FB3A4]" />
+              <span className="text-[#B4531F] dark:text-[#D4A034] font-bold">
+                City-to-Country Relocation Tasks
+              </span>
+            </div>
+
+            {/* Quick Field Mode Toggle Button */}
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setTheme(theme === 'field' ? 'dark' : 'field');
+                }}
+                title="Toggle Maximum-Contrast Field Mode"
+                className={cn(
+                  'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-xs transition-all duration-200 cursor-pointer border',
+                  theme === 'field'
+                    ? 'bg-white text-black border-white font-bold shadow-xs'
+                    : 'bg-[#FFFDF8] dark:bg-[#17241C] hover:bg-[#EAE2D2] dark:hover:bg-[#1F3325] text-[#1F2A22] dark:text-[#F6F1E7] border-[#E4DCCB] dark:border-[#283C30]'
+                )}
+              >
+                <Eye size={12} className={theme === 'field' ? 'text-black' : 'text-[#D4A034]'} />
+                <span>{theme === 'field' ? 'Field Mode Active' : 'Field Mode'}</span>
+              </button>
+              <button
+                onClick={handleExportRoadmap}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-[#FFFDF8] dark:bg-[#17241C] hover:bg-[#EAE2D2] dark:hover:bg-[#1F3325] border border-[#E4DCCB] dark:border-[#283C30] text-[#1F2A22] dark:text-[#F6F1E7] transition-colors cursor-pointer"
+              >
+                <Download size={12} />
+                <span>Export .TXT</span>
+              </button>
+            </div>
           </div>
 
-          {/* Quick Field Mode Toggle Button */}
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => {
-                setTheme(theme === 'field' ? 'dark' : 'field');
-              }}
-              title="Toggle Maximum-Contrast Field Mode (18px Body & 48px+ Touch Targets)"
-              className={cn(
-                'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-mono text-xs transition-all cursor-pointer border',
-                theme === 'field'
-                  ? 'bg-white text-black border-white font-bold shadow-xs'
-                  : 'bg-white/[0.06] hover:bg-white/[0.12] text-stone-600 dark:text-stone-300 border-stone-300/80 dark:border-white/10'
-              )}
-            >
-              <Eye size={12} className={theme === 'field' ? 'text-black' : 'text-amber-400'} />
-              <span>{theme === 'field' ? 'Field Mode Active' : 'Field Mode (Max Contrast)'}</span>
-            </button>
-            <button
-              onClick={handleExportRoadmap}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-white/5 hover:bg-white/10 border border-stone-300/80 dark:border-white/10 transition-colors cursor-pointer"
-            >
-              <Download size={12} />
-              <span>Export .TXT</span>
-            </button>
+          {/* Header Title + Stats Row */}
+          <div className="p-5 sm:p-6 rounded-xl bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-5 transition-colors">
+            <div className="flex flex-col gap-1.5">
+              <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-[#2B4636] dark:text-[#D4A034]">
+                <span>Outpost Task Board · Malawi Country Living Sizing</span>
+                <span aria-hidden="true">·</span>
+                <span className="text-[#5A6458] dark:text-[#9FB3A4] font-normal">
+                  {user?.district || 'Dedza'}, {user?.region || 'Central'} ({currentDistrictRecord?.rainfallAnnualMm || 950}mm/yr rain) · {user?.householdSize || '3-5 Members'}
+                </span>
+              </div>
+              <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#1F2A22] dark:text-[#FFFDF8]">
+                City-to-Country Relocation Tasks &amp; Milestones
+              </h1>
+              <p className="text-xs sm:text-sm text-[#5A6458] dark:text-[#9FB3A4] max-w-2xl leading-relaxed">
+                Organized into 4 actionable sprint columns. Move tasks between stages or mark complete as your family prepares, scouts land, and establishes your self-sufficient sanctuary.
+              </p>
+            </div>
+
+            {/* Quick Metrics Capsule */}
+            <div className="flex flex-wrap items-center gap-3 shrink-0">
+              <div className="p-3 rounded-lg bg-[#F6F1E7] dark:bg-[#0E1712] border border-[#E4DCCB] dark:border-[#283C30] flex flex-col">
+                <span className="text-caption text-[#5A6458] dark:text-[#9FB3A4]">Total Completion</span>
+                <span className="text-base font-mono font-bold text-[#2B4636] dark:text-[#86EFAC] tabular-nums">
+                  {Math.round(overallProgress)}% ({totalCompleted}/{totalTasks})
+                </span>
+              </div>
+              <div className="p-3 rounded-lg bg-[#F6F1E7] dark:bg-[#0E1712] border border-[#E4DCCB] dark:border-[#283C30] flex flex-col">
+                <span className="text-caption text-[#5A6458] dark:text-[#9FB3A4]">Readiness Score</span>
+                <span className="text-base font-mono font-bold text-[#B4531F] dark:text-[#D4A034] tabular-nums">
+                  {readinessBreakdown.totalScorePct}% Ready
+                </span>
+              </div>
+              <button
+                onClick={() => setShowWizard(true)}
+                className="px-4 py-2.5 rounded-lg bg-[#B4531F] dark:bg-[#D3672E] hover:opacity-90 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm cursor-pointer transition-all duration-200"
+              >
+                <Sparkles size={14} />
+                <span>{user?.onboardingCompleted ? 'Update Profile' : 'Start Sizer Quiz'}</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Perspective Switcher & Search Action Toolbar */}
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+            {/* 3 Perspectives: Kanban Board, Checklist, 5-Stage Ledger */}
+            <div className="inline-flex items-center gap-1 bg-[#F6F1E7] dark:bg-[#0E1712] p-1 rounded-lg border border-[#E4DCCB] dark:border-[#283C30]">
+              {[
+                { id: 'kanban' as const, label: '01 · Kanban Board', icon: LayoutGrid },
+                { id: 'milestones' as const, label: '02 · 3-Phase Checklist', icon: CheckSquare },
+                { id: 'readiness-ledger' as const, label: '03 · 5-Stage Readiness Ledger', icon: Layers },
+              ].map((tab) => {
+                const Icon = tab.icon;
+                const active = activePerspective === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActivePerspective(tab.id)}
+                    className={cn(
+                      'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all duration-200 cursor-pointer',
+                      active
+                        ? 'bg-[#2B4636] dark:bg-[#283C30] text-white shadow-xs font-bold'
+                        : 'text-[#5A6458] dark:text-[#9FB3A4] hover:bg-[#FFFDF8] dark:hover:bg-[#17241C] hover:text-[#1F2A22] dark:hover:text-[#F6F1E7]'
+                    )}
+                  >
+                    <Icon size={13} />
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Search + Priority Filters + Add Task */}
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="relative">
+                <Search size={13} className="absolute left-3 top-2.5 text-[#5A6458] dark:text-[#9FB3A4]" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search tasks or phases..."
+                  className="pl-8 pr-3 py-1.5 rounded-lg bg-[#F6F1E7] dark:bg-[#0E1712] border border-[#E4DCCB] dark:border-[#283C30] text-xs text-[#1F2A22] dark:text-[#F6F1E7] placeholder:text-[#5A6458] dark:placeholder:text-[#9FB3A4] focus:outline-none focus:border-[#B4531F] dark:focus:border-[#D3672E] w-44 sm:w-56 transition-colors"
+                />
+              </div>
+
+              <div className="inline-flex items-center gap-1 bg-[#F6F1E7] dark:bg-[#0E1712] p-0.5 rounded-lg border border-[#E4DCCB] dark:border-[#283C30] text-xs">
+                {(['all', 'high', 'medium', 'normal'] as const).map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setFilterPriority(p)}
+                    className={cn(
+                      'px-2 py-1 rounded-md text-caption font-mono capitalize transition-all duration-200 cursor-pointer',
+                      filterPriority === p
+                        ? 'bg-[#2B4636] dark:bg-[#283C30] text-white font-bold'
+                        : 'text-[#5A6458] dark:text-[#9FB3A4] hover:text-[#1F2A22] dark:hover:text-[#F6F1E7]'
+                    )}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setIsAddingKanbanTask(true)}
+                className="px-3 py-1.5 rounded-lg bg-[#2B4636] hover:bg-[#1F3325] dark:bg-[#283C30] dark:hover:bg-[#344E3E] text-white font-semibold text-xs inline-flex items-center gap-1 cursor-pointer transition-all duration-200 shadow-xs"
+              >
+                <Plus size={14} />
+                <span>Create Task</span>
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Header Title + Stats Row */}
-        <div className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#161619] border border-stone-200/90 dark:border-white/10 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-          <div className="flex flex-col gap-1.5">
-            <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-emerald-700 dark:text-amber-300">
-              <span>Outpost Task Board · Malawi Country Living Sizing</span>
-              <span aria-hidden="true">·</span>
-              <span className="text-stone-500 dark:text-stone-400 font-normal">
-                {user?.district || 'Dedza'}, {user?.region || 'Central'} ({currentDistrictRecord?.rainfallAnnualMm || 950}mm/yr rain) · {user?.householdSize || '3-5 Members'}
-              </span>
-            </div>
-            <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-stone-950 dark:text-white">
-              City-to-Country Relocation Tasks &amp; Milestones
-            </h1>
-            <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 max-w-2xl leading-relaxed">
-              Organized into 4 actionable sprint columns. Move tasks between stages or mark complete as your family prepares, scouts land, and establishes your self-sufficient sanctuary.
-            </p>
-          </div>
+        {/* ====================================================================
+            2. PERSPECTIVE 01: 4-COLUMN KANBAN BOARD
+        ==================================================================== */}
+        {activePerspective === 'kanban' && (
+          <section aria-label="Kanban Task Board" className="flex flex-col gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 items-start">
+              {KANBAN_COLUMNS.map((col) => {
+                const colTasks = filteredKanbanTasks.filter((t) => t.status === col.id);
+                return (
+                  <div
+                    key={col.id}
+                    className="flex flex-col gap-3 p-3.5 sm:p-4 rounded-xl bg-[#FFFDF8] dark:bg-[#132018] border border-[#E4DCCB] dark:border-[#283C30] min-h-[550px] transition-colors shadow-xs"
+                  >
+                    {/* Column Header */}
+                    <div className="flex items-center justify-between pb-2 border-b border-[#E4DCCB] dark:border-[#283C30]">
+                      <div className="flex items-center gap-2">
+                        <span className={cn('w-2 h-2 rounded-full shrink-0', col.dotColor)} />
+                        <h2 className="font-serif text-sm font-bold text-[#1F2A22] dark:text-[#FFFDF8]">
+                          {col.label}
+                        </h2>
+                        <span className="font-mono text-xs font-semibold text-[#5A6458] dark:text-[#9FB3A4]">
+                          {colTasks.length}
+                        </span>
+                      </div>
 
-          {/* Quick Metrics Capsule */}
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
-            <div className="p-3 rounded-2xl bg-stone-100 dark:bg-[#1E1E22] border border-stone-200 dark:border-white/10 flex flex-col">
-              <span className="text-caption text-stone-500 dark:text-stone-400">Total Completion</span>
-              <span className="text-base font-mono font-bold text-emerald-700 dark:text-amber-300 tabular-nums">
-                {Math.round(overallProgress)}% ({totalCompleted}/{totalTasks})
-              </span>
-            </div>
-            <div className="p-3 rounded-2xl bg-stone-100 dark:bg-[#1E1E22] border border-stone-200 dark:border-white/10 flex flex-col">
-              <span className="text-caption text-stone-500 dark:text-stone-400">Readiness Score</span>
-              <span className="text-base font-mono font-bold text-stone-900 dark:text-white tabular-nums">
-                {readinessBreakdown.totalScorePct}% Ready
-              </span>
-            </div>
-            <button
-              onClick={() => setShowWizard(true)}
-              className="px-4 py-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs flex items-center gap-1.5 shadow-md cursor-pointer transition-all"
-            >
-              <Sparkles size={14} />
-              <span>{user?.onboardingCompleted ? 'Update Profile' : 'Start Sizer Quiz'}</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Perspective Switcher & Search Action Toolbar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
-          {/* 3 Perspectives: Kanban Board, Checklist, 5-Stage Ledger */}
-          <div className="inline-flex items-center gap-1 bg-stone-200/80 dark:bg-[#1A1A1E] p-1 rounded-xl border border-stone-300/80 dark:border-white/10">
-            {[
-              { id: 'kanban' as const, label: '01 · Kanban Board', icon: LayoutGrid },
-              { id: 'milestones' as const, label: '02 · 3-Phase Checklist', icon: CheckSquare },
-              { id: 'readiness-ledger' as const, label: '03 · 5-Stage Readiness Ledger', icon: Layers },
-            ].map((tab) => {
-              const Icon = tab.icon;
-              const active = activePerspective === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setActivePerspective(tab.id)}
-                  className={cn(
-                    'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer',
-                    active
-                      ? 'bg-stone-950 text-white dark:bg-white dark:text-stone-950 shadow-xs font-bold'
-                      : 'text-stone-600 dark:text-stone-400 hover:text-stone-950 dark:hover:text-white'
-                  )}
-                >
-                  <Icon size={13} />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Search + Priority Filters + Add Task */}
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="relative">
-              <Search size={13} className="absolute left-3 top-2.5 text-stone-400" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search tasks or phases..."
-                className="pl-8 pr-3 py-1.5 rounded-xl bg-white dark:bg-[#18181B] border border-stone-200 dark:border-white/15 text-xs text-stone-900 dark:text-white placeholder:text-stone-400 focus:outline-none focus:ring-1 focus:ring-amber-400 w-44 sm:w-56"
-              />
-            </div>
-
-            <div className="inline-flex items-center gap-1 bg-stone-200/70 dark:bg-white/[0.05] p-0.5 rounded-xl border border-stone-300 dark:border-white/10 text-xs">
-              {(['all', 'high', 'medium', 'normal'] as const).map((p) => (
-                <button
-                  key={p}
-                  type="button"
-                  onClick={() => setFilterPriority(p)}
-                  className={cn(
-                    'px-2 py-1 rounded-lg text-caption font-mono capitalize transition-colors cursor-pointer',
-                    filterPriority === p
-                      ? 'bg-stone-900 text-white dark:bg-white dark:text-stone-950 font-bold'
-                      : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
-                  )}
-                >
-                  {p}
-                </button>
-              ))}
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setIsAddingKanbanTask(true)}
-              className="px-3 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-semibold text-xs inline-flex items-center gap-1 cursor-pointer transition-all shadow-xs"
-            >
-              <Plus size={14} />
-              <span>Create Task</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* ====================================================================
-          2. PERSPECTIVE 01: 4-COLUMN EQUIER KANBAN BOARD
-      ==================================================================== */}
-      {activePerspective === 'kanban' && (
-        <section aria-label="Kanban Task Board" className="flex flex-col gap-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 items-start">
-            {KANBAN_COLUMNS.map((col) => {
-              const colTasks = filteredKanbanTasks.filter((t) => t.status === col.id);
-              return (
-                <div
-                  key={col.id}
-                  className="flex flex-col gap-3 p-3.5 sm:p-4 rounded-3xl bg-stone-100/90 dark:bg-[#141417] border border-stone-200/90 dark:border-white/10 min-h-[550px]"
-                >
-                  {/* Column Header */}
-                  <div className="flex items-center justify-between pb-2 border-b border-stone-200 dark:border-white/10">
-                    <div className="flex items-center gap-2">
-                      <span className={cn('w-2 h-2 rounded-full shrink-0', col.dotColor)} />
-                      <h2 className="font-display text-sm font-bold text-stone-900 dark:text-white">
-                        {col.label}
-                      </h2>
-                      <span className="font-mono text-xs font-semibold text-stone-500 dark:text-stone-400">
-                        {colTasks.length}
-                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setKanbanTargetCol(col.id);
+                          setIsAddingKanbanTask(true);
+                        }}
+                        title={`Add task to ${col.label}`}
+                        className="p-1.5 rounded-lg hover:bg-[#F6F1E7] dark:hover:bg-[#1C2E23] text-[#5A6458] dark:text-[#9FB3A4] hover:text-[#1F2A22] dark:hover:text-[#FFFDF8] transition-colors cursor-pointer"
+                      >
+                        <Plus size={14} />
+                      </button>
                     </div>
 
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setKanbanTargetCol(col.id);
-                        setIsAddingKanbanTask(true);
-                      }}
-                      title={`Add task to ${col.label}`}
-                      className="p-1 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 text-stone-500 dark:text-stone-400 hover:text-stone-950 dark:hover:text-white transition-colors cursor-pointer"
-                    >
-                      <Plus size={14} />
-                    </button>
-                  </div>
+                    <p className="text-caption text-[#5A6458] dark:text-[#9FB3A4] line-clamp-1">
+                      {col.description}
+                    </p>
 
-                  <p className="text-caption text-stone-500 dark:text-stone-400 line-clamp-1">
-                    {col.description}
-                  </p>
+                    {/* Tasks List in Column */}
+                    <div className="flex flex-col gap-3">
+                      {colTasks.length === 0 ? (
+                        <div className="p-6 rounded-xl border border-dashed border-[#E4DCCB] dark:border-[#283C30] text-center text-xs text-[#5A6458] dark:text-[#9FB3A4] flex flex-col items-center gap-1.5">
+                          <span>No tasks in this stage</span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setKanbanTargetCol(col.id);
+                              setIsAddingKanbanTask(true);
+                            }}
+                            className="text-[#B85D36] dark:text-[#E2875A] hover:underline font-semibold"
+                          >
+                            + Add a task
+                          </button>
+                        </div>
+                      ) : (
+                        colTasks.map((task) => (
+                          <div
+                            key={task.id}
+                            className="group p-3.5 rounded-xl border border-[#E4DCCB] dark:border-[#283C30] bg-[#F6F1E7]/70 dark:bg-[#1A2920] hover:border-[#B85D36]/60 dark:hover:border-[#E2875A]/60 transition-all flex flex-col gap-2.5 shadow-xs relative overflow-hidden"
+                          >
+                            {/* Optional Architectural Preview Banner */}
+                            {task.image && (
+                              <div className="w-full h-28 rounded-lg overflow-hidden relative">
+                                <img
+                                  src={task.image}
+                                  alt={task.label}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                                <span className="absolute bottom-2 left-2 text-caption font-mono text-white/90 font-semibold px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-xs">
+                                  Blueprint Preview
+                                </span>
+                              </div>
+                            )}
 
-                  {/* Tasks List in Column */}
-                  <div className="flex flex-col gap-3">
-                    {colTasks.length === 0 ? (
-                      <div className="p-6 rounded-2xl border border-dashed border-stone-300 dark:border-white/10 text-center text-xs text-stone-400 dark:text-stone-500 flex flex-col items-center gap-1.5">
-                        <span>No tasks in this stage</span>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setKanbanTargetCol(col.id);
-                            setIsAddingKanbanTask(true);
-                          }}
-                          className="text-amber-500 hover:underline font-semibold"
-                        >
-                          + Add a task
-                        </button>
-                      </div>
-                    ) : (
-                      colTasks.map((task) => (
-                        <div
-                          key={task.id}
-                          className={cn(
-                            'group p-4 rounded-2xl border transition-all flex flex-col gap-2.5 shadow-sm hover:shadow-md relative overflow-hidden',
-                            isCharcoal
-                              ? 'bg-[#18181B] border-white/10 hover:border-amber-400/40 text-stone-100'
-                              : 'bg-white dark:bg-[#1A1A1E] border-stone-200 dark:border-white/10 hover:border-emerald-500/40'
-                          )}
-                        >
-                          {/* Optional Architectural / Permaculture Preview Banner (Equier Style) */}
-                          {task.image && (
-                            <div className="w-full h-28 rounded-xl overflow-hidden relative">
-                              <img
-                                src={task.image}
-                                alt={task.label}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                              <span className="absolute bottom-2 left-2 text-caption font-mono text-white/90 font-semibold px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-xs">
-                                Blueprint Preview
-                              </span>
+                            {/* Top Row: Priority & Phase Metadata */}
+                            <div className="flex items-center justify-between gap-2 text-xs">
+                              <div className="flex items-center gap-1.5">
+                                <span
+                                  className={cn(
+                                    'w-2 h-2 rounded-full',
+                                    task.priority === 'high'
+                                      ? 'bg-rose-500'
+                                      : task.priority === 'medium'
+                                      ? 'bg-[#E2875A]'
+                                      : 'bg-[#4E6B5D]'
+                                  )}
+                                />
+                                <span className="font-mono text-caption font-semibold text-[#5A6458] dark:text-[#9FB3A4]">
+                                  {task.priority.toUpperCase()} · {task.stepTitle}
+                                </span>
+                              </div>
+
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteSubtask(task.stepId, task.id)}
+                                title="Delete task"
+                                className="text-[#5A6458] dark:text-[#9FB3A4] hover:text-rose-500 transition-colors p-0.5 cursor-pointer opacity-0 group-hover:opacity-100"
+                              >
+                                <Trash2 size={12} />
+                              </button>
                             </div>
-                          )}
 
-                          {/* Top Row: Unboxed Priority & Phase Metadata */}
-                          <div className="flex items-center justify-between gap-2 text-xs">
-                            <div className="flex items-center gap-1.5">
+                            {/* Task Description */}
+                            <div className="flex items-start gap-2.5">
+                              <button
+                                type="button"
+                                onClick={() => toggleSubtask(task.stepId, task.id)}
+                                className="mt-0.5 shrink-0 cursor-pointer"
+                                title={task.completed ? 'Mark incomplete' : 'Mark completed'}
+                              >
+                                {task.completed ? (
+                                  <CheckCircle2 size={16} className="text-[#2C4A3E] dark:text-[#7EA28C]" />
+                                ) : (
+                                  <Circle size={16} className="text-[#5A6458] dark:text-[#7A8E80] hover:text-[#B85D36] dark:hover:text-[#E2875A] transition-colors" />
+                                )}
+                              </button>
                               <span
                                 className={cn(
-                                  'w-2 h-2 rounded-full',
-                                  task.priority === 'high'
-                                    ? 'bg-rose-500'
-                                    : task.priority === 'medium'
-                                    ? 'bg-amber-400'
-                                    : 'bg-cyan-400'
+                                  'text-xs font-semibold leading-relaxed',
+                                  task.completed
+                                    ? 'line-through text-[#5A6458] dark:text-[#7A8E80]'
+                                    : 'text-[#1F2A22] dark:text-[#FFFDF8]'
                                 )}
-                              />
-                              <span className="font-mono text-caption font-semibold text-stone-500 dark:text-stone-400">
-                                {task.priority.toUpperCase()} · {task.stepTitle}
+                              >
+                                {task.label}
                               </span>
                             </div>
 
-                            <button
-                              type="button"
-                              onClick={() => handleDeleteSubtask(task.stepId, task.id)}
-                              title="Delete task"
-                              className="text-stone-400 hover:text-rose-500 transition-colors p-0.5 cursor-pointer opacity-0 group-hover:opacity-100"
-                            >
-                              <Trash2 size={12} />
-                            </button>
-                          </div>
+                            {/* Card Footer: District Tag & Move Stage Button */}
+                            <div className="flex items-center justify-between gap-2 pt-2 border-t border-[#E4DCCB] dark:border-[#283C30] text-xs">
+                              <span className="font-mono text-caption text-[#5A6458] dark:text-[#9FB3A4] truncate">
+                                Target: {task.districtTag}
+                              </span>
 
-                          {/* Task Description */}
-                          <div className="flex items-start gap-2.5">
-                            <button
-                              type="button"
-                              onClick={() => toggleSubtask(task.stepId, task.id)}
-                              className="mt-0.5 shrink-0 cursor-pointer"
-                              title={task.completed ? 'Mark incomplete' : 'Mark completed'}
-                            >
-                              {task.completed ? (
-                                <CheckCircle2 size={16} className="text-emerald-500" />
-                              ) : (
-                                <Circle size={16} className="text-stone-400 hover:text-emerald-500 transition-colors" />
-                              )}
-                            </button>
-                            <span
-                              className={cn(
-                                'text-xs font-semibold leading-relaxed',
-                                task.completed
-                                  ? 'line-through text-stone-400 dark:text-stone-500'
-                                  : 'text-stone-900 dark:text-stone-100'
-                              )}
-                            >
-                              {task.label}
-                            </span>
+                              <button
+                                type="button"
+                                onClick={() => handleAdvanceTask(task)}
+                                className="inline-flex items-center gap-1 text-caption font-semibold text-[#B85D36] dark:text-[#E2875A] hover:underline cursor-pointer"
+                              >
+                                <span>Advance Stage</span>
+                                <ArrowRight size={11} />
+                              </button>
+                            </div>
                           </div>
-
-                          {/* Card Footer: District Tag & Move Stage Button */}
-                          <div className="flex items-center justify-between gap-2 pt-2 border-t border-stone-200/80 dark:border-white/10 text-xs">
-                            <span className="font-mono text-caption text-stone-500 dark:text-stone-400 truncate">
-                              Target: {task.districtTag}
-                            </span>
-
-                            <button
-                              type="button"
-                              onClick={() => handleAdvanceTask(task)}
-                              className="inline-flex items-center gap-1 text-caption font-semibold text-emerald-700 dark:text-amber-400 hover:underline cursor-pointer"
-                            >
-                              <span>Advance Stage</span>
-                              <ArrowRight size={11} />
-                            </button>
-                          </div>
-                        </div>
-                      ))
-                    )}
+                        ))
+                      )}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      )}
+                );
+              })}
+            </div>
+          </section>
+        )}
 
       {/* ====================================================================
-          3. PERSPECTIVE 02: 3-PHASE STEP CARDS CHECKLIST (EXISTING SUITE)
+          3. PERSPECTIVE 02: 3-PHASE STEP CARDS CHECKLIST
       ==================================================================== */}
       {activePerspective === 'milestones' && (
         <div className="flex flex-col gap-6">
@@ -701,20 +697,20 @@ export default function Tracker() {
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white dark:bg-[#141417] rounded-3xl border border-stone-200/90 dark:border-white/10 shadow-xs overflow-hidden"
+                className="bg-[#FFFDF8] dark:bg-[#17241C] rounded-2xl border border-[#E4DCCB] dark:border-[#283C30] shadow-xs overflow-hidden"
               >
                 <div className="p-6 sm:p-8 flex flex-col md:flex-row gap-8">
                   <div className="flex-1 flex flex-col gap-5">
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-stone-100 dark:bg-[#1E1E22] text-emerald-800 dark:text-amber-400 border border-stone-200 dark:border-white/10 flex items-center justify-center shrink-0">
+                        <div className="w-12 h-12 rounded-xl bg-[#F6F1E7] dark:bg-[#102017] text-[#2C4A3E] dark:text-[#E2875A] border border-[#E4DCCB] dark:border-[#283C30] flex items-center justify-center shrink-0">
                           <Icon size={24} />
                         </div>
                         <div>
-                          <h3 className="font-display text-2xl font-bold text-stone-900 dark:text-stone-50">
+                          <h3 className="font-serif text-2xl font-bold text-[#1F2A22] dark:text-[#FFFDF8]">
                             {step.title}
                           </h3>
-                          <p className="text-sm text-stone-600 dark:text-stone-300 font-medium mt-1 leading-relaxed">
+                          <p className="text-sm text-[#5A6458] dark:text-[#9FB3A4] font-medium mt-1 leading-relaxed">
                             {step.description}
                           </p>
                         </div>
@@ -722,32 +718,32 @@ export default function Tracker() {
 
                       <button
                         onClick={() => setActiveAddingStep(isAdding ? null : step.id)}
-                        className="bg-stone-100 hover:bg-stone-200 dark:bg-white/10 dark:hover:bg-white/15 text-stone-800 dark:text-amber-300 border border-stone-300 dark:border-white/15 text-xs font-semibold px-3.5 py-2 rounded-xl transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
+                        className="bg-[#F6F1E7] hover:bg-[#E4DCCB] dark:bg-[#102017] dark:hover:bg-[#1E3024] text-[#1F2A22] dark:text-[#F6F1E7] border border-[#E4DCCB] dark:border-[#283C30] text-xs font-semibold px-3.5 py-2 rounded-xl transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
                       >
                         <Plus size={13} /> Add Milestone
                       </button>
                     </div>
 
                     {isAdding && (
-                      <div className="bg-stone-50 dark:bg-[#1A1A1E] p-4 rounded-2xl border border-stone-200 dark:border-white/15 flex flex-col sm:flex-row gap-2">
+                      <div className="bg-[#F6F1E7] dark:bg-[#102017] p-4 rounded-xl border border-[#E4DCCB] dark:border-[#283C30] flex flex-col sm:flex-row gap-2">
                         <input
                           type="text"
                           placeholder="e.g. Purchase solar freezer or inspect water well..."
                           value={newTaskInput[step.id] || ''}
                           onChange={(e) => setNewTaskInput({ ...newTaskInput, [step.id]: e.target.value })}
                           onKeyDown={(e) => e.key === 'Enter' && handleAddCustomTask(step.id)}
-                          className="flex-1 bg-white dark:bg-stone-950 text-stone-900 dark:text-white placeholder:text-stone-400 px-4 py-2 rounded-xl border border-stone-300 dark:border-stone-800 text-xs font-medium focus:outline-none focus:ring-2 ring-emerald-700 dark:ring-amber-400"
+                          className="flex-1 bg-white dark:bg-[#17241C] text-[#1F2A22] dark:text-[#FFFDF8] placeholder:text-[#5A6458] px-4 py-2 rounded-xl border border-[#E4DCCB] dark:border-[#283C30] text-xs font-medium focus:outline-none focus:ring-1 ring-[#B85D36]"
                         />
                         <div className="flex gap-2">
                           <button
                             onClick={() => handleAddCustomTask(step.id)}
-                            className="bg-emerald-900 dark:bg-amber-500 text-white dark:text-stone-950 px-4 py-2 rounded-xl text-xs font-semibold shadow-xs hover:bg-emerald-800 dark:hover:bg-amber-400 cursor-pointer"
+                            className="bg-[#B85D36] hover:bg-[#A34F2C] text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-xs cursor-pointer transition-colors"
                           >
                             Save
                           </button>
                           <button
                             onClick={() => setActiveAddingStep(null)}
-                            className="bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300 px-3 py-2 rounded-xl text-xs font-semibold hover:bg-stone-300 dark:hover:bg-stone-700 cursor-pointer"
+                            className="bg-[#E4DCCB] dark:bg-[#283C30] text-[#1F2A22] dark:text-[#F6F1E7] px-3 py-2 rounded-xl text-xs font-semibold hover:bg-stone-300 dark:hover:bg-stone-700 cursor-pointer"
                           >
                             Cancel
                           </button>
@@ -760,10 +756,10 @@ export default function Tracker() {
                         <div
                           key={task.id}
                           className={cn(
-                            'flex items-center justify-between gap-4 p-3.5 sm:p-4 rounded-2xl transition-all border group',
+                            'flex items-center justify-between gap-4 p-3.5 sm:p-4 rounded-xl transition-all border group',
                             task.completed
-                              ? 'bg-emerald-50/80 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800/60'
-                              : 'bg-stone-50/90 dark:bg-[#1E1E22] text-stone-800 dark:text-stone-200 border-stone-200/90 dark:border-white/10 hover:border-emerald-700/40 dark:hover:border-amber-500/30'
+                              ? 'bg-[#EBF2ED] dark:bg-[#162B1F] text-[#2C4A3E] dark:text-[#88B89E] border-[#C3D9C9] dark:border-[#284E37]'
+                              : 'bg-[#F6F1E7]/70 dark:bg-[#102017] text-[#1F2A22] dark:text-[#F6F1E7] border-[#E4DCCB] dark:border-[#283C30] hover:border-[#B85D36]/50 dark:hover:border-[#E2875A]/50'
                           )}
                         >
                           <button
@@ -771,9 +767,9 @@ export default function Tracker() {
                             className="flex items-center gap-3.5 flex-1 text-left cursor-pointer"
                           >
                             {task.completed ? (
-                              <CheckCircle2 size={20} className="shrink-0 text-emerald-700 dark:text-emerald-400" />
+                              <CheckCircle2 size={20} className="shrink-0 text-[#2C4A3E] dark:text-[#88B89E]" />
                             ) : (
-                              <Circle size={20} className="shrink-0 text-stone-400 dark:text-stone-500 group-hover:text-emerald-700 dark:group-hover:text-amber-400" />
+                              <Circle size={20} className="shrink-0 text-[#5A6458] dark:text-[#7A8E80] group-hover:text-[#B85D36] dark:group-hover:text-[#E2875A]" />
                             )}
                             <span className={cn('text-sm font-medium leading-snug', task.completed && 'line-through opacity-60')}>
                               {task.label}
@@ -782,7 +778,7 @@ export default function Tracker() {
 
                           <button
                             onClick={() => handleDeleteSubtask(step.id, task.id)}
-                            className="text-stone-400 hover:text-rose-600 dark:hover:text-rose-400 transition-colors p-1 cursor-pointer"
+                            className="text-[#5A6458] dark:text-[#7A8E80] hover:text-rose-500 dark:hover:text-rose-400 transition-colors p-1 cursor-pointer"
                             title="Delete milestone task"
                           >
                             <Trash2 size={14} />
@@ -793,7 +789,7 @@ export default function Tracker() {
                   </div>
 
                   {/* Step Radial Progress */}
-                  <div className="md:w-40 flex md:flex-col items-center justify-center gap-5 border-t md:border-t-0 md:border-l border-stone-200 dark:border-white/10 pt-6 md:pt-0">
+                  <div className="md:w-40 flex md:flex-col items-center justify-center gap-5 border-t md:border-t-0 md:border-l border-[#E4DCCB] dark:border-[#283C30] pt-6 md:pt-0">
                     <div className="relative w-24 h-24 flex items-center justify-center">
                       <svg className="w-full h-full transform -rotate-90">
                         <circle
@@ -803,7 +799,7 @@ export default function Tracker() {
                           stroke="currentColor"
                           strokeWidth="6"
                           fill="transparent"
-                          className="text-stone-200 dark:text-stone-800"
+                          className="text-[#E4DCCB] dark:text-[#283C30]"
                         />
                         <motion.circle
                           cx="48"
@@ -816,16 +812,16 @@ export default function Tracker() {
                           animate={{ strokeDashoffset: 264 - (calculateProgress(step) / 100 * 264) }}
                           fill="transparent"
                           strokeLinecap="round"
-                          className="text-emerald-700 dark:text-amber-400"
+                          className="text-[#B85D36] dark:text-[#E2875A]"
                         />
                       </svg>
-                      <span className="absolute text-sm font-mono font-bold text-stone-900 dark:text-amber-300 tabular-nums">
+                      <span className="absolute text-sm font-mono font-bold text-[#1F2A22] dark:text-[#FFFDF8] tabular-nums">
                         {Math.round(calculateProgress(step))}%
                       </span>
                     </div>
                     <div className="flex flex-col items-center gap-0.5 text-center">
-                      <span className="text-xs font-semibold text-stone-500 dark:text-stone-400">Step 0{index + 1}</span>
-                      <span className="text-xs font-mono font-bold text-emerald-800 dark:text-amber-400">Phase {index === 0 ? 'I' : index === 1 ? 'II' : 'III'}</span>
+                      <span className="text-xs font-semibold text-[#5A6458] dark:text-[#9FB3A4]">Step 0{index + 1}</span>
+                      <span className="text-xs font-mono font-bold text-[#B85D36] dark:text-[#E2875A]">Phase {index === 0 ? 'I' : index === 1 ? 'II' : 'III'}</span>
                     </div>
                   </div>
                 </div>
@@ -944,6 +940,7 @@ export default function Tracker() {
         onClose={() => setShowWizard(false)}
         onComplete={handleApplyOnboarding}
       />
+      </div>
     </div>
   );
 }

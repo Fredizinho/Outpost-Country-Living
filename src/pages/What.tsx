@@ -115,183 +115,184 @@ export default function What() {
   const activeSoil = SOIL_TYPES_REGISTRY.find(s => s.id === selectedSoilId) || SOIL_TYPES_REGISTRY[0];
 
   return (
-    <div className="px-4 sm:px-6 md:px-10 py-6 max-w-7xl mx-auto flex flex-col gap-8">
-      <header className="glass-depth-card rounded-2xl p-5 sm:p-6 flex flex-col gap-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-2 text-xs text-emerald-800 dark:text-amber-300 font-semibold">
-              <span>Malawi Agronomy, Pedology &amp; Homestead Reserves</span>
-              <span aria-hidden="true">·</span>
-              <span className="text-stone-500 dark:text-stone-400 font-normal">5 Soil Orders, 75cm Ridges &amp; How to Persuade Red Clay to Grow Apples</span>
+    <div className="min-h-screen bg-[#F6F1E7] dark:bg-[#0E1712] text-[#1F2A22] dark:text-[#F6F1E7] pb-16 transition-colors duration-200">
+      <div className="px-4 sm:px-6 md:px-10 py-6 max-w-7xl mx-auto flex flex-col gap-8">
+        <header className="bg-[#FFFDF8] dark:bg-[#17241C] rounded-xl p-5 sm:p-6 border border-[#E4DCCB] dark:border-[#283C30] shadow-sm flex flex-col gap-4 transition-colors">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2 text-xs text-[#2B4636] dark:text-[#D4A034] font-semibold">
+                <span>Malawi Agronomy, Pedology &amp; Homestead Reserves</span>
+                <span aria-hidden="true">·</span>
+                <span className="text-[#5A6458] dark:text-[#9FB3A4] font-normal">5 Soil Orders, 75cm Ridges &amp; 3×3×3 ft Orchard Standards</span>
+              </div>
+              <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#1F2A22] dark:text-[#FFFDF8] tracking-tight">
+                Crops, Soil Chemistry &amp; 3×3×3 ft Orchard Pits
+              </h1>
             </div>
-            <h1 className="font-display text-2xl sm:text-3xl font-bold text-stone-950 dark:text-stone-50 tracking-tight">
-              Crops, Soil Chemistry &amp; 3×3×3 ft Orchard Pits
-            </h1>
+
+            <Link
+              to="/seasons"
+              className="self-start md:self-auto bg-[#B4531F] dark:bg-[#D3672E] hover:opacity-90 text-white font-sans font-semibold text-xs px-3.5 py-2 rounded-lg transition-all shadow-xs flex items-center gap-1.5"
+            >
+              <Calendar size={13} />
+              <span>Monthly Planting Almanac →</span>
+            </Link>
           </div>
 
-          <Link
-            to="/seasons"
-            className="self-start md:self-auto bg-emerald-900 hover:bg-emerald-800 dark:bg-amber-500 dark:hover:bg-amber-400 text-white dark:text-stone-950 font-sans font-semibold text-xs px-3.5 py-2 rounded-xl transition-all shadow-xs flex items-center gap-1.5"
+          {/* Consolidated 4-Tab Agronomy & Country Kitchen Switcher */}
+          <div className="flex flex-wrap items-center gap-1.5 bg-[#F6F1E7] dark:bg-[#0E1712] p-1 rounded-lg border border-[#E4DCCB] dark:border-[#283C30] self-start">
+            {([
+              { id: 'soil-crops', label: '01. Crops, Soil Swatches & 75cm Ridges', icon: Sprout },
+              { id: 'orchard-pits', label: '02. 3×3×3 ft Orchard Pits & Organic Manuals', icon: Layers },
+              { id: 'pantry-infra', label: '03. Country Pantry & Shelter Specs', icon: Package },
+              { id: 'kitchen', label: '04. Edenic Country Kitchen & Unfermented Bread', icon: UtensilsCrossed },
+            ] as const).map((tab) => {
+              const active = workspaceTab === tab.id;
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setWorkspaceTab(tab.id)}
+                  className={cn(
+                    'px-3.5 py-1.5 rounded-md text-xs font-semibold transition-all duration-200 cursor-pointer flex items-center gap-1.5',
+                    active
+                      ? 'bg-[#2B4636] dark:bg-[#283C30] text-white shadow-xs font-bold'
+                      : 'text-[#5A6458] dark:text-[#9FB3A4] hover:bg-[#FFFDF8] dark:hover:bg-[#17241C] hover:text-[#1F2A22] dark:hover:text-[#F6F1E7]'
+                  )}
+                >
+                  <Icon size={13} />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <ActiveDistrictContextBar />
+        </header>
+
+        {workspaceTab === 'kitchen' && (
+          <Suspense
+            fallback={
+              <div className="p-8 rounded-xl bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] text-center text-xs font-mono text-[#5A6458] dark:text-[#9FB3A4]">
+                Loading Edenic Country Kitchen &amp; Unfermented Bread Bakery...
+              </div>
+            }
           >
-            <Calendar size={13} />
-            <span>Monthly Planting Almanac →</span>
-          </Link>
-        </div>
+            <EdenicCountryKitchen />
+          </Suspense>
+        )}
 
-        {/* Consolidated 4-Tab Agronomy & Country Kitchen Switcher */}
-        <div className="flex flex-wrap items-center gap-1.5 bg-stone-100 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/80 dark:border-stone-800 self-start">
-          {([
-            { id: 'soil-crops', label: '01. Crops, Soil Swatches & 75cm Ridges', icon: Sprout },
-            { id: 'orchard-pits', label: '02. 3×3×3 ft Orchard Pits & Organic Manuals', icon: Layers },
-            { id: 'pantry-infra', label: '03. Country Pantry & Shelter Specs', icon: Package },
-            { id: 'kitchen', label: '04. Edenic Country Kitchen & Unfermented Bread', icon: UtensilsCrossed },
-          ] as const).map((tab) => {
-            const active = workspaceTab === tab.id;
-            const Icon = tab.icon;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setWorkspaceTab(tab.id)}
-                className={cn(
-                  'px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5',
-                  active
-                    ? 'bg-emerald-950 dark:bg-amber-500 text-amber-300 dark:text-stone-950 shadow-xs font-bold'
-                    : 'text-stone-700 dark:text-stone-300 hover:bg-white dark:hover:bg-stone-800'
-                )}
-              >
-                <Icon size={13} />
-                <span>{tab.label}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        <ActiveDistrictContextBar />
-      </header>
-
-      {workspaceTab === 'kitchen' && (
-        <Suspense
-          fallback={
-            <div className="p-8 rounded-3xl text-center text-xs font-mono text-stone-500">
-              Loading Edenic Country Kitchen &amp; Unfermented Bread Bakery...
+        {workspaceTab === 'orchard-pits' && (
+          <div className="flex flex-col gap-8">
+            <div className="bg-[#FFFDF8] dark:bg-[#17241C] p-6 sm:p-8 rounded-xl border border-[#E4DCCB] dark:border-[#283C30] shadow-sm">
+              <EdenicAgricultureGuides />
             </div>
-          }
-        >
-          <EdenicCountryKitchen />
-        </Suspense>
-      )}
-
-      {workspaceTab === 'orchard-pits' && (
-        <div className="flex flex-col gap-8">
-          <div className="bg-white dark:bg-[#0D1D13] p-6 sm:p-8 rounded-3xl border border-stone-200/90 dark:border-emerald-900/60 shadow-xs">
-            <EdenicAgricultureGuides />
+            <SoilStrataBlueprint />
           </div>
-          <SoilStrataBlueprint />
-        </div>
-      )}
+        )}
 
-      {workspaceTab === 'pantry-infra' && (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {essentials.map((item) => (
-          <div 
-            key={item.id} 
-            onClick={() => setSelectedEssential(item)}
-            className="bg-white/95 dark:bg-[#0D1D13] p-7 rounded-3xl border border-stone-200 dark:border-emerald-900/60 shadow-xs flex flex-col gap-4 card-hover cursor-pointer group hover:border-emerald-700/50 hover:shadow-md transition-all duration-300"
-          >
-            <div className="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 flex items-center justify-center text-emerald-800 dark:text-emerald-300 shadow-xs group-hover:scale-105 transition-all">
-              <item.icon size={24} />
-            </div>
-            <div className="flex justify-between items-start gap-2">
-              <h3 className="font-display text-xl font-bold text-stone-900 dark:text-white group-hover:text-emerald-800 dark:group-hover:text-emerald-300 transition-colors">{item.title}</h3>
-              <Info size={16} className="text-stone-400 shrink-0 group-hover:text-emerald-700 transition-colors mt-1" />
-            </div>
-            <p className="text-sm text-stone-600 dark:text-stone-300 leading-relaxed font-medium">{item.desc}</p>
-            <span className="text-xs font-sans font-bold uppercase text-emerald-800 dark:text-emerald-400 tracking-wider mt-auto flex items-center gap-1">
-              <span>Read Specs</span>
-              <span>→</span>
-            </span>
-          </div>
-        ))}
-      </div>
-      )}
-
-      {/* Malawi Soil Orders & Organic Fertility Protocol Selector */}
-      {workspaceTab === 'soil-crops' && (
-      <>
-      <section className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#0D1D13] border border-stone-200/90 dark:border-emerald-900/60 shadow-xs flex flex-col gap-5">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-stone-200 dark:border-emerald-900/50">
-          <div>
-            <div className="flex items-center gap-2 text-xs text-stone-500 dark:text-stone-400">
-              <span className="font-semibold text-emerald-800 dark:text-emerald-400">Malawi Pedology Registry</span>
-              <span aria-hidden="true">·</span>
-              <span>5 Major Soil Orders</span>
-            </div>
-            <h3 className="font-display text-2xl font-bold text-stone-900 dark:text-white mt-0.5">
-              Malawi Soil Chemistry & Organic Amendment Reference
-            </h3>
-          </div>
-
-          <div className="flex flex-wrap gap-1.5">
-            {SOIL_TYPES_REGISTRY.map((soil) => (
-              <button
-                key={soil.id}
-                type="button"
-                onClick={() => setSelectedSoilId(soil.id)}
-                className={cn(
-                  'px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap',
-                  selectedSoilId === soil.id
-                    ? 'bg-emerald-900 text-white dark:bg-emerald-700'
-                    : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700'
-                )}
-              >
-                {soil.name.split(' ')[0]} {soil.name.split(' ')[1]}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          <div className="lg:col-span-5 flex flex-col gap-2.5 p-5 rounded-2xl bg-stone-50 dark:bg-stone-900/70 border border-stone-200/80 dark:border-emerald-900/40">
-            <span className="text-xs font-mono text-emerald-800 dark:text-amber-300 font-semibold">
-              {activeSoil.chichewaName}
-            </span>
-            <h4 className="font-display text-xl font-bold text-stone-900 dark:text-white">
-              {activeSoil.name}
-            </h4>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-mono text-stone-600 dark:text-stone-300 tabular-nums pt-1">
-              <span>{activeSoil.phRange}</span>
-              <span aria-hidden="true">·</span>
-              <span>Drainage: {activeSoil.drainage}</span>
-              <span aria-hidden="true">·</span>
-              <span>Target OM: {activeSoil.organicMatterTarget}</span>
-            </div>
-            <p className="text-xs text-stone-500 dark:text-stone-400 pt-1">
-              FAO Classification: {activeSoil.faoClassification}
-            </p>
-          </div>
-
-          <div className="lg:col-span-7 flex flex-col gap-3 p-5 rounded-2xl bg-stone-50 dark:bg-stone-900/70 border border-stone-200/80 dark:border-emerald-900/40">
-            <div>
-              <span className="text-xs font-bold text-stone-900 dark:text-white block mb-1">
-                Organic Soil Restoration & Amendment Protocol
+        {workspaceTab === 'pantry-infra' && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {essentials.map((item) => (
+            <div 
+              key={item.id} 
+              onClick={() => setSelectedEssential(item)}
+              className="bg-[#FFFDF8] dark:bg-[#17241C] p-6 rounded-xl border border-[#E4DCCB] dark:border-[#283C30] shadow-sm flex flex-col gap-4 cursor-pointer group hover:border-[#B4531F] dark:hover:border-[#D3672E] hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+            >
+              <div className="w-10 h-10 rounded-lg bg-[#2B4636]/10 dark:bg-[#1F3325] border border-[#2B4636]/20 dark:border-[#283C30] flex items-center justify-center text-[#2B4636] dark:text-[#D4A034] shadow-xs group-hover:scale-105 transition-all">
+                <item.icon size={20} />
+              </div>
+              <div className="flex justify-between items-start gap-2">
+                <h3 className="font-serif text-lg font-bold text-[#1F2A22] dark:text-[#FFFDF8] group-hover:text-[#B4531F] dark:group-hover:text-[#D4A034] transition-colors">{item.title}</h3>
+                <Info size={15} className="text-[#5A6458] dark:text-[#9FB3A4] shrink-0 mt-1" />
+              </div>
+              <p className="text-xs text-[#5A6458] dark:text-[#D0DAD2] leading-relaxed font-normal">{item.desc}</p>
+              <span className="text-caption font-mono font-bold uppercase text-[#B4531F] dark:text-[#D4A034] tracking-wider mt-auto flex items-center gap-1">
+                <span>Read Specs</span>
+                <span>→</span>
               </span>
-              <p className="text-xs sm:text-sm text-stone-700 dark:text-stone-200 leading-relaxed">
-                {activeSoil.amendmentProtocol}
+            </div>
+          ))}
+        </div>
+        )}
+
+        {/* Malawi Soil Orders & Organic Fertility Protocol Selector */}
+        {workspaceTab === 'soil-crops' && (
+        <>
+        <section className="p-6 sm:p-8 rounded-xl bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] shadow-sm flex flex-col gap-5 transition-colors">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-[#E4DCCB] dark:border-[#283C30]">
+            <div>
+              <div className="flex items-center gap-2 text-xs text-[#5A6458] dark:text-[#9FB3A4]">
+                <span className="font-semibold text-[#2B4636] dark:text-[#D4A034]">Malawi Pedology Registry</span>
+                <span aria-hidden="true">·</span>
+                <span>5 Major Soil Orders</span>
+              </div>
+              <h3 className="font-serif text-2xl font-bold text-[#1F2A22] dark:text-[#FFFDF8] mt-0.5">
+                Malawi Soil Chemistry &amp; Organic Amendment Reference
+              </h3>
+            </div>
+
+            <div className="flex flex-wrap gap-1.5">
+              {SOIL_TYPES_REGISTRY.map((soil) => (
+                <button
+                  key={soil.id}
+                  type="button"
+                  onClick={() => setSelectedSoilId(soil.id)}
+                  className={cn(
+                    'px-3 py-1.5 rounded-md text-xs font-semibold transition-all duration-200 cursor-pointer whitespace-nowrap hover:-translate-y-0.5',
+                    selectedSoilId === soil.id
+                      ? 'bg-[#2B4636] dark:bg-[#283C30] text-white shadow-xs font-bold'
+                      : 'bg-[#F6F1E7] dark:bg-[#0E1712] border border-[#E4DCCB] dark:border-[#283C30] text-[#1F2A22] dark:text-[#F6F1E7] hover:bg-[#EAE2D2] dark:hover:bg-[#1F3325]'
+                  )}
+                >
+                  {soil.name.split(' ')[0]} {soil.name.split(' ')[1]}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <div className="lg:col-span-5 flex flex-col gap-2.5 p-5 rounded-lg bg-[#F6F1E7] dark:bg-[#0E1712] border border-[#E4DCCB] dark:border-[#283C30]">
+              <span className="text-xs font-mono text-[#B4531F] dark:text-[#D4A034] font-semibold">
+                {activeSoil.chichewaName}
+              </span>
+              <h4 className="font-serif text-xl font-bold text-[#1F2A22] dark:text-[#FFFDF8]">
+                {activeSoil.name}
+              </h4>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-mono text-[#5A6458] dark:text-[#9FB3A4] tabular-nums pt-1">
+                <span>{activeSoil.phRange}</span>
+                <span aria-hidden="true">·</span>
+                <span>Drainage: {activeSoil.drainage}</span>
+                <span aria-hidden="true">·</span>
+                <span>Target OM: {activeSoil.organicMatterTarget}</span>
+              </div>
+              <p className="text-xs text-[#5A6458] dark:text-[#9FB3A4] pt-1">
+                FAO Classification: {activeSoil.faoClassification}
               </p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-stone-200/70 dark:border-emerald-900/40 text-xs">
+
+            <div className="lg:col-span-7 flex flex-col gap-3 p-5 rounded-lg bg-[#F6F1E7] dark:bg-[#0E1712] border border-[#E4DCCB] dark:border-[#283C30]">
               <div>
-                <span className="font-semibold text-stone-900 dark:text-white block">Primary Malawi Districts:</span>
-                <span className="text-stone-600 dark:text-stone-300">{activeSoil.primaryDistricts.join(' · ')}</span>
+                <span className="text-xs font-bold text-[#1F2A22] dark:text-[#FFFDF8] block mb-1">
+                  Organic Soil Restoration &amp; Amendment Protocol
+                </span>
+                <p className="text-xs sm:text-sm text-[#5A6458] dark:text-[#D0DAD2] leading-relaxed">
+                  {activeSoil.amendmentProtocol}
+                </p>
               </div>
-              <div>
-                <span className="font-semibold text-stone-900 dark:text-white block">Best Adapted Crops:</span>
-                <span className="text-stone-600 dark:text-stone-300">{activeSoil.idealCrops.join(' · ')}</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-[#E4DCCB] dark:border-[#283C30] text-xs">
+                <div>
+                  <span className="font-semibold text-[#1F2A22] dark:text-[#FFFDF8] block">Primary Malawi Districts:</span>
+                  <span className="text-[#5A6458] dark:text-[#9FB3A4]">{activeSoil.primaryDistricts.join(' · ')}</span>
+                </div>
+                <div>
+                  <span className="font-semibold text-[#1F2A22] dark:text-[#FFFDF8] block">Best Adapted Crops:</span>
+                  <span className="text-[#5A6458] dark:text-[#9FB3A4]">{activeSoil.idealCrops.join(' · ')}</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
         {/* Visual Soil Swatch & Hand-Ribbon Test Guide */}
         <VisualSoilSwatchGuide />
@@ -307,12 +308,12 @@ export default function What() {
 
       {/* Country Pantry Section */}
       {(workspaceTab === 'pantry-infra' || workspaceTab === 'soil-crops') && (
-      <section className="bg-white dark:bg-[#0D1D13] rounded-3xl p-6 sm:p-8 md:p-10 text-stone-900 dark:text-stone-100 flex flex-col md:flex-row gap-8 items-start border border-stone-200/90 dark:border-emerald-900/60 shadow-xs overflow-hidden relative">
+      <section className="bg-[#FFFDF8] dark:bg-[#17241C] rounded-xl p-6 sm:p-8 text-[#1F2A22] dark:text-[#F6F1E7] flex flex-col md:flex-row gap-8 items-start border border-[#E4DCCB] dark:border-[#283C30] shadow-sm overflow-hidden relative transition-colors">
         <div className="flex-1 flex flex-col gap-5 relative z-10 w-full">
           <div>
-            <span className="text-emerald-800 dark:text-amber-400 text-xs font-sans font-semibold">Pantry Stock Checklist</span>
-            <h3 className="serif text-2xl sm:text-3xl font-bold mt-1 text-stone-900 dark:text-stone-50">The Country Pantry &amp; Food Granary</h3>
-            <p className="text-stone-600 dark:text-stone-300 font-medium text-sm leading-relaxed max-w-lg mt-1.5">
+            <span className="text-[#2B4636] dark:text-[#D4A034] text-xs font-mono font-semibold uppercase tracking-wider">Pantry Stock Checklist</span>
+            <h3 className="font-serif text-2xl sm:text-3xl font-bold mt-1 text-[#1F2A22] dark:text-[#FFFDF8]">The Country Pantry &amp; Food Granary</h3>
+            <p className="text-[#5A6458] dark:text-[#9FB3A4] font-normal text-sm leading-relaxed max-w-lg mt-1.5">
               A guide to preserving and storing staple harvests, based on inspired counsel to &ldquo;preserve as much food as possible.&rdquo; Click items to track your off-grid stock.
             </p>
           </div>
@@ -323,28 +324,28 @@ export default function What() {
                 key={item.id}
                 onClick={() => togglePantryItem(item.id)}
                 className={cn(
-                  "flex items-center gap-3 p-4 rounded-2xl border transition-all text-left active:scale-98 cursor-pointer leading-snug",
+                  "flex items-center gap-3 p-3.5 rounded-lg border transition-all duration-200 text-left active:scale-[0.98] cursor-pointer leading-snug hover:-translate-y-0.5",
                   item.checked 
-                    ? "bg-emerald-50/90 dark:bg-emerald-950/80 border-emerald-400 dark:border-emerald-500/50 text-emerald-950 dark:text-emerald-100 shadow-2xs" 
-                    : "bg-stone-50/90 dark:bg-stone-900/60 border-stone-200/90 dark:border-emerald-900/40 text-stone-800 dark:text-stone-200 hover:bg-white dark:hover:bg-stone-900"
+                    ? "bg-[#2B4636]/10 dark:bg-[#1F3325] border-[#2B4636]/40 dark:border-[#283C30] text-[#1F2A22] dark:text-[#F6F1E7] shadow-xs" 
+                    : "bg-[#F6F1E7] dark:bg-[#0E1712] border-[#E4DCCB] dark:border-[#283C30] text-[#1F2A22] dark:text-[#F6F1E7] hover:bg-[#EAE2D2] dark:hover:bg-[#1F3325]"
                 )}
               >
-                {item.checked ? <CheckCircle2 size={18} className="text-emerald-700 dark:text-emerald-400 shrink-0" /> : <Circle size={18} className="text-stone-400 dark:text-stone-500 shrink-0" />}
-                <span className={cn(item.checked && "line-through opacity-70 text-emerald-800 dark:text-emerald-300")}>{item.label}</span>
+                {item.checked ? <CheckCircle2 size={16} className="text-[#3F6B4E] shrink-0" /> : <Circle size={16} className="text-[#5A6458] dark:text-[#9FB3A4] shrink-0" />}
+                <span className={cn(item.checked && "line-through opacity-70 text-[#5A6458] dark:text-[#9FB3A4]")}>{item.label}</span>
               </button>
             ))}
           </div>
         </div>
 
-        <div className="w-full md:w-1/3 bg-stone-50 dark:bg-stone-900/80 p-6 sm:p-7 rounded-2xl border border-stone-200/90 dark:border-emerald-900/50 shrink-0">
-          <h4 className="serif text-xl font-bold mb-2.5 text-stone-900 dark:text-amber-200">Pro Stewardship</h4>
-          <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 leading-relaxed font-medium italic">
+        <div className="w-full md:w-1/3 bg-[#F6F1E7] dark:bg-[#0E1712] p-6 rounded-lg border border-[#E4DCCB] dark:border-[#283C30] shrink-0">
+          <h4 className="font-serif text-lg font-bold mb-2 text-[#1F2A22] dark:text-[#FFFDF8]">Pro Stewardship</h4>
+          <p className="text-xs text-[#5A6458] dark:text-[#D0DAD2] leading-relaxed italic">
             &ldquo;Buy tools that last a lifetime. In the country, your tools are your lifeline. Prefer forged steel and seasoned hardwood handles over cheap metal.&rdquo;
           </p>
-          <div className="mt-5 flex justify-between items-center pt-3.5 border-t border-stone-200 dark:border-emerald-900/40">
-             <span className="text-xs font-sans font-semibold text-emerald-800 dark:text-amber-300">Malawi Quality Standard</span>
-             <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-amber-500/20 flex items-center justify-center border border-emerald-300 dark:border-amber-500/30">
-                <Shield size={14} className="text-emerald-800 dark:text-amber-400" />
+          <div className="mt-4 flex justify-between items-center pt-3 border-t border-[#E4DCCB] dark:border-[#283C30]">
+             <span className="text-xs font-mono font-semibold text-[#2B4636] dark:text-[#D4A034]">Malawi Quality Standard</span>
+             <div className="w-7 h-7 rounded-md bg-[#2B4636]/15 dark:bg-[#1F3325] flex items-center justify-center border border-[#2B4636]/25 dark:border-[#283C30]">
+                <Shield size={13} className="text-[#2B4636] dark:text-[#D4A034]" />
              </div>
           </div>
         </div>
@@ -398,6 +399,7 @@ export default function What() {
           </div>
         )}
       </AnimatePresence>
+      </div>
     </div>
   );
 }

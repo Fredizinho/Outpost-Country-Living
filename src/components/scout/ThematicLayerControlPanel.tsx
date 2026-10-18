@@ -218,28 +218,26 @@ export function ThematicLayerControlPanel({
         id="thematic-map-layers-panel"
       >
         <div className={cn(
-          "backdrop-blur-2xl border rounded-2xl shadow-2xl overflow-hidden flex flex-col transition-all duration-300",
+          "border rounded-[10px] shadow-sm overflow-hidden flex flex-col transition-colors duration-200 font-chrome text-[13px]",
           isField
             ? "bg-black border-2 border-white text-white"
-            : isLight
-            ? "bg-[#FAF6F0]/95 border-[#E3D8CC] text-[#1A1612] shadow-raised"
-            : "bg-slate-950/95 border-white/20 text-white",
-          activeTab === 'legend' ? "w-[330px] sm:w-[390px]" : "w-[310px] sm:w-[340px]"
+            : "bg-[#FFFDF8] border-[#E4DCCB] text-[#1F2A22]",
+          activeTab === 'legend' ? "w-[330px] sm:w-[380px]" : "w-[300px] sm:w-[320px]"
         )}>
         
         {/* Panel Header */}
-        <div className="px-3.5 py-2.5 bg-gradient-to-r from-slate-900/95 via-slate-900 to-slate-950 border-b border-white/10 flex items-center justify-between gap-2">
+        <div className="px-3.5 py-2.5 bg-[#F6F1E7] border-b border-[#E4DCCB] flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shadow-2xs">
+            <div className="w-5.5 h-5.5 rounded-[4px] bg-[#E4DCCB] flex items-center justify-center text-[#2B4636]">
               <Layers size={13} />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <h3 className="serif font-bold text-xs text-white tracking-wide">
-                  Thematic Controls
+                <h3 className="font-medium text-[13px] text-[#1F2A22]">
+                  Layers
                 </h3>
-                <span className="text-caption font-mono px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
-                  {activeCount}/8 ON
+                <span className="text-[11px] px-1.5 py-0.2 rounded-full bg-[#3F6B4E]/15 text-[#3F6B4E] font-medium border border-[#3F6B4E]/30">
+                  {activeCount} active
                 </span>
               </div>
             </div>
@@ -272,36 +270,36 @@ export function ThematicLayerControlPanel({
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="p-3 flex flex-col gap-2.5 bg-slate-950/60 max-h-[calc(100vh-140px)]"
+              transition={{ duration: 0.15 }}
+              className="p-2.5 flex flex-col gap-2 bg-[#FFFDF8] max-h-[calc(100vh-140px)]"
             >
               {/* Mode Switcher Tabs */}
-              <div className="flex items-center gap-1 p-0.5 bg-slate-900 border border-white/10 rounded-xl shrink-0">
+              <div className="flex items-center gap-1 p-0.5 bg-[#F6F1E7] border border-[#E4DCCB] rounded-[6px] shrink-0 text-[12px]">
                 <button
                   type="button"
                   onClick={() => setActiveTab('layers')}
                   className={cn(
-                    "flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer",
+                    "flex-1 py-1 px-2 rounded-[4px] font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer",
                     activeTab === 'layers'
-                      ? "bg-slate-800 text-white shadow-xs"
-                      : "text-slate-400 hover:text-white"
+                      ? "bg-[#FFFDF8] text-[#1F2A22] shadow-xs font-semibold"
+                      : "text-[#5A6458] hover:text-[#1F2A22]"
                   )}
                 >
                   <Layers size={12} />
-                  <span>8 Thematic Layers</span>
+                  <span>Thematic Layers</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setActiveTab('legend')}
                   className={cn(
-                    "flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer",
+                    "flex-1 py-1 px-2 rounded-[4px] font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer",
                     activeTab === 'legend'
-                      ? "bg-emerald-950 text-emerald-200 border border-emerald-500/40 shadow-xs"
-                      : "text-emerald-400/80 hover:text-emerald-200"
+                      ? "bg-[#FFFDF8] text-[#1F2A22] shadow-xs font-semibold"
+                      : "text-[#5A6458] hover:text-[#1F2A22]"
                   )}
                 >
                   <BookOpen size={12} />
-                  <span>Symbology Legend</span>
+                  <span>Legend</span>
                 </button>
               </div>
 
@@ -317,55 +315,9 @@ export function ThematicLayerControlPanel({
                 />
               ) : (
                 <>
-                  {/* AI Field Insights Action Strip */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (onGetAiInsights) {
-                        onGetAiInsights();
-                      } else if (onOpenAiScout) {
-                        onOpenAiScout();
-                      }
-                    }}
-                    className="w-full relative group overflow-hidden rounded-xl p-[1px] shadow-lg transition-all duration-300 hover:shadow-emerald-500/25 active:scale-[0.98] cursor-pointer shrink-0"
-                    title="Analyze current map view and selected layers"
-                  >
-                    <span className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-teal-400 to-amber-400 rounded-xl opacity-85 group-hover:opacity-100 transition-opacity" />
-                    <div className="relative px-3 py-2 rounded-[11px] bg-slate-950/90 group-hover:bg-slate-900/90 transition-colors flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2 min-w-0">
-                        <div className="w-7 h-7 rounded-lg bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 shrink-0">
-                          <Sparkles size={14} className="text-amber-300" />
-                        </div>
-                        <div className="flex flex-col text-left min-w-0">
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-xs font-bold text-white tracking-tight truncate">
-                              Get AI Insights
-                            </span>
-                            <span className="text-caption font-mono font-semibold px-1 py-0.5 rounded bg-emerald-500/30 text-emerald-200 border border-emerald-400/30 shrink-0">
-                              {activeCount} Active
-                            </span>
-                          </div>
-                          <span className="text-caption text-slate-300 font-sans truncate">
-                            Country living recommendations
-                          </span>
-                        </div>
-                      </div>
-                      <div className="w-6 h-6 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-emerald-400 group-hover:translate-x-0.5 transition-transform shrink-0">
-                        <ArrowRight size={12} />
-                      </div>
-                    </div>
-                  </button>
-
-                  {/*
-                    REQUIREMENT:
-                    "the layer list must be a normal flex column with overflow-y-auto and min-h-0;
-                    each row has a fixed 56px collapsed height and never overlaps.
-                    Only one row expands at a time and its content grows to fit (no line-clamp, no fixed height).
-                    Titles wrap to two lines instead of truncating. Test with all 8 layers and report any other clipped rows."
-                  */}
                   <div
                     id="thematic-controls-layer-list"
-                    className="flex flex-col gap-2 overflow-y-auto min-h-0 max-h-[360px] sm:max-h-[420px] custom-scrollbar pr-1"
+                    className="flex flex-col gap-1.5 overflow-y-auto min-h-0 max-h-[360px] sm:max-h-[420px] custom-scrollbar pr-1"
                   >
                     {thematicLayers.map((layer) => {
                       const Icon = layer.icon;
@@ -375,67 +327,49 @@ export function ThematicLayerControlPanel({
                         <div
                           key={layer.id}
                           className={cn(
-                            "rounded-xl border transition-all duration-200 overflow-hidden box-border shrink-0 flex flex-col",
+                            "rounded-[6px] border transition-colors overflow-hidden box-border shrink-0 flex flex-col",
                             layer.active
-                              ? "bg-slate-900/90 border-white/20 shadow-md"
-                              : "bg-slate-900/40 border-white/10 hover:border-white/20 opacity-85 hover:opacity-100",
+                              ? "bg-[#F6F1E7] border-[#E4DCCB]"
+                              : "bg-[#FFFDF8] border-[#E4DCCB] hover:bg-[#F6F1E7]/50",
                             isRowExpanded
-                              ? "h-auto ring-1 ring-amber-400/40"
-                              : "h-[56px] min-h-[56px] max-h-[56px]"
+                              ? "h-auto ring-1 ring-[#C98A1B]"
+                              : "h-[54px] min-h-[54px] max-h-[54px]"
                           )}
                         >
-                          {/* Row Header Bar: Guaranteed 56px collapsed height */}
+                          {/* Row Header Bar: 54px collapsed height */}
                           <div
                             onClick={() => {
-                              // Only one row expands at a time
                               setExpandedRowId(isRowExpanded ? null : layer.id);
                             }}
-                            className="h-[54px] min-h-[54px] max-h-[54px] px-2.5 flex items-center justify-between gap-2 cursor-pointer select-none"
+                            className="h-[52px] min-h-[52px] max-h-[52px] px-2.5 flex items-center justify-between gap-2 cursor-pointer select-none"
                           >
                             <div className="flex items-center gap-2 min-w-0 flex-1">
                               {/* Layer Icon Swatch */}
                               <div 
                                 className={cn(
-                                  "w-8 h-8 rounded-lg border flex items-center justify-center shrink-0 transition-all",
+                                  "w-7 h-7 rounded-[4px] border flex items-center justify-center shrink-0 transition-colors",
                                   layer.active
-                                    ? layer.activeBg
-                                    : "bg-slate-900 border-white/10 text-slate-400"
+                                    ? "bg-[#FFFDF8] border-[#E4DCCB] text-[#1F2A22]"
+                                    : "bg-[#F6F1E7] border-[#E4DCCB] text-[#5A6458]"
                                 )}
                               >
-                                <Icon size={16} />
+                                <Icon size={14} className={layer.active ? "text-[#B4531F]" : "text-[#5A6458]"} />
                               </div>
 
-                              {/* Title (wraps to 2 lines instead of truncating) */}
+                              {/* Title */}
                               <div className="flex flex-col min-w-0 flex-1 justify-center">
                                 <span className={cn(
-                                  "text-xs font-bold leading-tight line-clamp-2 break-words",
-                                  layer.active ? "text-white" : "text-slate-300"
+                                  "text-[12.5px] font-medium leading-tight line-clamp-2 break-words",
+                                  layer.active ? "text-[#1F2A22]" : "text-[#5A6458]"
                                 )}>
                                   {layer.title}
-                                </span>
-                                <span className="text-caption text-slate-400 font-mono leading-none mt-0.5 truncate">
-                                  {layer.badge}
                                 </span>
                               </div>
                             </div>
 
                             {/* Controls: Expand disclosure + Toggle switch */}
                             <div className="flex items-center gap-1.5 shrink-0 ml-1">
-                              {/* Disclosure Chevron */}
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setExpandedRowId(isRowExpanded ? null : layer.id);
-                                }}
-                                className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-                                title={isRowExpanded ? "Collapse details" : "Expand layer details"}
-                                aria-expanded={isRowExpanded}
-                              >
-                                {isRowExpanded ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
-                              </button>
-
-                              {/* On/Off Switch */}
+                              {/* On/Off Switch: Green active pill (#3F6B4E) */}
                               <button
                                 type="button"
                                 onClick={(e) => {
@@ -443,22 +377,20 @@ export function ThematicLayerControlPanel({
                                   if (layer.toggle) layer.toggle();
                                 }}
                                 className={cn(
-                                  "w-9 h-5 rounded-full transition-colors relative shrink-0 p-0.5 border cursor-pointer",
+                                  "w-8.5 h-4.5 rounded-full transition-colors relative shrink-0 p-0.5 border cursor-pointer",
                                   layer.active
-                                    ? "bg-emerald-600/90 border-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.4)]"
-                                    : "bg-slate-800 border-slate-700"
+                                    ? "bg-[#3F6B4E] border-[#3F6B4E]"
+                                    : "bg-[#E4DCCB] border-[#E4DCCB]"
                                 )}
                                 aria-pressed={layer.active}
                                 title={`Toggle ${layer.title}`}
                               >
-                                <div
+                                <span
                                   className={cn(
-                                    "w-3.5 h-3.5 rounded-full bg-white shadow-md flex items-center justify-center transition-transform duration-200",
+                                    "w-3.5 h-3.5 rounded-full bg-[#FFFDF8] block transition-transform shadow-xs",
                                     layer.active ? "translate-x-4" : "translate-x-0"
                                   )}
-                                >
-                                  {layer.active && <Check size={9} className="text-emerald-700 stroke-[3]" />}
-                                </div>
+                                />
                               </button>
                             </div>
                           </div>

@@ -30,22 +30,22 @@ export default function Agriculture() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF7F0] dark:bg-[#09150E] text-stone-800 dark:text-stone-100 flex flex-col pb-20 transition-colors">
+    <div className="min-h-screen bg-[#F6F1E7] dark:bg-[#0E1712] text-[#1F2A22] dark:text-[#F6F1E7] flex flex-col pb-20 transition-colors duration-200">
       <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 md:px-10 pt-6 flex flex-col gap-6">
         {/* District Agro-Climatic Header Bar */}
         <ActiveDistrictContextBar />
 
-        <header className="bg-white dark:bg-[#0D1D13] rounded-2xl border border-stone-200/90 dark:border-emerald-900/60 p-5 sm:p-6 shadow-xs flex flex-col gap-4">
+        <header className="bg-[#FFFDF8] dark:bg-[#17241C] rounded-2xl border border-[#E4DCCB] dark:border-[#283C30] p-5 sm:p-6 shadow-xs flex flex-col gap-4">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             <div className="flex flex-col gap-1">
-              <div className="flex flex-wrap items-center gap-2 text-xs text-emerald-800 dark:text-amber-300 font-semibold">
+              <div className="flex flex-wrap items-center gap-2 text-xs text-[#B85D36] dark:text-[#E2875A] font-semibold">
                 <span>God-Honoring Organic Husbandry &amp; Food Autonomy</span>
                 <span aria-hidden="true">·</span>
-                <span className="text-stone-500 dark:text-stone-400 font-normal">
+                <span className="text-[#5A6458] dark:text-[#9FB3A4] font-normal">
                   Foundations for Farming · 3×3×3 ft Deep Pits · Pfumvudza Contours · Living Mulch
                 </span>
               </div>
-              <h1 className="serif text-2xl sm:text-3xl font-bold text-stone-950 dark:text-stone-50 tracking-tight">
+              <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#1F2A22] dark:text-[#FFFDF8] tracking-tight">
                 Edenic Agriculture, Orchard Guilds &amp; Crop Science
               </h1>
             </div>
@@ -53,7 +53,7 @@ export default function Agriculture() {
             <div className="flex flex-wrap items-center gap-2">
               <Link
                 to="/seasons"
-                className="bg-emerald-950 hover:bg-emerald-900 text-amber-300 font-mono font-bold text-xs uppercase px-3.5 py-2 rounded-xl transition-all shadow-xs flex items-center gap-1.5"
+                className="bg-[#2C4A3E] hover:bg-[#1F352C] dark:bg-[#B85D36] dark:hover:bg-[#A34F2C] text-white font-mono font-bold text-xs uppercase px-3.5 py-2 rounded-xl transition-all shadow-xs flex items-center gap-1.5"
               >
                 <Calendar size={13} />
                 <span>Malawi Planting Almanac</span>
@@ -62,7 +62,7 @@ export default function Agriculture() {
           </div>
 
           {/* 5-Tab Agricultural Workbench Switcher */}
-          <div className="flex flex-wrap items-center gap-1.5 bg-stone-100 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/80 dark:border-stone-800">
+          <div className="flex flex-wrap items-center gap-1.5 bg-[#F6F1E7] dark:bg-[#102017] p-1 rounded-xl border border-[#E4DCCB] dark:border-[#283C30]">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -74,11 +74,11 @@ export default function Agriculture() {
                   className={cn(
                     'flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer',
                     isActive
-                      ? 'bg-emerald-950 dark:bg-amber-500 text-amber-300 dark:text-stone-950 shadow-xs font-bold'
-                      : 'text-stone-700 dark:text-stone-300 hover:bg-white dark:hover:bg-stone-800'
+                      ? 'bg-[#B85D36] text-white shadow-xs font-bold'
+                      : 'text-[#5A6458] dark:text-[#9FB3A4] hover:bg-[#FFFDF8] dark:hover:bg-[#17241C]'
                   )}
                 >
-                  <Icon size={14} className={isActive ? 'text-amber-300 dark:text-stone-950' : 'text-stone-400'} />
+                  <Icon size={14} className={isActive ? 'text-white' : 'text-[#5A6458] dark:text-[#9FB3A4]'} />
                   <span>{tab.label}</span>
                 </button>
               );
@@ -88,7 +88,7 @@ export default function Agriculture() {
 
         {/* Tab 1: Edenic Agriculture Manuals */}
         {activeTab === 'manuals' && (
-          <div className="bg-white dark:bg-[#0D1D13] p-6 sm:p-8 rounded-3xl border border-stone-200/90 dark:border-emerald-900/60 shadow-md">
+          <div className="bg-[#FFFDF8] dark:bg-[#17241C] p-6 sm:p-8 rounded-2xl border border-[#E4DCCB] dark:border-[#283C30] shadow-xs">
             <EdenicAgricultureGuides />
           </div>
         )}
@@ -100,21 +100,21 @@ export default function Agriculture() {
 
         {/* Tab 3: Malawi Ridge & Companion Guilds */}
         {activeTab === 'ridge-planner' && (
-          <div className="bg-white dark:bg-[#0D1D13] p-6 sm:p-8 rounded-3xl border border-stone-200/90 dark:border-emerald-900/60 shadow-md">
+          <div className="bg-[#FFFDF8] dark:bg-[#17241C] p-6 sm:p-8 rounded-2xl border border-[#E4DCCB] dark:border-[#283C30] shadow-xs">
             <MalawiRidgeAndSeedPlanner />
           </div>
         )}
 
         {/* Tab 4: Orchard Pit & Permaculture Designer */}
         {activeTab === 'orchard-guilds' && (
-          <div className="bg-white dark:bg-[#0D1D13] p-6 sm:p-8 rounded-3xl border border-stone-200/90 dark:border-emerald-900/60 shadow-md">
+          <div className="bg-[#FFFDF8] dark:bg-[#17241C] p-6 sm:p-8 rounded-2xl border border-[#E4DCCB] dark:border-[#283C30] shadow-xs">
             <OrchardGuildPitDesigner />
           </div>
         )}
 
         {/* Tab 5: Indigenous Heirloom Crop Catalog */}
         {activeTab === 'crop-catalog' && (
-          <div className="bg-white dark:bg-[#0D1D13] p-6 sm:p-8 rounded-3xl border border-stone-200/90 dark:border-emerald-900/60 shadow-md">
+          <div className="bg-[#FFFDF8] dark:bg-[#17241C] p-6 sm:p-8 rounded-2xl border border-[#E4DCCB] dark:border-[#283C30] shadow-xs">
             <MalawiCropExplorer />
           </div>
         )}

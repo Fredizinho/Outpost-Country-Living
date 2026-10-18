@@ -527,6 +527,8 @@ export function ScoutingMap({
   const tileLayerRef = useRef<L.TileLayer | null>(null);
   
   // Layer Groups
+  const terrainTintLayerRef = useRef<L.LayerGroup | null>(null);
+  const waterBodiesLayerRef = useRef<L.LayerGroup | null>(null);
   const vectorBasemapLayerRef = useRef<L.LayerGroup | null>(null);
   const climateHeatmapLayerRef = useRef<L.LayerGroup | null>(null);
   const regionsLayerRef = useRef<L.LayerGroup | null>(null);
@@ -855,6 +857,8 @@ export function ScoutingMap({
     }).addTo(map);
 
     // Initialize Layer Groups in optical Z-order
+    terrainTintLayerRef.current = L.layerGroup().addTo(map);
+    waterBodiesLayerRef.current = L.layerGroup().addTo(map);
     vectorBasemapLayerRef.current = L.layerGroup().addTo(map);
     regionsLayerRef.current = L.layerGroup().addTo(map);
     climateHeatmapLayerRef.current = L.layerGroup().addTo(map);
@@ -1037,8 +1041,52 @@ export function ScoutingMap({
   }, []);
 
   // -------------------------------------------------------------
-  // 1.8 RENDER OFFLINE VECTOR GIS BASEMAP CARTOGRAPHY
-  // Renders native Lakes, Highways, Cities/Bomas on-device
+  // 1.8 RENDER WATER POLYGONS (LAKE MALAWI, LAKE MALOMBE, LAKE CHILWA) & TERRAIN TINT
+  // Muted blue water polygons + faint hillshade/terrain tint kept low contrast behind districts
+  // -------------------------------------------------------------
+  useEffect(() => {
+    if (!waterBodiesLayerRef.current || !terrainTintLayerRef.current) return;
+    waterBodiesLayerRef.current.clearLayers();
+    terrainTintLayerRef.current.clearLayers();
+
+    // 1. Faint hillshade / terrain tint behind districts (low contrast, opacity 0.08)
+    MALAWI_ELEVATION_OVERLAYS.forEach((elev) => {
+      const tint = L.polygon(elev.coordinates as L.LatLngTuple[], {
+        color: 'transparent',
+        weight: 0,
+        fillColor: elev.color,
+        fillOpacity: 0.08,
+        interactive: false,
+      });
+      terrainTintLayerRef.current?.addLayer(tint);
+    });
+
+    // 2. Lake Malawi, Lake Malombe, Lake Chilwa (and Lake Chiuta) in muted blue
+    MALAWI_LAKES.forEach((lake) => {
+      const lakePoly = L.polygon(lake.coordinates as L.LatLngTuple[], {
+        fillColor: '#1d4ed8',
+        fillOpacity: 0.38,
+        color: '#3b82f6',
+        weight: 1.2,
+      });
+
+      lakePoly.bindTooltip(`
+        <div style="font-family: sans-serif; padding: 6px 8px; background: rgba(6, 17, 11, 0.95); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.45); border-radius: 8px; box-shadow: 0 8px 18px rgba(0,0,0,0.65);">
+          <div style="font-weight: 800; font-size: 11.5px; color: #60a5fa; display: flex; align-items: center; gap: 4px;">
+            <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#60a5fa;margin-right:4px;"></span>
+            ${lake.name}
+          </div>
+          <div style="font-size: 10px; color: #94a3b8; margin-top: 2px;">Depth: ${lake.waterDepthMeters}</div>
+          <div style="font-size: 10px; color: #7dd3fc;">Surface Area: ${lake.areaKm2.toLocaleString()} km²</div>
+        </div>
+      `, { sticky: true });
+
+      waterBodiesLayerRef.current?.addLayer(lakePoly);
+    });
+  }, []);
+
+  // -------------------------------------------------------------
+  // 1.9 RENDER OFFLINE VECTOR GIS BASEMAP CARTOGRAPHY (HIGHWAYS & CITIES)
   // -------------------------------------------------------------
   useEffect(() => {
     if (!vectorBasemapLayerRef.current) return;
@@ -1047,28 +1095,6 @@ export function ScoutingMap({
     const isOfflineVectorActive = tileStyle === 'offline-vector' || isForceOfflineState || !isOnlineState;
 
     if (isOfflineVectorActive) {
-      // 1. Major Lakes & Waterbodies
-      MALAWI_LAKES.forEach((lake) => {
-        const lakePoly = L.polygon(lake.coordinates as L.LatLngTuple[], {
-          fillColor: '#0284c7',
-          fillOpacity: 0.85,
-          color: '#38bdf8',
-          weight: 1.8
-        });
-
-        lakePoly.bindTooltip(`
-          <div style="font-family: monospace; padding: 6px; background: #020617; color: #38bdf8; border: 1px solid #0284c7; border-radius: 8px; box-shadow: 0 8px 16px rgba(0,0,0,0.6);">
-            <div style="font-weight: 800; font-size: 12px; color: #38bdf8; display: flex; items-center; gap: 4px;">
-              <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#38bdf8;margin-right:4px;"></span>
-              ${lake.name}
-            </div>
-            <div style="font-size: 10px; color: #94a3b8; margin-top: 2px;">Depth: ${lake.waterDepthMeters}</div>
-            <div style="font-size: 10px; color: #7dd3fc;">Surface Area: ${lake.areaKm2.toLocaleString()} km²</div>
-          </div>
-        `, { sticky: true });
-
-        vectorBasemapLayerRef.current?.addLayer(lakePoly);
-      });
 
       // 2. National Highways (M1, M5, M3, M2, M12)
       MALAWI_HIGHWAYS.forEach((hwy) => {
@@ -2104,7 +2130,7 @@ export function ScoutingMap({
 
     if (mapInstanceRef.current && spec) {
       if (regionKey === 'all') {
-        mapInstanceRef.current.flyTo(spec.centroid, spec.zoom, { duration: 1.2 });
+        fitAllMalawiBounds(true);
       } else {
         mapInstanceRef.current.flyToBounds(spec.bounds, { 
           padding: [40, 40],
@@ -2141,7 +2167,11 @@ export function ScoutingMap({
   // Map Navigation Buttons
   const handleZoomIn = () => mapInstanceRef.current?.zoomIn();
   const handleZoomOut = () => mapInstanceRef.current?.zoomOut();
-  const handleResetMapView = () => handleFocusRegion('all');
+  const handleResetMapView = () => {
+    setActiveFocusRegion('all');
+    setActiveDistrict(null);
+    fitAllMalawiBounds(true);
+  };
 
   const handleCopyCoords = (coords: [number, number]) => {
     const text = `${coords[1].toFixed(5)}, ${coords[0].toFixed(5)}`;

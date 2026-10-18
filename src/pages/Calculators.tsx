@@ -301,119 +301,120 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
   };
 
   return (
-    <div className="px-4 sm:px-6 md:px-10 py-6 md:py-8 max-w-7xl mx-auto flex flex-col gap-8">
-      {/* Toast Notification */}
-      {toastMsg && (
-        <div className="fixed top-20 right-6 z-50 bg-[#121D16] text-white px-5 py-3 rounded-2xl shadow-2xl border border-amber-600/40 flex items-center gap-2 text-xs font-bold transition-all duration-300">
-          <Check size={16} className="text-amber-400" />
-          {toastMsg}
-        </div>
-      )}
+    <div className="min-h-screen bg-[#F6F1E7] dark:bg-[#0E1712] text-[#1F2A22] dark:text-[#F6F1E7] pb-16 transition-colors duration-200">
+      <div className="px-4 sm:px-6 md:px-10 py-6 md:py-8 max-w-7xl mx-auto flex flex-col gap-8">
+        {/* Toast Notification */}
+        {toastMsg && (
+          <div className="fixed top-20 right-6 z-50 bg-[#17241C] text-white px-5 py-3 rounded-2xl shadow-2xl border border-[#B85D36]/60 flex items-center gap-2 text-xs font-bold transition-all duration-300">
+            <Check size={16} className="text-[#E2875A]" />
+            {toastMsg}
+          </div>
+        )}
 
-      {/* Compact Engineering Workbench Header */}
-      <header className="glass-depth-card rounded-2xl p-5 sm:p-6 flex flex-col gap-4">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div className="flex flex-col gap-1">
-            <div className="flex flex-wrap items-center gap-2 text-xs text-emerald-800 dark:text-amber-300 font-semibold">
-              <span>7 Off-Grid Sizing Calculators</span>
-              <span aria-hidden="true">·</span>
-              <span className="text-stone-500 dark:text-stone-400 font-normal">
-                Synced Outpost: {user?.district || 'Dedza'} ({user?.region || 'Central'}) · {user?.familyMembers || 4} Members · {user?.landSizeAcres || 2.5} Acres — Honest Math for Solar, Wells &amp; Grain Sacks
-              </span>
-              <button
-                onClick={() => setShowWizard(true)}
-                className="text-emerald-800 dark:text-amber-300 underline hover:no-underline cursor-pointer ml-1"
-              >
-                Edit Household
-              </button>
+        {/* Compact Engineering Workbench Header */}
+        <header className="bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] rounded-2xl p-5 sm:p-6 flex flex-col gap-4 shadow-xs">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div className="flex flex-col gap-1">
+              <div className="flex flex-wrap items-center gap-2 text-xs text-[#B85D36] dark:text-[#E2875A] font-semibold">
+                <span>7 Off-Grid Sizing Calculators</span>
+                <span aria-hidden="true">·</span>
+                <span className="text-[#5A6458] dark:text-[#9FB3A4] font-normal">
+                  Synced Outpost: {user?.district || 'Dedza'} ({user?.region || 'Central'}) · {user?.familyMembers || 4} Members · {user?.landSizeAcres || 2.5} Acres
+                </span>
+                <button
+                  onClick={() => setShowWizard(true)}
+                  className="text-[#B85D36] dark:text-[#E2875A] underline hover:no-underline cursor-pointer ml-1"
+                >
+                  Edit Household
+                </button>
+              </div>
+              <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#1F2A22] dark:text-[#FFFDF8] tracking-tight">
+                Homestead Acreage, Solar Borehole, Rainwater &amp; Grain Calculators
+              </h1>
             </div>
-            <h1 className="serif text-2xl sm:text-3xl font-bold text-stone-950 dark:text-stone-50 tracking-tight">
-              Homestead Acreage, Solar Borehole, Rainwater &amp; Grain Calculators
-            </h1>
-          </div>
 
-          <div className="flex flex-wrap items-center gap-2 shrink-0">
-            <button
-              onClick={copySpecsToClipboard}
-              className={cn(
-                "px-3 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 active:scale-95 border cursor-pointer",
-                hasCopied 
-                  ? "bg-emerald-700 text-white border-emerald-500 shadow-xs"
-                  : "bg-stone-100 dark:bg-stone-900 hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 border-stone-300 dark:border-stone-700"
-              )}
-            >
-              {hasCopied ? <CheckCircle2 size={14} className="text-emerald-200" /> : <Copy size={14} className="text-amber-600 dark:text-amber-400" />}
-              {hasCopied ? 'Copied!' : 'Copy Spec Sheet'}
-            </button>
-
-            <button
-              onClick={saveSpecsToVault}
-              className="bg-stone-100 dark:bg-stone-900 hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 border border-stone-300 dark:border-stone-700 px-3 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer"
-            >
-              <Save size={14} className="text-emerald-700 dark:text-amber-400" /> Save to Vault
-            </button>
-
-            <button
-              onClick={exportSummary}
-              className="bg-emerald-950 hover:bg-emerald-900 text-amber-300 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 shadow-xs active:scale-95 cursor-pointer"
-            >
-              <Download size={14} /> Export .TXT
-            </button>
-          </div>
-        </div>
-
-        {/* Consolidated 4-Suite Engineering Navigation */}
-        <div className="flex flex-wrap items-center gap-1.5 bg-stone-100 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/80 dark:border-stone-800 self-start">
-          {[
-            {
-              id: 'land',
-              matchIds: ['land', 'yield'],
-              label: '01. Land Zoning, Pits & Crop Yields',
-              icon: Sprout,
-            },
-            {
-              id: 'solar',
-              matchIds: ['solar', 'rainwater'],
-              label: '02. Water Security (Solar Well & Rain Cisterns)',
-              icon: Droplets,
-            },
-            {
-              id: 'food',
-              matchIds: ['food'],
-              label: '03. 12-Month Grain & Seed Reserve',
-              icon: Utensils,
-            },
-            {
-              id: 'budget',
-              matchIds: ['budget', 'offgrid'],
-              label: '04. MWK/USD Bill of Quantities & Off-Grid Hardware',
-              icon: DollarSign,
-            },
-          ].map((suite) => {
-            const Icon = suite.icon;
-            const isSelected = suite.matchIds.includes(activeTab);
-            return (
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
               <button
-                key={suite.id}
-                type="button"
-                onClick={() => setActiveTab(suite.id as any)}
+                onClick={copySpecsToClipboard}
                 className={cn(
-                  'px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5',
-                  isSelected
-                    ? 'bg-emerald-950 dark:bg-amber-500 text-amber-300 dark:text-stone-950 shadow-xs font-bold'
-                    : 'text-stone-700 dark:text-stone-300 hover:bg-white dark:hover:bg-stone-800'
+                  "px-3 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 active:scale-95 border cursor-pointer",
+                  hasCopied 
+                    ? "bg-[#2C4A3E] text-white border-[#2C4A3E] shadow-xs"
+                    : "bg-[#F6F1E7] dark:bg-[#102017] hover:bg-[#E4DCCB] dark:hover:bg-[#1E3024] text-[#1F2A22] dark:text-[#F6F1E7] border-[#E4DCCB] dark:border-[#283C30]"
                 )}
               >
-                <Icon size={13} />
-                <span>{suite.label}</span>
+                {hasCopied ? <CheckCircle2 size={14} className="text-[#7EA28C]" /> : <Copy size={14} className="text-[#B85D36] dark:text-[#E2875A]" />}
+                {hasCopied ? 'Copied!' : 'Copy Spec Sheet'}
               </button>
-            );
-          })}
-        </div>
 
-        {/* Unified Active Malawi District Telemetry Strip */}
-        <ActiveDistrictContextBar onDistrictSelect={handleDistrictChange} />
-      </header>
+              <button
+                onClick={saveSpecsToVault}
+                className="bg-[#F6F1E7] dark:bg-[#102017] hover:bg-[#E4DCCB] dark:hover:bg-[#1E3024] text-[#1F2A22] dark:text-[#F6F1E7] border border-[#E4DCCB] dark:border-[#283C30] px-3 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer"
+              >
+                <Save size={14} className="text-[#2C4A3E] dark:text-[#7EA28C]" /> Save to Vault
+              </button>
+
+              <button
+                onClick={exportSummary}
+                className="bg-[#B85D36] hover:bg-[#A34F2C] text-white px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 shadow-xs active:scale-95 cursor-pointer"
+              >
+                <Download size={14} /> Export .TXT
+              </button>
+            </div>
+          </div>
+
+          {/* Consolidated 4-Suite Engineering Navigation */}
+          <div className="flex flex-wrap items-center gap-1.5 bg-[#F6F1E7] dark:bg-[#102017] p-1 rounded-xl border border-[#E4DCCB] dark:border-[#283C30] self-start">
+            {[
+              {
+                id: 'land',
+                matchIds: ['land', 'yield'],
+                label: '01. Land Zoning, Pits & Crop Yields',
+                icon: Sprout,
+              },
+              {
+                id: 'solar',
+                matchIds: ['solar', 'rainwater'],
+                label: '02. Water Security (Solar Well & Rain Cisterns)',
+                icon: Droplets,
+              },
+              {
+                id: 'food',
+                matchIds: ['food'],
+                label: '03. 12-Month Grain & Seed Reserve',
+                icon: Utensils,
+              },
+              {
+                id: 'budget',
+                matchIds: ['budget', 'offgrid'],
+                label: '04. MWK/USD Bill of Quantities & Off-Grid Hardware',
+                icon: DollarSign,
+              },
+            ].map((suite) => {
+              const Icon = suite.icon;
+              const isSelected = suite.matchIds.includes(activeTab);
+              return (
+                <button
+                  key={suite.id}
+                  type="button"
+                  onClick={() => setActiveTab(suite.id as any)}
+                  className={cn(
+                    'px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5',
+                    isSelected
+                      ? 'bg-[#B85D36] text-white shadow-xs font-bold'
+                      : 'text-[#5A6458] dark:text-[#9FB3A4] hover:bg-[#FFFDF8] dark:hover:bg-[#17241C]'
+                  )}
+                >
+                  <Icon size={13} />
+                  <span>{suite.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Unified Active Malawi District Telemetry Strip */}
+          <ActiveDistrictContextBar onDistrictSelect={handleDistrictChange} />
+        </header>
 
       {/* Seasonal Context Alert Banner */}
       {seasonParam && (
@@ -1268,6 +1269,7 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
       )}
 
       <OnboardingWizard isOpen={showWizard} onClose={() => setShowWizard(false)} />
+      </div>
     </div>
   );
 }

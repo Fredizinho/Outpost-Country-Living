@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import {
@@ -33,6 +33,7 @@ import {
   Settings,
   HeartPulse,
   UtensilsCrossed,
+  Pin,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -40,6 +41,12 @@ import { cn } from '@/lib/utils';
 import { prefetchRoute } from '@/lib/routePrefetch';
 import { OutpostLogo } from './OutpostLogo';
 import { SettingsModalTab } from '../layout/SettingsAndAboutModal';
+import { usePlatform } from '@/lib/platform';
+import { DesktopTitleBarControls } from './DesktopTitleBarControls';
+import { Tooltip } from './Tooltip';
+import { BreadcrumbsBar } from './BreadcrumbsBar';
+import { ApplicationMenu } from '../layout/ApplicationMenu';
+import { formatAccelerator } from '@/lib/acceleratorUtils';
 
 export interface NavigationProps {
   onOpenCitations?: () => void;
@@ -58,6 +65,8 @@ export interface WorkspaceTabDefinition {
   pillar: string;
   iconKey: string;
   pinned?: boolean;
+  history?: string[];
+  historyIndex?: number;
 }
 
 interface CatalogRouteMeta {
@@ -268,15 +277,27 @@ export const DESKTOP_MODULE_CATALOG: CatalogRouteMeta[] = [
     accentClass: 'text-sky-300',
     badgeBg: 'bg-sky-500/20 border-sky-400/35',
   },
+  {
+    id: 'settings',
+    basePath: '/settings',
+    title: 'Workspace Settings',
+    pillar: 'System',
+    wittyNote: 'Theme, offline vault & preferences',
+    iconKey: 'settings',
+    icon: Settings,
+    accentClass: 'text-amber-300',
+    badgeBg: 'bg-amber-500/20 border-amber-400/35',
+    shortcut: '⌘,',
+  },
 ];
 
-// Focused 3-Tab Default Set (Zero initial tab-bar bloat; new tabs open as you navigate)
+// Focused 3-Tab Default Set matching Start@1x1.png
 const DEFAULT_OPEN_TABS: WorkspaceTabDefinition[] = [
   {
     id: 'home',
     basePath: '/',
     currentPath: '/',
-    title: 'Home',
+    title: 'Start',
     pillar: 'Overview',
     iconKey: 'home',
     pinned: true,
@@ -285,17 +306,17 @@ const DEFAULT_OPEN_TABS: WorkspaceTabDefinition[] = [
     id: 'scout-map',
     basePath: '/scout-map',
     currentPath: '/scout-map',
-    title: 'District GIS Map',
+    title: 'District map',
     pillar: 'Land & Water',
     iconKey: 'compass',
   },
   {
-    id: 'tracker',
-    basePath: '/tracker',
-    currentPath: '/tracker',
-    title: 'Transition Tracker',
-    pillar: 'Sanctuary Path',
-    iconKey: 'check',
+    id: 'skills',
+    basePath: '/skills/ram-pump',
+    currentPath: '/skills/ram-pump',
+    title: 'Rainwater guide',
+    pillar: 'Water',
+    iconKey: 'droplet',
   },
 ];
 
@@ -303,6 +324,9 @@ const TABS_STORAGE_KEY = 'outpost_desktop_open_tabs_v4';
 
 function resolveRouteMeta(pathname: string): CatalogRouteMeta {
   if (pathname === '/') return DESKTOP_MODULE_CATALOG[0];
+  if (pathname.startsWith('/settings') || pathname.startsWith('/preferences')) {
+    return DESKTOP_MODULE_CATALOG.find((m) => m.id === 'settings')!;
+  }
   if (['/scout', '/scout-map', '/map', '/regions'].some((p) => pathname.startsWith(p))) {
     return DESKTOP_MODULE_CATALOG.find((m) => m.id === 'scout-map')!;
   }
@@ -363,12 +387,27 @@ export function Navigation({
   onOpenSettings,
 }: NavigationProps) {
   const { user, isFirebaseAuthenticated, signInWithGoogle, signOut } = useAuth();
-  const { theme, isLight, isDark, isField } = useTheme();
+  const { theme, isLight, isDark, isField, toggleTheme } = useTheme();
   const isSapphire = false;
   const isSienna = false;
   const isCharcoal = false;
   const location = useLocation();
   const navigate = useNavigate();
+  const platform = usePlatform();
+
+  const handleHeaderDoubleClick = useCallback(async (e: React.MouseEvent) => {
+    if (platform.runtime !== 'tauri') return;
+    const target = e.target as HTMLElement;
+    if (target.closest('button, a, input, select, [role="tab"], [data-tauri-drag-region="false"]')) {
+      return;
+    }
+    try {
+      const { getCurrentWindow } = await import('@tauri-apps/api/window');
+      await getCurrentWindow().toggleMaximize();
+    } catch (err) {
+      console.warn('Double click toggleMaximize error', err);
+    }
+  }, [platform.runtime]);
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -385,6 +424,15 @@ export function Navigation({
     } catch {}
     return DEFAULT_OPEN_TABS;
   });
+
+  const [recentlyClosedTabs, setRecentlyClosedTabs] = useState<WorkspaceTabDefinition[]>(() => {
+    try {
+      const saved = sessionStorage.getItem('outpost_desktop_recently_closed_tabs_v1');
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return [];
+  });
+  const [draggedTabId, setDraggedTabId] = useState<string | null>(null);
 
   const userMenuRef = useRef<HTMLDivElement>(null);
   const newTabMenuRef = useRef<HTMLDivElement>(null);
@@ -444,7 +492,7 @@ export function Navigation({
     } catch {}
   }, [openTabs]);
 
-  // Ensure current route is represented in openTabs
+  // Ensure current route is represented in openTabs and track per-tab history
   useEffect(() => {
     const meta = resolveRouteMeta(location.pathname);
     const fullPath = `${location.pathname}${location.search}`;
@@ -459,14 +507,33 @@ export function Navigation({
       const existingIdx = prev.findIndex((t) => t.id === meta.id);
       if (existingIdx !== -1) {
         const current = prev[existingIdx];
-        if (current.currentPath === fullPath && current.title === dynamicTitle) {
+        const prevHistory = current.history || [current.currentPath || current.basePath];
+        const prevIndex = current.historyIndex ?? (prevHistory.length - 1);
+
+        let newHistory = prevHistory;
+        let newIndex = prevIndex;
+
+        if (current.currentPath !== fullPath) {
+          newHistory = [...prevHistory.slice(0, prevIndex + 1), fullPath];
+          newIndex = newHistory.length - 1;
+        }
+
+        if (
+          current.currentPath === fullPath &&
+          current.title === dynamicTitle &&
+          current.history &&
+          current.historyIndex === newIndex
+        ) {
           return prev;
         }
+
         const updated = [...prev];
         updated[existingIdx] = {
           ...current,
           currentPath: fullPath,
           title: dynamicTitle,
+          history: newHistory,
+          historyIndex: newIndex,
         };
         return updated;
       }
@@ -480,6 +547,8 @@ export function Navigation({
           pillar: meta.pillar,
           iconKey: meta.iconKey,
           pinned: meta.id === 'home',
+          history: [fullPath],
+          historyIndex: 0,
         },
       ];
     });
@@ -490,13 +559,75 @@ export function Navigation({
     [location.pathname]
   );
 
-  const handleCloseTab = (e: React.MouseEvent, tabId: string) => {
-    e.stopPropagation();
-    e.preventDefault();
+  const activeTabObj = useMemo(
+    () => openTabs.find((t) => t.id === activeMeta.id),
+    [openTabs, activeMeta.id]
+  );
+
+  const canTabGoBack = Boolean(
+    activeTabObj?.history &&
+    activeTabObj.historyIndex !== undefined &&
+    activeTabObj.historyIndex > 0
+  );
+
+  const canTabGoForward = Boolean(
+    activeTabObj?.history &&
+    activeTabObj.historyIndex !== undefined &&
+    activeTabObj.historyIndex < (activeTabObj.history.length - 1)
+  );
+
+  const handleTabBack = () => {
+    if (canTabGoBack && activeTabObj) {
+      const prevIdx = (activeTabObj.historyIndex ?? 1) - 1;
+      const targetPath = activeTabObj.history![prevIdx];
+      setOpenTabs((prev) =>
+        prev.map((t) =>
+          t.id === activeTabObj.id
+            ? { ...t, currentPath: targetPath, historyIndex: prevIdx }
+            : t
+        )
+      );
+      navigate(targetPath);
+    } else {
+      navigate(-1);
+    }
+  };
+
+  const handleTabForward = () => {
+    if (canTabGoForward && activeTabObj) {
+      const nextIdx = (activeTabObj.historyIndex ?? 0) + 1;
+      const targetPath = activeTabObj.history![nextIdx];
+      setOpenTabs((prev) =>
+        prev.map((t) =>
+          t.id === activeTabObj.id
+            ? { ...t, currentPath: targetPath, historyIndex: nextIdx }
+            : t
+        )
+      );
+      navigate(targetPath);
+    } else {
+      navigate(1);
+    }
+  };
+
+  const handleCloseTab = (e: React.MouseEvent | KeyboardEvent, tabId: string) => {
+    if ('stopPropagation' in e) e.stopPropagation();
+    if ('preventDefault' in e) e.preventDefault();
     if (openTabs.length <= 1) return;
 
     const idx = openTabs.findIndex((t) => t.id === tabId);
     if (idx === -1) return;
+    const closingTab = openTabs[idx];
+    if (closingTab.pinned) return;
+
+    // Push to recentlyClosedTabs
+    setRecentlyClosedTabs((prev) => {
+      const updated = [...prev.slice(-10), closingTab];
+      try {
+        sessionStorage.setItem('outpost_desktop_recently_closed_tabs_v1', JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
 
     const nextTabs = openTabs.filter((t) => t.id !== tabId);
     setOpenTabs(nextTabs);
@@ -505,6 +636,66 @@ export function Navigation({
       const fallbackTab = nextTabs[Math.max(0, idx - 1)] || nextTabs[0];
       navigate(fallbackTab.currentPath);
     }
+  };
+
+  const reopenLastClosedTab = useCallback(() => {
+    if (recentlyClosedTabs.length === 0) return;
+    const last = recentlyClosedTabs[recentlyClosedTabs.length - 1];
+    const remaining = recentlyClosedTabs.slice(0, -1);
+    setRecentlyClosedTabs(remaining);
+    try {
+      sessionStorage.setItem('outpost_desktop_recently_closed_tabs_v1', JSON.stringify(remaining));
+    } catch {}
+
+    setOpenTabs((prev) => {
+      if (prev.some((t) => t.id === last.id)) return prev;
+      return [...prev, last];
+    });
+    navigate(last.currentPath);
+  }, [recentlyClosedTabs, navigate]);
+
+  const handleTogglePinTab = (e: React.MouseEvent, tabId: string) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setOpenTabs((prev) => {
+      const target = prev.find((t) => t.id === tabId);
+      if (!target) return prev;
+      const nextPinned = !target.pinned;
+      const updated = prev.map((t) => (t.id === tabId ? { ...t, pinned: nextPinned } : t));
+      const pinned = updated.filter((t) => t.pinned);
+      const unpinned = updated.filter((t) => !t.pinned);
+      return [...pinned, ...unpinned];
+    });
+  };
+
+  const handleDragStart = (e: React.DragEvent, tabId: string) => {
+    setDraggedTabId(tabId);
+    e.dataTransfer.setData('text/plain', tabId);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDropTab = (targetTabId: string) => {
+    if (!draggedTabId || draggedTabId === targetTabId) return;
+
+    setOpenTabs((prev) => {
+      const fromIdx = prev.findIndex((t) => t.id === draggedTabId);
+      const toIdx = prev.findIndex((t) => t.id === targetTabId);
+      if (fromIdx === -1 || toIdx === -1) return prev;
+
+      const copy = [...prev];
+      const [moved] = copy.splice(fromIdx, 1);
+      copy.splice(toIdx, 0, moved);
+
+      const pinned = copy.filter((t) => t.pinned);
+      const unpinned = copy.filter((t) => !t.pinned);
+      return [...pinned, ...unpinned];
+    });
+    setDraggedTabId(null);
   };
 
   const handleCloseOtherTabs = () => {
@@ -518,6 +709,54 @@ export function Navigation({
     });
     setIsNewTabMenuOpen(false);
   };
+
+  const handleResetDefaultTabs = () => {
+    setOpenTabs(DEFAULT_OPEN_TABS);
+    setIsNewTabMenuOpen(false);
+  };
+
+  // Global Tab Navigation Shortcuts: Ctrl+W, Ctrl+Tab, Ctrl+Shift+T
+  useEffect(() => {
+    const handleTabKeyShortcuts = (e: KeyboardEvent) => {
+      const targetTag = (e.target as HTMLElement)?.tagName;
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(targetTag) || (e.target as HTMLElement)?.isContentEditable) {
+        return;
+      }
+
+      // Ctrl+W or Cmd+W: Close active tab
+      if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key.toLowerCase() === 'w') {
+        const activeTab = openTabs.find((t) => t.id === activeMeta.id);
+        if (activeTab && !activeTab.pinned && openTabs.length > 1) {
+          e.preventDefault();
+          handleCloseTab(e, activeTab.id);
+        }
+        return;
+      }
+
+      // Ctrl+Tab / Ctrl+Shift+Tab: Cycle tabs
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Tab') {
+        e.preventDefault();
+        const activeIdx = openTabs.findIndex((t) => t.id === activeMeta.id);
+        if (activeIdx !== -1 && openTabs.length > 1) {
+          const delta = e.shiftKey ? -1 : 1;
+          const nextIdx = (activeIdx + delta + openTabs.length) % openTabs.length;
+          const target = openTabs[nextIdx];
+          if (target) navigate(target.currentPath);
+        }
+        return;
+      }
+
+      // Ctrl+Shift+T or Cmd+Shift+T: Reopen last closed tab
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 't') {
+        e.preventDefault();
+        reopenLastClosedTab();
+        return;
+      }
+    };
+
+    window.addEventListener('keydown', handleTabKeyShortcuts);
+    return () => window.removeEventListener('keydown', handleTabKeyShortcuts);
+  }, [openTabs, activeMeta.id, navigate, reopenLastClosedTab]);
 
   const handleHeaderSignIn = async () => {
     setIsSigningIn(true);
@@ -570,93 +809,67 @@ export function Navigation({
     <>
       <header
       id="outpost-main-header"
-      className={cn(
-        'shrink-0 w-full z-50 flex flex-col select-none',
-        isField ? 'bg-black border-b-2 border-white' : 'glass-depth-nav-emerald'
-      )}
+      className="shrink-0 w-full z-50 flex flex-col select-none"
       aria-label="Application Navigation and Workspace Tabs"
     >
       <div
+        data-tauri-drag-region
+        onDoubleClick={handleHeaderDoubleClick}
         className={cn(
-          'h-12 px-2.5 sm:px-3.5 flex items-center justify-between gap-2',
-          isField
-            ? 'bg-black text-white'
-            : isLight
-            ? 'bg-[#FAF6F0] text-[#1A1612] border-b border-[#E3D8CC]'
-            : 'bg-gradient-to-r from-[#03110A]/96 via-[#071F12]/94 to-[#03110A]/96 text-[#FEF3C7]'
+          'h-[36px] flex items-center justify-between gap-1.5 px-2 bg-[#16261C] dark:bg-[#0E1712] border-b border-[#2B4636] dark:border-[#1F3325] text-[#F6F1E7] transition-colors duration-200',
+          platform.runtime === 'tauri' && platform.os === 'mac' && 'pl-20'
         )}
       >
         {/* ===================================================================
-            LEFT ZONE: EXPLORER + MINIMALIST LOGO (DECORATIVE DOTS REMOVED)
+            LEFT ZONE: GOLD LOGO SQUARE + TAURI NATIVE/IN-APP APPLICATION MENU
         =================================================================== */}
-        <div className="flex items-center gap-2 shrink-0">
-          {/* Unified Window Control Capsule (Sidebar Toggle + Back/Forward) - Desktop Only */}
-          <div className="hidden md:inline-flex items-center rounded-xl bg-white/[0.04] border border-white/12 p-0.5 shadow-inner">
-            <button
-              id="outpost-drawer-toggle"
-              type="button"
-              onClick={handleToggleDirectory}
-              title="Toggle Field Suite Directory (⌘B)"
-              aria-label="Toggle Workspace Explorer"
-              className={cn(
-                'p-1.5 rounded-lg transition-all cursor-pointer',
-                isDrawerOpen
-                  ? 'bg-amber-400 text-stone-950 shadow-xs'
-                  : 'text-stone-200 hover:text-amber-300 hover:bg-white/10'
-              )}
-            >
-              <PanelLeft size={14} />
-            </button>
-
-            <span className="hidden lg:inline-block w-px h-3.5 bg-white/12 mx-0.5" />
-
-            <button
-              type="button"
-              onClick={() => navigate(-1)}
-              title="Navigate Back (Alt+←)"
-              aria-label="Navigate Back"
-              className="hidden lg:inline-flex p-1.5 rounded-lg text-stone-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-            >
-              <ChevronLeft size={13} />
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate(1)}
-              title="Navigate Forward (Alt+→)"
-              aria-label="Navigate Forward"
-              className="hidden lg:inline-flex p-1.5 rounded-lg text-stone-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-            >
-              <ChevronRight size={13} />
-            </button>
-          </div>
-
-          {/* Brand Crest */}
+        <div className="flex items-center gap-2 shrink-0" data-tauri-drag-region="false">
+          {/* Gold Logo Mark Triangle + Brand Name "Outpost" matching Start@1x1.png */}
           <Link
             to="/"
-            className="flex items-center gap-1.5 px-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 rounded-lg whitespace-nowrap"
+            className="flex items-center gap-1.5 group px-1 py-0.5 rounded-[4px] hover:bg-white/10 active:scale-95 transition-all duration-200 cursor-pointer"
             title="Outpost Country Living • Malawi Sanctuary Blueprint"
           >
-            <OutpostLogo size="sm" variant="header" showSubtitle={false} />
+            <div className="w-5 h-5 rounded-[4px] bg-[#C98A1B] text-[#16261C] flex items-center justify-center font-bold text-xs shadow-xs group-hover:scale-110 transition-all duration-200 shrink-0">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L1 21h22L12 2zm0 4.5l7.5 13H4.5L12 6.5z" />
+              </svg>
+            </div>
+            <span className="font-sans font-bold text-[13px] tracking-tight text-white group-hover:text-[#F6F1E7] transition-colors">
+              Outpost
+            </span>
           </Link>
+
+          {/* Native / In-Browser Application Menu */}
+          <ApplicationMenu
+            onOpenShortcuts={() => window.dispatchEvent(new CustomEvent('outpost:open-shortcuts'))}
+            onOpenCitations={onOpenCitations}
+            onOpenSearch={onOpenSearch}
+            onToggleExplorer={handleToggleDirectory}
+            onToggleInspector={onToggleInspector}
+            onCloseCurrentTab={() => handleCloseTab({ stopPropagation: () => {} } as React.MouseEvent, activeMeta.id)}
+            onNewTab={() => setIsNewTabMenuOpen(true)}
+          />
         </div>
 
         {/* ===================================================================
-            CENTER ZONE: SCULPTED 3D GLASS WORKSPACE TABS + COMPACT LAUNCHER
+            CENTER ZONE: WORKSPACE TABS + COMPACT LAUNCHER (28px height, 6px controls)
             Hidden on mobile (< 768px) in favor of bottom tab bar
         =================================================================== */}
-        <div className="hidden md:flex flex-1 items-center min-w-0 gap-1.5 px-1">
-          {/* Left Scroll Arrow (Own Flex-None Slot) */}
+        <div className="hidden md:flex flex-1 items-center min-w-0 gap-1 px-1">
+          {/* Left Scroll Arrow */}
           {canScrollLeft && (
-            <div className="flex-none shrink-0">
-              <button
-                type="button"
-                onClick={() => handleScrollTabs('left')}
-                className="h-8 w-6 rounded-lg bg-slate-950/90 hover:bg-slate-900 border border-white/20 text-stone-300 hover:text-white flex items-center justify-center transition-all shadow-md cursor-pointer"
-                title="Scroll tabs left"
-                aria-label="Scroll tabs left"
-              >
-                <ChevronLeft size={13} />
-              </button>
+            <div className="flex-none shrink-0" data-tauri-drag-region="false">
+              <Tooltip content="Scroll tabs left">
+                <button
+                  type="button"
+                  onClick={() => handleScrollTabs('left')}
+                  className="h-7.5 w-6 rounded-[6px] bg-[#2B4636]/60 hover:bg-[#2B4636] border border-[#2B4636] text-[#F6F1E7]/80 hover:text-white flex items-center justify-center transition-colors cursor-pointer active:scale-95"
+                  aria-label="Scroll tabs left"
+                >
+                  <ChevronLeft size={13} />
+                </button>
+              </Tooltip>
             </div>
           )}
 
@@ -665,7 +878,9 @@ export function Navigation({
             ref={tabStripRef}
             role="tablist"
             aria-label="Open Workspace Tabs"
-            className="flex-1 flex items-center gap-1.5 overflow-x-auto no-scrollbar min-w-0 px-0.5 scroll-smooth"
+            data-tauri-drag-region
+            onDoubleClick={handleHeaderDoubleClick}
+            className="flex-1 flex items-center gap-1 overflow-x-auto no-scrollbar min-w-0 px-0.5 scroll-smooth"
           >
             {openTabs.map((tab) => {
               const catalogEntry =
@@ -678,6 +893,11 @@ export function Navigation({
                 <div
                   key={tab.id}
                   role="tab"
+                  draggable={true}
+                  onDragStart={(e) => handleDragStart(e, tab.id)}
+                  onDragOver={handleDragOver}
+                  onDrop={() => handleDropTab(tab.id)}
+                  data-tauri-drag-region="false"
                   aria-selected={isActive}
                   onClick={() => navigate(tab.currentPath)}
                   onAuxClick={(e) => {
@@ -686,20 +906,19 @@ export function Navigation({
                     }
                   }}
                   onMouseEnter={() => prefetchRoute(tab.basePath)}
-                  title={tab.title}
+                  title={`${tab.title}${tab.pinned ? ' (Pinned)' : ''}`}
                   className={cn(
-                    'group relative h-8 pl-1.5 pr-2 rounded-xl border flex items-center gap-1.5 text-xs transition-all cursor-pointer shrink-0 max-w-[200px]',
+                    'group relative h-[28px] pl-2 pr-1.5 rounded-[6px] flex items-center gap-1.5 text-[12.5px] font-chrome transition-all duration-200 cursor-pointer shrink-0 max-w-[210px]',
                     isActive
-                      ? isSapphire
-                        ? 'bg-gradient-to-b from-sky-500/30 via-blue-900/65 to-slate-950/90 text-white border-sky-400/60 shadow-[0_4px_14px_rgba(14,165,233,0.28),inset_0_1px_0_rgba(255,255,255,0.3)] font-bold'
-                        : 'bg-gradient-to-b from-emerald-500/30 via-emerald-950/75 to-stone-950/90 text-white border-emerald-400/60 shadow-[0_4px_14px_rgba(16,185,129,0.28),inset_0_1px_0_rgba(255,255,255,0.3)] font-bold'
-                      : 'bg-white/[0.03] hover:bg-white/[0.09] text-stone-200/80 hover:text-white border-white/10 hover:border-white/25 font-medium'
+                      ? 'bg-[#FFFDF8] dark:bg-[#1E3326] text-[#1F2A22] dark:text-[#FFFDF8] font-medium shadow-xs border-b-2 border-[#C98A1B]'
+                      : 'text-[#F6F1E7]/75 hover:text-[#FFFDF8] hover:bg-[#2B4636]/60 dark:hover:bg-[#1E3326]/60 font-normal hover:scale-[1.01]',
+                    draggedTabId === tab.id && 'opacity-50 border-dashed border-[#C98A1B]'
                   )}
                 >
-                  {/* Jewelled Mini Symbol Badge inside Tab */}
+                  {/* Mini Symbol Badge inside Tab */}
                   <span
                     className={cn(
-                      'w-5 h-5 rounded-lg border flex items-center justify-center shrink-0 transition-transform group-hover:scale-105',
+                      'w-4.5 h-4.5 rounded-[4px] border flex items-center justify-center shrink-0 transition-transform group-hover:scale-105',
                       isActive
                         ? catalogEntry.badgeBg
                         : 'bg-white/[0.04] border-white/10'
@@ -715,26 +934,42 @@ export function Navigation({
                   </span>
 
                   <span 
-                    className="truncate whitespace-nowrap text-xs max-w-[140px]"
+                    className="truncate whitespace-nowrap text-[13px] font-chrome max-w-[125px]"
                     title={tab.title}
                   >
                     {tab.title}
                   </span>
 
                   {isActive && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24] shrink-0" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#C98A1B] shrink-0 animate-pulse" />
                   )}
+
+                  {/* Pin / Unpin button */}
+                  <button
+                    type="button"
+                    onClick={(e) => handleTogglePinTab(e, tab.id)}
+                    title={tab.pinned ? 'Unpin tab' : 'Pin tab to front'}
+                    aria-label={tab.pinned ? `Unpin ${tab.title}` : `Pin ${tab.title}`}
+                    className={cn(
+                      'p-0.5 rounded-[4px] hover:bg-white/15 transition-opacity cursor-pointer shrink-0',
+                      tab.pinned
+                        ? 'text-amber-400 opacity-90 hover:opacity-100'
+                        : 'opacity-0 group-hover:opacity-70 hover:opacity-100 text-stone-400'
+                    )}
+                  >
+                    <Pin size={10} className={tab.pinned ? '-rotate-45 text-amber-400' : ''} />
+                  </button>
 
                   {!tab.pinned && openTabs.length > 1 && (
                     <button
                       type="button"
                       onClick={(e) => handleCloseTab(e, tab.id)}
-                      title="Close Tab"
+                      title="Close Tab (Ctrl+W / Middle-Click)"
                       aria-label={`Close ${tab.title} tab`}
                       className={cn(
-                        'ml-0.5 p-0.5 rounded hover:bg-white/15 hover:text-amber-300 transition-opacity cursor-pointer',
+                        'p-0.5 rounded-[4px] hover:bg-white/15 hover:text-amber-300 transition-opacity cursor-pointer',
                         isActive
-                          ? 'opacity-80 hover:opacity-100 text-stone-200'
+                          ? 'opacity-80 hover:opacity-100 text-stone-600 dark:text-stone-200'
                           : 'opacity-0 group-hover:opacity-100 text-stone-400'
                       )}
                     >
@@ -748,51 +983,53 @@ export function Navigation({
 
           {/* Right Scroll Arrow (Own Flex-None Slot) */}
           {canScrollRight && (
-            <div className="flex-none shrink-0">
-              <button
-                type="button"
-                onClick={() => handleScrollTabs('right')}
-                className="h-8 w-6 rounded-lg bg-slate-950/90 hover:bg-slate-900 border border-white/20 text-stone-300 hover:text-white flex items-center justify-center transition-all shadow-md cursor-pointer"
-                title="Scroll tabs right"
-                aria-label="Scroll tabs right"
-              >
-                <ChevronRight size={13} />
-              </button>
+            <div className="flex-none shrink-0" data-tauri-drag-region="false">
+              <Tooltip content="Scroll tabs right">
+                <button
+                  type="button"
+                  onClick={() => handleScrollTabs('right')}
+                  className="h-7.5 w-6 rounded-[6px] bg-[#2B4636]/60 hover:bg-[#2B4636] border border-[#2B4636] text-[#F6F1E7]/80 hover:text-white flex items-center justify-center transition-colors cursor-pointer active:scale-95"
+                  aria-label="Scroll tabs right"
+                >
+                  <ChevronRight size={13} />
+                </button>
+              </Tooltip>
             </div>
           )}
 
           {/* "Tabs N" Dropdown Button (Own Flex-None Slot) */}
-          <div className="flex-none shrink-0 relative" ref={moreTabsMenuRef}>
-            <button
-              type="button"
-              onClick={() => setIsMoreTabsOpen((prev) => !prev)}
-              title="View all open tabs"
-              aria-label="More tabs"
-              className={cn(
-                'h-8 px-2.5 rounded-xl flex items-center gap-1.5 border text-xs font-semibold transition-all cursor-pointer',
-                isMoreTabsOpen
-                  ? 'bg-amber-400 text-stone-950 border-amber-300 shadow-md font-bold'
-                  : 'bg-white/[0.04] hover:bg-white/[0.1] text-stone-300 hover:text-white border-white/15'
-              )}
-            >
-              <span className="hidden sm:inline">Tabs</span>
-              <span className="w-4 h-4 rounded-full bg-white/10 text-caption font-mono flex items-center justify-center font-bold">
-                {openTabs.length}
-              </span>
-              <ChevronDown size={11} className={cn("transition-transform duration-150", isMoreTabsOpen && "rotate-180")} />
-            </button>
+          <div className="flex-none shrink-0 relative" ref={moreTabsMenuRef} data-tauri-drag-region="false">
+            <Tooltip content="View all open workspace tabs">
+              <button
+                type="button"
+                onClick={() => setIsMoreTabsOpen((prev) => !prev)}
+                aria-label="More tabs"
+                className={cn(
+                  'h-7.5 px-2.5 rounded-[6px] flex items-center gap-1.5 border text-[13px] font-chrome font-medium transition-all duration-200 cursor-pointer active:scale-95',
+                  isMoreTabsOpen
+                    ? 'bg-[#C98A1B] text-[#16261C] border-[#C98A1B] font-semibold shadow-xs'
+                    : 'bg-white/[0.04] hover:bg-white/[0.1] text-stone-300 hover:text-white border-white/15'
+                )}
+              >
+                <span className="hidden sm:inline">Tabs</span>
+                <span className="w-4 h-4 rounded-full bg-white/10 text-[11px] font-mono flex items-center justify-center font-bold">
+                  {openTabs.length}
+                </span>
+                <ChevronDown size={11} className={cn("transition-transform duration-150", isMoreTabsOpen && "rotate-180")} />
+              </button>
+            </Tooltip>
 
             {/* "More tabs" Dropdown Popover */}
             <AnimatePresence>
               {isMoreTabsOpen && (
                 <motion.div
-                  initial={{ opacity: 0, y: 6, scale: 0.96 }}
+                  initial={{ opacity: 0, y: 4, scale: 0.98 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 6, scale: 0.96 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute right-0 top-10 w-64 bg-slate-950/95 backdrop-blur-2xl border border-white/20 rounded-2xl p-2 shadow-2xl z-50 flex flex-col gap-1 max-h-80 overflow-y-auto custom-scrollbar"
+                  exit={{ opacity: 0, y: 4, scale: 0.98 }}
+                  transition={{ duration: 0.12 }}
+                  className="absolute right-0 top-9 w-64 bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] text-[#1F2A22] dark:text-[#EBF2EC] rounded-[8px] p-2 shadow-xl z-50 flex flex-col gap-1 max-h-80 overflow-y-auto custom-scrollbar font-chrome animate-in fade-in zoom-in-95 duration-150"
                 >
-                  <div className="px-2 py-1 text-caption font-mono uppercase text-slate-400 border-b border-white/10 font-bold flex items-center justify-between">
+                  <div className="px-2 py-1 text-[11px] font-mono uppercase text-[#5A6458] dark:text-[#8E9E92] border-b border-[#E4DCCB] dark:border-[#283C30] font-bold flex items-center justify-between">
                     <span>Open Workspace Tabs</span>
                     <span>{openTabs.length}</span>
                   </div>
@@ -811,19 +1048,19 @@ export function Navigation({
                           setIsMoreTabsOpen(false);
                         }}
                         className={cn(
-                          "px-2 py-1.5 rounded-xl flex items-center justify-between gap-2 text-xs transition-colors cursor-pointer border",
+                          "px-2 py-1.5 rounded-[6px] flex items-center justify-between gap-2 text-[13px] transition-all duration-150 cursor-pointer border",
                           isActive
-                            ? "bg-amber-400/20 text-white border-amber-400/40 font-bold"
-                            : "bg-white/[0.03] text-stone-300 hover:text-white hover:bg-white/10 border-transparent"
+                            ? "bg-[#2B4636] dark:bg-[#1E3326] text-[#FFFDF8] border-transparent font-medium shadow-2xs"
+                            : "bg-transparent hover:bg-[#F6F1E7] dark:hover:bg-[#1E3326]/60 text-[#1F2A22] dark:text-[#EBF2EC] border-transparent"
                         )}
                       >
                         <div className="flex items-center gap-2 min-w-0">
-                          <Icon size={12} className={isActive ? "text-amber-300" : "text-stone-400"} />
+                          <Icon size={12} className={isActive ? "text-[#C98A1B]" : "text-[#5A6458] dark:text-[#8E9E92]"} />
                           <span className="truncate">{tab.title}</span>
                         </div>
                         <div className="flex items-center gap-1 shrink-0">
                           {isActive && (
-                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_#fbbf24]" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#C98A1B]" />
                           )}
                           {!tab.pinned && openTabs.length > 1 && (
                             <button
@@ -832,7 +1069,7 @@ export function Navigation({
                                 e.stopPropagation();
                                 handleCloseTab(e, tab.id);
                               }}
-                              className="p-1 rounded text-stone-400 hover:text-rose-300 hover:bg-white/10"
+                              className="p-1 rounded-[4px] text-stone-400 hover:text-rose-500 hover:bg-stone-200/50 dark:hover:bg-white/10 transition-colors"
                               title="Close tab"
                             >
                               <X size={10} />
@@ -847,127 +1084,84 @@ export function Navigation({
             </AnimatePresence>
           </div>
 
-          {/* Quick-Launch Popover Trigger & Close other tabs (Own Flex-None Slot) */}
-          <div className="flex-none shrink-0 relative flex items-center gap-1" ref={newTabMenuRef}>
-            <button
-              type="button"
-              onClick={() => setIsNewTabMenuOpen((prev) => !prev)}
-              title="Launch or Pin Module Tab"
-              aria-label="Open Module Quick Launcher"
-              className={cn(
-                'h-8 px-2.5 rounded-xl flex items-center gap-1 border text-xs font-semibold transition-all cursor-pointer',
-                isNewTabMenuOpen
-                  ? 'bg-gradient-to-b from-amber-300 to-amber-500 text-stone-950 border-amber-300 shadow-[0_4px_12px_rgba(245,158,11,0.4)] font-bold'
-                  : 'bg-white/[0.05] hover:bg-white/[0.12] text-amber-200 hover:text-white border-white/15'
-              )}
-            >
-              <Plus size={13} />
-              <span className="hidden 2xl:inline">Modules</span>
-            </button>
 
-            {openTabs.length > 1 && (
+          {/* Quick-Launch Popover Trigger & Close other tabs (Own Flex-None Slot) */}
+          <div className="flex-none shrink-0 relative flex items-center gap-1" ref={newTabMenuRef} data-tauri-drag-region="false">
+            <Tooltip content="Open Module Quick Launcher">
               <button
                 type="button"
-                onClick={handleCloseOtherTabs}
-                title="Close other tabs"
-                aria-label="Close other tabs"
-                className="hidden xl:inline-flex h-8 px-2.5 rounded-xl bg-white/[0.03] hover:bg-white/10 border border-white/10 text-caption font-mono text-stone-300 hover:text-amber-300 items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
+                onClick={() => setIsNewTabMenuOpen((prev) => !prev)}
+                aria-label="Open Module Quick Launcher"
+                className={cn(
+                  'h-7.5 px-2.5 rounded-[6px] flex items-center gap-1 border text-[13px] font-chrome font-medium transition-colors cursor-pointer',
+                  isNewTabMenuOpen
+                    ? 'bg-amber-400 text-stone-950 border-amber-300 font-semibold'
+                    : 'bg-white/[0.05] hover:bg-white/[0.12] text-amber-200 hover:text-white border-white/15'
+                )}
               >
-                <RotateCcw size={11} />
-                <span>Close other tabs</span>
+                <Plus size={13} />
+                <span className="hidden 2xl:inline">Modules</span>
               </button>
+            </Tooltip>
+
+            {openTabs.length > 1 && (
+              <Tooltip content="Close other tabs">
+                <button
+                  type="button"
+                  onClick={handleCloseOtherTabs}
+                  aria-label="Close other tabs"
+                  className="inline-flex h-7.5 px-2 sm:px-2.5 rounded-[6px] bg-white/[0.03] hover:bg-white/10 border border-white/10 text-[13px] font-chrome text-stone-300 hover:text-amber-300 items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
+                >
+                  <RotateCcw size={11} />
+                  <span className="hidden xl:inline">Close other tabs</span>
+                </button>
+              </Tooltip>
             )}
           </div>
         </div>
 
         {/* ===================================================================
-            RIGHT ZONE: 3 UNIFIED GLASS CAPSULES (ZERO REDUNDANCY)
+            RIGHT ZONE: 3 UNIFIED GLASS CAPSULES (ZERO REDUNDANCY, 6px CONTROLS)
         =================================================================== */}
-        <div className="flex items-center gap-1.5 shrink-0">
-          {/* Capsule 1: Omnibar Search Trigger (⌘K) */}
+        <div className="flex items-center gap-1.5 shrink-0" data-tauri-drag-region="false">
+          {/* Search Guides Input with Accelerator Badge matching Start@1x1.png */}
           {onOpenSearch && (
             <button
               type="button"
               onClick={onOpenSearch}
-              className="h-8 px-2.5 rounded-xl bg-black/25 hover:bg-white/10 border border-white/15 hover:border-amber-400/50 flex items-center gap-2 text-xs text-stone-200 hover:text-white transition-all cursor-pointer shadow-inner"
-              title="Search 28 districts, crops, calculators & EGW counsel (⌘K)"
+              className="h-[28px] px-2.5 rounded-[6px] bg-[#2B4636]/60 hover:bg-[#2B4636] border border-[#2B4636] flex items-center gap-2 text-[12px] text-[#F6F1E7]/80 hover:text-[#FFFDF8] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+              aria-label="Search guides (Ctrl+K)"
             >
-              <Search size={13} className="text-amber-300 shrink-0" />
-              <span className="hidden xl:inline text-stone-300">Search...</span>
-              <kbd className="hidden sm:inline text-caption font-mono px-1.5 py-0.5 rounded bg-white/10 border border-white/15 text-amber-300">
-                ⌘K
+              <Search size={12} className="text-[#C98A1B] shrink-0" />
+              <span className="hidden sm:inline">Search guides</span>
+              <kbd className="text-[10.5px] font-mono px-1 py-0.2 rounded bg-[#16261C] border border-[#2B4636] text-[#C98A1B]">
+                {formatAccelerator('Ctrl+K', platform.os)}
               </kbd>
             </button>
           )}
 
-          {/* Capsule 2: Direct Field Utilities (Advisor · Split Sizer ⌘I · Sources) */}
-          <div className="hidden sm:inline-flex items-center rounded-xl bg-white/[0.04] border border-white/14 p-0.5">
-            {onOpenAdvisor && (
-              <button
-                type="button"
-                onClick={onOpenAdvisor}
-                title="Outpost Homestead Advisor (Districts, Water & EGW Counsel)"
-                className="flex items-center gap-1 px-2 h-7 rounded-lg text-xs font-semibold text-amber-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-              >
-                <Sparkles size={12} className="text-amber-300 shrink-0" />
-                <span className="hidden lg:inline">Advisor</span>
-              </button>
+          {/* Theme Toggle Button (Dark / Light Mode) */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="h-[28px] w-[28px] rounded-[6px] bg-[#2B4636]/60 hover:bg-[#2B4636] border border-[#2B4636] flex items-center justify-center text-[#F6F1E7]/80 hover:text-[#FFFDF8] transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+            title={`Switch to ${isDark ? 'Light' : 'Dark'} mode (or click to toggle)`}
+            aria-label={`Switch to ${isDark ? 'Light' : 'Dark'} mode`}
+          >
+            {isDark ? (
+              <Sun size={13} className="text-[#C98A1B] transition-transform duration-300 hover:rotate-90" />
+            ) : (
+              <Moon size={13} className="text-[#F6F1E7] transition-transform duration-300 hover:-rotate-12" />
             )}
+          </button>
 
-            {onToggleInspector && (
-              <button
-                type="button"
-                onClick={onToggleInspector}
-                title="Toggle Side-by-Side Acreage Sizer & Field Notes (⌘I)"
-                className={cn(
-                  'flex items-center gap-1 px-2 h-7 rounded-lg text-xs font-semibold transition-colors cursor-pointer',
-                  isInspectorOpen
-                    ? 'bg-amber-400 text-stone-950 font-bold'
-                    : 'text-stone-200 hover:text-white hover:bg-white/10'
-                )}
-              >
-                <Columns2 size={12} className={isInspectorOpen ? 'text-stone-950' : 'text-emerald-300'} />
-                <span className="hidden xl:inline">Sizer</span>
-              </button>
-            )}
-
-            {onOpenCitations && (
-              <button
-                type="button"
-                onClick={onOpenCitations}
-                title="Verified Data & EGW Archival Sources"
-                className="flex items-center justify-center w-7 h-7 rounded-lg text-sky-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-                aria-label="Verified Data Sources"
-              >
-                <ShieldCheck size={13} />
-              </button>
-            )}
-          </div>
-
-          {/* Capsule 3: Unified Settings & Appearance Symbol (Auto-Hides Theme Options Behind ⌘,) */}
-          {onOpenSettings && (
-            <button
-              type="button"
-              onClick={() => onOpenSettings('appearance')}
-              className="flex items-center gap-1.5 px-2.5 h-8 rounded-xl bg-white/[0.04] hover:bg-white/10 text-stone-200 hover:text-amber-300 border border-white/14 transition-all cursor-pointer shadow-inner"
-              title="Settings & Preferences (Themes, Fonts, Offline Vault & Dev Info: Alfred Pereira-Sozilho Onesi) (⌘,)"
-              aria-label="Open Settings and Preferences"
-            >
-              <Settings size={13} className="text-amber-300 shrink-0" />
-              <span className="hidden xl:inline text-xs font-semibold">Settings</span>
-              <kbd className="hidden 2xl:inline text-caption font-mono px-1.5 py-0.5 rounded bg-white/10 border border-white/15 text-amber-300">
-                ⌘,
-              </kbd>
-            </button>
-          )}
-
-          {/* Capsule 4: Steward Profile / Google Sign-In */}
+          {/* User Sign-In / Profile */}
           {user ? (
             <div className="relative" ref={userMenuRef}>
               <button
                 type="button"
                 onClick={() => setIsUserMenuOpen((prev) => !prev)}
-                className="flex items-center gap-1.5 pl-1.5 pr-2 h-8 rounded-xl bg-white/10 hover:bg-white/15 text-stone-100 border border-white/20 text-xs font-semibold cursor-pointer"
+                className="flex items-center gap-1.5 px-2 h-[28px] rounded-[6px] bg-[#2B4636]/40 hover:bg-[#2B4636] text-[#F6F1E7] text-[12px] font-chrome cursor-pointer"
                 title={`Signed in as ${user.displayName || user.email}`}
               >
                 <img
@@ -979,53 +1173,45 @@ export function Navigation({
                   }
                   alt={user.displayName || 'Steward'}
                   referrerPolicy="no-referrer"
-                  className="w-5 h-5 rounded object-cover bg-emerald-950"
+                  className="w-4 h-4 rounded-[4px] object-cover"
                 />
-                <span className="hidden 2xl:inline max-w-[72px] truncate text-amber-200">
+                <span className="hidden xl:inline max-w-[70px] truncate">
                   {user.displayName?.split(' ')[0] || 'Steward'}
                 </span>
-                <ChevronDown size={11} className="text-stone-200" />
               </button>
 
               <AnimatePresence>
                 {isUserMenuOpen && (
                   <motion.div
-                    initial={{ opacity: 0, y: 6, scale: 0.96 }}
+                    initial={{ opacity: 0, y: 4, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                    exit={{ opacity: 0, y: 4, scale: 0.98 }}
                     transition={{ duration: 0.12 }}
-                    className={cn(
-                      'absolute right-0 mt-2 w-60 rounded-2xl p-2.5 flex flex-col gap-1 z-50 text-xs text-stone-100',
-                      isSapphire ? 'glass-depth-blue-hero' : 'glass-depth-emerald-hero'
-                    )}
+                    className="absolute right-0 mt-2 w-56 rounded-[6px] p-2 flex flex-col gap-1 z-50 text-[12.5px] font-chrome text-[#1F2A22] dark:text-[#EBF2EC] bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] shadow-xl animate-in fade-in zoom-in-95 duration-150"
                   >
-                    <div className="px-2.5 py-2 border-b border-white/15 mb-1">
-                      <p className="font-bold text-white truncate">
+                    <div className="px-2 py-1.5 border-b border-[#E4DCCB] dark:border-[#283C30] mb-0.5">
+                      <p className="font-semibold text-[#1F2A22] dark:text-[#EBF2EC] truncate">
                         {user.displayName || 'Country Steward'}
                       </p>
-                      <p className="text-caption text-stone-300 truncate">{user.email}</p>
-                      <span className="inline-flex items-center gap-1 text-caption font-semibold text-emerald-300 mt-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                        {isFirebaseAuthenticated ? 'Cloud Synced' : 'Local Cache Active'}
-                      </span>
+                      <p className="text-[11px] text-[#5A6458] dark:text-[#8E9E92] truncate">{user.email}</p>
                     </div>
 
                     <Link
                       to="/account"
                       onClick={() => setIsUserMenuOpen(false)}
-                      className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl hover:bg-white/10 text-stone-100 hover:text-white transition-colors"
+                      className="flex items-center gap-2 px-2 py-1.5 rounded-[4px] hover:bg-[#F6F1E7] dark:hover:bg-[#1E3326] text-[#1F2A22] dark:text-[#EBF2EC] transition-colors"
                     >
-                      <UserIcon size={13} className="text-amber-300" />
-                      <span>My Sanctuary Profile</span>
+                      <UserIcon size={13} className="text-[#B4531F] dark:text-[#D3672E]" />
+                      <span>Profile</span>
                     </Link>
 
                     <Link
                       to="/tracker"
                       onClick={() => setIsUserMenuOpen(false)}
-                      className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl hover:bg-white/10 text-stone-100 hover:text-white transition-colors"
+                      className="flex items-center gap-2 px-2 py-1.5 rounded-[4px] hover:bg-[#F6F1E7] dark:hover:bg-[#1E3326] text-[#1F2A22] dark:text-[#EBF2EC] transition-colors"
                     >
-                      <CheckCircle2 size={13} className="text-emerald-300" />
-                      <span>Transition Tracker</span>
+                      <CheckCircle2 size={13} className="text-[#3F6B4E] dark:text-[#4E8761]" />
+                      <span>Journey Tracker</span>
                     </Link>
 
                     <button
@@ -1034,9 +1220,9 @@ export function Navigation({
                         setIsUserMenuOpen(false);
                         await signOut();
                       }}
-                      className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl hover:bg-rose-950/50 text-rose-300 hover:text-rose-200 transition-colors w-full text-left mt-1 border-t border-white/15 pt-2 cursor-pointer"
+                      className="flex items-center gap-2 px-2 py-1.5 rounded-[4px] hover:bg-rose-500/10 text-rose-700 dark:text-rose-400 transition-colors w-full text-left mt-0.5 border-t border-[#E4DCCB] dark:border-[#283C30] pt-1.5 cursor-pointer"
                     >
-                      <LogOut size={13} className="text-rose-400" />
+                      <LogOut size={13} className="text-rose-600 dark:text-rose-400" />
                       <span>Sign Out</span>
                     </button>
                   </motion.div>
@@ -1048,14 +1234,20 @@ export function Navigation({
               type="button"
               onClick={handleHeaderSignIn}
               disabled={isSigningIn}
-              className="flex items-center gap-1.5 px-3 h-8 rounded-xl bg-gradient-to-b from-amber-300 to-amber-500 hover:from-amber-200 hover:to-amber-400 text-stone-950 font-bold text-xs shadow-xs transition-all cursor-pointer whitespace-nowrap"
+              className="flex items-center gap-1.5 px-2.5 h-[28px] rounded-[6px] bg-[#2B4636]/60 hover:bg-[#2B4636] text-[#F6F1E7] hover:text-[#FFFDF8] text-[12px] font-chrome transition-all duration-150 active:scale-95 cursor-pointer whitespace-nowrap"
               title="Sign in with Google"
             >
               <span>Sign In</span>
             </button>
           )}
+
+          {/* Native Desktop Window Controls (Right-aligned, no fake dots) */}
+          <DesktopTitleBarControls />
         </div>
       </div>
+
+      {/* Desktop Breadcrumbs under the tab strip */}
+      <BreadcrumbsBar />
 
       {/* =====================================================================
           COMPACT QUICK LAUNCHER POPOVER (MINIMALIST DESKTOP APP COMMAND MENU)
@@ -1067,20 +1259,17 @@ export function Navigation({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -6, scale: 0.98 }}
             transition={{ duration: 0.14, ease: 'easeOut' }}
-            className={cn(
-              'absolute top-12 left-3 sm:left-36 z-50 w-[94vw] max-w-xl rounded-2xl p-3.5 text-xs text-stone-100 shadow-2xl',
-              isSapphire ? 'glass-depth-blue-hero' : 'glass-depth-emerald-hero'
-            )}
+            className="absolute top-12 left-3 sm:left-36 z-50 w-[94vw] max-w-xl rounded-[10px] p-4 text-xs text-[#1F2A22] dark:text-[#EBF2EC] bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] shadow-2xl animate-in fade-in zoom-in-95 duration-150"
           >
-            <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-white/15">
-              <span className="font-mono font-bold uppercase tracking-wider text-amber-300 text-caption">
+            <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-[#E4DCCB] dark:border-[#283C30]">
+              <span className="font-mono font-bold uppercase tracking-wider text-[#B4531F] dark:text-[#D3672E] text-[11px]">
                 Module Launcher
               </span>
               <div className="flex items-center gap-1.5">
                 <button
                   type="button"
                   onClick={handleResetDefaultTabs}
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/12 text-caption text-stone-200 hover:text-amber-300 cursor-pointer"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-[6px] bg-[#F6F1E7] dark:bg-[#0E1712] hover:bg-[#E4DCCB] dark:hover:bg-[#1E3326] border border-[#E4DCCB] dark:border-[#283C30] text-[11px] text-[#1F2A22] dark:text-[#EBF2EC] hover:text-[#B4531F] cursor-pointer transition-colors"
                 >
                   <RotateCcw size={10} />
                   <span>Reset 3 Core Tabs</span>
@@ -1088,10 +1277,10 @@ export function Navigation({
                 <button
                   type="button"
                   onClick={() => setIsNewTabMenuOpen(false)}
-                  className="p-1 rounded-lg bg-white/5 hover:bg-white/10 text-stone-300 hover:text-white cursor-pointer"
+                  className="p-1 rounded-[6px] bg-[#F6F1E7] dark:bg-[#0E1712] hover:bg-[#E4DCCB] dark:hover:bg-[#1E3326] text-[#5A6458] dark:text-[#8E9E92] hover:text-[#1F2A22] dark:hover:text-white cursor-pointer transition-colors"
                   aria-label="Close Launcher"
                 >
-                  <X size={12} />
+                  <X size={13} />
                 </button>
               </div>
             </div>
@@ -1105,9 +1294,9 @@ export function Navigation({
                 return (
                   <div
                     key={suite.id}
-                    className="p-2.5 rounded-xl bg-black/25 border border-white/10 flex flex-col gap-1.5"
+                    className="p-2.5 rounded-[8px] bg-[#F6F1E7]/70 dark:bg-[#0E1712] border border-[#E4DCCB] dark:border-[#283C30] flex flex-col gap-1.5"
                   >
-                    <span className="font-mono font-bold text-amber-300 text-caption px-1">
+                    <span className="font-mono font-bold text-[#B4531F] dark:text-[#D3672E] text-[11px] px-1">
                       {suite.title}
                     </span>
                     <div className="flex flex-col gap-1">
@@ -1124,18 +1313,16 @@ export function Navigation({
                               setIsNewTabMenuOpen(false);
                             }}
                             className={cn(
-                              'px-2 py-1.5 rounded-lg text-left flex items-center justify-between gap-2 border transition-all cursor-pointer group',
+                              'px-2 py-1.5 rounded-[6px] text-left flex items-center justify-between gap-2 border transition-all duration-150 cursor-pointer group',
                               isCurrent
-                                ? isSapphire
-                                  ? 'bg-sky-500/25 text-white border-sky-400/50 font-semibold'
-                                  : 'bg-emerald-500/25 text-white border-emerald-400/50 font-semibold'
-                                : 'bg-white/[0.02] hover:bg-white/[0.08] text-stone-200 border-transparent hover:border-white/15'
+                                ? 'bg-[#2B4636] text-[#FFFDF8] border-transparent font-medium shadow-2xs'
+                                : 'bg-[#FFFDF8] dark:bg-[#17241C] hover:bg-[#F6F1E7] dark:hover:bg-[#1E3326] text-[#1F2A22] dark:text-[#EBF2EC] border-[#E4DCCB]/60 dark:border-[#283C30] hover:translate-x-0.5'
                             )}
                           >
                             <span className="flex items-center gap-2 min-w-0">
                               <span
                                 className={cn(
-                                  'w-5 h-5 rounded-md border flex items-center justify-center shrink-0',
+                                  'w-5 h-5 rounded-[4px] border flex items-center justify-center shrink-0 transition-transform group-hover:scale-110',
                                   mod.badgeBg
                                 )}
                               >
@@ -1144,7 +1331,7 @@ export function Navigation({
                               <span className="truncate text-xs">{mod.title}</span>
                             </span>
                             {mod.shortcut && (
-                              <kbd className="text-caption font-mono px-1 rounded bg-white/10 text-stone-300 shrink-0">
+                              <kbd className="text-[10px] font-mono px-1 rounded bg-[#F6F1E7] dark:bg-[#0E1712] border border-[#E4DCCB] dark:border-[#283C30] text-[#5A6458] dark:text-[#8E9E92] shrink-0">
                                 {mod.shortcut}
                               </kbd>
                             )}
