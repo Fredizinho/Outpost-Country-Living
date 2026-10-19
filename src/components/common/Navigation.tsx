@@ -34,6 +34,7 @@ import {
   HeartPulse,
   UtensilsCrossed,
   Pin,
+  Layers,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -441,6 +442,19 @@ export function Navigation({
   const [isMoreTabsOpen, setIsMoreTabsOpen] = useState(false);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
+  const [tabContextMenu, setTabContextMenu] = useState<{
+    x: number;
+    y: number;
+    tabId: string;
+  } | null>(null);
+
+  useEffect(() => {
+    const handleGlobalClose = () => setTabContextMenu(null);
+    window.addEventListener('click', handleGlobalClose);
+    return () => {
+      window.removeEventListener('click', handleGlobalClose);
+    };
+  }, []);
 
   // Check and update scroll boundaries for tab strip
   const checkTabScroll = () => {
@@ -698,16 +712,19 @@ export function Navigation({
     setDraggedTabId(null);
   };
 
-  const handleCloseOtherTabs = () => {
+  const handleCloseOtherTabs = (keepTabId?: string) => {
+    const targetId = keepTabId || activeMeta.id;
     setOpenTabs((prev) => {
-      const activeTab = prev.find((t) => t.id === activeMeta.id);
+      const activeTab = prev.find((t) => t.id === targetId);
       const pinned = prev.filter((t) => t.pinned);
       if (activeTab && !pinned.some((p) => p.id === activeTab.id)) {
         return [...pinned, activeTab];
       }
-      return pinned.length > 0 ? pinned : [prev[0]];
+      return pinned.length > 0 ? pinned : (activeTab ? [activeTab] : [prev[0]]);
     });
     setIsNewTabMenuOpen(false);
+    setIsMoreTabsOpen(false);
+    setTabContextMenu(null);
   };
 
   const handleResetDefaultTabs = () => {
@@ -905,6 +922,11 @@ export function Navigation({
                       handleCloseTab(e, tab.id);
                     }
                   }}
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setTabContextMenu({ x: e.clientX, y: e.clientY, tabId: tab.id });
+                  }}
                   onMouseEnter={() => prefetchRoute(tab.basePath)}
                   title={`${tab.title}${tab.pinned ? ' (Pinned)' : ''}`}
                   className={cn(
@@ -1079,13 +1101,48 @@ export function Navigation({
                       </div>
                     );
                   })}
+
+                  {/* Actions Drawer in Tabs Dropdown */}
+                  <div className="pt-1.5 mt-1 border-t border-[#E4DCCB] dark:border-[#283C30] flex flex-col gap-0.5">
+                    <button
+                      type="button"
+                      disabled={openTabs.length <= 1}
+                      onClick={() => handleCloseOtherTabs()}
+                      className={cn(
+                        "w-full px-2 py-1.5 rounded-[6px] text-[12px] flex items-center justify-between transition-colors",
+                        openTabs.length > 1
+                          ? "hover:bg-[#F6F1E7] dark:hover:bg-[#1E3326] text-[#1F2A22] dark:text-[#EBF2EC] cursor-pointer font-medium"
+                          : "opacity-40 cursor-not-allowed text-stone-400"
+                      )}
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <RotateCcw size={12} className="text-[#C98A1B]" />
+                        <span>Close other tabs</span>
+                      </span>
+                      {openTabs.length > 1 && (
+                        <span className="text-[10px] font-mono text-[#5A6458] dark:text-[#8E9E92]">
+                          Keep active
+                        </span>
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleResetDefaultTabs();
+                        setIsMoreTabsOpen(false);
+                      }}
+                      className="w-full px-2 py-1.5 rounded-[6px] text-[12px] flex items-center gap-1.5 hover:bg-[#F6F1E7] dark:hover:bg-[#1E3326] text-[#5A6458] dark:text-[#8E9E92] hover:text-[#1F2A22] dark:hover:text-[#EBF2EC] transition-colors cursor-pointer"
+                    >
+                      <Layers size={12} className="text-[#2C4A3E] dark:text-[#88B896]" />
+                      <span>Reset core tabs</span>
+                    </button>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
 
-
-          {/* Quick-Launch Popover Trigger & Close other tabs (Own Flex-None Slot) */}
+          {/* Quick-Launch Popover Trigger (+ Button Kept Clean) */}
           <div className="flex-none shrink-0 relative flex items-center gap-1" ref={newTabMenuRef} data-tauri-drag-region="false">
             <Tooltip content="Open Module Quick Launcher">
               <button
@@ -1103,20 +1160,6 @@ export function Navigation({
                 <span className="hidden 2xl:inline">Modules</span>
               </button>
             </Tooltip>
-
-            {openTabs.length > 1 && (
-              <Tooltip content="Close other tabs">
-                <button
-                  type="button"
-                  onClick={handleCloseOtherTabs}
-                  aria-label="Close other tabs"
-                  className="inline-flex h-7.5 px-2 sm:px-2.5 rounded-[6px] bg-white/[0.03] hover:bg-white/10 border border-white/10 text-[13px] font-chrome text-stone-300 hover:text-amber-300 items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
-                >
-                  <RotateCcw size={11} />
-                  <span className="hidden xl:inline">Close other tabs</span>
-                </button>
-              </Tooltip>
-            )}
           </div>
         </div>
 
@@ -1346,6 +1389,62 @@ export function Navigation({
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Tab Context Menu */}
+      {tabContextMenu && (
+        <div
+          style={{
+            top: Math.min(tabContextMenu.y, typeof window !== 'undefined' ? window.innerHeight - 150 : 200),
+            left: Math.min(tabContextMenu.x, typeof window !== 'undefined' ? window.innerWidth - 200 : 200),
+          }}
+          className="fixed z-[100] min-w-44 bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] rounded-xl p-1.5 shadow-xl text-xs text-[#1F2A22] dark:text-[#EBF2EC] flex flex-col gap-0.5 animate-in fade-in duration-100 font-chrome"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            type="button"
+            onClick={() => {
+              handleCloseTab(null, tabContextMenu.tabId);
+              setTabContextMenu(null);
+            }}
+            disabled={openTabs.length <= 1}
+            className={cn(
+              "w-full px-2.5 py-1.5 rounded-lg flex items-center justify-between text-left transition-colors cursor-pointer",
+              openTabs.length > 1
+                ? "hover:bg-[#F6F1E7] dark:hover:bg-[#1E3326] text-stone-700 dark:text-stone-200"
+                : "opacity-40 cursor-not-allowed text-stone-400"
+            )}
+          >
+            <span>Close tab</span>
+            <kbd className="font-mono text-[10px] text-stone-400">Ctrl+W</kbd>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleCloseOtherTabs(tabContextMenu.tabId)}
+            disabled={openTabs.length <= 1}
+            className={cn(
+              "w-full px-2.5 py-1.5 rounded-lg flex items-center justify-between text-left transition-colors cursor-pointer",
+              openTabs.length > 1
+                ? "hover:bg-[#F6F1E7] dark:hover:bg-[#1E3326] text-stone-700 dark:text-stone-200 font-medium"
+                : "opacity-40 cursor-not-allowed text-stone-400"
+            )}
+          >
+            <span>Close other tabs</span>
+            <RotateCcw size={11} className="text-[#C98A1B]" />
+          </button>
+          <div className="my-1 border-t border-[#E4DCCB] dark:border-[#283C30]" />
+          <button
+            type="button"
+            onClick={() => {
+              handleTogglePinTab(null, tabContextMenu.tabId);
+              setTabContextMenu(null);
+            }}
+            className="w-full px-2.5 py-1.5 rounded-lg flex items-center justify-between text-left hover:bg-[#F6F1E7] dark:hover:bg-[#1E3326] text-stone-700 dark:text-stone-200 transition-colors cursor-pointer"
+          >
+            <span>{openTabs.find((t) => t.id === tabContextMenu.tabId)?.pinned ? 'Unpin tab' : 'Pin tab'}</span>
+            <Pin size={11} className="text-amber-400" />
+          </button>
+        </div>
+      )}
     </header>
 
     {/* ===================================================================

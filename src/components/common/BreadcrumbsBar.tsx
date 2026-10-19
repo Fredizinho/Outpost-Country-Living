@@ -26,106 +26,134 @@ export function BreadcrumbsBar() {
     }
 
     if (path.startsWith('/scout') || path.startsWith('/map') || path.startsWith('/regions')) {
-      result.push({ label: 'Land & Water', path: '/scout-map' });
+      result.push({ label: 'Water', path: '/scout-map' });
       if (path.includes('/regions/')) {
         const districtId = path.replace('/regions/', '');
         const dist = DISTRICT_LIST.find((d) => d.id === districtId);
-        result.push({ label: 'District GIS Map', path: '/scout-map' });
+        result.push({ label: 'District Water & Aquifers', path: '/scout-map' });
         result.push({ label: dist ? `${dist.name} Highlands` : districtId, isLast: true });
         return result;
       }
-      result.push({ label: '28-District GIS Map', isLast: true });
+      result.push({ label: 'District Water & Aquifers', isLast: true });
       return result;
     }
 
     if (path.startsWith('/where') || path.startsWith('/suitability') || path.startsWith('/property-evaluator')) {
-      result.push({ label: 'Land & Water', path: '/where' });
-      result.push({ label: 'Tenure & Land Protocols', isLast: true });
+      result.push({ label: 'Land', path: '/where' });
+      result.push({
+        label: search.get('tab') === 'tenure' ? 'Tenure & Customary Law' : 'Land Evaluation',
+        isLast: true,
+      });
       return result;
     }
 
     if (path.startsWith('/what')) {
-      result.push({ label: 'Agronomy & Soils', path: '/what' });
-      result.push({ label: 'Soil Stratigraphy & Crops', isLast: true });
+      result.push({ label: 'Food', path: '/what' });
+      result.push({ label: 'Agronomy & Soils', isLast: true });
       return result;
     }
 
     if (path.startsWith('/agriculture') || path.startsWith('/edenic-farming')) {
-      result.push({ label: 'Agronomy & Soils', path: '/agriculture' });
-      result.push({ label: 'Edenic Farming Protocols', isLast: true });
+      result.push({ label: 'Food', path: '/agriculture' });
+      result.push({ label: 'Bio-Intensive Farming', isLast: true });
       return result;
     }
 
     if (path.startsWith('/seasons') || path.startsWith('/almanac')) {
-      result.push({ label: 'Agronomy & Soils', path: '/seasons' });
-      result.push({ label: 'Seasonal Farm Almanac', isLast: true });
-      return result;
-    }
-
-    if (path.startsWith('/sanitarium')) {
-      result.push({ label: 'Health & Lifestyle', path: '/sanitarium' });
-      result.push({ label: 'Sanitarium Blueprint', isLast: true });
+      result.push({ label: 'Food', path: '/seasons' });
+      result.push({ label: 'Seasonal Planting Almanac', isLast: true });
       return result;
     }
 
     if (path.startsWith('/kitchen')) {
-      result.push({ label: 'Health & Lifestyle', path: '/kitchen' });
-      result.push({ label: 'Country Kitchen Recipes', isLast: true });
+      result.push({ label: 'Food', path: '/kitchen' });
+      result.push({ label: 'Country Kitchen', isLast: true });
+      return result;
+    }
+
+    if (path.startsWith('/sanitarium')) {
+      result.push({ label: 'Health', path: '/sanitarium' });
+      const tab = search.get('tab');
+      const label =
+        tab === 'hydrotherapy'
+          ? 'Hydrotherapy & Fomentations'
+          : tab === 'principles'
+          ? '8 Health Laws'
+          : 'Sanitarium & Lifestyle';
+      result.push({ label, isLast: true });
       return result;
     }
 
     if (path.startsWith('/calculators')) {
-      result.push({ label: 'Off-Grid Engineering', path: '/calculators' });
-      result.push({ label: 'Solar & Water Sizers', isLast: true });
+      result.push({ label: 'Tools', path: '/calculators' });
+      result.push({
+        label: search.get('tab') === 'solar' ? 'Solar & Water BoQ Sizer' : 'Homestead Engineering Tools',
+        isLast: true,
+      });
       return result;
     }
 
     if (path.startsWith('/how')) {
-      result.push({ label: 'Off-Grid Engineering', path: '/how' });
-      result.push({ label: 'Homestead Construction Specs', isLast: true });
+      result.push({ label: 'Shelter', path: '/how' });
+      result.push({ label: 'Build Blueprints', isLast: true });
       return result;
     }
 
     if (path.startsWith('/skills')) {
-      result.push({ label: 'Self-Reliance Trades', path: '/skills' });
+      result.push({ label: 'Shelter', path: '/skills' });
       if (path.length > 8) {
         const skillSlug = path.replace('/skills/', '').replace(/-/g, ' ');
+        result.push({ label: 'Natural Homestead Building', path: '/skills' });
         result.push({
           label: skillSlug.replace(/\b\w/g, (c) => c.toUpperCase()),
           isLast: true,
         });
         return result;
       }
-      result.push({ label: 'Field Manual Protocols', isLast: true });
+      result.push({ label: 'Natural Homestead Building', isLast: true });
       return result;
     }
 
     if (path.startsWith('/blueprints')) {
-      result.push({ label: 'Sanctuary Campus', path: '/blueprints' });
-      result.push({ label: 'Institutional Outpost Blueprints', isLast: true });
+      result.push({ label: 'Family and school', path: '/blueprints?tab=education' });
+      const tab = search.get('tab');
+      result.push({
+        label: tab === 'family' ? 'Family & Homestead Guides' : 'Rural School & Curriculum',
+        isLast: true,
+      });
       return result;
     }
 
     if (path.startsWith('/community') || path.startsWith('/directory')) {
-      result.push({ label: 'Fellowship', path: '/community' });
-      result.push({ label: 'Steward & Mission Directory', isLast: true });
+      result.push({ label: 'Community', path: '/community' });
+      result.push({
+        label: search.get('tab') === 'mentors' ? 'Regional Mentors' : 'Steward Registry & Outposts',
+        isLast: true,
+      });
       return result;
     }
 
     if (path.startsWith('/tracker')) {
-      result.push({ label: 'Sanctuary Path', path: '/tracker' });
-      result.push({ label: 'Transition Readiness Ledger', isLast: true });
+      result.push({ label: 'Journey', path: '/tracker' });
+      result.push({
+        label: search.get('view') === 'milestones' ? 'Sanctuary Milestones' : 'Transition Ledger',
+        isLast: true,
+      });
       return result;
     }
 
     if (path.startsWith('/devotional')) {
-      result.push({ label: 'Sanctuary Altar', path: '/devotional' });
-      result.push({ label: 'Daily Manna Devotional', isLast: true });
+      result.push({ label: 'Faith', path: '/devotional' });
+      const isSabbath = search.get('tab') === 'sabbath' || location.hash.includes('sabbath');
+      result.push({
+        label: isSabbath ? 'Sabbath & Worship' : 'Daily Devotional & Reflection',
+        isLast: true,
+      });
       return result;
     }
 
     if (path.startsWith('/vision')) {
-      result.push({ label: 'Sanctuary Altar', path: '/vision' });
+      result.push({ label: 'Faith', path: '/vision' });
       result.push({ label: 'Spirit of Prophecy Archive', isLast: true });
       return result;
     }
@@ -136,20 +164,7 @@ export function BreadcrumbsBar() {
     }
 
     if (path.startsWith('/settings') || path.startsWith('/preferences')) {
-      result.push({ label: 'System', path: '/settings' });
-      const tab = search.get('tab');
-      const tabLabel =
-        tab === 'data'
-          ? 'Data & Vault'
-          : tab === 'district'
-          ? 'District Focus'
-          : tab === 'diagnostics'
-          ? 'Diagnostics'
-          : tab === 'about'
-          ? 'About'
-          : 'Appearance';
-      result.push({ label: 'Workspace Settings', path: '/settings' });
-      result.push({ label: tabLabel, isLast: true });
+      result.push({ label: 'Workspace Settings', isLast: true });
       return result;
     }
 

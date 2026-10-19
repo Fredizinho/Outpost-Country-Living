@@ -67,8 +67,8 @@ export function WorkspaceStatusBar() {
           : 'bg-[#F6F1E7] dark:bg-[#121C16] text-[#1F2A22] dark:text-[#EBF2EC] border-[#E4DCCB] dark:border-[#283C30]'
       )}
     >
-      {/* Left zone: Network State & District Freshness */}
-      <div className="flex items-center gap-3">
+      {/* Left zone: Network State & Single District Display */}
+      <div className="flex items-center gap-2.5">
         {/* Offline / Online indicator */}
         <div
           className="flex items-center gap-1.5 cursor-default"
@@ -85,32 +85,28 @@ export function WorkspaceStatusBar() {
           <span className="font-medium text-[#1F2A22] dark:text-[#EBF2EC]">
             {isOnline ? 'Online ready' : 'Offline ready'}
           </span>
-          <span className="text-[#5A6458] dark:text-[#8E9E92] hidden sm:inline">
-            · District: {activeDistrict.name}
-          </span>
         </div>
-      </div>
 
-      {/* Right zone: Selected District, Last Saved, App Version */}
-      <div className="flex items-center gap-3">
-        {/* Selected District (Clickable quick switch) */}
+        <span className="text-[#E4DCCB] dark:text-[#283C30]" aria-hidden="true">
+          ·
+        </span>
+
+        {/* Selected District (Shown once: "Dedza, Central") with quick switch */}
         <div className="relative">
           <button
             type="button"
             onClick={() => setIsDistrictMenuOpen((prev) => !prev)}
-            className="flex items-center gap-1.5 px-1.5 py-0.5 rounded-[4px] hover:bg-[#E4DCCB]/60 dark:hover:bg-[#283C30] text-[#1F2A22] dark:text-[#EBF2EC] transition-colors cursor-pointer"
-            title="Active Homestead District"
+            className="flex items-center gap-1 px-1.5 py-0.5 rounded-[4px] hover:bg-[#E4DCCB]/60 dark:hover:bg-[#283C30] text-[#1F2A22] dark:text-[#EBF2EC] transition-colors cursor-pointer"
+            title="Active homestead district (click to change)"
           >
             <MapPin size={11} className="text-[#B4531F] dark:text-[#D3672E] shrink-0" />
-            <span className="font-medium">District: {activeDistrict.name}</span>
-            <span className="text-[#5A6458] dark:text-[#8E9E92] text-[10.5px] hidden md:inline">
-              ({activeDistrict.region})
-            </span>
+            <span className="font-medium">{activeDistrict.name}, {activeDistrict.region}</span>
+            <ChevronUp size={10} className={cn("text-[#5A6458] dark:text-[#8E9E92] transition-transform", isDistrictMenuOpen && "rotate-180")} />
           </button>
 
           {/* Quick District Popover Menu */}
           {isDistrictMenuOpen && (
-            <div className="absolute bottom-full right-0 mb-1 w-64 max-h-64 overflow-y-auto custom-scrollbar rounded-[6px] border border-[#E4DCCB] dark:border-[#283C30] bg-[#FFFDF8] dark:bg-[#17241C] shadow-xl p-1 z-50 text-xs flex flex-col gap-0.5">
+            <div className="absolute bottom-full left-0 mb-1 w-64 max-h-64 overflow-y-auto custom-scrollbar rounded-[6px] border border-[#E4DCCB] dark:border-[#283C30] bg-[#FFFDF8] dark:bg-[#17241C] shadow-xl p-1 z-50 text-xs flex flex-col gap-0.5">
               <div className="px-2 py-1 text-[11px] font-semibold text-[#5A6458] dark:text-[#8E9E92] border-b border-[#E4DCCB]/80 dark:border-[#283C30]">
                 Select Active District
               </div>
@@ -129,22 +125,21 @@ export function WorkspaceStatusBar() {
                       : 'hover:bg-[#F6F1E7] dark:hover:bg-[#283C30] text-[#1F2A22] dark:text-[#EBF2EC]'
                   )}
                 >
-                  <span>{dist.name}</span>
+                  <span>{dist.name}, {dist.region}</span>
                   {activeDistrictId === dist.id && <Check size={12} className="text-[#FFFDF8]" />}
                 </button>
               ))}
             </div>
           )}
         </div>
+      </div>
 
-        <span className="text-[#E4DCCB] dark:text-[#283C30]" aria-hidden="true">
-          |
-        </span>
-
+      {/* Right zone: Grouped "Saved locally" and App Version */}
+      <div className="flex items-center gap-2.5 text-[#5A6458] dark:text-[#8E9E92]">
         {/* Last Saved */}
-        <div className="flex items-center gap-1 text-[#5A6458] dark:text-[#8E9E92]">
-          <Clock size={11} className="text-[#5A6458] dark:text-[#8E9E92] shrink-0" />
-          <span className="text-[11px] hidden sm:inline">{lastSavedText}</span>
+        <div className="flex items-center gap-1">
+          <Clock size={11} className="shrink-0 text-[#5A6458] dark:text-[#8E9E92]" />
+          <span className="text-[11px]">{lastSavedText}</span>
         </div>
 
         <span className="text-[#E4DCCB] dark:text-[#283C30]" aria-hidden="true">
@@ -152,7 +147,7 @@ export function WorkspaceStatusBar() {
         </span>
 
         {/* App Version */}
-        <div className="flex items-center gap-1.5 text-[11px] text-[#5A6458] dark:text-[#8E9E92]">
+        <div className="flex items-center gap-1 text-[11px]">
           <span className="font-medium text-[#1F2A22] dark:text-[#EBF2EC]">Outpost 1.0</span>
           <span className="hidden lg:inline text-[#5A6458] dark:text-[#8E9E92]">({platform.os})</span>
         </div>

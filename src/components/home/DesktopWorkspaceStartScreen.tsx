@@ -294,8 +294,8 @@ export function DesktopWorkspaceStartScreen({ onOpenSearch }: DesktopWorkspaceSt
         {/* Background Photograph */}
         <div className="relative h-[210px] sm:h-[240px] md:h-[260px] w-full overflow-hidden bg-[#16261C]">
           <img
-            src={COUNTRY_IMAGES.ruralIndustrialSanctuary}
-            alt="Country Living Homestead with Solar Array and Garden"
+            src={COUNTRY_IMAGES.malawiHomesteadSanctuary}
+            alt="Malawian highlands homestead with brick house, corrugated iron roof, maize and banana plants, and mountains"
             className="w-full h-full object-cover object-center group-hover:scale-[1.03] transition-transform duration-700 ease-out"
           />
           {/* Subtle cinematic gradient overlay for high contrast readability */}

@@ -22,6 +22,8 @@ import {
   Feather,
   Building2,
   UtensilsCrossed,
+  Sparkles,
+  GraduationCap,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { prefetchRoute } from '@/lib/routePrefetch';
@@ -114,15 +116,26 @@ export const REFERENCE_SIDEBAR_ITEMS: ReferenceSidebarItem[] = [
     ],
   },
   {
-    id: 'family',
-    name: 'Family and school',
+    id: 'faith',
+    name: 'Faith',
     path: '/vision',
-    matchPrefixes: ['/vision', '/education', '/family', '/devotional'],
-    icon: BookOpen,
+    matchPrefixes: ['/vision', '/devotional'],
+    icon: Sparkles,
     subItems: [
       { label: 'Spirit of Prophecy Archive', path: '/vision' },
       { label: 'Daily Devotional & Reflection', path: '/devotional' },
-      { label: 'Country Education & Manual Labor', path: '/vision?tab=education' },
+      { label: 'Sabbath & Worship', path: '/devotional?tab=sabbath' },
+    ],
+  },
+  {
+    id: 'family',
+    name: 'Family and school',
+    path: '/blueprints?tab=education',
+    matchPrefixes: ['/blueprints', '/education', '/family'],
+    icon: GraduationCap,
+    subItems: [
+      { label: 'Rural School & Curriculum', path: '/blueprints?tab=education' },
+      { label: 'Family & Homestead Guides', path: '/blueprints?tab=family' },
     ],
   },
   {
