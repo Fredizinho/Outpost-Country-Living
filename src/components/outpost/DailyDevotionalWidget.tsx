@@ -208,7 +208,7 @@ export function DailyDevotionalWidget() {
                   </div>
                 </div>
 
-                {/* Verbatim Spirit of Prophecy Card */}
+                {/* Spirit of Prophecy Card */}
                 <div className="bg-[#C89B3C]/[0.08] backdrop-blur-sm rounded-3xl p-6 md:p-8 border border-[#C89B3C]/25 flex flex-col justify-between">
                   <div>
                     <div className="flex flex-wrap items-center justify-between gap-2 mb-4">

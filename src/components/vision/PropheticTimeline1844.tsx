@@ -23,6 +23,8 @@ import {
 import { COUNTRY_IMAGES } from '@/assets/images';
 import { cn } from '@/lib/utils';
 
+import { getQuoteById } from '@/data/sources/quotes';
+
 export interface PropheticEpoch {
   id: string;
   stageNumber: string;
@@ -32,225 +34,217 @@ export interface PropheticEpoch {
   subtitle: string;
   scriptureRef: string;
   scriptureText: string;
-  egwQuote: string;
-  egwSource: string;
-  egwCode: string;
+  scriptureSource: string;
+  quoteId: string;
+  standardEgwCode: string;
   egwUrl: string;
   imageSrc: string;
   imageCaption: string;
+  summary: string;
   theologicalSignificance: string;
   countryLivingDirective: string;
   actionLink: {
     label: string;
     to: string;
   };
-  chartX: number;
-  accentColor: string;
 }
 
 export const PROPHETIC_EPOCHS_1844: PropheticEpoch[] = [
   {
     id: '1844-sanctuary',
     stageNumber: '01',
-    eraLabel: 'Oct 22, 1844 · End of 2300 Days',
-    shortTitle: '1844 Sanctuary Judgment',
-    title: 'The Cleansing of the Heavenly Sanctuary & Investigative Judgment',
-    subtitle: 'Fulfillment of Daniel 8:14 (457 BC – AD 1844) & Opening of the Most Holy Place',
+    eraLabel: 'October 22, 1844',
+    shortTitle: '1844 Sanctuary judgment',
+    title: 'The cleansing of the heavenly sanctuary & investigative judgment',
+    subtitle: 'Fulfillment of Daniel 8:14 (457 BC – AD 1844) & opening of the Most Holy Place',
     scriptureRef: 'Daniel 8:14; Revelation 11:19',
     scriptureText:
       'And he said unto me, Unto two thousand and three hundred days; then shall the sanctuary be cleansed... And the temple of God was opened in heaven, and there was seen in his temple the ark of his testament.',
-    egwQuote:
-      'At the termination of the 2300 days, in 1844, Christ entered the most holy place of the heavenly sanctuary to perform the closing work of atonement, preparatory to His coming.',
-    egwSource: 'The Great Controversy, p. 422 (1911)',
-    egwCode: 'GC 422.1',
+    scriptureSource: 'Scripture from King James Version',
+    quoteId: 'prophecy-1844-sanctuary-part1',
+    standardEgwCode: 'GC 422.1',
     egwUrl: 'https://m.egwwritings.org/en/search?query=GC+422.1',
     imageSrc: COUNTRY_IMAGES.sanctuary1844Judgment,
     imageCaption:
-      'The Most Holy Place of the Heavenly Sanctuary opened in 1844—revealing the Ark of the Covenant and the immutable Law of God (Rev. 11:19).',
+      'The Most Holy Place of the heavenly sanctuary opened in 1844—revealing the Ark of the Covenant and the immutable Law of God (Rev. 11:19).',
+    summary:
+      'Christ enters the Most Holy Place to begin the closing investigative judgment at the conclusion of the 2,300 prophetic days of Daniel 8:14.',
     theologicalSignificance:
-      'The 2,300 prophetic years of Daniel 8:14 began in 457 BC with the decree of Artaxerxes to restore Jerusalem and terminated on October 22, 1844. On the antitypical Day of Atonement, Christ our High Priest entered the Second Apartment (Most Holy Place) before the Ark of the Testament to conduct the pre-advent Investigative Judgment.',
+      'The 2,300 prophetic years of Daniel 8:14 began in 457 BC with the decree of Artaxerxes to restore Jerusalem and terminated on October 22, 1844. On the antitypical Day of Atonement, Christ our High Priest entered the Second Apartment before the Ark of the Testament to conduct the pre-advent investigative judgment.',
     countryLivingDirective:
-      'As Christ ministers in the Most Holy Place, His people on earth are called to align every habit of home, diet, family worship, and stewardship with the standard of God’s holy Law.',
+      'Living during the antitypical Day of Atonement calls every rural household to daily heart preparation, family altar worship, and faithful stewardship of health, soil, and Sabbath time.',
     actionLink: {
-      label: 'Open Daily Sanctuary Devotionals',
+      label: 'Open daily sanctuary devotionals',
       to: '/devotional',
     },
-    chartX: 85,
-    accentColor: '#F59E0B',
   },
   {
     id: 'three-angels',
     stageNumber: '02',
-    eraLabel: '1844 – Present · Rev 14:6–12',
-    shortTitle: "Three Angels' Messages",
-    title: "Proclamation of the Three Angels' Messages & The Sabbath Seal",
-    subtitle: 'Calling Every Nation back to the Creator of Heaven and Earth',
+    eraLabel: '1844 to second advent',
+    shortTitle: "Three angels' messages",
+    title: "Proclamation of the three angels' messages & the Sabbath seal",
+    subtitle: 'Calling every nation back to the Creator of heaven and earth',
     scriptureRef: 'Revelation 14:6–7, 12',
     scriptureText:
       'Fear God, and give glory to him; for the hour of his judgment is come: and worship him that made heaven, and earth, and the sea, and the fountains of waters... Here is the patience of the saints: here are they that keep the commandments of God, and the faith of Jesus.',
-    egwQuote:
-      'In a special sense Seventh-day Adventists have been set in the world as watchmen and light bearers. To them has been entrusted the last warning for a perishing world... They have been given a work of the most solemn import—the proclamation of the first, second, and third angels’ messages.',
-    egwSource: 'Testimonies for the Church, Vol. 9, p. 19 (1909)',
-    egwCode: '9T 19.1',
+    scriptureSource: 'Scripture from King James Version',
+    quoteId: 'prophecy-three-angels',
+    standardEgwCode: '9T 19.1',
     egwUrl: 'https://m.egwwritings.org/en/search?query=9T+19.1',
     imageSrc: COUNTRY_IMAGES.threeAngelsProclamation,
     imageCaption:
-      'The Three Angels of Revelation 14 flying in midheaven—proclaiming the Everlasting Gospel, the fall of Babylon, and the seal of the Living God.',
+      'The Three Angels of Revelation 14 flying in midheaven—proclaiming the everlasting gospel, the fall of Babylon, and the seal of the living God.',
+    summary:
+      "Seventh-day Adventists are entrusted with the final threefold message of Revelation 14, restoring the Sabbath and calling souls to worship the Creator.",
     theologicalSignificance:
-      'Following 1844, the First Angel announces that the hour of God’s investigative judgment has arrived and calls humanity back to the Creator (quoting the fourth commandment of Exodus 20:11). The Second Angel declares the moral fall of spiritual Babylon, and the Third Angel warns against receiving the Mark of the Beast.',
+      'Following 1844, the First Angel announces that the hour of God’s investigative judgment has arrived and calls humanity back to the Creator. The Second Angel declares the moral fall of spiritual Babylon, and the Third Angel warns against receiving the mark of the beast.',
     countryLivingDirective:
-      'Nature itself is God’s lesson book testifying of the Creator. Living in the countryside surrounds families with the living works of Him who made heaven, earth, and the fountains of water.',
+      'Every country outpost serves as a missionary lighthouse—combining natural health treatments, agricultural demonstration, and literature distribution to minister to neighboring towns.',
     actionLink: {
-      label: 'Explore Outpost Evangelism Blueprints',
+      label: 'Explore outpost evangelism blueprints',
       to: '/blueprints',
     },
-    chartX: 215,
-    accentColor: '#38BDF8',
   },
   {
     id: 'country-outposts',
     stageNumber: '03',
-    eraLabel: 'Preparatory Window · Now',
-    shortTitle: 'Out of the Cities',
-    title: 'Orderly Exodus from the Cities & Rural Outpost Preparation',
-    subtitle: 'Establishing Self-Sustaining Homes, Gardens, and Sanitariums Before the Crisis',
-    scriptureRef: 'Isaiah 32:18; Matthew 24:15–16',
+    eraLabel: 'Preparatory window · Now',
+    shortTitle: 'Out of the cities',
+    title: 'Orderly exodus from the cities & rural outpost preparation',
+    subtitle: 'Establishing self-sustaining homes, gardens, and sanitariums before the crisis',
+    scriptureRef: 'Isaiah 32:18; Revelation 13:17',
     scriptureText:
-      'And my people shall dwell in a peaceable habitation, and in sure dwellings, and in quiet resting places.',
-    egwQuote:
-      'Again and again the Lord has instructed that our people are to take their families away from the cities, into the country, where they can raise their own provisions; for in the future the problem of buying and selling will be a very serious one.',
-    egwSource: 'Country Living, p. 9 (1904)',
-    egwCode: 'CL 9.5',
-    egwUrl: 'https://m.egwwritings.org/en/search?query=CL+9.5',
+      'And my people shall dwell in a peaceable habitation, and in sure dwellings, and in quiet resting places... And that no man might buy or sell, save he that had the mark, or the name of the beast, or the number of his name.',
+    scriptureSource: 'Scripture from King James Version',
+    quoteId: 'prep-2',
+    standardEgwCode: 'CL 9.6',
+    egwUrl: 'https://m.egwwritings.org/en/search?query=CL+9.6',
     imageSrc: COUNTRY_IMAGES.malawiHomesteadSanctuary,
     imageCaption:
-      'Preparatory Country Living—cultivating heirloom food reserves, pure spring water, and rural mission centers while pathways remain open.',
+      'Preparatory country living—cultivating heirloom food reserves, pure spring water, and rural mission centers while pathways remain open.',
+    summary:
+      'Before commercial buying and selling restrictions intensify, households are instructed to relocate to rural districts where they can produce their own food and establish missionary outposts.',
     theologicalSignificance:
       'Before the final conflict over buying and selling breaks upon the world, God graciously grants a preparatory window for families to relocate out of congested cities, learn practical agriculture, educate their children away from urban corruption, and work the cities from rural outpost centers.',
     countryLivingDirective:
-      'Use this peaceful window in Malawi to scout perennial water, verify Customary Land tenure, plant 3×3×3ft fruit tree pits, and build heirloom seed reserves.',
+      'Use this peaceful window in Malawi to scout perennial water, verify customary land tenure, plant deep-trench fruit tree pits, and build open-pollinated seed reserves.',
     actionLink: {
-      label: 'Scout 28 Malawi Districts on GIS Map',
+      label: 'Scout 28 Malawi districts on GIS map',
       to: '/scout-map',
     },
-    chartX: 345,
-    accentColor: '#10B981',
   },
   {
     id: 'sunday-law-siege',
     stageNumber: '04',
-    eraLabel: 'Prophetic Signal · Rev 13:11–17',
-    shortTitle: 'Sunday Law & Boycott',
-    title: 'The Siege Signal: Sunday Legislation & Economic Decree',
-    subtitle: 'The Prophetic Counterpart to Cestius Gallus Surrounding Jerusalem in AD 66',
-    scriptureRef: 'Revelation 13:16–17; Luke 21:20–21',
+    eraLabel: 'Prophetic signal · National decree',
+    shortTitle: 'Sunday legislation & boycott',
+    title: 'The siege signal: Sunday legislation & economic decree',
+    subtitle: 'The prophetic counterpart to Cestius Gallus surrounding Jerusalem in AD 66',
+    scriptureRef: 'Luke 21:20–21; Revelation 13:16–17',
     scriptureText:
-      'And that no man might buy or sell, save he that had the mark, or the name of the beast, or the number of his name.',
-    egwQuote:
-      'As the siege of Jerusalem by the Roman armies was the signal for flight to the Judean Christians, so the assumption of power on the part of our nation in the decree enforcing the papal sabbath will be a warning to us. It will then be time to leave the large cities, preparatory to leaving the smaller ones for retired homes in secluded places among the mountains.',
-    egwSource: 'Testimonies for the Church, Vol. 5, p. 464 (1885)',
-    egwCode: '5T 464.3',
+      'And when ye shall see Jerusalem compassed with armies, then know that the desolation thereof is nigh. Then let them which are in Judaea flee to the mountains; and let them which are in the midst of it depart out.',
+    scriptureSource: 'Scripture from King James Version',
+    quoteId: 'prep-1',
+    standardEgwCode: '5T 464.3',
     egwUrl: 'https://m.egwwritings.org/en/search?query=5T+464.3',
     imageSrc: COUNTRY_IMAGES.buyingSelling,
     imageCaption:
-      'The Prophetic Siege Signal (5T 464.3) and Economic Restriction (Rev. 13:17)—why off-grid water, solar, and soil independence must be prepared beforehand.',
+      'The prophetic siege signal (5T 464.3) and economic restriction (Rev. 13:17)—why off-grid water, solar, and soil independence must be prepared beforehand.',
+    summary:
+      'The legislative enforcement of the papal sabbath serves as the divine warning to leave large cities, preparing to retreat to secluded mountain homes.',
     theologicalSignificance:
-      'Ellen G. White identifies two distinct stages of urban departure: (1) purposeful relocation now to raise provisions and establish outposts, and (2) urgent departure from large cities when legislative enforcement of Sunday observance fulfills the prophetic sign of Luke 21:20, followed by economic sanctions against Sabbath-keepers.',
+      'Two distinct stages of urban departure are outlined: purposeful relocation now to raise provisions and establish outposts, followed by emergency departure from large cities when legislative enforcement fulfills the prophetic sign of Luke 21:20.',
     countryLivingDirective:
       'A debt-free rural homestead with independent borehole/spring water, solar energy, and perennial crops shields the family when urban commerce and labor unions restrict Sabbath-keepers.',
     actionLink: {
-      label: 'Open 15-Milestone Exodus Ledger',
+      label: 'Open 15-milestone exodus ledger',
       to: '/tracker',
     },
-    chartX: 475,
-    accentColor: '#F97316',
   },
   {
     id: 'latter-rain-loud-cry',
     stageNumber: '05',
-    eraLabel: 'Final Witness · Rev 18:1–4',
-    shortTitle: 'Latter Rain & Loud Cry',
-    title: 'The Shaking, The Latter Rain & The Loud Cry',
-    subtitle: 'The Earth Lightened with God’s Glory as the Final Call Sounds',
-    scriptureRef: 'Revelation 18:1, 4; Joel 2:23',
+    eraLabel: 'Final witness · Loud cry',
+    shortTitle: 'Latter rain & loud cry',
+    title: 'The shaking, the latter rain & the loud cry',
+    subtitle: 'The earth lightened with God’s glory as the final warning sounds',
+    scriptureRef: 'Revelation 18:1–4; Joel 2:23',
     scriptureText:
       'And after these things I saw another angel come down from heaven, having great power; and the earth was lightened with his glory... Come out of her, my people, that ye be not partakers of her sins.',
-    egwQuote:
-      'The great work of the gospel is not to close with less manifestation of the power of God than marked its opening. The prophecies which were fulfilled in the outpouring of the former rain at the opening of the gospel are again to be fulfilled in the latter rain at its close.',
-    egwSource: 'The Great Controversy, p. 611 (1911)',
-    egwCode: 'GC 611.3',
+    scriptureSource: 'Scripture from King James Version',
+    quoteId: 'prophecy-latter-rain',
+    standardEgwCode: 'GC 611.3',
     egwUrl: 'https://m.egwwritings.org/en/search?query=GC+611.3',
     imageSrc: COUNTRY_IMAGES.jerusalemSiege,
     imageCaption:
-      'The Loud Cry of Revelation 18—medical missionary outposts and faithful stewards proclaiming the final call in the power of the Latter Rain.',
+      'The loud cry of Revelation 18—medical missionary outposts and faithful stewards proclaiming the final call in the power of the latter rain.',
+    summary:
+      'The closing work of the gospel is attended by the outpouring of the Holy Spirit in power surpassing Pentecost, illuminating the entire earth with truth.',
     theologicalSignificance:
-      'As persecution intensifies, a spiritual sifting ("the Shaking") separates superficial professors from faithful stewards. Simultaneously, the Latter Rain of the Holy Spirit ripens the spiritual harvest, empowering the Loud Cry of the Fourth Angel (Revelation 18) to call multitudes out of Babylon into the truth.',
+      'As persecution intensifies, a spiritual sifting separates superficial professors from faithful stewards. Simultaneously, the latter rain ripens the spiritual harvest, empowering the loud cry of the Fourth Angel to call multitudes out of Babylon into the truth.',
     countryLivingDirective:
       'Rural outpost centers, treatment rooms, and humble country homes become refuges of truth and healing where honest souls find light during the final proclamation.',
     actionLink: {
-      label: 'Master 25 Practical Country & Medical Skills',
+      label: 'Master 25 practical country & medical skills',
       to: '/skills',
     },
-    chartX: 605,
-    accentColor: '#EAB308',
   },
   {
     id: 'time-of-trouble',
     stageNumber: '06',
-    eraLabel: 'Close of Probation · Dan 12:1',
-    shortTitle: 'Mountain Refuge',
-    title: 'Close of Probation & Flight to the Mountain Strongholds',
-    subtitle: '“His Place of Defense Shall Be the Munitions of Rocks: Bread and Water Shall Be Sure”',
+    eraLabel: 'Close of probation',
+    shortTitle: 'Mountain refuge',
+    title: 'Close of probation & flight to the mountain strongholds',
+    subtitle: '“His place of defense shall be the munitions of rocks: bread and water shall be sure”',
     scriptureRef: 'Daniel 12:1; Isaiah 33:16',
     scriptureText:
       'And at that time shall Michael stand up, the great prince which standeth for the children of thy people: and there shall be a time of trouble, such as never was... He shall dwell on high: his place of defence shall be the munitions of rocks: bread shall be given him; his waters shall be sure.',
-    egwQuote:
-      'As the decree issued by the various rulers of Christendom against commandment keepers shall withdraw the protection of government and abandon them to those who desire their destruction, the people of God will flee from the cities and villages and associate together in companies, dwelling in the most desolate and solitary places. Many will find refuge in the strongholds of the mountains.',
-    egwSource: 'The Great Controversy, p. 626 (1911)',
-    egwCode: 'GC 626.1',
+    scriptureSource: 'Scripture from King James Version',
+    quoteId: 'prophecy-mountain-refuge',
+    standardEgwCode: 'GC 626.1',
     egwUrl: 'https://m.egwwritings.org/en/search?query=GC+626.1',
     imageSrc: COUNTRY_IMAGES.mountainFlight,
     imageCaption:
-      'During the Time of Trouble after the Close of Probation, God’s sealed people find refuge in the mountain strongholds where heavenly angels minister to them.',
+      'During the time of trouble after the close of probation, God’s sealed people find refuge in mountain strongholds where angels minister to them.',
+    summary:
+      'When civil protection is withdrawn during the time of trouble, believers find refuge in solitary mountain strongholds, sustained directly by divine providence.',
     theologicalSignificance:
-      'When Christ ceases His intercession in the heavenly sanctuary (`Rev. 22:11`), human probation closes and the Seven Last Plagues fall upon the unrepentant world. During the death decree ("Time of Jacob’s Trouble"), God’s people leave even their rural villages for solitary mountain strongholds, sustained directly by ministering angels (`Isaiah 33:16`).',
+      'When Christ ceases His intercession in the heavenly sanctuary (Rev. 22:11), human probation closes and the seven last plagues fall. During the death decree, God’s people leave even rural villages for solitary mountain strongholds, sustained directly by ministering angels.',
     countryLivingDirective:
-      'Physical endurance, familiarity with highland terrain, simple habits of life, and unshakable trust in God prepare families both physically and spiritually for this final test.',
+      'Physical endurance, familiarity with highland terrain, simple habits of life, and unshakable trust in God prepare families both physically and spiritually for this final crisis.',
     actionLink: {
-      label: 'Evaluate Highland Plots & Water Security',
+      label: 'Evaluate highland plots & water security',
       to: '/suitability',
     },
-    chartX: 735,
-    accentColor: '#A855F7',
   },
   {
     id: 'second-coming',
     stageNumber: '07',
-    eraLabel: 'Consummation · Rev 14:14–16',
-    shortTitle: 'Second Coming & Eden',
-    title: 'Glorious Deliverance, The Second Coming & Earth Made New',
-    subtitle: '“They Shall Build Houses, and Inhabit Them; and They Shall Plant Vineyards”',
+    eraLabel: 'Consummation & New Earth',
+    shortTitle: 'Second coming & Eden',
+    title: 'Glorious deliverance, the second coming & earth made new',
+    subtitle: '“They shall build houses, and inhabit them; and they shall plant vineyards”',
     scriptureRef: 'Revelation 14:14; Isaiah 65:21–22',
     scriptureText:
       'And I looked, and behold a white cloud, and upon the cloud one sat like unto the Son of man, having on his head a golden crown, and in his hand a sharp sickle.',
-    egwQuote:
-      'In the Bible the inheritance of the saved is called "a country." Heb. 11:14–16. There the heavenly Shepherd leads His flock to fountains of living waters. The tree of life yields its fruit every month, and the leaves of the tree are for the service of the nations.',
-    egwSource: 'The Great Controversy, p. 675 (1911)',
-    egwCode: 'GC 675.2',
+    scriptureSource: 'Scripture from King James Version',
+    quoteId: 'prophecy-second-coming-eden',
+    standardEgwCode: 'GC 675.2',
     egwUrl: 'https://m.egwwritings.org/en/search?query=GC+675.2',
     imageSrc: COUNTRY_IMAGES.secondComingDeliverance,
     imageCaption:
-      'The glorious appearing of Christ in the clouds of heaven to deliver His faithful people and restore the eternal Edenic Country Home.',
+      'The glorious appearing of Christ in the clouds of heaven to deliver His faithful people and restore the eternal Edenic country home.',
+    summary:
+      'The biblical inheritance of the redeemed is an eternal country with crystal streams, healing foliage, and permanent peaceful homes.',
     theologicalSignificance:
-      'At midnight God’s voice delivers His covenant people. Soon appears the small black cloud in the east, growing brighter until Jesus rides forth as King of kings and Lord of lords (`Rev. 19:16`). Earthly country living is the training school for the eternal New Earth, where the redeemed shall build houses and plant vineyards forever (`Isaiah 65:21`).',
+      'At midnight God’s voice delivers His covenant people. Jesus rides forth as King of kings and Lord of lords. Earthly country living is the training school for the eternal New Earth, where the redeemed shall build houses and plant vineyards forever.',
     countryLivingDirective:
       'Every tree planted, every soil bed restored, and every child taught in nature today is a foretaste of the restored Edenic inheritance promised to the faithful.',
     actionLink: {
-      label: 'Explore Edenic Agriculture Manuals',
+      label: 'Explore Edenic agriculture manuals',
       to: '/agriculture',
     },
-    chartX: 865,
-    accentColor: '#FACC15',
   },
 ];
 
@@ -475,66 +469,66 @@ export function PropheticTimeline1844() {
       className="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex flex-col gap-8"
     >
       {/* ====================================================================
-          1. INTERACTIVE 1844–ENDTIME PROPHETIC PANORAMA VECTOR CHART
+          1. INTERACTIVE 1844–ENDTIME PROPHETIC TIMELINE & DOSSIER
       ==================================================================== */}
-      <div className="rounded-3xl bg-[#091810] border border-amber-500/35 p-5 sm:p-8 shadow-2xl flex flex-col gap-6 relative overflow-hidden">
+      <div className="rounded-3xl bg-[#FFFDF8] dark:bg-[#132018] border border-[#E4DCCB] dark:border-[#283C30] p-5 sm:p-8 shadow-sm flex flex-col gap-6 relative overflow-hidden transition-colors">
         {/* Header Bar */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pb-5 border-b border-emerald-900/70">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pb-5 border-b border-[#E4DCCB] dark:border-[#283C30]">
           <div className="flex flex-col gap-1.5">
-            <div className="flex flex-wrap items-center gap-2 text-xs text-amber-300 font-mono">
-              <Sparkles size={13} className="text-amber-400" />
-              <span>Prophetic Sanctuary &amp; Country Living Chart (1844 – Consummation)</span>
-              <span aria-hidden="true" className="text-stone-600">
+            <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-[#2C4A3E] dark:text-[#88B896]">
+              <Sparkles size={13} className="text-[#C25E2E] dark:text-[#D3672E]" />
+              <span>Prophetic sanctuary &amp; country living sequence · 1844 to consummation</span>
+              <span aria-hidden="true" className="text-[#A2B3A6]">
                 ·
               </span>
-              <span className="text-emerald-300">Daniel 8:14 · Revelation 13–18 · 5T 464.3</span>
+              <span className="font-mono">Daniel 8:14 · Revelation 13–18 · 5T 464.3</span>
             </div>
-            <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight">
-              End-Time Events from 1844 to the Second Coming
+            <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-normal text-[#1F2A22] dark:text-[#F6F1E7] tracking-tight">
+              End-time prophetic milestones from 1844 to the second coming
             </h2>
-            <p className="text-xs sm:text-sm text-stone-300 max-w-3xl leading-relaxed">
-              Click any prophetic milestone on the interactive vector chart below to inspect its biblical foundation, Spirit of Prophecy counsel, illustrated artwork, and practical Malawi homestead preparation step.
+            <p className="text-xs sm:text-sm text-[#5A6458] dark:text-[#C5D3C8] max-w-3xl leading-relaxed">
+              Explore seven key prophetic milestones in the timeline cards below to inspect their biblical foundation, standard EGW reference codes, and practical country living directives.
             </p>
           </div>
 
           {/* 3-Mode View Switcher + Prev/Next Controls */}
           <div className="flex flex-wrap items-center gap-2 self-start lg:self-auto shrink-0">
-            <div className="inline-flex items-center p-1 rounded-xl bg-black/40 border border-emerald-800/80">
+            <div className="inline-flex items-center p-1 rounded-xl bg-[#F6F1E7] dark:bg-[#0E1712] border border-[#E4DCCB] dark:border-[#283C30]">
               <button
                 type="button"
                 onClick={() => setViewMode('interactive')}
                 className={cn(
-                  'px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap',
+                  'px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap',
                   viewMode === 'interactive'
-                    ? 'bg-amber-400 text-stone-950 font-bold'
-                    : 'text-stone-300 hover:text-white'
+                    ? 'bg-[#2C4A3E] text-white shadow-xs'
+                    : 'text-[#5A6458] dark:text-[#C5D3C8] hover:text-[#1F2A22] dark:hover:text-white'
                 )}
               >
-                Interactive Dossier
+                Interactive dossier
               </button>
               <button
                 type="button"
                 onClick={() => setViewMode('sanctuary-blueprint')}
                 className={cn(
-                  'px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap',
+                  'px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap',
                   viewMode === 'sanctuary-blueprint'
-                    ? 'bg-amber-400 text-stone-950 font-bold'
-                    : 'text-stone-300 hover:text-white'
+                    ? 'bg-[#2C4A3E] text-white shadow-xs'
+                    : 'text-[#5A6458] dark:text-[#C5D3C8] hover:text-[#1F2A22] dark:hover:text-white'
                 )}
               >
-                1844 Sanctuary Vector Chart
+                Sanctuary schematic
               </button>
               <button
                 type="button"
                 onClick={() => setViewMode('panorama-grid')}
                 className={cn(
-                  'px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap',
+                  'px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap',
                   viewMode === 'panorama-grid'
-                    ? 'bg-amber-400 text-stone-950 font-bold'
-                    : 'text-stone-300 hover:text-white'
+                    ? 'bg-[#2C4A3E] text-white shadow-xs'
+                    : 'text-[#5A6458] dark:text-[#C5D3C8] hover:text-[#1F2A22] dark:hover:text-white'
                 )}
               >
-                All 7 Illustrated Plates
+                All 7 illustrated plates
               </button>
             </div>
 
@@ -543,20 +537,20 @@ export function PropheticTimeline1844() {
                 <button
                   type="button"
                   onClick={handlePrev}
-                  className="px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/15 border border-white/15 text-xs font-semibold text-stone-200 flex items-center gap-1 transition-colors cursor-pointer"
-                  title="Previous Prophetic Milestone"
+                  className="px-2.5 py-1.5 rounded-xl bg-[#F6F1E7] dark:bg-[#0E1712] hover:bg-[#EAE2D2] dark:hover:bg-[#1A281F] border border-[#E4DCCB] dark:border-[#283C30] text-xs font-semibold text-[#1F2A22] dark:text-[#F6F1E7] flex items-center gap-1 transition-colors cursor-pointer"
+                  title="Previous milestone"
                 >
                   <ChevronLeft size={14} />
                   <span>Prev</span>
                 </button>
-                <span className="px-2.5 py-1.5 rounded-xl bg-amber-500/15 border border-amber-400/40 font-mono text-xs font-bold text-amber-300 tabular-nums">
+                <span className="px-2.5 py-1.5 rounded-xl bg-[#F6F1E7] dark:bg-[#0E1712] border border-[#E4DCCB] dark:border-[#283C30] font-mono text-xs font-bold text-[#2C4A3E] dark:text-[#88B896] tabular-nums">
                   {activeEpoch.stageNumber}/07
                 </span>
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="px-2.5 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer"
-                  title="Next Prophetic Milestone"
+                  className="px-2.5 py-1.5 rounded-xl bg-[#2C4A3E] hover:bg-[#233B31] text-white text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+                  title="Next milestone"
                 >
                   <span>Next</span>
                   <ChevronRight size={14} />
@@ -791,25 +785,26 @@ export function PropheticTimeline1844() {
                         <h4 className="font-display text-base font-bold text-white leading-snug">
                           {epoch.shortTitle}
                         </h4>
-                        <p className="text-caption font-mono text-emerald-300">
-                          {epoch.scriptureRef} · {epoch.egwCode}
+                        <p className="text-xs font-mono text-[#2C4A3E] dark:text-[#88B896]">
+                          {epoch.scriptureRef} · {epoch.standardEgwCode}
                         </p>
                       </div>
                     </div>
 
                     {/* Middle Custom Vector Schematic */}
-                    <div className="p-3 bg-[#040E08] border-y border-emerald-900/70 h-36">
+                    <div className="p-3 bg-[#FFFDF8] dark:bg-[#0E1712] border-y border-[#E4DCCB] dark:border-[#283C30] h-36">
                       <EpochVectorSchematic epochId={epoch.id} />
                     </div>
 
-                    {/* Quote & Summary */}
+                    {/* Summary & References */}
                     <div className="p-4 flex flex-col gap-2">
-                      <p className="font-serif text-xs italic text-stone-200 line-clamp-3 leading-relaxed">
-                        “{epoch.egwQuote}”
+                      <p className="text-xs text-[#1F2A22] dark:text-[#F6F1E7] line-clamp-3 leading-relaxed">
+                        {epoch.summary}
                       </p>
-                      <p className="text-caption text-amber-300 font-semibold">
-                        — {epoch.egwSource}
-                      </p>
+                      <div className="flex items-center justify-between text-xs font-mono text-[#5A6458] dark:text-[#9FB3A4]">
+                        <span>Standard EGW code: {epoch.standardEgwCode}</span>
+                        <span>{epoch.scriptureRef.split(';')[0]}</span>
+                      </div>
                     </div>
                   </div>
 
@@ -820,15 +815,15 @@ export function PropheticTimeline1844() {
                         setActiveEpochId(epoch.id);
                         setViewMode('interactive');
                       }}
-                      className="text-xs font-bold text-emerald-300 hover:text-amber-300 inline-flex items-center gap-1 cursor-pointer"
+                      className="text-xs font-semibold text-[#2C4A3E] dark:text-[#88B896] hover:underline inline-flex items-center gap-1 cursor-pointer"
                     >
-                      <span>Open Full Dossier</span>
+                      <span>Open full dossier</span>
                       <ArrowRight size={12} />
                     </button>
 
                     <Link
                       to={epoch.actionLink.to}
-                      className="text-caption font-mono text-stone-400 hover:text-white underline"
+                      className="text-xs font-mono text-[#5A6458] dark:text-[#9FB3A4] hover:text-[#1F2A22] dark:hover:text-white underline"
                     >
                       {epoch.actionLink.label}
                     </Link>
@@ -839,337 +834,340 @@ export function PropheticTimeline1844() {
           </div>
         )}
 
-        {/* Interactive Master Panoramic SVG Prophetic Chart (960 x 210) */}
+        {/* ====================================================================
+            VIEW MODE A: HORIZONTAL HTML CARD TIMELINE (≥12px text, 44px nodes)
+        ==================================================================== */}
         {viewMode === 'interactive' && (
           <>
-            <div className="w-full overflow-x-auto custom-scrollbar rounded-2xl bg-[#05100A] border border-emerald-900/80 p-3">
-          <svg
-            viewBox="0 0 950 215"
-            className="w-full min-w-[760px] h-auto select-none block"
-            role="img"
-            aria-label="Interactive Prophetic Timeline from 457 BC and 1844 to the Second Coming"
-          >
-            <defs>
-              <linearGradient id="propheticLineGrad" x1="0" y1="0" x2="950" y2="0" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="#F59E0B" />
-                <stop offset="35%" stopColor="#10B981" />
-                <stop offset="70%" stopColor="#F97316" />
-                <stop offset="100%" stopColor="#FACC15" />
-              </linearGradient>
-            </defs>
+            {/* 44px Node Rail */}
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between text-xs font-semibold text-[#5A6458] dark:text-[#9FB3A4]">
+                <span>Prophetic sequence progression</span>
+                <span className="font-mono text-xs">Stage {activeEpoch.stageNumber} of 07</span>
+              </div>
 
-            {/* Subtle Chart Grid */}
-            <line x1="20" y1="45" x2="930" y2="45" stroke="#064E3B" strokeWidth="0.6" strokeDasharray="4 4" />
-            <line x1="20" y1="165" x2="930" y2="165" stroke="#064E3B" strokeWidth="0.6" strokeDasharray="4 4" />
+              {/* Horizontal Stepper Rail */}
+              <div className="w-full overflow-x-auto pb-2 custom-scrollbar">
+                <div className="min-w-[680px] flex items-center justify-between relative px-2">
+                  <div className="absolute left-6 right-6 top-1/2 -translate-y-1/2 h-0.5 bg-[#E4DCCB] dark:bg-[#283C30] -z-0" />
+                  {PROPHETIC_EPOCHS_1844.map((epoch) => {
+                    const isSelected = epoch.id === activeEpochId;
+                    return (
+                      <button
+                        key={epoch.id}
+                        type="button"
+                        onClick={() => setActiveEpochId(epoch.id)}
+                        className="relative z-10 flex flex-col items-center gap-1.5 cursor-pointer group focus:outline-hidden"
+                      >
+                        <div
+                          className={cn(
+                            'w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl flex items-center justify-center font-mono text-sm font-bold transition-all duration-200 border',
+                            isSelected
+                              ? 'bg-[#C25E2E] dark:bg-[#D3672E] text-white border-[#C25E2E] dark:border-[#D3672E] shadow-sm scale-105'
+                              : 'bg-[#FFFDF8] dark:bg-[#132018] text-[#1F2A22] dark:text-[#C5D3C8] border-[#E4DCCB] dark:border-[#283C30] hover:border-[#3D5A45] hover:scale-102'
+                          )}
+                        >
+                          {epoch.stageNumber}
+                        </div>
+                        <span
+                          className={cn(
+                            'text-xs font-medium whitespace-nowrap text-center transition-colors',
+                            isSelected
+                              ? 'text-[#C25E2E] dark:text-[#E27C44] font-bold'
+                              : 'text-[#5A6458] dark:text-[#9FB3A4] group-hover:text-[#1F2A22] dark:group-hover:text-white'
+                          )}
+                        >
+                          {epoch.shortTitle}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
 
-            {/* Pre-1844 2300-Day Lead-In Arc */}
-            <path
-              d="M 18 110 Q 52 75 85 110"
-              fill="none"
-              stroke="#F59E0B"
-              strokeWidth="2"
-              strokeDasharray="4 3"
-            />
-            <text x="48" y="76" textAnchor="middle" fill="#FDE68A" fontSize="8" fontFamily="monospace" fontWeight="bold">
-              2300 DAYS
-            </text>
-            <text x="48" y="86" textAnchor="middle" fill="#A7F3D0" fontSize="7" fontFamily="monospace">
-              457 BC–1844
-            </text>
+            {/* Horizontal Scroll of HTML Cards */}
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between text-xs text-[#5A6458] dark:text-[#9FB3A4]">
+                <span className="font-semibold">Horizontal timeline cards</span>
+                <span>Scroll or click any card to inspect dossier</span>
+              </div>
 
-            {/* Main Prophetic Timeline Axis */}
-            <line
-              x1="85"
-              y1="110"
-              x2="865"
-              y2="110"
-              stroke="url(#propheticLineGrad)"
-              strokeWidth="4"
-              strokeLinecap="round"
-            />
+              <div className="w-full overflow-x-auto flex gap-4 pb-4 pt-1 snap-x scroll-smooth custom-scrollbar">
+                {PROPHETIC_EPOCHS_1844.map((epoch) => {
+                  const isSelected = epoch.id === activeEpochId;
 
-            {/* 7 Interactive Milestone Nodes */}
-            {PROPHETIC_EPOCHS_1844.map((epoch) => {
-              const isSelected = epoch.id === activeEpochId;
-              const cx = epoch.chartX;
+                  return (
+                    <article
+                      key={epoch.id}
+                      onClick={() => setActiveEpochId(epoch.id)}
+                      className={cn(
+                        'min-w-[320px] sm:min-w-[360px] max-w-[400px] flex-shrink-0 snap-start rounded-2xl p-5 border transition-all duration-200 cursor-pointer flex flex-col justify-between gap-4 text-left select-none',
+                        isSelected
+                          ? 'bg-[#FFF9F3] dark:bg-[#1C2822] border-2 border-[#C25E2E] dark:border-[#D3672E] ring-2 ring-[#C25E2E]/20 shadow-md'
+                          : 'bg-[#FFFDF8] dark:bg-[#132018] border border-[#E4DCCB] dark:border-[#283C30] hover:border-[#3D5A45] shadow-xs'
+                      )}
+                    >
+                      {/* Card Header */}
+                      <div className="flex items-start justify-between gap-3 border-b border-[#E4DCCB] dark:border-[#283C30] pb-3">
+                        <div className="flex items-center gap-3">
+                          <div
+                            className={cn(
+                              'w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl flex items-center justify-center font-mono text-sm font-bold border shrink-0',
+                              isSelected
+                                ? 'bg-[#C25E2E] dark:bg-[#D3672E] text-white border-[#C25E2E]'
+                                : 'bg-[#F6F1E7] dark:bg-[#0E1712] text-[#1F2A22] dark:text-[#C5D3C8] border-[#E4DCCB] dark:border-[#283C30]'
+                            )}
+                          >
+                            {epoch.stageNumber}
+                          </div>
+                          <div>
+                            <span className="text-xs font-mono font-bold text-[#5A6458] dark:text-[#9FB3A4]">
+                              Stage {epoch.stageNumber}
+                            </span>
+                            <h3 className="font-serif text-base sm:text-lg font-normal text-[#1F2A22] dark:text-[#F6F1E7] leading-snug line-clamp-1">
+                              {epoch.shortTitle}
+                            </h3>
+                          </div>
+                        </div>
 
-              return (
-                <g
-                  key={epoch.id}
-                  onClick={() => setActiveEpochId(epoch.id)}
-                  className="cursor-pointer group"
-                >
-                  {/* Vertical Connector Stem */}
-                  <line
-                    x1={cx}
-                    y1={isSelected ? 52 : 66}
-                    x2={cx}
-                    y2={152}
-                    stroke={isSelected ? epoch.accentColor : '#1E293B'}
-                    strokeWidth={isSelected ? '2' : '1.2'}
-                  />
+                        {isSelected && (
+                          <span className="px-2 py-0.5 rounded-full bg-[#C25E2E]/10 text-[#C25E2E] dark:text-[#E27C44] border border-[#C25E2E]/30 text-xs font-semibold whitespace-nowrap">
+                            Active
+                          </span>
+                        )}
+                      </div>
 
-                  {/* Top Stage Pill on Chart */}
-                  <rect
-                    x={cx - 54}
-                    y={18}
-                    width="108"
-                    height="32"
-                    rx="8"
-                    fill={isSelected ? '#1C2D22' : '#081810'}
-                    stroke={isSelected ? epoch.accentColor : '#064E3B'}
-                    strokeWidth={isSelected ? '2' : '1'}
-                  />
-                  <text
-                    x={cx}
-                    y={31}
-                    textAnchor="middle"
-                    fill={isSelected ? '#FDE047' : '#A7F3D0'}
-                    fontSize="8"
-                    fontFamily="monospace"
-                    fontWeight="bold"
+                      {/* Content Template: 1. Summary */}
+                      <div className="flex flex-col gap-1">
+                        <span className="text-xs font-semibold text-[#5A6458] dark:text-[#9FB3A4]">
+                          Summary
+                        </span>
+                        <p className="text-xs sm:text-sm text-[#1F2A22] dark:text-[#F6F1E7] leading-relaxed line-clamp-3">
+                          {epoch.summary}
+                        </p>
+                      </div>
+
+                      {/* Content Template: 2. Timeline */}
+                      <div className="flex flex-col gap-1">
+                        <span className="text-xs font-semibold text-[#5A6458] dark:text-[#9FB3A4]">
+                          Timeline
+                        </span>
+                        <span className="font-mono text-xs font-medium text-[#2C4A3E] dark:text-[#88B896]">
+                          {epoch.eraLabel}
+                        </span>
+                      </div>
+
+                      {/* Content Template: 3. References */}
+                      <div className="flex flex-col gap-1">
+                        <span className="text-xs font-semibold text-[#5A6458] dark:text-[#9FB3A4]">
+                          References
+                        </span>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-md bg-[#F6F1E7] dark:bg-[#0E1712] border border-[#E4DCCB] dark:border-[#283C30] text-[#1F2A22] dark:text-[#F6F1E7]">
+                            {epoch.standardEgwCode}
+                          </span>
+                          <span className="font-mono text-xs text-[#5A6458] dark:text-[#9FB3A4]">
+                            {epoch.scriptureRef}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Content Template: 4. Application for country living */}
+                      <div className="flex flex-col gap-1">
+                        <span className="text-xs font-semibold text-[#2C4A3E] dark:text-[#88B896]">
+                          Application for country living
+                        </span>
+                        <p className="text-xs text-[#1F2A22] dark:text-[#D0DAD2] leading-relaxed line-clamp-2">
+                          {epoch.countryLivingDirective}
+                        </p>
+                      </div>
+
+                      {/* Content Template: 5. Adventist perspective */}
+                      <div className="flex flex-col gap-1 pt-2 border-t border-[#E4DCCB] dark:border-[#283C30]">
+                        <span className="text-xs font-semibold text-[#5A6458] dark:text-[#9FB3A4]">
+                          Adventist perspective
+                        </span>
+                        <p className="text-xs text-[#3E4D40] dark:text-[#B2C4B7] leading-relaxed line-clamp-2">
+                          {epoch.theologicalSignificance}
+                        </p>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* ====================================================================
+                2. ACTIVE EPOCH ILLUSTRATED DOSSIER (PAINTING + VECTOR SCHEMATIC + COUNSEL)
+            ==================================================================== */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeEpoch.id}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.2 }}
+                className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-2 items-stretch"
+              >
+                {/* Left Column (5 Cols): Prophetic Painting + Vector Schematic */}
+                <div className="lg:col-span-5 flex flex-col gap-4">
+                  <div
+                    onClick={() => setLightboxEpoch(activeEpoch)}
+                    className="group relative rounded-2xl overflow-hidden border border-[#E4DCCB] dark:border-[#283C30] bg-stone-950 h-60 sm:h-68 cursor-pointer shadow-sm"
                   >
-                    STAGE {epoch.stageNumber}
-                  </text>
-                  <text
-                    x={cx}
-                    y={43}
-                    textAnchor="middle"
-                    fill="#FFFFFF"
-                    fontSize="8.5"
-                    fontFamily="sans-serif"
-                    fontWeight="bold"
-                  >
-                    {epoch.shortTitle}
-                  </text>
-
-                  {/* Center Glowing Node on Axis */}
-                  {isSelected && (
-                    <circle
-                      cx={cx}
-                      cy={110}
-                      r="18"
-                      fill={epoch.accentColor}
-                      fillOpacity="0.25"
+                    <img
+                      src={activeEpoch.imageSrc}
+                      alt={activeEpoch.title}
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                  )}
-                  <circle
-                    cx={cx}
-                    cy={110}
-                    r={isSelected ? '10' : '7'}
-                    fill={isSelected ? epoch.accentColor : '#0B2417'}
-                    stroke={isSelected ? '#FFFFFF' : epoch.accentColor}
-                    strokeWidth="2.2"
-                  />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setLightboxEpoch(activeEpoch);
+                      }}
+                      className="absolute top-3 right-3 px-2.5 py-1.5 rounded-lg bg-black/70 hover:bg-[#2C4A3E] text-white border border-white/20 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <Maximize2 size={12} />
+                      <span>Enlarge plate</span>
+                    </button>
+                    <div className="absolute bottom-0 inset-x-0 p-4 flex flex-col gap-1">
+                      <span className="text-xs font-mono font-bold text-[#E4DCCB]">
+                        Prophetic plate {activeEpoch.stageNumber} · {activeEpoch.scriptureRef}
+                      </span>
+                      <p className="text-xs text-stone-200 leading-snug">
+                        {activeEpoch.imageCaption}
+                      </p>
+                    </div>
+                  </div>
 
-                  {/* Bottom Reference Label */}
-                  <rect
-                    x={cx - 56}
-                    y={152}
-                    width="112"
-                    height="38"
-                    rx="7"
-                    fill={isSelected ? '#132A1D' : '#07140D'}
-                    stroke={isSelected ? epoch.accentColor : '#064E3B'}
-                    strokeWidth="1"
-                  />
-                  <text
-                    x={cx}
-                    y={167}
-                    textAnchor="middle"
-                    fill={isSelected ? '#FDE68A' : '#94A3B8'}
-                    fontSize="7.5"
-                    fontFamily="monospace"
-                    fontWeight="bold"
-                  >
-                    {epoch.eraLabel.split('·')[0].trim()}
-                  </text>
-                  <text
-                    x={cx}
-                    y={180}
-                    textAnchor="middle"
-                    fill={isSelected ? '#6EE7B7' : '#64748B'}
-                    fontSize="7.5"
-                    fontFamily="monospace"
-                  >
-                    {epoch.scriptureRef.split(';')[0]}
-                  </text>
-                </g>
-              );
-            })}
-          </svg>
-        </div>
-
-        {/* 7 Quick Selector Buttons */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
-          {PROPHETIC_EPOCHS_1844.map((epoch) => {
-            const isSelected = epoch.id === activeEpochId;
-            return (
-              <button
-                key={epoch.id}
-                type="button"
-                onClick={() => setActiveEpochId(epoch.id)}
-                className={cn(
-                  'p-2.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-1',
-                  isSelected
-                    ? 'bg-amber-400 text-stone-950 border-amber-300 font-bold shadow-md'
-                    : 'bg-white/[0.04] hover:bg-white/[0.09] text-stone-200 border-white/10'
-                )}
-              >
-                <span
-                  className={cn(
-                    'text-caption font-mono font-bold',
-                    isSelected ? 'text-stone-900' : 'text-amber-300'
-                  )}
-                >
-                  {epoch.stageNumber} · {epoch.eraLabel.split('·')[0].trim()}
-                </span>
-                <span className="text-xs font-semibold truncate">{epoch.shortTitle}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* ====================================================================
-            2. ACTIVE EPOCH ILLUSTRATED DOSSIER (PAINTING + VECTOR SCHEMATIC + COUNSEL)
-        ==================================================================== */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeEpoch.id}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2 }}
-            className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-2 items-stretch"
-          >
-            {/* Left Column (5 Cols): High-Res Prophetic Painting + Vector Schematic */}
-            <div className="lg:col-span-5 flex flex-col gap-4">
-              {/* Prophetic Painting Card with Fullscreen Lightbox Trigger */}
-              <div
-                onClick={() => setLightboxEpoch(activeEpoch)}
-                className="group relative rounded-2xl overflow-hidden border border-amber-500/35 bg-stone-950 h-60 sm:h-68 cursor-pointer shadow-lg"
-              >
-                <img
-                  src={activeEpoch.imageSrc}
-                  alt={activeEpoch.title}
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setLightboxEpoch(activeEpoch);
-                  }}
-                  className="absolute top-3 right-3 px-2.5 py-1.5 rounded-lg bg-black/70 hover:bg-amber-400 text-amber-200 hover:text-stone-950 border border-white/20 text-caption font-mono font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <Maximize2 size={12} />
-                  <span>Enlarge Plate</span>
-                </button>
-                <div className="absolute bottom-0 inset-x-0 p-4 flex flex-col gap-1">
-                  <span className="text-caption font-mono uppercase tracking-wider text-amber-300 font-bold">
-                    Prophetic Plate {activeEpoch.stageNumber} · {activeEpoch.scriptureRef}
-                  </span>
-                  <p className="text-xs text-stone-200 leading-snug">
-                    {activeEpoch.imageCaption}
-                  </p>
-                </div>
-              </div>
-
-              {/* Companion Custom Vector Schematic */}
-              <div className="rounded-2xl border border-emerald-800/70 bg-[#05110A] p-3 flex flex-col gap-1.5">
-                <div className="flex items-center justify-between text-caption font-mono text-emerald-300 px-1">
-                  <span>PROPHETIC VECTOR DIAGRAM</span>
-                  <span className="text-amber-300">{activeEpoch.egwCode}</span>
-                </div>
-                <div className="w-full h-44">
-                  <EpochVectorSchematic epochId={activeEpoch.id} />
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column (7 Cols): Scripture, Verbatim EGW Counsel & Malawi Outpost Directive */}
-            <div className="lg:col-span-7 rounded-2xl bg-[#06140D] border border-emerald-900/80 p-5 sm:p-7 flex flex-col justify-between gap-5">
-              <div className="flex flex-col gap-4">
-                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-emerald-900/70 pb-3">
-                  <span className="text-xs font-mono font-bold text-amber-300">
-                    STAGE {activeEpoch.stageNumber} · {activeEpoch.eraLabel}
-                  </span>
-                  <a
-                    href={activeEpoch.egwUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-xs font-mono text-emerald-300 hover:text-amber-300 hover:underline"
-                  >
-                    <span>Verify {activeEpoch.egwCode} on EGW Estate</span>
-                    <ExternalLink size={12} />
-                  </a>
+                  {/* Companion Custom Vector Schematic */}
+                  <div className="rounded-2xl border border-[#E4DCCB] dark:border-[#283C30] bg-[#FFFDF8] dark:bg-[#0E1712] p-3 flex flex-col gap-1.5 shadow-2xs">
+                    <div className="flex items-center justify-between text-xs font-mono text-[#5A6458] dark:text-[#9FB3A4] px-1">
+                      <span className="font-sans font-semibold">Prophetic vector diagram</span>
+                      <span className="font-bold">{activeEpoch.standardEgwCode}</span>
+                    </div>
+                    <div className="w-full h-44">
+                      <EpochVectorSchematic epochId={activeEpoch.id} />
+                    </div>
+                  </div>
                 </div>
 
-                <div>
-                  <h3 className="font-display text-2xl sm:text-3xl font-bold text-white leading-tight">
-                    {activeEpoch.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-emerald-300 font-medium mt-1">
-                    {activeEpoch.subtitle}
-                  </p>
+                {/* Right Column (7 Cols): Scripture, EGW Reference Counsel & Outpost Directive */}
+                <div className="lg:col-span-7 rounded-2xl bg-[#FFFDF8] dark:bg-[#132018] border border-[#E4DCCB] dark:border-[#283C30] p-5 sm:p-7 flex flex-col justify-between gap-5 shadow-xs">
+                  <div className="flex flex-col gap-4">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#E4DCCB] dark:border-[#283C30] pb-3">
+                      <span className="text-xs font-mono font-bold text-[#2C4A3E] dark:text-[#88B896]">
+                        Stage {activeEpoch.stageNumber} · {activeEpoch.eraLabel}
+                      </span>
+                      <a
+                        href={activeEpoch.egwUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-xs font-mono text-[#2C4A3E] dark:text-[#88B896] hover:underline"
+                      >
+                        <span>Standard EGW reference code: {activeEpoch.standardEgwCode}</span>
+                        <ExternalLink size={12} />
+                      </a>
+                    </div>
+
+                    <div>
+                      <h3 className="font-serif text-2xl sm:text-3xl font-normal text-[#1F2A22] dark:text-[#F6F1E7] leading-tight">
+                        {activeEpoch.title}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-[#5A6458] dark:text-[#C5D3C8] font-medium mt-1">
+                        {activeEpoch.subtitle}
+                      </p>
+                    </div>
+
+                    {/* Scripture Block */}
+                    <div className="p-4 rounded-xl bg-[#F6F1E7] dark:bg-[#0E1712] border border-[#E4DCCB] dark:border-[#283C30] flex flex-col gap-1.5">
+                      <span className="text-xs font-semibold text-[#2C4A3E] dark:text-[#88B896]">
+                        {activeEpoch.scriptureSource} · <span className="font-mono">{activeEpoch.scriptureRef}</span>
+                      </span>
+                      <p className="font-serif text-sm italic text-[#1F2A22] dark:text-[#F6F1E7] leading-relaxed">
+                        “{activeEpoch.scriptureText}”
+                      </p>
+                    </div>
+
+                    {/* Standard EGW Quote Verification Block */}
+                    {(() => {
+                      const q = getQuoteById(activeEpoch.quoteId);
+                      if (q && q.verifiedBy !== null) {
+                        return (
+                          <blockquote className="border-l-2 border-[#2C4A3E] dark:border-[#88B896] pl-4 py-1 flex flex-col gap-1.5">
+                            <p className="font-serif text-sm sm:text-base italic text-[#1F2A22] dark:text-[#F6F1E7] leading-relaxed">
+                              “{q.text}”
+                            </p>
+                            <footer className="text-xs text-[#5A6458] dark:text-[#9FB3A4]">
+                              — Ellen G. White, {q.source} (<span className="font-mono font-semibold">{q.standardEgwCode}</span>) · <span className="text-[#2C4A3E] dark:text-[#88B896]">Verified by {q.verifiedBy}</span>
+                            </footer>
+                          </blockquote>
+                        );
+                      }
+                      return (
+                        <div className="p-4 rounded-xl bg-[#F6F1E7] dark:bg-[#0E1712] border border-[#E4DCCB] dark:border-[#283C30] flex flex-col gap-2">
+                          <div className="flex items-center justify-between gap-2 text-xs">
+                            <span className="font-semibold text-[#1F2A22] dark:text-[#F6F1E7]">
+                              Standard EGW reference code: <span className="font-mono font-bold text-[#2C4A3E] dark:text-[#88B896]">{activeEpoch.standardEgwCode}</span>
+                            </span>
+                            <span className="px-2 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-800 dark:text-amber-300 font-mono text-xs">
+                              Pending verification
+                            </span>
+                          </div>
+                          <p className="text-xs text-[#5A6458] dark:text-[#C5D3C8] leading-relaxed">
+                            This passage is registered in the verified quote store (<code className="font-mono">src/data/sources/quotes.ts</code>) and listed in <code className="font-mono font-semibold">QUOTES_TO_VERIFY.md</code>. In accordance with strict verification policy, the quote text remains hidden until verified against standard print editions.
+                          </p>
+                          <a
+                            href={activeEpoch.egwUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-xs text-[#2C4A3E] dark:text-[#88B896] hover:underline font-medium self-start pt-1"
+                          >
+                            <span>Review {activeEpoch.standardEgwCode} on EGW Writings</span>
+                            <ExternalLink size={12} />
+                          </a>
+                        </div>
+                      );
+                    })()}
+
+                    {/* Historical & Prophetic Explanation */}
+                    <div className="flex flex-col gap-1">
+                      <span className="text-xs font-semibold text-[#5A6458] dark:text-[#9FB3A4]">
+                        Adventist perspective
+                      </span>
+                      <p className="text-xs sm:text-sm text-[#3E4D40] dark:text-[#C5D3C8] leading-relaxed">
+                        {activeEpoch.theologicalSignificance}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Practical Malawi Homestead Action Box */}
+                  <div className="p-4 rounded-2xl bg-[#F6F1E7] dark:bg-[#0E1712] border border-[#E4DCCB] dark:border-[#283C30] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-xs font-semibold text-[#2C4A3E] dark:text-[#88B896] flex items-center gap-1.5">
+                        <Compass size={13} />
+                        <span>Application for country living</span>
+                      </span>
+                      <p className="text-xs text-[#1F2A22] dark:text-[#F6F1E7] leading-relaxed">
+                        {activeEpoch.countryLivingDirective}
+                      </p>
+                    </div>
+
+                    <Link
+                      to={activeEpoch.actionLink.to}
+                      className="px-4 py-2.5 rounded-xl bg-[#2C4A3E] hover:bg-[#233B31] text-white font-semibold text-xs flex items-center gap-1.5 shrink-0 transition-colors whitespace-nowrap cursor-pointer shadow-xs"
+                    >
+                      <span>{activeEpoch.actionLink.label}</span>
+                      <ArrowRight size={14} />
+                    </Link>
+                  </div>
                 </div>
-
-                {/* KJV Scripture Block */}
-                <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 flex flex-col gap-1">
-                  <span className="text-caption font-mono font-bold text-amber-300">
-                    BIBLICAL FOUNDATION · {activeEpoch.scriptureRef} (KJV)
-                  </span>
-                  <p className="font-serif text-sm italic text-stone-100 leading-relaxed">
-                    “{activeEpoch.scriptureText}”
-                  </p>
-                </div>
-
-                {/* Verbatim Spirit of Prophecy Counsel */}
-                <blockquote className="border-l-2 border-emerald-400 pl-4 py-1 flex flex-col gap-1.5">
-                  <p className="font-serif text-sm sm:text-base italic text-stone-100 leading-relaxed">
-                    “{activeEpoch.egwQuote}”
-                  </p>
-                  <footer className="text-xs text-amber-300 font-semibold">
-                    — Ellen G. White, {activeEpoch.egwSource} ({activeEpoch.egwCode})
-                  </footer>
-                </blockquote>
-
-                {/* Historical & Prophetic Explanation */}
-                <div className="flex flex-col gap-1">
-                  <span className="text-xs font-mono font-bold text-emerald-300">
-                    Prophetic Fulfillment &amp; Context
-                  </span>
-                  <p className="text-xs sm:text-sm text-stone-300 leading-relaxed">
-                    {activeEpoch.theologicalSignificance}
-                  </p>
-                </div>
-              </div>
-
-              {/* Practical Malawi Homestead Action Box */}
-              <div className="p-4 rounded-2xl bg-emerald-950/60 border border-emerald-700/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="flex flex-col gap-1">
-                  <span className="text-caption font-mono font-bold text-amber-300 flex items-center gap-1.5">
-                    <Compass size={13} />
-                    <span>Malawi Country Living Application</span>
-                  </span>
-                  <p className="text-xs text-stone-200 leading-relaxed">
-                    {activeEpoch.countryLivingDirective}
-                  </p>
-                </div>
-
-                <Link
-                  to={activeEpoch.actionLink.to}
-                  className="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs flex items-center gap-1.5 shrink-0 transition-colors whitespace-nowrap"
-                >
-                  <span>{activeEpoch.actionLink.label}</span>
-                  <ArrowRight size={14} />
-                </Link>
-              </div>
-            </div>
-          </motion.div>
-        </AnimatePresence>
+              </motion.div>
+            </AnimatePresence>
           </>
         )}
       </div>
@@ -1220,19 +1218,31 @@ export function PropheticTimeline1844() {
                 />
               </div>
 
-              <div className="p-5 bg-[#07150E] flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-stone-200">
+              <div className="p-5 bg-[#FFFDF8] dark:bg-[#132018] border-t border-[#E4DCCB] dark:border-[#283C30] flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-[#1F2A22] dark:text-[#F6F1E7]">
                 <div className="flex flex-col gap-1 max-w-3xl">
-                  <p className="font-serif italic text-amber-200 text-sm">
-                    “{lightboxEpoch.egwQuote}” — {lightboxEpoch.egwSource}
-                  </p>
-                  <p className="text-stone-400">{lightboxEpoch.imageCaption}</p>
+                  {(() => {
+                    const q = getQuoteById(lightboxEpoch.quoteId);
+                    if (q && q.verifiedBy !== null) {
+                      return (
+                        <p className="font-serif italic text-sm text-[#1F2A22] dark:text-[#F6F1E7]">
+                          “{q.text}” — {q.source} ({q.standardEgwCode})
+                        </p>
+                      );
+                    }
+                    return (
+                      <p className="text-xs text-[#5A6458] dark:text-[#9FB3A4]">
+                        Standard EGW reference code: <span className="font-mono font-bold text-[#1F2A22] dark:text-[#F6F1E7]">{lightboxEpoch.standardEgwCode}</span> · Pending verification in QUOTES_TO_VERIFY.md
+                      </p>
+                    );
+                  })()}
+                  <p className="text-xs text-[#5A6458] dark:text-[#9FB3A4]">{lightboxEpoch.imageCaption}</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setLightboxEpoch(null)}
-                  className="px-4 py-2 rounded-xl bg-amber-400 text-stone-950 font-bold shrink-0 cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-[#2C4A3E] hover:bg-[#233B31] text-white font-semibold text-xs shrink-0 cursor-pointer shadow-xs"
                 >
-                  Close Plate
+                  Close plate
                 </button>
               </div>
             </motion.div>

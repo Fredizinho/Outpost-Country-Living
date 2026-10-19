@@ -631,14 +631,14 @@ Generated from OUTPOST: Country Living Matrix
         <aside className="flex flex-col gap-6">
           <div className="bg-[#0B2517] p-6 sm:p-8 rounded-3xl border border-emerald-800 shadow-md text-white">
             <div className="flex items-center justify-between gap-2 mb-2">
-              <span className="text-xs font-sans font-bold uppercase tracking-widest text-amber-300">Verbatim Counsel · Ev 77.1</span>
+              <span className="text-xs font-sans font-semibold text-amber-300">Standard EGW reference code · Ev 77.1</span>
               <a
                 href="https://m.egwwritings.org/en/book/30.391"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs font-mono text-emerald-300 hover:text-amber-300 underline"
               >
-                Verify on EGW Estate ↗
+                EGW writings archive ↗
               </a>
             </div>
             <h4 className="serif text-xl font-bold mb-3 italic text-white">The Outpost Principle</h4>

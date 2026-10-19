@@ -1030,7 +1030,7 @@ export function SettingsAndAboutModal({
                         <span>Inspired Blueprint</span>
                       </div>
                       <p className="text-stone-300/85 leading-relaxed">
-                        Built upon the Avondale &amp; Madison outpost model, verbatim Ellen G. White counsels, and the 1844 Sanctuary message.
+                        Built upon the Avondale and Madison outpost model, Ellen G. White counsels, and the 1844 sanctuary message.
                       </p>
                     </div>
                   </div>

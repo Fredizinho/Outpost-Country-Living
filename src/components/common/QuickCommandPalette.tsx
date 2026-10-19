@@ -193,9 +193,9 @@ const COMMAND_REGISTRY: CommandItem[] = [
   },
   {
     id: 'country-vision',
-    title: 'The Inspired Blueprint — Verbatim EGW Archive',
+    title: 'The inspired blueprint — Spirit of Prophecy archive',
     category: 'Spiritual & Fellowship',
-    subtitle: 'Searchable archive of Ellen G. White counsels with live KJV Scripture verification',
+    subtitle: 'Searchable archive of Ellen G. White counsels with Scripture from King James Version',
     path: '/vision',
     icon: BookOpen,
     keywords: ['vision', 'ellen white', 'egw', 'counsel', 'country living', 'ministry of healing'],
