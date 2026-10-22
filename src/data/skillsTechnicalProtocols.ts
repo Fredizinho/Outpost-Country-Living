@@ -597,62 +597,62 @@ export const SKILL_TECHNICAL_PROTOCOLS: Record<string, DetailedSkillProtocol> = 
       ]
     },
     materials: [
-      { name: 'Bible (KJV) & Spirit of Prophecy Education Library', localAvailability: 'Malawi Union / ABC Bookstores & Offline Digital Archive', purpose: 'Foundational morning study in sacred history, prophecy, physiology, and nature parables' },
-      { name: 'Junior Broadfork, Light Hoe (Khasu) & Steel Rake', localAvailability: 'Local blacksmith forged to child/youth height', purpose: 'Cultivating individual 25m² student garden plots without spinal strain' },
-      { name: 'Double-Entry Homestead Ledger & Measuring Tape', localAvailability: 'Stationery suppliers (Blantyre / Lilongwe / Mzuzu)', purpose: 'Teaching practical arithmetic, seed-to-harvest yields, tithe calculation, and debt-free bookkeeping' },
-      { name: 'Hand Carpentry Toolkit (Tenon Saw, Chisel, Jack Plane, Try-Square)', localAvailability: 'Hardware stores & rural tool markets', purpose: 'Afternoon vocational training in timber joinery, beehive building, and roof framing' },
-      { name: 'Soil pH Test Strips, Hand Lens (10x) & Rain Gauge', localAvailability: 'Agricultural supply depots', purpose: 'Connecting botany, soil biology, and meteorology directly to field observation' }
+      { name: 'Bible and Spirit of Prophecy Books', localAvailability: 'Malawi ABC Bookstores and Offline Library', purpose: 'Morning Bible study, nature parables, and health laws' },
+      { name: 'Junior Garden Fork, Hoe, and Rake', localAvailability: 'Local blacksmith forged to child height', purpose: 'Working youth garden beds comfortably without back strain' },
+      { name: 'Paper Ledger and Tape Measure', localAvailability: 'Local stationery shops', purpose: 'Learning practical math, crop yields, and family bookkeeping' },
+      { name: 'Hand Woodworking Tools', localAvailability: 'Hardware shops and rural tool markets', purpose: 'Teaching practical woodwork, timber joinery, and beehive building' },
+      { name: 'Soil Test Paper and Hand Lens', localAvailability: 'Farm supply shops', purpose: 'Studying soil health and plant growth directly in garden beds' }
     ],
     protocol: [
       {
         stepNumber: 1,
-        phase: 'Morning Sacred & Scientific Foundation (08:00–11:30)',
-        title: 'Conduct Morning Worship, Physiology & Practical Mathematics',
+        phase: 'Morning Study Block (08:00–11:30)',
+        title: 'Morning Worship, Health, and Practical Math',
         timing: 'Daily 08:00 – 11:30',
         seasonalWindow: 'Year-Round / Any Season',
-        instructions: 'Begin at sunrise with family worship, Scripture memorization, and sacred singing. Dedicate 08:00–11:30 to high-focus mental work: Bible history, human physiology and hygiene, practical geometry/arithmetic applied to building and land measurement, and agricultural botany.',
-        criticalCheck: 'Ensure study room has cross-ventilation and natural daylight; pause every 50 minutes for 10 minutes of deep breathing and calisthenics.'
+        instructions: 'Begin at sunrise with family worship and sacred singing. Use morning hours for Bible history, health laws, reading, and practical math. Step outside for fresh air every hour.',
+        criticalCheck: 'Study rooms must have plenty of open windows and daylight.'
       },
       {
         stepNumber: 2,
-        phase: 'Individual Student Plot Stewardship',
-        title: 'Survey & Cultivate Dedicated 5m × 5m Youth Garden Plots',
-        timing: 'Daily 11:30 – 12:15',
+        phase: 'Student Garden Care (11:30–12:30)',
+        title: 'Care for Individual Youth Garden Plots',
+        timing: 'Daily 11:30 – 12:30',
         seasonalWindow: 'Year-Round / Any Season',
-        instructions: 'Assign each child or youth a staked 5m × 5m garden plot. Guide them to test soil texture, apply 10cm of compost and leaf mulch, sow heirloom vegetables and legumes, and manage drip/watering schedules independently.',
-        criticalCheck: 'Parents and teachers must work alongside students with their own hands, dignifying labor as noble co-working with God.'
+        instructions: 'Give each youth a small garden plot. Guide them to add compost and mulch. Children plant seeds, water beds, and weed their own vegetables.',
+        criticalCheck: 'Parents work alongside children, showing that honest outdoor labor is noble and good.'
       },
       {
         stepNumber: 3,
         phase: 'Vocational Trade Rotation (13:30–16:30)',
-        title: 'Apprentice in Carpentry, Masonry, Tailoring & Hydrotherapy',
+        title: 'Apprentice in Practical Crafts',
         timing: 'Daily 13:30 – 16:30',
         seasonalWindow: 'Year-Round / Any Season',
-        instructions: 'Rotate older children and youth through 6-week practical trade modules: (1) Carpentry & furniture joinery, (2) Compressed Earth Block (CEB) masonry, (3) Fruit tree grafting & nursery care, (4) Treadle sewing & garment making, (5) Hygienic breadmaking & food preservation, and (6) Simple hydrotherapy & first aid.',
-        criticalCheck: 'Every student must produce functional, durable homestead goods rather than mere theoretical exercises.'
+        instructions: 'Teach useful trades every afternoon. Rotate youth through carpentry, brick making, tree grafting, sewing, and first aid.',
+        criticalCheck: 'Youth must build real, durable items for the home and farm.'
       },
       {
         stepNumber: 4,
-        phase: 'Double-Entry Bookkeeping & Economic Stewardship',
-        title: 'Log Harvest Weights, Expenses & Tithe in Farm Ledgers',
+        phase: 'Farm Ledger Bookkeeping',
+        title: 'Track Harvest Weights and Tithe',
         timing: 'Weekly (Friday Morning)',
         seasonalWindow: 'Year-Round / Any Season',
-        instructions: 'Have students weigh harvested produce from their plots, calculate input costs vs. market value, set aside 10% sacred tithe and freewill offerings, and balance their personal account ledger to master debt-free financial stewardship.',
-        criticalCheck: 'Verify mathematical accuracy and reinforce the counsel: "Owe no man anything."'
+        instructions: 'Students weigh garden crops and write numbers in a farm ledger. They calculate costs, set aside ten percent tithe, and practice debt-free living.',
+        criticalCheck: 'Teach children to keep accounts carefully and avoid all debt.'
       }
     ],
     troubleshooting: [
       {
-        pitfall: 'Treating Manual Labor as Drudgery or Punishment',
-        symptom: 'Youth resent garden and workshop hours, viewing book learning as superior to hand labor',
-        rootCause: 'Adults sitting idle or issuing commands from the shade instead of sharing joyfully in the physical work and explaining the science behind every task',
-        fieldRemedy: 'Teachers and parents must lead with tool in hand, turning every furrow, graft, and mortise joint into a living object lesson in natural law.'
+        pitfall: 'Treating Manual Labor as Drudgery',
+        symptom: 'Children dislike garden work and prefer indoor books',
+        rootCause: 'Adults giving orders from the shade instead of working joyfully alongside youth.',
+        fieldRemedy: 'Work together with tools in hand. Explain how nature laws teach spiritual lessons.'
       },
       {
-        pitfall: 'Mental Exhaustion from Unbalanced Book Cramming',
-        symptom: 'Headaches, sluggish digestion, irritability, and myopia in children',
-        rootCause: 'Exceeding 3.5 hours of sedentary indoor textbook study without outdoor muscular exercise and oxygen circulation',
-        fieldRemedy: 'Strictly enforce the half-day mental, half-day manual balance counselled in Testimonies Vol. 6 and Education.'
+        pitfall: 'Tiredness from Too Much Sitting Indoors',
+        symptom: 'Headaches and restless energy in children',
+        rootCause: 'Studying indoors too long without fresh air and active manual work.',
+        fieldRemedy: 'Balance book study with outdoor work every day: half day mental, half day manual.'
       }
     ],
     calculator: {
@@ -782,7 +782,7 @@ export const SKILL_TECHNICAL_PROTOCOLS: Record<string, DetailedSkillProtocol> = 
         title: 'Pyrolyze Clean Hardwood in Sealed Retort Tin & Pulverize',
         timing: '2 Hours (Stockpile in Advance)',
         seasonalWindow: 'Year-Round / Any Season',
-        instructions: 'Pack debarked, unpainted eucalyptus or fruitwood billets tightly into a metal tin with a tight lid pierced by a single 3mm nail hole. Place in a hot campfire for 60 minutes until smoke jet turns clear/stops. Plug hole with mud, let cool completely airtight, then grind in a clean mortar and sieve through fine muslin.',
+        instructions: 'Pack clean wood billets tightly into a metal tin with a small hole in the lid. Heat in a hot fire for one hour until smoke stops. Cool airtight, grind fine, and sift.',
         criticalCheck: 'Store pulverized charcoal in sealed glass jars; exposure to damp air prematurely saturates its microscopic adsorption pores.'
       },
       {
@@ -800,7 +800,7 @@ export const SKILL_TECHNICAL_PROTOCOLS: Record<string, DetailedSkillProtocol> = 
         title: 'Apply 3 Alternations of Steaming Wool & Brief Cold Friction',
         timing: '15–20 Minutes Total',
         seasonalWindow: 'Year-Round / Any Season',
-        instructions: 'Fold a wet towel inside a dry wool flannel cover and steam or wring from boiling water. Place over a dry towel on the patient’s chest, back, or abdomen for 3 minutes. Lift fomentation, immediately rub skin briskly for 30 seconds with a cloth wrung from cold water, dry quickly, and apply the next hot fomentation. Complete 3 full cycles.',
+        instructions: 'Fold a damp steaming towel inside a wool cover. Place on the chest for three minutes. Wipe skin briskly with a cold cloth for thirty seconds. Repeat three times.',
         criticalCheck: 'Never leave the skin chilled; always finish on the brief cold friction rub followed by immediate thorough drying and warm covering.'
       },
       {
@@ -809,7 +809,7 @@ export const SKILL_TECHNICAL_PROTOCOLS: Record<string, DetailedSkillProtocol> = 
         title: 'Mix Charcoal-Cassava Paste & Apply Over Inflammation or Bite',
         timing: '4–8 Hours (or Overnight)',
         seasonalWindow: 'Year-Round / Any Season',
-        instructions: 'Stir 3 tbsp pulverized charcoal and 3 tbsp ground flaxseed or fine cassava meal into 150ml boiling water until it forms a thick paste. Spread 6mm thick on the center of a clean cotton cloth, fold all 4 edges inward to enclose the paste, apply warm to the boil, infected wound, or sting, cover with plastic film to retain moisture, and bind with a dry cloth.',
+        instructions: 'Stir three spoonfuls of charcoal and ground flaxseed into warm water to make a thick paste. Spread on cloth, fold edges in, place on the bite, and wrap.',
         criticalCheck: 'Do not apply raw black charcoal powder directly into deep open surgical wounds where tattooing could occur—always enclose inside the porous cotton poultice cloth.'
       }
     ],
@@ -956,7 +956,7 @@ export const SKILL_TECHNICAL_PROTOCOLS: Record<string, DetailedSkillProtocol> = 
         title: 'Leach White Hardwood Ash with Rainwater to Specific Gravity 1.08',
         timing: 'Day 1 (24 Hours Drip)',
         seasonalWindow: 'Year-Round / Any Season',
-        instructions: 'Place a wooden or heavy plastic barrel on brick piers over a stainless or glass collection basin. Pack a 10cm layer of washed river pebbles at the bottom spigot, topped with 10cm of crisscrossing dry straw. Pack barrel tightly with cold, white sifted hardwood ash. Pour soft rainwater slowly into a hollow depression on top until amber lye drips out bottom.',
+        instructions: 'Place a barrel on bricks over a basin. Put pebbles and straw at the bottom spigot. Pack with white wood ash. Pour soft rainwater slowly over ash until amber lye drips out.',
         criticalCheck: 'Float a fresh raw chicken egg or peeled potato cube in the collected lye: if it sinks, pour the lye back through fresh ash; when a coin-sized circle floats above the surface, concentration is exact.'
       },
       {
@@ -965,7 +965,7 @@ export const SKILL_TECHNICAL_PROTOCOLS: Record<string, DetailedSkillProtocol> = 
         title: 'Simmer Lye & Homestead Oils in Stainless Pot Until Trace',
         timing: 'Day 2 (2.5–3 Hours)',
         seasonalWindow: 'Year-Round / Any Season',
-        instructions: 'Pour 2L strained potash lye and 1.5L warm sunflower/moringa oil (plus 100g melted beeswax for hardness) into a heavy stainless steel or cast-iron pot (NEVER aluminum). Bring to a gentle simmer outdoors, stirring frequently for 2.5 hours until the mixture thickens into a translucent gel that ribbons off the wooden spoon without oil separation.',
+        instructions: 'Pour two liters lye and one and a half liters warm sunflower oil into an iron pot. Simmer gently outdoors for two hours until thick and creamy.',
         criticalCheck: 'Stir in 3 tbsp dissolved sea salt during the final 20 minutes to convert portion of soft potassium soap into firmer sodium soap bars, plus 2 tbsp neem powder.'
       },
       {
@@ -983,7 +983,7 @@ export const SKILL_TECHNICAL_PROTOCOLS: Record<string, DetailedSkillProtocol> = 
         title: 'Oil Treadle Bearings & Sew Shoulder-Supported Work Apparel',
         timing: 'Weekly Domestic Workshop',
         seasonalWindow: 'Year-Round / Any Season',
-        instructions: 'Clean lint from the shuttle race of the foot-treadle sewing machine and apply 1 drop of fine oil to all moving pivot bearings. Draft family work trousers, aprons, and modest dresses from breathable cotton twill, using button-on shoulder straps or yokes so garment weight rests on the shoulders rather than constricting the waist and diaphragm.',
+        instructions: 'Clean and oil the foot-treadle sewing machine weekly. Sew family work garments from breathable cotton. Use shoulder straps so clothes do not constrict the waist.',
         criticalCheck: 'Ensure ankles and wrists are protected during cool highland mornings and field work, fulfilling the healthful dress principles of Education (p. 248).'
       }
     ],

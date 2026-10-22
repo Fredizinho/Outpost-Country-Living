@@ -21,6 +21,7 @@ import {
   SanctuarySectionHeader, 
   SanctuaryStatBox 
 } from '@/components/ui';
+import { StandardDiagram } from '@/components/common/StandardDiagram';
 import { 
   DISTRICT_RAINFALL_PRESETS, 
   HOMESTEAD_WATER_CONSTANTS,
@@ -84,6 +85,8 @@ export default function Calculators() {
     return p?.rainfall || 1100;
   }); // Dedza default mm
   const [districtPreset, setDistrictPreset] = useState<string>(initialDistrict);
+  const [showRoofDiagram, setShowRoofDiagram] = useState(false);
+  const [showPitDiagram, setShowPitDiagram] = useState(false);
 
   useEffect(() => {
     const onGlobalDistrict = (e: Event) => {
@@ -810,6 +813,23 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
                   </span>
                 </div>
               </div>
+
+              <div className="flex items-center justify-between pt-2 border-t border-white/10 text-caption font-mono">
+                <button
+                  type="button"
+                  onClick={() => setShowPitDiagram(!showPitDiagram)}
+                  className="text-amber-300 hover:text-amber-200 underline font-bold cursor-pointer inline-flex items-center gap-1"
+                >
+                  <Layers size={13} />
+                  <span>{showPitDiagram ? 'Hide Excavation Schematic' : 'View Excavation Schematic (SVG)'}</span>
+                </button>
+                <span className="text-emerald-300/70">Scale: 90×90×90 cm [3×3×3 ft]</span>
+              </div>
+              {showPitDiagram && (
+                <div className="mt-2 pt-2 border-t border-white/10 rounded-xl overflow-hidden bg-black/40 p-2">
+                  <StandardDiagram type="planting-pit" className="bg-transparent border-0" />
+                </div>
+              )}
             </div>
           </div>
 
@@ -984,23 +1004,44 @@ OUTPOST: COUNTRY LIVING - Malawi Sanctuary & Self-Reliance Blueprint
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-black/30 p-5 rounded-2xl border border-amber-500/20 flex flex-col gap-1">
                   <span className="text-caption font-mono font-black uppercase text-amber-300">Annual Catchment Harvest</span>
-                  <span className="serif text-3xl font-bold text-amber-300">
+                  <span className="serif text-3xl font-bold text-amber-300 font-mono">
                     {harvestableVolumeLiters.toLocaleString()} L
                   </span>
-                  <span className="text-caption text-emerald-200 font-mono">Based on 85% corrugated sheet efficiency</span>
+                  <span className="text-caption text-emerald-200 font-mono">
+                    [{Math.round(harvestableVolumeLiters * 0.264172).toLocaleString()} gal] · 85% sheet runoff
+                  </span>
                 </div>
 
                 <div className="bg-black/30 p-5 rounded-2xl border border-amber-500/20 flex flex-col gap-1">
                   <span className="text-caption font-mono font-black uppercase text-emerald-300">Recommended Tank Capacity</span>
-                  <span className="serif text-3xl font-bold text-white">
+                  <span className="serif text-3xl font-bold text-white font-mono">
                     {recommendedCisternLiters.toLocaleString()} L
                   </span>
-                  <span className="text-caption text-emerald-200 font-mono">e.g. {Math.ceil(recommendedCisternLiters / 5000)}x 5,000L Tanks</span>
+                  <span className="text-caption text-emerald-200 font-mono">
+                    [{Math.round(recommendedCisternLiters * 0.264172).toLocaleString()} gal] · {Math.ceil(recommendedCisternLiters / 5000)}× 5,000 L tanks
+                  </span>
                 </div>
               </div>
 
-              <div className="mt-6 bg-white/5 p-4 rounded-2xl border border-amber-500/15 text-xs text-emerald-100/90 font-medium leading-relaxed">
-                <strong className="text-amber-300">First-Flush Diverter Strategy:</strong> Install a 20-liter PVC first-flush pipe to catch dusty initial roof runoff before diverting clean water directly into your food-grade storage tanks.
+              <div className="mt-4 flex items-center justify-between text-caption font-mono">
+                <button
+                  type="button"
+                  onClick={() => setShowRoofDiagram(!showRoofDiagram)}
+                  className="text-amber-300 hover:text-amber-200 underline font-bold cursor-pointer inline-flex items-center gap-1"
+                >
+                  <Layers size={13} />
+                  <span>{showRoofDiagram ? 'Hide Engineering Schematic' : 'View Roof Tank Engineering Schematic (SVG)'}</span>
+                </button>
+                <span className="text-emerald-300/70">First-Flush &amp; Cistern</span>
+              </div>
+              {showRoofDiagram && (
+                <div className="mt-3 rounded-xl overflow-hidden bg-black/40 p-2 border border-amber-500/20">
+                  <StandardDiagram type="roof-tank" className="bg-transparent border-0" />
+                </div>
+              )}
+
+              <div className="mt-4 bg-white/5 p-4 rounded-2xl border border-amber-500/15 text-xs text-emerald-100/90 font-medium leading-relaxed">
+                <strong className="text-amber-300">First-Flush Diverter Strategy:</strong> Install a 20 L [5.3 gal] PVC first-flush pipe to catch dusty initial roof runoff before diverting clean water directly into your food-grade storage tanks.
               </div>
 
               {/* Dry-Season Dimba (Chilimwe) Garden Irrigation Sizer */}

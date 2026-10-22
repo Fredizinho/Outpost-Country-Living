@@ -563,6 +563,9 @@ export function SoilScienceGuide() {
                   <span className="text-caption font-bold text-emerald-300 uppercase tracking-wider block">
                     Stewardship Score
                   </span>
+                  <span className="text-[10px] text-slate-400 block mt-0.5">
+                    Formula: pH (30%) + Humus (30%) + Worms (20%) + Biology (20%)
+                  </span>
                 </div>
               </div>
 
@@ -576,6 +579,12 @@ export function SoilScienceGuide() {
                   <span className="text-amber-400 font-bold block text-caption uppercase">Humus & Biology Rating:</span>
                   {evaluation.humusStatus}
                 </div>
+              </div>
+
+              {/* Transparent Score Formula Details */}
+              <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800 text-[11px] text-slate-300 leading-relaxed">
+                <span className="font-bold text-emerald-400 block mb-0.5">Stewardship Score Formula:</span>
+                Calculated directly from measurable field indicators: soil pH balance (up to 30 points) + organic matter percentage (up to 30 points) + earthworm count per spade (up to 20 points) + vetiver hedges &amp; living legume cover (20 points). Minus 25 points if synthetic chemical burns are present.
               </div>
             </div>
 

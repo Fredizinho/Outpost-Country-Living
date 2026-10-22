@@ -295,7 +295,7 @@ const APOTHECARY_REMEDIES: ApothecaryRemedy[] = [
     partUsed: 'Freshly grated Zingiber officinale (Ginger) and Curcuma longa (Turmeric) rhizomes',
     primaryUses: 'Sluggish peripheral circulation, arthritic joint stiffness, sore muscles after heavy hoeing, and non-broken sprains.',
     preparationProtocol: 'Simmer 2 tablespoons grated fresh ginger and 1 tablespoon turmeric in 1 liter of water for 10 minutes (covered). Dip a folded cotton cloth into the hot decoction, wring out, and apply over the stiff joint or kidney/lumbar region for 15 minutes, followed by a brisk cool wipe.',
-    egwOrScientificNote: 'Gingerols and curcuminoids inhibit COX-2 inflammatory pathways locally while stimulating cutaneous micro-circulation without gastric irritation.',
+    egwOrScientificNote: 'A traditional warm compress. Stop if your skin gets sore, and see a clinic if pain or swelling continues.',
   },
   {
     id: 'guava-leaf-tea',

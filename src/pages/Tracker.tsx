@@ -60,11 +60,11 @@ const ICON_MAP: Record<string, any> = {
   exodus: Mountain,
 };
 
-const KANBAN_COLUMNS: { id: KanbanColumnId; label: string; dotColor: string; description: string }[] = [
-  { id: 'todo', label: 'To Do', dotColor: 'bg-rose-500', description: 'City exit, finance clearance & pantry reserves' },
-  { id: 'inprogress', label: 'In Progress', dotColor: 'bg-amber-400', description: 'Solar array, deep pits & water piping' },
-  { id: 'scouting', label: 'Site Review & Scouting', dotColor: 'bg-cyan-400', description: 'Traditional authority, soils & aquifer depth' },
-  { id: 'completed', label: 'Completed', dotColor: 'bg-emerald-500', description: 'Verified homestead milestones grounded' },
+const KANBAN_COLUMNS: { id: KanbanColumnId; stageNumber: string; label: string; description: string }[] = [
+  { id: 'todo', stageNumber: '01', label: 'To Do', description: 'City exit, finance clearance & pantry reserves' },
+  { id: 'inprogress', stageNumber: '02', label: 'In Progress', description: 'Solar array, deep pits & water piping' },
+  { id: 'scouting', stageNumber: '03', label: 'Site Review & Scouting', description: 'Traditional authority, soils & aquifer depth' },
+  { id: 'completed', stageNumber: '04', label: 'Completed', description: 'Verified homestead milestones grounded' },
 ];
 
 export default function Tracker() {
@@ -539,12 +539,14 @@ export default function Tracker() {
                     {/* Column Header */}
                     <div className="flex items-center justify-between pb-2 border-b border-[#E4DCCB] dark:border-[#283C30]">
                       <div className="flex items-center gap-2">
-                        <span className={cn('w-2 h-2 rounded-full shrink-0', col.dotColor)} />
+                        <span className="font-mono text-caption text-[#B85D36] dark:text-[#E2875A] font-bold">
+                          {col.stageNumber}
+                        </span>
                         <h2 className="font-serif text-sm font-bold text-[#1F2A22] dark:text-[#FFFDF8]">
                           {col.label}
                         </h2>
                         <span className="font-mono text-xs font-semibold text-[#5A6458] dark:text-[#9FB3A4]">
-                          {colTasks.length}
+                          ({colTasks.length})
                         </span>
                       </div>
 
@@ -604,19 +606,22 @@ export default function Tracker() {
 
                             {/* Top Row: Priority & Phase Metadata */}
                             <div className="flex items-center justify-between gap-2 text-xs">
-                              <div className="flex items-center gap-1.5">
+                              <div className="flex items-center gap-1.5 font-mono text-caption font-semibold">
                                 <span
                                   className={cn(
-                                    'w-2 h-2 rounded-full',
+                                    'font-bold',
                                     task.priority === 'high'
-                                      ? 'bg-rose-500'
+                                      ? 'text-rose-600 dark:text-rose-400'
                                       : task.priority === 'medium'
-                                      ? 'bg-[#E2875A]'
-                                      : 'bg-[#4E6B5D]'
+                                      ? 'text-[#B85D36] dark:text-[#E2875A]'
+                                      : 'text-[#4E6B5D] dark:text-[#9FB3A4]'
                                   )}
-                                />
-                                <span className="font-mono text-caption font-semibold text-[#5A6458] dark:text-[#9FB3A4]">
-                                  {task.priority.toUpperCase()} · {task.stepTitle}
+                                >
+                                  [{task.priority.toUpperCase()}]
+                                </span>
+                                <span className="text-[#5A6458] dark:text-[#9FB3A4]">·</span>
+                                <span className="text-[#5A6458] dark:text-[#9FB3A4] truncate max-w-[140px]">
+                                  {task.stepTitle}
                                 </span>
                               </div>
 

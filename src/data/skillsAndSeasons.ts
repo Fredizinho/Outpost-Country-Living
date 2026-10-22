@@ -339,25 +339,25 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Beginner',
     timeToMaster: '3 Weeks',
     iconName: 'compost',
-    summary: 'Constructing high-temperature thermal compost heaps with a balanced 30:1 Carbon-to-Nitrogen ratio, reaching 55°C–65°C to destroy weed seeds and pathogens, creating dark nutrient-dense humus in 6–8 weeks.',
-    description: 'Hot thermophilic composting harnesses aerobic bacteria, actinomycetes, and fungi to rapidly break down organic waste. By alternating carbon-rich brown materials (dry maize stalks, straw, dry leaves) with nitrogen-rich greens (fresh manure, green weeds, kitchen waste, legume cuttings) and keeping moisture at 50–60%, temperatures climb to 55°C–65°C within 72 hours. This heat sterilizes pest larvae and weed seeds while concentrating minerals into bio-available microbial humus.',
+    summary: 'Build hot compost piles with brown dry leaves and green manure. The pile heats up to kill weeds and makes rich black soil in six to eight weeks.',
+    description: 'Hot composting uses tiny helpful microbes to turn plant waste into rich garden soil. Layer dry brown stalks with fresh green manure and kitchen scraps. Keep the pile damp like a squeezed sponge. The heap heats up within three days to kill pest eggs and weed seeds.',
     steps: [
-      'Choose a shaded, well-drained site (minimum 1.5m x 1.5m footprint) and loosen the native soil base 20cm deep with a broadfork.',
-      'Lay a coarse bottom base (15cm thick) of dry twigs and maize cobs for foundational bottom aeration.',
-      'Add a 15cm brown layer of dry grass, chopped straw, and dried leaves (high carbon, C:N ~ 60:1).',
-      'Add a 10cm green layer of fresh animal manure (cattle/goat/poultry), green weeds, and kitchen scraps (high nitrogen, C:N ~ 15:1).',
-      'Dust lightly with wood ash and biochar, then sprinkle with water until as moist as a wrung-out sponge (50–60% moisture).',
-      'Repeat alternating brown and green layers up to a height of 1.5 meters, tapering toward a rounded top.',
-      'Insert a central ventilation branch or perforated bamboo stalk into the center to monitor internal heat.',
-      'Turn the entire heap inside-out on Day 4, Day 10, and Day 17 to re-oxygenate aerobic microbes and ensure uniform heating.',
-      'Allow the pile to cure for 3–4 weeks until it cools to ambient temperature and smells like sweet forest earth.'
+      'Choose a shaded spot at least five feet wide. Loosen the ground with a garden fork.',
+      'Lay a base of dry twigs and maize cobs for airflow.',
+      'Add a six-inch brown layer of dry grass and chopped straw.',
+      'Add a four-inch green layer of fresh animal manure and kitchen scraps.',
+      'Dust lightly with wood ash and charcoal. Sprinkle water until damp.',
+      'Repeat brown and green layers up to five feet high.',
+      'Push a dry stick into the center to check the heat each day.',
+      'Turn the pile inside out on Day 4, Day 10, and Day 17 to give microbes fresh air.',
+      'Let the compost rest for four weeks until it smells sweet like forest soil.'
     ],
     toolsNeeded: ['Pitchfork / Digging Fork', 'Watering Can / Bucket', 'Hoe (Khasu)', 'Compost Thermometer / Dry Stick', 'Organic Mulch / Tarp'],
-    inspiredCounsel: '"In the cultivation of the soil the thoughtful worker will find that unexpected treasures open before him... The earth must be given back that which is taken from it, that its strength may not be exhausted." — E.G. White, Education, p. 211',
+    inspiredCounsel: '"In the cultivation of the soil the thoughtful worker will find unexpected treasures. The earth must be given back that which is taken from it." — Education, p. 211',
     commonMistakes: [
-      'Making piles too small (<1 cubic meter), which lose heat quickly and fail to achieve thermophilic temperatures (55°C+).',
-      'Over-saturating the pile with water, creating anaerobic conditions, foul ammonia odors, and nutrient leaching.',
-      'Adding excessive wood ash in thick layers, raising pile pH above 8.5 and causing volatile nitrogen loss as ammonia gas.'
+      'Piles smaller than three feet across lose heat too fast and stay cold.',
+      'Too much water makes the pile soggy and smelly.',
+      'Too much wood ash turns the compost bitter and drives away nitrogen.'
     ],
     seasonalTag: 'Cold Dry Season',
     prerequisiteNote: 'Foundational homestead fertility skill. No prerequisites required.'
@@ -369,22 +369,22 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Intermediate',
     timeToMaster: '2 Weeks',
     iconName: 'firstaid',
-    summary: 'Stabilizing bone fractures with rigid padded splints, pressure-immobilization for venomous snakebites (Boomslang, Mamba, Spitting Cobra), natural cooling for 1st/2nd degree burns, and activated charcoal poisoning triage.',
-    description: 'In rural outposts located far from district hospitals (e.g. 40+ km from Dedza, Ntcheu, or Mzimba clinics), immediate emergency self-triage is life-saving. This comprehensive guide details emergency orthopedic splinting, pressure-immobilization without harmful tourniquets, burn stabilization with cool clean water and medical-grade honey/aloe, eye flushing for venom spit, and rapid activated charcoal detox protocols.',
+    summary: 'Learn essential emergency care for country homes. Treat broken bones, snakebites, burns, and swallowed poisons with simple natural supplies.',
+    description: 'Outpost homes often sit far away from hospitals and clinics. Knowing fast first aid saves lives. Learn how to splint broken bones with bamboo and wrap snakebites safely. Cool burns with water and raw honey. Use food-grade charcoal for accidental poisons.',
     steps: [
-      'Fracture Protocol: Check neurovascular status (pulse, warmth, sensation). Pad the injured limb with soft cloth and immobilize using rigid wooden/bamboo splints securing the joint above and below the fracture. Never attempt to force displaced bone back.',
-      'Snakebite Protocol (Cytotoxic/Neurotoxic/Hemotoxic): Keep the victim completely still and calm to slow lymphatic venom spread. Apply a broad crepe pressure immobilization bandage firmly along the entire limb (firm as for an ankle sprain). Immobilize with a splint. Keep bite at heart level. Never cut, suck, or apply arterial tourniquets.',
-      'Snake Venom Eye Spitting Protocol: Immediately flush the eyes with continuous clean stream/boiled saline water or fresh milk for at least 15–20 minutes without rubbing.',
-      'Burn Protocol: Cool thermal burns immediately with clean cool running water for 10–20 minutes. Apply pure raw unheated honey or sterile Aloe vera inner gel to prevent microbial infection. Cover loosely with sterile non-stick gauze. Never apply butter, flour, or ice.',
-      'Poisoning / Ingestion Triage: Immediately mix 50–100 grams of food-grade activated hardwood charcoal powder in 300ml clean boiled water and administer orally to adsorb ingested botanical or chemical toxins before systemic absorption.',
-      'Hydration & Shock Management: Elevate legs 30cm if shock symptoms appear (pale, clammy, rapid pulse), cover with a warm blanket, and administer oral rehydration salts (1L boiled water + 6 level tsp sugar + 1/2 tsp salt).'
+      'Broken Bones: Keep the injured limb still. Tie straight wooden or bamboo sticks on both sides with soft cloth. Never force bones back into place.',
+      'Snakebite Care: Keep the person calm and resting flat. Wrap a wide cloth bandage firmly from fingers or toes up toward the body. Splint the limb still. Never cut the skin or use tight tourniquets.',
+      'Spitting Cobra Venom: Rinse the eyes right away with clean boiled water or fresh milk for fifteen minutes.',
+      'Burns: Pour cool clean water over burns for fifteen minutes. Spread raw unheated honey over the skin to prevent infection. Cover loosely with clean cloth.',
+      'Swallowed Poison: Stir three spoonfuls of fine wood charcoal into drinking water right away. Charcoal catches poisons in the stomach before they enter blood.',
+      'Shock and Weakness: Lay the person down and raise their feet one foot high. Keep them warm with blankets and give sips of clean water with a pinch of salt and sugar.'
     ],
     toolsNeeded: ['Rigid Wooden / Bamboo Splints', 'Elastic Crepe & Gauze Bandages', 'Food-Grade Activated Charcoal Powder', 'Sterile Saline / Clean Boiled Water', 'Raw Honey & Fresh Aloe Vera', 'Medical Scissors & Tweezers'],
     inspiredCounsel: '"Pure air, sunlight, abstemiousness, rest, exercise, proper diet, the use of water, trust in divine power—these are the true remedies. Every person should have a knowledge of nature\'s remedial agencies and how to apply them." — E.G. White, The Ministry of Healing, p. 127',
     commonMistakes: [
-      'Applying tight arterial tourniquets or cutting/sucking snakebites, which causes catastrophic localized tissue necrosis and gangrene.',
-      'Bursting burn blisters or putting dirty grease/soot on open wounds, creating rapid bacterial sepsis.',
-      'Moving an un-splinted compound bone fracture, risking severed arteries and permanent nerve damage.'
+      'Using tight rubber bands or ropes for snakebites, which cuts off blood and kills healthy muscle.',
+      'Putting butter, flour, or ice on fresh burns, which traps heat and causes infection.',
+      'Giving charcoal powder to an unconscious person who cannot swallow safely.'
     ],
     seasonalTag: 'Year-Round / Any Season',
     prerequisiteNote: 'Essential emergency survival skill. Read and practice drills before moving to rural acreage.'
@@ -396,23 +396,25 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Intermediate',
     timeToMaster: '1 Season',
     iconName: 'fruittree',
-    summary: 'Establishing lifelong high-yield perennial orchards (Apples, Guavas, Mangoes, Avocados, Citrus, Peaches) using the Ellen G. White deep-pit planting method with rock bedding, cambium grafting, and micro-swale guilds.',
-    description: 'Perennial food forests provide multi-generational food security, microclimate temperature buffering, and cash income with decreasing labor over time. Successful orchard establishment follows the proven Ellen G. White method: excavating deep 1m³ pits with bottom drainage rocks and enriched organic stratifications, selecting zone-specific varieties (low-chill apples in highland Dedza/Nyika vs. guavas, mangoes, and citrus in sub-tropical lowlands), executing precision whip-and-tongue/cleft grafting, and intercropping companion guilds.',
+    summary: 'Plant long-lived fruit trees in deep, rich planting pits. Feed the roots with compost, biochar, and mulch to survive dry winter months.',
+    description: 'Grow healthy fruit trees that bear sweet fruit for decades. Dig large three-foot planting holes. Fill the bottom with compost, crushed charcoal, and rocks to catch water. Mulch the surface heavily so roots stay cool through hot dry months.',
     steps: [
-      'Ellen G. White Deep Pit Excavation: Dig 80cm x 80cm x 80cm planting holes (up to 1m³ for deep taproot avocados and mangoes on heavy clay) during the dry season. Place a 15–20cm base layer of coarse river stones and volcanic gravel at the bottom for lifelong aeration and deep taproot drainage.',
-      'Stratified Organic Backfill: Mix separated topsoil 50/50 with well-aged thermophilic compost, 3kg crushed biochar, 250g steamed bone meal, and 100g hardwood ash to build a lifelong nutrient reservoir.',
-      'Highland vs. Lowland Variety Selection: For cool highlands (Dedza, Nyika, Zomba), plant low-chill apples (Anna, Dorsett Golden), peaches, and plums. For warmer sub-tropical/lakeshore valleys, establish guavas (pink/white heirloom), improved mangoes (Tommy Atkins, Kent), avocados (Hass/Fuerte), and citrus.',
-      'Precision Scion Grafting: Collect pencil-thick dormant scions with 3–4 plump vegetative buds. Align the green inner cambium layers with hardy local wild rootstocks using whip-and-tongue or cleft cuts; bind tightly with parafilm and seal cut ends with beeswax.',
-      'Planting & Root Flare Alignment: Center the young sapling so the root collar sits 3cm above ground level (accounting for soil settling). Ensure the graft union remains 10–15cm above soil level to prevent scion rooting and crown rot.',
-      '1-Meter Smile Bund Rainwater Catchment: Shape a semi-circular downhill earthen berm (smile bund) around the tree dripline and pack with 10cm of coarse grass mulch to harvest wet-season runoff.',
-      'Symbiotic Guild Establishment: Plant nitrogen-fixing pigeon peas (nandolo) on the windward side, deep-rooting comfrey around the dripline for mineral pumping, and aromatic lemongrass/marigolds to deter root-knot nematodes and fruit pests.'
+      'Dig a planting pit three feet wide and three feet deep during the dry season.',
+      'Keep the dark topsoil in one pile and subsoil in another pile.',
+      'Place stones and crushed charcoal in the bottom for drainage and moisture sponge.',
+      'Mix the topsoil with cured compost and a cup of wood ash.',
+      'Place the young fruit sapling upright so the stem base sits level with the ground.',
+      'Fill around the roots with the rich soil mix and press gently with your hands.',
+      'Water thoroughly with two buckets of clean water to settle the soil.',
+      'Build a low earth ring around the tree to catch seasonal rainwater.',
+      'Cover the ground with four inches of dry grass mulch, keeping mulch two inches away from the tree bark.'
     ],
     toolsNeeded: ['Shovel & Digging Hoe (Khasu)', 'Razor Sharp Grafting Knife & Parafilm', 'Secateurs / Pruning Shears', 'River Stones / Gravel for Drainage Layer', 'Aged Compost, Biochar & Bone Meal', 'Tree Support Stakes & Mulch'],
     inspiredCounsel: '"While we were in Australia, we adopted the plan of digging deep trenches and filling them in with dressing that would provide nourishment for the roots... This was done with tomatoes, oranges, lemons, peaches, and grapes." — Ellen G. White, Letter 350, 1907 (Ellen G. White Estate)',
     commonMistakes: [
-      'Burying the tree stem too deep with the graft union under soil, which leads to deadly collar rot (Phytophthora) and loss of rootstock resistance.',
-      'Skipping the bottom drainage layer in heavy clay soils, resulting in waterlogging and anaerobic root suffocation during torrential wet seasons.',
-      'Failing to whitewash or shade young grafted stems from intense tropical sunscald.'
+      'Digging small shallow holes that force tree roots into hard subsoil.',
+      'Piling wet mulch directly against the tree trunk, which invites termites and rot.',
+      'Planting trees below the original ground level, causing the stem collar to rot.'
     ],
     seasonalTag: 'Hot Dry Preparation',
     prerequisiteSkillIds: ['compost-making'],
@@ -425,22 +427,24 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Beginner',
     timeToMaster: '3 Weeks',
     iconName: 'vermiculture',
-    summary: 'Cultivating African Nightcrawlers (Eudrilus eugeniae) and Red Wigglers in stacked wooden or clay bin systems to transform kitchen scraps and animal manure into microbial vermicompost and liquid foliar tea.',
-    description: 'Vermiculture utilizes epigeic earthworms to rapidly process organic waste into worm castings (vermicompost)—the richest organic plant food on earth, packed with humus, beneficial bacteria, auxins, and enzymes. A single square meter worm bin can produce 20kg of premium organic fertilizer per month while generating a potent liquid bio-fertilizer that boosts seedling root vigor and disease resistance.',
+    summary: 'Breed earthworms in shaded wooden boxes. Worms turn kitchen peels and manure into the richest natural plant food for your garden.',
+    description: 'Earthworms are tireless garden helpers. Keep them in cool wooden or clay boxes fed with vegetable peels and dry grass. Worm droppings make gentle, weed-free plant food that helps seedlings grow strong roots.',
     steps: [
-      'Bin Construction: Build a dark, shaded 2- or 3-tier wooden box (or repurposed ventilated plastic totes) with 5mm drainage holes drilled in the bottom base.',
-      'Prepare Bedding: Shred unbleached cardboard, coconut coir, or dried banana leaves. Soak in clean water and squeeze out excess until 75% moisture (feels like a damp sponge).',
-      'Stocking Worms: Add 500g–1kg of healthy compost worms (African Nightcrawlers / Red Wigglers) onto the bedding and cover with a damp burlap sack in deep shade.',
-      'Feeding Protocol: Feed worms finely chopped fruit scraps, vegetable peelings, crushed eggshells (for grit and pH balance), and aged herbivore manure.',
-      'Moisture & Aeration: Maintain bedding moisture at 70–80% and temperature between 18°C–28°C. Add crushed wood ash sparingly if pH drops below 6.5.',
-      'Harvesting Castings: Shift feed to one half of the bin for 7 days so worms migrate; scoop rich black castings from the opposite side.',
-      'Brewing Worm Tea: Suspend 2 cups of fresh castings in 10L clean de-chlorinated water with 1 tbsp molasses; bubble with an aerator for 24 hours to create foliar bio-fertilizer.'
+      'Build a shaded wooden box or use clay pots with small drainage holes in the bottom.',
+      'Line the bottom with damp shredded cardboard, dry leaves, and aged manure.',
+      'Add earthworms gently onto the damp bedding.',
+      'Bury kitchen vegetable peels and fruit rinds two inches deep under the leaves.',
+      'Sprinkle a handful of crushed eggshells once a month to keep the bedding sweet.',
+      'Keep the bedding damp like a squeezed cloth. Protect the box from hot sun and ants.',
+      'Collect worm droppings from the bottom after two months to feed your garden beds.',
+      'Make worm tea: soak two cups of worm castings in a bucket of water for one day. Water your vegetable leaves with this liquid.'
     ],
     toolsNeeded: ['Tiered Wooden/Plastic Worm Bins', 'Shredded Cardboard & Leaf Mulch', 'Crushed Eggshells', 'Compost Worm Starter Colony', 'Burlap Sacks', 'Fine Mesh Sieve'],
     inspiredCounsel: '"Go to the ant, thou sluggard; consider her ways, and be wise... In nature God has given us humble teachers to instruct us in His laws of diligence and order." — Proverbs 6:6 / Education, p. 117',
     commonMistakes: [
-      'Feeding heavy quantities of citrus peels, raw onions, oily foods, or fresh dog/cat feces, which acidifies or poisons the worm bedding.',
-      'Exposing worm bins to hot direct midday sunlight (>35°C), which cooks earthworms in their bins within hours.'
+      'Letting worm bins dry out in the hot afternoon sun.',
+      'Feeding onions, hot peppers, oily foods, or meat scraps that attract flies and sour the box.',
+      'Flooding the bin with too much water so worms drown in the bottom tray.'
     ],
     seasonalTag: 'Year-Round / Any Season',
     prerequisiteNote: 'Foundational bio-fertility skill. No prerequisites required.'
@@ -452,22 +456,23 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Intermediate',
     timeToMaster: '2 Weeks',
     iconName: 'waterconservation',
-    summary: 'Capturing and infiltrating 100% of rainwater runoff on homestead land using precision A-frame contour swales, deep organic mulching, Vetiver grass vegetative barriers, and dambo wetland sponge recharge.',
-    description: 'In semi-arid or unimodal rainfall climates (such as Malawi with a 7-month dry season), rain must be slowed, spread, and sunk into the subsoil rather than running off to erode topsoil. By cutting level contour ditches (misozi) with downhill earth berms, planting dense Vetiver grass hedges, and creating deep woodchip swale reservoirs, you recharge underground aquifers, keeping down-slope crops green throughout the dry season.',
+    summary: 'Catch every drop of rain using contour swales, deep mulch, and vetiver grass. Store water deep in the ground to keep crops green all year.',
+    description: 'In dry regions, heavy seasonal rain often washes away rich topsoil. Dig level ditch swales across hill slopes to slow down running water. The water sinks deep into underground sponges. Downhill crops and fruit trees stay green through dry winter months.',
     steps: [
-      'A-Frame Calibration: Build a 2-meter wooden A-frame with a center plumb-line weight. Calibrate on level ground and reverse to mark exact zero-level center.',
-      'Contour Surveying: Walk the landscape across the slope, placing wooden marker stakes every 3 meters along the exact level contour line.',
-      'Swale Trench Excavation: Dig a level, flat-bottom trench 50cm wide by 30cm deep along the staked line (never sloping).',
-      'Downhill Berm Construction: Pile excavated soil on the downhill side of the trench, shaping a wide rounded mound (msozi berm).',
-      'Vegetative Stabilization: Plant double rows of Vetiver grass (Chrysopogon zizanioides) slips or pigeon pea seeds along the berm crest to anchor the soil.',
-      'Organic Infiltration Bedding: Fill the trench bottom with coarse branches, corn stalks, and dry mulch to absorb water and prevent standing mosquito puddles.',
-      'Level Sill Spillways: Construct wide, stone-paved level spillways at each end of the swale to discharge overflow safely during extreme cyclonic storms.'
+      'Use an A-frame level to mark exact level lines across your sloping ground.',
+      'Dig a flat-bottomed trench two feet wide and one foot deep along the line.',
+      'Pile the excavated earth into a rounded mound on the downhill side of the ditch.',
+      'Plant thick vetiver grass along the downhill mound to hold the soil tightly.',
+      'Fill the ditch with coarse wood chips and dry maize stalks to prevent mosquito pools.',
+      'Cut a level stone overflow sill at each end to safely guide flood water away.',
+      'Plant fruit trees and bananas along the downhill side of the swale mound.'
     ],
     toolsNeeded: ['Wooden A-Frame Level & Plumb Line', 'Marking Stakes & Twine', 'Digging Hoe (Khasu) & Spade', 'Vetiver Grass Slips', 'River Stones for Spillways'],
     inspiredCounsel: '"He turneth the wilderness into a standing water, and dry ground into watersprings. And there he maketh the hungry to dwell, that they may prepare a city for habitation." — Psalm 107:35-36',
     commonMistakes: [
-      'Digging swales off-contour without an A-frame, which channels torrents of water into low spots and blows out the berm during downpours.',
-      'Failing to pave level overflow spillways with flat stones, allowing emergency storm overflows to cut deep erosive gullies across gardens.'
+      'Digging swales on a slope instead of a true level contour, which causes water to pool and break the mound.',
+      'Leaving open stagnant water that breeds mosquitoes instead of filling ditches with mulch.',
+      'Building steep bare dirt mounds without planting grass roots to anchor the soil.'
     ],
     seasonalTag: 'Hot Dry Preparation',
     prerequisiteNote: 'Foundational land hydration skill. No prerequisites required.'
@@ -479,21 +484,23 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Intermediate',
     timeToMaster: '1 Season',
     iconName: 'droughtcrops',
-    summary: 'Growing high-yield climate-resilient dryland staples—Sorghum, Pearl Millet, Cassava, Pigeon Peas, and Cowpeas—using seed priming, bio-intensive spacing, and minimum soil disturbance.',
-    description: 'As rainfall patterns become erratic and mid-season dry spells more frequent, relying solely on water-hungry hybrid maize risks total crop failure. Modern agroecological cultivation combines drought-hardy traditional grains and deep-rooting legumes with bio-intensive planting techniques: soaking seeds (priming) before sowing, zero-till planting basins, and companion intercropping that locks in residual soil moisture.',
+    summary: 'Grow hardy grains and legumes that thrive through dry spells. Plant cassava, sorghum, pigeon peas, and cowpeas for dependable food security.',
+    description: 'Dry spells often threaten shallow-rooted hybrid crops. Protect your family by growing drought-hardy traditional crops. Cassava, sorghum, pearl millet, cowpeas, and pigeon peas reach deep moisture in the soil. They yield nutritious food even in low-rainfall years.',
     steps: [
-      'Crop Selection: Choose proven drought-hardy varieties: Sorghum, Pearl Millet, Cassava, and Pigeon Peas.',
-      'Seed Priming: Soak sorghum/millet seeds in clean water or aerated compost tea for 8 hours overnight; surface dry in shade for 1 hour before sowing to accelerate germination by 48 hours.',
-      'No-Till Planting Stations (Zai Pits / Bio-basins): Dig small 15cm x 15cm planting basins spaced 75cm apart along contour lines; place 2 handfuls of rich compost in each station.',
-      'Intercropping Guilds: Intercrop 2 rows of sorghum/maize with 1 row of trailing cowpeas or climbing beans to provide a dense living mulch canopy.',
-      'Mulch Retention (God’s Blanket): Keep a continuous 8cm cover of dry crop residue across the soil surface to reduce evaporation by up to 70%.',
-      'Thinning & Weeding: Thin seedlings to the strongest 2 plants per station at 2 weeks. Uproot weeds early before they compete for soil moisture.'
+      'Select open-pollinated seeds of sorghum, pearl millet, pigeon peas, and cowpeas.',
+      'Take healthy, mature cassava stems and cut them into nine-inch planting stakes.',
+      'Plant seeds right after the first soaking rain in November.',
+      'Intercrop tall sorghum with pigeon peas so the legumes fix nitrogen in the ground.',
+      'Cover bare soil between crop rows with dry grass mulch to stop moisture evaporation.',
+      'Weed beds twice while plants are small so weeds do not steal soil water.',
+      'Harvest sorghum grains when heads dry golden brown. Store dry seeds in airtight bags.'
     ],
     toolsNeeded: ['Pointed Planting Stick (Dibbler)', 'Hoe (Khasu)', 'Soaking Basins for Seed Priming', 'Organic Mulch / Crop Residues', 'Heirloom Drought-Tolerant Seeds'],
     inspiredCounsel: '"He that observeth the wind shall not sow; and he that regardeth the clouds shall not reap... In the morning sow thy seed, and in the evening withhold not thine hand." — Ecclesiastes 11:4, 6',
     commonMistakes: [
-      'Burning crop residues (chitukuko burning) after harvest instead of leaving them on the soil as protective moisture-retaining mulch.',
-      'Planting seeds too deep (>5cm) in dry soil, causing seeds to exhaust their energy before reaching the surface.'
+      'Relying solely on thirsty hybrid maize that wilts during two-week dry spells.',
+      'Planting upside down cassava cuttings that sprout poorly.',
+      'Leaving bare soil exposed to baking sun without mulch covers.'
     ],
     seasonalTag: 'Rainy Planting',
     prerequisiteSkillIds: ['compost-making'],
@@ -506,21 +513,24 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Beginner',
     timeToMaster: '1 Month',
     iconName: 'herbs',
-    summary: 'Cultivating essential African and introduced healing and culinary herbs: local species (Moringa oleifera, Neem, Artemisia annua, Ginger, Garlic) and temperate varieties (Rosemary, Thyme, Peppermint, Tulsi/Holy Basil) for remedies, teas, and pest protection.',
-    description: 'An off-grid medicinal garden is a natural dispensary. Herbs require minimal space, provide essential micronutrients and botanical compounds, repel harmful garden pests, and attract pollinators. This guide covers intensive raised-bed cultivation, soil drainage preparation, propagation via cuttings and root division, companion planting, and proper harvesting and drying for long shelf-life.',
+    summary: 'Grow simple healing herbs around your homestead. Cultivate fever grass, garlic, ginger, rosemary, and comfrey for daily family health.',
+    description: 'God gave healing herbs to comfort and restore the sick. Plant a fragrant apothecary garden near your kitchen door. Grow lemongrass for fevers, ginger for digestion, garlic for infections, and comfrey for sprains. Harvest leaves on dry sunny mornings.',
     steps: [
-      'Bed Preparation: Construct raised garden beds (20cm high) incorporating 30% coarse river sand and 30% compost for rapid drainage, essential for Mediterranean and perennial herbs.',
-      'Local Species Propagation: Plant Moringa from fresh seeds or 1m hardwood truncheons; sow Artemisia annua seeds surface-sown on fine silt; plant Ginger/Turmeric rhizomes 5cm deep in semi-shade.',
-      'Non-Local Culinary Guilds: Take 10cm semi-hardwood cuttings of Rosemary, Lavender, and Thyme; strip lower leaves, dip in raw honey or aloe gel, and root in moist sand for 21 days.',
-      'Companion Planting Layout: Border cabbage/brassica beds with Rosemary and Thyme to deter whiteflies; plant Basil next to tomatoes to enhance flavor and repel hornworms.',
-      'Harvesting Timing: Harvest leaves early in the morning immediately after dew dries, but before the hot midday sun evaporates volatile essential oils.',
-      'Shade Drying & Curing: Hang herb bundles upside down in a dark, warm, well-ventilated drying shed (never in direct sunlight) for 7–10 days until crisp; pack in airtight glass jars.'
+      'Prepare a sunny raised garden bed with plenty of finished compost.',
+      'Plant root divisions of lemongrass and mint six inches apart in damp soil.',
+      'Bury plump ginger and turmeric root rhizomes two inches deep under rich leaf mulch.',
+      'Plant garlic cloves with the pointed end facing upward in loose, sandy soil.',
+      'Prune comfrey leaves every month to make mineral-rich mulch for vegetables.',
+      'Pick fresh herb leaves in the morning after dew dries for strongest fragrance.',
+      'Hang herbs in loose bundles inside a warm, shaded, well-ventilated room to dry.',
+      'Store dried herb leaves in clean, dry glass jars away from direct sunlight.'
     ],
     toolsNeeded: ['Pruning Shears / Sharp Scissors', 'Well-Drained Raised Garden Beds', 'Coarse River Sand & Compost', 'Drying Racks / Hanging Twine', 'Airtight Glass Storage Jars'],
     inspiredCounsel: '"And by the river upon the bank thereof, on this side and on that side, shall grow all trees for meat, whose leaf shall not fade... and the fruit thereof shall be for meat, and the leaf thereof for medicine." — Ezekiel 47:12',
     commonMistakes: [
-      'Over-watering Mediterranean herbs (Rosemary, Thyme, Sage) in heavy waterlogged clay, leading to black root rot within 2 weeks.',
-      'Drying harvested herbs in direct sunlight, which bleaches out chlorophyll and vaporizes valuable medicinal essential oils.'
+      'Drying herbs in bright direct sunshine, which bleaches colors and destroys healing oils.',
+      'Storing herbs before they are fully dry, causing mold inside jars.',
+      'Planting invasive mint in open garden beds where it crowds out vegetables.'
     ],
     seasonalTag: 'Year-Round / Any Season',
     prerequisiteNote: 'Foundational homestead wellness skill. No prior skills required.'
@@ -532,20 +542,21 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Intermediate',
     timeToMaster: '2 Weeks',
     iconName: 'foodpreservation',
-    summary: 'Mastering multi-method seasonal surplus preservation: indirect solar thermal dehydration, triple-layer hermetic PICS bags for weevil-free grain storage, wild lacto-fermentation, root cellaring, and clay Zeer pot evaporative cooling.',
-    description: 'Post-harvest losses in rural areas can exceed 30–40% due to insect pests, molds, and lack of refrigeration. Mastering comprehensive non-electric preservation techniques turns a bumper harvest into year-round food security. Learn thermal solar drying for vegetables and fruits, hermetic oxygen-depletion grain preservation in PICS bags without chemical pesticides, and natural lactic acid vegetable fermentation.',
+    summary: 'Preserve your seasonal harvest without chemicals. Use solar drying, sealed airtight bags, and clay cold pots to store food all year.',
+    description: 'Abundant harvests in April can easily spoil if stored poorly. Learn simple, reliable ways to keep food fresh for months. Dry fruit and vegetables in clean solar boxes. Store dry grain in airtight bags where insects cannot breathe. Keep greens cool in clay pots.',
     steps: [
-      'Solar Thermal Dehydration: Slice mangoes, tomatoes, squashes, and leafy greens (mustard, pumpkin leaves) to uniform 5mm thickness. Blanch greens for 60 seconds. Place on stainless mesh trays in an indirect solar cabinet at 50°C–60°C until moisture drops below 10% (crisp texture).',
-      'Hermetic Grain Bagging (PICS Method): Sun-dry harvested maize, cowpeas, and beans to <12% moisture. Inspect for zero live larvae. Pack grain into a high-density double-polyethylene liner inside a woven outer bag. Tie each layer independently with twine. As insects respire, oxygen drops below 5%, naturally asphyxiating all weevils within 72 hours.',
-      'Lacto-Fermentation: Shred fresh cabbage, carrots, or radishes; toss with 2% non-iodized coarse salt by weight (20g salt per 1kg vegetable). Massage until brine releases. Pack tightly into clean glass jars, submerging vegetables below the brine line. Ferment at 18°C–24°C for 7–14 days.',
-      'Root Cellaring: Cure unwashed sweet potatoes and butternut squashes in a warm shady spot (28°C) for 10 days to set tough skins; transfer to a cool, dark, ventilated root cellar room on slatted wooden shelves.',
-      'Zeer Pot Evaporative Cooling: Nest two unglazed terracotta pots with 4cm of wet river sand in between. Place fresh perishables inside the inner pot; cover with a damp cloth in a breezy shade corridor to drop internal temperature by up to 12°C below ambient.'
+      'Solar Fruit Drying: Slice ripe mangoes and sweet potatoes into thin strips. Place on clean mesh screens inside a solar dryer for two sunny days.',
+      'Grain Storage: Check that maize and beans are completely dry. Drop kernels on a flat rock: dry grain cracks with a sharp click.',
+      'Airtight Bag Packing: Pour clean dry grain into triple-layer plastic bags. Tie each layer tightly with twine so no air enters.',
+      'Vegetable Salt Curing: Shred cabbage and toss with two percent salt. Pack tightly into clean earthenware crocks until juice covers the shreds.',
+      'Root Cellar Storage: Store whole sweet potatoes and pumpkins on wooden slatted shelves in a cool, dark room.'
     ],
     toolsNeeded: ['Indirect Solar Cabinet Dehydrator', 'Triple-Layer PICS Hermetic Bags', 'Airtight Fermentation Jars with Air-locks', 'Coarse Non-Iodized Salt', 'Nested Terracotta Zeer Pots'],
     inspiredCounsel: '"He that gathereth in summer is a wise son: but he that sleepeth in harvest is a son that causeth shame." — Proverbs 10:5',
     commonMistakes: [
-      'Packing grain into hermetic PICS bags before it is thoroughly sun-dried (<12% moisture), causing internal moisture condensation and mold growth.',
-      'Allowing fermented vegetables to rise above the brine surface, which allows white kahm yeast and mold to form on the surface.'
+      'Packing grain before it is fully dry, which causes mold and grain heating.',
+      'Puncturing the plastic inner liners of airtight storage bags with sharp sticks.',
+      'Placing stored grain directly on cold concrete floors where dampness rises.'
     ],
     seasonalTag: 'Harvest & Storage',
     prerequisiteSkillIds: ['solar-food-dehydration'],
@@ -558,20 +569,21 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Advanced',
     timeToMaster: '1 Month',
     iconName: 'outposttech',
-    summary: 'Operating, sizing, and repairing off-grid homestead critical technology: 24V/48V LiFePO4 battery banks, MPPT controllers, DC submersible borehole pumps, walking two-wheel tractors, grain mills, and precision tool sharpening.',
-    description: 'True self-reliance requires keeping mechanical and electrical equipment operational without relying on urban repair shops. This guide covers off-grid electrical system troubleshooting with digital multimeters, preventative engine maintenance for two-wheel diesel walking tractors and grain mills (oil, fuel filters, valve clearances), helical DC pump replacement, and tool refurbishment.',
+    summary: 'Operate and maintain essential off-grid tools. Keep solar pumps, diesel walking tractors, and hand tools running smoothly without power lines.',
+    description: 'Country living relies on durable, reliable equipment. Master simple maintenance for solar water pumps, two-wheel garden tractors, and metal hand tools. Regular cleaning, oil changes, and blade sharpening keep your homestead working smoothly.',
     steps: [
-      'Multimeter Electrical Diagnostics: Measure solar open-circuit voltage (Voc) and short-circuit current (Isc) at the combiner box. Check LiFePO4 battery string voltage balance (must stay within 0.05V per cell).',
-      'Solar Charge Controller Configuration: Program MPPT controller for LiFePO4 chemistry: Absorption voltage 56.8V (for 48V bank), Float 54.0V, Low Voltage Disconnect (LVD) 48.0V (to prevent deep discharge).',
-      'Submersible Solar Pump Maintenance: Inspect DC helical pump every 6 months. Clean sand intake screen; verify water-level probe wiring to prevent pump burnout from dry-running during low dry season aquifer levels.',
-      'Small Diesel Engine Servicing (Walking Tractor / Mill): Change SAE 15W-40 engine oil every 50 operating hours; clean diesel sediment bowl and bleed air from fuel injector lines; clean foam air filter in kerosene and re-oil.',
-      'Precision Hand Tool Sharpening: Grind nicks out of hoes (makhasu), axes, and machetes using a bastard mill file held at a consistent 30° bevel angle; hone with a medium oilstone and coat metal with linseed oil.'
+      'Solar Pump Care: Inspect the water intake screen every month. Clear away river silt and weeds so the motor pumps freely.',
+      'Electrical Connections: Check that all battery terminals and solar wire connections stay tight and clean without white corrosion.',
+      'Walking Tractor Maintenance: Check engine oil levels before every work day. Change engine oil every fifty operating hours.',
+      'Air Cleaner Service: Clean the air filter sponge with kerosene and dry thoroughly. Add a few drops of clean oil.',
+      'Hand Tool Care: Sharpen hoes, axes, and machetes with a flat mill file at a thirty-degree angle. Rub oiled rags on metal blades after work.'
     ],
     toolsNeeded: ['Digital True-RMS Multimeter', 'Insulated Electrical Hand Tools & Wire Crimpers', 'Socket & Wrench Set (Metric 8mm–24mm)', 'Bastard Mill Files & Wet Sharpening Stones', 'Grease Gun & Lubricants'],
     inspiredCounsel: '"If the iron be blunt, and he do not whet the edge, then must he put to more strength: but wisdom is profitable to direct." — Ecclesiastes 10:10',
     commonMistakes: [
-      'Running diesel engines or generators low on engine oil or with clogged air filters, causing catastrophic cylinder scoring within weeks.',
-      'Allowing lead-acid or lithium battery banks to sit discharged for days, resulting in permanent capacity degradation and BMS lockouts.'
+      'Letting water pumps run dry when well levels drop, which burns out pump seals.',
+      'Running small diesel engines with dirty oil or clogged fuel filters.',
+      'Leaving iron hoes and axes outside in the rain to rust.'
     ],
     seasonalTag: 'Year-Round / Any Season',
     prerequisiteSkillIds: ['solar-pv-lithium-bank'],
@@ -584,21 +596,21 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Intermediate',
     timeToMaster: '1 Season',
     iconName: 'insects',
-    summary: 'Managing beneficial insects through Kenyan Top-Bar beekeeping and pollinator sanctuaries, combined with organic botanical insect repellents (Neem oil, Tephrosia vogelii, chili-garlic-ash emulsion) against Fall Armyworms and aphids.',
-    description: 'In an ecological homestead, insects are not all enemies: bees provide pollination and raw honey, predatory wasps and ladybugs consume pests, while pest outbreaks are controlled without toxic commercial synthetic chemicals. This skill covers hive management with local materials, gentle smoking, honey harvesting without destroying brood comb, and brewing natural botanical biopesticides from farm-grown trees.',
+    summary: 'Manage beneficial bees and deter crop pests naturally. Use top-bar beehives, companion planting, and natural plant sprays.',
+    description: 'Healthy farms welcome beneficial insects while managing pests gently. Build top-bar beehives to pollinate fruit trees and harvest pure honey. Make organic sprays from neem leaves and garlic to control aphids and caterpillars without chemical poisons.',
     steps: [
-      'Top-Bar Hive Construction: Build a Kenyan Top-Bar Hive from seasoned cedar/bamboo with 30 top bars (exact 32mm width for African honeybees *Apis mellifera scutellata*).',
-      'Hive Siting & Baiting: Hang the hive 2 meters high in deep tree shade near clean water; bait interior top bars with melted beeswax and lemongrass oil (Cymbopogon). Grease hanging wires to block ants.',
-      'Gentle Inspection & Smoke: Use dry cow dung, dried maize cobs, or cedar wood shavings in a smoker. Smoke hive entrance gently; lift bars vertically to inspect comb without crushing bees.',
-      'Brood Protection & Harvesting: Never harvest dark brood combs containing larvae; harvest only capped golden honey combs located at the rear of the hive during evening hours.',
-      'Neem Botanical Spray: Pound 500g of fresh green Neem leaves in 5L water; let stand overnight, strain through cloth, add 1 tsp biodegradable soap, and spray directly on crops infested with aphids or caterpillars.',
-      'Fish Bean (*Tephrosia vogelii*) Biocontrol: Extract fresh Tephrosia leaves in water (contains natural rotenone) to create a rapid knockdown spray for Fall Armyworms on maize.'
+      'Top-Bar Beekeeping: Build simple wooden hives with thirty-two millimeter wide top bars. Hang hives six feet high in shady trees.',
+      'Baiting Hives: Rub melted beeswax and lemongrass oil inside clean hives to attract wild bee swarms in September.',
+      'Ant Barriers: Wrap grease bands or engine oil rags around hanging hive wires so ants cannot reach the bees.',
+      'Neem Pest Spray: Pound fresh neem leaves and soak overnight in a bucket of water. Strain liquid and spray on crops to repel chewing caterpillars.',
+      'Companion Planting: Grow fragrant marigolds and basil alongside tomatoes to keep away pest flies and soil worms.'
     ],
     toolsNeeded: ['Kenyan Top-Bar Beehive', 'Bee Veil, Gloves & Smoker', 'Lemongrass Essential Oil / Bait Wax', 'Pounding Mortar & Cloth Strainer', 'Knapsack Sprayer'],
     inspiredCounsel: '"My son, eat thou honey, because it is good; and the honeycomb, which is sweet to thy taste: So shall the knowledge of wisdom be unto thy soul." — Proverbs 24:13-14',
     commonMistakes: [
-      'Using synthetic chemical pesticides near homestead hives, wiping out the entire honeybee colony within hours.',
-      'Harvesting honey during hot daylight hours or with excessive aggressive smoke, causing African honeybees to abscond from the hive.'
+      'Using synthetic pesticide sprays near flowering trees, which kills honeybees and beneficial predators.',
+      'Using hot, harsh smoke when opening beehives, which burns and irritates bees.',
+      'Harvesting brood combs containing baby bees instead of only capped honeycombs.'
     ],
     seasonalTag: 'Rainy Planting',
     prerequisiteNote: 'Foundational integrated homestead biology skill. No prerequisites required.'
@@ -610,21 +622,22 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Intermediate',
     timeToMaster: '1 Season',
     iconName: 'diseases',
-    summary: 'Diagnosing and controlling major agricultural plant diseases: fungal Late Blight (Phytophthora infestans), Bacterial Wilt (Ralstonia), Cassava Mosaic Virus (CMV), powdery mildew, and damping-off using certified clean seed, wood ash, and organic Bordeaux fungicides.',
-    description: 'Plant diseases thrive in humid or poorly drained soils, decimating potato, tomato, and cassava yields if not intercepted early. Modern ecological disease handling relies on early visual diagnosis (differentiating fungal concentric lesions from bacterial vascular wilt and viral leaf curling), strict crop rotation, cultural sanitation, and organic foliar bio-fungicides (dilute copper sulfate + hydrated lime Bordeaux mixture, aerated compost tea, and milk foliar sprays).',
+    summary: 'Diagnose and control plant diseases using clean seed, weekly checks, crop rotation, and organic sprays.',
+    description: 'Plant diseases can quickly ruin your potatoes, tomatoes, and cassava. Check your plants every week. Remove sick plants early and rotate crops.',
     steps: [
-      'Differential Diagnosis: Inspect foliage daily. Fungal blight shows dark brown water-soaked lesions with white mold on leaf undersides; Bacterial wilt causes sudden midday wilting while leaves remain green; Viral infections display mosaic yellow mottling and crinkled leaf margins.',
-      'Bacterial Wilt Water Test: Cut a 3cm stem of a suspected wilted tomato/potato; suspend in a clear glass of clean water for 2 minutes. A cloudy streaming bacterial ooze confirms Ralstonia solanacearum.',
-      'Formulating Organic Bordeaux Mixture: Dissolve 100g copper sulfate and 100g hydrated lime in 10L clean water. Strain and spray on tomato and potato foliage early morning every 7–10 days during rainy Chiperoni weather to prevent Late Blight.',
-      'Milk & Baking Soda Mildew Spray: Mix 1 part fresh cow/goat milk with 9 parts water and 1 tsp baking soda (sodium bicarbonate); spray on squash and cucurbit leaves in bright sunlight to kill powdery mildew spores.',
-      'Strict Sanitation & Rogueing: Uproot and burn or bury deeply (>1 meter) any plants infected with Cassava Mosaic Virus or Bacterial Wilt. Never put diseased tissue in compost heaps.',
-      '4-Year Solanaceae Rotation: Never plant tomatoes, potatoes, eggplants, or peppers in the same bed in consecutive years; rotate with legumes (beans/cowpeas) and brassicas (cabbage/kale).'
+      'Weekly Plant Checks: Inspect leaves for dark spots or yellow patterns. Look on the underside of leaves for white mold.',
+      'Bacterial Wilt Water Test: Cut a short stem from a wilting tomato plant. Place it in a clear glass of water for two minutes: cloudy white threads flowing down mean bacterial wilt.',
+      'Organic Bordeaux Spray: Mix equal small parts of copper sulfate and hydrated lime in clean water. Spray tomato leaves in damp weather to prevent blight.',
+      'Milk Spray for Mildew: Mix one cup of fresh milk with nine cups of clean water. Spray on pumpkin and squash leaves in bright sun to stop white powdery mildew.',
+      'Remove Sick Plants: Pull up plants with virus symptoms or bacterial wilt. Burn or bury them deeply far away from garden beds.',
+      'Crop Rotation: Never plant tomatoes or potatoes in the same bed two years in a row. Follow them with beans, peas, or cabbage.'
     ],
     toolsNeeded: ['Hand Lens / Magnifying Glass', 'Copper Sulfate & Hydrated Lime (Bordeaux Mix)', 'Knapsack Sprayer with Brass Nozzle', 'Pruning Shears & Rubbing Alcohol (70%)', 'Baking Soda & Fresh Milk'],
     inspiredCounsel: '"Cleanse out the old leaven that you may be a new lump... In physical as in spiritual life, cleanliness and vigilance are the price of preservation." — 1 Corinthians 5:7 / Ministry of Healing',
     commonMistakes: [
-      'Tossing diseased potato/tomato vines with Late Blight or Bacterial Wilt into compost piles, contaminating the entire homestead garden soil for years.',
-      'Overhead watering foliage in the late evening, creating prolonged leaf wetness that enables fungal spores to germinate.'
+      'Throwing diseased potato and tomato vines into compost heaps where disease spreads to other beds.',
+      'Spraying plants in the hot midday sun, which scorches leaves.',
+      'Watering garden leaves late in the evening so leaves stay wet all night.'
     ],
     seasonalTag: 'Rainy Planting',
     prerequisiteSkillIds: ['compost-making'],
@@ -637,21 +650,21 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Advanced',
     timeToMaster: '1 Month',
     iconName: 'soilscience',
-    summary: 'Mastering soil physics, chemistry, and biology: soil profile horizon reading (O-A-B-C), mason jar sedimentation testing, field ribbon texture assessment, Cation Exchange Capacity (CEC), pH correction via agricultural lime and wood ash, and nourishing the living mycorrhizal web.',
-    description: 'Healthy soil is not dead dirt—it is a complex living ecosystem containing billions of bacteria, fungal mycorrhizae, nematodes, and protozoa per tablespoon. Deep understanding of soil physical texture (sand, silt, clay ratios), soil chemistry (pH, organic carbon, cation balance), and pedological horizons enables you to correct infertile sandy latosols or heavy compacted dambo clays into world-class fertile loam.',
+    summary: 'Understand your soil horizons, texture, and living earth. Use jar tests, lime, and compost to build fertile living ground.',
+    description: 'Healthy soil is alive with millions of helpful creatures. Learn to read your soil by sight and feel. Check if your ground is sand, silt, or rich clay. Add compost, crushed charcoal, and agricultural lime so plants receive steady nutrition.',
     steps: [
-      'Mason Jar Soil Texture Test: Fill a straight-sided clear glass jar 1/3 full with soil. Add clean water and 1 tsp detergent; shake vigorously for 3 minutes. Sand settles in 1 minute (measure height); Silt settles in 2 hours; Clay settles in 48 hours. Calculate percentages to classify soil on the USDA Soil Texture Triangle.',
-      'Field Ribbon Test: Moisten a golf-ball-sized soil sample. Knead and squeeze out between thumb and forefinger to form a ribbon. If ribbon breaks before 2.5cm = Sandy Loam; 2.5cm–5cm = Clay Loam; >5cm flexible ribbon = Heavy Clay.',
-      'pH Testing & Agricultural Lime Correction: Measure soil pH with indicator strips or digital probe (ideal: pH 6.0–6.8). For acidic soils (pH < 5.5 common in high-rainfall highlands like Mulanje/Viphya), apply 200g–400g of finely ground agricultural dolomitic limestone per square meter.',
-      'Wood Ash Potassium & Calcium Boost: Apply sieved hardwood ash at max 50g per square meter to provide immediate potassium, calcium, and raise acidic soil pH.',
-      'Soil Food Web Inoculation: Apply compost extracts rich in indigenous microorganisms (IMO) and avoid synthetic chemical fertilizers (Urea/NPK) that burn mycorrhizal fungi and salt out soil earthworms.',
-      'Organic Matter Stratification: Keep soil covered with 10cm of carbon mulch at all times to feed endogeic earthworms and build permanent humic glomalin substances.'
+      'Jar Texture Test: Fill a clear glass jar one-third with soil. Add water, shake hard for one minute, and set on a flat table. Sand settles in one minute, silt in two hours, and clay in two days.',
+      'Hand Ribbon Test: Moisten a handful of soil and knead into a ball. Squeeze it out between your thumb and forefinger to make a flat ribbon. Long smooth ribbons mean heavy clay.',
+      'Soil Acidity Check: Test soil with simple pH paper or test kits. If soil tests too acidic, scatter two handfuls of agricultural limestone per square yard.',
+      'Wood Ash Feeding: Sprinkle small amounts of sifted wood ash across garden beds to give potassium, but never use large piles.',
+      'Compost and Charcoal: Work three inches of finished compost and biochar into the top four inches of soil to feed living earthworms.'
     ],
     toolsNeeded: ['Straight-Sided Glass Sedimentation Jars', 'Soil pH Test Strips / Digital Soil Probe', 'Agricultural Dolomitic Lime', 'Sieved Hardwood Ash', 'Measuring Ruler & Notebook'],
     inspiredCounsel: '"In the cultivation of the soil the thoughtful worker will find that unexpected treasures open before him... Nature is an open lesson book; the soil, the seed, the tree, the blossom, the fruit, all have their lessons for us." — E.G. White, The Ministry of Healing, p. 241',
     commonMistakes: [
-      'Applying massive quantities of unmeasured wood ash, spiking soil pH above 8.0 and locking up iron, zinc, and phosphorus.',
-      'Deep rototilling dry clay-rich soils, destroying soil aggregates and pulverizing fungal hyphae into lifeless powder that bakes into hardpan.'
+      'Tilling wet clay soil, which packs it into hard concrete-like lumps.',
+      'Adding large buckets of wood ash in one spot, which locks up plant minerals.',
+      'Leaving fertile soil bare and unmulched in hot sun and driving rain.'
     ],
     seasonalTag: 'Hot Dry Preparation',
     prerequisiteSkillIds: ['broadforking-notill', 'compost-making'],
@@ -689,20 +702,23 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Intermediate',
     timeToMaster: '1 Season',
     iconName: 'seedvault',
-    summary: 'Selecting, fermenting, drying, and hermetically sealing non-GMO heirloom seeds for infinite generations.',
-    description: 'Commercial hybrid seeds do not breed true in subsequent generations. True heirloom seed saving guarantees food security independently of commercial seed suppliers.',
+    summary: 'Save your own vegetable and grain seeds each harvest. Select strong plants, dry seeds fully, and store in cool airtight glass jars.',
+    description: 'Saving seeds gives your homestead true independence. Keep seeds only from healthy, productive parent plants. Clean seeds carefully and dry them in the shade. Store seeds in airtight glass jars with dry wood ash so they sprout vigorously next spring.',
     steps: [
-      'Select seed crops from the healthiest, most vigorous, disease-resistant plants.',
-      'For wet seeds (tomatoes, squashes), ferment seed pulp in water for 3 days to remove germination inhibitors.',
-      'Rinse clean seeds thoroughly in fine mesh sieves.',
-      'Spread seeds on unbleached parchment paper in a shady, well-ventilated room for 14 days.',
-      'Pack thoroughly dried seeds in airtight glass mason jars with food-grade silica gel packets.'
+      'Select Seeds: Tag the strongest, healthiest plants in your garden before harvest.',
+      'Harvest Ripe Seeds: Let seed pods dry brown on the plant before picking.',
+      'Dry in the Shade: Spread cleaned seeds on cloth screens in a warm, breezy room for one week.',
+      'Test Dryness: Press large seeds with a thumbnail. They should feel rock hard without leaving an indent.',
+      'Airtight Storage: Pour dry seeds into clean glass jars with a spoonful of fine wood ash or silica pack.',
+      'Seal and Label: Screw jar lids tight. Write the plant name, variety, and harvest date on a paper label.',
+      'Store Cool: Keep seed jars in a dark, cool cupboard or underground storage box.'
     ],
     toolsNeeded: ['Fine Mesh Strainers', 'Glass Jars', 'Silica Gel Desiccants', 'Parchment Paper'],
     inspiredCounsel: '"While the earth remaineth, seedtime and harvest, and cold and heat, and summer and winter, and day and night shall not cease." — Genesis 8:22',
     commonMistakes: [
-      'Saving seeds from hybrid (F1) market produce, which produce unpredictable, low-yielding offspring in subsequent seasons.',
-      'Storing seeds in sealed plastic bags or humid environments before they reach <8% moisture content, leading to mold rot and lost seed viability.'
+      'Saving seeds from commercial hybrid plants, which grow unevenly and produce poor yields.',
+      'Putting seeds into jars before they are fully dry, causing mold to kill the seed germ.',
+      'Storing seeds in hot tin sheds where heat weakens germination rates.'
     ],
     seasonalTag: 'Cold Dry Season',
     prerequisiteSkillIds: ['broadforking-notill'],
@@ -715,21 +731,24 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Intermediate',
     timeToMaster: '3 Days',
     iconName: 'waterconservation',
-    summary: 'Constructing a multi-layered sand, gravel, and active biological layer filter for crystal-clear drinking water without electricity.',
-    description: 'Bio-sand filters eliminate 99% of pathogens, parasites, and turbidity using gravity flow through biologically active sand columns.',
+    summary: 'Purify drinking water using gravity, sand, and gravel. Build a bio-sand filter that removes dirt and germs without electricity.',
+    description: 'Clean drinking water is vital for family health. Build a slow bio-sand filter in a clean drum. Water trickles down through layers of fine sand and gravel. Helpful microbes on top destroy harmful germs, giving clear safe water every day.',
     steps: [
-      'Prepare a food-grade 200L barrel or masonry column with a lower PVC outlet pipe.',
-      'Fill bottom 5cm with washed underbedding gravel (12mm size).',
-      'Add middle 5cm layer of coarse sand (1-2mm size).',
-      'Fill upper 50cm with clean, fine silica sand (0.7mm size).',
-      'Maintain a 5cm standing water layer above sand to nourish the biological schmutzdecke layer.',
-      'Pour raw stream/rain water gently onto diffuser plate.'
+      'Wash a clean food-grade plastic or concrete barrel thoroughly.',
+      'Place a perforated plastic pipe at the bottom connected to an outside outlet tap.',
+      'Add two inches of clean coarse gravel over the bottom pipe.',
+      'Add two inches of clean coarse sand over the gravel layer.',
+      'Pour in twenty inches of fine washed silica sand, keeping the surface flat and level.',
+      'Place a perforated diffuser plate or plastic lid two inches above the sand to shield the bed.',
+      'Pour raw water gently into the top every day. Keep two inches of standing water over the sand bed.',
+      'Let the top biological layer mature for two weeks before using filtered water for drinking.'
     ],
     toolsNeeded: ['Food-Grade Drum/Concrete Shell', 'Graded Sand & Gravel', 'Diffuser Plate', 'PVC Outlet Pipe'],
     inspiredCounsel: '"In health and in sickness, pure water is one of Heaven\'s choicest blessings. Its proper use promotes health." — E.G. White, The Ministry of Healing, p. 237',
     commonMistakes: [
-      'Scraping or disturbing the top biological "schmutzdecke" layer during routine cleaning, destroying the pathogen-filtering ecosystem.',
-      'Using unwashed or dirty river sand with high silt/clay content, which clogs the filter pores within 48 hours.'
+      'Disturbing or scraping the top sand layer where helpful microbes live.',
+      'Letting the filter dry out completely, which kills the living filter layer.',
+      'Pouring water directly onto bare sand without a diffuser plate.'
     ],
     seasonalTag: 'Year-Round / Any Season',
     prerequisiteNote: 'Essential water sanitation skill. No prerequisites required.'
@@ -741,20 +760,24 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Beginner',
     timeToMaster: '1 Week',
     iconName: 'foodpreservation',
-    summary: 'Building a passive indirect solar cabinet to dry fruits, greens, and grains in 24-48 hours.',
-    description: 'Indirect solar drying uses thermal air convection to draw warm air through food trays without direct ultraviolet light destroying vitamins or scorching produce.',
+    summary: 'Dry fruits, vegetables, and greens using warm sunshine and air. Preserve sweet mangoes, bananas, and tomatoes for the dry season.',
+    description: 'Harness the heat of the sun to preserve surplus garden harvests. Build a simple solar dryer with black metal, glass, and wood. Warm air rises through slatted trays, drying sliced food gently in two sunny days without flies or dust.',
     steps: [
-      'Construct a tilted solar collector box lined with black metal absorbing plate under glass.',
-      'Attach collector base to an insulated drying cabinet fitted with mesh food trays.',
-      'Provide adjustable top exhaust vents to regulate temperature between 45°C and 60°C.',
-      'Slice fruits/vegetables uniformly (5mm thickness) and arrange in single layers on trays.',
-      'Monitor until food reaches <10% moisture content (crisp or leathery texture).'
+      'Build a wooden box with a black painted bottom and a clear glass or plastic lid.',
+      'Cut air intake vents at the bottom front and exhaust vents at the top back.',
+      'Wash and slice fruits or vegetables into uniform quarter-inch slices.',
+      'Spread food slices in a single layer on stainless or nylon mesh drying trays.',
+      'Place the dryer in full sunshine facing the midday sun.',
+      'Check the internal air temperature: keep it between forty-five and sixty degrees Celsius.',
+      'Remove dried fruit when it feels leathery and bends without sticky wetness.',
+      'Pack dried food into airtight jars or clean bags and store in a dark pantry.'
     ],
     toolsNeeded: ['Glazed Glass/Polycarbonate', 'Black Metal Sheet', 'Stainless Mesh Trays', 'Wood/Plywood Frame'],
     inspiredCounsel: '"Gather up the fragments that remain, that nothing be lost." — John 6:12',
     commonMistakes: [
-      'Exposing sliced produce directly to intense, direct sunlight rather than indirect thermal hot air, destroying heat-sensitive vitamins and darkening fruit skin.',
-      'Overcrowding food slices on mesh trays, blocking thermal convection airflow and causing moisture entrapment and souring.'
+      'Slicing food in uneven thick chunks that dry too slowly and turn sour.',
+      'Blocking ventilation vents, which traps humid air and cooks food instead of drying it.',
+      'Leaving dried food outside overnight where cool evening mist softens it.'
     ],
     seasonalTag: 'Harvest & Storage',
     prerequisiteNote: 'Foundational food preservation skill. No prerequisites required.'
@@ -766,20 +789,23 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Advanced',
     timeToMaster: '1 Month',
     iconName: 'outposttech',
-    summary: 'Sizing, wiring, and installing a reliable 24V/48V solar array with LiFePO4 lithium batteries for off-grid power.',
-    description: 'An independent solar energy system powers water pumps, seed refrigeration, grain mills, and household lighting independently of power grids.',
+    summary: 'Set up an off-grid solar power system. Power your water pump, lights, and refrigerator using rooftop solar panels and batteries.',
+    description: 'Solar electricity brings clean lighting and power to rural outposts. Connect solar panels on your roof to a battery charger and battery bank. An inverter turns battery power into normal wall current for lights, pumps, and grain mills.',
     steps: [
-      'Calculate daily kilowatt-hour (kWh) consumption (e.g. 3kWh/day).',
-      'Mount 4x 400W solar panels facing North at 15° tilt (for Southern Hemisphere/Malawi latitude).',
-      'Connect panels to an MPPT Charge Controller via 6mm² solar cable.',
-      'Wire MPPT output to a 48V 100Ah LiFePO4 battery bank with integrated BMS.',
-      'Connect battery bank to a 3kVA Pure Sine Wave Inverter for standard household AC power.'
+      'List Your Daily Power: Add up the watt-hours needed for LED lights, water pumps, and electronics.',
+      'Mount Solar Panels: Bolt panels securely to your roof facing north at a fifteen-degree tilt.',
+      'Wire the Charge Controller: Connect the solar charger to your battery bank first with a proper fuse.',
+      'Connect the Solar Panels: Run heavy copper cables from rooftop panels down to the solar charge controller.',
+      'Install the Inverter: Mount the inverter close to batteries using thick short cables.',
+      'Add Circuit Breakers: Install DC safety breakers on battery wires and AC breakers on house wiring.',
+      'Ground the System: Drive an eight-foot copper rod into damp soil and connect metal frames with ground wire.'
     ],
     toolsNeeded: ['Solar Panels (Mono PERC)', 'MPPT Charge Controller', 'LiFePO4 Lithium Battery', 'Pure Sine Wave Inverter', 'DC Circuit Breakers'],
     inspiredCounsel: '"Sunlight is one of the most benevolent remedies which God has given to man... Room after room should be flooded with light and heat." — E.G. White, Testimonies for the Church, Vol. 2, p. 527',
     commonMistakes: [
-      'Connecting LiFePO4 batteries in parallel without balancing individual cell voltages first, causing severe current imbalance and premature BMS shutdown.',
-      'Undersizing DC solar cables between panels and controller, causing high voltage drops, excessive heat, and lost charging efficiency.'
+      'Connecting solar panels to the charger before connecting the battery bank.',
+      'Using thin undersized wires that overheat and drop electrical voltage.',
+      'Draining batteries completely flat, which ruins battery life.'
     ],
     seasonalTag: 'Hot Dry Preparation',
     prerequisiteSkillIds: ['gravity-water-filtration'],
@@ -817,20 +843,25 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Beginner',
     timeToMaster: '3 Days',
     iconName: 'zeerpot',
-    summary: 'Preserving fresh vegetables, eggs, and fruits for weeks without electricity using double-walled terracotta clay pots and wet river sand.',
-    description: 'In off-grid homesteads, electricity for refrigeration is costly or unavailable. Zeer pot cooling operates on the thermodynamic principle of evaporative cooling: as water evaporates through porous unglazed terracotta outer clay walls, heat is drawn away from the inner chamber, lowering internal temperature by up to 10°C-15°C below ambient air.',
+    summary: 'Keep vegetables fresh without electricity using clay pots. Evaporating water in damp sand cools the inner pot by ten degrees.',
+    description: 'A Zeer pot is a natural refrigerator made from two unglazed clay pots. Place a smaller clay pot inside a larger pot and fill the gap with sand. When you wet the sand, evaporating water draws away heat, keeping tomatoes, leafy greens, and fruit cool and crisp.',
     steps: [
-      'Nest a smaller unglazed earthenware clay pot inside a larger porous terracotta clay pot, leaving a 3-5cm gap between walls.',
-      'Fill the interstitial gap completely with clean, coarse river sand.',
-      'Pour clean water into the sand until fully saturated.',
-      'Place vegetables, tomatoes, greens, or fruit inside the inner dry pot and cover with a clean, wet jute cloth or damp towel.',
-      'Elevate the pot off the ground in a shaded, well-ventilated draft corridor and re-water the sand twice daily.'
+      'Find two porous unglazed clay pots, with one pot three inches smaller than the other.',
+      'Fill the bottom of the larger pot with three inches of clean river sand.',
+      'Place the smaller clay pot inside on top of the sand base.',
+      'Fill the ring gap between the two pots with clean sand up to the top rim.',
+      'Pour clean water slowly onto the sand until it is completely soaked.',
+      'Place fresh vegetables and fruits inside the dry inner clay pot.',
+      'Cover the top with a damp cotton cloth or clean jute sack.',
+      'Set the pot in a breezy, shaded hallway with good airflow.',
+      'Pour water onto the sand twice a day: once in the morning and once in the evening.'
     ],
     toolsNeeded: ['2 Nested Unglazed Earthenware Clay Pots', 'Coarse River Sand', 'Clean Water', 'Jute/Burlap Sack or Towel'],
     inspiredCounsel: '"He that gathereth in summer is a wise son: but he that sleepeth in harvest is a son that causeth shame." — Proverbs 10:5',
     commonMistakes: [
-      'Placing the Zeer pot inside an unventilated indoor corner where humidity accumulates, stopping water evaporation and cooling action.',
-      'Using glazed or painted outer clay pots, which blocks moisture from seeping through outer walls to evaporate.'
+      'Using glazed or painted clay pots that block water evaporation.',
+      'Placing the pot in direct hot sunshine or inside a closed room without moving air.',
+      'Letting the sand dry out during hot windy afternoons.'
     ],
     seasonalTag: 'Hot Dry Preparation',
     prerequisiteNote: 'Foundational non-electric refrigeration skill. No prerequisites required.'
@@ -842,20 +873,23 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Intermediate',
     timeToMaster: '1 Month',
     iconName: 'poultry',
-    summary: 'Housing, feeding, and disease prevention for local indigenous chickens (kuku wa chimaye) and dairy goats on natural forage.',
-    description: 'Poultry and goats provide essential protein (eggs, milk, manure) and weed control for rural homesteads. Managing hardy local breeds requires elevated predator-proof coops, balanced natural feed mixes (grain, termites, greens, crushed eggshells for calcium), and herbal pest protection.',
+    summary: 'Raise healthy free-range chickens and small livestock. Build raised coops, feed natural grain rations, and use natural parasite care.',
+    description: 'Chickens and small livestock provide valuable eggs, meat, and rich manure for your garden. House poultry in raised bamboo coops with good airflow to stay healthy. Feed them grain bran, sunflower seeds, and greens. Prevent parasites with wood ash dust baths.',
     steps: [
-      'Construct an elevated bamboo or wood coop 1 meter above ground with slatted flooring for droppings and predator security.',
-      'Supply clean water mixed with garlic cloves and wood ash dusting baths to prevent external mites and lice.',
-      'Prepare daily supplemental feed combining maize bran (gaga), crushed pigeon peas, dried termites, and greens.',
-      'Vaccinate chicks against Newcastle Disease (Kasozi/Chitopa) at 3 weeks and 3 months using district veterinary drops.',
-      'Collect manure daily to age for 30 days in compost piles before applying to vegetable garden beds.'
+      'Build a raised poultry coop three feet above the ground with slatted bamboo floors for easy cleaning.',
+      'Set up a dry dust bath box filled with clean wood ash and sand so birds clean off lice.',
+      'Provide clean drinking water daily with two crushed cloves of fresh garlic to repel worms.',
+      'Mix wholesome poultry feed using maize bran, crushed pigeon peas, sunflower seeds, and green leaves.',
+      'Vaccinate young chicks against Newcastle disease at three weeks and three months.',
+      'Lock coop doors securely every evening to protect birds from nocturnal predators.',
+      'Collect poultry manure weekly and compost it thoroughly for one month before garden use.'
     ],
     toolsNeeded: ['Elevated Bamboo/Lumber Coop', 'Clay Drinking Troughs', 'Wood Ash & Fresh Garlic', 'Newcastle Disease Eye-Drop Vaccine'],
     inspiredCounsel: '"A righteous man regardeth the life of his beast: but the tender mercies of the wicked are cruel." — Proverbs 12:10',
     commonMistakes: [
-      'Keeping poultry coops directly on damp ground without slatted elevation, encouraging parasitic worm infestations and respiratory disease.',
-      'Skipping seasonal Newcastle disease eye-drop vaccinations, risking sudden 90%+ flock loss during district outbreaks.'
+      'Keeping chickens in dark, crowded, damp coops where respiratory disease spreads quickly.',
+      'Putting fresh hot poultry manure directly on vegetable beds, which burns tender roots.',
+      'Skipping Newcastle vaccination during the windy dry season.'
     ],
     seasonalTag: 'Year-Round / Any Season',
     prerequisiteNote: 'Foundational animal husbandry skill. No prerequisites required.'
@@ -971,20 +1005,23 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Advanced',
     timeToMaster: '2 Weeks',
     iconName: 'borehole',
-    summary: 'Installing direct-drive DC solar submersible pumps in shallow dambo wells for zero-cost drip and trench crop irrigation.',
-    description: 'Pumping water manually with treadle pumps or buckets limits dry season crop acreage. DC solar pumps connect directly to PV panels to automatically deliver 5,000–10,000 liters of water daily during peak sunshine hours without fuel costs or expensive batteries.',
+    summary: 'Pump shallow wetland groundwater with solar power. Water dry-season vegetable beds and fruit trees without costly fuel.',
+    description: 'Valley dambos hold abundant water close to the surface all year. Dig a shallow brick-lined well in the wetland edge. Submerge a small direct-drive solar pump powered by two solar panels. Pump cool clean water directly to garden beds and storage tanks.',
     steps: [
-      'Dig or line a 4-8 meter shallow dambo well with perforated concrete rings or brick casing.',
-      'Lower a 24V DC stainless steel helical screw pump into the water column above well floor silt.',
-      'Connect pump wires to a Solar Pump Controller with water level sensors to prevent dry running.',
-      'Wire controller to a dedicated 2x 350W solar panel array mounted near the dambo.',
-      'Run 32mm HDPE main pipeline to elevated 2,000L header tank feeding gravity drip irrigation lines.'
+      'Dig a shallow well ten to twenty feet deep in the dry season on the wetland edge.',
+      'Line the well with open brick rings or concrete rings to keep sand from caving in.',
+      'Suspend a submersible solar pump three feet above the well bottom with safety rope.',
+      'Mount two solar panels on a pole near the well facing north.',
+      'Connect the solar panels directly to the pump controller with waterproof cables.',
+      'Run thick plastic pipe from the pump uphill to an elevated header tank.',
+      'Distribute water to vegetable garden beds through gravity-fed drip pipes or trenches.'
     ],
     toolsNeeded: ['24V DC Solar Submersible Pump', 'Solar Pump Controller', '2x 350W Solar Panels', '32mm HDPE Pipe', 'Water Level Sensors'],
     inspiredCounsel: '"For I will pour water upon him that is thirsty, and floods upon the dry ground: I will pour my spirit upon thy seed, and my blessing upon thine offspring." — Isaiah 44:3',
     commonMistakes: [
-      'Restricting pump intake directly on the muddy bottom of the well, sucking in sand and destroying pump impellers within weeks.',
-      'Operating the pump without a dry-run sensor controller during October low water tables, causing motor burnout.'
+      'Resting the water pump directly on the muddy well floor where sand clogs pump gears.',
+      'Using thin wires over long distances from solar panels, causing voltage drops.',
+      'Pumping dirty silt water into drip lines without an intake filter screen.'
     ],
     seasonalTag: 'Hot Dry Preparation',
     prerequisiteSkillIds: ['solar-pv-lithium-bank', 'rainwater-swale-dambo-capture'],
@@ -997,20 +1034,21 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Intermediate',
     timeToMaster: '1 Season',
     iconName: 'trueeducation',
-    summary: 'Structuring an Avondale-model family home school and outpost training ground combining morning Bible and scientific study with afternoon agriculture, carpentry, bookkeeping, and self-supporting missionary trades.',
-    description: 'True Adventist education rejects the cramming of dead classics and passive urban schooling in favor of harmonious physical, mental, and spiritual culture. Patterned after the Schools of the Prophets and the Avondale School blueprint in Education and Testimonies Vol. 6, students spend morning hours mastering Scripture, physiology, bookkeeping, and natural sciences, and afternoon hours working side-by-side with parents/instructors in no-till gardening, orchard grafting, carpentry, sewing, and hygienic cookery.',
+    summary: 'Train children with a balanced rhythm of Bible study, academic skills, manual trades, and garden care on the land.',
+    description: 'True education develops the physical, mental, and spiritual powers together. Children learn Bible truths and practical academics in the morning. In the afternoon, they work with their hands in gardens, carpentry workshops, and sewing rooms.',
     steps: [
-      'Morning Sacred & Scientific Block (08:00–11:30): Dedicate peak mental hours to Bible history, human physiology, practical arithmetic, homestead bookkeeping, and botany/soil chemistry.',
-      'Individual Child Garden Plots (5m × 5m): Assign every child their own raised garden bed. Have them test soil pH, sow heirloom seeds, manage mulch, harvest produce, and record yields and tithe in a personal ledger.',
-      'Vocational Trade Mastery (13:30–16:30): Rotate youth through essential self-supporting trades: timber joinery and roofing, compressed earth block masonry, fruit tree grafting, treadle tailoring, and hydrotherapy treatment.',
-      'Bookkeeping & Debt-Free Stewardship: Teach youth double-entry farm accounting—calculating seed-to-harvest multiplication ratios, tool depreciation, and household budgeting under the principle "owe no man anything."',
-      'Nature Object Lesson Walks: Conduct weekly field walks across hillside contours, streams, and beehives, connecting natural laws directly to Christ’s parables in Scripture.'
+      'Morning Study (8:00–11:30): Teach Scripture, practical arithmetic, reading, physiology, and natural science.',
+      'Student Garden Plots (11:30–12:30): Give each child a personal raised bed to plant, weed, and harvest vegetables.',
+      'Noon Rest and Meal (12:30–13:30): Share a wholesome plant-based meal and rest in the shade.',
+      'Vocational Trades (13:30–16:30): Teach practical trades including carpentry, earth brick building, sewing, and first aid.',
+      'Family Worship and Nature Walks: Conclude the day with songs of praise, prayer, and lessons from nature.'
     ],
     toolsNeeded: ['Bible & Spirit of Prophecy Library', 'Student Garden Plot Tools (Small Fork, Hoe, Watering Can)', 'Double-Entry Farm Ledger & Measuring Tape', 'Carpentry Hand Tools (Saw, Chisel, Plane, Square)', 'Soil pH & Thermometer Kit'],
-    inspiredCounsel: '"Study in agricultural lines should be the A, B, and C of the education given in our schools... Instruction should be given in agriculture, manufactures—covering as many as possible of the most useful trades—also in household economy, healthful cookery, sewing, hygienic dressmaking, the treatment of the sick, and kindred lines." — Ellen G. White, Testimonies Vol. 6, p. 179 & Education, p. 218 (6T 179.2 · Ed 218.2)',
+    inspiredCounsel: '"Manual training is worthy of far more attention than it has received... It trains the hands and makes the mind clear and strong." — Education, p. 218',
     commonMistakes: [
-      'Treating outdoor manual labor as a punishment or menial drudgery instead of dignifying it with parent/teacher participation and scientific inquiry.',
-      'Allowing children to spend all day indoors with textbooks or screens, weakening their lungs, digestion, and practical judgment.'
+      'Keeping children sitting indoors over books all day without vigorous physical work in open air.',
+      'Treating garden and workshop labor as drudgery or punishment instead of an honorable blessing.',
+      'Teaching theory without allowing children to build real things with their hands.'
     ],
     seasonalTag: 'Year-Round / Any Season',
     prerequisiteSkillIds: ['compost-making'],
@@ -1023,21 +1061,23 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Beginner',
     timeToMaster: '2 Weeks',
     iconName: 'breadmaking',
-    summary: 'Milling whole wheat, sorghum, finger millet (mawere), and heirloom maize on the homestead, cultivating sweet wild yeast starters without baking soda/saleratus, baking in clay thermal ovens, and twice-baking shelf-stable Zwieback.',
-    description: 'In The Ministry of Healing (pp. 300–302) and Counsels on Diet and Foods, Ellen White emphasizes that wholesome breadmaking is a vital domestic art directly impacting family health and clarity of mind. Commercial white flour is stripped of mineral bran and germ, while baking soda/saleratus inflames the stomach lining. By milling whole grain berries fresh, fermenting with sweet potato-water yeast before souring occurs, baking small loaves thoroughly in a wood-fired clay oven, and converting slices into twice-baked Zwieback (dextrinized rusks), a homestead secures digestible, nutrient-dense bread year-round.',
+    summary: 'Mill whole grains and bake wholesome loaves. Make sweet non-sour bread and crisp double-baked zwieback in a simple cob oven.',
+    description: 'Good bread is the true staff of life. Grind whole wheat, sorghum, or millet fresh before baking so nutrients are preserved. Ferment dough gently with sweet wild yeast without baking soda. Bake in a warm clay oven, and toast leftover bread into crisp, digestible zwieback.',
     steps: [
-      'Fresh Whole-Grain Milling: Clean dry whole wheat, red sorghum (mapira), or finger millet (mawere). Grind into fine whole meal using a manual cast-iron or solar-powered stone burr mill immediately before baking to prevent germ oil rancidity.',
-      'Sweet Potato-Water Yeast Starter: Boil 1 peeled Irish potato in 500ml water; mash and cool to lukewarm (32°C). Stir in 2 tbsp whole wheat flour and 1 tsp raw honey; aerate in a warm spot for 18–24 hours until bubbly and fragrant—never allow it to turn sour or acidic.',
-      'Dough Kneading & Hydration: Combine 70% whole wheat flour with 30% fine sorghum or millet flour, warm water, a pinch of sea salt, and sweet yeast starter. Knead vigorously for 12–15 minutes to develop gluten elasticity without any baking soda or chemical baking powder.',
-      'Controlled Proofing & Small Loaf Shaping: Let dough rise in a warm draft-free cloth until just doubled (60–90 minutes). Shape into small, narrow loaves so heat penetrates to the center and destroys all live yeast germs during baking.',
-      'Clay Thermal Oven Baking (200°C–210°C): Bake in a pre-heated insulated clay cob oven or Dutch oven for 40–45 minutes until the crust rings hollow when tapped. Cool completely on wire racks before slicing (never eat hot, clammy fresh bread).',
-      'Zwieback (Twice-Baked Rusk) Conversion: Slice 24-hour cooled whole-grain loaves into uniform 12mm slices. Arrange on oven trays and slow-bake at 110°C–125°C for 45–60 minutes until crisp and golden through-and-through, converting complex starch into easily digested dextrin.'
+      'Mill Whole Grains: Grind whole wheat berries or sorghum fine on a stone or cast-iron mill.',
+      'Mix Dough: Combine whole flour, warm water, sweet yeast starter, and a pinch of salt.',
+      'Knead Dough: Knead vigorously on a clean table for fifteen minutes until smooth and elastic.',
+      'Gentle Rise: Place dough in a warm bowl covered with a damp cloth for two hours until doubled.',
+      'Shape Loaves: Form into small loaves and place in greased tins for a final thirty-minute rise.',
+      'Bake in Clay Oven: Slide loaves into a hot wood-fired clay oven and bake until crusts ring hollow when tapped.',
+      'Make Zwieback: Slice cool bread thin and toast in a slow warm oven until crisp and golden brown.'
     ],
     toolsNeeded: ['Manual Cast-Iron or Stone Burr Grain Mill', 'Glass Jar for Sweet Yeast Starter', 'Wood-Fired Clay Thermal Oven or Cast-Iron Dutch Oven', 'Bread Loaf Pans & Cooling Wire Racks', 'Airtight Glass or Tin Zwieback Containers'],
-    inspiredCounsel: '"The use of soda or baking powder in breadmaking is harmful and unnecessary. Soda causes inflammation of the stomach and often poisons the entire system... Bread should be light and sweet. Not the least taint of sourness should be tolerated. The loaves should be small, and so thoroughly baked that, so far as possible, the yeast germs shall be destroyed... Whole-wheat bread, or zwieback, are the best articles of diet." — E.G. White, The Ministry of Healing, pp. 300–301 (MH 300.2)',
+    inspiredCounsel: '"Bread should be light and sweet. Not the least taint of sourness should be tolerated." — Ministry of Healing, p. 301',
     commonMistakes: [
-      'Over-fermenting sourdough until it becomes sharply acetic and sour, or pulling large loaves out of the oven with damp, underbaked doughy centers that ferment in the stomach.',
-      'Using commercial baking soda (sodium bicarbonate) or alum baking powders, which neutralize gastric juices and irritate digestive mucous membranes.'
+      'Using harmful chemical baking powders or saleratus that irritate delicate stomach linings.',
+      'Eating fresh, hot, heavy bread straight from the oven before it cools.',
+      'Letting dough over-ferment until it turns sour and acidic.'
     ],
     seasonalTag: 'Year-Round / Any Season',
     prerequisiteNote: 'Foundational SDA culinary and off-grid sustenance skill. No prerequisites required.'
@@ -1049,20 +1089,21 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Intermediate',
     timeToMaster: '3 Weeks',
     iconName: 'hydrotherapy',
-    summary: 'Administering clinical hot-and-cold contrast fomentations, derivative hot foot baths, heating chest compresses, and pulverized hardwood charcoal poultices for fevers, malaria congestion, infections, and reptile bites.',
-    description: 'Every Adventist country outpost is called to serve as a beacon of rational, drugless healing. Hydrotherapy utilizes the thermal and mechanical properties of pure water—vasodilation from heat and vasoconstriction from brief cold—to mobilize leukocytes (white blood cells), relieve internal organ congestion, and break fevers. Paired with pulverized hardwood charcoal poultices (which adsorb bacterial endotoxins, venom, and inflammatory exudates), a rural family can effectively manage common acute ailments.',
+    summary: 'Apply hot and cold water treatments and charcoal poultices to relieve pain, draw inflammation, and stimulate circulation.',
+    description: 'Simple natural remedies work with the body to restore health. Use hot foot baths to draw congestion away from the head and chest. Apply warm moist cloths followed by brief cold wipes to relieve soreness. Use charcoal poultices on wounds and insect bites.',
     steps: [
-      'Hot Foot Bath Foundation (40°C–43°C): Place the patient’s feet in a deep bucket of hot water (40°C, gradually adding hot water up to 43°C) while keeping a cold wet washcloth on the forehead/neck. This draws blood from congested lungs, brain, or abdominal organs.',
-      'Hot & Cold Contrast Fomentations: Wring a heavy folded wool or flannel blanket towel out of boiling water (or steam in a double boiler), wrap in a dry outer towel, and apply over the chest, spine, or liver for 3 minutes. Remove, briskly rub the skin with an ice-cold wet mitt for 30 seconds, and dry. Repeat for 3 complete hot/cold cycles.',
-      'Medical Hardwood Charcoal Production: Cut clean, unpainted eucalyptus, guava, or peach wood into 5cm billets. Pack tightly inside a sealed metal tin with a single 3mm vent nail-hole in the lid; burn in a hot fire for 60 minutes until gas venting stops, cool completely while sealed, and grind in a mortar to a superfine powder.',
-      'Charcoal & Flaxseed/Cassava Poultice: Mix 3 tablespoons of fine activated hardwood charcoal powder with 3 tablespoons of ground flaxseed or fine cassava/maize meal. Stir into 150ml boiling water to form a smooth paste. Spread 6mm thick onto a porous cotton cloth, fold edges, apply warm over infected wounds, boils, cellulitis, or snakebites, and cover with plastic wrap and a wool binder overnight.',
-      'Heating Chest Compress (Overnight): Wring a thin cotton cloth out of cold water, wrap snugly around the chest or throat for coughs/bronchitis, and cover completely with a wider dry wool flannel scarf pinned tightly so body heat warms it through the night.'
+      'Hot Foot Bath: Place feet in warm water (40°C). Gradually add hot water up to 43°C. Keep a cool wet cloth on the forehead. After twenty minutes, pour cool water over the feet and dry thoroughly.',
+      'Hot and Cold Fomentations: Apply a steaming moist cloth over sore joints or chest for three minutes. Follow with a brisk thirty-second wipe with a cold cloth. Repeat three times, always finishing with cold.',
+      'Charcoal Poultice: Stir three spoonfuls of fine wood charcoal and ground flaxseed into warm water to make a thick paste.',
+      'Wrap the Poultice: Spread paste on clean cloth, fold edges inward, and place over inflammation or insect bites.',
+      'Rest and Warmth: Tuck the patient into bed with warm blankets and encourage plenty of clean drinking water.'
     ],
     toolsNeeded: ['Wool Flannel Fomentation Blankets & Cotton Towels', 'Deep Foot Bath Tub & Water Thermometer', 'Sealed Metal Pyrolysis Tin & Mortar/Pestle', 'Pulverized Hardwood Charcoal Powder (Eucalyptus/Peach)', 'Ground Flaxseed or Cassava Meal', 'Kettle & Double Boiler'],
-    inspiredCounsel: '"Pulverized charcoal, wet with water or used in poultices, is most successful in checking inflammation and drawing out poison... In health and in sickness, pure water is one of Heaven\'s choicest blessings. Its proper use promotes health. It is the beverage which God provided to quench the thirst of animals and man." — E.G. White, Selected Messages Book 2, p. 294 & Ministry of Healing, p. 237 (2SM 294.2 · MH 237.1)',
+    inspiredCounsel: '"There are many ways of applying water to relieve pain and check disease. All should become intelligent in its use in simple home treatments." — Ministry of Healing, p. 237',
     commonMistakes: [
-      'Applying scalding fomentation cloths directly to bare skin without a dry insulating layer or without testing temperature on the inner wrist, especially on diabetic or elderly patients with reduced sensation.',
-      'Leaving a cold wet compress uncovered by dry wool flannel, which chills the patient through evaporation instead of creating a therapeutic heating reaction.'
+      'Leaving a cold wet cloth on the skin without drying, which chills the patient.',
+      'Using boiling water directly against skin without protecting towels underneath.',
+      'Letting charcoal paste dry into a hard crust instead of keeping it moist under a wrap.'
     ],
     seasonalTag: 'Year-Round / Any Season',
     prerequisiteSkillIds: ['offgrid-first-aid', 'herbs-cultivation-medicinal'],
@@ -1075,20 +1116,21 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Beginner',
     timeToMaster: '2 Weeks',
     iconName: 'oilpress',
-    summary: 'Producing complete plant-based proteins, dairy-free soybean and groundnut milks, coagulated tofu curds, sprouted legumes, and cold-pressed sunflower/moringa oils without electricity or dairy reliance.',
-    description: 'As Ellen White foretold, disease in animal flocks and dairy cattle makes plant-based nutrition a cornerstone of country self-sufficiency. Malawi’s climate excels at producing high-protein soybeans, groundnuts, pigeon peas, macadamia nuts, sesame, and oilseed sunflowers. Mastering wet-milling for plant milks, lemon/nigari tofu coagulation, 72-hour seed sprouting, and manual screw/ram oil pressing ensures abundant protein, calcium, and essential fatty acids entirely from your own soil.',
+    summary: 'Make rich plant milks, tofu, and cold-pressed oils. Process soybeans, groundnuts, and sunflower seeds for wholesome family nutrition.',
+    description: 'Wholesome plant foods provide abundant protein, healthy fats, and minerals without animal diseases. Make fresh soy and groundnut milk for children. Press golden oil from home-grown sunflower seeds, and sprout beans for fresh winter greens.',
     steps: [
-      'Soybean & Groundnut Milk Production: Soak 500g clean non-GMO soybeans in water for 10 hours; rub off hulls. Wet-grind with 3.5L water into a fine slurry. Strain through a tight muslin cloth (save okara pulp for bread/patties). Boil the raw soy milk at a rolling simmer for 20 minutes to neutralize trypsin inhibitors and bean enzymes.',
-      'Artisanal Homestead Tofu Coagulation: Cool freshly boiled soy milk to 78°C. Slowly stir in a coagulant solution (60ml fresh squeezed lemon/lime juice or 2 tsp nigari/Epsom salt dissolved in warm water) in a figure-8 motion. Cover for 15 minutes until white curds separate from clear amber whey; press curds in a cloth-lined wooden mold under a 2kg stone for 30 minutes.',
-      '72-Hour Legume Sprouting Protocol: Soak mung beans, lentils, or cowpeas for 8 hours, drain in a wide-mouth glass jar with a mesh lid, and rinse twice daily in shade for 3 days. Sprouting neutralizes phytic acid, increases Vitamin C by 300%, and reduces firewood cooking time from 90 minutes to 15 minutes.',
-      'Cold-Pressed Sunflower & Moringa Oil: Harvest and sun-dry black-hulled oilseed sunflower seeds or winged Moringa oleifera seeds to <8% moisture. Feed into a manual lever ram-press (Capricorn/Bielenberg press) to extract golden virgin cooking oil; clarify by gravity settling for 48 hours in dark glass jugs.',
-      'Stone-Ground Nut Creams & Tahini: Lightly toast shelled groundnuts, macadamia nuts, or white sesame seeds in a heavy cast-iron pan; grind warm in a burr mill or mortar into smooth nut butter. Whisk 2 tbsp nut butter with warm water to create instant dairy-free cream for soups, gravies, and breadmaking.'
+      'Soy and Nut Milk: Soak dry soybeans or groundnuts in clean water for eight hours. Grind fine with water in a clean mortar. Boil gently for twenty minutes and strain through cloth.',
+      'Fresh Tofu: While hot soy milk simmers at eighty degrees, stir in fresh lemon juice. Watch white curds form. Scoop curds into a cloth-lined wooden press box and weigh down with a stone for thirty minutes.',
+      'Cold Oil Pressing: Sun-dry clean sunflower seeds until crisp. Feed seeds into a hand-lever press to squeeze out pure golden oil.',
+      'Clarify Oil: Let raw oil sit in tall glass jars for two days until sediment settles at the bottom, then pour off clear oil.',
+      'Sprouting Beans: Soak lentils or mung beans in water overnight. Rinse twice a day in a shaded jar until fresh green sprouts appear.'
     ],
     toolsNeeded: ['Muslin / Cheesecloth Straining Bags', 'Perforated Wooden Tofu Press Box', 'Wide-Mouth Glass Sprouting Jars with Mesh Lids', 'Manual Lever Oilseed Ram-Press', 'Heavy Cast-Iron Skillet & Burr Grinder'],
-    inspiredCounsel: '"Grains, fruits, nuts, and vegetables constitute the diet chosen for us by our Creator. These foods, prepared in as simple and natural a manner as possible, are the most healthful and nourishing... The time will come when we may have to discard some of the articles of diet we now use, such as milk and cream and eggs." — E.G. White, The Ministry of Healing, p. 296 & Counsels on Diet and Foods, p. 206 (MH 296.1 · CD 206.1)',
+    inspiredCounsel: '"Grains, fruits, nuts, and vegetables constitute the diet chosen for us by our Creator." — Ministry of Healing, p. 296',
     commonMistakes: [
-      'Under-boiling raw soybean milk (<15 minutes), leaving active trypsin inhibitors that cause severe indigestion and block protein absorption.',
-      'Using excessive proportions of rich nuts or oils in a single meal; Ellen White counsels that one tenth to one sixth part of nuts/oil is sufficient alongside grains and fruit (CD 351).'
+      'Under-cooking raw soybean milk, which leaves an earthy taste and causes stomach upset.',
+      'Using rancid, moldy, or damp oilseeds for pressing oil.',
+      'Eating rich nut preparations in excessive quantities at single meals.'
     ],
     seasonalTag: 'Harvest & Storage',
     prerequisiteSkillIds: ['drought-resistant-crops'],
@@ -1101,20 +1143,21 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Intermediate',
     timeToMaster: '3 Weeks',
     iconName: 'soapmaking',
-    summary: 'Leaching potassium hydroxide (KOH) lye from hardwood cooking ash to saponify sunflower and moringa oils into antiseptic homestead soap, paired with non-electric treadle sewing and healthful garment drafting.',
-    description: 'Complete off-grid independence extends beyond food to hygiene and clothing. By leaching white ash from hardwood cooking fires through a straw-lined barrel with soft rainwater, homesteaders produce natural potassium hydroxide (KOH) lye at zero cost. Saponified with home-pressed sunflower, coconut, or moringa oil and infused with antiseptic neem and lemongrass, this yields gentle laundry and body soap. Simultaneously, mastering a non-electric foot-treadle sewing machine enables families to draft durable, modest, physiologically healthful work garments.',
+    summary: 'Make pure homestead soap from wood ash and pressed oils. Sew modest, durable work garments using a manual treadle sewing machine.',
+    description: 'Learn valuable household crafts for complete country independence. Leach natural potassium lye from clean wood ash. Cook lye with sunflower oil and beeswax into gentle cleansing soap. Maintain a foot-treadle sewing machine to sew comfortable work clothes.',
     steps: [
-      'Hardwood Ash Leaching Barrel Setup: Drill a 10mm outlet hole near the bottom of a wooden or heavy HDPE barrel; plug with a wooden spigot. Lay a 10cm filter bed of river pebbles topped with 10cm of clean dry straw. Fill barrel tightly with cold, white, sifted ash from burned hardwood (acacia, mango, eucalyptus—never soft pine).',
-      'Percolating & Testing Lye Concentration: Pour soft rainwater slowly over the ash until golden-brown potash lye trickles from the bottom spigot. Test concentration using the traditional specific-gravity test: a fresh chicken egg or raw potato cube should just float with a coin-sized circle exposed above the lye surface.',
-      'Hot-Process Saponification: Heat 2 liters of strained wood-ash lye in a stainless steel or cast-iron pot (never aluminum!) and slowly whisk in 1.5 liters of warm sunflower/coconut/moringa oil blend. Simmer gently for 2–3 hours, stirring periodically until the mixture thickens to a translucent pudding ("trace") with no free oil.',
-      'Botanical Infusion & Curing: Stir in 2 tbsp neem leaf powder, 3 tbsp fresh Aloe vera gel, and 15ml lemongrass essential oil (plus 2 tbsp sea salt to firm potassium soap into harder bars). Pour into cloth-lined wooden molds, cut after 48 hours, and cure on ventilated racks for 3–4 weeks.',
-      'Treadle Sewing & Healthful Garment Drafting: Clean and lubricate a cast-iron foot-treadle sewing machine. Draft work trousers, skirts, and shirts from breathable heavy cotton or linen, ensuring garment weight hangs comfortably from the shoulders with full freedom for deep diaphragmatic breathing.'
+      'Leach Ash Lye: Pack cold white hardwood ash into a wooden barrel over straw and pebbles. Pour soft rainwater slowly over the ash. Collect dark amber lye dripping from the bottom.',
+      'Test Lye Strength: Float a clean raw egg in the lye. If a coin-sized patch of egg floats above liquid, the lye is strong enough.',
+      'Simmer Soap: Pour two liters of lye and one and a half liters of warm sunflower oil into an iron pot. Simmer gently over an outdoor fire, stirring until thick.',
+      'Mold and Cure: Pour thick soap into a cloth-lined wooden box. Let firm for two days, cut into bars with wire, and cure on open racks for four weeks.',
+      'Treadle Sewing: Clean and oil your foot-treadle sewing machine weekly. Sew comfortable clothes that hang from the shoulders without tight waistbands.'
     ],
     toolsNeeded: ['Ash Leaching Barrel with Spigot & Straw Filter', 'Stainless Steel or Cast-Iron Soap Pot (No Aluminum)', 'Wooden Soap Molds & Wire Cutter', 'Cast-Iron Foot-Treadle Sewing Machine', 'Tailoring Shears, Measuring Tape & Heavy Cotton Fabric'],
     inspiredCounsel: '"Strict habits of cleanliness should be maintained. Many are susceptible to disease merely because of their uncleanly habits... Our clothing, while modest and simple, should be of good quality, of becoming colors, and suited for service. It should be chosen for durability rather than display; and it should provide warmth and proper protection, leaving the lungs and limbs free to act." — E.G. White, Counsels on Health, p. 101 & Education, p. 248 (CH 101.2 · Ed 248.2)',
     commonMistakes: [
-      'Boiling wood-ash lye in an aluminum pot, which reacts violently with alkali, corroding the pot and releasing toxic hydrogen gas.',
-      'Using softwood pine ash or un-sifted charcoal chunks, which yields weak lye and leaves abrasive black grit in finished laundry soap.'
+      'Using aluminum pots for cooking soap, which lye dissolves and ruins.',
+      'Using fresh un-cured soap that still bites the skin with unreacted lye.',
+      'Sewing tight work garments that restrict deep breathing and easy movement.'
     ],
     seasonalTag: 'Year-Round / Any Season',
     prerequisiteNote: 'Foundational domestic economy and sanitation trade skill. No prerequisites required.'
@@ -1126,20 +1169,22 @@ const BASE_HOMESTEAD_SKILLS: SkillItem[] = [
     difficulty: 'Beginner',
     timeToMaster: '1 Week',
     iconName: 'thermalcooker',
-    summary: 'Constructing insulated hay-box / rice-hull thermal cookers (Wonderbags) to keep Sabbath meals hot from Friday sundown without kindling fires, combined with rocket-stove masonry and village gospel outreach.',
-    description: 'In the country outpost, Friday ("the preparation day") is organized with calm precision so that when the sun sets behind the mountains, all cooking, bathing, tool cleaning, and secular labor are finished (Exodus 16:23; Testimonies Vol. 6, p. 355). By constructing high-efficiency insulated clay rocket stoves for Friday preparation and sewing deep rice-hull or sheep-wool thermal retention cookers (fireless cookers), stews, beans, and whole grains brought to a 10-minute boil on Friday afternoon remain piping hot (above 68°C food-safe threshold) through Sabbath noon meal—freeing the entire family for worship, nature study, and medical/literature ministry.',
+    summary: 'Prepare peacefully for the holy Sabbath. Cook Friday dishes in an insulated Wonderbag and keep your home quiet and restful.',
+    description: 'The Sabbath is a joyful sanctuary in time. Complete all cooking, cleaning, and field work on Friday afternoon before sunset. Boil pots of beans and stew for fifteen minutes, then seal them inside an insulated cloth cooker to finish cooking without fire on Sabbath morning.',
     steps: [
-      'Insulated Clay-Pumice Rocket Stove Construction: Build an L-shaped combustion tunnel using 1 part clay, 2 parts coarse sand, and 2 parts crushed charcoal/rice-hull ash insulation. The vertical insulated chimney creates a fierce draft that boils 5L of water using only 4 small dry twigs, cutting smoke and firewood use by 75%.',
-      'Sewing the Fireless Thermal Cooker (Wonderbag / Hay-Box): Sew two concentric heavy cotton drawstring bags (inner bag 45cm diameter, outer bag 65cm diameter) and pack the 10cm annular wall tightly with dry rice hulls, kapok fiber, raw sheep wool, or shredded dry maize husks, plus a thick insulated top pillow.',
-      'Friday Afternoon Thermal Cooking Protocol: Two hours before Friday sunset, bring a heavy lidded stainless or cast-iron pot of seasoned beans, brown rice, or vegetable stew to a rolling boil for 15 minutes on the rocket stove. Immediately transfer the sealed boiling pot into the insulated thermal bag, cinch the top pillow tight, and place in a draft-free corner.',
-      'Friday Sundown Sanctuary Readiness: Polish boots/shoes, lay out Sabbath garments, prepare solar-heated or stove-heated bathwater, harvest fresh fruit, and tidy the homestead yard 30 minutes before sunset so the family greets the Sabbath with singing and Scripture.',
-      'Sabbath Afternoon Outpost Ministry: Pack health tracts, Chichewa/English Steps to Christ, solar-charged audio-Bibles, and small baskets of homestead fruit or herbal teas to visit sick, elderly, or bereaved villagers within walking distance.'
+      'Friday Morning Prep: Gather vegetables, grind meal, and wash family garments early.',
+      'Start the Food: Bring pots of beans, soups, or porridge to a rolling boil on the stove for fifteen minutes.',
+      'Insulated Box Cooking: Transfer the boiling pot with lid straight into an insulated Wonderbag or straw box. Close tightly so trapped heat cooks food for six hours.',
+      'Friday Afternoon Rest: Tidy living rooms, polish work shoes, and take warm baths before the sun sets.',
+      'Sunset Welcome: Gather family at sunset with singing, prayer, and scripture to welcome the sacred Sabbath hours.',
+      'Sabbath Meal: Open the insulated cooker on Sabbath noon. The food is warm, tender, and delicious without building a fire.'
     ],
     toolsNeeded: ['Heavy Cotton Fabric & Dry Rice Hulls / Kapok Insulation', 'Tight-Fitting Lidded Stainless or Cast-Iron Stockpot', 'Clay-Sand Insulated Rocket Stove', 'Solar Audio-Bible & Health Literature Pouch'],
-    inspiredCounsel: '"On Friday let the preparation for the Sabbath be completed. See that all the clothing is in readiness and that all the cooking is done. Let the boots be blacked and the baths be taken. It is possible to do this. If you make it a rule you can do it. The Sabbath is not to be given to the repairing of garments, to the cooking of food, to pleasure seeking, or to any other worldly employment." — E.G. White, Testimonies for the Church, Vol. 6, pp. 355–356 (6T 355.3)',
+    inspiredCounsel: '"On Friday let the preparation for the Sabbath be completed... On the Sabbath let no fire be kindled to cook food." — Testimonies, Vol. 6, p. 355',
     commonMistakes: [
-      'Using a thin, poorly fitting pot lid or opening the thermal cooker repeatedly to peek, which releases trapped steam heat and allows food temperature to drop below 60°C.',
-      'Delaying Friday preparation until late afternoon, rushing into the sacred Sabbath hours exhausted and irritable.'
+      'Leaving heavy cooking, washing, and chopping until Sabbath hours.',
+      'Opening the insulated cooker repeatedly, which lets valuable cooking heat escape.',
+      'Rushing into Sabbath sunset with frantic, unfinished household chores.'
     ],
     seasonalTag: 'Year-Round / Any Season',
     prerequisiteNote: 'Essential Seventh-day Adventist homestead rhythm and energy-conservation skill.'

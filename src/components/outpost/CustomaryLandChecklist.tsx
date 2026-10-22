@@ -37,7 +37,7 @@ const CUSTOMARY_LAND_STEPS: CustomaryStep[] = [
     id: 'cl-step-3',
     stepNumber: 'STEP 03',
     title: 'Physical Boundary Walk with All Adjacent Neighbors',
-    chichewaTerm: 'Kuyenda Malire &amp; Mboni za Malire',
+    chichewaTerm: 'Kuyenda Malire & Mboni za Malire',
     authorityLevel: 'Boundary Witnesses &amp; Customary Land Committee (CLC)',
     description:
       'Walk the entire perimeter with the Village Headman, all 4 neighboring landholders, and the Customary Land Committee (Komiti ya Malo). Plant permanent sisal (Khonje) or stone beacons and record GPS corner coordinates.',

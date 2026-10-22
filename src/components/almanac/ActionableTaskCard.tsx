@@ -71,24 +71,28 @@ export function ActionableTaskCard({
         
         {/* Header Badges: Priority + Domain + Exodus Stage */}
         <div className="flex flex-wrap items-center justify-between gap-2.5">
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 text-caption font-mono">
             {/* Domain Tag */}
-            <span className={cn("text-caption font-mono font-black uppercase px-2.5 py-0.5 rounded-full border flex items-center gap-1", domainStyle.bg, domainStyle.text, domainStyle.border)}>
+            <span className={cn("font-bold uppercase px-2 py-0.5 rounded-md border flex items-center gap-1", domainStyle.bg, domainStyle.text, domainStyle.border)}>
               <DomainIcon size={11} />
               <span>{task.domain.replace('-', ' ')}</span>
             </span>
 
             {/* Exodus Stage Tag */}
-            <span className="text-caption font-mono font-bold uppercase px-2.5 py-0.5 rounded-full bg-black/40 text-emerald-300 border border-emerald-500/30">
+            <span className="text-stone-500">·</span>
+            <span className="font-semibold text-emerald-300">
               Stage: {task.exodusStage}
             </span>
 
             {/* Priority / Urgency Badge */}
             {task.priority === 'urgent' && (
-              <span className="text-caption font-mono font-black uppercase px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1">
-                <AlertTriangle size={11} className="text-amber-400" />
-                <span>Urgent Window</span>
-              </span>
+              <>
+                <span className="text-stone-500">·</span>
+                <span className="font-bold uppercase px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1">
+                  <AlertTriangle size={11} className="text-amber-400" />
+                  <span>Urgent Window</span>
+                </span>
+              </>
             )}
           </div>
 

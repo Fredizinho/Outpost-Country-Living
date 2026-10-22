@@ -360,7 +360,7 @@ export const DATA_SOURCES_AND_CITATIONS: CitationSource[] = [
     category: 'Land & Legal',
     title: 'Customary Land Act (Act No. 19 of 2016) & Customary Land Regulations (2018)',
     institution: 'Parliament of Malawi & Malawi Legal Information Institute (MalawiLII)',
-    description: 'Statutory framework governing Traditional Land Management Areas (TLMAs), Customary Estate registration, Traditional Authority (TA) consent, and dispute resolution.',
+    description: 'How land is managed in your area: how to register it, why you need the chief’s agreement, and what to do if there is a dispute.',
     verifiableURLOrDoc: 'Malawi Parliament Act No. 19 of 2016 (MalawiLII Official Statutory Archive)',
     directUrl: 'https://malawilii.org/akn/mw/act/2016/19/eng@2016-09-01'
   },

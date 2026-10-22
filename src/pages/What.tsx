@@ -11,6 +11,7 @@ import { SoilStrataBlueprint } from '@/components/home/SoilStrataBlueprint';
 import { ActiveDistrictContextBar } from '@/components/common/ActiveDistrictContextBar';
 import { getStoredPantryStock, saveStoredPantryStock } from '@/lib/offlineStorage';
 import { SOIL_TYPES_REGISTRY } from '@/constants';
+import { StandardDiagram } from '@/components/common/StandardDiagram';
 
 const EdenicCountryKitchen = lazy(() =>
   import('@/components/outpost/EdenicCountryKitchen').then((m) => ({
@@ -53,7 +54,7 @@ export default function What() {
       title: 'Home Building & Strong Shelter', 
       icon: Shield, 
       desc: 'Pressed earth blocks, stone foundations, and timber roofing built to withstand heavy Malawi rains.',
-      details: 'Block Making: 70% coarse sand/loam + 20% clay + 10% cement (or lime), pressed tightly using a hand-press machine. Roof Overhang: Keep roof edges at least 1 meter wide to shield mud and earth walls from heavy downpours. Foundation: 60cm deep stone base with waterproof plastic sheet to stop moisture rising.'
+      details: 'Block Making: 70% coarse sand/loam + 20% clay + 10% cement (or lime), pressed tightly using a hand-press machine. Roof Overhang: Keep roof edges at least 1 m [3.3 ft] wide to shield mud and earth walls from heavy downpours. Foundation: 60 cm [2 ft] deep stone base with waterproof plastic sheet to stop moisture rising.'
     },
     { 
       id: 'tools',
@@ -67,24 +68,24 @@ export default function What() {
       title: 'Clean Water & Rain Harvesting', 
       icon: Flame, 
       desc: 'Hillside stream pipes, metal roof rain collection tanks, solar well pumps, and sand water filters.',
-      details: 'Sand Water Filter: Clean drums filled with fine silica sand and gravel that clean dirty water naturally and remove bacteria. Rain Collection: A standard iron roof of 100 sq. meters catches over 90,000 liters of fresh rainwater in a normal Malawi rainy season.'
+      details: 'Sand Water Filter: Clean drums filled with fine silica sand and gravel that clean dirty water naturally and remove bacteria. Rain Collection: A standard iron roof of 100 m² [1,076 sq ft] catches over 90,000 L [23,775 gal] of fresh rainwater in a normal Malawi rainy season.'
     },
     { 
       id: 'power',
       title: 'Solar Power & Batteries', 
       icon: Zap, 
       desc: 'Solar panels, long-lasting lithium batteries, and direct solar water pumping without fuel.',
-      details: 'Simple Solar Setup: 4x 200W solar panels (800W total) paired with a 48V lithium battery can run LED home lights, phone charging, a chest freezer, and daily water pumping with zero monthly bills or fuel costs.'
+      details: 'Simple Solar Setup: 4× 200 W solar panels (800 W total) paired with a 48 V lithium battery can run LED home lights, phone charging, a chest freezer, and daily water pumping with zero monthly bills or fuel costs.'
     },
   ];
 
   const defaultPantry = [
-    { id: 'p1', label: 'Bulk Grains (Corn, Sorghum, Millet, Rice)', checked: false },
-    { id: 'p2', label: 'Home-Canned & Solar-Dried Vegetables (Dried Greens, Tomatoes, Squash)', checked: false },
+    { id: 'p1', label: 'Bulk Grains (Chimanga, Mapira, Mchewere, Mpunga)', checked: false },
+    { id: 'p2', label: 'Home-Canned & Solar-Dried Vegetables (Mfutso, Tomatoes, Squash)', checked: false },
     { id: 'p3', label: 'Heirloom Non-GMO Seeds (Open-Pollinated Heritage Varieties)', checked: false },
-    { id: 'p4', label: 'Natural Herbal Remedies & Pure Charcoal (Garlic, Moringa, Aloe)', checked: false },
-    { id: 'p5', label: 'Protein Legumes & Dried Beans (Field Beans, Cowpeas, Pigeon Peas, Groundnuts)', checked: false },
-    { id: 'p6', label: 'Cold-Pressed Oils & Raw Honey (Sunflower Oil, Groundnut Oil, Honey)', checked: false },
+    { id: 'p4', label: 'Natural Herbal Remedies & Pure Charcoal (Chamwamba, Chidole, Garlic)', checked: false },
+    { id: 'p5', label: 'Protein Legumes & Dried Beans (Nyemba, Khobwe, Nandolo, Mtedza)', checked: false },
+    { id: 'p6', label: 'Cold-Pressed Oils & Raw Honey (Uchi wa Njuchi, Sunflower & Groundnut Oil)', checked: false },
   ];
 
   const [pantryItems, setPantryItems] = useState(() => {
@@ -360,38 +361,51 @@ export default function What() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-[#0B2517] rounded-[2.5rem] p-8 md:p-10 max-w-lg w-full shadow-2xl border border-emerald-800 flex flex-col gap-6 relative text-stone-100"
+              className="bg-[#FFFDF8] dark:bg-[#17241C] rounded-2xl p-6 sm:p-8 max-w-xl w-full shadow-2xl border border-[#E4DCCB] dark:border-[#283C30] flex flex-col gap-5 relative text-[#1F2A22] dark:text-[#F6F1E7] max-h-[90vh] overflow-y-auto"
             >
               <button 
                 onClick={() => setSelectedEssential(null)}
-                className="absolute top-6 right-6 p-2 rounded-full bg-white/10 text-stone-300 hover:bg-white/20 hover:text-white transition-colors cursor-pointer"
+                className="absolute top-5 right-5 p-2 rounded-lg bg-[#F6F1E7] dark:bg-[#0E1712] text-[#5A6458] dark:text-[#9FB3A4] hover:text-[#1F2A22] dark:hover:text-[#FFFDF8] transition-colors cursor-pointer border border-[#E4DCCB] dark:border-[#283C30]"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
 
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-900/60 border border-emerald-700/60 flex items-center justify-center text-amber-300">
-                  <selectedEssential.icon size={26} />
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-xl bg-[#2B4636]/10 dark:bg-[#1F3325] border border-[#2B4636]/20 dark:border-[#283C30] flex items-center justify-center text-[#2B4636] dark:text-[#D4A034]">
+                  <selectedEssential.icon size={22} />
                 </div>
                 <div>
-                  <span className="text-caption uppercase font-sans font-bold tracking-wider text-amber-300">Field Specification</span>
-                  <h3 className="serif text-2xl font-bold text-white">{selectedEssential.title}</h3>
+                  <span className="text-caption uppercase font-mono font-bold tracking-wider text-[#B4531F] dark:text-[#D4A034]">
+                    Field Engineering Specification
+                  </span>
+                  <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#1F2A22] dark:text-[#FFFDF8]">
+                    {selectedEssential.title}
+                  </h3>
                 </div>
               </div>
 
-              <div className="flex flex-col gap-4">
-                <p className="text-stone-200 text-sm font-medium leading-relaxed">
+              <div className="flex flex-col gap-3">
+                <p className="text-xs sm:text-sm text-[#5A6458] dark:text-[#D0DAD2] font-medium leading-relaxed">
                   {selectedEssential.desc}
                 </p>
-                <div className="p-4 bg-[#06180E] rounded-2xl border border-emerald-900/80 text-xs text-emerald-100 leading-relaxed font-medium">
-                  <strong className="text-amber-300 block mb-1 font-sans uppercase text-caption tracking-wider">Practical Field Application:</strong> 
+
+                {selectedEssential.id === 'water' && (
+                  <div className="my-1 rounded-xl overflow-hidden border border-[#E4DCCB] dark:border-[#283C30] bg-[#F6F1E7] dark:bg-[#0E1712] p-2">
+                    <StandardDiagram type="roof-tank" className="bg-transparent border-0" />
+                  </div>
+                )}
+
+                <div className="p-4 bg-[#F6F1E7] dark:bg-[#0E1712] rounded-xl border border-[#E4DCCB] dark:border-[#283C30] text-xs text-[#1F2A22] dark:text-[#F6F1E7] leading-relaxed font-medium">
+                  <strong className="text-[#B4531F] dark:text-[#D4A034] block mb-1 font-mono uppercase text-caption tracking-wider">
+                    Practical Field Application:
+                  </strong> 
                   {selectedEssential.details}
                 </div>
               </div>
 
               <button 
                 onClick={() => setSelectedEssential(null)}
-                className="bg-emerald-800 hover:bg-emerald-700 text-white border border-emerald-600/50 py-3.5 rounded-2xl font-sans font-bold text-xs uppercase tracking-wider transition-all shadow-md cursor-pointer"
+                className="bg-[#2B4636] hover:bg-[#1F3325] dark:bg-[#283C30] dark:hover:bg-[#344E3E] text-white py-3 rounded-xl font-mono font-bold text-xs uppercase tracking-wider transition-all shadow-sm cursor-pointer"
               >
                 Close Specification
               </button>

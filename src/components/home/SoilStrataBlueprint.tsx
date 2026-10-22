@@ -180,10 +180,10 @@ export function SoilStrataBlueprint() {
                 <circle cx="95" cy="72" r="2" fill="#A7F3D0" />
                 <circle cx="150" cy="90" r="2" fill="#A7F3D0" />
                 <circle cx="250" cy="75" r="2" fill="#A7F3D0" />
-                <text x="14" y="72" fill="#A7F3D0" fontSize="10" fontFamily="monospace" fontWeight="bold">
+                <text x="14" y="70" fill="#A7F3D0" fontSize="12.5" fontFamily="monospace" fontWeight="bold">
                   O/A HORIZON · HUMUS &amp; MULCH (0–25cm)
                 </text>
-                <text x="14" y="88" fill="#6EE7B7" fontSize="8.5" fontFamily="monospace">
+                <text x="14" y="88" fill="#6EE7B7" fontSize="12" fontFamily="monospace">
                   Mycorrhizal Fungi · Earthworms · pH 6.2–6.8
                 </text>
               </g>
@@ -206,10 +206,10 @@ export function SoilStrataBlueprint() {
                 <rect x="172" y="108" width="46" height="48" rx="6" fill="#1C1917" fillOpacity="0.6" stroke="#F59E0B" strokeDasharray="3 2" />
                 <path d="M195 52 L195 150 M195 115 L178 142 M195 120 L212 146" stroke="#FDE68A" strokeWidth="2" strokeLinecap="round" fill="none" />
                 <path d="M55 95 L52 158 M58 95 L64 154" stroke="#34D399" strokeWidth="1.3" strokeDasharray="2 2" fill="none" />
-                <text x="14" y="128" fill="#FDE68A" fontSize="10" fontFamily="monospace" fontWeight="bold">
+                <text x="14" y="128" fill="#FDE68A" fontSize="12.5" fontFamily="monospace" fontWeight="bold">
                   B HORIZON · KATONDO RED LOAM (25–120cm)
                 </text>
-                <text x="14" y="144" fill="#FCD34D" fontSize="8.5" fontFamily="monospace">
+                <text x="14" y="146" fill="#FCD34D" fontSize="12" fontFamily="monospace">
                   3×3×3ft Orchard Pit Sponge · Deep Moisture Bank
                 </text>
               </g>
@@ -233,10 +233,10 @@ export function SoilStrataBlueprint() {
                 <polygon points="285,186 312,180 316,208 282,210" fill="#44403C" stroke="#78716C" strokeWidth="1" />
                 <polygon points="185,190 222,185 228,216 190,220" fill="#44403C" stroke="#78716C" strokeWidth="1" />
                 <path d="M232 176 L232 226 M279 176 L279 226" stroke="#38BDF8" strokeWidth="1.5" strokeDasharray="3 3" />
-                <text x="14" y="194" fill="#E7E5E4" fontSize="10" fontFamily="monospace" fontWeight="bold">
+                <text x="14" y="194" fill="#E7E5E4" fontSize="12.5" fontFamily="monospace" fontWeight="bold">
                   C HORIZON · SAPROLITE ROCK FILTER (1.2–3.5m)
                 </text>
-                <text x="14" y="210" fill="#A8A29E" fontSize="8.5" fontFamily="monospace">
+                <text x="14" y="212" fill="#A8A29E" fontSize="12" fontFamily="monospace">
                   Natural Mineral Filtration · Spring Percolation Zone
                 </text>
               </g>
@@ -258,12 +258,13 @@ export function SoilStrataBlueprint() {
                 {/* Flowing Underground Water Waves */}
                 <path d="M0 256 Q45 248 90 256 T180 256 T270 256 T360 256 T420 256" stroke="#38BDF8" strokeWidth="1.8" fill="none" opacity="0.65" />
                 <path d="M0 276 Q45 268 90 276 T180 276 T270 276 T360 276 T420 276" stroke="#7DD3FC" strokeWidth="1.5" fill="none" opacity="0.5" />
-                <text x="14" y="254" fill="#7DD3FC" fontSize="10" fontFamily="monospace" fontWeight="bold">
+                <text x="14" y="254" fill="#7DD3FC" fontSize="12.5" fontFamily="monospace" fontWeight="bold">
                   R AQUIFER · BASEMENT WATER TABLE (4–25m+)
                 </text>
-                <text x="14" y="272" fill="#BAE6FD" fontSize="8.5" fontFamily="monospace">
+                <text x="14" y="272" fill="#BAE6FD" fontSize="12" fontFamily="monospace">
                   Solar Submersible Borehole Intake · pH 7.1 Pure
                 </text>
+
               </g>
 
               {/* Continuous Borehole Casing Pipe from Surface to Aquifer */}

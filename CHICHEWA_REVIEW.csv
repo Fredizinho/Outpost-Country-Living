@@ -1,0 +1,100 @@
+file,key,English,Chichewa,region,notes,reviewer,status
+src/data/glossary.ts,glossary.TLMA,TLMA,Dera Loyang’aniridwa ndi Mfumu Yaikulu,National,Defined as: Traditional Land Management Area. This is customary village land managed by a Tr...,Pending local review,unreviewed
+src/data/glossary.ts,glossary.TA,TA,Mfumu Yaikulu,National,"Defined as: Traditional Authority. A senior regional chief who oversees customary land, vill...",Pending local review,unreviewed
+src/data/glossary.ts,glossary.OPV,OPV,Mbewu Yobzala Nthawi Zonse,National,Defined as: Open-Pollinated Variety. Natural seeds that you can save and replant every year ...,Pending local review,unreviewed
+src/data/glossary.ts,glossary.SSB,SSB,Njerwa Zosawotcha za Dothi ndi Simenti,National,Defined as: Stabilized Soil Block. An interlocking building brick made by pressing subsoil a...,Pending local review,unreviewed
+src/data/glossary.ts,glossary.BoQ,BoQ,Mndandanda wa Zipangizo ndi Mtengo Wake,National,"Defined as: Bill of Quantities. A complete list of all building materials, tools, and labor ...",Pending local review,unreviewed
+src/data/glossary.ts,glossary.HDPE,HDPE,Phaipi Yolimba ya Pulasitiki,National,"Defined as: High-Density Polyethylene. Strong, flexible black plastic pipe that does not cra...",Pending local review,unreviewed
+src/data/glossary.ts,glossary.Katondo,Katondo,Katondo,National,Defined as: Deep red clay soil (Eutric Nitisol). It holds water well and grows great fruit t...,Pending local review,unreviewed
+src/data/glossary.ts,glossary.Makande,Makande,Makande,National,Defined as: Heavy black clay soil (Pellic Vertisol). It cracks wide when dry and turns stick...,Pending local review,unreviewed
+src/data/glossary.ts,glossary.Dambo,Dambo,Dambo,National,"Defined as: A low, broad wetland valley that stays wet long after the rains stop....",Pending local review,unreviewed
+src/data/glossary.ts,glossary.Dimba,Dimba,Dimba,National,Defined as: A dry-season vegetable garden grown in damp valley soil using residual water....,Pending local review,unreviewed
+src/data/glossary.ts,glossary.Biochar,Biochar,Makala a M’nthaka Okhazikika,National,Defined as: Crushed charcoal made in a low-smoke kiln. It acts like a sponge in soil to hold...,Pending local review,unreviewed
+src/data/glossary.ts,glossary.Mulch,Mulch,Ubusa kapena Udzu Wophimba Nthaka,National,"Defined as: A protective blanket of dry grass, straw, or leaves spread over garden soil to k...",Pending local review,unreviewed
+src/data/glossary.ts,glossary.Swale,Swale,Mugero Wogwira Madzi,National,Defined as: A ditch dug on a level line across a hillside to catch rainwater and let it sink...,Pending local review,unreviewed
+src/data/glossary.ts,glossary.Aquifer,Aquifer,Madzi a Pansi pa Nthaka,National,"Defined as: An underground sponge of sand, gravel, or cracked rock holding fresh drinking wa...",Pending local review,unreviewed
+src/data/glossary.ts,glossary.Hydrotherapy,Hydrotherapy,Chithandizo Chogwiritsa Ntchito Madzi,National,Defined as: Natural healing that uses hot and cold water to increase blood flow and help whi...,Pending local review,unreviewed
+src/data/glossary.ts,glossary.Fomentation,Fomentation,Kukanikiza Nsalu Yotentha ya Madzi,National,"Defined as: A steaming moist cloth applied to the skin, followed by a brief cold towel wipe,...",Pending local review,unreviewed
+src/data/glossary.ts,glossary.Sinjiro,Sinjiro,Sinjiro ya Mtedza,National,Defined as: Pounded roasted groundnut meal mixed into cooked greens to provide complete prot...,Pending local review,unreviewed
+src/data/glossary.ts,glossary.Wonderbag,Wonderbag,Chikwama Chofunda Chophikira,National,Defined as: A heavily padded cloth cooker that finishes cooking hot pots of food for 8 hours...,Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.chimanga,Maize / Corn,Chimanga (Chimanga cha Makolo / MH18),National,"Alternates: Chimanga cha Makolo, MH18",Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.chinangwa,Cassava,Chinangwa / Manyoka (Leaves: Chigwada),National,"Alternates: Manyoka, Leaves: Chigwada",Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.mbatata,Sweet Potato (Orange-Fleshed),Mbatata / Mbatata Yotsekemera (Mbambaira / Zondeni),National,"Alternates: Mbatata Yotsekemera, Mbambaira, Zondeni",Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.kachebere,Irish Potato,Mbatata ya Chizungu / Kachebere / Apirisi,National,"Alternates: Kachebere, Apirisi",Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.ntedza,Groundnut / Peanut,Ntedza / Mtedza (CG7 / Nsinjiro / Chalimbana),National,"Alternates: Mtedza, CG7, Nsinjiro, Chalimbana",Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.nyemba,Common Field Beans,Nyemba / Nyanja / Chimbamba,National,"Alternates: Nyanja, Chimbamba",Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.nandolo,Pigeon Pea,Nandolo / Mwandolo,National,Alternates: Mwandolo,Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.nzama,Bambara Groundnut,Nzama / Eziwiri,National,Alternates: Eziwiri,Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.chitedze,Velvet Bean / Mucuna,Chitedze (Mucuna),National,Alternates: Mucuna,Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.khobwe,Cowpea,Khobwe / Nkhwani wa Khobwe,National,Alternates: Nkhwani wa Khobwe,Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.mpiru,African Mustard Greens,Mpiru / Masamba a Mpiru,National,Alternates: Masamba a Mpiru,Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.nkhwani,Pumpkin Leaves & Squash,Nkhwani / Mphonda / Chiyani,National,"Alternates: Mphonda, Chiyani",Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.therere,Okra / Lady Finger,Therere / Therere Nchila,National,Alternates: Therere Nchila,Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.bonongwe,Amaranth Greens,Bonongwe / Chemberemweru,National,Alternates: Chemberemweru,Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.mapira,Sorghum,Mapira / Gagawira (Pilira 1 & 2),National,"Alternates: Gagawira, Pilira 1 & 2",Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.mawere,Finger Millet,Mawere / Lipoko,National,Alternates: Lipoko,Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.soya,Soybean,Soya / Mphesa ya Soya (Tikwawere / Makwacha),National,"Alternates: Mphesa ya Soya, Tikwawere, Makwacha",Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.nthochi,Banana & Plantain,Nthochi / Zabwino / Kabuthu (Dwarf Cavendish) / Harichali,National,"Alternates: Zabwino, Kabuthu, Harichali, Dwarf Cavendish",Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.kofi,Arabica Coffee,Kofi (Kofi wa Misuku / SL28 / Catimor),National,"Alternates: Kofi wa Misuku, SL28, Catimor",Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.macadamia,Macadamia Nut,Mtedza wa Mung’ona / Macadamia,National,Apostrophe repaired from Mtedza wa Mung\'ona; flagged for elder verification,Pending local review,flagged_uncertain
+src/data/malawiCropsData.ts,crop.manga,Mango,Manga (Manga ya Chilowe / Tommy Atkins / KENT),National,"Alternates: Manga ya Chilowe, Tommy Atkins, KENT",Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.anyezi,Red Onion,Anyezi / Anyenzi (Red Creole / Texas Grano),National,"Alternates: Anyenzi, Red Creole, Texas Grano",Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.mapwetekere,Tomato,Mapwetekere / Phwetekere (Tengeru / Money Maker / Rodade),National,"Alternates: Phwetekere, Tengeru, Money Maker, Rodade",Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.galuwinki,Garlic,Adyo / Anyezi wa Adyo,National,Alternates: Anyezi wa Adyo,Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.avokado,Avocado,Avokado / Mapeyala (Hass / Fuerte),National,"Alternates: Mapeyala, Hass, Fuerte",Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.mpendadzuwa,Sunflower,Mpendadzuwa / Sanifilawa,National,Alternates: Sanifilawa,Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.ntchachacha,African Eggplant / Garden Eggs,Ntchachacha / Ngwangwa,National,Alternates: Ngwangwa,Pending local review,unreviewed
+src/data/malawiCropsData.ts,crop.nzimbe,Chewing Sugarcane,Nzimbe / Msuwaki / Nkhwere,National,"Alternates: Msuwaki, Nkhwere",Pending local review,unreviewed
+src/data/malawiRegionalDetailData.ts,regional_crop.nc-1,Misuku Arabica Coffee,Khofi wa Misuku,Northern Region,Regional crop variety identifier,Pending local review,unreviewed
+src/data/malawiRegionalDetailData.ts,regional_crop.nc-2,Apples & Stone Fruit,Zipatso za Maapulo,Northern Region,Regional crop variety identifier,Pending local review,unreviewed
+src/data/malawiRegionalDetailData.ts,regional_crop.nc-3,Macadamia Nut Orchards,Mtedza wa Macadamia,Northern Region,Regional crop variety identifier,Pending local review,unreviewed
+src/data/malawiRegionalDetailData.ts,regional_crop.nc-4,Irish Potatoes,Mbatata za Chizungu,Northern Region,Regional crop variety identifier,Pending local review,unreviewed
+src/data/malawiRegionalDetailData.ts,regional_crop.nc-5,Paddy Rice (Hara & Chilumba),Mpunga wa pa Hara,Northern Region,Regional crop variety identifier,Pending local review,unreviewed
+src/data/malawiRegionalDetailData.ts,regional_crop.nc-6,Cassava,Chinangwa Chokhazikika,Northern Region,Regional crop variety identifier,Pending local review,unreviewed
+src/data/malawiRegionalDetailData.ts,regional_crop.cc-1,Commercial & Heirloom Maize,Chimanga Chodzala,Central Region,Regional crop variety identifier,Pending local review,unreviewed
+src/data/malawiRegionalDetailData.ts,regional_crop.cc-2,Highland Irish Potatoes,Mbatata za ku Dedza,Central Region,Regional crop variety identifier,Pending local review,unreviewed
+src/data/malawiRegionalDetailData.ts,regional_crop.cc-3,Soya Beans & Groundnuts,Soya ndi Mtedza,Central Region,Regional crop variety identifier,Pending local review,unreviewed
+src/data/malawiRegionalDetailData.ts,regional_crop.cc-4,Commercial Tomatoes & Cabbage,Mapwetekere ndi Makabichi,Central Region,Regional crop variety identifier,Pending local review,unreviewed
+src/data/malawiRegionalDetailData.ts,regional_crop.cc-5,Kilombero & Faya Rice,Mpunga wa Nkhotakota,Central Region,Regional crop variety identifier,Pending local review,unreviewed
+src/data/malawiRegionalDetailData.ts,regional_crop.cc-6,Sunflowers & Beekeeping,Mpendadzuwa ndi Uchi,Central Region,Regional crop variety identifier,Pending local review,unreviewed
+src/data/malawiRegionalDetailData.ts,regional_crop.sc-1,Estate & Smallholder Tea,Tiyi wa ku Mulanje,Southern Region,Regional crop variety identifier,Pending local review,unreviewed
+src/data/malawiRegionalDetailData.ts,regional_crop.sc-2,Macadamia & Pecan Nuts,Mtedza Wamtengo,Southern Region,Regional crop variety identifier,Pending local review,unreviewed
+src/data/malawiRegionalDetailData.ts,regional_crop.sc-3,Pigeon Peas,Nandolo Wopatsa Thanzi,Southern Region,Regional crop variety identifier,Pending local review,unreviewed
+src/data/malawiRegionalDetailData.ts,regional_crop.sc-4,Cavendish & Red Bananas,Nthochi za ku Thyolo,Southern Region,Regional crop variety identifier,Pending local review,unreviewed
+src/data/malawiRegionalDetailData.ts,regional_crop.sc-5,Commercial Sugarcane,Nzimbe za pa Nchalo,Southern Region,Regional crop variety identifier,Pending local review,unreviewed
+src/data/malawiRegionalDetailData.ts,regional_crop.sc-6,Strawberries & Market Herbs,Zipatso za Sitiroberi,Southern Region,Regional crop variety identifier,Pending local review,unreviewed
+src/components/outpost/CustomaryLandChecklist.tsx,land_protocol.cl-step-1,Introductory Protocol Visit to the Village Headman,Mfumu ya Mudzi / Nyakwawa,Central & Southern,Customary authority & boundary term,Pending local review,unreviewed
+src/components/outpost/CustomaryLandChecklist.tsx,land_protocol.cl-step-2,Lineage & Family Clan Verification (Matrilineal / Patrilineal),Chikamwini / Mwini Mbumba vs. Lobola Clan Elders,Central & Southern,Customary authority & boundary term,Pending local review,unreviewed
+src/components/outpost/CustomaryLandChecklist.tsx,land_protocol.cl-step-3,Physical Boundary Walk with All Adjacent Neighbors,Kuyenda Malire & Mboni za Malire,Central & Southern,Customary authority & boundary term,Pending local review,unreviewed
+src/components/outpost/CustomaryLandChecklist.tsx,land_protocol.cl-step-4,Group Village Headman (GVH) & Traditional Authority (T/A) Endorsement,Chizindikiro cha GVH ndi Traditional Authority (T/A),Central & Southern,Customary authority & boundary term,Pending local review,unreviewed
+src/components/outpost/CustomaryLandChecklist.tsx,land_protocol.cl-step-5,District Land Registry Filing for Customary Estate,Kalata ya Umwini wa Malo (Customary Land Act 2016),Central & Southern,Customary authority & boundary term,Pending local review,unreviewed
+src/components/outpost/MalawiRidgeAndSeedPlanner.tsx,guild_crop.item_1,Heirloom Flint Maize,Chimanga cha Makolo,National,Guild component crop,Pending local review,unreviewed
+src/components/outpost/MalawiRidgeAndSeedPlanner.tsx,guild_crop.item_2,Pigeon Pea (Deep Taproot),Nandolo,National,Guild component crop,Pending local review,unreviewed
+src/components/outpost/MalawiRidgeAndSeedPlanner.tsx,guild_crop.item_3,Pumpkin / Squash Leaves,Nkhwani / Maungu,National,Guild component crop,Pending local review,unreviewed
+src/components/outpost/MalawiRidgeAndSeedPlanner.tsx,guild_crop.item_4,Vetiver Grass & Lemon Grass,Chisale & Udzu waimu,National,Entity repaired from Chisale &mp; Udzu waimu; flagged for local botanist check,Pending local review,flagged_uncertain
+src/components/outpost/MalawiRidgeAndSeedPlanner.tsx,guild_crop.item_5,Sweet Cassava Cuttings,Chinangwa (Manyokola),National,Guild component crop,Pending local review,unreviewed
+src/components/outpost/MalawiRidgeAndSeedPlanner.tsx,guild_crop.item_6,Sorghum / Pearl Millet,Mapemba / Mchewere,National,Guild component crop,Pending local review,unreviewed
+src/components/outpost/MalawiRidgeAndSeedPlanner.tsx,guild_crop.item_7,Drought-Hardy Cowpeas,Khobwe / Nseula,National,Guild component crop,Pending local review,unreviewed
+src/components/outpost/MalawiRidgeAndSeedPlanner.tsx,guild_crop.item_8,Sisal & Tephrosia Boundary,Khonje & Ombwe (Tephrosia),National,Guild component crop,Pending local review,unreviewed
+src/components/outpost/MalawiRidgeAndSeedPlanner.tsx,guild_crop.item_9,Grafted Avocado & Mango Trees,Mapeyala & Manga (3×3×3 ft Pits),National,Guild component crop,Pending local review,unreviewed
+src/components/outpost/MalawiRidgeAndSeedPlanner.tsx,guild_crop.item_10,Banana & Plantain Circle,Nthochi & Matoki,National,Guild component crop,Pending local review,unreviewed
+src/components/outpost/MalawiRidgeAndSeedPlanner.tsx,guild_crop.item_11,Bambara Groundnuts & Sweet Potato,Nzama & Mbatata,National,Guild component crop,Pending local review,unreviewed
+src/components/outpost/MalawiRidgeAndSeedPlanner.tsx,guild_crop.item_12,Moringa & Mulberry Hedgerow,Chamwamba (Moringa) & Mapuleni,National,Guild component crop,Pending local review,unreviewed
+src/components/outpost/EdenicCountryKitchen.tsx,recipe.zwischenbrot-wafer-rolls,Unfermented Whole-Grain Wafer Rolls (Zwischenbrot),Mkate Wopanda Chofufumitsa wa Tirigu ndi Mapira,National,Traditional healthful food recipe name,Pending local review,unreviewed
+src/components/outpost/EdenicCountryKitchen.tsx,recipe.malawi-sorghum-sweet-potato-flatbread,Malawi Sorghum & Orange Sweet Potato Unleavened Rounds,Chikondamoyo Chopanda Soda cha Mapira ndi Mbatata,National,Traditional healthful food recipe name,Pending local review,unreviewed
+src/components/outpost/EdenicCountryKitchen.tsx,recipe.sinjiro-groundnut-emulsion,Traditional Oil-Free Groundnut Cream (Nsinjiro Emulsion),Nsinjiro za Mtedza Wosakazinga mu Mafuta,National,Traditional healthful food recipe name,Pending local review,unreviewed
+src/components/outpost/EdenicCountryKitchen.tsx,recipe.homestead-soy-milk-tofu,Homestead Soybean Milk & Lemon-Coagulated Country Tofu,Mkaka wa Soya ndi Tchizi wa Zomera,National,Traditional healthful food recipe name,Pending local review,unreviewed
+src/components/outpost/EdenicCountryKitchen.tsx,recipe.sabbath-friday-savory-millet-bake,"Friday Preparation Savory Millet, Pigeon Pea & Squash Loaf",Chakudya cha Lachisanu Chokonzera Sabata (Exod. 16:23),National,Traditional healthful food recipe name,Pending local review,unreviewed
+src/components/outpost/MedicalMissionarySanitarium.tsx,natural_remedy.activated-charcoal,Pulverized Hardwood Charcoal (Poultice & Slurry),Makala a Mtengo Wouma,National,Botanical/simple remedy local designation,Pending local review,unreviewed
+src/components/outpost/MedicalMissionarySanitarium.tsx,natural_remedy.moringa-leaf,Moringa Oleifera Shade-Dried Leaf Powder,Chamwamba / Kangaluni,National,Botanical/simple remedy local designation,Pending local review,unreviewed
+src/components/outpost/MedicalMissionarySanitarium.tsx,natural_remedy.ginger-turmeric-poultice,Ginger & Turmeric Circulatory Compress,Chikasu & Tsobola Wamtengo (Thandizo la Magazi),National,Botanical/simple remedy local designation,Pending local review,unreviewed
+src/components/outpost/MedicalMissionarySanitarium.tsx,natural_remedy.guava-leaf-tea,Young Guava Leaf Astringent Decoction,Masamba a Gwafa,National,Botanical/simple remedy local designation,Pending local review,unreviewed
+src/components/outpost/MedicalMissionarySanitarium.tsx,natural_remedy.aloe-honey-dressing,Fresh Aloe Vera & Raw Forest Honey Dressing,Chinziri & Uchi Weniweni,National,Botanical/simple remedy local designation,Pending local review,unreviewed
+src/components/outpost/ChichewaFieldPhrasebook.tsx,phrase.phr-1,Excuse us / May we approach the Chief’s courtyard?,Odi! Tikupempha kulowa pa bwalo la Mfumu.,National,Traditional respectful spoken sentence,Pending local review,unreviewed
+src/components/outpost/ChichewaFieldPhrasebook.tsx,phrase.phr-2,"Greetings Chief, we have come in peace seeking agricultural land for our family.","Moni Bambo Mfumu, tabwera mwamtendere kudzafuna malo a ulimi ndi banja lathu.",National,Traditional respectful spoken sentence,Pending local review,unreviewed
+src/components/outpost/ChichewaFieldPhrasebook.tsx,phrase.phr-3,Do the senior clan head (Mwini Mbumba) and all maternal guardians consent to this land allocation?,Mwini mbumba ndi ankhoswe onse akugwirizana ndi kugawa kwa malo amenewa?,National,Traditional respectful spoken sentence,Pending local review,unreviewed
+src/components/outpost/ChichewaFieldPhrasebook.tsx,phrase.phr-4,Let us walk the entire perimeter boundary together with all adjoining neighbors.,Tiyeni tiyende malire onse pamodzi ndi eni malo oyandikana nawo.,National,Traditional respectful spoken sentence,Pending local review,unreviewed
+src/components/outpost/ChichewaFieldPhrasebook.tsx,phrase.phr-5,Does this spring or stream dry up in the month of October (peak dry season)?,Kodi kasupe kapena mtsinje uwu umauma m’mwezi wa Okutobala (Chilimwe)?,National,Traditional respectful spoken sentence,Pending local review,unreviewed
+src/components/outpost/ChichewaFieldPhrasebook.tsx,phrase.phr-6,Fertile red clay-loam upland soil (Katondo) and moisture-retaining valley soil (Dambo).,Dothi lofiira lachonde (Katondo) ndi dambo losunga chinyezi.,National,Traditional respectful spoken sentence,Pending local review,unreviewed
+src/components/outpost/ChichewaFieldPhrasebook.tsx,phrase.phr-7,"We are looking for open-pollinated heirloom seeds (OPV) such as local maize, Bambara groundnuts, and cowpeas.","Tikufuna mbewu za makolo zosinthika (OPV) monga chimanga, nzama, ndi khobwe.",National,Traditional respectful spoken sentence,Pending local review,unreviewed
+src/components/outpost/ChichewaFieldPhrasebook.tsx,phrase.phr-8,Thank you very much; may God bless this village and your families.,"Zikomo kwambiri, Mulungu adalitse mudzi uno ndi mabanja anu.",National,Traditional respectful spoken sentence,Pending local review,unreviewed

@@ -458,59 +458,90 @@ Generated from OUTPOST: Country Living Matrix
               </span>
             </div>
 
-            {/* Statutory Procedural Flowchart Vector Schematic */}
-            <div className="bg-[#07160E] rounded-2xl p-4 border border-emerald-900/80 overflow-hidden">
-              <svg viewBox="0 0 780 120" className="w-full h-auto select-none" role="img" aria-label="Malawi customary land statutory procedure flowchart">
-                <rect x="0" y="0" width="780" height="120" rx="8" fill="#040E09" />
-                
+            {/* Statutory Procedural Flowchart HTML Stepper (≥12px Typography) */}
+            <div className="bg-[#07160E] rounded-2xl p-5 border border-emerald-900/80 overflow-hidden select-none">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 relative">
                 {/* Step 1 Node */}
-                <g transform="translate(15, 15)">
-                  <rect width="220" height="90" rx="8" fill="#0F291E" stroke="#10B981" strokeWidth="1.5" />
-                  <rect x="12" y="12" width="28" height="24" rx="4" fill="#047857" />
-                  <text x="26" y="28" textAnchor="middle" fill="#FFFFFF" fontSize="11" fontWeight="bold" fontFamily="monospace">01</text>
-                  <text x="50" y="24" fill="#34D399" fontSize="10" fontWeight="bold" fontFamily="monospace">TA &amp; CHIEF (MFUMU)</text>
-                  <text x="50" y="38" fill="#A7F3D0" fontSize="9" fontFamily="monospace">Customary Chikhalidwe</text>
-                  <line x1="12" y1="46" x2="208" y2="46" stroke="#064E3B" strokeWidth="1" />
-                  <text x="14" y="62" fill="#FEF3C7" fontSize="9" fontFamily="sans-serif">• Confirm boundary markers (Malire)</text>
-                  <text x="14" y="78" fill="#D6D3D1" fontSize="9" fontFamily="sans-serif">• Village assembly consensus protocol</text>
-                </g>
-
-                {/* Arrow 1 -> 2 */}
-                <g transform="translate(245, 52)">
-                  <line x1="0" y1="8" x2="26" y2="8" stroke="#34D399" strokeWidth="2.5" strokeDasharray="4 2" />
-                  <polygon points="26,3 35,8 26,13" fill="#34D399" />
-                </g>
+                <div className="p-4 rounded-xl bg-[#0F291E] border border-emerald-500/80 flex flex-col gap-2.5 text-white">
+                  <div className="flex items-center gap-2.5 border-b border-emerald-900/80 pb-2">
+                    <span className="w-8 h-8 rounded-lg bg-emerald-700 text-white flex items-center justify-center font-mono text-xs font-bold shrink-0">
+                      01
+                    </span>
+                    <div>
+                      <span className="text-xs font-mono font-bold text-emerald-400 block">
+                        TA &amp; CHIEF (MFUMU)
+                      </span>
+                      <span className="text-xs font-mono text-emerald-200">
+                        Customary Chikhalidwe
+                      </span>
+                    </div>
+                  </div>
+                  <ul className="flex flex-col gap-1 text-xs text-stone-200">
+                    <li className="flex items-start gap-1.5">
+                      <span className="text-amber-400 leading-none">•</span>
+                      <span>Confirm boundary markers (Malire)</span>
+                    </li>
+                    <li className="flex items-start gap-1.5">
+                      <span className="text-amber-400 leading-none">•</span>
+                      <span>Village assembly consensus protocol</span>
+                    </li>
+                  </ul>
+                </div>
 
                 {/* Step 2 Node */}
-                <g transform="translate(285, 15)">
-                  <rect width="220" height="90" rx="8" fill="#1E293B" stroke="#38BDF8" strokeWidth="1.5" />
-                  <rect x="12" y="12" width="28" height="24" rx="4" fill="#0284C7" />
-                  <text x="26" y="28" textAnchor="middle" fill="#FFFFFF" fontSize="11" fontWeight="bold" fontFamily="monospace">02</text>
-                  <text x="50" y="24" fill="#7DD3FC" fontSize="10" fontWeight="bold" fontFamily="monospace">LAND CLERK &amp; CLC</text>
-                  <text x="50" y="38" fill="#BAE6FD" fontSize="9" fontFamily="monospace">Customary Land Committee</text>
-                  <line x1="12" y1="46" x2="208" y2="46" stroke="#0C4A6E" strokeWidth="1" />
-                  <text x="14" y="62" fill="#FEF3C7" fontSize="9" fontFamily="sans-serif">• GPS parcel boundary demarcation</text>
-                  <text x="14" y="78" fill="#D6D3D1" fontSize="9" fontFamily="sans-serif">• 21-day public objections gazette</text>
-                </g>
-
-                {/* Arrow 2 -> 3 */}
-                <g transform="translate(515, 52)">
-                  <line x1="0" y1="8" x2="26" y2="8" stroke="#FBBF24" strokeWidth="2.5" strokeDasharray="4 2" />
-                  <polygon points="26,3 35,8 26,13" fill="#FBBF24" />
-                </g>
+                <div className="p-4 rounded-xl bg-[#1E293B] border border-sky-500/80 flex flex-col gap-2.5 text-white">
+                  <div className="flex items-center gap-2.5 border-b border-sky-900/80 pb-2">
+                    <span className="w-8 h-8 rounded-lg bg-sky-700 text-white flex items-center justify-center font-mono text-xs font-bold shrink-0">
+                      02
+                    </span>
+                    <div>
+                      <span className="text-xs font-mono font-bold text-sky-300 block">
+                        LAND CLERK &amp; CLC
+                      </span>
+                      <span className="text-xs font-mono text-sky-200">
+                        Customary Land Committee
+                      </span>
+                    </div>
+                  </div>
+                  <ul className="flex flex-col gap-1 text-xs text-stone-200">
+                    <li className="flex items-start gap-1.5">
+                      <span className="text-amber-400 leading-none">•</span>
+                      <span>GPS parcel boundary demarcation</span>
+                    </li>
+                    <li className="flex items-start gap-1.5">
+                      <span className="text-amber-400 leading-none">•</span>
+                      <span>21-day public objections gazette</span>
+                    </li>
+                  </ul>
+                </div>
 
                 {/* Step 3 Node */}
-                <g transform="translate(555, 15)">
-                  <rect width="210" height="90" rx="8" fill="#3E1A0C" stroke="#F59E0B" strokeWidth="1.5" />
-                  <rect x="12" y="12" width="28" height="24" rx="4" fill="#B45309" />
-                  <text x="26" y="28" textAnchor="middle" fill="#FFFFFF" fontSize="11" fontWeight="bold" fontFamily="monospace">03</text>
-                  <text x="50" y="24" fill="#FDE047" fontSize="10" fontWeight="bold" fontFamily="monospace">DISTRICT REGISTRY</text>
-                  <text x="50" y="38" fill="#FEF08A" fontSize="9" fontFamily="monospace">Customary Estate Title</text>
-                  <line x1="12" y1="46" x2="198" y2="46" stroke="#78350F" strokeWidth="1" />
-                  <text x="14" y="62" fill="#FEF3C7" fontSize="9" fontFamily="sans-serif">• Formal Ministry Certificate seal</text>
-                  <text x="14" y="78" fill="#D6D3D1" fontSize="9" fontFamily="sans-serif">• Perpetual family inheritance rights</text>
-                </g>
-              </svg>
+                <div className="p-4 rounded-xl bg-[#3E1A0C] border border-amber-500/80 flex flex-col gap-2.5 text-white">
+                  <div className="flex items-center gap-2.5 border-b border-amber-900/80 pb-2">
+                    <span className="w-8 h-8 rounded-lg bg-amber-700 text-white flex items-center justify-center font-mono text-xs font-bold shrink-0">
+                      03
+                    </span>
+                    <div>
+                      <span className="text-xs font-mono font-bold text-amber-300 block">
+                        DISTRICT REGISTRY
+                      </span>
+                      <span className="text-xs font-mono text-amber-200">
+                        Customary Estate Title
+                      </span>
+                    </div>
+                  </div>
+                  <ul className="flex flex-col gap-1 text-xs text-stone-200">
+                    <li className="flex items-start gap-1.5">
+                      <span className="text-amber-400 leading-none">•</span>
+                      <span>Formal Ministry Certificate seal</span>
+                    </li>
+                    <li className="flex items-start gap-1.5">
+                      <span className="text-amber-400 leading-none">•</span>
+                      <span>Perpetual family inheritance rights</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">

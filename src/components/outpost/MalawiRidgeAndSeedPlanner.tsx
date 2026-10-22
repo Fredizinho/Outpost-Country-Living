@@ -45,7 +45,7 @@ const MALAWI_COMPANION_GUILDS: CompanionGuild[] = [
     },
     borderBarrier: {
       name: 'Vetiver Grass & Lemon Grass',
-      chichewa: 'Chisale &mp; Udzu waimu',
+      chichewa: 'Chisale & Udzu waimu',
       spacing: 'Along A-frame contour marker ridge (Mitumbira ya mizere)',
       role: 'Stops storm sheet erosion & repels stemborer moths',
       color: '#0D9488'
@@ -82,7 +82,7 @@ const MALAWI_COMPANION_GUILDS: CompanionGuild[] = [
     },
     borderBarrier: {
       name: 'Sisal & Tephrosia Boundary',
-      chichewa: 'Khonje &amp; Ombwe (Tephrosia)',
+      chichewa: 'Khonje & Ombwe (Tephrosia)',
       spacing: 'Perimeter living fence every 100 cm',
       role: 'Livestock-proof barrier & natural botanical pest spray leaves',
       color: '#059669'
@@ -98,32 +98,33 @@ const MALAWI_COMPANION_GUILDS: CompanionGuild[] = [
     ridgeSpacingCm: 75,
     centerCrop: {
       name: 'Grafted Avocado & Mango Trees',
-      chichewa: 'Mapeyala &amp; Manga (3×3×3 ft Pits)',
+      chichewa: 'Mapeyala & Manga (3×3×3 ft Pits)',
       spacing: '6 meters × 6 meters grid',
       role: 'Long-term canopy shade & high-value homestead oil/fruit harvest',
       color: '#15803D'
     },
     interCrop: {
       name: 'Banana & Plantain Circle',
-      chichewa: 'Nthochi &amp;Matoki',
+      chichewa: 'Nthochi & Matoki',
       spacing: '3 meters around greywater/mulch trench',
       role: 'Windbreak for young grafted trees & year-round potassium source',
       color: '#84CC16'
     },
     groundCover: {
       name: 'Bambara Groundnuts & Sweet Potato',
-      chichewa: 'Nzama &amp; Mbatata',
+      chichewa: 'Nzama & Mbatata',
       spacing: 'Alley ridges (30 cm spacing) between young fruit trees',
       role: 'Living weed-suppressing carpet + underground tubers during years 1–4',
       color: '#F97316'
     },
     borderBarrier: {
       name: 'Moringa & Mulberry Hedgerow',
-      chichewa: 'Chamwamba (Moringa) &amp; Mapuleni',
+      chichewa: 'Chamwamba (Moringa) & Mapuleni',
       spacing: 'Every 1.5 meters on windward boundary',
       role: 'Nutrient-dense leaf powder & high-calcium chop-and-drop mulch',
       color: '#10B981'
     },
+
     agronomyBenefit:
       'Turns the 4-year waiting period before fruit trees bear into productive seasonal harvests of sweet potatoes (Mbatata), Bambara nuts (Nzama), and bananas.'
   }

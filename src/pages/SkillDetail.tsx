@@ -36,6 +36,8 @@ import {
 import { SKILL_TECHNICAL_PROTOCOLS, DetailedSkillProtocol } from '@/data/skillsTechnicalProtocols';
 import { cn } from '@/lib/utils';
 import { SkillStepVectorDiagram } from '@/components/outpost/SkillStepVectorDiagram';
+import { StandardDiagram, DiagramSymbolsDefs, StandardDiagramType } from '@/components/common/StandardDiagram';
+import { COUNTRY_IMAGES } from '@/assets/images';
 
 export default function SkillDetail() {
   const { id } = useParams<{ id: string }>();
@@ -148,8 +150,46 @@ export default function SkillDetail() {
   const displayCategory = isRainwaterGuide ? 'Water' : skill.category;
   const displayTitle = isRainwaterGuide ? 'Rainwater harvesting for a small homestead' : skill.title;
 
+  const diagramType: StandardDiagramType = (() => {
+    const idLower = (skill?.id || '').toLowerCase();
+    if (idLower.includes('rainwater') || idLower.includes('water') || idLower.includes('tank') || id === 'ram-pump') {
+      return 'roof-tank';
+    }
+    if (idLower.includes('tree') || idLower.includes('pit') || idLower.includes('graft') || idLower.startsWith('ft-')) {
+      return 'planting-pit';
+    }
+    if (idLower.includes('swale') || idLower.includes('contour') || idLower.startsWith('wc-')) {
+      return 'swale';
+    }
+    if (idLower.includes('ridge') || idLower.includes('spacing') || idLower.includes('sasakawa') || idLower.includes('crop')) {
+      return 'ridge-spacing';
+    }
+    if (idLower.includes('zeer') || idLower.includes('cool') || idLower.includes('preserv') || idLower.startsWith('zp-')) {
+      return 'zeer-pot';
+    }
+    return 'roof-tank';
+  })();
+
+  const bannerImage = (() => {
+    if (isRainwaterGuide || diagramType === 'roof-tank' || diagramType === 'swale') {
+      return COUNTRY_IMAGES.offgridHomesteadWater || COUNTRY_IMAGES.permacultureWaterHydraulics;
+    }
+    if (diagramType === 'planting-pit') {
+      return COUNTRY_IMAGES.edenicDeepPlantingPit || COUNTRY_IMAGES.childrenGarden;
+    }
+    if (diagramType === 'ridge-spacing') {
+      return COUNTRY_IMAGES.permacultureGarden;
+    }
+    if (diagramType === 'zeer-pot') {
+      return COUNTRY_IMAGES.buyingSelling;
+    }
+    return COUNTRY_IMAGES.homesteadHighlands;
+  })();
+
   return (
     <div className="w-full min-h-screen bg-[#F6F1E7] text-[#1F2A22] font-chrome">
+      {/* SVG Symbol Definitions for standard diagrams */}
+      <DiagramSymbolsDefs />
       
       {/* Top Container with Max Width matching reference layout */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8">
@@ -159,9 +199,18 @@ export default function SkillDetail() {
         ==================================================================== */}
         <article className="flex-1 min-w-0 flex flex-col gap-6">
           
+          {/* Top Banner Image with rounded corners matching reference */}
+          <div className="w-full h-32 sm:h-44 rounded-2xl overflow-hidden border border-[#E4DCCB] dark:border-emerald-900/50 shadow-2xs bg-stone-900">
+            <img 
+              src={bannerImage} 
+              alt={displayTitle}
+              className="w-full h-full object-cover object-center"
+            />
+          </div>
+
           {/* Breadcrumbs: "Water › Rainwater harvesting" */}
           <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-[#5A6458]">
-            <Link to="/scout-map" className="hover:text-[#1F2A22] transition-colors">
+            <Link to="/skills" className="hover:text-[#1F2A22] transition-colors">
               {displayCategory}
             </Link>
             <ChevronRight size={13} className="text-[#5A6458]/60 shrink-0" />
@@ -178,7 +227,7 @@ export default function SkillDetail() {
 
             {/* Metadata Tags Row: "Draft · not yet checked", "8 min", "Beginner", "Offline ready" */}
             <div className="flex flex-wrap items-center gap-2 pt-1 text-xs text-[#5A6458]">
-              <span className="px-2.5 py-0.5 rounded-full bg-[#FFFDF8] border border-[#E4DCCB] text-[#5A6458] font-normal text-[11.5px]">
+              <span className="px-2.5 py-0.5 rounded-full bg-[#FFFDF8] border border-[#E4DCCB] text-[#8C5320] font-normal text-[11.5px]">
                 Draft · not yet checked
               </span>
               <span>·</span>
@@ -196,9 +245,13 @@ export default function SkillDetail() {
             </div>
           </header>
 
+          {/* Standardized Field Diagram Card (Matches Guide reader@1x.png layout) */}
+          <section id="how-it-fits-together">
+            <StandardDiagram type={diagramType} />
+          </section>
+
           {/* Quick Action Bar for Stewards */}
           <div className="flex flex-wrap items-center gap-2 pt-1 border-b border-[#E4DCCB] pb-4">
-            {/* The single primary terracotta button per screen */}
             <button
               type="button"
               onClick={handleToggleMastered}
@@ -248,9 +301,10 @@ export default function SkillDetail() {
             </div>
             <p className="text-xs sm:text-[13px] leading-relaxed text-[#1F2A22] font-normal">
               {skill.inspiredCounsel ||
-                '"Pure water is one of heaven\'s choicest blessings. Its proper use promotes health. It is the beverage which God provided to quench the thirst of animals and man. Drank freely, it helps to supply the necessities of the system and assists nature to resist disease." — Ellen G. White, The Ministry of Healing, p. 237'}
+                '[Principle in plain words, with a verified reference added before this guide is marked Reviewed.]'}
             </p>
           </section>
+
 
           {/* Section: Steps (Fraunces serif) */}
           <section id="steps" className="flex flex-col gap-4 pt-2">
@@ -430,16 +484,16 @@ export default function SkillDetail() {
             </h3>
             <nav aria-label="Table of contents" className="flex flex-col gap-1 text-xs">
               <a
-                href="#overview"
+                href="#how-it-fits-together"
                 className="py-1 px-2 rounded-control text-[#5A6458] hover:text-[#1F2A22] hover:bg-[#EDE6D6]/60 transition-colors"
               >
-                Overview
+                How it fits together
               </a>
               <a
                 href="#adventist-perspective"
                 className="py-1 px-2 rounded-control text-[#5A6458] hover:text-[#1F2A22] hover:bg-[#EDE6D6]/60 transition-colors"
               >
-                Adventist perspective
+                Principle
               </a>
               <a
                 href="#steps"
@@ -454,18 +508,13 @@ export default function SkillDetail() {
                 Safety
               </a>
               <a
-                href="#tools"
-                className="py-1 px-2 rounded-control text-[#5A6458] hover:text-[#1F2A22] hover:bg-[#EDE6D6]/60 transition-colors"
-              >
-                Tools and materials
-              </a>
-              <a
                 href="#notes"
                 className="py-1 px-2 rounded-control text-[#5A6458] hover:text-[#1F2A22] hover:bg-[#EDE6D6]/60 transition-colors"
               >
-                Field notes
+                Questions for a local expert
               </a>
             </nav>
+
           </div>
         </aside>
 

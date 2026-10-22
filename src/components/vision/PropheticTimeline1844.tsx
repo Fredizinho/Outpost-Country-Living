@@ -154,7 +154,7 @@ export const PROPHETIC_EPOCHS_1844: PropheticEpoch[] = [
     summary:
       'The legislative enforcement of the papal sabbath serves as the divine warning to leave large cities, preparing to retreat to secluded mountain homes.',
     theologicalSignificance:
-      'Two distinct stages of urban departure are outlined: purposeful relocation now to raise provisions and establish outposts, followed by emergency departure from large cities when legislative enforcement fulfills the prophetic sign of Luke 21:20.',
+      'Ellen G. White outlines two distinct departure phases (Country Living, pp. 9–10). First, families move calmly now to grow food and build outposts; later, believers make an emergency flight when Sunday laws take effect (5T 464).',
     countryLivingDirective:
       'A debt-free rural homestead with independent borehole/spring water, solar energy, and perennial crops shields the family when urban commerce and labor unions restrict Sabbath-keepers.',
     actionLink: {
@@ -252,195 +252,47 @@ export const PROPHETIC_EPOCHS_1844: PropheticEpoch[] = [
  * Bespoke Vector Diagram for each of the 7 Prophetic Epochs from 1844 to the Second Coming
  */
 function EpochVectorSchematic({ epochId }: { epochId: string }) {
-  switch (epochId) {
-    case '1844-sanctuary':
-      return (
-        <svg viewBox="0 0 360 210" className="w-full h-full select-none" role="img" aria-label="1844 Heavenly Sanctuary and 2300 Days Vector Schematic">
-          <rect width="360" height="210" rx="14" fill="#07150E" />
-          {/* Shekinah Glory Radial Halo */}
-          <circle cx="180" cy="78" r="56" fill="#F59E0B" fillOpacity="0.14" />
-          <circle cx="180" cy="78" r="32" fill="#FBBF24" fillOpacity="0.24" />
-          {/* Rays of Light */}
-          <line x1="180" y1="18" x2="180" y2="54" stroke="#FDE68A" strokeWidth="2" strokeLinecap="round" />
-          <line x1="135" y1="32" x2="160" y2="60" stroke="#FDE68A" strokeWidth="1.5" strokeLinecap="round" />
-          <line x1="225" y1="32" x2="200" y2="60" stroke="#FDE68A" strokeWidth="1.5" strokeLinecap="round" />
-          {/* Two Stone Tablets of Ten Commandments (I-IV & V-X) */}
-          <path d="M156 54 C156 46, 178 46, 178 54 L178 88 L156 88 Z" fill="#1E293B" stroke="#FDE68A" strokeWidth="1.5" />
-          <path d="M182 54 C182 46, 204 46, 204 54 L204 88 L182 88 Z" fill="#1E293B" stroke="#FDE68A" strokeWidth="1.5" />
-          <line x1="162" y1="62" x2="172" y2="62" stroke="#FBBF24" strokeWidth="1.2" />
-          <line x1="162" y1="69" x2="172" y2="69" stroke="#FBBF24" strokeWidth="1.2" />
-          <line x1="162" y1="76" x2="172" y2="76" stroke="#34D399" strokeWidth="1.8" />
-          <line x1="188" y1="62" x2="198" y2="62" stroke="#FBBF24" strokeWidth="1.2" />
-          <line x1="188" y1="69" x2="198" y2="69" stroke="#FBBF24" strokeWidth="1.2" />
-          <line x1="188" y1="76" x2="198" y2="76" stroke="#FBBF24" strokeWidth="1.2" />
-          {/* Golden Ark of the Covenant & Cherubim Wings */}
-          <path d="M118 92 Q148 64 174 82" stroke="#F59E0B" strokeWidth="3" fill="none" strokeLinecap="round" />
-          <path d="M242 92 Q212 64 186 82" stroke="#F59E0B" strokeWidth="3" fill="none" strokeLinecap="round" />
-          <rect x="122" y="92" width="116" height="42" rx="4" fill="#92400E" stroke="#FBBF24" strokeWidth="2" />
-          <rect x="130" y="98" width="100" height="30" rx="2" fill="#78350F" stroke="#F59E0B" strokeWidth="1" />
-          <line x1="96" y1="112" x2="264" y2="112" stroke="#FDE68A" strokeWidth="3" strokeLinecap="round" />
-          {/* 2300 Days Prophetic Mathematical Bar at Bottom */}
-          <rect x="24" y="152" width="312" height="40" rx="8" fill="#04100A" stroke="#10B981" strokeWidth="1.2" />
-          <line x1="46" y1="170" x2="314" y2="170" stroke="#34D399" strokeWidth="2" />
-          <circle cx="46" cy="170" r="4.5" fill="#10B981" />
-          <circle cx="145" cy="170" r="4.5" fill="#38BDF8" />
-          <circle cx="314" cy="170" r="5.5" fill="#FBBF24" stroke="#FEF08A" strokeWidth="1.5" />
-          <text x="46" y="162" textAnchor="middle" fill="#A7F3D0" fontSize="8.5" fontFamily="monospace" fontWeight="bold">457 BC</text>
-          <text x="145" y="162" textAnchor="middle" fill="#7DD3FC" fontSize="8.5" fontFamily="monospace" fontWeight="bold">AD 31/34</text>
-          <text x="302" y="162" textAnchor="middle" fill="#FDE047" fontSize="9" fontFamily="monospace" fontWeight="bold">OCT 22, 1844</text>
-          <text x="180" y="185" textAnchor="middle" fill="#6EE7B7" fontSize="8" fontFamily="monospace">
-            2,300 PROPHETIC YEARS (DANIEL 8:14) → SANCTUARY CLEANSED
-          </text>
-        </svg>
-      );
+  const epoch =
+    PROPHETIC_EPOCHS_1844.find((e) => e.id === epochId) || PROPHETIC_EPOCHS_1844[0];
 
-    case 'three-angels':
-      return (
-        <svg viewBox="0 0 360 210" className="w-full h-full select-none" role="img" aria-label="Three Angels Messages of Revelation 14 Vector Schematic">
-          <rect width="360" height="210" rx="14" fill="#07150E" />
-          {/* Globe & Fountains of Waters Below */}
-          <path d="M40 195 Q180 135 320 195" fill="#064E3B" stroke="#34D399" strokeWidth="2" />
-          <path d="M90 195 Q180 160 270 195" fill="none" stroke="#38BDF8" strokeWidth="1.5" strokeDasharray="4 3" />
-          {/* Three Radiant Angelic Heralds in Midheaven */}
-          {[
-            { cx: 92, cy: 76, label: '1ST ANGEL', sub: 'Rev 14:6–7 · Judgment Hour', color: '#FBBF24' },
-            { cx: 180, cy: 56, label: '2ND ANGEL', sub: 'Rev 14:8 · Babylon Fallen', color: '#38BDF8' },
-            { cx: 268, cy: 76, label: '3RD ANGEL', sub: 'Rev 14:9–12 · Commandments', color: '#34D399' },
-          ].map((a) => (
-            <g key={a.label}>
-              <circle cx={a.cx} cy={a.cy} r="24" fill={a.color} fillOpacity="0.15" stroke={a.color} strokeWidth="1.5" />
-              {/* Wings & Trumpet Vector */}
-              <path d={`M${a.cx - 18} ${a.cy + 4} Q${a.cx - 6} ${a.cy - 14} ${a.cx} ${a.cy - 2} Q${a.cx + 6} ${a.cy - 14} ${a.cx + 18} ${a.cy + 4}`} fill="none" stroke={a.color} strokeWidth="2" strokeLinecap="round" />
-              <line x1={a.cx} y1={a.cy + 2} x2={a.cx + 14} y2={a.cy + 10} stroke="#FEF08A" strokeWidth="2" strokeLinecap="round" />
-              <text x={a.cx} y={a.cy + 38} textAnchor="middle" fill="#FFFFFF" fontSize="8.5" fontFamily="monospace" fontWeight="bold">{a.label}</text>
-              <text x={a.cx} y={a.cy + 49} textAnchor="middle" fill={a.color} fontSize="7" fontFamily="monospace">{a.sub}</text>
-            </g>
-          ))}
-          <text x="180" y="185" textAnchor="middle" fill="#FDE68A" fontSize="8.5" fontFamily="monospace" fontWeight="bold">
-            “WORSHIP HIM THAT MADE HEAVEN, EARTH &amp; FOUNTAINS OF WATERS”
-          </text>
-        </svg>
-      );
+  return (
+    <div className="w-full h-full min-h-[210px] rounded-2xl bg-[#07150E] border border-emerald-900/60 p-4 sm:p-5 flex flex-col justify-between gap-3 text-white select-none shadow-sm">
+      {/* Top Header: Stage badge, era label, standard EGW reference */}
+      <div className="flex items-center justify-between gap-2 border-b border-emerald-900/60 pb-2.5">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="w-7 h-7 rounded-lg bg-[#C25E2E] text-white flex items-center justify-center font-mono text-xs font-bold shrink-0">
+            {epoch.stageNumber}
+          </span>
+          <span className="text-xs font-mono font-bold text-amber-300 truncate">
+            {epoch.eraLabel}
+          </span>
+        </div>
+        <span className="px-2 py-0.5 rounded-md bg-stone-900 border border-emerald-800/60 text-xs font-mono text-emerald-300 font-bold shrink-0">
+          {epoch.standardEgwCode}
+        </span>
+      </div>
 
-    case 'country-outposts':
-      return (
-        <svg viewBox="0 0 360 210" className="w-full h-full select-none" role="img" aria-label="Out of the Cities to Rural Outpost Vector Schematic">
-          <rect width="360" height="210" rx="14" fill="#07150E" />
-          {/* Left: Congested City Skyline */}
-          <rect x="22" y="72" width="22" height="72" fill="#334155" stroke="#64748B" strokeWidth="1.2" />
-          <rect x="48" y="54" width="26" height="90" fill="#1E293B" stroke="#64748B" strokeWidth="1.2" />
-          <rect x="78" y="84" width="20" height="60" fill="#334155" stroke="#64748B" strokeWidth="1.2" />
-          <text x="60" y="160" textAnchor="middle" fill="#94A3B8" fontSize="8.5" fontFamily="monospace" fontWeight="bold">URBAN BABYLON</text>
-          {/* Arrow of Orderly Exodus */}
-          <path d="M114 104 L196 104" stroke="#FBBF24" strokeWidth="2.5" strokeDasharray="5 3" />
-          <polygon points="196,99 208,104 196,109" fill="#FBBF24" />
-          <text x="160" y="94" textAnchor="middle" fill="#FDE68A" fontSize="8" fontFamily="monospace" fontWeight="bold">CL 9.5 EXODUS</text>
-          {/* Right: Rural Mountain Outpost Sanctuary, Orchard & Spring */}
-          <path d="M215 144 L255 62 L295 110 L325 74 L348 144 Z" fill="#064E3B" stroke="#10B981" strokeWidth="1.5" />
-          <polygon points="245,144 245,118 268,102 291,118 291,144" fill="#78350F" stroke="#FBBF24" strokeWidth="1.5" />
-          <circle cx="315" cy="126" r="11" fill="#059669" stroke="#6EE7B7" strokeWidth="1.2" />
-          <text x="280" y="160" textAnchor="middle" fill="#6EE7B7" fontSize="8.5" fontFamily="monospace" fontWeight="bold">RURAL OUTPOST</text>
-          <text x="180" y="188" textAnchor="middle" fill="#A7F3D0" fontSize="8" fontFamily="monospace">
-            RAISE OWN PROVISIONS • TRUE EDUCATION • MEDICAL MISSION
-          </text>
-        </svg>
-      );
+      {/* Main Content: Title & Plain-Language Summary */}
+      <div className="flex flex-col gap-1.5">
+        <h4 className="font-serif text-sm sm:text-base font-bold text-white line-clamp-1">
+          {epoch.shortTitle}
+        </h4>
+        <p className="text-xs text-stone-300 leading-relaxed line-clamp-3">
+          {epoch.summary}
+        </p>
+      </div>
 
-    case 'sunday-law-siege':
-      return (
-        <svg viewBox="0 0 360 210" className="w-full h-full select-none" role="img" aria-label="Sunday Law Siege Signal and Economic Boycott Vector Schematic">
-          <rect width="360" height="210" rx="14" fill="#07150E" />
-          {/* Two Parallel Prophetic Signposts: AD 66 Cestius Siege -> 5T 464.3 Sunday Decree */}
-          <rect x="24" y="34" width="142" height="108" rx="10" fill="#1C1917" stroke="#F97316" strokeWidth="1.5" />
-          <text x="95" y="54" textAnchor="middle" fill="#FDBA74" fontSize="9" fontFamily="monospace" fontWeight="bold">TYPE: AD 66 SIEGE</text>
-          <text x="95" y="70" textAnchor="middle" fill="#E7E5E4" fontSize="8" fontFamily="monospace">Roman Standards</text>
-          <text x="95" y="84" textAnchor="middle" fill="#E7E5E4" fontSize="8" fontFamily="monospace">Surrounding Jerusalem</text>
-          <text x="95" y="106" textAnchor="middle" fill="#34D399" fontSize="8" fontFamily="monospace" fontWeight="bold">→ Flee to Pella Hills</text>
-          <text x="95" y="124" textAnchor="middle" fill="#A8A29E" fontSize="7.5" fontFamily="monospace">(Luke 21:20–21)</text>
-
-          <path d="M172 88 L190 88" stroke="#FBBF24" strokeWidth="2" />
-
-          <rect x="194" y="34" width="142" height="108" rx="10" fill="#0F172A" stroke="#FBBF24" strokeWidth="1.8" />
-          <text x="265" y="54" textAnchor="middle" fill="#FDE047" fontSize="9" fontFamily="monospace" fontWeight="bold">ANTITYPE: 5T 464.3</text>
-          <text x="265" y="70" textAnchor="middle" fill="#F8FAFC" fontSize="8" fontFamily="monospace">National Sunday Decree</text>
-          <text x="265" y="84" textAnchor="middle" fill="#FCA5A5" fontSize="8" fontFamily="monospace">No Buy or Sell (Rev 13:17)</text>
-          <text x="265" y="106" textAnchor="middle" fill="#6EE7B7" fontSize="8" fontFamily="monospace" fontWeight="bold">→ Leave Large Cities</text>
-          <text x="265" y="124" textAnchor="middle" fill="#93C5FD" fontSize="7.5" fontFamily="monospace">For Secluded Outposts</text>
-
-          <text x="180" y="176" textAnchor="middle" fill="#FDE68A" fontSize="8.5" fontFamily="monospace" fontWeight="bold">
-            OFF-GRID WATER, SOLAR &amp; HEIRLOOM SEED SOVEREIGNTY
-          </text>
-        </svg>
-      );
-
-    case 'latter-rain-loud-cry':
-      return (
-        <svg viewBox="0 0 360 210" className="w-full h-full select-none" role="img" aria-label="Latter Rain and Loud Cry of Revelation 18 Vector Schematic">
-          <rect width="360" height="210" rx="14" fill="#07150E" />
-          {/* Clouds Pouring Latter Rain & Golden Beams of Rev 18 Glory */}
-          <path d="M70 46 Q110 24 155 42 Q195 20 240 42 Q275 28 300 48 L60 48 Z" fill="#065F46" stroke="#34D399" strokeWidth="1.5" />
-          {[90, 125, 160, 195, 230, 265].map((x) => (
-            <g key={x}>
-              <line x1={x} y1="56" x2={x - 10} y2="112" stroke="#38BDF8" strokeWidth="1.8" strokeDasharray="4 4" />
-              <line x1={x + 12} y1="56" x2={x + 2} y2="118" stroke="#FBBF24" strokeWidth="1.5" />
-            </g>
-          ))}
-          {/* Ripened Golden Harvest Sheaves Below */}
-          {[95, 150, 205, 260].map((x) => (
-            <g key={x}>
-              <path d={`M${x - 10} 150 L${x} 118 L${x + 10} 150`} stroke="#F59E0B" strokeWidth="3" fill="none" strokeLinecap="round" />
-              <circle cx={x} cy="116" r="5" fill="#FDE047" />
-            </g>
-          ))}
-          <text x="180" y="175" textAnchor="middle" fill="#FDE047" fontSize="9" fontFamily="monospace" fontWeight="bold">
-            LATTER RAIN (JOEL 2:23) &amp; LOUD CRY (REV 18:1–4)
-          </text>
-          <text x="180" y="190" textAnchor="middle" fill="#A7F3D0" fontSize="8" fontFamily="monospace">
-            “THE EARTH WAS LIGHTENED WITH HIS GLORY”
-          </text>
-        </svg>
-      );
-
-    case 'time-of-trouble':
-      return (
-        <svg viewBox="0 0 360 210" className="w-full h-full select-none" role="img" aria-label="Time of Trouble and Mountain Munitions of Rocks Vector Schematic">
-          <rect width="360" height="210" rx="14" fill="#07150E" />
-          {/* High Mountain Strongholds ("Munitions of Rocks" - Isaiah 33:16) */}
-          <polygon points="20,156 95,48 165,126 235,38 335,156" fill="#1E293B" stroke="#94A3B8" strokeWidth="1.8" />
-          <polygon points="75,156 145,74 215,134 275,68 340,156" fill="#064E3B" fillOpacity="0.7" stroke="#34D399" strokeWidth="1.5" />
-          {/* Protective Heavenly Light & Living Stream in the Rock */}
-          <circle cx="235" cy="38" r="22" fill="#FBBF24" fillOpacity="0.25" />
-          <path d="M235 65 Q215 105 190 156" stroke="#38BDF8" strokeWidth="3" fill="none" strokeLinecap="round" />
-          <text x="180" y="175" textAnchor="middle" fill="#BAE6FD" fontSize="9" fontFamily="monospace" fontWeight="bold">
-            ISAIAH 33:16 · MUNITIONS OF ROCKS (GC 626.1)
-          </text>
-          <text x="180" y="190" textAnchor="middle" fill="#FDE68A" fontSize="8" fontFamily="monospace">
-            “BREAD SHALL BE GIVEN HIM; HIS WATERS SHALL BE SURE”
-          </text>
-        </svg>
-      );
-
-    default:
-      return (
-        <svg viewBox="0 0 360 210" className="w-full h-full select-none" role="img" aria-label="Second Coming of Christ and New Earth Vector Schematic">
-          <rect width="360" height="210" rx="14" fill="#07150E" />
-          {/* Radiant Glory Cloud & Golden Crown */}
-          <circle cx="180" cy="72" r="52" fill="#FACC15" fillOpacity="0.2" />
-          <circle cx="180" cy="72" r="32" fill="#FEF08A" fillOpacity="0.35" />
-          {/* Golden Crown Vector */}
-          <polygon points="154,78 160,54 173,68 180,48 187,68 200,54 206,78" fill="#FACC15" stroke="#FEF9C3" strokeWidth="1.5" />
-          {/* Restored Edenic Mountains & Tree of Life on Both Sides of the River */}
-          <path d="M20 155 Q100 115 180 145 Q260 115 340 155" fill="#065F46" stroke="#34D399" strokeWidth="2" />
-          <path d="M180 105 C170 125 165 140 155 158 L205 158 C195 140 190 125 180 105 Z" fill="#38BDF8" />
-          <text x="180" y="176" textAnchor="middle" fill="#FEF08A" fontSize="9" fontFamily="monospace" fontWeight="bold">
-            REVELATION 14:14 &amp; ISAIAH 65:21 · EDEN RESTORED
-          </text>
-          <text x="180" y="191" textAnchor="middle" fill="#6EE7B7" fontSize="8" fontFamily="monospace">
-            “THEY SHALL BUILD HOUSES AND PLANT VINEYARDS”
-          </text>
-        </svg>
-      );
-  }
+      {/* Footer: Scripture badge & Stage index */}
+      <div className="pt-2 border-t border-emerald-900/40 flex items-center justify-between gap-2 text-xs">
+        <span className="font-mono text-xs text-amber-200 truncate">
+          📖 {epoch.scriptureRef}
+        </span>
+        <span className="text-xs font-mono text-emerald-400 font-semibold shrink-0">
+          Stage {epoch.stageNumber}/07
+        </span>
+      </div>
+    </div>
+  );
 }
 
 export function PropheticTimeline1844() {
@@ -594,14 +446,14 @@ export function PropheticTimeline1844() {
 
                 {/* TOP HALF: THE 2,300 PROPHETIC YEARS MATHEMATICAL DIAGRAM (457 BC TO 1844) */}
                 <rect x="24" y="20" width="872" height="155" rx="12" fill="#081C11" stroke="#10B981" strokeWidth="1.5" />
-                <text x="44" y="44" fill="#FDE047" fontSize="11" fontFamily="monospace" fontWeight="bold">
-                  I. THE 2,300 PROPHETIC DAYS / YEARS OF DANIEL 8:14 &amp; 9:24–27 (DAY-FOR-A-YEAR PRINCIPLE · NUMBERS 14:34; EZEKIEL 4:6)
+                <text x="44" y="44" fill="#FDE047" fontSize="14" fontFamily="monospace" fontWeight="bold">
+                  I. THE 2,300 PROPHETIC DAYS / YEARS OF DANIEL 8:14 &amp; 9:24–27 (DAY-FOR-A-YEAR PRINCIPLE)
                 </text>
 
                 {/* Main 2300-Year Span Bracket */}
                 <path d="M 60 72 L 60 60 L 660 60 L 660 72" fill="none" stroke="#FBBF24" strokeWidth="2" />
-                <text x="360" y="55" textAnchor="middle" fill="#FEF08A" fontSize="10" fontFamily="monospace" fontWeight="bold">
-                  2,300 PROPHETIC YEARS = 490 YEARS (70 WEEKS) + 1,810 YEARS → TERMINATING OCTOBER 22, 1844
+                <text x="360" y="55" textAnchor="middle" fill="#FEF08A" fontSize="13" fontFamily="monospace" fontWeight="bold">
+                  2,300 PROPHETIC YEARS: 490 YEARS (70 WEEKS) + 1,810 YEARS → ENDS OCT 22, 1844
                 </text>
 
                 {/* Primary Timeline Axis */}
@@ -609,34 +461,34 @@ export function PropheticTimeline1844() {
 
                 {/* 490 Years Sub-Bracket */}
                 <path d="M 60 120 L 60 132 L 340 132 L 340 120" fill="none" stroke="#38BDF8" strokeWidth="1.8" />
-                <text x="200" y="146" textAnchor="middle" fill="#7DD3FC" fontSize="9" fontFamily="monospace" fontWeight="bold">
-                  70 WEEKS (490 YEARS) CUT OFF FOR ISRAEL (DAN 9:24)
+                <text x="200" y="146" textAnchor="middle" fill="#7DD3FC" fontSize="12.5" fontFamily="monospace" fontWeight="bold">
+                  70 WEEKS (490 YEARS) TO ISRAEL (DAN 9:24)
                 </text>
 
                 {/* 1810 Years Sub-Bracket */}
                 <path d="M 340 120 L 340 132 L 660 132 L 660 120" fill="none" stroke="#F59E0B" strokeWidth="1.8" />
-                <text x="500" y="146" textAnchor="middle" fill="#FDE68A" fontSize="9" fontFamily="monospace" fontWeight="bold">
+                <text x="500" y="146" textAnchor="middle" fill="#FDE68A" fontSize="12.5" fontFamily="monospace" fontWeight="bold">
                   REMAINING 1,810 YEARS TO 1844 (DAN 8:14)
                 </text>
 
                 {/* Prophetic Time Nodes */}
                 {[
-                  { x: 60, year: '457 BC', event: 'Artaxerxes Decree', sub: 'Ezra 7:11–26', color: '#10B981' },
-                  { x: 185, year: 'AD 27', event: 'Messiah Anointed', sub: 'Luke 3:21–22', color: '#38BDF8' },
-                  { x: 262, year: 'AD 31', event: 'Crucifixion', sub: 'Midst of Week', color: '#F43F5E' },
-                  { x: 340, year: 'AD 34', event: 'Gospel to Gentiles', sub: 'End of 70 Weeks', color: '#38BDF8' },
-                  { x: 660, year: 'OCT 22, 1844', event: 'Sanctuary Cleansed', sub: 'Investigative Judgment', color: '#FBBF24' },
-                  { x: 845, year: 'CONSUMMATION', event: 'Second Coming', sub: 'Rev 14:14–16', color: '#FACC15' },
+                  { x: 60, year: '457 BC', event: 'Decree', sub: 'Ezra 7', color: '#10B981' },
+                  { x: 185, year: 'AD 27', event: 'Anointed', sub: 'Luke 3', color: '#38BDF8' },
+                  { x: 262, year: 'AD 31', event: 'Cross', sub: 'Mid-Week', color: '#F43F5E' },
+                  { x: 340, year: 'AD 34', event: 'Gentiles', sub: 'End 70 Wk', color: '#38BDF8' },
+                  { x: 660, year: 'OCT 22, 1844', event: 'Sanctuary Cleansed', sub: 'Judgment', color: '#FBBF24' },
+                  { x: 845, year: 'CONSUMMATION', event: 'Second Coming', sub: 'Rev 14:14', color: '#FACC15' },
                 ].map((pt) => (
                   <g key={pt.year}>
                     <circle cx={pt.x} cy={105} r="8" fill={pt.color} stroke="#FFFFFF" strokeWidth="2" />
-                    <text x={pt.x} y={84} textAnchor="middle" fill="#FFFFFF" fontSize="9.5" fontFamily="monospace" fontWeight="bold">
+                    <text x={pt.x} y={84} textAnchor="middle" fill="#FFFFFF" fontSize="13" fontFamily="monospace" fontWeight="bold">
                       {pt.year}
                     </text>
-                    <text x={pt.x} y={95} textAnchor="middle" fill={pt.color} fontSize="8" fontFamily="sans-serif" fontWeight="bold">
+                    <text x={pt.x} y={97} textAnchor="middle" fill={pt.color} fontSize="12" fontFamily="sans-serif" fontWeight="bold">
                       {pt.event}
                     </text>
-                    <text x={pt.x} y={164} textAnchor="middle" fill="#A7F3D0" fontSize="7.5" fontFamily="monospace">
+                    <text x={pt.x} y={165} textAnchor="middle" fill="#A7F3D0" fontSize="12" fontFamily="monospace">
                       {pt.sub}
                     </text>
                   </g>
@@ -644,26 +496,26 @@ export function PropheticTimeline1844() {
 
                 {/* BOTTOM HALF: ARCHITECTURAL CUTAWAY OF THE TWO-APARTMENT SANCTUARY & END-TIME PREPARATION */}
                 <rect x="24" y="190" width="872" height="210" rx="12" fill="#07170E" stroke="#F59E0B" strokeWidth="1.5" />
-                <text x="44" y="214" fill="#FDE047" fontSize="11" fontFamily="monospace" fontWeight="bold">
-                  II. ARCHITECTURAL PLAN OF SALVATION: EARTHLY COURTYARD → HOLY PLACE (AD 31–1844) → MOST HOLY PLACE (SINCE OCT 22, 1844)
+                <text x="44" y="214" fill="#FDE047" fontSize="14" fontFamily="monospace" fontWeight="bold">
+                  II. PLAN OF SALVATION: EARTHLY COURT → HOLY PLACE (AD 31–1844) → MOST HOLY PLACE (SINCE OCT 22, 1844)
                 </text>
 
                 {/* Zone 1: Outer Courtyard (AD 31 Cross) */}
                 <rect x="44" y="230" width="210" height="148" rx="10" fill="#0B2115" stroke="#34D399" strokeWidth="1.5" />
-                <text x="149" y="250" textAnchor="middle" fill="#6EE7B7" fontSize="10" fontFamily="monospace" fontWeight="bold">
+                <text x="149" y="250" textAnchor="middle" fill="#6EE7B7" fontSize="13.5" fontFamily="monospace" fontWeight="bold">
                   1. OUTER COURT (EARTH)
                 </text>
                 {/* Altar of Sacrifice & Laver */}
                 <rect x="75" y="278" width="46" height="40" rx="4" fill="#78350F" stroke="#F97316" strokeWidth="1.8" />
                 <path d="M88 278 Q98 256 108 278" fill="#F97316" />
-                <text x="98" y="334" textAnchor="middle" fill="#FDBA74" fontSize="8" fontFamily="monospace" fontWeight="bold">
+                <text x="98" y="334" textAnchor="middle" fill="#FDBA74" fontSize="12" fontFamily="monospace" fontWeight="bold">
                   ALTAR (AD 31)
                 </text>
                 <circle cx="185" cy="298" r="20" fill="#0284C7" fillOpacity="0.35" stroke="#38BDF8" strokeWidth="1.8" />
-                <text x="185" y="334" textAnchor="middle" fill="#7DD3FC" fontSize="8" fontFamily="monospace" fontWeight="bold">
+                <text x="185" y="334" textAnchor="middle" fill="#7DD3FC" fontSize="12" fontFamily="monospace" fontWeight="bold">
                   LAVER OF WATER
                 </text>
-                <text x="149" y="362" textAnchor="middle" fill="#D1FAE5" fontSize="8" fontFamily="sans-serif">
+                <text x="149" y="362" textAnchor="middle" fill="#D1FAE5" fontSize="12" fontFamily="sans-serif">
                   Calvary Sacrifice &amp; Rebirth
                 </text>
 
@@ -673,7 +525,7 @@ export function PropheticTimeline1844() {
 
                 {/* Zone 2: First Apartment / Holy Place (AD 31 – 1844) */}
                 <rect x="298" y="230" width="250" height="148" rx="10" fill="#0D2618" stroke="#38BDF8" strokeWidth="1.5" />
-                <text x="423" y="250" textAnchor="middle" fill="#7DD3FC" fontSize="10" fontFamily="monospace" fontWeight="bold">
+                <text x="423" y="250" textAnchor="middle" fill="#7DD3FC" fontSize="13.5" fontFamily="monospace" fontWeight="bold">
                   2. HOLY PLACE (AD 31 – 1844)
                 </text>
                 {/* 7-Branched Lampstand, Table of Showbread, Golden Altar of Incense */}
@@ -681,31 +533,31 @@ export function PropheticTimeline1844() {
                   <line x1="20" y1="5" x2="20" y2="42" stroke="#FBBF24" strokeWidth="2.5" />
                   <path d="M6 12 Q20 28 34 12" fill="none" stroke="#FBBF24" strokeWidth="2" />
                   <path d="M12 8 Q20 20 28 8" fill="none" stroke="#FBBF24" strokeWidth="2" />
-                  <text x="20" y="56" textAnchor="middle" fill="#FDE68A" fontSize="7.5" fontFamily="monospace">7 LAMPS</text>
+                  <text x="20" y="56" textAnchor="middle" fill="#FDE68A" fontSize="12" fontFamily="monospace">7 LAMPS</text>
                 </g>
                 <g transform="translate(405, 280)">
                   <rect x="0" y="10" width="42" height="26" rx="3" fill="#92400E" stroke="#FDE047" strokeWidth="1.5" />
-                  <text x="21" y="51" textAnchor="middle" fill="#FDE68A" fontSize="7.5" fontFamily="monospace">SHOWBREAD</text>
+                  <text x="21" y="51" textAnchor="middle" fill="#FDE68A" fontSize="12" fontFamily="monospace">SHOWBREAD</text>
                 </g>
                 <g transform="translate(482, 278)">
                   <rect x="6" y="8" width="28" height="30" rx="3" fill="#B45309" stroke="#FDE047" strokeWidth="1.5" />
                   <path d="M20 8 Q15 -4 25 -8" stroke="#A7F3D0" strokeWidth="1.5" fill="none" />
-                  <text x="20" y="53" textAnchor="middle" fill="#FDE68A" fontSize="7.5" fontFamily="monospace">INCENSE</text>
+                  <text x="20" y="53" textAnchor="middle" fill="#FDE68A" fontSize="12" fontFamily="monospace">INCENSE</text>
                 </g>
-                <text x="423" y="362" textAnchor="middle" fill="#BAE6FD" fontSize="8" fontFamily="sans-serif">
+                <text x="423" y="362" textAnchor="middle" fill="#BAE6FD" fontSize="12" fontFamily="sans-serif">
                   Daily Intercession of Christ our High Priest
                 </text>
 
                 {/* Arrow 2 -> 3 (Oct 22, 1844 Transition through the Second Veil) */}
                 <path d="M 550 304 L 584 304" stroke="#FBBF24" strokeWidth="3" />
                 <polygon points="584,298 596,304 584,310" fill="#FBBF24" />
-                <text x="573" y="290" textAnchor="middle" fill="#FDE047" fontSize="8" fontFamily="monospace" fontWeight="bold">
+                <text x="573" y="290" textAnchor="middle" fill="#FDE047" fontSize="12" fontFamily="monospace" fontWeight="bold">
                   1844
                 </text>
 
                 {/* Zone 3: Second Apartment / Most Holy Place (Oct 22, 1844 – Close of Probation) */}
                 <rect x="600" y="230" width="276" height="148" rx="10" fill="#182210" stroke="#FBBF24" strokeWidth="2.2" />
-                <text x="738" y="250" textAnchor="middle" fill="#FDE047" fontSize="10" fontFamily="monospace" fontWeight="bold">
+                <text x="738" y="250" textAnchor="middle" fill="#FDE047" fontSize="13.5" fontFamily="monospace" fontWeight="bold">
                   3. MOST HOLY PLACE (SINCE OCT 22, 1844)
                 </text>
                 {/* Shekinah Glory & Ark of the Covenant with Ten Commandments */}
@@ -714,10 +566,10 @@ export function PropheticTimeline1844() {
                 <rect x="740" y="268" width="18" height="24" rx="2" fill="#1E293B" stroke="#FDE68A" strokeWidth="1.4" />
                 <rect x="692" y="294" width="92" height="32" rx="4" fill="#92400E" stroke="#FDE047" strokeWidth="2" />
                 <line x1="674" y1="310" x2="802" y2="310" stroke="#FEF08A" strokeWidth="2.8" />
-                <text x="738" y="342" textAnchor="middle" fill="#FEF08A" fontSize="8.5" fontFamily="monospace" fontWeight="bold">
+                <text x="738" y="342" textAnchor="middle" fill="#FEF08A" fontSize="12.5" fontFamily="monospace" fontWeight="bold">
                   ARK OF THE TESTAMENT &amp; LAW OF GOD (REV 11:19)
                 </text>
-                <text x="738" y="362" textAnchor="middle" fill="#FDE68A" fontSize="8" fontFamily="sans-serif">
+                <text x="738" y="362" textAnchor="middle" fill="#FDE68A" fontSize="12" fontFamily="sans-serif">
                   Investigative Judgment · Three Angels · Country Living Preparation
                 </text>
               </svg>

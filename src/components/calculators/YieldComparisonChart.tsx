@@ -96,7 +96,7 @@ export const CROPS_DATABASE: CropData[] = [
   {
     id: 'groundnuts',
     name: 'Groundnuts (CG7 / Nsinjiro)',
-    chinyanjaName: "Mtedza wa M'Munda",
+    chinyanjaName: 'Mtedza wa M’Munda',
     unitLabel: '50kg Bags',
     tradYieldPerAcre: 10,
     impYieldPerAcre: 26,

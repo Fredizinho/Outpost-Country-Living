@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { getStoredMasteredSkills, saveStoredMasteredSkills } from '@/lib/offlineStorage';
 import { PLANTING_PIT_SPECS, PlantingPitKey } from '@/constants';
 import { FieldEngineeringDiagrams } from '@/components/outpost/FieldEngineeringDiagrams';
+import { getChichewaDisplay } from '@/i18n/ny';
 
 const MASTERY_SKILLS = [
   { id: 's1', title: 'Deep Organic Compost Pit', category: 'Gardening' },
@@ -105,9 +106,19 @@ export default function How() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             <div className="lg:col-span-5 flex flex-col gap-4 p-5 rounded-lg bg-[#F6F1E7] dark:bg-[#0E1712] border border-[#E4DCCB] dark:border-[#283C30]">
               <div>
-                <span className="text-xs font-mono text-[#B4531F] dark:text-[#D4A034] font-semibold">
-                  {activePit.chichewaName}
-                </span>
+                {(() => {
+                  const ch = getChichewaDisplay(activePit.chichewaName);
+                  return (
+                    <div className="flex flex-wrap items-baseline gap-1.5 text-xs font-mono mb-1">
+                      <span className="text-[#B4531F] dark:text-[#D4A034] font-bold">{ch.primary}</span>
+                      {ch.alsoCalled && (
+                        <span className="text-[#5A6458] dark:text-[#9FB3A4] font-normal text-caption">
+                          ({ch.alsoCalled})
+                        </span>
+                      )}
+                    </div>
+                  );
+                })()}
                 <h3 className="font-serif text-xl font-bold text-[#1F2A22] dark:text-[#FFFDF8] mt-0.5">
                   {activePit.name}
                 </h3>
@@ -123,7 +134,9 @@ export default function How() {
                 </div>
                 <div>
                   <span className="text-caption text-[#5A6458] dark:text-[#9FB3A4] block">Moisture Retention</span>
-                  <span className="font-bold text-[#3F6B4E] dark:text-[#86EFAC]">{activePit.waterRetentionLiters} L / pit</span>
+                  <span className="font-bold text-[#3F6B4E] dark:text-[#86EFAC]">
+                    {activePit.waterRetentionLiters} L [{Math.round(activePit.waterRetentionLiters * 0.264172)} gal] / pit
+                  </span>
                 </div>
                 <div>
                   <span className="text-caption text-[#5A6458] dark:text-[#9FB3A4] block">Biochar / Compost</span>

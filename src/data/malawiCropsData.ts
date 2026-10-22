@@ -404,7 +404,7 @@ export const MALAWI_CROPS_DATABASE: MalawiCrop[] = [
     id: 'macadamia',
     name: 'Macadamia',
     englishName: 'Macadamia Nut',
-    chichewaName: 'Mtedza wa Mung\'ona / Macadamia',
+    chichewaName: 'Mtedza wa Mung’ona / Macadamia',
     scientificName: 'Macadamia integrifolia',
     category: 'Fruits & Orchards',
     malawiRegions: ['Thyolo & Mulanje Highlands', 'Mzuzu & Nkhata Bay Escarpment', 'Zomba'],

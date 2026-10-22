@@ -266,9 +266,52 @@
   --card-padding-desktop: 24px;
   --section-gap-mobile: 32px;
   --section-gap-desktop: 48px;
+
+  /* =========================================================================
+     STANDARDIZED DIAGRAM SYSTEM TOKENS (--dg-*)
+     720px viewBox standard; ≥16 unit font; external leader lines; light & dark
+     ========================================================================= */
+  --dg-bg: #FFFDF8;
+  --dg-card-bg: #FFFFFF;
+  --dg-border: #E4DCCB;
+  --dg-sky: #EDF3EE;
+  --dg-ground: #E7DFD3;
+  --dg-soil-dark: #583F2F;
+  --dg-soil-mid: #8C6A50;
+  --dg-soil-light: #CBB49C;
+  --dg-rock: #798389;
+  --dg-water: #9AC2CD;
+  --dg-water-stroke: #3F7585;
+  --dg-plant-stem: #6E492B;
+  --dg-plant-leaf: #3F6B4E;
+  --dg-highlight: #B4531F;
+  --dg-leader: #7C7467;
+  --dg-label-text: #1F2A22;
+  --dg-num-bg: #B4531F;
+  --dg-num-text: #FFFFFF;
 }
 
 .dark {
+  /* Standardized Diagram System Tokens (--dg-*) */
+  --dg-bg: #0B1911;
+  --dg-card-bg: #0F2217;
+  --dg-border: rgba(245, 158, 11, 0.25);
+  --dg-sky: #13241A;
+  --dg-ground: #261E17;
+  --dg-soil-dark: #3A271C;
+  --dg-soil-mid: #5A3E2C;
+  --dg-soil-light: #7E5B42;
+  --dg-rock: #58646B;
+  --dg-water: #376575;
+  --dg-water-stroke: #6AA5B7;
+  --dg-plant-stem: #8C633C;
+  --dg-plant-leaf: #4E8C5F;
+  --dg-highlight: #F59E0B;
+  --dg-leader: #A39B8F;
+  --dg-label-text: #FEF3C7;
+  --dg-num-bg: #F59E0B;
+  --dg-num-text: #0B1911;
+
   /* Semantic Color Tokens - Dark Mode */
   --surface: #071A10; /* Deep Moss Brand Foundation */
   --surface-raised: #0D2818; /* Forest Earthy Raised Container */
@@ -302,6 +345,30 @@
   --shadow-raised: var(--elevation-raised);
   --shadow-overlay: var(--elevation-overlay);
 }
+
+/* =========================================================================
+   DIAGRAM SYSTEM TOKEN CLASSES (.dg-*)
+   ========================================================================= */
+.dg-bg { fill: var(--dg-bg); }
+.dg-card-bg { fill: var(--dg-card-bg); }
+.dg-border { stroke: var(--dg-border); }
+.dg-sky { fill: var(--dg-sky); }
+.dg-ground { fill: var(--dg-ground); }
+.dg-soil-dark { fill: var(--dg-soil-dark); }
+.dg-soil-mid { fill: var(--dg-soil-mid); }
+.dg-soil-light { fill: var(--dg-soil-light); }
+.dg-rock { fill: var(--dg-rock); }
+.dg-water { fill: var(--dg-water); }
+.dg-water-stroke { stroke: var(--dg-water-stroke); }
+.dg-plant-stem { stroke: var(--dg-plant-stem); }
+.dg-plant-leaf { fill: var(--dg-plant-leaf); }
+.dg-highlight { fill: var(--dg-highlight); }
+.dg-highlight-stroke { stroke: var(--dg-highlight); }
+.dg-leader { stroke: var(--dg-leader); }
+.dg-label-text { fill: var(--dg-label-text); color: var(--dg-label-text); }
+.dg-num-bg { fill: var(--dg-num-bg); }
+.dg-num-text { fill: var(--dg-num-text); }
+
 
 /* Katondo Burnt Sienna, Soft Beige & Sandy Neutrals Theme Overrides */
 html.theme-sienna {

@@ -103,7 +103,7 @@ export function VisualSoilSwatchGuide() {
                     {swatch.englishName}
                   </h5>
                   <span className="text-caption text-stone-500 dark:text-stone-400 font-mono">
-                    {swatch.faoClass}
+                    Technical: FAO {swatch.faoClass}
                   </span>
                 </div>
               </div>

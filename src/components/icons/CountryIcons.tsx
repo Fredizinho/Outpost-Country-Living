@@ -312,7 +312,7 @@ export function SoilStrataIllustration({
           <path d="M320 38 L325 21 M323 38 L331 25" />
           <path d="M370 38 L374 19 M373 38 L380 23" />
         </g>
-        <text x="20" y="24" fill="#86efac" fontSize="11" fontWeight="800" letterSpacing="0.05em">
+        <text x="20" y="24" fill="#86efac" fontSize="12" fontWeight="800" letterSpacing="0.05em">
           01. ORGANIC HUMUS & MULCH (0-25cm) • pH 6.4
         </text>
 
@@ -327,10 +327,10 @@ export function SoilStrataIllustration({
         <circle cx="310" cy="95" r="4.5" fill="#dc5c23" />
         <circle cx="150" cy="120" r="6" fill="#b94218" />
         <circle cx="280" cy="135" r="5" fill="#dc5c23" />
-        <text x="20" y="85" fill="#ffd7b5" fontSize="11" fontWeight="800">
+        <text x="20" y="85" fill="#ffd7b5" fontSize="12" fontWeight="800">
           02. KATONDO LATOSOL SUBSOIL (25-120cm)
         </text>
-        <text x="20" y="102" fill="#ffd7b5" fontSize="9" opacity="0.85">
+        <text x="20" y="102" fill="#ffd7b5" fontSize="12" opacity="0.85">
           High Fe & Al oxides • High water-holding capacity • pH 5.8-6.2
         </text>
 
@@ -351,7 +351,7 @@ export function SoilStrataIllustration({
         <polygon points="40,200 90,190 110,225 60,235" fill="#55483a" stroke="#6a5a47" strokeWidth="1.5" />
         <polygon points="160,195 230,185 250,220 180,230" fill="#463c31" stroke="#6a5a47" strokeWidth="1.5" />
         <polygon points="290,205 360,195 380,235 310,245" fill="#55483a" stroke="#6a5a47" strokeWidth="1.5" />
-        <text x="20" y="260" fill="#d3c7b5" fontSize="11" fontWeight="800">
+        <text x="20" y="260" fill="#d3c7b5" fontSize="12" fontWeight="800">
           03. WEATHERED SAPROLITE & BASEMENT COMPLEX (1.2m+)
         </text>
 
@@ -434,7 +434,7 @@ export function SolarBoreholeIllustration({
 
         {/* Title Badge */}
         <rect x="12" y="196" width="170" height="26" rx="6" fill="#042614" stroke="#16a34a" strokeWidth="1" />
-        <text x="22" y="213" fill="#86efac" fontSize="10" fontWeight="800">
+        <text x="22" y="213" fill="#86efac" fontSize="12" fontWeight="800">
           ☀️ SOLAR PUMP • 45m AQUIFER
         </text>
 
@@ -518,7 +518,7 @@ export function PermacultureSwaleIllustration({
 
         {/* Annotation Label */}
         <rect x="12" y="196" width="195" height="26" rx="6" fill="#042614" stroke="#16a34a" strokeWidth="1" />
-        <text x="22" y="213" fill="#86efac" fontSize="10" fontWeight="800">
+        <text x="22" y="213" fill="#86efac" fontSize="12" fontWeight="800">
           🌱 CONTOUR SWALE • WATER RETENTION
         </text>
 
@@ -603,7 +603,7 @@ export function GranaryStorageIllustration({
 
         {/* Badge */}
         <rect x="12" y="196" width="180" height="26" rx="6" fill="#042614" stroke="#16a34a" strokeWidth="1" />
-        <text x="22" y="213" fill="#86efac" fontSize="10" fontWeight="800">
+        <text x="22" y="213" fill="#86efac" fontSize="12" fontWeight="800">
           🌽 NKHOKWE • POST-HARVEST STORAGE
         </text>
 
@@ -678,7 +678,7 @@ export function HerbalApothecaryIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="185" height="24" rx="6" fill="#042614" stroke="#16a34a" strokeWidth="1" />
-        <text x="20" y="196" fill="#86efac" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#86efac" fontSize="12.5" fontWeight="800">
           🌿 APOTHECARY • NATURAL REMEDIES
         </text>
 
@@ -747,7 +747,7 @@ export function LakeMalawiIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="190" height="24" rx="6" fill="#042614" stroke="#38bdf8" strokeWidth="1" />
-        <text x="20" y="196" fill="#bae6fd" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#bae6fd" fontSize="12.5" fontWeight="800">
           🌊 LAKE MALAWI • AQUATIC GUILD
         </text>
 
@@ -824,7 +824,7 @@ export function SabbathSanctuaryIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="180" height="24" rx="6" fill="#042614" stroke="#fbbf24" strokeWidth="1" />
-        <text x="20" y="196" fill="#fde68a" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#fde68a" fontSize="12.5" fontWeight="800">
           🕊️ SABBATH SANCTUARY & REST
         </text>
 
@@ -926,7 +926,7 @@ export function CompostIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="195" height="24" rx="6" fill="#042614" stroke="#16a34a" strokeWidth="1" />
-        <text x="20" y="196" fill="#86efac" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#86efac" fontSize="12.5" fontWeight="800">
           🍂 THERMOPHILIC COMPOST • 60°C
         </text>
 
@@ -995,8 +995,8 @@ export function FirstAidIllustration({
           <rect x="18" y="10" width="22" height="10" rx="2" fill="#55483a" stroke="#25201a" strokeWidth="1.5" />
           {/* Label */}
           <rect x="14" y="32" width="30" height="28" rx="2" fill="#ffd7b5" />
-          <text x="18" y="44" fill="#361009" fontSize="6.5" fontWeight="900">CHAR</text>
-          <text x="18" y="53" fill="#782a15" fontSize="5.5" fontWeight="700">COAL</text>
+          <text x="18" y="44" fill="#361009" fontSize="12" fontWeight="900">CHAR</text>
+          <text x="18" y="53" fill="#782a15" fontSize="12" fontWeight="700">COAL</text>
         </g>
 
         {/* Fresh Healing Aloe Vera Leaf for Burns */}
@@ -1027,7 +1027,7 @@ export function FirstAidIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="205" height="24" rx="6" fill="#361009" stroke="#dc5c23" strokeWidth="1" />
-        <text x="20" y="196" fill="#ffd7b5" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#ffd7b5" fontSize="12.5" fontWeight="800">
           🩹 EMERGENCY FIRST AID & TRIAGE
         </text>
 
@@ -1119,7 +1119,7 @@ export function FruitTreeIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="195" height="24" rx="6" fill="#042614" stroke="#16a34a" strokeWidth="1" />
-        <text x="20" y="196" fill="#86efac" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#86efac" fontSize="12.5" fontWeight="800">
           🥑 FRUIT ORCHARDS & GRAFTING
         </text>
 
@@ -1165,15 +1165,15 @@ export function VermicultureIllustration({
         <g transform="translate(100, 30)">
           {/* Top Bin (Active Feeding Layer) */}
           <rect x="0" y="20" width="140" height="32" rx="4" fill="#15803d" stroke="#042614" strokeWidth="2" />
-          <text x="10" y="40" fill="#dcfce7" fontSize="8" fontWeight="800">TIER 1: FRESH VEGETABLE SCRAPS</text>
+          <text x="10" y="40" fill="#dcfce7" fontSize="12" fontWeight="800">TIER 1: FRESH VEGETABLE SCRAPS</text>
 
           {/* Middle Bin (Working Bedding & Worms) */}
           <rect x="0" y="56" width="140" height="34" rx="4" fill="#55483a" stroke="#25201a" strokeWidth="2" />
-          <text x="10" y="76" fill="#ffd7b5" fontSize="8" fontWeight="800">TIER 2: VERMICASTINGS & COCOONS</text>
+          <text x="10" y="76" fill="#ffd7b5" fontSize="12" fontWeight="800">TIER 2: VERMICASTINGS & COCOONS</text>
 
           {/* Bottom Sump Bin (Liquid Vermi-Tea Collector) */}
           <rect x="0" y="94" width="140" height="34" rx="4" fill="#361009" stroke="#25201a" strokeWidth="2" />
-          <text x="10" y="114" fill="#ffd7b5" fontSize="8" fontWeight="800">TIER 3: LIQUID MICROBIAL TEA</text>
+          <text x="10" y="114" fill="#ffd7b5" fontSize="12" fontWeight="800">TIER 3: LIQUID MICROBIAL TEA</text>
 
           {/* Brass Spigot Tap on bottom bin */}
           <path d="M140 110 L155 110 L155 118" stroke="#d97706" strokeWidth="3" fill="none" strokeLinecap="round" />
@@ -1200,12 +1200,12 @@ export function VermicultureIllustration({
           <rect x="0" y="10" width="35" height="45" rx="4" fill="#25201a" stroke="#6a5a47" strokeWidth="1.5" />
           <rect x="5" y="4" width="25" height="8" rx="2" fill="#d3c7b5" stroke="#6a5a47" strokeWidth="1" />
           <circle cx="17" cy="30" r="10" fill="#ffd7b5" />
-          <text x="10" y="33" fill="#782a15" fontSize="6" fontWeight="900">100%</text>
+          <text x="10" y="33" fill="#782a15" fontSize="12" fontWeight="900">100%</text>
         </g>
 
         {/* Badge */}
         <rect x="12" y="180" width="190" height="24" rx="6" fill="#042614" stroke="#16a34a" strokeWidth="1" />
-        <text x="20" y="196" fill="#86efac" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#86efac" fontSize="12.5" fontWeight="800">
           🪱 VERMICULTURE & WORM TEA
         </text>
 
@@ -1272,7 +1272,7 @@ export function WaterConservationIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="200" height="24" rx="6" fill="#042614" stroke="#0284c7" strokeWidth="1" />
-        <text x="20" y="196" fill="#bae6fd" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#bae6fd" fontSize="12.5" fontWeight="800">
           💧 WATER RETENTION & KEYLINE
         </text>
 
@@ -1358,7 +1358,7 @@ export function DroughtCropsIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="205" height="24" rx="6" fill="#042614" stroke="#d97706" strokeWidth="1" />
-        <text x="20" y="196" fill="#fde68a" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#fde68a" fontSize="12.5" fontWeight="800">
           🌾 DROUGHT CROPS • SORGHUM & CASSAVA
         </text>
 
@@ -1449,7 +1449,7 @@ export function HerbsCultivationIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="200" height="24" rx="6" fill="#042614" stroke="#16a34a" strokeWidth="1" />
-        <text x="20" y="196" fill="#86efac" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#86efac" fontSize="12.5" fontWeight="800">
           🌿 HERBAL GUILD • LOCAL & EXOTIC
         </text>
 
@@ -1508,8 +1508,8 @@ export function FoodPreservationIllustration({
           />
           {/* Bag Tie at top */}
           <rect x="20" y="10" width="10" height="8" rx="2" fill="#ffd7b5" stroke="#782a15" strokeWidth="1.2" />
-          <text x="18" y="50" fill="#bae6fd" fontSize="7" fontWeight="900">PICS</text>
-          <text x="14" y="60" fill="#ffffff" fontSize="5.5" fontWeight="700">HERMETIC</text>
+          <text x="18" y="50" fill="#bae6fd" fontSize="12" fontWeight="900">PICS</text>
+          <text x="14" y="60" fill="#ffffff" fontSize="12" fontWeight="700">HERMETIC</text>
         </g>
 
         {/* Fermentation Glass Mason Jars on Right */}
@@ -1538,7 +1538,7 @@ export function FoodPreservationIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="210" height="24" rx="6" fill="#042614" stroke="#dc5c23" strokeWidth="1" />
-        <text x="20" y="196" fill="#ffd7b5" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#ffd7b5" fontSize="12.5" fontWeight="800">
           🥫 FOOD PRESERVATION & FERMENTATION
         </text>
 
@@ -1583,7 +1583,7 @@ export function OutpostTechIllustration({
           
           {/* Inverter Screen & Status LEDs */}
           <rect x="10" y="12" width="65" height="22" rx="2" fill="#0369a1" stroke="#38bdf8" strokeWidth="1" />
-          <text x="16" y="26" fill="#bae6fd" fontSize="7" fontWeight="900">48.2V • 1.8kW</text>
+          <text x="16" y="26" fill="#bae6fd" fontSize="12" fontWeight="900">48.2V • 1.8kW</text>
           <circle cx="65" cy="22" r="2.5" fill="#4ade80" />
 
           {/* 48V LiFePO4 Server Rack Battery Modules */}
@@ -1625,7 +1625,7 @@ export function OutpostTechIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="220" height="24" rx="6" fill="#042614" stroke="#38bdf8" strokeWidth="1" />
-        <text x="20" y="196" fill="#bae6fd" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#bae6fd" fontSize="12.5" fontWeight="800">
           ⚙️ OUTPOST MACHINERY & SOLAR TECH
         </text>
 
@@ -1718,7 +1718,7 @@ export function InsectHandlingIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="200" height="24" rx="6" fill="#042614" stroke="#fbbf24" strokeWidth="1" />
-        <text x="20" y="196" fill="#fde68a" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#fde68a" fontSize="12.5" fontWeight="800">
           🐝 INSECT GUILD & BEEKEEPING
         </text>
 
@@ -1768,7 +1768,7 @@ export function DiseaseHandlingIllustration({
           {/* Necrotic Blight Lesions & Yellow Halo */}
           <ellipse cx="25" cy="40" rx="8" ry="6" fill="#25201a" stroke="#fbbf24" strokeWidth="1.5" />
           <ellipse cx="45" cy="25" rx="6" ry="4" fill="#25201a" stroke="#fbbf24" strokeWidth="1.5" />
-          <text x="5" y="85" fill="#782a15" fontSize="8" fontWeight="900">DISEASED / BLIGHT</text>
+          <text x="5" y="85" fill="#782a15" fontSize="12" fontWeight="900">DISEASED / BLIGHT</text>
         </g>
 
         {/* Center Divider Arrow (Cured through Bio-Sanitation) */}
@@ -1788,14 +1788,14 @@ export function DiseaseHandlingIllustration({
           <path d="M0 60 Q30 35 60 10" stroke="#86efac" strokeWidth="1.5" fill="none" />
           <path d="M20 45 Q35 48 45 42" stroke="#86efac" strokeWidth="1.2" fill="none" />
           <path d="M35 32 Q45 32 52 24" stroke="#86efac" strokeWidth="1.2" fill="none" />
-          <text x="5" y="85" fill="#14532d" fontSize="8" fontWeight="900">HEALTHY / PROTECTED</text>
+          <text x="5" y="85" fill="#14532d" fontSize="12" fontWeight="900">HEALTHY / PROTECTED</text>
         </g>
 
         {/* Organic Bio-Fungicide Vessel (Bordeaux Mix / Wood Ash slurry) */}
         <g transform="translate(135, 115)">
           <path d="M10 20 Q15 45 35 45 Q55 45 60 20 Z" fill="#0284c7" stroke="#0369a1" strokeWidth="1.8" />
           <ellipse cx="35" cy="20" rx="25" ry="5" fill="#38bdf8" stroke="#0369a1" strokeWidth="1.2" />
-          <text x="18" y="36" fill="#ffffff" fontSize="6.5" fontWeight="900">BIO-CURE</text>
+          <text x="18" y="36" fill="#ffffff" fontSize="12" fontWeight="900">BIO-CURE</text>
         </g>
 
         {/* Ground */}
@@ -1803,7 +1803,7 @@ export function DiseaseHandlingIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="205" height="24" rx="6" fill="#361009" stroke="#dc5c23" strokeWidth="1" />
-        <text x="20" y="196" fill="#ffd7b5" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#ffd7b5" fontSize="12.5" fontWeight="800">
           🔬 PLANT PATHOLOGY & BLIGHT CURE
         </text>
 
@@ -1852,15 +1852,15 @@ export function SoilScienceIllustration({
           <rect x="2" y="65" width="41" height="28" fill="#d3c7b5" />
           <circle cx="15" cy="75" r="1.5" fill="#6a5a47" />
           <circle cx="30" cy="80" r="1.5" fill="#6a5a47" />
-          <text x="50" y="80" fill="#55483a" fontSize="6.5" fontWeight="800">SAND (40%)</text>
+          <text x="50" y="80" fill="#55483a" fontSize="12" fontWeight="800">SAND (40%)</text>
 
           {/* Silt (Middle 35%) */}
           <rect x="2" y="40" width="41" height="25" fill="#933113" />
-          <text x="50" y="55" fill="#782a15" fontSize="6.5" fontWeight="800">SILT (35%)</text>
+          <text x="50" y="55" fill="#782a15" fontSize="12" fontWeight="800">SILT (35%)</text>
 
           {/* Clay (Top 25%) */}
           <rect x="2" y="22" width="41" height="18" fill="#dc5c23" />
-          <text x="50" y="32" fill="#dc5c23" fontSize="6.5" fontWeight="800">CLAY (25%)</text>
+          <text x="50" y="32" fill="#dc5c23" fontSize="12" fontWeight="800">CLAY (25%)</text>
 
           {/* Water Column & Floating Humus */}
           <rect x="2" y="12" width="41" height="10" fill="#bae6fd" opacity="0.6" />
@@ -1873,19 +1873,19 @@ export function SoilScienceIllustration({
           <path d="M0 45 Q20 30 50 35 L50 65 Q20 70 0 60 Z" fill="#ffd7b5" stroke="#782a15" strokeWidth="1.5" />
           {/* Cohesive Clay Ribbon Extrusion (5cm long = high clay Katondo) */}
           <path d="M48 40 Q75 38 90 55" stroke="#933113" strokeWidth="7" strokeLinecap="round" fill="none" />
-          <text x="15" y="85" fill="#782a15" fontSize="7.5" fontWeight="900">RIBBON TEST: 5cm</text>
+          <text x="15" y="85" fill="#782a15" fontSize="12" fontWeight="900">RIBBON TEST: 5cm</text>
         </g>
 
         {/* pH Chemistry Indicator Scale on Right */}
         <g transform="translate(280, 30)">
           <rect x="0" y="0" width="22" height="12" fill="#b94218" />
-          <text x="26" y="9" fill="#782a15" fontSize="6.5" fontWeight="800">pH 4.5</text>
+          <text x="26" y="9" fill="#782a15" fontSize="12" fontWeight="800">pH 4.5</text>
           <rect x="0" y="14" width="22" height="12" fill="#d97706" />
-          <text x="26" y="23" fill="#b45309" fontSize="6.5" fontWeight="800">pH 5.5</text>
+          <text x="26" y="23" fill="#b45309" fontSize="12" fontWeight="800">pH 5.5</text>
           <rect x="0" y="28" width="22" height="12" fill="#15803d" />
-          <text x="26" y="37" fill="#14532d" fontSize="6.5" fontWeight="900">pH 6.5 ★</text>
+          <text x="26" y="37" fill="#14532d" fontSize="12" fontWeight="900">pH 6.5 ★</text>
           <rect x="0" y="42" width="22" height="12" fill="#0284c7" />
-          <text x="26" y="51" fill="#0369a1" fontSize="6.5" fontWeight="800">pH 7.5</text>
+          <text x="26" y="51" fill="#0369a1" fontSize="12" fontWeight="800">pH 7.5</text>
         </g>
 
         {/* Ground */}
@@ -1893,7 +1893,7 @@ export function SoilScienceIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="210" height="24" rx="6" fill="#042614" stroke="#16a34a" strokeWidth="1" />
-        <text x="20" y="196" fill="#86efac" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#86efac" fontSize="12.5" fontWeight="800">
           🔬 SOIL SCIENCE & PEDOLOGY MATRIX
         </text>
 
@@ -1967,7 +1967,7 @@ export function EarthBlockMasonryIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="225" height="24" rx="6" fill="#042614" stroke="#dc5c23" strokeWidth="1" />
-        <text x="20" y="196" fill="#ffd7b5" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#ffd7b5" fontSize="12.5" fontWeight="800">
           🧱 CSEB EARTH MASONRY • 7:2:1 MIX
         </text>
         <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
@@ -2045,12 +2045,12 @@ export function PoultryHusbandryIllustration({
         {/* Wood Ash Mite-Prevention Dust Bath & Garlic Clay Waterer */}
         <g transform="translate(260, 140)">
           <ellipse cx="32" cy="12" rx="26" ry="7" fill="#d3c7b5" stroke="#55483a" strokeWidth="1.5" />
-          <text x="14" y="15" fill="#25201a" fontSize="6.5" fontWeight="900">ASH BATH</text>
+          <text x="14" y="15" fill="#25201a" fontSize="12" fontWeight="900">ASH BATH</text>
         </g>
 
         {/* Badge */}
         <rect x="12" y="180" width="225" height="24" rx="6" fill="#042614" stroke="#f59e0b" strokeWidth="1" />
-        <text x="20" y="196" fill="#fde68a" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#fde68a" fontSize="12.5" fontWeight="800">
           🐓 INDIGENOUS POULTRY &amp; HUSBANDRY
         </text>
         <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
@@ -2104,7 +2104,7 @@ export function ZeerPotCoolingIllustration({
 
           {/* Damp Jute Cloth Top Cover */}
           <path d="M6 20 Q75 10 144 20" stroke="#0284c7" strokeWidth="5" strokeLinecap="round" />
-          <text x="52" y="44" fill="#bae6fd" fontSize="9" fontWeight="900">12°C–15°C</text>
+          <text x="52" y="44" fill="#bae6fd" fontSize="12" fontWeight="900">12°C–15°C</text>
         </g>
 
         {/* Evaporative Cooling Arrows (Left & Right) */}
@@ -2117,7 +2117,7 @@ export function ZeerPotCoolingIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="225" height="24" rx="6" fill="#042614" stroke="#38bdf8" strokeWidth="1" />
-        <text x="20" y="196" fill="#bae6fd" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#bae6fd" fontSize="12.5" fontWeight="800">
           🏺 ZEER POT COOLING • ZERO ELECTRIC
         </text>
         <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
@@ -2176,7 +2176,7 @@ export function BreadmakingMillingIllustration({
           <ellipse cx="57" cy="96" rx="16" ry="6" fill="#fbbf24" />
           {/* Chimney */}
           <rect x="48" y="18" width="18" height="28" fill="#933113" stroke="#782a15" strokeWidth="1.5" />
-          <text x="36" y="58" fill="#fff8f3" fontSize="8" fontWeight="900">210°C COB</text>
+          <text x="36" y="58" fill="#fff8f3" fontSize="12" fontWeight="900">210°C COB</text>
         </g>
 
         {/* Twice-Baked Zwieback Rusks & Sweet Yeast Jar (Right) */}
@@ -2193,7 +2193,7 @@ export function BreadmakingMillingIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="230" height="24" rx="6" fill="#042614" stroke="#fbbf24" strokeWidth="1" />
-        <text x="20" y="196" fill="#fde68a" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#fde68a" fontSize="12.5" fontWeight="800">
           🍞 WHOLE-GRAIN MILLING &amp; ZWIEBACK
         </text>
         <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
@@ -2239,18 +2239,18 @@ export function HydrotherapyPoulticeIllustration({
           <path d="M28 8 Q24 -6 32 -16" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" fill="none" />
           <path d="M46 6 Q42 -8 50 -18" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" fill="none" />
           <path d="M64 8 Q60 -6 68 -16" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" fill="none" />
-          <text x="18" y="58" fill="#ffffff" fontSize="9" fontWeight="900">40°C–43°C</text>
-          <text x="20" y="71" fill="#bae6fd" fontSize="7.5" fontWeight="700">FOOT BATH</text>
+          <text x="18" y="58" fill="#ffffff" fontSize="12" fontWeight="900">40°C–43°C</text>
+          <text x="20" y="71" fill="#bae6fd" fontSize="12" fontWeight="700">FOOT BATH</text>
         </g>
 
         {/* Folded Wool Fomentation & Cold Compress Cycle (Center) */}
         <g transform="translate(136, 62)">
           {/* Hot Wool Flannel Roll */}
           <rect x="0" y="38" width="76" height="22" rx="6" fill="#dc5c23" stroke="#782a15" strokeWidth="1.8" />
-          <text x="10" y="52" fill="#fff8f3" fontSize="7.5" fontWeight="900">HOT FOMENT</text>
+          <text x="10" y="52" fill="#fff8f3" fontSize="12" fontWeight="900">HOT FOMENT</text>
           {/* Cold Compress Cloth */}
           <rect x="4" y="14" width="68" height="20" rx="5" fill="#bae6fd" stroke="#0284c7" strokeWidth="1.8" />
-          <text x="10" y="27" fill="#0369a1" fontSize="7.5" fontWeight="900">COLD MITT</text>
+          <text x="10" y="27" fill="#0369a1" fontSize="12" fontWeight="900">COLD MITT</text>
         </g>
 
         {/* Activated Hardwood Charcoal & Cassava Poultice Mortar (Right) */}
@@ -2258,13 +2258,13 @@ export function HydrotherapyPoulticeIllustration({
           <path d="M8 35 Q12 84 44 84 Q76 84 80 35 Z" fill="#25201a" stroke="#6a5a47" strokeWidth="2" />
           <ellipse cx="44" cy="35" rx="36" ry="8" fill="#18181b" stroke="#6a5a47" strokeWidth="1.5" />
           <line x1="44" y1="35" x2="62" y2="-4" stroke="#a18b6e" strokeWidth="6" strokeLinecap="round" />
-          <text x="18" y="62" fill="#86efac" fontSize="7.5" fontWeight="900">CHARCOAL</text>
-          <text x="22" y="73" fill="#fde68a" fontSize="7" fontWeight="700">POULTICE</text>
+          <text x="18" y="62" fill="#86efac" fontSize="12" fontWeight="900">CHARCOAL</text>
+          <text x="22" y="73" fill="#fde68a" fontSize="12" fontWeight="700">POULTICE</text>
         </g>
 
         {/* Badge */}
         <rect x="12" y="180" width="235" height="24" rx="6" fill="#042614" stroke="#38bdf8" strokeWidth="1" />
-        <text x="20" y="196" fill="#bae6fd" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#bae6fd" fontSize="12.5" fontWeight="800">
           💧 HYDROTHERAPY &amp; CHARCOAL POULTICE
         </text>
         <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
@@ -2311,7 +2311,7 @@ export function PlantMilkOilPressIllustration({
           <line x1="35" y1="45" x2="95" y2="5" stroke="#dc5c23" strokeWidth="4.5" strokeLinecap="round" />
           {/* Golden Oil Drip into Glass Jug */}
           <circle cx="40" cy="112" r="3.5" fill="#f59e0b" />
-          <text x="18" y="80" fill="#fde68a" fontSize="7.5" fontWeight="900">OIL PRESS</text>
+          <text x="18" y="80" fill="#fde68a" fontSize="12" fontWeight="900">OIL PRESS</text>
         </g>
 
         {/* Artisanal Wooden Tofu Curd Press Box (Center) */}
@@ -2320,7 +2320,7 @@ export function PlantMilkOilPressIllustration({
           <ellipse cx="42" cy="4" rx="22" ry="9" fill="#6a5a47" stroke="#25201a" strokeWidth="1.5" />
           {/* Wooden Press Mold */}
           <rect x="8" y="12" width="68" height="44" rx="3" fill="#ffd7b5" stroke="#782a15" strokeWidth="2" />
-          <text x="18" y="38" fill="#782a15" fontSize="8" fontWeight="900">SOY TOFU</text>
+          <text x="18" y="38" fill="#782a15" fontSize="12" fontWeight="900">SOY TOFU</text>
           {/* Drainage Holes */}
           <circle cx="24" cy="48" r="2" fill="#0284c7" />
           <circle cx="42" cy="48" r="2" fill="#0284c7" />
@@ -2338,12 +2338,12 @@ export function PlantMilkOilPressIllustration({
             <path d="M35 78 Q42 58 48 70" />
             <path d="M24 55 Q32 42 40 52" />
           </g>
-          <text x="15" y="90" fill="#14532d" fontSize="7" fontWeight="900">72h SPROUTS</text>
+          <text x="15" y="90" fill="#14532d" fontSize="12" fontWeight="900">72h SPROUTS</text>
         </g>
 
         {/* Badge */}
         <rect x="12" y="180" width="235" height="24" rx="6" fill="#042614" stroke="#22c55e" strokeWidth="1" />
-        <text x="20" y="196" fill="#86efac" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#86efac" fontSize="12.5" fontWeight="800">
           🌻 PLANT MILKS, TOFU &amp; OIL PRESSING
         </text>
         <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
@@ -2386,7 +2386,7 @@ export function SoapMakingTailoringIllustration({
           <rect x="8" y="10" width="68" height="88" rx="6" fill="#a18b6e" stroke="#25201a" strokeWidth="2" />
           {/* White Hardwood Ash Layer */}
           <rect x="12" y="22" width="60" height="46" fill="#e7e5e4" />
-          <text x="18" y="48" fill="#25201a" fontSize="7.5" fontWeight="900">WOOD ASH</text>
+          <text x="18" y="48" fill="#25201a" fontSize="12" fontWeight="900">WOOD ASH</text>
           {/* Bottom Straw & Pebble Filter */}
           <rect x="12" y="68" width="60" height="16" fill="#fbbf24" />
           {/* Spigot & Golden KOH Lye Bucket with Floating Egg Test */}
@@ -2400,7 +2400,7 @@ export function SoapMakingTailoringIllustration({
           <rect x="0" y="28" width="42" height="18" rx="3" fill="#86efac" stroke="#14532d" strokeWidth="1.5" />
           <rect x="46" y="28" width="42" height="18" rx="3" fill="#fde68a" stroke="#b45309" strokeWidth="1.5" />
           <rect x="22" y="8" width="42" height="18" rx="3" fill="#bbf7d0" stroke="#14532d" strokeWidth="1.5" />
-          <text x="29" y="20" fill="#042614" fontSize="6.5" fontWeight="900">KOH SOAP</text>
+          <text x="29" y="20" fill="#042614" fontSize="12" fontWeight="900">KOH SOAP</text>
         </g>
 
         {/* Non-Electric Cast-Iron Foot-Treadle Sewing Machine (Right) */}
@@ -2417,7 +2417,7 @@ export function SoapMakingTailoringIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="235" height="24" rx="6" fill="#042614" stroke="#fbbf24" strokeWidth="1" />
-        <text x="20" y="196" fill="#fde68a" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#fde68a" fontSize="12.5" fontWeight="800">
           🧼 ASH SOAP &amp; TREADLE TAILORING
         </text>
         <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
@@ -2463,7 +2463,7 @@ export function FirelessThermalCookerIllustration({
           <path d="M-10 88 L24 88" stroke="#55483a" strokeWidth="4" strokeLinecap="round" />
           {/* Updraft Flame */}
           <path d="M55 75 Q62 45 62 20" stroke="#fbbf24" strokeWidth="5" strokeLinecap="round" />
-          <text x="46" y="92" fill="#fff8f3" fontSize="7" fontWeight="900">-75% WOOD</text>
+          <text x="46" y="92" fill="#fff8f3" fontSize="12" fontWeight="900">-75% WOOD</text>
         </g>
 
         {/* 10cm Rice-Hull Insulated Fireless Thermal Bag / Wonderbag (Right) */}
@@ -2475,13 +2475,13 @@ export function FirelessThermalCookerIllustration({
           <ellipse cx="75" cy="34" rx="34" ry="6" fill="#94a3b8" stroke="#334155" strokeWidth="1.8" />
           {/* Top Insulating Pillow Cap */}
           <ellipse cx="75" cy="24" rx="42" ry="11" fill="#fbbf24" stroke="#b45309" strokeWidth="1.8" />
-          <text x="50" y="60" fill="#0f172a" fontSize="9.5" fontWeight="900">&gt;68°C • 8h</text>
-          <text x="40" y="95" fill="#dcfce7" fontSize="7.5" fontWeight="900">10cm RICE-HULL BAG</text>
+          <text x="50" y="60" fill="#0f172a" fontSize="12.5" fontWeight="900">&gt;68°C • 8h</text>
+          <text x="40" y="95" fill="#dcfce7" fontSize="12" fontWeight="900">10cm RICE-HULL BAG</text>
         </g>
 
         {/* Badge */}
         <rect x="12" y="180" width="240" height="24" rx="6" fill="#042614" stroke="#fbbf24" strokeWidth="1" />
-        <text x="20" y="196" fill="#fde68a" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#fde68a" fontSize="12.5" fontWeight="800">
           🍲 SABBATH FIRELESS THERMAL COOKER
         </text>
         <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
@@ -2524,8 +2524,8 @@ export function TrueEducationCurriculumIllustration({
           <path d="M0 30 Q26 20 52 28 L52 68 Q26 60 0 68 Z" fill="#fff8f3" stroke="#782a15" strokeWidth="1.8" />
           <path d="M52 28 Q78 20 104 30 L104 68 Q78 60 52 68 Z" fill="#fff8f3" stroke="#782a15" strokeWidth="1.8" />
           <line x1="52" y1="28" x2="52" y2="68" stroke="#782a15" strokeWidth="2" />
-          <text x="8" y="48" fill="#782a15" fontSize="7.5" fontWeight="900">BIBLE</text>
-          <text x="58" y="48" fill="#14532d" fontSize="7.5" fontWeight="900">LEDGER</text>
+          <text x="8" y="48" fill="#782a15" fontSize="12" fontWeight="900">BIBLE</text>
+          <text x="58" y="48" fill="#14532d" fontSize="12" fontWeight="900">LEDGER</text>
         </g>
 
         {/* Student 5m × 5m Personal Garden Plot (Center-Right) */}
@@ -2540,7 +2540,7 @@ export function TrueEducationCurriculumIllustration({
           <circle cx="65" cy="40" r="5" fill="#22c55e" />
           <circle cx="90" cy="44" r="5.5" fill="#4ade80" />
           <circle cx="115" cy="48" r="5" fill="#22c55e" />
-          <text x="55" y="18" fill="#14532d" fontSize="8" fontWeight="900">5m × 5m PLOT</text>
+          <text x="55" y="18" fill="#14532d" fontSize="12" fontWeight="900">5m × 5m PLOT</text>
         </g>
 
         {/* Carpentry Framing Square (Top Right) */}
@@ -2550,7 +2550,7 @@ export function TrueEducationCurriculumIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="235" height="24" rx="6" fill="#042614" stroke="#16a34a" strokeWidth="1" />
-        <text x="20" y="196" fill="#86efac" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#86efac" fontSize="12.5" fontWeight="800">
           🎓 AVONDALE HEAD, HAND &amp; HEART
         </text>
         <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
@@ -2613,7 +2613,7 @@ export function BroadforkNoTillIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="235" height="24" rx="6" fill="#042614" stroke="#22c55e" strokeWidth="1" />
-        <text x="20" y="196" fill="#86efac" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#86efac" fontSize="12.5" fontWeight="800">
           🔱 NO-TILL BROADFORK • 30cm AERATION
         </text>
         <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
@@ -2659,7 +2659,7 @@ export function HeirloomSeedVaultIllustration({
           <circle cx="16" cy="76" r="3" fill="#b45309" />
           <circle cx="26" cy="78" r="3" fill="#b45309" />
           <circle cx="36" cy="76" r="3" fill="#b45309" />
-          <text x="6" y="25" fill="#782a15" fontSize="6.5" fontWeight="900">3-DAY FERMENT</text>
+          <text x="6" y="25" fill="#782a15" fontSize="12" fontWeight="900">3-DAY FERMENT</text>
         </g>
 
         {/* Shaded Drying Mesh Tray (<8% Moisture) (Center) */}
@@ -2670,7 +2670,7 @@ export function HeirloomSeedVaultIllustration({
           <circle cx="38" cy="18" r="3" fill="#15803d" />
           <circle cx="54" cy="24" r="3" fill="#b45309" />
           <circle cx="70" cy="20" r="3" fill="#dc5c23" />
-          <text x="14" y="56" fill="#fff8f3" fontSize="7.5" fontWeight="900">SHADE DRY &lt;8%</text>
+          <text x="14" y="56" fill="#fff8f3" fontSize="12" fontWeight="900">SHADE DRY &lt;8%</text>
         </g>
 
         {/* Hermetic Glass Seed Vault Jar with Silica Packet (Right) */}
@@ -2679,7 +2679,7 @@ export function HeirloomSeedVaultIllustration({
           <rect x="16" y="2" width="52" height="10" rx="3" fill="#d97706" />
           {/* Silica Desiccant Packet */}
           <rect x="22" y="26" width="40" height="22" rx="3" fill="#ffffff" />
-          <text x="27" y="40" fill="#042614" fontSize="7" fontWeight="900">SILICA GEL</text>
+          <text x="27" y="40" fill="#042614" fontSize="12" fontWeight="900">SILICA GEL</text>
           {/* Heirloom Seeds */}
           <ellipse cx="32" cy="74" rx="6" ry="4" fill="#fbbf24" />
           <ellipse cx="52" cy="74" rx="6" ry="4" fill="#f57d42" />
@@ -2688,7 +2688,7 @@ export function HeirloomSeedVaultIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="235" height="24" rx="6" fill="#042614" stroke="#fbbf24" strokeWidth="1" />
-        <text x="20" y="196" fill="#fde68a" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#fde68a" fontSize="12.5" fontWeight="800">
           🌱 HEIRLOOM SEED BANK &amp; CURING
         </text>
         <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
@@ -2733,7 +2733,7 @@ export function SaltCuringSmokerIllustration({
           <circle cx="35" cy="38" r="3" fill="#ffffff" />
           <circle cx="52" cy="34" r="3" fill="#ffffff" />
           <circle cx="72" cy="37" r="3" fill="#ffffff" />
-          <text x="12" y="14" fill="#782a15" fontSize="8" fontWeight="900">ROCK SALT + LEMON</text>
+          <text x="12" y="14" fill="#782a15" fontSize="12" fontWeight="900">ROCK SALT + LEMON</text>
         </g>
 
         {/* Fly-Screened Solar & Hardwood Cold Smoker Cabinet (Right) */}
@@ -2752,7 +2752,7 @@ export function SaltCuringSmokerIllustration({
 
         {/* Badge */}
         <rect x="12" y="180" width="235" height="24" rx="6" fill="#042614" stroke="#dc5c23" strokeWidth="1" />
-        <text x="20" y="196" fill="#ffd7b5" fontSize="9.5" fontWeight="800">
+        <text x="20" y="196" fill="#ffd7b5" fontSize="12.5" fontWeight="800">
           🧂 SALT CURING &amp; SOLAR SMOKER
         </text>
         <rect x="1" y="1" width="338" height="218" rx="15" stroke="#14532d" strokeWidth="2" fill="none" />
@@ -2793,8 +2793,8 @@ export function SeasonRainyDzinjaIllustration({
           <circle cx="12" cy="36" r="5" fill="#fbbf24" />
         </g>
       ))}
-      <rect x="12" y="164" width="220" height="24" rx="6" fill="#041d10" stroke="#34d399" strokeWidth="1" />
-      <text x="20" y="180" fill="#a7f3d0" fontSize="9.5" fontWeight="800">🌧️ DZINJA • RAINY PLANTING (NOV–MAR)</text>
+      <rect x="12" y="162" width="270" height="26" rx="6" fill="#041d10" stroke="#34d399" strokeWidth="1" />
+      <text x="20" y="179" fill="#a7f3d0" fontSize="12.5" fontWeight="800">🌧️ DZINJA • RAINY PLANTING (NOV–MAR)</text>
     </svg>
   );
 }
@@ -2823,14 +2823,14 @@ export function SeasonHarvestMasikaIllustration({
         <ellipse cx="90" cy="14" rx="12" ry="5" fill="#fbbf24" />
       </g>
       {/* Hermetic PICS Bags & Nkhokwe Silo */}
-      <g transform="translate(200, 58)">
-        <rect x="0" y="25" width="38" height="48" rx="5" fill="#0284c7" stroke="#bae6fd" strokeWidth="1.5" />
-        <text x="8" y="52" fill="#ffffff" fontSize="8" fontWeight="900">PICS</text>
-        <polygon points="55,25 85,0 115,25" fill="#d97706" />
-        <rect x="62" y="25" width="46" height="46" rx="3" fill="#ffd7b5" stroke="#782a15" strokeWidth="1.5" />
+      <g transform="translate(195, 54)">
+        <rect x="0" y="25" width="48" height="52" rx="5" fill="#0284c7" stroke="#bae6fd" strokeWidth="1.5" />
+        <text x="8" y="55" fill="#ffffff" fontSize="12" fontWeight="900">PICS</text>
+        <polygon points="65,25 95,0 125,25" fill="#d97706" />
+        <rect x="72" y="25" width="46" height="46" rx="3" fill="#ffd7b5" stroke="#782a15" strokeWidth="1.5" />
       </g>
-      <rect x="12" y="164" width="230" height="24" rx="6" fill="#1c1104" stroke="#fbbf24" strokeWidth="1" />
-      <text x="20" y="180" fill="#fde68a" fontSize="9.5" fontWeight="800">🌾 MASIKA • HARVEST &amp; STORAGE (APR–JUN)</text>
+      <rect x="12" y="162" width="280" height="26" rx="6" fill="#1c1104" stroke="#fbbf24" strokeWidth="1" />
+      <text x="20" y="179" fill="#fde68a" fontSize="12.5" fontWeight="800">🌾 MASIKA • HARVEST &amp; STORAGE (APR–JUN)</text>
     </svg>
   );
 }
@@ -2853,15 +2853,15 @@ export function SeasonColdChisanuIllustration({
       {/* Frost-Protected Straw Mulch Dimba Beds */}
       <g transform="translate(36, 95)">
         <path d="M0 32 Q55 6 110 32 Z" fill="#fbbf24" opacity="0.85" stroke="#d97706" strokeWidth="1.5" />
-        <text x="20" y="28" fill="#25201a" fontSize="7.5" fontWeight="900">FROST BLANKET</text>
+        <text x="14" y="27" fill="#25201a" fontSize="12" fontWeight="900">MULCH BED</text>
       </g>
       {/* Steaming 60°C Thermophilic Compost Mound */}
       <g transform="translate(195, 76)">
         <path d="M0 52 Q55 0 110 52 Z" fill="#55483a" stroke="#d97706" strokeWidth="2" />
-        <text x="30" y="42" fill="#fde68a" fontSize="8.5" fontWeight="900">60°C COMPOST</text>
+        <text x="18" y="42" fill="#fde68a" fontSize="12" fontWeight="900">60°C COMPOST</text>
       </g>
-      <rect x="12" y="164" width="235" height="24" rx="6" fill="#041421" stroke="#38bdf8" strokeWidth="1" />
-      <text x="20" y="180" fill="#bae6fd" fontSize="9.5" fontWeight="800">❄️ CHISANU • COLD DRY SEASON (JUL–AUG)</text>
+      <rect x="12" y="162" width="285" height="26" rx="6" fill="#041421" stroke="#38bdf8" strokeWidth="1" />
+      <text x="20" y="179" fill="#bae6fd" fontSize="12.5" fontWeight="800">❄️ CHISANU • COLD DRY (JUL–AUG)</text>
     </svg>
   );
 }
@@ -2882,9 +2882,9 @@ export function SeasonHotChilimweIllustration({
       <rect x="0" y="120" width="360" height="80" fill="#782a15" />
       {/* EGW 90x90x90cm Deep Tree Pit Cutaway */}
       <g transform="translate(115, 88)">
-        <rect x="0" y="32" width="76" height="54" rx="4" fill="#25201a" stroke="#fbbf24" strokeWidth="2" />
-        <rect x="4" y="68" width="68" height="14" fill="#94a3b8" />
-        <text x="10" y="54" fill="#fde68a" fontSize="7.5" fontWeight="900">90cm³ EGW PIT</text>
+        <rect x="0" y="28" width="86" height="58" rx="4" fill="#25201a" stroke="#fbbf24" strokeWidth="2" />
+        <rect x="4" y="68" width="78" height="14" fill="#94a3b8" />
+        <text x="8" y="52" fill="#fde68a" fontSize="12" fontWeight="900">EGW TREE PIT</text>
       </g>
       {/* Wooden A-Frame Contour Level */}
       <g transform="translate(235, 58)">
@@ -2894,8 +2894,8 @@ export function SeasonHotChilimweIllustration({
         <line x1="35" y1="4" x2="35" y2="48" stroke="#38bdf8" strokeWidth="1.5" />
         <circle cx="35" cy="48" r="3.5" fill="#38bdf8" />
       </g>
-      <rect x="12" y="164" width="235" height="24" rx="6" fill="#1a0902" stroke="#f59e0b" strokeWidth="1" />
-      <text x="20" y="180" fill="#fde68a" fontSize="9.5" fontWeight="800">☀️ CHILIMWE • HOT DRY PREP (SEP–OCT)</text>
+      <rect x="12" y="162" width="280" height="26" rx="6" fill="#1a0902" stroke="#f59e0b" strokeWidth="1" />
+      <text x="20" y="179" fill="#fde68a" fontSize="12.5" fontWeight="800">☀️ CHILIMWE • HOT DRY PREP (SEP–OCT)</text>
     </svg>
   );
 }
@@ -2933,11 +2933,11 @@ export function Sanctuary1844Illustration({
       <line x1="92" y1="114" x2="268" y2="114" stroke="#FDE68A" strokeWidth="3.5" strokeLinecap="round" />
       {/* 2300 Prophetic Days Mathematical Bar */}
       <rect x="20" y="152" width="320" height="26" rx="6" fill="#04100A" stroke="#10B981" strokeWidth="1.2" />
-      <text x="180" y="169" textAnchor="middle" fill="#FDE68A" fontSize="8.5" fontFamily="monospace" fontWeight="bold">
-        457 BC ─── 2,300 DAYS (DAN 8:14) ─── OCT 22, 1844
+      <text x="180" y="169" textAnchor="middle" fill="#FDE68A" fontSize="12" fontFamily="monospace" fontWeight="bold">
+        457 BC ── 2,300 DAYS ── OCT 22, 1844
       </text>
-      <rect x="12" y="186" width="255" height="22" rx="6" fill="#1C1404" stroke="#FBBF24" strokeWidth="1" />
-      <text x="20" y="201" fill="#FDE68A" fontSize="9" fontWeight="800">⚖️ 1844 MOST HOLY PLACE • SANCTUARY CLEANSED</text>
+      <rect x="12" y="184" width="295" height="26" rx="6" fill="#1C1404" stroke="#FBBF24" strokeWidth="1" />
+      <text x="20" y="201" fill="#FDE68A" fontSize="12.5" fontWeight="800">⚖️ 1844 MOST HOLY PLACE • SANCTUARY</text>
     </svg>
   );
 }
@@ -2967,12 +2967,12 @@ export function ThreeAngelsVectorIllustration({
           <circle cx={a.cx} cy={a.cy} r="25" fill={a.color} fillOpacity="0.16" stroke={a.color} strokeWidth="1.6" />
           <path d={`M${a.cx - 18} ${a.cy + 4} Q${a.cx - 6} ${a.cy - 14} ${a.cx} ${a.cy - 2} Q${a.cx + 6} ${a.cy - 14} ${a.cx + 18} ${a.cy + 4}`} fill="none" stroke={a.color} strokeWidth="2.2" strokeLinecap="round" />
           <line x1={a.cx} y1={a.cy + 2} x2={a.cx + 15} y2={a.cy + 10} stroke="#FEF08A" strokeWidth="2.2" strokeLinecap="round" />
-          <text x={a.cx} y={a.cy + 38} textAnchor="middle" fill="#FFFFFF" fontSize="8.5" fontFamily="monospace" fontWeight="bold">{a.label}</text>
-          <text x={a.cx} y={a.cy + 49} textAnchor="middle" fill={a.color} fontSize="7.5" fontFamily="monospace">{a.ref}</text>
+          <text x={a.cx} y={a.cy + 38} textAnchor="middle" fill="#FFFFFF" fontSize="12" fontFamily="monospace" fontWeight="bold">{a.label}</text>
+          <text x={a.cx} y={a.cy + 51} textAnchor="middle" fill={a.color} fontSize="12" fontFamily="monospace">{a.ref}</text>
         </g>
       ))}
-      <rect x="12" y="186" width="255" height="22" rx="6" fill="#041D12" stroke="#34D399" strokeWidth="1" />
-      <text x="20" y="201" fill="#A7F3D0" fontSize="9" fontWeight="800">🎺 THREE ANGELS’ MESSAGES • REV 14:6–12</text>
+      <rect x="12" y="184" width="295" height="26" rx="6" fill="#041D12" stroke="#34D399" strokeWidth="1" />
+      <text x="20" y="201" fill="#A7F3D0" fontSize="12.5" fontWeight="800">🎺 THREE ANGELS’ MESSAGES • REV 14</text>
     </svg>
   );
 }
@@ -2993,17 +2993,17 @@ export function SiegeSignalExodusIllustration({
       <rect x="24" y="68" width="24" height="86" fill="#334155" stroke="#EF4444" strokeWidth="1.4" />
       <rect x="52" y="48" width="28" height="106" fill="#1E293B" stroke="#F97316" strokeWidth="1.4" />
       <rect x="84" y="82" width="22" height="72" fill="#334155" stroke="#EF4444" strokeWidth="1.4" />
-      <text x="64" y="38" textAnchor="middle" fill="#FCA5A5" fontSize="8" fontFamily="monospace" fontWeight="bold">NO BUY/SELL</text>
+      <text x="64" y="38" textAnchor="middle" fill="#FCA5A5" fontSize="12" fontFamily="monospace" fontWeight="bold">BOYCOTT</text>
       {/* Center: Prophetic Exodus Arrow */}
       <path d="M120 105 L198 105" stroke="#FBBF24" strokeWidth="3" strokeDasharray="6 4" />
       <polygon points="198,99 212,105 198,111" fill="#FBBF24" />
-      <text x="164" y="94" textAnchor="middle" fill="#FDE68A" fontSize="8" fontFamily="monospace" fontWeight="bold">5T 464.3</text>
+      <text x="164" y="94" textAnchor="middle" fill="#FDE68A" fontSize="12" fontFamily="monospace" fontWeight="bold">5T 464</text>
       {/* Right: Mountain Sanctuary & Rural Outpost */}
       <polygon points="214,154 256,56 296,112 328,68 350,154" fill="#064E3B" stroke="#10B981" strokeWidth="1.8" />
       <rect x="248" y="122" width="38" height="32" rx="3" fill="#92400E" stroke="#FBBF24" strokeWidth="1.5" />
       <path d="M328 96 Q315 126 304 154" stroke="#38BDF8" strokeWidth="2.5" fill="none" />
-      <rect x="12" y="186" width="265" height="22" rx="6" fill="#1C1105" stroke="#F97316" strokeWidth="1" />
-      <text x="20" y="201" fill="#FDBA74" fontSize="9" fontWeight="800">⛰️ SIEGE SIGNAL &amp; MOUNTAIN FLIGHT (5T 464.3)</text>
+      <rect x="12" y="184" width="295" height="26" rx="6" fill="#1C1105" stroke="#F97316" strokeWidth="1" />
+      <text x="20" y="201" fill="#FDBA74" fontSize="12.5" fontWeight="800">⛰️ SIEGE SIGNAL &amp; MOUNTAIN REFUGE</text>
     </svg>
   );
 }
@@ -3027,8 +3027,8 @@ export function SecondComingEdenIllustration({
       {/* Restored Edenic Mountains & River of Life */}
       <path d="M16 164 Q100 116 180 150 Q260 116 344 164 Z" fill="#065F46" stroke="#34D399" strokeWidth="2" />
       <path d="M180 110 C170 130 162 146 150 164 L210 164 C198 146 190 130 180 110 Z" fill="#38BDF8" />
-      <rect x="12" y="186" width="265" height="22" rx="6" fill="#1C1603" stroke="#FACC15" strokeWidth="1" />
-      <text x="20" y="201" fill="#FEF08A" fontSize="9" fontWeight="800">👑 SECOND COMING &amp; EDEN RESTORED (REV 14:14)</text>
+      <rect x="12" y="184" width="295" height="26" rx="6" fill="#1C1603" stroke="#FACC15" strokeWidth="1" />
+      <text x="20" y="201" fill="#FEF08A" fontSize="12.5" fontWeight="800">👑 SECOND COMING &amp; EDEN RESTORED</text>
     </svg>
   );
 }
@@ -3057,8 +3057,8 @@ export function RamPumpIllustration({
       <path d="M170 140 L280 40" stroke="#06B6D4" strokeWidth="4" strokeLinecap="round" strokeDasharray="6 4" />
       {/* Header Tank at High Elevation */}
       <rect x="270" y="25" width="60" height="40" rx="6" fill="#0F766E" stroke="#2DD4BF" strokeWidth="2" />
-      <rect x="12" y="12" width="220" height="22" rx="6" fill="#071A10" stroke="#38BDF8" strokeWidth="1" />
-      <text x="20" y="27" fill="#BAE6FD" fontSize="9" fontWeight="800">HYDRAULIC RAM PUMP • GRAVITY LIFT</text>
+      <rect x="12" y="10" width="275" height="26" rx="6" fill="#071A10" stroke="#38BDF8" strokeWidth="1" />
+      <text x="20" y="27" fill="#BAE6FD" fontSize="12.5" fontWeight="800">HYDRAULIC RAM PUMP • GRAVITY LIFT</text>
     </svg>
   );
 }
@@ -3087,8 +3087,8 @@ export function BiocharRetortIllustration({
       {/* Chimney Flue & Syn-Gas Reburn */}
       <rect x="165" y="45" width="30" height="45" fill="#57534E" stroke="#A8A29E" strokeWidth="1.5" />
       <path d="M180 45 Q170 20 185 8 Q195 20 180 45 Z" fill="#FB923C" opacity="0.8" />
-      <rect x="12" y="12" width="220" height="22" rx="6" fill="#071A10" stroke="#F59E0B" strokeWidth="1" />
-      <text x="20" y="27" fill="#FEF08A" fontSize="9" fontWeight="800">BIOCHAR RETORT KILN • SOIL ENRICHMENT</text>
+      <rect x="12" y="10" width="285" height="26" rx="6" fill="#071A10" stroke="#F59E0B" strokeWidth="1" />
+      <text x="20" y="27" fill="#FEF08A" fontSize="12.5" fontWeight="800">BIOCHAR RETORT KILN • SOIL ENRICHMENT</text>
     </svg>
   );
 }
@@ -3117,8 +3117,8 @@ export function VetiverHedgerowIllustration({
       {[35, 55, 75, 95, 115, 135, 155, 175, 195, 215, 235, 255, 275, 295, 315].map((gx, idx) => (
         <path key={idx} d={`M${gx} 125 L${gx - 6} 50 M${gx} 125 L${gx + 2} 42 M${gx} 125 L${gx + 8} 54`} stroke="#22C55E" strokeWidth="2.5" strokeLinecap="round" />
       ))}
-      <rect x="12" y="12" width="220" height="22" rx="6" fill="#071A10" stroke="#22C55E" strokeWidth="1" />
-      <text x="20" y="27" fill="#86EFAC" fontSize="9" fontWeight="800">VETIVER HEDGEROW • CONTOUR SILT BARRIER</text>
+      <rect x="12" y="10" width="285" height="26" rx="6" fill="#071A10" stroke="#22C55E" strokeWidth="1" />
+      <text x="20" y="27" fill="#86EFAC" fontSize="12.5" fontWeight="800">VETIVER HEDGEROW • CONTOUR BARRIER</text>
     </svg>
   );
 }
@@ -3145,8 +3145,8 @@ export function DamboRidgeIllustration({
       <circle cx="190" cy="95" r="14" fill="#15803D" />
       <circle cx="290" cy="95" r="14" fill="#15803D" />
       <path d="M90 95 L90 120 M190 95 L190 120 M290 95 L290 120" stroke="#4ADE80" strokeWidth="3" />
-      <rect x="12" y="12" width="230" height="22" rx="6" fill="#071A10" stroke="#38BDF8" strokeWidth="1" />
-      <text x="20" y="27" fill="#BAE6FD" fontSize="9" fontWeight="800">DAMBO WETLAND RIDGE • CHILIMWE FARMING</text>
+      <rect x="12" y="10" width="285" height="26" rx="6" fill="#071A10" stroke="#38BDF8" strokeWidth="1" />
+      <text x="20" y="27" fill="#BAE6FD" fontSize="12.5" fontWeight="800">DAMBO WETLAND RIDGE • CHILIMWE</text>
     </svg>
   );
 }
@@ -3176,8 +3176,8 @@ export function IntercropPolycultureIllustration({
       <circle cx="230" cy="75" r="7" fill="#EA580C" />
       {/* Ground Cover Vines (Mbatata Sweet Potato Living Mulch) */}
       <path d="M40 155 Q90 148 140 155 Q190 148 240 155 Q290 148 340 155" stroke="#16A34A" strokeWidth="5" strokeLinecap="round" />
-      <rect x="12" y="12" width="230" height="22" rx="6" fill="#071A10" stroke="#F59E0B" strokeWidth="1" />
-      <text x="20" y="27" fill="#FEF08A" fontSize="9" fontWeight="800">COMPANION POLYCULTURE • NANDOLO &amp; MAIZE</text>
+      <rect x="12" y="10" width="290" height="26" rx="6" fill="#071A10" stroke="#F59E0B" strokeWidth="1" />
+      <text x="20" y="27" fill="#FEF08A" fontSize="12.5" fontWeight="800">COMPANION POLYCULTURE • INTERCROP</text>
     </svg>
   );
 }

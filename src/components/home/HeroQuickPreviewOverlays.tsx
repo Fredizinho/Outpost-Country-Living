@@ -263,37 +263,46 @@ export function HeroQuickPreviewOverlays({
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col gap-1">
                   <span className="font-mono text-caption text-emerald-300 font-semibold">
-                    Eutric & Chromic Nitisols
+                    Katondo (Red Clay Soil)
+                  </span>
+                  <span className="text-[11px] font-mono text-stone-300">
+                    Technical: FAO Eutric &amp; Chromic Nitisols
                   </span>
                   <span className="font-semibold text-white font-mono tabular-nums">
-                    pH 5.8 – 6.5 (Katondo Loam)
+                    pH 5.8 – 6.5 (Red Clay Loam)
                   </span>
                   <span className="text-caption text-stone-400">
-                    Dedza, Ntcheu, Lilongwe, Dowa, Mchinji & Zomba
+                    Dedza, Ntcheu, Lilongwe, Dowa, Mchinji &amp; Zomba
                   </span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col gap-1">
                   <span className="font-mono text-caption text-emerald-300 font-semibold">
-                    Humic Acrisols & Ferralsols
+                    Chidothe (Highland Humus Soil)
+                  </span>
+                  <span className="text-[11px] font-mono text-stone-300">
+                    Technical: FAO Humic Acrisols &amp; Ferralsols
                   </span>
                   <span className="font-semibold text-white font-mono tabular-nums">
-                    pH 4.8 – 5.7 (Highland Humus)
+                    pH 4.8 – 5.7 (Highland Forest Humus)
                   </span>
                   <span className="text-caption text-stone-400">
-                    Mulanje, Thyolo, Nkhata Bay, Rumphi & Misuku Hills
+                    Mulanje, Thyolo, Nkhata Bay, Rumphi &amp; Misuku Hills
                   </span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col gap-1">
                   <span className="font-mono text-caption text-emerald-300 font-semibold">
-                    Eutric Fluvisols (Alluvial)
+                    Dambo (Wetland &amp; Valley Alluvium)
+                  </span>
+                  <span className="text-[11px] font-mono text-stone-300">
+                    Technical: FAO Eutric Fluvisols
                   </span>
                   <span className="font-semibold text-white font-mono tabular-nums">
-                    pH 6.2 – 7.2 (Mineral Silt)
+                    pH 6.2 – 7.2 (Mineral Silt &amp; Alluvium)
                   </span>
                   <span className="text-caption text-stone-400">
-                    Salima, Karonga, Nkhotakota & Shire Basin
+                    Salima, Karonga, Nkhotakota &amp; Shire Basin
                   </span>
                 </div>
               </div>

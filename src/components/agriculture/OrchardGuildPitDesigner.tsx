@@ -13,6 +13,8 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { StandardDiagram } from '@/components/common/StandardDiagram';
+import { getChichewaDisplay } from '@/i18n/ny';
 
 export interface OrchardGuildPitDesignerProps {
   className?: string;
@@ -33,22 +35,22 @@ const GUILD_PRESETS: Record<string, { name: string; description: string; plants:
     name: 'Highland Avocado & Pigeon Pea Guild',
     description: 'Deep-rooted perennial oil and protein guild optimized for cool Malawian highland slopes (Dedza, Ntcheu, Mulanje, Viphya).',
     plants: [
-      { tier: 'Canopy (Tier 1)', species: 'Grafted Hass / Fuerte Avocado', chichewa: 'Mapeyala', role: 'Caloric density, monounsaturated fats, long-term shade', spacing: '6m × 6m along contour' },
-      { tier: 'Sub-Canopy (Tier 2)', species: 'Dwarf Solo Papaya / Lime', chichewa: 'Mapapaya / Ndimu', role: 'Rapid 9-month harvest, papain digestive enzymes, vitamins A/C', spacing: '2.5m from avocado trunk' },
-      { tier: 'Nitrogen Shrub (Tier 3)', species: 'Perennial Pigeon Pea (Nandolo) & Moringa', chichewa: 'Nandolo & Chamwamba', role: 'Atmospheric N2 fixation, dense leaf mulch, complete plant protein', spacing: '1.2m spacing along basin rim' },
-      { tier: 'Dynamic Accumulator (Tier 4)', species: 'Russian Comfrey / Lemongrass', chichewa: 'Kamsikisi / Lemongrass', role: 'Deep taproot potassium mining, pest repellent barrier', spacing: '0.6m perimeter circle' },
-      { tier: 'Erosion Barrier (Tier 5)', species: 'Vetiver Grass (Chrysopogon zizanioides)', chichewa: 'Kandjeje / Vetiver', role: 'Permanent 3-meter deep subsoil root barrier, stops runoff', spacing: 'Contour swale edge (10cm spacing)' },
+      { tier: 'Canopy (Tier 1)', species: 'Grafted Hass / Fuerte Avocado', chichewa: 'Mapeyala', role: 'Caloric density, monounsaturated fats, long-term shade', spacing: '6 m [20 ft] along contour' },
+      { tier: 'Sub-Canopy (Tier 2)', species: 'Dwarf Solo Papaya / Lime', chichewa: 'Mapapaya / Ndimu', role: 'Rapid 9-month harvest, papain digestive enzymes, vitamins A/C', spacing: '2.5 m [8 ft] from avocado trunk' },
+      { tier: 'Nitrogen Shrub (Tier 3)', species: 'Perennial Pigeon Pea (Nandolo) & Moringa', chichewa: 'Nandolo & Chamwamba', role: 'Atmospheric N2 fixation, dense leaf mulch, complete plant protein', spacing: '1.2 m [4 ft] spacing along basin rim' },
+      { tier: 'Dynamic Accumulator (Tier 4)', species: 'Russian Comfrey / Lemongrass', chichewa: 'Kamsikisi / Lemongrass', role: 'Deep taproot potassium mining, pest repellent barrier', spacing: '0.6 m [2 ft] perimeter circle' },
+      { tier: 'Erosion Barrier (Tier 5)', species: 'Vetiver Grass (Chrysopogon zizanioides)', chichewa: 'Kandjeje / Vetiver', role: 'Permanent 3-meter deep subsoil root barrier, stops runoff', spacing: 'Contour swale edge (10 cm [4 in] spacing)' },
     ],
   },
   mango: {
     name: 'Plateau Mango & Legume Savanna Guild',
     description: 'Drought-hardy guild thriving in warm plateau districts (Lilongwe, Kasungu, Mzimba, Salima).',
     plants: [
-      { tier: 'Canopy (Tier 1)', species: 'Improved Tommy Atkins / Kent Mango', chichewa: 'Maimbe a Makono', role: 'Summer fruit drought security, livestock leaf shelter', spacing: '8m × 8m grid' },
-      { tier: 'Sub-Canopy (Tier 2)', species: 'Guava (Psidium guajava)', chichewa: 'Mapwera', role: 'High pectin fruit, medicinal respiratory leaves', spacing: '3m spacing' },
-      { tier: 'Biomass Shrub (Tier 3)', species: 'Gliricidia sepium / Sesbania sesban', chichewa: 'Mchewere wamoyo', role: 'Chop-and-drop green manure rich in nitrogen', spacing: '1.5m intervals' },
+      { tier: 'Canopy (Tier 1)', species: 'Improved Tommy Atkins / Kent Mango', chichewa: 'Maimbe a Makono', role: 'Summer fruit drought security, livestock leaf shelter', spacing: '8 m [26 ft] grid' },
+      { tier: 'Sub-Canopy (Tier 2)', species: 'Guava (Psidium guajava)', chichewa: 'Mapwera', role: 'High pectin fruit, medicinal respiratory leaves', spacing: '3 m [10 ft] spacing' },
+      { tier: 'Biomass Shrub (Tier 3)', species: 'Gliricidia sepium / Sesbania sesban', chichewa: 'Mchewere wamoyo', role: 'Chop-and-drop green manure rich in nitrogen', spacing: '1.5 m [5 ft] intervals' },
       { tier: 'Living Mulch (Tier 4)', species: 'Orange-Fleshed Sweet Potato', chichewa: 'Mbambaira yofiira', role: 'Beta-carotene rich ground cover suppressing weeds', spacing: 'Covering inter-basin soil' },
-      { tier: 'Erosion Barrier (Tier 5)', species: 'Vetiver Grass', chichewa: 'Kandjeje', role: 'Water-spreading contour hedgerow', spacing: '10cm continuous row' },
+      { tier: 'Erosion Barrier (Tier 5)', species: 'Vetiver Grass', chichewa: 'Kandjeje', role: 'Water-spreading contour hedgerow', spacing: '10 cm [4 in] continuous row' },
     ],
   },
 };
@@ -57,6 +59,7 @@ export function OrchardGuildPitDesigner({ className = '' }: OrchardGuildPitDesig
   const [selectedSoil, setSelectedSoil] = useState<SoilCategory>('katondo-clay');
   const [selectedGuild, setSelectedGuild] = useState<'avocado' | 'mango'>('avocado');
   const [pitCount, setPitCount] = useState<number>(24);
+  const [viewMode, setViewMode] = useState<'stratified' | 'engineering'>('stratified');
   const [copied, setCopied] = useState(false);
 
   const activeGuild = GUILD_PRESETS[selectedGuild];
@@ -98,16 +101,16 @@ export function OrchardGuildPitDesigner({ className = '' }: OrchardGuildPitDesig
   const totalCompostTons = +((amendments.compostWheelbarrows * 0.03 * pitCount)).toFixed(1);
 
   const handleCopyRecipe = () => {
-    const text = `ELLEN G. WHITE 3×3×3FT DEEP PLANTING PIT SPECIFICATION
+    const text = `ELLEN G. WHITE 90×90×90 CM [3×3×3 FT] DEEP PLANTING PIT SPECIFICATION
 Guild Archetype: ${activeGuild.name}
 Soil Profile: ${amendments.soilName}
 Scale: ${pitCount} Pits (Total Biochar: ${totalBiocharTotalKg} kg | Compost: ~${totalCompostTons} tons)
 
 STRATIFIED CROSS-SECTION RECIPE (PER 1M³ PIT):
-• Depth 2.5–3.0 ft (Base): Coarse basalt rocks, weathered animal bones & hardwood branches for subsoil aeration and slow mineral release.
-• Depth 1.5–2.5 ft (Matrix): Native subsoil blended with ${amendments.biocharKg}kg inoculated biochar, ${amendments.compostWheelbarrows} wheelbarrows aerobic compost, ${amendments.woodAshCups} cups wood ash, and ${amendments.boneMealGrams}g bone meal.
-• Depth 0.5–1.5 ft (Root Zone): Fine Katondo topsoil blended with cured worm castings/compost.
-• Surface (0–0.5 ft): Mounded 2 inches above ground level with a 4-inch dry grass mulch ring kept 3 inches from tree trunk.
+• Depth 75–90 cm [2.5–3.0 ft] (Base): Coarse basalt rocks, weathered animal bones & hardwood branches for subsoil aeration and slow mineral release.
+• Depth 45–75 cm [1.5–2.5 ft] (Matrix): Native subsoil blended with ${amendments.biocharKg} kg inoculated biochar, ${amendments.compostWheelbarrows} wheelbarrows aerobic compost, ${amendments.woodAshCups} cups wood ash, and ${amendments.boneMealGrams} g bone meal.
+• Depth 15–45 cm [0.5–1.5 ft] (Root Zone): Fine Katondo topsoil blended with cured worm castings/compost.
+• Surface (0–15 cm [0–0.5 ft]): Mounded 5 cm [2 in] above ground level with a 10 cm [4 in] dry grass mulch ring kept 8 cm [3 in] from tree trunk.
 • Companion Barrier: Vetiver grass (Kandjeje) planted along contour edge.`;
 
     if (navigator?.clipboard?.writeText) {
@@ -124,7 +127,7 @@ STRATIFIED CROSS-SECTION RECIPE (PER 1M³ PIT):
         <div>
           <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 font-semibold mb-1">
             <Sprout size={14} />
-            <span>Ellen White 3×3×3ft Method &amp; Agroforestry Guilds</span>
+            <span>Ellen White 90×90×90 cm [3×3×3 ft] Method</span>
             <span>·</span>
             <span className="text-stone-400">Living Soil Architecture</span>
           </div>
@@ -206,61 +209,88 @@ STRATIFIED CROSS-SECTION RECIPE (PER 1M³ PIT):
 
       {/* Cross-Section Stratification Diagram & Recipe */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-        {/* Left (5 Cols): Stratified Cross-Section Visualizer */}
+        {/* Left (5 Cols): Stratified Cross-Section Visualizer or SVG Diagram */}
         <div className="lg:col-span-5 bg-stone-950/80 p-4 rounded-xl border border-stone-800 flex flex-col justify-between gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-stone-800">
             <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">
-              3×3×3ft (0.91m³) Pit Cross-Section
+              90×90×90 cm [3×3×3 ft] Pit Model
             </span>
-            <span className="text-caption font-mono text-stone-400">Scale: 1m Deep</span>
-          </div>
-
-          {/* Visual Stratified Layers */}
-          <div className="flex flex-col gap-1.5">
-            {/* Surface Mulch Ring */}
-            <div className="p-2.5 rounded-lg bg-amber-950/40 border border-amber-800/40 text-xs">
-              <div className="flex justify-between items-center font-mono text-caption font-bold text-amber-300">
-                <span>0.0 ft · Surface Mulch Ring</span>
-                <span>4-inch dry grass</span>
-              </div>
-              <p className="text-caption text-stone-300 mt-0.5">
-                Mulched with dry veld grass, kept 3 inches from tree trunk to stop fungal collar rot.
-              </p>
-            </div>
-
-            {/* Root Zone Mound */}
-            <div className="p-2.5 rounded-lg bg-emerald-950/30 border border-emerald-800/40 text-xs">
-              <div className="flex justify-between items-center font-mono text-caption font-bold text-emerald-300">
-                <span>0.0 – 1.0 ft · Friable Topsoil Mound</span>
-                <span>Root Zone</span>
-              </div>
-              <p className="text-caption text-stone-300 mt-0.5">
-                Topsoil mound set 2 inches above ground level to compensate for settling.
-              </p>
-            </div>
-
-            {/* Living Matrix */}
-            <div className="p-2.5 rounded-lg bg-stone-900 border border-stone-700/80 text-xs">
-              <div className="flex justify-between items-center font-mono text-caption font-bold text-emerald-400">
-                <span>1.0 – 2.5 ft · Biochar &amp; Humus Matrix</span>
-                <span>Water Sponge</span>
-              </div>
-              <p className="text-caption text-stone-300 mt-0.5">
-                {amendments.biocharKg}kg inoculated biochar + {amendments.compostWheelbarrows} wheelbarrows compost + {amendments.woodAshCups} cups wood ash.
-              </p>
-            </div>
-
-            {/* Base Subsoil Aeration */}
-            <div className="p-2.5 rounded-lg bg-stone-950 border border-stone-800 text-xs">
-              <div className="flex justify-between items-center font-mono text-caption font-bold text-stone-300">
-                <span>2.5 – 3.0 ft · Drainage &amp; Bones Base</span>
-                <span>Mineral Bed</span>
-              </div>
-              <p className="text-caption text-stone-400 mt-0.5">
-                Basalt granite stones, animal bone fragments, and coarse woody chunks for subsoil aeration.
-              </p>
+            <div className="inline-flex items-center gap-1 bg-stone-900 p-0.5 rounded-lg border border-stone-800 text-[10px] font-mono">
+              <button
+                type="button"
+                onClick={() => setViewMode('stratified')}
+                className={cn(
+                  'px-2 py-0.5 rounded transition-colors cursor-pointer',
+                  viewMode === 'stratified' ? 'bg-emerald-500/20 text-emerald-300 font-bold' : 'text-stone-400 hover:text-white'
+                )}
+              >
+                Layers
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('engineering')}
+                className={cn(
+                  'px-2 py-0.5 rounded transition-colors cursor-pointer',
+                  viewMode === 'engineering' ? 'bg-emerald-500/20 text-emerald-300 font-bold' : 'text-stone-400 hover:text-white'
+                )}
+              >
+                Diagram
+              </button>
             </div>
           </div>
+
+          {viewMode === 'engineering' ? (
+            <div className="p-1">
+              <StandardDiagram type="planting-pit" className="bg-transparent border-0" />
+            </div>
+          ) : (
+            /* Visual Stratified Layers */
+            <div className="flex flex-col gap-1.5">
+              {/* Surface Mulch Ring */}
+              <div className="p-2.5 rounded-lg bg-amber-950/40 border border-amber-800/40 text-xs">
+                <div className="flex justify-between items-center font-mono text-caption font-bold text-amber-300">
+                  <span>0 cm [0 in] · Surface Mulch Ring</span>
+                  <span>10 cm [4 in] dry grass</span>
+                </div>
+                <p className="text-caption text-stone-300 mt-0.5">
+                  Mulched with dry veld grass, kept 8 cm [3 in] clear of tree trunk to prevent fungal collar rot.
+                </p>
+              </div>
+
+              {/* Root Zone Mound */}
+              <div className="p-2.5 rounded-lg bg-emerald-950/30 border border-emerald-800/40 text-xs">
+                <div className="flex justify-between items-center font-mono text-caption font-bold text-emerald-300">
+                  <span>0–30 cm [0–1 ft] · Topsoil Mound</span>
+                  <span>Root Zone</span>
+                </div>
+                <p className="text-caption text-stone-300 mt-0.5">
+                  Topsoil mound set 5 cm [2 in] above ground level to compensate for natural soil settling.
+                </p>
+              </div>
+
+              {/* Living Matrix */}
+              <div className="p-2.5 rounded-lg bg-stone-900 border border-stone-700/80 text-xs">
+                <div className="flex justify-between items-center font-mono text-caption font-bold text-emerald-400">
+                  <span>30–75 cm [1.0–2.5 ft] · Biochar &amp; Humus Matrix</span>
+                  <span>Water Sponge</span>
+                </div>
+                <p className="text-caption text-stone-300 mt-0.5">
+                  {amendments.biocharKg} kg inoculated biochar + {amendments.compostWheelbarrows} wheelbarrows compost + {amendments.woodAshCups} cups wood ash.
+                </p>
+              </div>
+
+              {/* Base Subsoil Aeration */}
+              <div className="p-2.5 rounded-lg bg-stone-950 border border-stone-800 text-xs">
+                <div className="flex justify-between items-center font-mono text-caption font-bold text-stone-300">
+                  <span>75–90 cm [2.5–3.0 ft] · Drainage Base</span>
+                  <span>Mineral Bed</span>
+                </div>
+                <p className="text-caption text-stone-400 mt-0.5">
+                  Basalt rocks, animal bone fragments, and coarse hardwood chunks for subsoil aeration.
+                </p>
+              </div>
+            </div>
+          )}
 
           <div className="text-caption text-stone-400 font-mono pt-2 border-t border-stone-800">
             Total Amendments for {pitCount} Pits: <strong className="text-white">{totalBiocharTotalKg} kg Biochar</strong> · <strong className="text-white">~{totalCompostTons} Tons Compost</strong>
@@ -277,23 +307,32 @@ STRATIFIED CROSS-SECTION RECIPE (PER 1M³ PIT):
           </div>
 
           <div className="space-y-2 text-xs">
-            {activeGuild.plants.map((plant, idx) => (
-              <div key={idx} className="p-2.5 rounded-lg bg-stone-900/60 border border-stone-800 flex flex-col gap-1">
-                <div className="flex items-center justify-between">
-                  <span className="font-mono font-bold text-emerald-400 text-caption">
-                    {plant.tier}
-                  </span>
-                  <span className="font-mono text-stone-400 text-caption">
-                    {plant.spacing}
-                  </span>
+            {activeGuild.plants.map((plant, idx) => {
+              const ch = getChichewaDisplay(plant.chichewa);
+              return (
+                <div key={idx} className="p-2.5 rounded-lg bg-stone-900/60 border border-stone-800 flex flex-col gap-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono font-bold text-emerald-400 text-caption">
+                      {plant.tier}
+                    </span>
+                    <span className="font-mono text-stone-400 text-caption">
+                      {plant.spacing}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap items-baseline gap-1.5 text-stone-200 font-semibold">
+                    <span>{plant.species}</span>
+                    <span className="text-stone-400 font-normal">·</span>
+                    <span className="text-amber-300 font-normal">{ch.primary}</span>
+                    {ch.alsoCalled && (
+                      <span className="text-stone-400 text-[11px] font-normal italic">
+                        ({ch.alsoCalled})
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-stone-400 text-caption">{plant.role}</p>
                 </div>
-                <div className="flex items-center gap-1.5 text-stone-200 font-semibold">
-                  <span>{plant.species}</span>
-                  <span className="text-stone-400 font-normal">({plant.chichewa})</span>
-                </div>
-                <p className="text-stone-400 text-caption">{plant.role}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <div className="p-3 rounded-lg bg-emerald-950/20 border border-emerald-800/30 text-xs text-emerald-300 flex items-start gap-2">
