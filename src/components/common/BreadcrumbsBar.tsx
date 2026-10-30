@@ -196,7 +196,7 @@ export function BreadcrumbsBar() {
           return (
             <li key={idx} className="inline-flex items-center gap-1.5 shrink-0 max-w-[200px] truncate">
               {idx > 0 && (
-                <ChevronRight size={10} className="text-[#5A6458] shrink-0" />
+                <ChevronRight size={10} className="text-[var(--ink-muted)] shrink-0" />
               )}
 
               {isCurrent ? (
@@ -209,13 +209,13 @@ export function BreadcrumbsBar() {
               ) : seg.path ? (
                 <Link
                   to={seg.path}
-                  className="hover:underline hover:text-[#B4531F] text-[#5A6458] transition-colors truncate flex items-center gap-1"
+                  className="hover:underline hover:text-[#B4531F] text-[var(--ink-muted)] transition-colors truncate flex items-center gap-1"
                 >
-                  {isFirst && <Home size={10} className="shrink-0 text-[#5A6458]" />}
+                  {isFirst && <Home size={10} className="shrink-0 text-[var(--ink-muted)]" />}
                   <span>{seg.label}</span>
                 </Link>
               ) : (
-                <span className="text-[#5A6458] truncate">{seg.label}</span>
+                <span className="text-[var(--ink-muted)] truncate">{seg.label}</span>
               )}
             </li>
           );
@@ -223,7 +223,7 @@ export function BreadcrumbsBar() {
       </ol>
 
       {/* Right subtle workspace context indicator */}
-      <div className="hidden sm:flex items-center gap-2 text-[10.5px] text-[#5A6458] shrink-0">
+      <div className="hidden sm:flex items-center gap-2 text-[10.5px] text-[var(--ink-muted)] shrink-0">
         <span>Desktop Workspace</span>
         <span>•</span>
         <span>28 Districts</span>

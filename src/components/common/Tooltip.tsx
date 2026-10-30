@@ -67,17 +67,17 @@ export function Tooltip({
         <div
           role="tooltip"
           className={cn(
-            'absolute z-50 pointer-events-none px-2 py-1',
-            'bg-stone-900/95 dark:bg-stone-950/95 text-stone-100',
-            'border border-white/15 rounded-[6px] shadow-sm',
-            'flex items-center gap-1.5 whitespace-nowrap select-none',
-            'text-[12px] font-chrome animate-in fade-in-0 zoom-in-95 duration-100',
+            'absolute z-50 pointer-events-none px-2.5 py-1.5',
+            'bg-[var(--ink)] text-[var(--ground)]',
+            'border border-[var(--border)] rounded-[var(--radius-control)] shadow-md',
+            'flex items-center gap-2 whitespace-nowrap select-none',
+            'text-[13px] font-sans font-medium animate-in fade-in-0 zoom-in-95 duration-150',
             positionClasses[side]
           )}
         >
           <span>{content}</span>
           {shortcut && (
-            <kbd className="px-1 py-0.5 rounded-[4px] bg-white/10 border border-white/20 text-[10px] font-mono text-amber-300 leading-none">
+            <kbd className="px-1.5 py-0.5 rounded-xs bg-[var(--ground)]/20 border border-[var(--ground)]/30 text-[11px] font-mono leading-none">
               {shortcut}
             </kbd>
           )}

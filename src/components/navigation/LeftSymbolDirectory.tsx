@@ -45,6 +45,11 @@ export const REFERENCE_SIDEBAR_ITEMS: ReferenceSidebarItem[] = [
     path: '/',
     matchPrefixes: ['/'],
     icon: Home,
+    subItems: [
+      { label: 'Homestead Workspace', path: '/' },
+      { label: '5-Step First-Run Checklist', path: '/getting-started' },
+      { label: 'How Outpost Works', path: '/getting-started?tab=how-it-works' },
+    ],
   },
   {
     id: 'journey',
@@ -110,9 +115,11 @@ export const REFERENCE_SIDEBAR_ITEMS: ReferenceSidebarItem[] = [
     matchPrefixes: ['/sanitarium', '/health'],
     icon: HeartPulse,
     subItems: [
-      { label: 'Sanitarium & Lifestyle', path: '/sanitarium' },
-      { label: 'Hydrotherapy & Fomentations', path: '/sanitarium?tab=hydrotherapy' },
-      { label: '8 Health Laws', path: '/sanitarium?tab=principles' },
+      { label: 'Eight Laws of Health', path: '/sanitarium?section=eight-laws' },
+      { label: 'Scientific & Ecological Evidence', path: '/sanitarium?section=evidence' },
+      { label: 'Hydrotherapy Protocols', path: '/sanitarium?section=hydrotherapy' },
+      { label: 'Botanical Apothecary', path: '/sanitarium?section=apothecary' },
+      { label: 'Medical Missionary & Home', path: '/sanitarium?section=outreach' },
     ],
   },
   {

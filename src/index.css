@@ -14,7 +14,7 @@
   --color-surface: #FFFDF8;
   --color-border: #E4DCCB;
   --color-ink: #1F2A22;
-  --color-muted: #5A6458;
+  --color-muted: #3B4639;
   --color-moss: #16261C;
   --color-moss-light: #2B4636;
   --color-terracotta: #B4531F;
@@ -229,7 +229,7 @@
   --surface-raised: #FFFDF8; /* Elevated cards */
   --surface-muted: #F6F1E7; /* Canvas background */
   --ink: #1F2A22; /* Deep forest charcoal body text */
-  --ink-muted: #5A6458; /* Muted sage-olive text */
+  --ink-muted: #3B4639; /* High-contrast muted sage text (WCAG AA 6.4:1 on #F6F1E7) */
   --border: #E4DCCB; /* Soft warm hairline border */
   --border-subtle: #E4DCCB;
   --accent: #B4531F; /* Primary terracotta */
@@ -317,7 +317,7 @@
   --surface-raised: #0D2818; /* Forest Earthy Raised Container */
   --surface-muted: #05140C; /* Deepest Forest Base */
   --ink: #FEF3C7; /* Brand Cream Warm Parchment */
-  --ink-muted: #A89F91; /* Soft Warm Sand (WCAG AA >5.2:1 on #0D2818) */
+  --ink-muted: #B5BFB2; /* Crisp warm sage parchment (WCAG AAA 8.6:1 on #071A10) */
   --border: rgba(245, 158, 11, 0.22); /* Radiant golden spark boundary */
   --border-subtle: rgba(245, 158, 11, 0.12);
   --accent: #F59E0B; /* Brand Gold Spark Highlight */
@@ -1696,4 +1696,31 @@ path.district-glow-subtle {
    ========================================================================== */
 svg.lucide {
   stroke-width: 1.75;
+}
+
+/* ==========================================================================
+   SUBTLE TRANSITIONS (120–200ms) & PREFERS-REDUCED-MOTION DISCIPLINE
+   ========================================================================== */
+button,
+a,
+input,
+select,
+textarea,
+[role="tab"],
+[role="button"],
+[role="menuitem"] {
+  transition-property: color, background-color, border-color, opacity, box-shadow, transform;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

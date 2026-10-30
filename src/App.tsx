@@ -10,6 +10,7 @@ import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { lazyWithRetry } from './lib/lazyWithRetry';
 import { scheduleDesktopIdleRoutePrefetch } from './lib/routePrefetch';
 import { DesktopLaunchSplash } from './components/common/DesktopLaunchSplash';
+import { isStandaloneApp } from './lib/apiClient';
 import Home from './pages/Home';
 import ScoutMapPage from './pages/ScoutMapPage';
 
@@ -29,25 +30,29 @@ const Blueprints = lazyWithRetry(() => import('./pages/Blueprints'));
 const Community = lazyWithRetry(() => import('./pages/Community'));
 const Devotional = lazyWithRetry(() => import('./pages/Devotional'));
 const Agriculture = lazyWithRetry(() => import('./pages/Agriculture'));
+const GettingStarted = lazyWithRetry(() => import('./pages/GettingStarted'));
+const PropertyEvaluator = lazyWithRetry(() => import('./pages/PropertyEvaluator'));
 const DevPalette = lazyWithRetry(() => import('./pages/DevPalette'));
+const DevUiSpecimen = lazyWithRetry(() => import('./pages/DevUiSpecimen'));
 const SettingsPage = lazyWithRetry(() => import('./pages/SettingsPage'));
 const NotFound = lazyWithRetry(() => import('./pages/NotFound'));
+import { ToastProvider, ContextMenuProvider } from '@/components/ui';
 
 function PageFallback() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full flex flex-col gap-6 animate-pulse">
-      <div className="rounded-card bg-surface-raised border border-border p-6 flex flex-col justify-between gap-4">
-        <Skeleton className="h-6 w-52 rounded-control bg-stone-300/40 dark:bg-stone-800/60" />
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full flex flex-col gap-6 animate-pulse select-none">
+      <div className="rounded-[var(--radius-card)] bg-[var(--surface)] border border-[var(--border)] p-6 flex flex-col justify-between gap-4 shadow-xs">
+        <Skeleton className="h-7 w-64 rounded-[var(--radius-control)] bg-[var(--ground)]" />
         <SkeletonText lines={2} className="max-w-xl" />
         <div className="flex gap-3 pt-2">
-          <Skeleton className="h-9 w-36 rounded-control bg-amber-500/20" />
-          <Skeleton className="h-9 w-28 rounded-control bg-stone-300/40 dark:bg-stone-800/60" />
+          <Skeleton className="h-9 w-32 rounded-[var(--radius-control)] bg-[var(--accent)]/15" />
+          <Skeleton className="h-9 w-28 rounded-[var(--radius-control)] bg-[var(--ground)]" />
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <SkeletonCard className="h-44" />
-        <SkeletonCard className="h-44" />
-        <SkeletonCard className="h-44" />
+        <SkeletonCard className="h-44 rounded-[var(--radius-card)] bg-[var(--surface)] border border-[var(--border)]" />
+        <SkeletonCard className="h-44 rounded-[var(--radius-card)] bg-[var(--surface)] border border-[var(--border)]" />
+        <SkeletonCard className="h-44 rounded-[var(--radius-card)] bg-[var(--surface)] border border-[var(--border)]" />
       </div>
     </div>
   );
@@ -58,12 +63,18 @@ function AnimatedAppRoutes() {
   const navigate = useNavigate();
   const [splashDone, setSplashDone] = useState(false);
 
-  // Restore previous session's last active tab on initial launch (if at root)
+  // Restore previous session's last active tab on cold launch in standalone desktop/PWA mode
   useEffect(() => {
     try {
-      const savedRoute = localStorage.getItem('outpost_desktop_last_active_route_v1');
-      if (savedRoute && savedRoute !== '/' && location.pathname === '/') {
-        navigate(savedRoute, { replace: true });
+      const alreadyRestored = sessionStorage.getItem('outpost_session_restored_v1');
+      if (!alreadyRestored && isStandaloneApp()) {
+        sessionStorage.setItem('outpost_session_restored_v1', 'true');
+        const searchParams = new URLSearchParams(window.location.search);
+        const hasExplicitHome = searchParams.get('home') === 'true';
+        const savedRoute = localStorage.getItem('outpost_desktop_last_active_route_v1');
+        if (!hasExplicitHome && savedRoute && savedRoute !== '/' && location.pathname === '/') {
+          navigate(savedRoute, { replace: true });
+        }
       }
     } catch {}
   }, []);
@@ -153,7 +164,9 @@ function AnimatedAppRoutes() {
           <Route path="/skills/:id" element={<SkillDetail />} />
           <Route path="/calculators" element={<Calculators />} />
           <Route path="/suitability" element={<Where />} />
-          <Route path="/property-evaluator" element={<Where />} />
+          <Route path="/getting-started" element={<GettingStarted />} />
+          <Route path="/start" element={<GettingStarted />} />
+          <Route path="/property-evaluator" element={<PropertyEvaluator />} />
           <Route path="/blueprints" element={<Blueprints />} />
           <Route path="/sanitarium" element={<Blueprints />} />
           <Route path="/kitchen" element={<What />} />
@@ -165,7 +178,12 @@ function AnimatedAppRoutes() {
           <Route path="/edenic-farming" element={<Agriculture />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/preferences" element={<SettingsPage />} />
-          <Route path="/dev/palette" element={<DevPalette />} />
+          {import.meta.env.DEV && (
+            <>
+              <Route path="/dev/palette" element={<DevPalette />} />
+              <Route path="/dev/ui" element={<DevUiSpecimen />} />
+            </>
+          )}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.div>
@@ -179,15 +197,19 @@ export default function App() {
     <ErrorBoundary>
       <ThemeProvider>
         <AuthProvider>
-          <MotionConfig reducedMotion="user">
-            <Router>
-              <Shell>
-                <Suspense fallback={<PageFallback />}>
-                  <AnimatedAppRoutes />
-                </Suspense>
-              </Shell>
-            </Router>
-          </MotionConfig>
+          <ToastProvider>
+            <ContextMenuProvider>
+              <MotionConfig reducedMotion="user">
+                <Router>
+                  <Shell>
+                    <Suspense fallback={<PageFallback />}>
+                      <AnimatedAppRoutes />
+                    </Suspense>
+                  </Shell>
+                </Router>
+              </MotionConfig>
+            </ContextMenuProvider>
+          </ToastProvider>
         </AuthProvider>
       </ThemeProvider>
     </ErrorBoundary>

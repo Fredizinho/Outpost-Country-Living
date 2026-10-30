@@ -32,6 +32,7 @@ import { DAILY_DEVOTIONALS } from '@/data/outpostFourPillarsData';
 import { SEASONAL_CALENDAR } from '@/data/skillsAndSeasons';
 import { CountryLivingIntroQuote } from '@/components/home/CountryLivingIntroQuote';
 import { HomeSceneryBackground } from '@/components/home/HomeSceneryBackground';
+import { ThisMonthCard } from '@/components/almanac/ThisMonthCard';
 import { CountryIcon, CountryIconName } from '@/components/icons/CountryIcons';
 import { CountryImage } from '@/components/common/CountryImage';
 import { COUNTRY_IMAGES } from '@/assets/images';
@@ -698,7 +699,7 @@ Generated via Outpost Living Malawi (Avondale Model & DCCMS/FAO Standards)`;
         <button
           type="button"
           onClick={() => setShowExtendedGuides((prev) => !prev)}
-          className="w-full py-2.5 px-4 rounded-[6px] border border-[#E4DCCB] dark:border-[#283C30] bg-[#FFFDF8] dark:bg-[#17241C] hover:bg-[#F6F1E7] dark:hover:bg-[#1F3025] flex items-center justify-between text-[13px] text-[#5A6458] dark:text-[#8E9E92] hover:text-[#1F2A22] dark:hover:text-[#EBF2EC] font-medium transition-all duration-200 cursor-pointer select-none"
+          className="w-full py-2.5 px-4 rounded-[6px] border border-[#E4DCCB] dark:border-[#283C30] bg-[#FFFDF8] dark:bg-[#17241C] hover:bg-[#F6F1E7] dark:hover:bg-[#1F3025] flex items-center justify-between text-[13px] text-[var(--ink-muted)] dark:text-[#8E9E92] hover:text-[#1F2A22] dark:hover:text-[#EBF2EC] font-medium transition-all duration-200 cursor-pointer select-none"
         >
           <span>
             {showExtendedGuides
@@ -716,91 +717,8 @@ Generated via Outpost Living Malawi (Avondale Model & DCCMS/FAO Standards)`;
         {/* ====================================================================
             2. FULL-WIDTH FIRST CARD: THIS SEASON: HOT DRY PREPARATION
         ==================================================================== */}
-        <section
-          id="this-season"
-          aria-label="Current Season in Malawi"
-          className={cn(
-            'p-5 sm:p-7 rounded-2xl border transition-all',
-            isCharcoal
-              ? 'bg-white dark:bg-[#161619] border-stone-300/80 dark:border-white/12'
-              : glassSurfaceClass,
-            'shadow-raised'
-          )}
-        >
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-stone-200/80 dark:border-white/10">
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-amber-400/20 dark:bg-amber-400/10 text-amber-800 dark:text-amber-300 flex items-center justify-center shrink-0">
-                <Calendar size={22} />
-              </div>
-              <div>
-                <div className="flex items-center gap-2 text-xs font-mono font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">
-                  <span>This Season in Malawi</span>
-                  <span aria-hidden="true">·</span>
-                  <span>{currentSeasonalTask.months || 'August – October'}</span>
-                </div>
-                <h2 className="font-display text-2xl sm:text-3xl font-bold text-stone-900 dark:text-white tracking-tight">
-                  This season: Hot Dry Preparation
-                </h2>
-              </div>
-            </div>
-
-            <Link
-              to="/seasons"
-              className="px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs sm:text-sm inline-flex items-center gap-2 shadow-md transition-colors self-start sm:self-auto cursor-pointer"
-            >
-              <span>Open Full Farm Almanac</span>
-              <ArrowRight size={14} />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 pt-5 text-xs sm:text-sm">
-            <div className="md:col-span-7 flex flex-col gap-3.5">
-              <div>
-                <span className="font-mono text-xs font-bold text-stone-500 dark:text-stone-400 uppercase tracking-wider block">
-                  Priority Agronomy &amp; Homestead Focus:
-                </span>
-                <p className="text-stone-900 dark:text-stone-100 font-semibold mt-1 text-base leading-snug">
-                  {currentSeasonalTask.focus}
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <span className="font-mono text-xs font-bold text-stone-500 dark:text-stone-400 uppercase tracking-wider">
-                  Key Field Tasks:
-                </span>
-                <ul className="space-y-1.5 text-xs text-stone-700 dark:text-stone-300">
-                  {currentSeasonalTask.keyActivities.slice(0, 3).map((act, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <span className="text-amber-600 dark:text-amber-400 font-bold shrink-0">·</span>
-                      <span>{act}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            <div className="md:col-span-5 flex flex-col justify-between gap-3.5 p-4 rounded-xl bg-amber-500/10 dark:bg-amber-400/5 border border-amber-500/20 dark:border-amber-400/15">
-              <div>
-                <span className="font-mono text-xs font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider block">
-                  Recommended Crops:
-                </span>
-                <div className="flex flex-wrap gap-1.5 mt-2">
-                  {currentSeasonalTask.recommendedCrops.map((c) => (
-                    <span
-                      key={c}
-                      className="px-2.5 py-1 rounded-lg bg-white/80 dark:bg-black/40 text-stone-800 dark:text-stone-200 font-semibold text-xs border border-stone-200/80 dark:border-white/10"
-                    >
-                      {c}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="pt-2.5 border-t border-amber-500/20 dark:border-amber-400/15 text-xs italic text-stone-800 dark:text-stone-200">
-                “{currentSeasonalTask.proTip}”
-              </div>
-            </div>
-          </div>
+        <section id="this-season" aria-label="Current Season in Malawi">
+          <ThisMonthCard />
         </section>
 
         {/* ====================================================================

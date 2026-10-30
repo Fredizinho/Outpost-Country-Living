@@ -111,7 +111,7 @@ export function ShortcutCheatSheetModal({ isOpen, onClose }: ShortcutCheatSheetM
                   <h2 className="font-serif text-lg text-[#1F2A22] font-semibold leading-tight">
                     Keyboard Accelerators & Shortcuts
                   </h2>
-                  <p className="text-xs text-[#5A6458]">
+                  <p className="text-xs text-[var(--ink-muted)]">
                     Native desktop keybindings optimized for {os === 'mac' ? 'macOS (⌘ Command)' : 'Windows & Linux (Ctrl)'}
                   </p>
                 </div>
@@ -119,7 +119,7 @@ export function ShortcutCheatSheetModal({ isOpen, onClose }: ShortcutCheatSheetM
               <button
                 type="button"
                 onClick={onClose}
-                className="w-7 h-7 rounded-[6px] text-[#5A6458] hover:text-[#1F2A22] hover:bg-[#E4DCCB]/50 flex items-center justify-center transition-colors cursor-pointer"
+                className="w-7 h-7 rounded-[6px] text-[var(--ink-muted)] hover:text-[#1F2A22] hover:bg-[#E4DCCB]/50 flex items-center justify-center transition-colors cursor-pointer"
                 aria-label="Close shortcuts dialog"
               >
                 <X size={16} />
@@ -130,7 +130,7 @@ export function ShortcutCheatSheetModal({ isOpen, onClose }: ShortcutCheatSheetM
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
               {categories.map((category) => (
                 <div key={category.title}>
-                  <h3 className="text-xs font-semibold text-[#5A6458] uppercase tracking-wider mb-2.5">
+                  <h3 className="text-xs font-semibold text-[var(--ink-muted)] uppercase tracking-wider mb-2.5">
                     {category.title}
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -141,7 +141,7 @@ export function ShortcutCheatSheetModal({ isOpen, onClose }: ShortcutCheatSheetM
                       >
                         <div className="min-w-0 pr-2">
                           <p className="text-[13px] font-medium text-[#1F2A22] truncate">{item.label}</p>
-                          <p className="text-[11px] text-[#5A6458] truncate">{item.description}</p>
+                          <p className="text-[11px] text-[var(--ink-muted)] truncate">{item.description}</p>
                         </div>
                         <kbd className="shrink-0 px-2 py-0.5 rounded-[4px] bg-[#F6F1E7] border border-[#E4DCCB] text-[11px] font-mono font-semibold text-[#16261C] shadow-2xs">
                           {formatAccelerator(item.accelerator, os)}
@@ -154,7 +154,7 @@ export function ShortcutCheatSheetModal({ isOpen, onClose }: ShortcutCheatSheetM
             </div>
 
             {/* Footer */}
-            <div className="px-6 py-3 bg-[#F6F1E7] border-t border-[#E4DCCB] flex items-center justify-between text-xs text-[#5A6458]">
+            <div className="px-6 py-3 bg-[#F6F1E7] border-t border-[#E4DCCB] flex items-center justify-between text-xs text-[var(--ink-muted)]">
               <span>Press <kbd className="font-mono text-[#16261C] font-semibold">Esc</kbd> to dismiss</span>
               <span>All accelerators work inside tabs and full screen</span>
             </div>

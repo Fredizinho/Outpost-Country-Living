@@ -19,6 +19,7 @@ import { useActiveHomesteadDistrict } from '@/lib/activeDistrictSync';
 import { DISTRICT_LIST } from '@/data/dataRegistry';
 import { COUNTRY_IMAGES } from '@/assets/images';
 import { cn } from '@/lib/utils';
+import { DailyDevotionalWidget } from '@/components/outpost/DailyDevotionalWidget';
 
 // Approximate astronomical sunset times in Malawi (CAT / UTC+2) by month (0=Jan .. 11=Dec)
 const MALAWI_SUNSET_BY_MONTH: Record<
@@ -632,6 +633,11 @@ export function DesktopWorkspaceStartScreen({ onOpenSearch }: DesktopWorkspaceSt
           </div>
         </div>
 
+      </div>
+
+      {/* Daily Devotional Compact Card */}
+      <div className="mt-4">
+        <DailyDevotionalWidget />
       </div>
 
     </div>

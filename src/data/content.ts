@@ -344,7 +344,16 @@ export const DATA_SOURCES_AND_CITATIONS: CitationSource[] = [
     institution: 'Food and Agriculture Organization of the United Nations (FAO), ISRIC World Soil Information & LUANAR',
     description: 'Pedological mapping detailing Eutric Nitisols in Dedza/Ntcheu, Humic Ferralsols in Mulanje/Thyolo, and Orthic Ferralsols in Kasungu plateau, including pH and CEC profiles.',
     verifiableURLOrDoc: 'FAO Land & Water Profile for Malawi & MoAIWD Land Resources Bulletin No. 4',
-    directUrl: 'https://www.fao.org/countryprofiles/index/en/?iso3=MWI'
+    directUrl: 'https://www.fao.org/soils-portal/en/'
+  },
+  {
+    id: 'cit-fff-sasakawa',
+    category: 'Soil & Agriculture',
+    title: 'Foundations for Farming & Sasakawa Global 2000 Zero-Tillage Planting Pits',
+    institution: 'Foundations for Farming International & Sasakawa Africa Association',
+    description: 'Zero-tillage permanent planting stations (3×3×3ft / 80×80×80cm) with biochar and green-waste composting, delivering drought resilience and water infiltration in Southern Africa.',
+    verifiableURLOrDoc: 'Foundations for Farming Conservation Agriculture Manual & SAA Technical Bulletins',
+    directUrl: 'https://foundationsforfarming.org/'
   },
   {
     id: 'cit-wateraid-hydro',
@@ -353,14 +362,32 @@ export const DATA_SOURCES_AND_CITATIONS: CitationSource[] = [
     institution: 'FAO AQUASTAT Global Information System on Water and Agriculture & Ministry of Water Malawi',
     description: 'Drill depths, borehole yields, and water table depths for crystalline basement aquifers (25–45m in Central Plateau) vs. unconsolidated alluvial aquifers (5–20m along Lakeshore).',
     verifiableURLOrDoc: 'FAO AQUASTAT Country Profile: Malawi & Hydrogeological Survey Paper #12',
-    directUrl: 'https://www.fao.org/aquastat/en/countries-and-basins/country-profiles/country/MWI'
+    directUrl: 'https://www.fao.org/aquastat/en/'
+  },
+  {
+    id: 'cit-bgs-groundwater',
+    category: 'Water & Hydrogeology',
+    title: 'Africa Groundwater Atlas: Hydrogeology of Malawi',
+    institution: 'British Geological Survey (BGS), International Association of Hydrogeologists & UK DFID',
+    description: 'Detailed hydrogeological mapping of fractured Precambrian crystalline basement aquifers and quaternary alluvium throughout Malawi, documenting transmissivity and static water levels.',
+    verifiableURLOrDoc: 'BGS Africa Groundwater Atlas — Hydrogeology of Malawi',
+    directUrl: 'https://www.bgs.ac.uk/geology-projects/africa-groundwater-atlas/'
+  },
+  {
+    id: 'cit-cawst-biosand',
+    category: 'Water & Hydrogeology',
+    title: 'Biosand Filter Design, Construction & Maintenance Manual',
+    institution: 'Centre for Affordable Water and Sanitation Technology (CAWST, Calgary, Canada)',
+    description: 'Engineering standards for household intermittently-operated biosand water filters: schmutzdecke biological layer development, flow rate limits (0.4m/h), and effective sand sizing (0.15–0.35mm).',
+    verifiableURLOrDoc: 'CAWST Biosand Filter Design Manual',
+    directUrl: 'https://www.cawst.org/'
   },
   {
     id: 'cit-land-act',
     category: 'Land & Legal',
     title: 'Customary Land Act (Act No. 19 of 2016) & Customary Land Regulations (2018)',
     institution: 'Parliament of Malawi & Malawi Legal Information Institute (MalawiLII)',
-    description: 'How land is managed in your area: how to register it, why you need the chief’s agreement, and what to do if there is a dispute.',
+    description: 'Statutory legal framework governing customary estates in Malawi: Village Land Committees, Traditional Authority consent, Customary Land Committees, and District Land Registry title recording.',
     verifiableURLOrDoc: 'Malawi Parliament Act No. 19 of 2016 (MalawiLII Official Statutory Archive)',
     directUrl: 'https://malawilii.org/akn/mw/act/2016/19/eng@2016-09-01'
   },
@@ -369,9 +396,18 @@ export const DATA_SOURCES_AND_CITATIONS: CitationSource[] = [
     category: 'Inspired Counsel & Scripture',
     title: 'Ellen G. White Estate Complete Published Writings & Archival Manuscripts',
     institution: 'Ellen G. White Estate, Inc. (Silver Spring, Maryland, USA)',
-    description: 'Primary source texts including Country Living (1946), The Ministry of Healing (1905), Education (1903), Testimonies for the Church (Vols. 1–9), and Selected Messages.',
-    verifiableURLOrDoc: 'Official EGW Writings Digital Archive (m.egwwritings.org)',
-    directUrl: 'https://m.egwwritings.org/en/folders/2'
+    description: 'Primary source texts including Country Living (1946), The Ministry of Healing (1905), Education (1903), Testimonies for the Church (Vols. 1–9), and Selected Messages with standard paragraph code citations.',
+    verifiableURLOrDoc: 'Official EGW Writings Digital Archive (egwwritings.org)',
+    directUrl: 'https://egwwritings.org/'
+  },
+  {
+    id: 'cit-ahs-longevity',
+    category: 'Inspired Counsel & Scripture',
+    title: 'Adventist Health Studies (AHS-1 & AHS-2) & Lifestyle Medicine Research',
+    institution: 'Loma Linda University School of Public Health & National Institutes of Health (NIH)',
+    description: 'Longitudinal prospective epidemiological studies demonstrating longevity gains, cardiovascular risk reduction, and biological health markers correlating with the eight natural remedies and vegetarian diet.',
+    verifiableURLOrDoc: 'Loma Linda University Health Research Archive & American Journal of Clinical Nutrition',
+    directUrl: 'https://adventisthealthstudy.org/'
   }
 ];
 

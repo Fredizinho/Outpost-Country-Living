@@ -184,6 +184,17 @@ export function HomesteadAdvisorModal({
     localStorage.removeItem(STORAGE_KEY);
   };
 
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
@@ -191,6 +202,9 @@ export function HomesteadAdvisorModal({
       <div 
         className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-md"
         onClick={onClose}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="advisor-modal-title"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
@@ -208,7 +222,7 @@ export function HomesteadAdvisorModal({
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="font-display text-xl sm:text-2xl font-bold text-[#FAF8F5]">Homestead Field Advisor</h3>
+                  <h3 id="advisor-modal-title" className="font-display text-xl sm:text-2xl font-bold text-[#FAF8F5]">Homestead Field Advisor</h3>
                   <span className="text-caption font-mono text-emerald-300">
                     · 28-District Telemetry
                   </span>

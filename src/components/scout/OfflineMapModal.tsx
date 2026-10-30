@@ -118,14 +118,32 @@ export function OfflineMapModal({
     }
   };
 
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="offline-map-title"
+    >
       <motion.div 
         initial={{ opacity: 0, scale: 0.95, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
+        onClick={(e) => e.stopPropagation()}
         className="w-full max-w-xl bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
       >
         {/* Header */}
@@ -140,13 +158,15 @@ export function OfflineMapModal({
               {isOnline && !isForceOffline ? <Wifi className="w-5 h-5" /> : <WifiOff className="w-5 h-5" />}
             </div>
             <div>
-              <h3 className="font-bold text-slate-100 text-base">Offline Map & Field Storage</h3>
+              <h3 id="offline-map-title" className="font-bold text-slate-100 text-base">Offline Map &amp; Field Storage</h3>
               <p className="text-xs text-slate-400">Download maps to your phone or computer to use without internet</p>
             </div>
           </div>
           <button 
+            type="button"
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-lg transition-colors"
+            aria-label="Close offline map dialog"
+            className="p-1.5 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>

@@ -1,39 +1,69 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Compass, ShieldCheck, Sparkles, BookOpen } from 'lucide-react';
+import {
+  Compass,
+  MapPin,
+  ShieldCheck,
+  Mail,
+  ArrowRight,
+  Droplets,
+  Layers
+} from 'lucide-react';
+import { PageHeader, Badge, Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui';
 import { PropertySuitabilityCalculator } from '@/components/outpost/PropertySuitabilityCalculator';
-import { HomeSceneryBackground } from '@/components/home/HomeSceneryBackground';
-import { CountryIcon } from '@/components/icons/CountryIcons';
 
 export default function PropertyEvaluator() {
   return (
-    <div className="min-h-screen bg-[#FAF7F0] dark:bg-[#09150E] text-stone-800 dark:text-stone-100 flex flex-col pb-20 transition-colors">
-      <main className="max-w-6xl mx-auto w-full px-4 sm:px-6 md:px-10 pt-6 flex flex-col gap-6">
-        <header className="bg-white dark:bg-[#0D1D13] rounded-2xl border border-stone-200/90 dark:border-emerald-900/60 p-5 sm:p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex flex-col gap-1">
-            <div className="flex flex-wrap items-center gap-2 text-xs text-emerald-800 dark:text-amber-300 font-semibold">
-              <span>Field Property Rubric &amp; Inspection</span>
-              <span aria-hidden="true">·</span>
-              <span className="text-stone-500 dark:text-stone-400 font-normal">
-                Water · Soil · City Distance · Slope · Customary Title
+    <div className="min-h-screen bg-[var(--ground)] text-[var(--ink)] pb-20 transition-colors">
+      <main className="max-w-5xl mx-auto w-full px-4 sm:px-6 pt-6 flex flex-col gap-6">
+        {/* Page Header */}
+        <PageHeader
+          title="Rural property suitability & customary title evaluator"
+          eyebrow="Land Assessment Rubric"
+          summary="Systematic scoring matrix evaluating perennial water rights, soil fertility, road access, and customary land tenure before purchasing acreage."
+          chips={
+            <>
+              <Badge status="Verified" />
+              <span className="text-[12px] text-[var(--ink-muted)]">
+                Chief Protocol · Traditional Authority &middot; 28 Districts
               </span>
-            </div>
-            <h1 className="serif text-2xl sm:text-3xl font-bold text-stone-950 dark:text-stone-50 tracking-tight">
-              Rural Property Suitability &amp; Chief Protocol Evaluator
-            </h1>
-          </div>
+            </>
+          }
+        />
 
-          <Link
-            to="/scout-map"
-            className="self-start sm:self-auto bg-emerald-950 hover:bg-emerald-900 text-amber-300 font-mono font-bold text-xs uppercase px-3.5 py-2 rounded-xl transition-all shadow-xs flex items-center gap-1.5"
-          >
-            <Compass size={13} />
-            <span>28-District GIS Map</span>
-          </Link>
-        </header>
+        {/* Overview & Quick Links Card */}
+        <Card>
+          <CardHeader>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <CardTitle>Field Site Assessment Criteria</CardTitle>
+                <CardDescription>
+                  Cross-referenced with the 2016 Malawi Customary Land Act and Spirit of Prophecy country living guidelines.
+                </CardDescription>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Link
+                  to="/where"
+                  className="px-3 py-1.5 rounded-[var(--radius-control)] bg-[var(--ground)] hover:bg-[var(--surface-raised)] border border-[var(--border)] text-[12px] font-sans font-medium text-[var(--ink)] inline-flex items-center gap-1.5 transition-colors"
+                >
+                  <MapPin size={13} />
+                  <span>District Explorer</span>
+                </Link>
+                <a
+                  href="mailto:outpostliving@gmail.com?subject=Property%20Rubric%20Feedback"
+                  className="px-3 py-1.5 rounded-[var(--radius-control)] bg-[var(--ground)] hover:bg-[var(--surface-raised)] border border-[var(--border)] text-[12px] font-sans font-medium text-[var(--ink)] inline-flex items-center gap-1.5 transition-colors"
+                >
+                  <Mail size={13} />
+                  <span>Feedback</span>
+                </a>
+              </div>
+            </div>
+          </CardHeader>
+        </Card>
 
         {/* The Full Interactive Calculator */}
-        <div className="bg-white dark:bg-[#0D1D13] p-6 sm:p-8 rounded-3xl border border-stone-200/90 dark:border-emerald-900/60 shadow-md">
+        <div className="rounded-[var(--radius-card)] bg-[var(--surface)] border border-[var(--border)] p-6 sm:p-8 shadow-xs">
           <PropertySuitabilityCalculator />
         </div>
       </main>

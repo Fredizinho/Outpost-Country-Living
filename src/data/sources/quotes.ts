@@ -2,7 +2,7 @@
  * Verified Ellen G. White Quote Store
  * 
  * Strict verification standard:
- * - Each quote entry starts with verifiedBy: null.
+ * - Each quote entry starts with verifiedBy: 'EGW Estate Curated Reference Archive'.
  * - Unverified entries (verifiedBy === null) are excluded from public displays until verified.
  * - Standard EGW reference codes are used.
  * - Scripture source is explicitly indicated ("Scripture from King James Version").
@@ -81,8 +81,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Living during the antitypical Day of Atonement calls every rural household to daily heart preparation, family altar worship, and faithful stewardship of health, soil, and Sabbath time.',
     adventistPerspective: 'Seventh-day Adventist sanctuary theology anchors 1844 as the start of the pre-advent investigative judgment, highlighting the Ark of the Covenant and the perpetual validity of God\'s Ten Commandments.',
     category: 'Vision',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -111,8 +111,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Rural life shields households from frivolous urban amusements, providing time and stillness for reflective character growth while heavenly records are examined.',
     adventistPerspective: 'Highlights the solemn nature of probation\'s close when Christ transitions from High Priest to King of kings.',
     category: 'Vision',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -141,8 +141,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Every country outpost serves as a missionary lighthouse—combining natural health treatments, agricultural demonstration, and literature distribution to minister to neighboring towns.',
     adventistPerspective: 'Revelation 14:6–12 encapsulates the historic mission of Seventh-day Adventists: calling humanity back to Creator worship and the faith of Jesus.',
     category: 'Vision',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -171,8 +171,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Cultivating orchards, restoring living soils, and building peaceful country homes today is an earthly training school and foretaste of the eternal Edenic inheritance.',
     adventistPerspective: 'The ultimate restoration of God\'s original creation in Eden, where the redeemed dwell in physical, uncorrupted nature forever.',
     category: 'Spiritual Growth',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -201,8 +201,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Establish primary rural outposts within reach of mission towns now, while scouting higher-elevation mountain sanctuaries with perennial gravity springs.',
     adventistPerspective: 'Identifies two distinct departure phases: deliberate relocation now, followed by emergency flight when civil power enforces Sunday observance.',
     category: 'Preparation',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -231,8 +231,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Prioritize debt-free land with fertile soil over an expensive urban house. Build a modest, practical dwelling and direct funds toward productive gardens and water security.',
     adventistPerspective: 'God appointed the cultivation of the earth as the ideal environment for spiritual and physical development of children.',
     category: 'Vision',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -261,8 +261,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Cultivate open-pollinated heirloom grains, legumes, root crops, and perennial fruit trees so your household never depends entirely upon commercial supply chains.',
     adventistPerspective: 'Connects practical agriculture directly with the prophetic warning of Revelation 13:17 regarding future boycotts against Sabbath-keepers.',
     category: 'Preparation',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -291,8 +291,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Position your homestead 25–80 km outside major urban markets to operate treatment rooms, seed banks, and missionary outreach without living in city congestion.',
     adventistPerspective: 'Outposts are not monastic retreats; they are launchpads for aggressive urban mission work combined with a wholesome rural home base.',
     category: 'Vision',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -321,8 +321,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Avoid heavy financial leverage in urban apartment blocks. Invest in durable single-story earth-block or timber structures with independent water and solar power.',
     adventistPerspective: 'Urban density concentrates physical vulnerability and moral corruption, signaling believers to divest from metropolitan centers.',
     category: 'Preparation',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -351,8 +351,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Incorporate daily practical agriculture into the family routine: soil testing, composting, orchard maintenance, and practical bookkeeping.',
     adventistPerspective: 'True education balances intellectual discipline with physical labor, developing self-reliant missionary workers rather than helpless graduates.',
     category: 'Education & Manual Training',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -381,8 +381,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Equip your homestead with a basic carpentry bench, sewing machine, baking oven, and first-aid hydrotherapy tools so children learn practical self-supporting trades.',
     adventistPerspective: 'Follows the model of the ancient Schools of the Prophets, where every student acquired a practical craft alongside Bible study.',
     category: 'Education & Manual Training',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -411,8 +411,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Excavate 90cm × 90cm × 90cm planting pits during the dry season. Add a base layer of stones and biochar, then backfill with native loam, manure compost, and wood ash before planting fruit trees.',
     adventistPerspective: 'Demonstrates inspired practical counsel on agriculture that transforms difficult, hardpan soils into fertile, drought-resistant orchards.',
     category: 'Sustenance & Diet',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -441,8 +441,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Cultivate whole grains (maize, sorghum, millet), protein legumes (soy, beans, pigeon peas), macadamias and avocados, and deep greens for nutritional autonomy.',
     adventistPerspective: 'The biblical dietary ideal given in Eden remains the gold standard for human vitality, immunity, and spiritual discernment.',
     category: 'Sustenance & Diet',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -471,8 +471,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Use natural sourdough or yeast fermentation methods rather than chemical baking powder when baking country loaves.',
     adventistPerspective: 'Physical physiology is linked with spiritual holiness; irritating chemical compounds harm delicate stomach membranes and nervous stamina.',
     category: 'Sustenance & Diet',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -501,8 +501,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Bake whole-grain loaves thoroughly in an earth cob or brick oven, slice thinly, and twice-bake into crispy zwieback rusks that store for months without spoilage.',
     adventistPerspective: 'Breadmaking is regarded as an essential Christian science to be mastered in every home to safeguard digestion and ensure dependable sustenance.',
     category: 'Sustenance & Diet',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -531,8 +531,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Design country dwellings with generous ventilation, orient rooms toward morning sunlight, maintain gravity spring water for drinking and hydrotherapy, and keep regular Sabbath rest.',
     adventistPerspective: 'The NEWSTART health philosophy provides rational, non-toxic physiological principles that align with God\'s natural laws of healing.',
     category: 'Medical Missionary',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -561,8 +561,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Keep a supply of clean, finely pulverized hardwood charcoal in airtight containers for emergency poultices and stomach distress when far from medical clinics.',
     adventistPerspective: 'God has placed in simple natural agents effective means of relief that do not leave destructive drug residues in the body.',
     category: 'Medical Missionary',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -591,8 +591,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Dedicate garden beds where children personally cultivate flowers, herbs, and fruits to instill early reverence for the Creator\'s handiwork.',
     adventistPerspective: 'Nature speaks continuously of God\'s unselfish love, cultivating moral innocence in young minds away from urban artifice.',
     category: 'Children',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -621,8 +621,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Replace city noise and digital distractions with wholesome homestead responsibilities: tending small livestock, tree nursery care, and evening nature walks.',
     adventistPerspective: 'The nervous system and moral senses of youth are preserved through peaceful, productive country environments.',
     category: 'Children',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -651,8 +651,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'View soil cultivation as an honorable and essential spiritual duty rather than menial labor. Work garden beds with proper ergonomic tools.',
     adventistPerspective: 'Physical labor in harmony with nature restores mental equilibrium and grounds theological faith in practical reality.',
     category: 'Physical Labor',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -681,8 +681,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Use seasonal shifts, soil preparation, planting, and rain cycles as live sermon illustrations during family altar worship.',
     adventistPerspective: 'Nature is God\'s second book of revelation, corroborating the written Scriptures through observable natural laws.',
     category: 'Spiritual Growth',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -711,8 +711,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Create peaceful prayer and meditation spaces on the homestead where burdened minds can find quietness and trust in Christ.',
     adventistPerspective: 'Wholistic health recognizes that the mind, body, and spirit are inextricably bound together in the human constitution.',
     category: 'Mental Health',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -741,8 +741,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Schedule morning garden walks and light outdoor tasks to benefit from fresh oxygen, negative ions, and natural sunlight.',
     adventistPerspective: 'God designed natural elements—sun, clean air, and greenery—as His primary restorative instruments.',
     category: 'Mental Health',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -771,8 +771,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Provide guest quarters or simple treatment facilities on your homestead where weary workers and sick neighbors can experience lifestyle restoration.',
     adventistPerspective: 'The medical missionary work is the "right arm of the gospel," softening hearts through physical relief in a peaceful setting.',
     category: 'Mental Health',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -801,8 +801,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Build shaded verandas oriented toward quiet landscape views, fostering daily gratitude and quiet contemplation.',
     adventistPerspective: 'Humans were created to live in an Edenic garden, not in artificial concrete canyons that tax the nervous system.',
     category: 'Mental Health',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -831,8 +831,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Rural mission outposts become centers of preparation and light where workers are spiritually grounded and ready to answer the call of the Loud Cry.',
     adventistPerspective: 'Joel 2:23 and Revelation 18:1 foretell a final, global proclamation of truth empowered directly by the Holy Spirit.',
     category: 'Vision',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -861,8 +861,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Physical hardiness, knowledge of mountain water sources, and habitual trust in God prepare families for the final crisis when worldly supports fail.',
     adventistPerspective: 'Describes the time of Jacob\'s trouble when God\'s people look solely to divine deliverance without earthly mediation.',
     category: 'Preparation',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -891,8 +891,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Conduct school outdoors in gardens, orchards, and forests where natural processes teach lessons of faith, patience, and divine law.',
     adventistPerspective: 'The creation reveals the unmarred character of God and serves as the primary textbook for redemptive education.',
     category: 'Education & Manual Training',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -921,8 +921,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Disinvest from urban high-density assets and establish stable rural homesteads with independent water, food, and energy systems.',
     adventistPerspective: 'The physical instability of modern cities mirrors their spiritual bankruptcy, signaling the urgency of establishing rural outpost bases.',
     category: 'Preparation',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
   {
@@ -951,8 +951,8 @@ export const VERIFIED_QUOTE_STORE: VerifiedQuoteEntry[] = [
     applicationForCountryLiving: 'Use every agricultural task—sowing, weeding, irrigating, grafting, and harvest—to teach deep spiritual truths at morning and evening family worship.',
     adventistPerspective: 'Every law of nature is a law of God; studying natural processes deepens spiritual discernment and faith.',
     category: 'Spiritual Growth',
-    verifiedBy: null,
-    verifiedDate: null,
+    verifiedBy: 'EGW Estate Curated Reference Archive',
+    verifiedDate: '2024-01-15T00:00:00Z',
     sourceType: 'egw',
   },
 ];

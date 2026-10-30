@@ -13,13 +13,8 @@ export interface OutpostLogoProps {
 /**
  * OutpostLogo.tsx
  * =============================================================================
- * Redesigned Minimalist Logo Mark for Outpost Living Malawi.
- *
- * Design Concept:
- * - Simple, iconic, memorable desktop-grade emblem.
- * - Geometric architectural sanctuary gable & Mount Mulanje peak silhouette.
- * - Rising Golden Dawn Sun / Morning Star radiating in the apex.
- * - Sits on a native desktop-app squircle tile with subtle ambient lighting.
+ * Minimalist Logo Mark and Wordmark for Outpost Living Malawi.
+ * Wordmark: Fraunces serif, normal tracking, balanced editorial presence.
  * =============================================================================
  */
 export function OutpostLogo({
@@ -32,68 +27,61 @@ export function OutpostLogo({
 }: OutpostLogoProps) {
   const iconPixelSizes = {
     xs: 20,
-    sm: 26,
-    md: 34,
-    lg: 44,
-    xl: 60,
-    '2xl': 80,
+    sm: 24,
+    md: 32,
+    lg: 40,
+    xl: 56,
+    '2xl': 72,
   };
 
   const titleSizes = {
-    xs: 'text-caption tracking-[0.18em]',
-    sm: 'text-xs tracking-[0.18em]',
-    md: 'text-sm sm:text-base tracking-[0.20em]',
-    lg: 'text-lg sm:text-xl tracking-[0.22em]',
-    xl: 'text-2xl sm:text-3xl tracking-[0.24em]',
-    '2xl': 'text-3xl sm:text-4xl tracking-[0.26em]',
+    xs: 'text-[14px]',
+    sm: 'text-[15px]',
+    md: 'text-[17px] sm:text-[18px]',
+    lg: 'text-[20px] sm:text-[22px]',
+    xl: 'text-[26px] sm:text-[28px]',
+    '2xl': 'text-[32px] sm:text-[36px]',
   };
 
   const subtitleSizes = {
-    xs: 'text-caption tracking-[0.22em]',
-    sm: 'text-caption tracking-[0.22em]',
-    md: 'text-caption tracking-[0.24em]',
-    lg: 'text-caption tracking-[0.26em]',
-    xl: 'text-xs tracking-[0.28em]',
-    '2xl': 'text-sm tracking-[0.3em]',
+    xs: 'text-[11px]',
+    sm: 'text-[11px]',
+    md: 'text-[12px]',
+    lg: 'text-[12px]',
+    xl: 'text-[13px]',
+    '2xl': 'text-[14px]',
   };
 
   const isHeader = variant === 'header';
-  const isDarkCanvas = variant === 'light';
 
   const titleColor = isHeader
     ? 'text-white'
-    : isDarkCanvas
-    ? 'text-stone-50'
-    : 'text-stone-950 dark:text-white';
+    : 'text-[var(--ink)]';
 
   const subtitleColor = isHeader
     ? 'text-stone-300'
-    : 'text-stone-500 dark:text-stone-400';
+    : 'text-[var(--ink-muted)]';
 
   const px = iconPixelSizes[size];
 
   return (
     <div
       className={cn(
-        'group select-none inline-flex items-center transition-transform duration-200',
+        'group select-none inline-flex items-center transition-transform duration-150',
         layout === 'vertical' ? 'flex-col text-center gap-2' : 'flex-row gap-2.5',
         className
       )}
     >
-      {/* 
-        DESKTOP APP EMBLEM SQUIRCLE:
-        - Sleek bevel tile with subtle matte depth
-        - Crisp geometric sanctuary peak with dawn star
-      */}
+      {/* Native desktop squircle emblem */}
       <div
-        className="relative shrink-0 flex items-center justify-center transition-all duration-200 group-hover:scale-105"
+        className="relative shrink-0 flex items-center justify-center transition-all duration-150 group-hover:scale-105"
         style={{ width: px, height: px }}
       >
         <svg
           viewBox="0 0 32 32"
           width={px}
           height={px}
-          className="w-full h-full overflow-visible drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)]"
+          className="w-full h-full overflow-visible drop-shadow-[0_1px_4px_rgba(0,0,0,0.25)]"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
@@ -103,12 +91,12 @@ export function OutpostLogo({
             y="1.5"
             width="29"
             height="29"
-            rx="7.5"
+            rx="7"
             className="fill-stone-900/90 dark:fill-[#16161A] stroke-white/15 dark:stroke-white/15"
             strokeWidth="1"
           />
 
-          {/* Golden Dawn Aura Glow in squircle */}
+          {/* Golden Dawn Aura Glow */}
           <circle
             cx="16"
             cy="11"
@@ -122,14 +110,14 @@ export function OutpostLogo({
             cy="11"
             r="2.8"
             fill="#F59E0B"
-            className="group-hover:fill-amber-300 transition-colors"
+            className="group-hover:fill-amber-300 transition-colors duration-150"
           />
 
-          {/* Symmetrical Geometric Sanctuary Peak (Mount Mulanje & Refuge Roofline) */}
+          {/* Symmetrical Geometric Sanctuary Peak */}
           <path
             d="M16 8L7.5 22.5H13L16 17.5L19 22.5H24.5L16 8Z"
             fill="url(#logo-peak-gradient)"
-            className="transition-all"
+            className="transition-all duration-150"
           />
 
           {/* Inner Negative Space Gateway Arch */}
@@ -148,7 +136,6 @@ export function OutpostLogo({
             fill="#F59E0B"
           />
 
-          {/* Definition for smooth metallic / jewel gradient */}
           <defs>
             <linearGradient id="logo-peak-gradient" x1="16" y1="8" x2="16" y2="23" gradientUnits="userSpaceOnUse">
               <stop stopColor="#34D399" />
@@ -159,34 +146,30 @@ export function OutpostLogo({
         </svg>
       </div>
 
-      {/* Typographic Identity */}
+      {/* New Fraunces Wordmark with Normal Tracking */}
       {!iconOnly && (
-        <div className={cn('flex flex-col leading-none', layout === 'vertical' ? 'items-center' : 'items-start')}>
+        <div className={cn('flex flex-col leading-tight', layout === 'vertical' ? 'items-center' : 'items-start')}>
           <div className="flex items-center gap-1.5">
             <span
               className={cn(
-                'font-display font-black transition-colors uppercase',
+                'font-serif font-semibold tracking-normal transition-colors',
                 titleSizes[size],
                 titleColor
               )}
             >
-              OUTPOST
-            </span>
-            <span className="w-1 h-1 rounded-full bg-amber-400 shrink-0" />
-            <span className="font-mono text-caption font-bold text-amber-400 uppercase tracking-widest hidden sm:inline">
-              MALAWI
+              Outpost Living
             </span>
           </div>
 
           {showSubtitle && (
             <span
               className={cn(
-                'font-mono font-medium uppercase transition-colors mt-1',
+                'font-sans font-normal tracking-normal transition-colors',
                 subtitleSizes[size],
                 subtitleColor
               )}
             >
-              Country Sanctuary
+              Southern Africa Sanctuary
             </span>
           )}
         </div>

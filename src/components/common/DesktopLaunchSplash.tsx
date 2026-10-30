@@ -17,12 +17,26 @@ export function DesktopLaunchSplash({
   onReady,
   minDurationMs = 650,
 }: DesktopLaunchSplashProps) {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(() => {
+    try {
+      return !sessionStorage.getItem('outpost_splash_shown_v1');
+    } catch {
+      return true;
+    }
+  });
   const [progress, setProgress] = useState(15);
   const [statusText, setStatusText] = useState('Restoring workspace session...');
   const { isDesktop, os } = usePlatform();
 
   useEffect(() => {
+    try {
+      if (sessionStorage.getItem('outpost_splash_shown_v1')) {
+        setIsVisible(false);
+        onReady?.();
+        return;
+      }
+      sessionStorage.setItem('outpost_splash_shown_v1', 'true');
+    } catch {}
     // Stage 1: Reading stored tabs and active district
     const t1 = setTimeout(() => {
       setProgress(55);

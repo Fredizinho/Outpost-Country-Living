@@ -3,7 +3,35 @@ import { cn } from '@/lib/utils';
 import { LucideIcon, AlertTriangle } from 'lucide-react';
 
 /* -------------------------------------------------------------------------- */
-/* 1. SANCTUARY CARD PRIMITIVES                                               */
+/* NEW MODULAR COMPONENT EXPORTS (UI KIT)                                     */
+/* -------------------------------------------------------------------------- */
+
+export * from './Button';
+export * from './IconButton';
+export * from './Chip';
+export * from './Badge';
+export * from './Card';
+export * from './PageHeader';
+export * from './Tabs';
+export * from './SplitPane';
+export * from './Dialog';
+export * from './Drawer';
+export * from './Tooltip';
+export * from './Toast';
+export * from './EmptyState';
+export * from './ErrorStateCard';
+export * from './Skeleton';
+export * from './Field';
+export * from './Input';
+export * from './Select';
+export * from './Slider';
+export * from './Toggle';
+export * from './DataTable';
+export * from './ContextMenu';
+export * from './KeyTakeawaysCard';
+
+/* -------------------------------------------------------------------------- */
+/* BACKWARD-COMPATIBLE SANCTUARY PRIMITIVES (Preserving existing pages)       */
 /* -------------------------------------------------------------------------- */
 
 export interface SanctuaryCardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -88,10 +116,6 @@ export function SanctuaryCardFooter({ className, children, ...props }: React.HTM
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* 2. SANCTUARY BUTTON PRIMITIVES                                             */
-/* -------------------------------------------------------------------------- */
-
 export interface SanctuaryButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'amber' | 'outline' | 'ghost' | 'danger';
   size?: 'sm' | 'md' | 'lg';
@@ -152,10 +176,6 @@ export function SanctuaryButton({
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* 3. SANCTUARY BADGE PRIMITIVE                                               */
-/* -------------------------------------------------------------------------- */
-
 export interface SanctuaryBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: 'emerald' | 'amber' | 'dark' | 'sand' | 'danger' | 'demo';
   size?: 'sm' | 'md';
@@ -197,10 +217,6 @@ export function SanctuaryBadge({
     </span>
   );
 }
-
-/* -------------------------------------------------------------------------- */
-/* 4. SANCTUARY SECTION HEADER PRIMITIVE                                      */
-/* -------------------------------------------------------------------------- */
 
 export interface SanctuarySectionHeaderProps {
   eyebrow?: string;
@@ -248,10 +264,6 @@ export function SanctuarySectionHeader({
     </div>
   );
 }
-
-/* -------------------------------------------------------------------------- */
-/* 5. SANCTUARY BANNER & DISCLAIMER CALLOUT                                   */
-/* -------------------------------------------------------------------------- */
 
 export interface SanctuaryBannerProps {
   title?: string;
@@ -309,10 +321,6 @@ export function SanctuaryBanner({
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* 6. SANCTUARY STAT BOX PRIMITIVE                                            */
-/* -------------------------------------------------------------------------- */
-
 export interface SanctuaryStatBoxProps {
   label: string;
   value: string | number;
@@ -361,6 +369,3 @@ export function SanctuaryStatBox({
     </div>
   );
 }
-
-export * from './Skeleton';
-

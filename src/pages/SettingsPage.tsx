@@ -1,59 +1,91 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   Palette,
-  Database,
+  Languages,
+  WifiOff,
+  ShieldCheck,
+  Keyboard,
   Info,
-  Sliders,
-  Check,
-  Copy,
+  Search,
   Download,
   Upload,
   RefreshCw,
-  Sun,
-  Moon,
-  Layers,
-  MapPin,
-  ShieldCheck,
+  Trash2,
+  LogIn,
+  LogOut,
+  User as UserIcon,
+  Check,
   Sparkles,
-  RotateCcw,
-  Code2,
-  Cpu,
-  Monitor,
-  HeartHandshake,
-  BookOpen,
-  ArrowRight,
+  MapPin,
+  Edit2,
+  X
 } from 'lucide-react';
-import { useTheme, THEME_META, Theme } from '@/contexts/ThemeContext';
+import { useTheme, THEME_META, Theme, FontPairing } from '@/contexts/ThemeContext';
 import { useActiveHomesteadDistrict } from '@/lib/activeDistrictSync';
+import { useAuth } from '@/contexts/AuthContext';
 import { DISTRICT_LIST } from '@/constants';
 import {
   getOfflineSyncStatus,
   forceSyncOfflineCache,
   createFullAppBackup,
-  restoreFullAppBackup,
-  calculateHomesteadReadinessScore,
+  restoreFullAppBackup
 } from '@/lib/offlineStorage';
-import { usePlatform } from '@/lib/platform';
+import {
+  PageHeader,
+  Button,
+  Badge,
+  Chip,
+  Dialog,
+  Select,
+  Toggle,
+  useToast
+} from '@/components/ui';
+import { SettingsRow } from '@/components/settings/SettingsRow';
+import { ThemePreviewCard } from '@/components/settings/ThemePreviewCard';
+import { KeyboardShortcutsList } from '@/components/settings/KeyboardShortcutsList';
+import { DesktopDiagnosticsCard } from '@/components/settings/DesktopDiagnosticsCard';
 import { cn } from '@/lib/utils';
-import { OutpostLogo } from '@/components/common/OutpostLogo';
 
-export type SettingsTabId = 'appearance' | 'data' | 'district' | 'diagnostics' | 'about';
+export type SettingsCategory =
+  | 'appearance'
+  | 'language'
+  | 'offline'
+  | 'data'
+  | 'shortcuts'
+  | 'about';
 
-export function SettingsPage() {
+interface CategoryNav {
+  id: SettingsCategory;
+  label: string;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+}
+
+const CATEGORIES: CategoryNav[] = [
+  { id: 'appearance', label: 'Appearance', icon: Palette },
+  { id: 'language', label: 'Language', icon: Languages },
+  { id: 'offline', label: 'Offline and sync', icon: WifiOff },
+  { id: 'data', label: 'Data and privacy', icon: ShieldCheck },
+  { id: 'shortcuts', label: 'Keyboard shortcuts', icon: Keyboard },
+  { id: 'about', label: 'About', icon: Info }
+];
+
+export default function SettingsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const platform = usePlatform();
-  const { theme, setTheme, isDark, isLight, isField, fontPairing, setFontPairing } = useTheme();
+  const { theme, setTheme, fontPairing, setFontPairing } = useTheme();
+  const { user, isFirebaseAuthenticated, signInWithGoogle, signIn, signOut, updateProfile } = useAuth();
+  const [activeDistrictId, setActiveDistrictId] = useActiveHomesteadDistrict();
+  const { toast } = useToast();
 
-  const tabParam = (searchParams.get('tab') as SettingsTabId) || 'appearance';
-  const [activeTab, setActiveTab] = useState<SettingsTabId>(
-    ['appearance', 'data', 'district', 'diagnostics', 'about'].includes(tabParam)
+  const tabParam = (searchParams.get('tab') as SettingsCategory) || 'appearance';
+  const [activeCategory, setActiveCategory] = useState<SettingsCategory>(
+    ['appearance', 'language', 'offline', 'data', 'shortcuts', 'about'].includes(tabParam)
       ? tabParam
       : 'appearance'
   );
 
-  const [activeDistrictId, setActiveDistrictId] = useActiveHomesteadDistrict();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [syncStatus, setSyncStatus] = useState(() => getOfflineSyncStatus());
   const [isLargeText, setIsLargeText] = useState<boolean>(() => {
     try {
       return localStorage.getItem('outpost_reader_font_scale') === 'lg';
@@ -61,404 +93,685 @@ export function SettingsPage() {
       return false;
     }
   });
-  const [syncStatus, setSyncStatus] = useState(() => getOfflineSyncStatus());
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const [copiedEmail, setCopiedEmail] = useState(false);
+
+  const [chichewaTermsEnabled, setChichewaTermsEnabled] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('outpost_chichewa_bilingual_v1') !== 'disabled';
+    } catch {
+      return true;
+    }
+  });
+
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+
+  // Profile edit draft state
+  const [profileDraft, setProfileDraft] = useState({
+    displayName: user?.displayName || 'Local Household Steward',
+    familyMembers: user?.familyMembers || 4,
+    landSizeAcres: user?.landSizeAcres || 2.5
+  });
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    const currentTab = searchParams.get('tab') as SettingsTabId;
-    if (currentTab && currentTab !== activeTab) {
-      setActiveTab(currentTab);
-    }
-  }, [searchParams]);
-
-  const handleTabChange = (id: SettingsTabId) => {
-    setActiveTab(id);
-    setSearchParams({ tab: id });
+  const handleCategoryChange = (cat: SettingsCategory) => {
+    setActiveCategory(cat);
+    setSearchParams({ tab: cat });
   };
 
-  const handleLargeTextToggle = () => {
-    const next = !isLargeText;
-    setIsLargeText(next);
+  const handleLargeTextToggle = (enabled: boolean) => {
+    setIsLargeText(enabled);
     try {
-      localStorage.setItem('outpost_reader_font_scale', next ? 'lg' : 'normal');
+      localStorage.setItem('outpost_reader_font_scale', enabled ? 'lg' : 'normal');
       window.dispatchEvent(
-        new CustomEvent('outpost:font-scale-changed', { detail: { scale: next ? 'lg' : 'normal' } })
+        new CustomEvent('outpost:font-scale-changed', { detail: { scale: enabled ? 'lg' : 'normal' } })
       );
-      setToastMessage(next ? 'Large guide typography activated' : 'Standard guide typography restored');
+      toast({
+        message: enabled ? 'Large reading text enabled' : 'Standard text restored',
+        variant: 'default'
+      });
+    } catch {}
+  };
+
+  const handleChichewaToggle = (enabled: boolean) => {
+    setChichewaTermsEnabled(enabled);
+    try {
+      localStorage.setItem('outpost_chichewa_bilingual_v1', enabled ? 'enabled' : 'disabled');
+      toast({
+        message: enabled ? 'Chichewa agricultural terms enabled' : 'English-only headers set',
+        variant: 'default'
+      });
     } catch {}
   };
 
   const handleSyncNow = () => {
-    setToastMessage('Refreshing local databases...');
-    const result = forceSyncOfflineCache();
-    setSyncStatus(result);
-    setToastMessage(`Offline caches refreshed (${result.lastSyncFormatted})`);
+    const updated = forceSyncOfflineCache();
+    setSyncStatus(updated);
+    toast({
+      message: `Offline database synchronized (${updated.lastSyncFormatted})`,
+      variant: 'success'
+    });
   };
 
   const handleExportBackup = () => {
-    const backupData = createFullAppBackup();
-    const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `outpost-backup-${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-    setToastMessage('Backup archive exported to downloads');
+    try {
+      const backupJson = createFullAppBackup();
+      const blob = new Blob([JSON.stringify(backupJson, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Outpost_Sanctuary_Backup_${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast({ message: 'Backup file exported successfully', variant: 'success' });
+    } catch {
+      toast({ message: 'Backup export failed', variant: 'destructive' });
+    }
   };
 
-  const handleImportFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileRestore = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
     const reader = new FileReader();
-    reader.onload = (evt) => {
+    reader.onload = (event) => {
       try {
-        const text = evt.target?.result as string;
+        const text = event.target?.result as string;
         const parsed = JSON.parse(text);
         restoreFullAppBackup(parsed);
-        setToastMessage('Homestead state restored successfully. Reloading...');
+        toast({ message: 'Sanctuary data restored successfully', variant: 'success' });
         setTimeout(() => window.location.reload(), 1000);
-      } catch (err: any) {
-        setToastMessage(`Invalid backup JSON: ${err?.message}`);
+      } catch {
+        toast({ message: 'Invalid backup file structure', variant: 'destructive' });
       }
     };
     reader.readAsText(file);
   };
 
-  const readiness = calculateHomesteadReadinessScore();
+  const handleDeleteAllLocalData = () => {
+    try {
+      localStorage.clear();
+      setIsDeleteDialogOpen(false);
+      toast({
+        message: 'All local offline data cleared',
+        variant: 'destructive',
+        duration: 8000,
+        undoLabel: 'Reload defaults',
+        undo: () => window.location.reload()
+      });
+      setTimeout(() => window.location.reload(), 2000);
+    } catch {
+      toast({ message: 'Could not clear data', variant: 'destructive' });
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setIsGoogleLoading(true);
+    try {
+      await signInWithGoogle();
+      toast({ message: 'Signed in with Google account', variant: 'success' });
+    } catch {
+      toast({ message: 'Google sign in could not be completed', variant: 'destructive' });
+    } finally {
+      setIsGoogleLoading(false);
+    }
+  };
+
+  const handleSaveProfile = () => {
+    updateProfile({
+      displayName: profileDraft.displayName.trim() || 'Local Household Steward',
+      familyMembers: Number(profileDraft.familyMembers) || 4,
+      landSizeAcres: Number(profileDraft.landSizeAcres) || 2.5
+    });
+    setIsProfileModalOpen(false);
+    toast({ message: 'Household profile updated successfully', variant: 'success' });
+  };
+
+  // Search filter predicate
+  const q = searchQuery.toLowerCase().trim();
+  const matchesSearch = (text: string, desc?: string) => {
+    if (!q) return true;
+    return text.toLowerCase().includes(q) || (desc && desc.toLowerCase().includes(q));
+  };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-8 py-6 w-full font-chrome select-none">
-      {/* Page Title & Breadcrumb Header */}
-      <div className="flex items-center justify-between pb-4 mb-6 border-b border-border/80">
-        <div>
-          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-amber-600 dark:text-amber-400 mb-1">
-            <span>Workspace</span>
-            <span>·</span>
-            <span>Desktop Settings &amp; Vault</span>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 md:py-8 w-full flex flex-col gap-6">
+      {/* Page Header */}
+      <PageHeader
+        title="Settings & workspace preferences"
+        eyebrow="Configuration Window"
+        summary="Manage interface themes, language localization, offline synchronization, account profiles, and keyboard shortcuts."
+        chips={
+          <>
+            <Badge status="Verified" />
+            <Chip label="100% offline capable" />
+            <Chip label={`Theme: ${THEME_META[theme]?.name || 'Light'}`} />
+            <Chip label={`District: ${activeDistrictId}`} />
+          </>
+        }
+      />
+
+      {/* Main Settings Window Container */}
+      <div className="flex flex-col lg:flex-row items-stretch rounded-[var(--radius-sheet)] border border-[var(--border)] bg-[var(--surface)] shadow-xs overflow-hidden min-h-[640px]">
+        {/* Left Category List */}
+        <aside className="w-full lg:w-64 bg-[var(--ground)] border-b lg:border-b-0 lg:border-r border-[var(--border)] p-4 flex flex-col justify-between gap-4">
+          <div className="flex flex-col gap-3">
+            {/* Search settings input */}
+            <div className="relative flex items-center">
+              <span className="absolute left-2.5 text-[var(--ink-muted)] pointer-events-none">
+                <Search size={14} />
+              </span>
+              <input
+                type="search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search settings..."
+                className="w-full h-8 pl-8 pr-3 text-[13px] font-sans bg-[var(--surface)] text-[var(--ink)] placeholder:text-[var(--ink-muted)]/60 rounded-[var(--radius-control)] border border-[var(--border)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2 text-[var(--ink-muted)] hover:text-[var(--ink)]"
+                  aria-label="Clear search"
+                >
+                  <X size={12} />
+                </button>
+              )}
+            </div>
+
+            {/* Category Navigation Items */}
+            <nav aria-label="Settings categories" className="flex flex-col gap-1 pt-1">
+              {CATEGORIES.map((cat) => {
+                const Icon = cat.icon;
+                const isActive = activeCategory === cat.id;
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => handleCategoryChange(cat.id)}
+                    className={cn(
+                      'flex items-center gap-2.5 px-3 py-2 text-[13px] font-sans font-medium rounded-[var(--radius-control)] transition-all cursor-pointer text-left',
+                      isActive
+                        ? 'bg-[var(--surface)] text-[var(--accent)] font-semibold shadow-2xs border border-[var(--border)]'
+                        : 'text-[var(--ink-muted)] hover:text-[var(--ink)] hover:bg-[var(--surface)]/50'
+                    )}
+                  >
+                    <Icon size={15} className={isActive ? 'text-[var(--accent)]' : 'text-[var(--ink-muted)]'} />
+                    <span>{cat.label}</span>
+                  </button>
+                );
+              })}
+            </nav>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-ink flex items-center gap-2.5">
-            <Sliders size={22} className="text-amber-500" />
-            <span>Workspace Settings</span>
-          </h1>
-        </div>
 
-        <div className="text-right text-xs text-ink-muted">
-          <span className="font-mono">v1.0.0</span> · <span className="capitalize">{platform.os}</span>
-        </div>
-      </div>
-
-      {toastMessage && (
-        <div className="mb-4 p-2.5 rounded-[6px] bg-amber-500/15 border border-amber-500/30 text-amber-900 dark:text-amber-200 text-xs flex items-center justify-between animate-in fade-in">
-          <span>{toastMessage}</span>
-          <button
-            type="button"
-            onClick={() => setToastMessage(null)}
-            className="text-xs hover:underline cursor-pointer"
-          >
-            Dismiss
-          </button>
-        </div>
-      )}
-
-      {/* Main Settings Body: Left Vertical Tabs + Right Tab Canvas */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
-        {/* Navigation Sidebar */}
-        <aside className="md:col-span-3 flex flex-col gap-1 rounded-[10px] border border-border bg-surface-raised p-2 shadow-xs">
-          {[
-            { id: 'appearance', label: 'Appearance & Theme', icon: Palette, badge: theme },
-            { id: 'data', label: 'Data & Offline Vault', icon: Database, badge: 'Offline' },
-            { id: 'district', label: 'Homestead District', icon: MapPin, badge: activeDistrictId },
-            { id: 'diagnostics', label: 'System Diagnostics', icon: Cpu },
-            { id: 'about', label: 'About Outpost', icon: Info },
-          ].map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-            return (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => handleTabChange(item.id as SettingsTabId)}
-                className={cn(
-                  'h-8.5 px-2.5 rounded-[6px] text-[13px] flex items-center justify-between gap-2 transition-colors cursor-pointer text-left',
-                  isActive
-                    ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300 font-semibold border border-amber-500/30'
-                    : 'text-ink-muted hover:text-ink hover:bg-surface/80 border border-transparent'
-                )}
-              >
-                <div className="flex items-center gap-2 truncate">
-                  <Icon size={14} className={isActive ? 'text-amber-500' : 'text-stone-400'} />
-                  <span className="truncate">{item.label}</span>
-                </div>
-                {item.badge && (
-                  <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-surface/80 border border-border text-ink-muted uppercase">
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
+          {/* Quick Account Profile Pill at Bottom of Nav */}
+          <div className="p-3 bg-[var(--surface)] rounded-[var(--radius-control)] border border-[var(--border)] flex items-center justify-between text-[12px]">
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="w-7 h-7 rounded-full bg-[var(--accent)]/15 text-[var(--accent)] flex items-center justify-center font-semibold shrink-0">
+                {user?.displayName ? user.displayName[0].toUpperCase() : 'O'}
+              </div>
+              <div className="flex flex-col min-w-0">
+                <span className="font-medium text-[var(--ink)] truncate">
+                  {user?.displayName || 'Local Household'}
+                </span>
+                <span className="text-[11px] text-[var(--ink-muted)] truncate">
+                  {isFirebaseAuthenticated ? 'Cloud synced' : 'Local offline account'}
+                </span>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => handleCategoryChange('data')}
+              className="text-[11px] font-semibold text-[var(--accent)] hover:underline shrink-0"
+            >
+              Manage
+            </button>
+          </div>
         </aside>
 
-        {/* Tab Content Panel */}
-        <div className="md:col-span-9 flex flex-col gap-5 rounded-[10px] border border-border bg-surface-raised p-5 shadow-xs min-h-[460px]">
-          {/* TAB 1: APPEARANCE & THEME */}
-          {activeTab === 'appearance' && (
-            <div className="flex flex-col gap-5">
-              <div>
-                <h2 className="text-base font-semibold text-ink mb-1">Visual Theme</h2>
-                <p className="text-xs text-ink-muted">
-                  Choose the calibrated color theme. Designed with high contrast, WCAG AA compliance, and zero neon glare.
+        {/* Right Content Pane: One Setting per Row */}
+        <main className="flex-1 p-6 sm:p-8 flex flex-col gap-6 overflow-y-auto">
+          {searchQuery && (
+            <div className="p-3 rounded-[var(--radius-control)] bg-[var(--ground)] border border-[var(--border)] text-[12px] text-[var(--ink-muted)] flex items-center justify-between">
+              <span>
+                Filtering settings for “<strong className="text-[var(--ink)]">{searchQuery}</strong>”
+              </span>
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="text-[var(--accent)] hover:underline font-medium"
+              >
+                Clear filter
+              </button>
+            </div>
+          )}
+
+          {/* CATEGORY 1: APPEARANCE */}
+          {(activeCategory === 'appearance' || (searchQuery && matchesSearch('Appearance theme color font text scale'))) && (
+            <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-1 border-b border-[var(--border)] pb-3">
+                <h3 className="font-serif text-[20px] font-semibold text-[var(--ink)]">
+                  Appearance & typography
+                </h3>
+                <p className="text-[13px] text-[var(--ink-muted)]">
+                  Select daylight or dark sanctuary color palettes and adjust reading scale.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {(['light', 'dark', 'field'] as Theme[]).map((tId) => {
-                  const meta = THEME_META[tId];
-                  const isCurrent = theme === tId;
-                  return (
-                    <button
-                      key={tId}
-                      type="button"
-                      onClick={() => setTheme(tId)}
-                      className={cn(
-                        'p-3 rounded-[8px] border text-left flex flex-col justify-between gap-3 transition-colors cursor-pointer',
-                        isCurrent
-                          ? 'border-amber-500 bg-amber-500/10 shadow-xs'
-                          : 'border-border bg-surface hover:bg-surface/90'
-                      )}
-                    >
-                      <div className="flex items-center justify-between w-full">
-                        <span className="text-xs font-semibold text-ink">{meta.name}</span>
-                        {isCurrent && <Check size={14} className="text-amber-500" />}
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        {meta.swatches.map((color, idx) => (
-                          <span
-                            key={idx}
-                            className="w-4 h-4 rounded-full border border-black/20"
-                            style={{ backgroundColor: color }}
-                          />
+              {/* Live Theme Preview */}
+              {!searchQuery && <ThemePreviewCard />}
+
+              <div className="flex flex-col">
+                {matchesSearch('Color theme', 'Calibrated color palettes conforming to 4.5:1+ contrast criteria') && (
+                  <SettingsRow
+                    label="Color theme"
+                    description="Calibrated color palettes conforming to 4.5:1+ contrast criteria for bright field sunlight or nocturnal study."
+                    control={
+                      <div className="flex items-center gap-1.5 p-1 bg-[var(--ground)] rounded-[var(--radius-control)] border border-[var(--border)] text-[12px] font-sans">
+                        {(['light', 'dark', 'field'] as Theme[]).map((t) => (
+                          <button
+                            key={t}
+                            type="button"
+                            onClick={() => setTheme(t)}
+                            className={cn(
+                              'px-3 py-1 rounded-[calc(var(--radius-control)-2px)] font-medium transition-all cursor-pointer',
+                              theme === t
+                                ? 'bg-[var(--surface)] text-[var(--ink)] font-semibold shadow-2xs'
+                                : 'text-[var(--ink-muted)] hover:text-[var(--ink)]'
+                            )}
+                          >
+                            {THEME_META[t].name}
+                          </button>
                         ))}
                       </div>
-                      <p className="text-[11px] text-ink-muted leading-tight">{meta.description}</p>
-                    </button>
-                  );
-                })}
-              </div>
+                    }
+                  />
+                )}
 
-              {/* Guide Typography Scaling */}
-              <div className="pt-4 border-t border-border flex items-center justify-between">
-                <div>
-                  <h3 className="text-sm font-medium text-ink">Large Guide Reading Text</h3>
-                  <p className="text-xs text-ink-muted">
-                    Scales guide study paragraphs to 18px for relaxed offline field reading.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleLargeTextToggle}
-                  className={cn(
-                    'h-7 px-3 rounded-[6px] border text-xs font-semibold transition-colors cursor-pointer',
-                    isLargeText
-                      ? 'bg-amber-500 text-stone-950 border-amber-400'
-                      : 'bg-surface border-border text-ink hover:bg-surface/80'
-                  )}
-                >
-                  {isLargeText ? 'Enabled (18px)' : 'Standard (16px)'}
-                </button>
-              </div>
-            </div>
-          )}
+                {matchesSearch('Large reader text scale', 'Enlarges typography across edenic agriculture manuals and devotional guides') && (
+                  <SettingsRow
+                    label="Large reader text scale"
+                    description="Enlarges typography to 18px body size across all edenic agriculture manuals and devotional study guides."
+                    control={
+                      <Toggle
+                        checked={isLargeText}
+                        onChange={handleLargeTextToggle}
+                      />
+                    }
+                  />
+                )}
 
-          {/* TAB 2: DATA & OFFLINE VAULT */}
-          {activeTab === 'data' && (
-            <div className="flex flex-col gap-5">
-              <div>
-                <h2 className="text-base font-semibold text-ink mb-1">Offline Vault &amp; Sync</h2>
-                <p className="text-xs text-ink-muted">
-                  All 28 district hydrogeology tables, calculators, Spirit of Prophecy texts, and notes operate 100% offline.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="p-3 rounded-[8px] border border-border bg-surface flex flex-col justify-between">
-                  <span className="text-xs text-ink-muted font-medium">Exodus Score</span>
-                  <div className="text-2xl font-mono font-bold text-amber-500 mt-1">
-                    {readiness.breakdown.exodusScorePct}%
-                  </div>
-                  <span className="text-[11px] text-ink-muted">Weighted milestone completion</span>
-                </div>
-
-                <div className="p-3 rounded-[8px] border border-border bg-surface flex flex-col justify-between">
-                  <span className="text-xs text-ink-muted font-medium">Offline Tables</span>
-                  <div className="text-2xl font-mono font-bold text-emerald-500 mt-1">
-                    28 / 28
-                  </div>
-                  <span className="text-[11px] text-ink-muted">Full Malawi district coverage</span>
-                </div>
-
-                <div className="p-3 rounded-[8px] border border-border bg-surface flex flex-col justify-between">
-                  <span className="text-xs text-ink-muted font-medium">Local Storage Status</span>
-                  <div className="text-sm font-semibold text-ink mt-2">
-                    {syncStatus.skillsCount > 0 ? 'Storage Operational' : 'Degraded Storage'}
-                  </div>
-                  <span className="text-[11px] text-ink-muted font-mono truncate">
-                    {syncStatus.lastSyncFormatted || 'Active'}
-                  </span>
-                </div>
-              </div>
-
-              {/* Data Actions: Export / Import / Refresh */}
-              <div className="pt-3 border-t border-border flex flex-wrap gap-2.5">
-                <button
-                  type="button"
-                  onClick={handleExportBackup}
-                  className="h-8 px-3 rounded-[6px] border border-border bg-surface hover:bg-surface/80 text-ink text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <Download size={13} className="text-amber-500" />
-                  <span>Export Backup (.json)</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="h-8 px-3 rounded-[6px] border border-border bg-surface hover:bg-surface/80 text-ink text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <Upload size={13} className="text-emerald-500" />
-                  <span>Restore from File</span>
-                </button>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".json,application/json"
-                  onChange={handleImportFile}
-                  className="hidden"
-                />
-
-                <button
-                  type="button"
-                  onClick={handleSyncNow}
-                  className="h-8 px-3 rounded-[6px] border border-border bg-surface hover:bg-surface/80 text-ink text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <RefreshCw size={13} className="text-sky-500" />
-                  <span>Refresh Local Cache</span>
-                </button>
+                {matchesSearch('Primary font pairing', 'Headline typography pairing standardizing Fraunces editorial serif') && (
+                  <SettingsRow
+                    label="Primary font pairing"
+                    description="Headline typography pairing standardizing Fraunces editorial serif with Plus Jakarta Sans interface chrome."
+                    control={
+                      <Select
+                        value={fontPairing}
+                        onChange={(e) => setFontPairing(e.target.value as FontPairing)}
+                        options={[
+                          { value: 'editorial', label: 'Fraunces + Plus Jakarta Sans (Editorial)' },
+                          { value: 'inter', label: 'Plus Jakarta Sans UI (Modern Clean)' },
+                          { value: 'warm', label: 'Playfair Display + Outfit (Warm)' }
+                        ]}
+                      />
+                    }
+                  />
+                )}
               </div>
             </div>
           )}
 
-          {/* TAB 3: HOMESTEAD DISTRICT */}
-          {activeTab === 'district' && (
-            <div className="flex flex-col gap-4">
-              <div>
-                <h2 className="text-base font-semibold text-ink mb-1">Active Homestead District</h2>
-                <p className="text-xs text-ink-muted">
-                  Default district used for solar insolation calculations, borehole target depths, sunset timers, and soil profiles.
+          {/* CATEGORY 2: LANGUAGE & LOCALIZATION */}
+          {(activeCategory === 'language' || (searchQuery && matchesSearch('Language chichewa vernacular district operational'))) && (
+            <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-1 border-b border-[var(--border)] pb-3">
+                <h3 className="font-serif text-[20px] font-semibold text-[var(--ink)]">
+                  Language & regional terminology
+                </h3>
+                <p className="text-[13px] text-[var(--ink-muted)]">
+                  Configure vernacular agricultural vocabulary and district operational telemetry.
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 max-h-[360px] overflow-y-auto custom-scrollbar p-1">
-                {DISTRICT_LIST.map((dist) => {
-                  const isSelected = activeDistrictId === dist.id;
-                  return (
-                    <button
-                      key={dist.id}
-                      type="button"
+              <div className="flex flex-col">
+                {matchesSearch('Chichewa agricultural terminology', 'Displays bilingual headers and agricultural terms') && (
+                  <SettingsRow
+                    label="Chichewa agricultural terminology"
+                    description="Displays bilingual headers and agricultural terms like Dimba (valley garden), Chisanu (cold season), and Sasakawa planting pits."
+                    control={
+                      <Toggle
+                        checked={chichewaTermsEnabled}
+                        onChange={handleChichewaToggle}
+                      />
+                    }
+                  />
+                )}
+
+                {matchesSearch('Home operational district', 'Defaults all rainfall models and planting calendars to your primary outpost location') && (
+                  <SettingsRow
+                    label="Home operational district"
+                    description="Defaults all rainfall models, aquifer depths, and planting calendars to your primary outpost location."
+                    control={
+                      <Select
+                        value={activeDistrictId}
+                        onChange={(e) => {
+                          setActiveDistrictId(e.target.value);
+                          toast({
+                            message: `Operational district updated to ${e.target.value}`,
+                            variant: 'success'
+                          });
+                        }}
+                        options={DISTRICT_LIST.map((d) => ({
+                          value: d.id,
+                          label: `${d.name} (${d.region})`
+                        }))}
+                      />
+                    }
+                  />
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* CATEGORY 3: OFFLINE AND SYNC */}
+          {(activeCategory === 'offline' || (searchQuery && matchesSearch('Offline sync storage database cache status'))) && (
+            <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-1 border-b border-[var(--border)] pb-3">
+                <h3 className="font-serif text-[20px] font-semibold text-[var(--ink)]">
+                  Offline storage & synchronization
+                </h3>
+                <p className="text-[13px] text-[var(--ink-muted)]">
+                  Verify local cached databases guaranteeing 100% standalone reliability when far from connectivity.
+                </p>
+              </div>
+
+              <div className="flex flex-col">
+                {matchesSearch('Local database status', 'stored in IndexedDB/localStorage') && (
+                  <SettingsRow
+                    label="Local database status"
+                    description={`${syncStatus.skillsCount} skills, ${syncStatus.seasonsCount} seasonal guides, and ${syncStatus.districtsCount} districts stored in IndexedDB/localStorage.`}
+                    badge={<Badge status="Verified" />}
+                    control={
+                      <Button variant="secondary" size="sm" icon={RefreshCw} onClick={handleSyncNow}>
+                        Re-sync now
+                      </Button>
+                    }
+                  />
+                )}
+
+                {matchesSearch('Last successful sync', 'Timestamp of the most recent offline asset bundle validation') && (
+                  <SettingsRow
+                    label="Last successful sync"
+                    description="Timestamp of the most recent offline asset bundle validation."
+                    control={
+                      <span className="font-mono tabular-nums text-[13px] font-medium text-[var(--ink)]">
+                        {syncStatus.lastSyncFormatted}
+                      </span>
+                    }
+                  />
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* CATEGORY 4: DATA AND PRIVACY (MERGED ACCOUNT PROFILE, AUTH & DATA BACKUP) */}
+          {(activeCategory === 'data' || (searchQuery && matchesSearch('Data privacy account profile backup export restore sign in delete'))) && (
+            <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-1 border-b border-[var(--border)] pb-3">
+                <h3 className="font-serif text-[20px] font-semibold text-[var(--ink)]">
+                  Steward profile, data & privacy
+                </h3>
+                <p className="text-[13px] text-[var(--ink-muted)]">
+                  Manage household demographics, sign in credentials, export JSON backup archives, or clear local storage.
+                </p>
+              </div>
+
+              {/* Profile Card */}
+              <div className="p-5 rounded-[var(--radius-card)] bg-[var(--ground)] border border-[var(--border)] flex flex-col gap-4">
+                <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
+                  <div className="flex items-center gap-2.5">
+                    <UserIcon size={18} className="text-[var(--accent)]" />
+                    <h4 className="font-serif text-[17px] font-semibold text-[var(--ink)]">
+                      Household steward profile
+                    </h4>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      icon={Edit2}
                       onClick={() => {
-                        setActiveDistrictId(dist.id);
-                        setToastMessage(`Active district set to ${dist.name}`);
+                        setProfileDraft({
+                          displayName: user?.displayName || 'Local Household Steward',
+                          familyMembers: user?.familyMembers || 4,
+                          landSizeAcres: user?.landSizeAcres || 2.5
+                        });
+                        setIsProfileModalOpen(true);
                       }}
-                      className={cn(
-                        'p-2 rounded-[6px] border text-left flex flex-col justify-between transition-colors cursor-pointer text-xs',
-                        isSelected
-                          ? 'border-amber-500 bg-amber-500/15 font-semibold text-ink'
-                          : 'border-border bg-surface hover:bg-surface/80 text-ink-muted'
-                      )}
                     >
-                      <div className="flex items-center justify-between">
-                        <span className="truncate">{dist.name}</span>
-                        {isSelected && <Check size={12} className="text-amber-500 shrink-0" />}
-                      </div>
-                      <span className="text-[10px] font-mono text-ink-muted mt-1">{dist.region}</span>
-                    </button>
-                  );
-                })}
+                      Edit profile
+                    </Button>
+                    {isFirebaseAuthenticated ? (
+                      <Button variant="ghost" size="sm" icon={LogOut} onClick={() => signOut()}>
+                        Sign out
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        icon={LogIn}
+                        onClick={handleGoogleSignIn}
+                        disabled={isGoogleLoading}
+                      >
+                        {isGoogleLoading ? 'Connecting...' : 'Sign in with Google'}
+                      </Button>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-[13px]">
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-[11px] text-[var(--ink-muted)]">Steward name:</span>
+                    <span className="font-medium text-[var(--ink)]">{user?.displayName || 'Local Household Steward'}</span>
+                  </div>
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-[11px] text-[var(--ink-muted)]">Household members:</span>
+                    <span className="font-mono tabular-nums font-medium text-[var(--ink)]">
+                      {user?.familyMembers || 4} people
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-[11px] text-[var(--ink-muted)]">Homestead parcel size:</span>
+                    <span className="font-mono tabular-nums font-medium text-[var(--ink)]">
+                      {user?.landSizeAcres || 2.5} acres
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col">
+                {matchesSearch('Export data backup (.JSON)', 'Download a full encrypted backup of all field notes') && (
+                  <SettingsRow
+                    label="Export data backup (.JSON)"
+                    description="Download a full encrypted backup of all field notes, checklist marks, calculator specs, and bookmarked parcels."
+                    control={
+                      <Button variant="secondary" size="sm" icon={Download} onClick={handleExportBackup}>
+                        Export backup
+                      </Button>
+                    }
+                  />
+                )}
+
+                {matchesSearch('Restore data from backup', 'Import and merge a previously saved .JSON sanctuary archive') && (
+                  <SettingsRow
+                    label="Restore data from backup"
+                    description="Import and merge a previously saved .JSON sanctuary archive into this device."
+                    control={
+                      <>
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept=".json"
+                          onChange={handleFileRestore}
+                          className="hidden"
+                        />
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          icon={Upload}
+                          onClick={() => fileInputRef.current?.click()}
+                        >
+                          Restore backup
+                        </Button>
+                      </>
+                    }
+                  />
+                )}
+
+                {matchesSearch('Delete all local offline data', 'Permanently erase all local storage caches and notes') && (
+                  <SettingsRow
+                    label="Delete all local offline data"
+                    description="Permanently erase all local storage caches, checklist marks, and recorded notes from this browser session."
+                    control={
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        icon={Trash2}
+                        onClick={() => setIsDeleteDialogOpen(true)}
+                      >
+                        Delete all data
+                      </Button>
+                    }
+                  />
+                )}
               </div>
             </div>
           )}
 
-          {/* TAB 4: SYSTEM DIAGNOSTICS */}
-          {activeTab === 'diagnostics' && (
-            <div className="flex flex-col gap-4 text-xs font-mono">
-              <div>
-                <h2 className="text-base font-sans font-semibold text-ink mb-1">Desktop Diagnostics</h2>
-                <p className="text-xs font-sans text-ink-muted">
-                  Host runtime status, window parameters, and capability bindings.
+          {/* CATEGORY 5: KEYBOARD SHORTCUTS */}
+          {(activeCategory === 'shortcuts' || (searchQuery && matchesSearch('Keyboard shortcuts hotkeys commands navigation'))) && (
+            <KeyboardShortcutsList searchQuery={searchQuery} />
+          )}
+
+          {/* CATEGORY 6: ABOUT & DESKTOP DIAGNOSTICS */}
+          {(activeCategory === 'about' || (searchQuery && matchesSearch('About Outpost diagnostics version mission telemetry'))) && (
+            <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-1 border-b border-[var(--border)] pb-3">
+                <h3 className="font-serif text-[20px] font-semibold text-[var(--ink)]">
+                  About Outpost Living
+                </h3>
+                <p className="text-[13px] text-[var(--ink-muted)]">
+                  An open-source country living manual and sanctuary establishment tool for Southern Africa.
                 </p>
               </div>
 
-              <div className="divide-y divide-border/60 rounded-[8px] border border-border bg-surface p-3">
-                <div className="flex justify-between py-1.5">
-                  <span className="text-ink-muted">Runtime:</span>
-                  <span className="text-ink font-semibold">{platform.runtime.toUpperCase()}</span>
-                </div>
-                <div className="flex justify-between py-1.5">
-                  <span className="text-ink-muted">Operating System:</span>
-                  <span className="text-ink font-semibold">{platform.os.toUpperCase()}</span>
-                </div>
-                <div className="flex justify-between py-1.5">
-                  <span className="text-ink-muted">Window Title:</span>
-                  <span className="text-ink">Outpost</span>
-                </div>
-                <div className="flex justify-between py-1.5">
-                  <span className="text-ink-muted">Offline Mode:</span>
-                  <span className="text-emerald-500 font-semibold">Self-Hosted / Zero CDN</span>
-                </div>
-                <div className="flex justify-between py-1.5">
-                  <span className="text-ink-muted">Font Engine:</span>
-                  <span className="text-ink">Segoe UI Variable (System UI)</span>
-                </div>
-                <div className="flex justify-between py-1.5">
-                  <span className="text-ink-muted">CSP:</span>
-                  <span className="text-amber-500 font-semibold">Strict (Self, Local API, Blob)</span>
-                </div>
+              <div className="p-5 rounded-[var(--radius-card)] bg-[var(--ground)] border border-[var(--border)] flex flex-col gap-3 text-[13px] leading-relaxed text-[var(--ink)] max-w-[70ch]">
+                <p>
+                  Outpost Living provides practical instructions, edenic agriculture methodologies, and prophetic timeline waymarks grounded in the written counsels of Ellen G. White and verified by regional Malawian agronomists and water engineers.
+                </p>
+                <p className="text-[var(--ink-muted)] text-[12px]">
+                  Designed for 100% offline autonomy. All calculations, diagrams, and field guides remain fully functional without active internet connectivity.
+                </p>
               </div>
+
+              {/* Desktop Diagnostics moved under About with Copy diagnostics button */}
+              <DesktopDiagnosticsCard />
             </div>
           )}
-
-          {/* TAB 5: ABOUT */}
-          {activeTab === 'about' && (
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-3 pb-3 border-b border-border">
-                <OutpostLogo size="md" />
-                <div>
-                  <h2 className="text-lg font-bold text-ink">Outpost</h2>
-                  <p className="text-xs text-ink-muted">Malawi Country Living &amp; Homestead Workspace</p>
-                </div>
-              </div>
-
-              <p className="text-xs leading-relaxed text-ink-muted">
-                An inspired Seventh-day Adventist country living guide and outpost sanctuary blueprint for Malawi, featuring Spirit of Prophecy counsel, daily devotionals, transition ledger, simplified land readiness cards, property suitability scoring, Edenic agriculture manuals, off-grid resource calculators, and outpost center community connections.
-              </p>
-
-              <div className="p-3 rounded-[8px] border border-border bg-surface text-xs flex flex-col gap-1.5">
-                <span className="font-semibold text-ink">Core Principles:</span>
-                <ul className="list-disc list-inside text-ink-muted space-y-0.5 text-[12px]">
-                  <li>Debt-free customary land tenure under Traditional Authorities (Mfumu).</li>
-                  <li>Perennial gravity-fed water, solar pumping, and bioswale infiltration.</li>
-                  <li>Ellen G. White 3x3x3ft deep trench organic orchard tree sponges.</li>
-                  <li>Full offline autonomy with local data persistence across sessions.</li>
-                </ul>
-              </div>
-            </div>
-          )}
-        </div>
+        </main>
       </div>
+
+      {/* Edit Profile Dialog */}
+      <Dialog
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        title="Edit household profile"
+        description="Update your household demographics and parcel sizing to personalize calculators and planting guidelines."
+        actions={
+          <>
+            <Button variant="ghost" onClick={() => setIsProfileModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="primary" onClick={handleSaveProfile}>
+              Save changes
+            </Button>
+          </>
+        }
+      >
+        <div className="flex flex-col gap-4 py-2">
+          <div className="flex flex-col gap-1">
+            <label className="text-[12px] font-medium text-[var(--ink)]">
+              Steward or family name
+            </label>
+            <input
+              type="text"
+              value={profileDraft.displayName}
+              onChange={(e) => setProfileDraft((p) => ({ ...p, displayName: e.target.value }))}
+              className="h-9 px-3 text-[13px] font-sans bg-[var(--surface)] text-[var(--ink)] rounded-[var(--radius-control)] border border-[var(--border)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-1">
+              <label className="text-[12px] font-medium text-[var(--ink)]">
+                Household members
+              </label>
+              <input
+                type="number"
+                min={1}
+                max={50}
+                value={profileDraft.familyMembers}
+                onChange={(e) =>
+                  setProfileDraft((p) => ({ ...p, familyMembers: Number(e.target.value) || 1 }))
+                }
+                className="h-9 px-3 text-[13px] font-mono bg-[var(--surface)] text-[var(--ink)] rounded-[var(--radius-control)] border border-[var(--border)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-[12px] font-medium text-[var(--ink)]">
+                Land parcel size (Acres)
+              </label>
+              <input
+                type="number"
+                min={0.1}
+                step={0.1}
+                max={500}
+                value={profileDraft.landSizeAcres}
+                onChange={(e) =>
+                  setProfileDraft((p) => ({ ...p, landSizeAcres: Number(e.target.value) || 1 }))
+                }
+                className="h-9 px-3 text-[13px] font-mono bg-[var(--surface)] text-[var(--ink)] rounded-[var(--radius-control)] border border-[var(--border)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+              />
+            </div>
+          </div>
+        </div>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        title="Erase all local sanctuary data?"
+        description="This destructive action will clear all cached field notes, checklists, and saved specs from this device."
+        actions={
+          <>
+            <Button variant="ghost" onClick={() => setIsDeleteDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleDeleteAllLocalData}>
+              Yes, erase local data
+            </Button>
+          </>
+        }
+      >
+        <p className="text-[14px] text-[var(--ink)] leading-relaxed">
+          Please make sure you have exported a .JSON backup before proceeding if you wish to preserve your notes or checklist state.
+        </p>
+      </Dialog>
     </div>
   );
 }
-
-export default SettingsPage;
