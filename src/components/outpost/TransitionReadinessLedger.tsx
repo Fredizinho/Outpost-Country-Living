@@ -36,7 +36,6 @@ export function TransitionReadinessLedger({ className }: { className?: string })
   const [activeEditingNoteId, setActiveEditingNoteId] = useState<string | null>(null);
   const [noteBuffer, setNoteBuffer] = useState<string>('');
 
-  // Persist completed items
   const toggleMilestoneItem = (actionKey: string) => {
     const updated = {
       ...completedItems,
@@ -67,7 +66,6 @@ export function TransitionReadinessLedger({ className }: { className?: string })
     setActiveEditingNoteId(null);
   };
 
-  // Calculate stats
   const totalActionsCount = useMemo(() => {
     return TRANSITION_MILESTONES.reduce((acc, m) => acc + m.actionItems.length, 0);
   }, []);
@@ -87,7 +85,7 @@ export function TransitionReadinessLedger({ className }: { className?: string })
       id="transition-readiness-ledger"
       aria-label="Transition Readiness Ledger"
       className={cn(
-        "rounded-3xl bg-white dark:bg-[#0E1D14] border border-stone-200/90 dark:border-emerald-900/60 shadow-xs p-6 sm:p-8 md:p-10 flex flex-col gap-8 text-stone-900 dark:text-stone-100 transition-colors",
+        "rounded-[var(--radius-sheet)] bg-[var(--surface)] border border-stone-200/90 dark:border-emerald-900/60 shadow-xs p-6 sm:p-8 md:p-10 flex flex-col gap-8 text-stone-900 dark:text-stone-100 transition-colors",
         className
       )}
     >
@@ -95,7 +93,7 @@ export function TransitionReadinessLedger({ className }: { className?: string })
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-stone-200/80 dark:border-emerald-900/40">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold tracking-wider text-emerald-800 dark:text-amber-300 uppercase bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-md">
+            <span className="text-xs font-semibold text-emerald-800 dark:text-amber-300 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-[var(--radius-control)]">
               Pillar 1 Journey
             </span>
             <span className="text-stone-300 dark:text-stone-600">•</span>
@@ -111,7 +109,7 @@ export function TransitionReadinessLedger({ className }: { className?: string })
         </div>
 
         {/* Readiness Meter */}
-        <div className="bg-[#FAF8F5] dark:bg-[#14281D] border border-stone-200/80 dark:border-emerald-900/60 rounded-2xl p-4 sm:p-5 flex flex-col gap-2 min-w-[240px]">
+        <div className="bg-[var(--ground)] border border-stone-200/80 dark:border-emerald-900/60 rounded-[var(--radius-card)] p-4 sm:p-5 flex flex-col gap-2 min-w-[240px]">
           <div className="flex items-center justify-between text-xs font-semibold">
             <span className="text-stone-700 dark:text-stone-300">Journey Progress</span>
             <span className="font-bold text-emerald-800 dark:text-amber-300 font-mono text-sm">{overallPercentage}%</span>
@@ -132,7 +130,6 @@ export function TransitionReadinessLedger({ className }: { className?: string })
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3">
         {TRANSITION_STAGES.map((stage) => {
           const isActive = activeStage === stage.stageNumber;
-          // Count completed in this stage
           const stageItems = TRANSITION_MILESTONES.filter(m => m.stageNumber === stage.stageNumber);
           const stageTotal = stageItems.reduce((acc, m) => acc + m.actionItems.length, 0);
           const stageDone = stageItems.reduce((acc, m) => {
@@ -146,18 +143,18 @@ export function TransitionReadinessLedger({ className }: { className?: string })
               type="button"
               onClick={() => setActiveStage(stage.stageNumber)}
               className={cn(
-                "p-3.5 sm:p-4 rounded-2xl text-left border transition-all flex flex-col justify-between gap-2.5 cursor-pointer",
+                "p-3.5 sm:p-4 rounded-[var(--radius-card)] text-left border transition-all flex flex-col justify-between gap-2.5 cursor-pointer",
                 isActive 
                   ? "bg-emerald-900 dark:bg-emerald-800 text-white border-emerald-950 dark:border-emerald-700 shadow-xs ring-2 ring-emerald-800/30"
-                  : "bg-stone-50/70 dark:bg-[#14281D] hover:bg-stone-100/80 dark:hover:bg-emerald-950/60 text-stone-800 dark:text-stone-200 border-stone-200/80 dark:border-emerald-900/60"
+                  : "bg-stone-50/70 dark:bg-[var(--ground)] hover:bg-stone-100/80 dark:hover:bg-emerald-950/60 text-stone-800 dark:text-stone-200 border-stone-200/80 dark:border-emerald-900/60"
               )}
             >
               <div className="flex items-center justify-between">
                 <span className={cn(
-                  "text-caption font-mono font-bold px-2 py-0.5 rounded-md",
+                  "text-caption font-semibold px-2 py-0.5 rounded-[var(--radius-control)]",
                   isActive ? "bg-white/20 text-emerald-100" : "bg-stone-200/70 dark:bg-emerald-950/80 text-stone-700 dark:text-stone-300"
                 )}>
-                  STAGE {stage.stageNumber}
+                  Stage {stage.stageNumber}
                 </span>
                 {isComplete && (
                   <CheckCircle2 size={15} className={isActive ? "text-amber-300" : "text-emerald-700 dark:text-emerald-400"} />
@@ -203,10 +200,10 @@ export function TransitionReadinessLedger({ className }: { className?: string })
               <div
                 key={milestone.id}
                 className={cn(
-                  "rounded-2xl border transition-all overflow-hidden",
+                  "rounded-[var(--radius-card)] border transition-all overflow-hidden",
                   isAllCompleted 
                     ? "bg-emerald-50/50 dark:bg-emerald-950/40 border-emerald-200/70 dark:border-emerald-800/60" 
-                    : "bg-[#FAF8F5] dark:bg-[#14281D] border-stone-200/80 dark:border-emerald-900/60 hover:border-stone-300 dark:hover:border-emerald-800"
+                    : "bg-[var(--ground)] border-stone-200/80 dark:border-emerald-900/60 hover:border-stone-300 dark:hover:border-emerald-800"
                 )}
               >
                 {/* Milestone Summary Row */}
@@ -224,17 +221,17 @@ export function TransitionReadinessLedger({ className }: { className?: string })
                 >
                   <div className="flex items-start gap-3.5">
                     <div className={cn(
-                      "w-7 h-7 rounded-xl flex items-center justify-center shrink-0 mt-0.5 transition-all",
+                      "w-7 h-7 rounded-[var(--radius-control)] flex items-center justify-center shrink-0 mt-0.5 transition-all",
                       isAllCompleted 
                         ? "bg-emerald-800 dark:bg-emerald-700 text-white" 
-                        : "bg-white dark:bg-[#0A140E] border border-stone-300 dark:border-emerald-900/80 text-stone-400"
+                        : "bg-[var(--surface)] border border-stone-300 dark:border-emerald-900/80 text-stone-400"
                     )}>
                       {isAllCompleted ? <CheckCircle2 size={16} /> : <Circle size={16} />}
                     </div>
 
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-caption font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 bg-emerald-100/60 dark:bg-emerald-950/60 px-2 py-0.5 rounded">
+                        <span className="text-caption font-semibold text-emerald-800 dark:text-emerald-300 bg-emerald-100/60 dark:bg-emerald-950/60 px-2 py-0.5 rounded-[var(--radius-control)]">
                           {milestone.category}
                         </span>
                         <span className="text-xs text-stone-400 dark:text-stone-400 font-mono">
@@ -266,16 +263,16 @@ export function TransitionReadinessLedger({ className }: { className?: string })
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.2 }}
-                      className="border-t border-stone-200/80 dark:border-emerald-900/60 bg-white dark:bg-[#0A140E] p-4 sm:p-6 flex flex-col gap-5"
+                      className="border-t border-stone-200/80 dark:border-emerald-900/60 bg-[var(--surface)] p-4 sm:p-6 flex flex-col gap-5"
                     >
                       {/* Spirit of Prophecy Counsel Banner */}
-                      <div className="p-4 rounded-xl bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200/60 dark:border-amber-800/40 flex items-start gap-3">
+                      <div className="p-4 rounded-[var(--radius-control)] bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200/60 dark:border-amber-800/40 flex items-start gap-3">
                         <BookOpen size={16} className="text-amber-800 dark:text-amber-400 mt-0.5 shrink-0" />
                         <div className="flex flex-col gap-1">
                           <p className="serif text-sm text-stone-800 dark:text-stone-200 italic leading-relaxed">
                             "{milestone.spiritualGuidance.text}"
                           </p>
-                          <span className="text-xs font-bold text-amber-900 dark:text-amber-300 font-mono">
+                          <span className="text-xs font-semibold text-amber-900 dark:text-amber-300 font-mono">
                             — {milestone.spiritualGuidance.source}
                           </span>
                         </div>
@@ -283,7 +280,7 @@ export function TransitionReadinessLedger({ className }: { className?: string })
 
                       {/* Action Items Checklist */}
                       <div className="flex flex-col gap-2.5">
-                        <h5 className="text-xs font-bold uppercase tracking-wider text-stone-700 dark:text-stone-300">
+                        <h5 className="text-xs font-semibold text-stone-700 dark:text-stone-300">
                           Action Items & Verification Steps:
                         </h5>
                         <div className="grid grid-cols-1 gap-2">
@@ -295,17 +292,17 @@ export function TransitionReadinessLedger({ className }: { className?: string })
                               <label
                                 key={itemKey}
                                 className={cn(
-                                  "p-3.5 rounded-xl border flex items-start gap-3 cursor-pointer transition-all",
+                                  "p-3.5 rounded-[var(--radius-control)] border flex items-start gap-3 cursor-pointer transition-all",
                                   isChecked 
                                     ? "bg-emerald-50/70 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800/60 text-stone-900 dark:text-stone-100" 
-                                    : "bg-stone-50/50 dark:bg-[#14281D] hover:bg-stone-100/70 dark:hover:bg-emerald-950/60 border-stone-200/70 dark:border-emerald-900/60 text-stone-700 dark:text-stone-200"
+                                    : "bg-stone-50/50 dark:bg-[var(--ground)] hover:bg-stone-100/70 dark:hover:bg-emerald-950/60 border-stone-200/70 dark:border-emerald-900/60 text-stone-700 dark:text-stone-200"
                                 )}
                               >
                                 <input
                                   type="checkbox"
                                   checked={isChecked}
                                   onChange={() => toggleMilestoneItem(itemKey)}
-                                  className="w-4 h-4 rounded text-emerald-800 dark:text-emerald-500 border-stone-300 dark:border-emerald-800 focus:ring-emerald-700 mt-0.5 shrink-0 cursor-pointer"
+                                  className="w-4 h-4 rounded-[var(--radius-control)] text-emerald-800 dark:text-emerald-500 border-stone-300 dark:border-emerald-800 focus:ring-emerald-700 mt-0.5 shrink-0 cursor-pointer"
                                 />
                                 <span className={cn("text-xs sm:text-sm leading-relaxed", isChecked && "line-through text-stone-400 dark:text-stone-500")}>
                                   {action}
@@ -319,7 +316,7 @@ export function TransitionReadinessLedger({ className }: { className?: string })
                       {/* Personal Reflection & Notes */}
                       <div className="pt-3 border-t border-stone-100 dark:border-emerald-900/40 flex flex-col gap-2">
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-stone-700 dark:text-stone-300 flex items-center gap-1.5">
+                          <span className="text-xs font-semibold text-stone-700 dark:text-stone-300 flex items-center gap-1.5">
                             <Edit3 size={13} /> Personal Ledger Notes & Target Date
                           </span>
                           {activeEditingNoteId !== milestone.id && (
@@ -343,7 +340,7 @@ export function TransitionReadinessLedger({ className }: { className?: string })
                               value={noteBuffer}
                               onChange={(e) => setNoteBuffer(e.target.value)}
                               placeholder="Record your prayer, target date, village head contact, or progress details..."
-                              className="w-full p-3 text-xs sm:text-sm rounded-xl border border-stone-300 dark:border-emerald-800/80 focus:outline-none focus:ring-2 focus:ring-emerald-800 bg-white dark:bg-[#14281D] text-stone-900 dark:text-stone-100"
+                              className="w-full p-3 text-xs sm:text-sm rounded-[var(--radius-control)] border border-stone-300 dark:border-emerald-800/80 focus:outline-none focus:ring-2 focus:ring-emerald-800 bg-[var(--surface)] text-stone-900 dark:text-stone-100"
                             />
                             <div className="flex items-center justify-end gap-2">
                               <button
@@ -356,14 +353,14 @@ export function TransitionReadinessLedger({ className }: { className?: string })
                               <button
                                 type="button"
                                 onClick={() => handleSaveNote(milestone.id)}
-                                className="px-3.5 py-1.5 text-xs bg-emerald-800 dark:bg-emerald-700 text-white rounded-lg font-semibold hover:bg-emerald-900 flex items-center gap-1 cursor-pointer"
+                                className="px-3.5 py-1.5 text-xs bg-emerald-800 dark:bg-emerald-700 text-white rounded-[var(--radius-control)] font-semibold hover:bg-emerald-900 flex items-center gap-1 cursor-pointer"
                               >
                                 <Save size={12} /> Save Note
                               </button>
                             </div>
                           </div>
                         ) : personalNotes[milestone.id] ? (
-                          <div className="p-3 rounded-xl bg-stone-50 dark:bg-[#14281D] border border-stone-200 dark:border-emerald-900/60 text-xs sm:text-sm text-stone-700 dark:text-stone-300 italic">
+                          <div className="p-3 rounded-[var(--radius-control)] bg-stone-50 dark:bg-[var(--ground)] border border-stone-200 dark:border-emerald-900/60 text-xs sm:text-sm text-stone-700 dark:text-stone-300 italic">
                             "{personalNotes[milestone.id]}"
                           </div>
                         ) : null}

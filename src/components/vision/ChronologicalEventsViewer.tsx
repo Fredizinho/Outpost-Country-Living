@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
 import {
   Clock,
-  Layers,
   ChevronRight,
-  BookOpen,
-  CheckCircle2,
-  AlertTriangle,
-  Scale,
-  Sparkles,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { ENDLINE_CHRONOLOGICAL_EVENTS, ChronologicalEvent } from '@/data/prophecy/endlineChronologicalEvents';
+import { ENDLINE_CHRONOLOGICAL_EVENTS } from '@/data/prophecy/endlineChronologicalEvents';
 
 export function ChronologicalEventsViewer() {
   const [viewMode, setViewMode] = useState<'timeline' | 'table'>('timeline');
@@ -21,45 +15,45 @@ export function ChronologicalEventsViewer() {
   return (
     <div className="flex flex-col gap-6">
       {/* Header & View Mode Switcher */}
-      <div className="bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-[#B85D36] dark:text-[#E2875A] font-bold">
+          <div className="flex items-center gap-2 text-xs font-sans text-[var(--accent)] font-semibold">
             <Clock size={14} />
-            <span>Orderly Apocalyptic Progression</span>
-            <span className="text-[#5A6458] dark:text-[#9FB3A4]" aria-hidden="true">·</span>
-            <span className="font-serif italic font-normal text-[#5A6458] dark:text-[#9FB3A4]">
+            <span>Orderly apocalyptic progression</span>
+            <span className="text-[var(--ink-muted)]" aria-hidden="true">·</span>
+            <span className="font-serif italic font-normal text-[var(--ink-muted)]">
               "Event After Event" (DA 634; GC 594)
             </span>
           </div>
-          <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#1F2A22] dark:text-[#FFFDF8] tracking-tight mt-1">
+          <h2 className="font-serif text-xl sm:text-2xl font-bold text-[var(--ink)] tracking-tight mt-1">
             The 10 Chronological End-Time Events
           </h2>
         </div>
 
-        <div className="inline-flex items-center gap-1 bg-[#F6F1E7] dark:bg-[#0E1712] p-1 rounded-lg border border-[#E4DCCB] dark:border-[#283C30] text-xs font-mono self-start sm:self-auto">
+        <div className="inline-flex items-center gap-1 bg-[var(--ground)] p-1 rounded-[var(--radius-control)] border border-[var(--border)] text-xs font-sans self-start sm:self-auto">
           <button
             type="button"
             onClick={() => setViewMode('timeline')}
             className={cn(
-              'px-3 py-1.5 rounded-md transition-all cursor-pointer font-semibold',
+              'px-3 py-1.5 rounded-[var(--radius-control)] transition-all cursor-pointer font-semibold',
               viewMode === 'timeline'
-                ? 'bg-[#2B4636] dark:bg-[#283C30] text-white shadow-xs'
-                : 'text-[#5A6458] dark:text-[#9FB3A4] hover:text-[#1F2A22] dark:hover:text-[#FFFDF8]'
+                ? 'bg-[var(--color-moss-light)] text-white shadow-xs'
+                : 'text-[var(--ink-muted)] hover:text-[var(--ink)]'
             )}
           >
-            Sequential Cards
+            Sequential cards
           </button>
           <button
             type="button"
             onClick={() => setViewMode('table')}
             className={cn(
-              'px-3 py-1.5 rounded-md transition-all cursor-pointer font-semibold',
+              'px-3 py-1.5 rounded-[var(--radius-control)] transition-all cursor-pointer font-semibold',
               viewMode === 'table'
-                ? 'bg-[#2B4636] dark:bg-[#283C30] text-white shadow-xs'
-                : 'text-[#5A6458] dark:text-[#9FB3A4] hover:text-[#1F2A22] dark:hover:text-[#FFFDF8]'
+                ? 'bg-[var(--color-moss-light)] text-white shadow-xs'
+                : 'text-[var(--ink-muted)] hover:text-[var(--ink)]'
             )}
           >
-            Comparative Table
+            Comparative table
           </button>
         </div>
       </div>
@@ -67,9 +61,9 @@ export function ChronologicalEventsViewer() {
       {viewMode === 'timeline' ? (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Left: 10-Step Index Rail */}
-          <div className="lg:col-span-5 flex flex-col gap-2 bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] rounded-xl p-3 sm:p-4 shadow-xs">
-            <span className="font-mono text-caption uppercase tracking-wider font-bold text-[#5A6458] dark:text-[#9FB3A4] px-1 pb-1 border-b border-[#E4DCCB] dark:border-[#283C30]">
-              Chronological Sequence
+          <div className="lg:col-span-5 flex flex-col gap-2 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] p-3 sm:p-4 shadow-xs">
+            <span className="font-sans text-caption font-semibold text-[var(--ink-muted)] px-1 pb-1 border-b border-[var(--border)]">
+              Chronological sequence
             </span>
             <div className="flex flex-col gap-1.5 max-h-[560px] overflow-y-auto pr-1">
               {ENDLINE_CHRONOLOGICAL_EVENTS.map((event, idx) => {
@@ -80,26 +74,26 @@ export function ChronologicalEventsViewer() {
                     type="button"
                     onClick={() => setSelectedEventIndex(idx)}
                     className={cn(
-                      'p-2.5 rounded-lg border text-left transition-all duration-200 cursor-pointer flex items-center justify-between gap-2',
+                      'p-2.5 rounded-[var(--radius-control)] border text-left transition-all duration-200 cursor-pointer flex items-center justify-between gap-2',
                       active
-                        ? 'bg-[#2B4636] dark:bg-[#283C30] border-[#2B4636] dark:border-[#283C30] text-white shadow-xs'
-                        : 'bg-[#F6F1E7] dark:bg-[#0E1712] border-[#E4DCCB] dark:border-[#283C30] text-[#1F2A22] dark:text-[#F6F1E7] hover:bg-[#EAE2D2] dark:hover:bg-[#1F3325]'
+                        ? 'bg-[var(--color-moss-light)] border-[var(--color-moss-light)] text-white shadow-xs'
+                        : 'bg-[var(--ground)] border-[var(--border)] text-[var(--ink)] hover:bg-[var(--ground)]/80'
                     )}
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <span className={cn('font-mono text-caption font-bold tabular-nums shrink-0', active ? 'text-[#D4A034]' : 'text-[#B85D36] dark:text-[#E2875A]')}>
+                      <span className={cn('font-mono text-caption font-bold tabular-nums shrink-0', active ? 'text-[var(--gold)]' : 'text-[var(--accent)]')}>
                         {event.step < 10 ? `0${event.step}` : event.step}
                       </span>
                       <div className="flex flex-col min-w-0">
                         <span className="text-xs font-serif font-bold truncate leading-snug">
                           {event.phase}
                         </span>
-                        <span className={cn('text-[10px] truncate italic', active ? 'text-emerald-100/70' : 'text-[#5A6458] dark:text-[#9FB3A4]')}>
+                        <span className={cn('text-[10px] truncate italic', active ? 'text-emerald-100/70' : 'text-[var(--ink-muted)]')}>
                           {event.chichewaTitle}
                         </span>
                       </div>
                     </div>
-                    <ChevronRight size={13} className={cn('shrink-0', active ? 'text-[#D4A034]' : 'text-[#5A6458] dark:text-[#9FB3A4]')} />
+                    <ChevronRight size={13} className={cn('shrink-0', active ? 'text-[var(--gold)]' : 'text-[var(--ink-muted)]')} />
                   </button>
                 );
               })}
@@ -107,50 +101,50 @@ export function ChronologicalEventsViewer() {
           </div>
 
           {/* Right: Selected Event Detailed Dossier */}
-          <div className="lg:col-span-7 bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] rounded-xl p-6 sm:p-7 flex flex-col gap-5 shadow-xs">
-            <div className="flex flex-col gap-1.5 pb-4 border-b border-[#E4DCCB] dark:border-[#283C30]">
-              <div className="flex items-center gap-2 text-xs font-mono">
-                <span className="text-[#B85D36] dark:text-[#E2875A] font-bold">
-                  WAYMARK {selectedEvent.step < 10 ? `0${selectedEvent.step}` : selectedEvent.step} OF 10
+          <div className="lg:col-span-7 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] p-6 sm:p-7 flex flex-col gap-5 shadow-xs">
+            <div className="flex flex-col gap-1.5 pb-4 border-b border-[var(--border)]">
+              <div className="flex items-center gap-2 text-xs font-sans">
+                <span className="font-mono text-[var(--accent)] font-semibold">
+                  Waymark {selectedEvent.step < 10 ? `0${selectedEvent.step}` : selectedEvent.step} of 10
                 </span>
-                <span className="text-[#5A6458] dark:text-[#9FB3A4]" aria-hidden="true">·</span>
-                <span className="text-[#2B4636] dark:text-[#D4A034] font-semibold">
+                <span className="text-[var(--ink-muted)]" aria-hidden="true">·</span>
+                <span className="font-mono text-[var(--moss)] dark:text-[var(--gold)] font-medium">
                   {selectedEvent.scriptureEgwRef}
                 </span>
               </div>
-              <h3 className="font-serif text-2xl font-bold text-[#1F2A22] dark:text-[#FFFDF8] tracking-tight">
+              <h3 className="font-serif text-2xl font-bold text-[var(--ink)] tracking-tight">
                 {selectedEvent.phase}
               </h3>
-              <span className="font-sans italic text-xs text-[#B85D36] dark:text-[#E2875A]">
+              <span className="font-sans italic text-xs text-[var(--accent)]">
                 {selectedEvent.chichewaTitle}
               </span>
             </div>
 
             <div className="flex flex-col gap-3">
-              <div className="p-4 rounded-xl bg-[#F6F1E7] dark:bg-[#0E1712] border border-[#E4DCCB] dark:border-[#283C30] text-xs sm:text-sm">
-                <strong className="text-[#B85D36] dark:text-[#E2875A] font-mono text-caption uppercase tracking-wider block mb-1">
-                  Theological &amp; Event Trigger:
+              <div className="p-4 rounded-[var(--radius-control)] bg-[var(--ground)] border border-[var(--border)] text-xs sm:text-sm">
+                <strong className="text-[var(--accent)] font-sans text-caption font-semibold block mb-1">
+                  Theological &amp; event trigger:
                 </strong>
-                <p className="text-[#1F2A22] dark:text-[#F6F1E7] leading-relaxed">
+                <p className="text-[var(--ink)] leading-relaxed">
                   {selectedEvent.trigger}
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl bg-[#2B4636]/10 dark:bg-[#1F3325] border border-[#2B4636]/30 dark:border-[#283C30] text-xs sm:text-sm">
-                <strong className="text-[#2B4636] dark:text-[#D4A034] font-mono text-caption uppercase tracking-wider block mb-1">
-                  Practical &amp; Spiritual Impact on Believers:
+              <div className="p-4 rounded-[var(--radius-control)] bg-[var(--success)]/10 border border-[var(--border)] text-xs sm:text-sm">
+                <strong className="text-[var(--moss)] dark:text-[var(--gold)] font-sans text-caption font-semibold block mb-1">
+                  Practical &amp; spiritual impact on believers:
                 </strong>
-                <p className="text-[#1F2A22] dark:text-[#F6F1E7] leading-relaxed">
+                <p className="text-[var(--ink)] leading-relaxed">
                   {selectedEvent.impactOnBelievers}
                 </p>
               </div>
             </div>
 
-            <div className="flex flex-col gap-2 pt-2 border-t border-[#E4DCCB] dark:border-[#283C30]">
-              <span className="font-mono text-caption font-bold uppercase tracking-wider text-[#5A6458] dark:text-[#9FB3A4]">
-                Analytical Exegesis:
+            <div className="flex flex-col gap-2 pt-2 border-t border-[var(--border)]">
+              <span className="font-sans text-caption font-semibold text-[var(--ink-muted)]">
+                Analytical exegesis:
               </span>
-              <p className="text-xs sm:text-sm text-[#5A6458] dark:text-[#D0DAD2] leading-relaxed">
+              <p className="text-xs sm:text-sm text-[var(--ink-muted)] leading-relaxed">
                 {selectedEvent.detailedAnalysis}
               </p>
             </div>
@@ -158,48 +152,48 @@ export function ChronologicalEventsViewer() {
         </div>
       ) : (
         /* Comparative Sequence Table */
-        <div className="bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] rounded-xl overflow-hidden shadow-xs">
-          <div className="p-4 bg-[#F6F1E7] dark:bg-[#0E1712] border-b border-[#E4DCCB] dark:border-[#283C30] flex items-center justify-between">
-            <span className="font-mono text-caption font-bold uppercase tracking-wider text-[#2B4636] dark:text-[#D4A034]">
-              Comparative Sequence Table: Waymarks 01 through 10
+        <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-card)] overflow-hidden shadow-xs">
+          <div className="p-4 bg-[var(--ground)] border-b border-[var(--border)] flex items-center justify-between">
+            <span className="font-sans text-caption font-semibold text-[var(--moss)] dark:text-[var(--gold)]">
+              Comparative sequence table: Waymarks 01 through 10
             </span>
-            <span className="text-caption font-mono text-[#5A6458] dark:text-[#9FB3A4]">
+            <span className="text-caption font-mono text-[var(--ink-muted)]">
               10 Events
             </span>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs font-sans">
-              <thead className="bg-[#F6F1E7]/60 dark:bg-[#0E1712]/60 border-b border-[#E4DCCB] dark:border-[#283C30] text-caption font-mono uppercase text-[#5A6458] dark:text-[#9FB3A4]">
+              <thead className="bg-[var(--ground)]/60 border-b border-[var(--border)] text-caption font-sans font-medium text-[var(--ink-muted)]">
                 <tr>
                   <th className="p-3 w-12 text-center">#</th>
-                  <th className="p-3 w-48">Prophetic Phase</th>
-                  <th className="p-3">Key Theological / Event Trigger</th>
-                  <th className="p-3">Practical / Spiritual Impact</th>
+                  <th className="p-3 w-48">Prophetic phase</th>
+                  <th className="p-3">Key theological / event trigger</th>
+                  <th className="p-3">Practical / spiritual impact</th>
                   <th className="p-3 w-36">Citations</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#E4DCCB] dark:divide-[#283C30] bg-[#FFFDF8] dark:bg-[#17241C]">
+              <tbody className="divide-y divide-[var(--border)] bg-[var(--surface)]">
                 {ENDLINE_CHRONOLOGICAL_EVENTS.map((event) => (
-                  <tr key={event.step} className="hover:bg-[#F6F1E7]/50 dark:hover:bg-[#0E1712]/50 transition-colors">
-                    <td className="p-3 font-mono font-bold text-center text-[#B85D36] dark:text-[#E2875A] tabular-nums">
+                  <tr key={event.step} className="hover:bg-[var(--ground)]/50 transition-colors">
+                    <td className="p-3 font-mono font-bold text-center text-[var(--accent)] tabular-nums">
                       {event.step < 10 ? `0${event.step}` : event.step}
                     </td>
                     <td className="p-3">
-                      <span className="font-serif font-bold text-[#1F2A22] dark:text-[#FFFDF8] block">
+                      <span className="font-serif font-bold text-[var(--ink)] block">
                         {event.phase}
                       </span>
-                      <span className="font-sans text-[10px] italic text-[#5A6458] dark:text-[#9FB3A4] block mt-0.5">
+                      <span className="font-sans text-[10px] italic text-[var(--ink-muted)] block mt-0.5">
                         {event.chichewaTitle}
                       </span>
                     </td>
-                    <td className="p-3 text-[#5A6458] dark:text-[#D0DAD2] leading-relaxed">
+                    <td className="p-3 text-[var(--ink-muted)] leading-relaxed">
                       {event.trigger}
                     </td>
-                    <td className="p-3 text-[#2B4636] dark:text-[#86EFAC] leading-relaxed font-medium">
+                    <td className="p-3 text-[var(--moss)] dark:text-[var(--success)] leading-relaxed font-medium">
                       {event.impactOnBelievers}
                     </td>
-                    <td className="p-3 font-mono text-[11px] text-[#5A6458] dark:text-[#9FB3A4]">
+                    <td className="p-3 font-mono text-[11px] text-[var(--ink-muted)]">
                       {event.scriptureEgwRef}
                     </td>
                   </tr>

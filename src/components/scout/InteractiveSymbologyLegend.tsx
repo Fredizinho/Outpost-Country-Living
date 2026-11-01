@@ -143,7 +143,7 @@ export function InteractiveSymbologyLegend({
       isLayerActive: showArableLand,
       toggleLayer: () => onToggleArableLand?.(!showArableLand),
       symbolPreview: (
-        <div className="w-16 h-8 flex items-center justify-center relative rounded-md bg-[#2d120a] border border-amber-600/50 overflow-hidden">
+        <div className="w-16 h-8 flex items-center justify-center relative rounded-md bg-amber-950/90 border border-amber-600/50 overflow-hidden">
           <div className="w-full h-full bg-gradient-to-br from-amber-700/60 via-red-900/70 to-emerald-950/40" />
           <div className="absolute inset-0 border border-dashed border-amber-400/40" />
           <span className="absolute text-caption font-mono font-bold text-amber-200">pH 6.2</span>
@@ -371,8 +371,8 @@ export function InteractiveSymbologyLegend({
 
       {/* Layer Visibility Quick Badges */}
       <div className="flex items-center justify-between text-caption text-slate-400 pt-2 pb-1 px-1">
-        <span className="font-mono uppercase tracking-wider text-caption text-slate-400 font-bold">
-          Layer Symbology & Guide
+        <span className="text-caption text-slate-400 font-semibold">
+          Layer symbology & guide
         </span>
         <div className="flex items-center gap-2 font-mono text-caption">
           <span className="flex items-center gap-1">
@@ -470,7 +470,7 @@ export function InteractiveSymbologyLegend({
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 p-2 rounded-lg bg-slate-900/80 border border-white/5 font-mono text-caption">
                       {item.technicalSpecs.map((spec, sIdx) => (
                         <div key={sIdx} className="flex flex-col">
-                          <span className="text-slate-400 uppercase">{spec.label}</span>
+                          <span className="text-slate-400 font-sans">{spec.label}</span>
                           <span className="text-white font-semibold mt-0.5">{spec.value}</span>
                         </div>
                       ))}
@@ -482,7 +482,7 @@ export function InteractiveSymbologyLegend({
                         <Sparkles size={11} className="text-amber-300" />
                       </div>
                       <div className="flex flex-col gap-0.5">
-                        <span className="text-caption font-bold uppercase tracking-wider text-emerald-300">
+                        <span className="text-caption font-semibold text-emerald-300">
                           Homestead Siting Application:
                         </span>
                         <p className="text-caption text-slate-200 leading-relaxed font-sans">
@@ -518,7 +518,7 @@ export function InteractiveSymbologyLegend({
         <div className="p-3.5 rounded-xl bg-slate-900/90 border border-white/10 flex flex-col gap-2.5 text-xs">
           <div className="flex items-center gap-2 border-b border-white/10 pb-1.5">
             <Compass size={13} className="text-amber-400" />
-            <span className="font-bold text-white font-mono uppercase tracking-wider text-caption">
+            <span className="font-semibold text-white text-caption">
               Cartographic Conventions &amp; Ratings
             </span>
           </div>

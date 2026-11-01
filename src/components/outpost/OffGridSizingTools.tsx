@@ -24,11 +24,9 @@ export function OffGridSizingTools({ className }: { className?: string }) {
     const staticPsi = (gravityHeadMeters * 1.422).toFixed(1);
 
     // Simplified Darcy-Weisbach / Hazen-Williams estimation for HDPE plastic pipe (C=140)
-    // Flow rate in L/min
     const d = gravityPipeDiameterMm / 1000; // in meters
     const h = gravityHeadMeters;
     const l = Math.max(10, gravityPipeLengthMeters);
-    // Empirical flow approximation Q (m3/s) ≈ 0.2785 * C * D^2.63 * (H/L)^0.54
     const c = 140; // smooth HDPE
     const qM3s = 0.2785 * c * Math.pow(d, 2.63) * Math.pow(h / l, 0.54);
     const qLpm = Math.max(1, Math.round(qM3s * 60 * 1000));
@@ -60,12 +58,8 @@ export function OffGridSizingTools({ className }: { className?: string }) {
   const [roofTypeEfficiency, setRoofTypeEfficiency] = useState<number>(0.90); // 0.90 corrugated iron
 
   const rainResult = useMemo(() => {
-    // Harvestable Liters = Area (m2) * Rain (mm) * Runoff Coefficient
-    // Note: 1 mm of rain on 1 m2 = 1 liter of water
     const totalHarvestableLiters = Math.round(roofAreaM2 * annualRainfallMm * roofTypeEfficiency);
-    // Typical dry season in Malawi is approx 180 days (May to October)
     const drySeasonDailyLiters = Math.round(totalHarvestableLiters / 365);
-    // Storage recommendation: Capture at least 25% to 35% of total annual harvest for dry months
     const recommendedStorageLiters = Math.round(totalHarvestableLiters * 0.30);
     const tanksCount5000L = Math.ceil(recommendedStorageLiters / 5000);
 
@@ -85,19 +79,11 @@ export function OffGridSizingTools({ className }: { className?: string }) {
   const [peakSunHours, setPeakSunHours] = useState<number>(6); // 6 peak sun hours in Malawi
 
   const solarPumpResult = useMemo(() => {
-    // Flow needed in m3/hr
     const dailyM3 = dailyWaterLiters / 1000;
     const hourlyM3 = Number((dailyM3 / Math.max(1, peakSunHours)).toFixed(2));
-    
-    // Hydraulic energy: Ph (Watts) = (rho * g * Q * H) / 3600
-    // rho = 1000 kg/m3, g = 9.81, Q in m3/hr, H in meters
-    // Ph ≈ 2.725 * Q (m3/hr) * H (m)
-    const hydraulicWatts = 2.725 * hourlyM3 * (boreholeDepthMeters + 10); // +10m friction/tank elevation
-    // Solar pump efficiency factor ≈ 45% (wire-to-water)
+    const hydraulicWatts = 2.725 * hourlyM3 * (boreholeDepthMeters + 10);
     const electricalWatts = Math.round(hydraulicWatts / 0.45);
-    // PV array size with 30% solar derating margin
     const recommendedPvWatts = Math.round(electricalWatts * 1.35);
-    // Recommend panel count based on standard 380W panels
     const panelCount380W = Math.max(1, Math.ceil(recommendedPvWatts / 380));
 
     return {
@@ -119,23 +105,16 @@ export function OffGridSizingTools({ className }: { className?: string }) {
   const [batteryType, setBatteryType] = useState<'Lithium' | 'LeadAcid'>('Lithium');
 
   const solarPowerResult = useMemo(() => {
-    // LED lighting: 8W each
     const lightingWh = lampCount * 8 * lampHours;
-    // DC Inverter fridge: 50W average when running
     const fridgeWh = 50 * fridgeHours;
-    // Phones & Laptops: 60W
     const commsWh = 60 * laptopHours;
-    // Base contingency & phone charging: 250Wh
     const totalDailyWh = lightingWh + fridgeWh + commsWh + 250;
 
-    // Battery calculation
-    // Lithium DoD = 80%, Lead Acid DoD = 50%
     const dod = batteryType === 'Lithium' ? 0.80 : 0.50;
-    const systemEfficiency = 0.85; // inverter and wire losses
+    const systemEfficiency = 0.85;
     const requiredBatteryWh = (totalDailyWh / systemEfficiency) / dod;
     const requiredAh = Math.round(requiredBatteryWh / batteryVoltage);
 
-    // Solar PV sizing (assume 5.5 usable sun hours in Malawi)
     const pvWattsNeeded = Math.round((totalDailyWh / (5.5 * 0.75)));
     const pvPanelsCount400W = Math.max(1, Math.ceil(pvWattsNeeded / 400));
 
@@ -153,13 +132,13 @@ export function OffGridSizingTools({ className }: { className?: string }) {
     <section 
       id="off-grid-sizing-tools"
       aria-label="Homestead Engineering Sizing Tools"
-      className={cn("rounded-3xl bg-white dark:bg-[#0E1D14] border border-stone-200/90 dark:border-emerald-900/60 shadow-xs p-6 sm:p-8 md:p-10 flex flex-col gap-8", className)}
+      className={cn("rounded-[var(--radius-sheet)] bg-[var(--surface)] border border-stone-200/90 dark:border-emerald-900/60 shadow-xs p-6 sm:p-8 md:p-10 flex flex-col gap-8", className)}
     >
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-stone-200/80 dark:border-emerald-900/40">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold tracking-wider text-emerald-800 dark:text-amber-300 uppercase bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-md">
+            <span className="text-xs font-semibold text-emerald-800 dark:text-amber-300 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-[var(--radius-control)]">
               Pillar 3 Engineering
             </span>
             <span className="text-stone-300 dark:text-stone-600">•</span>
@@ -191,24 +170,24 @@ export function OffGridSizingTools({ className }: { className?: string }) {
               type="button"
               onClick={() => setActiveTab(tab.id as typeof activeTab)}
               className={cn(
-                "p-4 rounded-2xl text-left border transition-all flex flex-col justify-between gap-2 shadow-2xs cursor-pointer",
+                "p-4 rounded-[var(--radius-card)] text-left border transition-all flex flex-col justify-between gap-2 shadow-2xs cursor-pointer",
                 isActive
                   ? "bg-emerald-900 dark:bg-emerald-800 text-white border-emerald-950 dark:border-emerald-700 ring-2 ring-emerald-800/30"
-                  : "bg-stone-50/70 dark:bg-[#14281D] hover:bg-stone-100/80 dark:hover:bg-emerald-950/60 border-stone-200 dark:border-emerald-900/60 text-stone-800 dark:text-stone-100"
+                  : "bg-stone-50/70 dark:bg-[var(--surface)] hover:bg-stone-100/80 dark:hover:bg-emerald-950/60 border-stone-200 dark:border-emerald-900/60 text-stone-800 dark:text-stone-100"
               )}
             >
               <div className="flex items-center justify-between">
                 <span className={cn(
-                  "w-8 h-8 rounded-xl flex items-center justify-center",
+                  "w-8 h-8 rounded-[var(--radius-control)] flex items-center justify-center",
                   isActive ? "bg-white/20 text-amber-300" : "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300"
                 )}>
                   <Icon size={16} />
                 </span>
                 <span className={cn(
-                  "text-caption font-mono font-bold uppercase",
+                  "text-caption font-semibold",
                   isActive ? "text-emerald-200 dark:text-emerald-200" : "text-stone-400 dark:text-stone-500"
                 )}>
-                  CALC
+                  Calculator
                 </span>
               </div>
 
@@ -226,7 +205,7 @@ export function OffGridSizingTools({ className }: { className?: string }) {
       </div>
 
       {/* Active Calculator Workstation */}
-      <div className="p-6 sm:p-8 rounded-2xl bg-[#FAF8F5] dark:bg-[#14281D] border border-stone-200/90 dark:border-emerald-900/60 flex flex-col gap-6">
+      <div className="p-6 sm:p-8 rounded-[var(--radius-card)] bg-[var(--ground)] border border-stone-200/90 dark:border-emerald-900/60 flex flex-col gap-6">
         {/* ====================================================================
             1. GRAVITY WATER CALCULATOR
         ==================================================================== */}
@@ -243,7 +222,7 @@ export function OffGridSizingTools({ className }: { className?: string }) {
               </div>
 
               {/* Sliders */}
-              <div className="flex flex-col gap-4 bg-white dark:bg-[#0E1D14] p-5 rounded-2xl border border-stone-200 dark:border-emerald-900/60">
+              <div className="flex flex-col gap-4 bg-[var(--surface)] p-5 rounded-[var(--radius-card)] border border-stone-200 dark:border-emerald-900/60">
                 {/* Elevation Head */}
                 <div className="flex flex-col gap-1.5">
                   <div className="flex justify-between text-xs sm:text-sm font-semibold text-stone-800 dark:text-stone-200">
@@ -261,10 +240,10 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                         type="button"
                         onClick={() => setGravityHeadMeters(preset.val)}
                         className={cn(
-                          "py-1.5 px-2 text-caption font-semibold rounded-lg border transition-all cursor-pointer",
+                          "py-1.5 px-2 text-caption font-semibold rounded-[var(--radius-control)] border transition-all cursor-pointer",
                           gravityHeadMeters === preset.val
                             ? "bg-emerald-900 dark:bg-emerald-800 text-white border-emerald-950"
-                            : "bg-stone-50 dark:bg-[#14281D] border-stone-200 dark:border-emerald-900/60 text-stone-700 dark:text-stone-300 hover:bg-stone-100"
+                            : "bg-stone-50 dark:bg-[var(--surface)] border-stone-200 dark:border-emerald-900/60 text-stone-700 dark:text-stone-300 hover:bg-stone-100"
                         )}
                       >
                         {preset.label}
@@ -300,10 +279,10 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                         type="button"
                         onClick={() => setGravityPipeDiameterMm(d)}
                         className={cn(
-                          "py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer",
+                          "py-1.5 text-xs font-semibold rounded-[var(--radius-control)] border transition-all cursor-pointer",
                           gravityPipeDiameterMm === d 
                             ? "bg-emerald-900 dark:bg-emerald-800 text-white border-emerald-950 dark:border-emerald-700" 
-                            : "bg-stone-50 dark:bg-[#14281D] border-stone-200 dark:border-emerald-900/60 text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-emerald-950/60"
+                            : "bg-stone-50 dark:bg-[var(--surface)] border-stone-200 dark:border-emerald-900/60 text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-emerald-950/60"
                         )}
                       >
                         {d} mm
@@ -337,9 +316,9 @@ export function OffGridSizingTools({ className }: { className?: string }) {
             </div>
 
             {/* Results Column */}
-            <div className="lg:col-span-5 flex flex-col justify-between gap-4 bg-white dark:bg-[#0E1D14] p-6 rounded-2xl border border-stone-200 dark:border-emerald-900/60 shadow-xs">
+            <div className="lg:col-span-5 flex flex-col justify-between gap-4 bg-[var(--surface)] p-6 rounded-[var(--radius-card)] border border-stone-200 dark:border-emerald-900/60 shadow-xs">
               <div>
-                <span className="text-caption font-bold uppercase tracking-wider text-emerald-800 dark:text-amber-300">
+                <span className="text-caption font-semibold text-emerald-800 dark:text-amber-300">
                   Calculated Delivery Telemetry
                 </span>
                 <h4 className="serif text-lg font-bold text-stone-900 dark:text-stone-50 mt-1">
@@ -347,20 +326,20 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                 </h4>
 
                 <div className="grid grid-cols-2 gap-3 mt-4">
-                  <div className="p-3 rounded-xl bg-sky-50 dark:bg-sky-950/40 border border-sky-100 dark:border-sky-800/60">
-                    <div className="text-caption uppercase font-bold text-sky-900 dark:text-sky-300">Static Pressure</div>
+                  <div className="p-3 rounded-[var(--radius-control)] bg-sky-50 dark:bg-sky-950/40 border border-sky-100 dark:border-sky-800/60">
+                    <div className="text-caption font-semibold text-sky-900 dark:text-sky-300">Static pressure</div>
                     <div className="text-xl font-black font-mono text-stone-900 dark:text-stone-50 mt-0.5">{gravityResult.staticBar} bar</div>
                     <div className="text-xs text-stone-500 dark:text-stone-400 font-mono">{gravityResult.staticPsi} PSI</div>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-100 dark:border-emerald-800/60">
-                    <div className="text-caption uppercase font-bold text-emerald-900 dark:text-emerald-300">Delivery Flow</div>
+                  <div className="p-3 rounded-[var(--radius-control)] bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-100 dark:border-emerald-800/60">
+                    <div className="text-caption font-semibold text-emerald-900 dark:text-emerald-300">Delivery flow</div>
                     <div className="text-xl font-black font-mono text-stone-900 dark:text-stone-50 mt-0.5">{gravityResult.qLpm} L/min</div>
                     <div className="text-xs text-stone-500 dark:text-stone-400 font-mono">{gravityResult.qLph.toLocaleString()} L/hr</div>
                   </div>
                 </div>
 
-                <div className="mt-4 p-3.5 rounded-xl bg-stone-50 dark:bg-[#14281D] border border-stone-200 dark:border-emerald-900/60 text-xs sm:text-sm text-stone-700 dark:text-stone-300 leading-relaxed">
+                <div className="mt-4 p-3.5 rounded-[var(--radius-control)] bg-stone-50 dark:bg-[var(--ground)] border border-stone-200 dark:border-emerald-900/60 text-xs sm:text-sm text-stone-700 dark:text-stone-300 leading-relaxed">
                   <strong className="text-stone-900 dark:text-stone-100 block mb-1">System Assessment:</strong>
                   {gravityResult.assessment}
                 </div>
@@ -388,7 +367,7 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                 </p>
               </div>
 
-              <div className="flex flex-col gap-4 bg-white dark:bg-[#0E1D14] p-5 rounded-2xl border border-stone-200 dark:border-emerald-900/60">
+              <div className="flex flex-col gap-4 bg-[var(--surface)] p-5 rounded-[var(--radius-card)] border border-stone-200 dark:border-emerald-900/60">
                 {/* Roof Area */}
                 <div className="flex flex-col gap-1.5">
                   <div className="flex justify-between text-xs sm:text-sm font-semibold text-stone-800 dark:text-stone-200">
@@ -406,10 +385,10 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                         type="button"
                         onClick={() => setRoofAreaM2(preset.val)}
                         className={cn(
-                          "py-1.5 px-2 text-caption font-semibold rounded-lg border transition-all cursor-pointer",
+                          "py-1.5 px-2 text-caption font-semibold rounded-[var(--radius-control)] border transition-all cursor-pointer",
                           roofAreaM2 === preset.val
                             ? "bg-emerald-900 dark:bg-emerald-800 text-white border-emerald-950"
-                            : "bg-stone-50 dark:bg-[#14281D] border-stone-200 dark:border-emerald-900/60 text-stone-700 dark:text-stone-300 hover:bg-stone-100"
+                            : "bg-stone-50 dark:bg-[var(--surface)] border-stone-200 dark:border-emerald-900/60 text-stone-700 dark:text-stone-300 hover:bg-stone-100"
                         )}
                       >
                         {preset.label}
@@ -468,10 +447,10 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                         type="button"
                         onClick={() => setRoofTypeEfficiency(m.val)}
                         className={cn(
-                          "py-2 px-1 text-center text-xs font-semibold rounded-lg border transition-all cursor-pointer",
+                          "py-2 px-1 text-center text-xs font-semibold rounded-[var(--radius-control)] border transition-all cursor-pointer",
                           roofTypeEfficiency === m.val
                             ? "bg-emerald-900 dark:bg-emerald-800 text-white border-emerald-950 dark:border-emerald-700"
-                            : "bg-stone-50 dark:bg-[#14281D] border-stone-200 dark:border-emerald-900/60 text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-emerald-950/60"
+                            : "bg-stone-50 dark:bg-[var(--surface)] border-stone-200 dark:border-emerald-900/60 text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-emerald-950/60"
                         )}
                       >
                         {m.label}
@@ -483,9 +462,9 @@ export function OffGridSizingTools({ className }: { className?: string }) {
             </div>
 
             {/* Results Column */}
-            <div className="lg:col-span-5 flex flex-col justify-between gap-4 bg-white dark:bg-[#0E1D14] p-6 rounded-2xl border border-stone-200 dark:border-emerald-900/60 shadow-xs">
+            <div className="lg:col-span-5 flex flex-col justify-between gap-4 bg-[var(--surface)] p-6 rounded-[var(--radius-card)] border border-stone-200 dark:border-emerald-900/60 shadow-xs">
               <div>
-                <span className="text-caption font-bold uppercase tracking-wider text-emerald-800 dark:text-amber-300">
+                <span className="text-caption font-semibold text-emerald-800 dark:text-amber-300">
                   Catchment Volume & Storage Sizing
                 </span>
                 <h4 className="serif text-lg font-bold text-stone-900 dark:text-stone-50 mt-1">
@@ -493,14 +472,14 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                 </h4>
 
                 <div className="flex flex-col gap-3 mt-4">
-                  <div className="p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-100 dark:border-emerald-800/60">
-                    <div className="text-caption uppercase font-bold text-emerald-900 dark:text-emerald-300">Total Annual Harvest</div>
+                  <div className="p-3.5 rounded-[var(--radius-control)] bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-100 dark:border-emerald-800/60">
+                    <div className="text-caption font-semibold text-emerald-900 dark:text-emerald-300">Total annual harvest</div>
                     <div className="text-2xl font-black font-mono text-stone-900 dark:text-stone-50 mt-0.5">{rainResult.totalHarvestableLiters} Liters</div>
                     <div className="text-xs text-emerald-800 dark:text-emerald-300 mt-0.5">≈ {rainResult.drySeasonDailyLiters} Liters / day year-round</div>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-sky-50 dark:bg-sky-950/40 border border-sky-100 dark:border-sky-800/60">
-                    <div className="text-caption uppercase font-bold text-sky-900 dark:text-sky-300">Recommended Dry-Season Tank Storage</div>
+                  <div className="p-3.5 rounded-[var(--radius-control)] bg-sky-50 dark:bg-sky-950/40 border border-sky-100 dark:border-sky-800/60">
+                    <div className="text-caption font-semibold text-sky-900 dark:text-sky-300">Recommended dry-season tank storage</div>
                     <div className="text-xl font-black font-mono text-stone-900 dark:text-stone-50 mt-0.5">{rainResult.recommendedStorageLiters} Liters</div>
                     <div className="text-xs text-sky-900 dark:text-sky-300 font-semibold mt-1">
                       Equates to {rainResult.tanksCount5000L} × 5,000-Liter storage tanks
@@ -531,7 +510,7 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                 </p>
               </div>
 
-              <div className="flex flex-col gap-4 bg-white dark:bg-[#0E1D14] p-5 rounded-2xl border border-stone-200 dark:border-emerald-900/60">
+              <div className="flex flex-col gap-4 bg-[var(--surface)] p-5 rounded-[var(--radius-card)] border border-stone-200 dark:border-emerald-900/60">
                 {/* Borehole Depth */}
                 <div className="flex flex-col gap-1.5">
                   <div className="flex justify-between text-xs sm:text-sm font-semibold text-stone-800 dark:text-stone-200">
@@ -579,9 +558,9 @@ export function OffGridSizingTools({ className }: { className?: string }) {
             </div>
 
             {/* Results Column */}
-            <div className="lg:col-span-5 flex flex-col justify-between gap-4 bg-white dark:bg-[#0E1D14] p-6 rounded-2xl border border-stone-200 dark:border-emerald-900/60 shadow-xs">
+            <div className="lg:col-span-5 flex flex-col justify-between gap-4 bg-[var(--surface)] p-6 rounded-[var(--radius-card)] border border-stone-200 dark:border-emerald-900/60 shadow-xs">
               <div>
-                <span className="text-caption font-bold uppercase tracking-wider text-emerald-800 dark:text-amber-300">
+                <span className="text-caption font-semibold text-emerald-800 dark:text-amber-300">
                   Solar Array Specification
                 </span>
                 <h4 className="serif text-lg font-bold text-stone-900 dark:text-stone-50 mt-1">
@@ -589,8 +568,8 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                 </h4>
 
                 <div className="flex flex-col gap-3 mt-4">
-                  <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-100 dark:border-amber-800/60">
-                    <div className="text-caption uppercase font-bold text-amber-900 dark:text-amber-300">Required Solar PV Array</div>
+                  <div className="p-3 rounded-[var(--radius-control)] bg-amber-50 dark:bg-amber-950/40 border border-amber-100 dark:border-amber-800/60">
+                    <div className="text-caption font-semibold text-amber-900 dark:text-amber-300">Required solar PV array</div>
                     <div className="text-2xl font-black font-mono text-stone-900 dark:text-stone-50 mt-0.5">{solarPumpResult.recommendedPvWatts} Watts</div>
                     <div className="text-xs text-amber-900 dark:text-amber-300 font-semibold mt-1">
                       {solarPumpResult.panelCount380W} × 380W Solar Panels (Mono-PERC)
@@ -598,14 +577,14 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                   </div>
 
                   <div className="grid grid-cols-2 gap-2">
-                    <div className="p-3 rounded-xl bg-stone-50 dark:bg-[#14281D] border border-stone-200 dark:border-emerald-900/60">
-                      <div className="text-caption uppercase font-bold text-stone-600 dark:text-stone-400">Pumping Rate</div>
+                    <div className="p-3 rounded-[var(--radius-control)] bg-stone-50 dark:bg-[var(--ground)] border border-stone-200 dark:border-emerald-900/60">
+                      <div className="text-caption font-semibold text-stone-600 dark:text-stone-400">Pumping rate</div>
                       <div className="text-base font-bold font-mono text-stone-900 dark:text-stone-100 mt-0.5">{solarPumpResult.hourlyM3} m³/hr</div>
                       <div className="text-xs text-stone-500 dark:text-stone-400">≈ {Math.round(solarPumpResult.hourlyM3 * 1000 / 60)} L/min</div>
                     </div>
 
-                    <div className="p-3 rounded-xl bg-stone-50 dark:bg-[#14281D] border border-stone-200 dark:border-emerald-900/60">
-                      <div className="text-caption uppercase font-bold text-stone-600 dark:text-stone-400">Pump Motor</div>
+                    <div className="p-3 rounded-[var(--radius-control)] bg-stone-50 dark:bg-[var(--ground)] border border-stone-200 dark:border-emerald-900/60">
+                      <div className="text-caption font-semibold text-stone-600 dark:text-stone-400">Pump motor</div>
                       <div className="text-base font-bold font-mono text-stone-900 dark:text-stone-100 mt-0.5">{solarPumpResult.electricalWatts} W</div>
                       <div className="text-xs text-stone-500 dark:text-stone-400">DC Brushless Motor</div>
                     </div>
@@ -635,11 +614,11 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                 </p>
               </div>
 
-              <div className="flex flex-col gap-4 bg-white dark:bg-[#0E1D14] p-5 rounded-2xl border border-stone-200 dark:border-emerald-900/60">
+              <div className="flex flex-col gap-4 bg-[var(--surface)] p-5 rounded-[var(--radius-card)] border border-stone-200 dark:border-emerald-900/60">
                 {/* One-Click Household Presets for Beginners */}
                 <div className="flex flex-col gap-1.5 pb-3 border-b border-stone-100 dark:border-emerald-900/40">
-                  <span className="text-xs font-bold text-emerald-800 dark:text-amber-300 uppercase tracking-wider">
-                    Quick Household Setup (Tap One if Unsure of Volts/Amps):
+                  <span className="text-xs font-semibold text-emerald-800 dark:text-amber-300">
+                    Quick Household Setup:
                   </span>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                     {[
@@ -657,10 +636,10 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                           setBatteryVoltage(preset.volt);
                         }}
                         className={cn(
-                          "p-2.5 rounded-xl border text-left text-xs font-semibold transition-all cursor-pointer",
+                          "p-2.5 rounded-[var(--radius-control)] border text-left text-xs font-semibold transition-all cursor-pointer",
                           lampCount === preset.lamps && batteryVoltage === preset.volt
                             ? "bg-emerald-900 dark:bg-emerald-800 text-white border-emerald-950"
-                            : "bg-stone-50 dark:bg-[#14281D] border-stone-200 dark:border-emerald-900/60 text-stone-800 dark:text-stone-200 hover:bg-stone-100"
+                            : "bg-stone-50 dark:bg-[var(--ground)] border-stone-200 dark:border-emerald-900/60 text-stone-800 dark:text-stone-200 hover:bg-stone-100"
                         )}
                       >
                         {preset.label}
@@ -676,7 +655,7 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                     <button
                       type="button"
                       onClick={() => setLampCount(Math.max(2, lampCount - 2))}
-                      className="w-6 h-6 rounded bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-100 font-bold flex items-center justify-center cursor-pointer"
+                      className="w-6 h-6 rounded-[var(--radius-control)] bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-100 font-bold flex items-center justify-center cursor-pointer"
                     >
                       -
                     </button>
@@ -684,7 +663,7 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                     <button
                       type="button"
                       onClick={() => setLampCount(lampCount + 2)}
-                      className="w-6 h-6 rounded bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-100 font-bold flex items-center justify-center cursor-pointer"
+                      className="w-6 h-6 rounded-[var(--radius-control)] bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-100 font-bold flex items-center justify-center cursor-pointer"
                     >
                       +
                     </button>
@@ -708,10 +687,10 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                           type="button"
                           onClick={() => setBatteryType(b)}
                           className={cn(
-                            "py-1.5 px-2 rounded-lg border font-semibold text-center text-xs transition-all cursor-pointer",
+                            "py-1.5 px-2 rounded-[var(--radius-control)] border font-semibold text-center text-xs transition-all cursor-pointer",
                             batteryType === b 
                               ? "bg-emerald-900 dark:bg-emerald-800 text-white border-emerald-950 dark:border-emerald-700" 
-                              : "bg-stone-50 dark:bg-[#14281D] border-stone-200 dark:border-emerald-900/60 text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-emerald-950/60"
+                              : "bg-stone-50 dark:bg-[var(--ground)] border-stone-200 dark:border-emerald-900/60 text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-emerald-950/60"
                           )}
                         >
                           {b === 'Lithium' ? 'LiFePO4' : 'Lead Acid'}
@@ -729,10 +708,10 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                           type="button"
                           onClick={() => setBatteryVoltage(v)}
                           className={cn(
-                            "py-1.5 rounded-lg border font-semibold text-center text-xs transition-all cursor-pointer",
+                            "py-1.5 rounded-[var(--radius-control)] border font-semibold text-center text-xs transition-all cursor-pointer",
                             batteryVoltage === v 
                               ? "bg-emerald-900 dark:bg-emerald-800 text-white border-emerald-950 dark:border-emerald-700" 
-                              : "bg-stone-50 dark:bg-[#14281D] border-stone-200 dark:border-emerald-900/60 text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-emerald-950/60"
+                              : "bg-stone-50 dark:bg-[var(--ground)] border-stone-200 dark:border-emerald-900/60 text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-emerald-950/60"
                           )}
                         >
                           {v}V
@@ -745,9 +724,9 @@ export function OffGridSizingTools({ className }: { className?: string }) {
             </div>
 
             {/* Results Column */}
-            <div className="lg:col-span-5 flex flex-col justify-between gap-4 bg-white dark:bg-[#0E1D14] p-6 rounded-2xl border border-stone-200 dark:border-emerald-900/60 shadow-xs">
+            <div className="lg:col-span-5 flex flex-col justify-between gap-4 bg-[var(--surface)] p-6 rounded-[var(--radius-card)] border border-stone-200 dark:border-emerald-900/60 shadow-xs">
               <div>
-                <span className="text-caption font-bold uppercase tracking-wider text-emerald-800 dark:text-amber-300">
+                <span className="text-caption font-semibold text-emerald-800 dark:text-amber-300">
                   Calculated Off-Grid System
                 </span>
                 <h4 className="serif text-lg font-bold text-stone-900 dark:text-stone-50 mt-1">
@@ -755,13 +734,13 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                 </h4>
 
                 <div className="flex flex-col gap-3 mt-4">
-                  <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-100 dark:border-emerald-800/60">
-                    <div className="text-caption uppercase font-bold text-emerald-900 dark:text-emerald-300">Total Daily Energy Consumption</div>
+                  <div className="p-3 rounded-[var(--radius-control)] bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-100 dark:border-emerald-800/60">
+                    <div className="text-caption font-semibold text-emerald-900 dark:text-emerald-300">Total daily energy consumption</div>
                     <div className="text-xl font-black font-mono text-stone-900 dark:text-stone-50 mt-0.5">{solarPowerResult.totalDailyWh.toLocaleString()} Watt-Hours</div>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-sky-50 dark:bg-sky-950/40 border border-sky-100 dark:border-sky-800/60">
-                    <div className="text-caption uppercase font-bold text-sky-900 dark:text-sky-300">Battery Capacity Required</div>
+                  <div className="p-3 rounded-[var(--radius-control)] bg-sky-50 dark:bg-sky-950/40 border border-sky-100 dark:border-sky-800/60">
+                    <div className="text-caption font-semibold text-sky-900 dark:text-sky-300">Battery capacity required</div>
                     <div className="text-xl font-black font-mono text-stone-900 dark:text-stone-50 mt-0.5">
                       {solarPowerResult.requiredAh} Ah @ {solarPowerResult.batteryVoltage}V
                     </div>
@@ -770,8 +749,8 @@ export function OffGridSizingTools({ className }: { className?: string }) {
                     </div>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-100 dark:border-amber-800/60">
-                    <div className="text-caption uppercase font-bold text-amber-900 dark:text-amber-300">Recommended Solar Panel Array</div>
+                  <div className="p-3 rounded-[var(--radius-control)] bg-amber-50 dark:bg-amber-950/40 border border-amber-100 dark:border-amber-800/60">
+                    <div className="text-caption font-semibold text-amber-900 dark:text-amber-300">Recommended solar panel array</div>
                     <div className="text-lg font-black font-mono text-stone-900 dark:text-stone-50 mt-0.5">{solarPowerResult.pvWattsNeeded} Watts PV</div>
                     <div className="text-xs text-amber-900 dark:text-amber-300 font-semibold mt-0.5">
                       {solarPowerResult.pvPanelsCount400W} × 400W Solar Panels

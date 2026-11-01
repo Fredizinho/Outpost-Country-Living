@@ -9,6 +9,7 @@ import {
 import { cn } from '@/lib/utils';
 import { InteractiveSymbologyLegend } from './InteractiveSymbologyLegend';
 import { useTheme } from '@/contexts/ThemeContext';
+import { OUTPOST_SCHEMATIC_THEME } from '@/theme';
 
 export interface ThematicLayerState {
   waterSources: boolean;
@@ -98,9 +99,9 @@ export function ThematicLayerControlPanel({
       icon: Droplets,
       active: waterSources,
       badge: 'Aquifer & Rivers',
-      color: '#38bdf8',
+      color: OUTPOST_SCHEMATIC_THEME.waterSky,
       activeBg: 'bg-sky-500/20 border-sky-400 text-sky-200',
-      activeDot: 'bg-sky-400 shadow-[0_0_8px_#38bdf8]',
+      activeDot: 'bg-sky-400 shadow-sm',
       toggle: () => onToggleWaterSources(!waterSources)
     },
     {
@@ -112,9 +113,9 @@ export function ThematicLayerControlPanel({
       icon: Sprout,
       active: arableLand,
       badge: 'Soil & Loam',
-      color: '#34d399',
+      color: OUTPOST_SCHEMATIC_THEME.emeraldMint,
       activeBg: 'bg-emerald-500/20 border-emerald-400 text-emerald-200',
-      activeDot: 'bg-emerald-400 shadow-[0_0_8px_#34d399]',
+      activeDot: 'bg-emerald-400 shadow-sm',
       toggle: () => onToggleArableLand(!arableLand)
     },
     {
@@ -126,9 +127,9 @@ export function ThematicLayerControlPanel({
       icon: Users,
       active: communitySettlements,
       badge: 'Villages & Hubs',
-      color: '#fbbf24',
+      color: OUTPOST_SCHEMATIC_THEME.goldBright,
       activeBg: 'bg-amber-500/20 border-amber-400 text-amber-200',
-      activeDot: 'bg-amber-400 shadow-[0_0_8px_#fbbf24]',
+      activeDot: 'bg-amber-400 shadow-sm',
       toggle: () => onToggleCommunitySettlements(!communitySettlements)
     },
     {
@@ -140,9 +141,9 @@ export function ThematicLayerControlPanel({
       icon: CloudRain,
       active: rainfallIsohyets,
       badge: '800–1600mm',
-      color: '#60a5fa',
+      color: OUTPOST_SCHEMATIC_THEME.sunBlueLight,
       activeBg: 'bg-blue-500/20 border-blue-400 text-blue-200',
-      activeDot: 'bg-blue-400 shadow-[0_0_8px_#60a5fa]',
+      activeDot: 'bg-blue-400 shadow-sm',
       toggle: () => onToggleRainfallIsohyets ? onToggleRainfallIsohyets(!rainfallIsohyets) : onToggleWaterSources(!waterSources)
     },
     {
@@ -154,9 +155,9 @@ export function ThematicLayerControlPanel({
       icon: Mountain,
       active: elevationTiers,
       badge: 'Thermal Belt',
-      color: '#a78bfa',
+      color: OUTPOST_SCHEMATIC_THEME.purpleGis,
       activeBg: 'bg-purple-500/20 border-purple-400 text-purple-200',
-      activeDot: 'bg-purple-400 shadow-[0_0_8px_#a78bfa]',
+      activeDot: 'bg-purple-400 shadow-sm',
       toggle: () => onToggleElevationTiers ? onToggleElevationTiers(!elevationTiers) : null
     },
     {
@@ -168,9 +169,9 @@ export function ThematicLayerControlPanel({
       icon: Waves,
       active: catchmentBasins,
       badge: 'Dambo Hydrology',
-      color: '#2dd4bf',
+      color: OUTPOST_SCHEMATIC_THEME.tealGis,
       activeBg: 'bg-teal-500/20 border-teal-400 text-teal-200',
-      activeDot: 'bg-teal-400 shadow-[0_0_8px_#2dd4bf]',
+      activeDot: 'bg-teal-400 shadow-sm',
       toggle: () => onToggleCatchmentBasins ? onToggleCatchmentBasins(!catchmentBasins) : null
     },
     {
@@ -182,9 +183,9 @@ export function ThematicLayerControlPanel({
       icon: Compass,
       active: riftEscarpments,
       badge: 'Keyline Terracing',
-      color: '#f97316',
+      color: OUTPOST_SCHEMATIC_THEME.orangeRust,
       activeBg: 'bg-orange-500/20 border-orange-400 text-orange-200',
-      activeDot: 'bg-orange-400 shadow-[0_0_8px_#f97316]',
+      activeDot: 'bg-orange-400 shadow-sm',
       toggle: () => onToggleRiftEscarpments ? onToggleRiftEscarpments(!riftEscarpments) : null
     },
     {
@@ -196,9 +197,9 @@ export function ThematicLayerControlPanel({
       icon: Landmark,
       active: districtBoundaries,
       badge: '28 Districts',
-      color: '#e2e8f0',
+      color: OUTPOST_SCHEMATIC_THEME.slateLight,
       activeBg: 'bg-stone-500/20 border-stone-300 text-stone-200',
-      activeDot: 'bg-stone-200 shadow-[0_0_8px_#e2e8f0]',
+      activeDot: 'bg-stone-200 shadow-sm',
       toggle: () => onToggleDistrictBoundaries ? onToggleDistrictBoundaries(!districtBoundaries) : null
     }
   ];
@@ -221,22 +222,22 @@ export function ThematicLayerControlPanel({
           "border rounded-[10px] shadow-sm overflow-hidden flex flex-col transition-colors duration-200 font-chrome text-[13px]",
           isField
             ? "bg-black border-2 border-white text-white"
-            : "bg-[#FFFDF8] border-[#E4DCCB] text-[#1F2A22]",
+            : "bg-[var(--surface)] border-[var(--sand)] text-[var(--ink)]",
           activeTab === 'legend' ? "w-[330px] sm:w-[380px]" : "w-[300px] sm:w-[320px]"
         )}>
         
         {/* Panel Header */}
-        <div className="px-3.5 py-2.5 bg-[#F6F1E7] border-b border-[#E4DCCB] flex items-center justify-between gap-2">
+        <div className="px-3.5 py-2.5 bg-[var(--ground)] border-b border-[var(--sand)] flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <div className="w-5.5 h-5.5 rounded-[4px] bg-[#E4DCCB] flex items-center justify-center text-[#2B4636]">
+            <div className="w-5.5 h-5.5 rounded-[4px] bg-[var(--sand)] flex items-center justify-center text-[var(--ink)]">
               <Layers size={13} />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <h3 className="font-medium text-[13px] text-[#1F2A22]">
+                <h3 className="font-medium text-[13px] text-[var(--ink)]">
                   Layers
                 </h3>
-                <span className="text-[11px] px-1.5 py-0.2 rounded-full bg-[#3F6B4E]/15 text-[#3F6B4E] font-medium border border-[#3F6B4E]/30">
+                <span className="text-[11px] px-1.5 py-0.2 rounded-full bg-[var(--moss)]/15 text-[var(--moss)] font-medium border border-[var(--moss)]/30">
                   {activeCount} active
                 </span>
               </div>
@@ -271,18 +272,18 @@ export function ThematicLayerControlPanel({
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.15 }}
-              className="p-2.5 flex flex-col gap-2 bg-[#FFFDF8] max-h-[calc(100vh-140px)]"
+              className="p-2.5 flex flex-col gap-2 bg-[var(--surface)] max-h-[calc(100vh-140px)]"
             >
               {/* Mode Switcher Tabs */}
-              <div className="flex items-center gap-1 p-0.5 bg-[#F6F1E7] border border-[#E4DCCB] rounded-[6px] shrink-0 text-[12px]">
+              <div className="flex items-center gap-1 p-0.5 bg-[var(--ground)] border border-[var(--sand)] rounded-[6px] shrink-0 text-[12px]">
                 <button
                   type="button"
                   onClick={() => setActiveTab('layers')}
                   className={cn(
                     "flex-1 py-1 px-2 rounded-[4px] font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer",
                     activeTab === 'layers'
-                      ? "bg-[#FFFDF8] text-[#1F2A22] shadow-xs font-semibold"
-                      : "text-[#5A6458] hover:text-[#1F2A22]"
+                      ? "bg-[var(--surface)] text-[var(--ink)] shadow-xs font-semibold"
+                      : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
                   )}
                 >
                   <Layers size={12} />
@@ -294,8 +295,8 @@ export function ThematicLayerControlPanel({
                   className={cn(
                     "flex-1 py-1 px-2 rounded-[4px] font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer",
                     activeTab === 'legend'
-                      ? "bg-[#FFFDF8] text-[#1F2A22] shadow-xs font-semibold"
-                      : "text-[#5A6458] hover:text-[#1F2A22]"
+                      ? "bg-[var(--surface)] text-[var(--ink)] shadow-xs font-semibold"
+                      : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
                   )}
                 >
                   <BookOpen size={12} />
@@ -329,10 +330,10 @@ export function ThematicLayerControlPanel({
                           className={cn(
                             "rounded-[6px] border transition-colors overflow-hidden box-border shrink-0 flex flex-col",
                             layer.active
-                              ? "bg-[#F6F1E7] border-[#E4DCCB]"
-                              : "bg-[#FFFDF8] border-[#E4DCCB] hover:bg-[#F6F1E7]/50",
+                              ? "bg-[var(--ground)] border-[var(--sand)]"
+                              : "bg-[var(--surface)] border-[var(--sand)] hover:bg-[var(--ground)]/50",
                             isRowExpanded
-                              ? "h-auto ring-1 ring-[#C98A1B]"
+                              ? "h-auto ring-1 ring-[var(--clay)]"
                               : "h-[54px] min-h-[54px] max-h-[54px]"
                           )}
                         >
@@ -349,18 +350,18 @@ export function ThematicLayerControlPanel({
                                 className={cn(
                                   "w-7 h-7 rounded-[4px] border flex items-center justify-center shrink-0 transition-colors",
                                   layer.active
-                                    ? "bg-[#FFFDF8] border-[#E4DCCB] text-[#1F2A22]"
-                                    : "bg-[#F6F1E7] border-[#E4DCCB] text-[#5A6458]"
+                                    ? "bg-[var(--surface)] border-[var(--sand)] text-[var(--ink)]"
+                                    : "bg-[var(--ground)] border-[var(--sand)] text-[var(--ink-muted)]"
                                 )}
                               >
-                                <Icon size={14} className={layer.active ? "text-[#B4531F]" : "text-[#5A6458]"} />
+                                <Icon size={14} className={layer.active ? "text-[var(--clay)]" : "text-[var(--ink-muted)]"} />
                               </div>
 
                               {/* Title */}
                               <div className="flex flex-col min-w-0 flex-1 justify-center">
                                 <span className={cn(
                                   "text-[12.5px] font-medium leading-tight line-clamp-2 break-words",
-                                  layer.active ? "text-[#1F2A22]" : "text-[#5A6458]"
+                                  layer.active ? "text-[var(--ink)]" : "text-[var(--ink-muted)]"
                                 )}>
                                   {layer.title}
                                 </span>
@@ -369,7 +370,7 @@ export function ThematicLayerControlPanel({
 
                             {/* Controls: Expand disclosure + Toggle switch */}
                             <div className="flex items-center gap-1.5 shrink-0 ml-1">
-                              {/* On/Off Switch: Green active pill (#3F6B4E) */}
+                              {/* On/Off Switch: Green active pill */}
                               <button
                                 type="button"
                                 onClick={(e) => {
@@ -379,15 +380,15 @@ export function ThematicLayerControlPanel({
                                 className={cn(
                                   "w-8.5 h-4.5 rounded-full transition-colors relative shrink-0 p-0.5 border cursor-pointer",
                                   layer.active
-                                    ? "bg-[#3F6B4E] border-[#3F6B4E]"
-                                    : "bg-[#E4DCCB] border-[#E4DCCB]"
+                                    ? "bg-[var(--moss)] border-[var(--moss)]"
+                                    : "bg-[var(--sand)] border-[var(--sand)]"
                                 )}
                                 aria-pressed={layer.active}
                                 title={`Toggle ${layer.title}`}
                               >
                                 <span
                                   className={cn(
-                                    "w-3.5 h-3.5 rounded-full bg-[#FFFDF8] block transition-transform shadow-xs",
+                                    "w-3.5 h-3.5 rounded-full bg-[var(--surface)] block transition-transform shadow-xs",
                                     layer.active ? "translate-x-4" : "translate-x-0"
                                   )}
                                 />
@@ -429,12 +430,12 @@ export function ThematicLayerControlPanel({
           isField
             ? "bg-black text-white border-2 border-white"
             : isLight
-            ? "bg-[#FAF6F0] text-[#1A1612] border-[#E3D8CC] shadow-raised"
-            : "bg-slate-950/95 text-[#FEF3C7] border-amber-500/30 shadow-raised"
+            ? "bg-[var(--ground)] text-[var(--ink)] border-[var(--sand)] shadow-raised"
+            : "bg-slate-950/95 text-amber-200 border-amber-500/30 shadow-raised"
         )}
         aria-label="Open thematic map layers sheet"
       >
-        <Layers size={15} className={isLight ? "text-[#C85A32]" : "text-amber-400"} />
+        <Layers size={15} className={isLight ? "text-[var(--clay)]" : "text-amber-400"} />
         <span>Layers ({activeCount}/8)</span>
       </button>
     </div>
@@ -453,18 +454,18 @@ export function ThematicLayerControlPanel({
             transition={{ type: 'spring', damping: 26, stiffness: 280 }}
             onClick={(e) => e.stopPropagation()}
             className={cn(
-              "w-full max-h-[75vh] rounded-t-3xl border-t shadow-2xl flex flex-col overflow-hidden pb-6",
+              "w-full max-h-[75vh] rounded-t-2xl border-t shadow-2xl flex flex-col overflow-hidden pb-6",
               isField
                 ? "bg-black text-white border-white"
                 : isLight
-                ? "bg-[#FAF6F0] text-[#1A1612] border-[#E3D8CC]"
+                ? "bg-[var(--ground)] text-[var(--ink)] border-[var(--sand)]"
                 : "bg-slate-950/95 text-white border-white/20"
             )}
           >
             <div className="w-12 h-1 rounded-full bg-current/25 mx-auto my-2.5 shrink-0" />
             <div className="px-4 py-2 flex items-center justify-between border-b border-current/10">
               <div className="flex items-center gap-2">
-                <Layers size={16} className={isLight ? "text-[#C85A32]" : "text-amber-400"} />
+                <Layers size={16} className={isLight ? "text-[var(--clay)]" : "text-amber-400"} />
                 <span className="font-semibold text-sm">Thematic GIS Layers ({activeCount}/8 ON)</span>
               </div>
               <button
@@ -486,7 +487,7 @@ export function ThematicLayerControlPanel({
                     "flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer normal-case",
                     activeTab === 'layers'
                       ? isLight
-                        ? "bg-white text-[#1A1612] shadow-xs font-bold"
+                        ? "bg-white text-[var(--ink)] shadow-xs font-bold"
                         : "bg-slate-800 text-white shadow-xs font-bold"
                       : "opacity-75 hover:opacity-100"
                   )}
@@ -501,7 +502,7 @@ export function ThematicLayerControlPanel({
                     "flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer normal-case",
                     activeTab === 'legend'
                       ? isLight
-                        ? "bg-white text-[#1A1612] shadow-xs font-bold"
+                        ? "bg-white text-[var(--ink)] shadow-xs font-bold"
                         : "bg-emerald-950 text-emerald-200 border border-emerald-500/40 shadow-xs font-bold"
                       : "opacity-75 hover:opacity-100"
                   )}
@@ -533,7 +534,7 @@ export function ThematicLayerControlPanel({
                           "rounded-xl border transition-all duration-200 overflow-hidden box-border shrink-0 flex flex-col",
                           layer.active
                             ? isLight
-                              ? "bg-white border-[#C85A32]/40 shadow-xs"
+                              ? "bg-white border-[var(--clay)]/40 shadow-xs"
                               : "bg-slate-900/90 border-white/20 shadow-md"
                             : isLight
                             ? "bg-black/5 border-transparent opacity-85"
@@ -550,7 +551,7 @@ export function ThematicLayerControlPanel({
                                 "w-8 h-8 rounded-lg border flex items-center justify-center shrink-0",
                                 layer.active
                                   ? isLight
-                                    ? "bg-[#C85A32]/10 border-[#C85A32]/40 text-[#C85A32]"
+                                    ? "bg-[var(--clay)]/10 border-[var(--clay)]/40 text-[var(--clay)]"
                                     : layer.activeBg
                                   : "bg-black/10 border-current/10 text-current/60"
                               )}

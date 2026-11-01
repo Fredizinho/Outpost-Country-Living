@@ -5,6 +5,7 @@ import {
   MapPin, ShieldCheck, ArrowRight, Eye, Calendar, Info, Layers
 } from 'lucide-react';
 import { MalawiDistrictSpec } from '@/data/malawiDistrictData';
+import { OUTPOST_SCHEMATIC_THEME } from '@/theme';
 
 interface SeasonalNdviSplitModalProps {
   isOpen: boolean;
@@ -31,7 +32,7 @@ export function SeasonalNdviSplitModal({
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.96 }}
-        className="w-full max-w-4xl bg-slate-900 border border-emerald-500/30 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+        className="w-full max-w-4xl bg-slate-900 border border-emerald-500/30 rounded-[var(--radius-sheet)] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
       >
         {/* Header */}
         <div className="px-6 py-4 border-b border-slate-800 bg-slate-950 flex items-center justify-between">
@@ -42,7 +43,7 @@ export function SeasonalNdviSplitModal({
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="serif text-lg font-bold text-white">Seasonal Vegetation & NDVI Comparison</h3>
-                <span className="text-caption font-mono font-bold uppercase bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-0.5 rounded">
+                <span className="text-caption font-semibold bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-0.5 rounded">
                   Dual-Pane Time-Series
                 </span>
               </div>
@@ -78,7 +79,7 @@ export function SeasonalNdviSplitModal({
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between text-xs font-mono">
               <div className="flex items-center gap-2 text-emerald-400 font-bold">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-emerald-500/30"></span>
                 <span>DZINJA (Jan – March) • NDVI 0.82</span>
               </div>
               <div className="flex items-center gap-2 text-amber-400 font-bold">
@@ -93,12 +94,15 @@ export function SeasonalNdviSplitModal({
               <div 
                 className="absolute inset-0 bg-cover bg-center flex flex-col justify-end p-4"
                 style={{
-                  background: 'linear-gradient(135deg, #1c1917 0%, #292524 40%, #44403c 70%, #1c1917 100%)'
+                  background: `linear-gradient(135deg, ${OUTPOST_SCHEMATIC_THEME.hearthDark} 0%, ${OUTPOST_SCHEMATIC_THEME.stoneDarker} 40%, ${OUTPOST_SCHEMATIC_THEME.stoneQuernBed} 70%, ${OUTPOST_SCHEMATIC_THEME.hearthDark} 100%)`
                 }}
               >
-                <div className="absolute inset-0 opacity-40 mix-blend-overlay bg-[radial-gradient(#d97706_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                <div 
+                  className="absolute inset-0 opacity-40 mix-blend-overlay"
+                  style={{ backgroundImage: `radial-gradient(${OUTPOST_SCHEMATIC_THEME.amberWarm} 1px, transparent 1px)`, backgroundSize: '16px 16px' }}
+                ></div>
                 <div className="relative z-10 self-end bg-slate-950/80 backdrop-blur border border-amber-500/40 p-3 rounded-xl max-w-xs text-right">
-                  <span className="text-caption font-mono text-amber-400 uppercase font-bold block">Chilimwe Dry Baseline</span>
+                  <span className="text-caption text-amber-400 font-medium block">Chilimwe Dry Baseline</span>
                   <div className="text-sm font-bold text-white font-mono mt-0.5">Water Table: 18m – 24m</div>
                   <div className="text-caption text-slate-300 mt-0.5">Dambos dry up; only perennial springs flowing.</div>
                 </div>
@@ -114,12 +118,15 @@ export function SeasonalNdviSplitModal({
                   style={{
                     width: '100%',
                     minWidth: '400px',
-                    background: 'linear-gradient(135deg, #064e3b 0%, #065f46 40%, #047857 70%, #022c22 100%)'
+                    background: `linear-gradient(135deg, ${OUTPOST_SCHEMATIC_THEME.forestSlope} 0%, ${OUTPOST_SCHEMATIC_THEME.emeraldDark} 40%, ${OUTPOST_SCHEMATIC_THEME.emeraldStroke} 70%, ${OUTPOST_SCHEMATIC_THEME.darkGreenDeep} 100%)`
                   }}
                 >
-                  <div className="absolute inset-0 opacity-40 mix-blend-overlay bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                  <div 
+                    className="absolute inset-0 opacity-40 mix-blend-overlay"
+                    style={{ backgroundImage: `radial-gradient(${OUTPOST_SCHEMATIC_THEME.emeraldBright} 1px, transparent 1px)`, backgroundSize: '16px 16px' }}
+                  ></div>
                   <div className="relative z-10 bg-slate-950/80 backdrop-blur border border-emerald-500/40 p-3 rounded-xl max-w-xs">
-                    <span className="text-caption font-mono text-emerald-400 uppercase font-bold block">Dzinja Lush Canopy</span>
+                    <span className="text-caption text-emerald-400 font-medium block">Dzinja Lush Canopy</span>
                     <div className="text-sm font-bold text-white font-mono mt-0.5">Water Table: 4m – 8m</div>
                     <div className="text-caption text-slate-300 mt-0.5">Heavy runoff; streams at peak 100% velocity.</div>
                   </div>
@@ -131,7 +138,7 @@ export function SeasonalNdviSplitModal({
                 className="absolute top-0 bottom-0 w-1 bg-white shadow-2xl cursor-ew-resize flex items-center justify-center z-20"
                 style={{ left: `${sliderPosition}%` }}
               >
-                <div className="w-8 h-8 rounded-full bg-slate-900 border-2 border-white shadow-xl flex items-center justify-center text-white text-xs font-bold font-mono">
+                <div className="w-8 h-8 rounded-full bg-slate-900 border-2 border-white shadow-xl flex items-center justify-center text-white text-xs font-bold">
                   ↔
                 </div>
               </div>
@@ -148,7 +155,7 @@ export function SeasonalNdviSplitModal({
             </div>
 
             {/* Slider Control Button Bar */}
-            <div className="flex items-center justify-between text-xs font-mono text-slate-400 px-1">
+            <div className="flex items-center justify-between text-xs text-slate-400 px-1">
               <span>← Drag left for Chilimwe</span>
               <span>Position: {sliderPosition}% Dzinja</span>
               <span>Drag right for Dzinja →</span>
@@ -158,16 +165,16 @@ export function SeasonalNdviSplitModal({
           {/* Metric Comparison Table */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 flex flex-col gap-1.5">
-              <span className="text-caption font-mono font-bold uppercase text-slate-400 flex items-center gap-1.5">
+              <span className="text-caption font-medium text-slate-400 flex items-center gap-1.5">
                 <Droplets size={12} className="text-sky-400" /> Groundwater Depth
               </span>
               <div className="flex items-baseline justify-between mt-1">
                 <div>
-                  <span className="text-caption text-emerald-400 block font-mono">Dzinja</span>
+                  <span className="text-caption text-emerald-400 block">Dzinja</span>
                   <span className="text-sm font-bold text-white font-mono">4m – 7m</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-caption text-amber-400 block font-mono">Chilimwe</span>
+                  <span className="text-caption text-amber-400 block">Chilimwe</span>
                   <span className="text-sm font-bold text-white font-mono">15m – 22m</span>
                 </div>
               </div>
@@ -175,16 +182,16 @@ export function SeasonalNdviSplitModal({
             </div>
 
             <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 flex flex-col gap-1.5">
-              <span className="text-caption font-mono font-bold uppercase text-slate-400 flex items-center gap-1.5">
+              <span className="text-caption font-medium text-slate-400 flex items-center gap-1.5">
                 <Sun size={12} className="text-amber-400" /> Solar Irradiance
               </span>
               <div className="flex items-baseline justify-between mt-1">
                 <div>
-                  <span className="text-caption text-emerald-400 block font-mono">Dzinja</span>
+                  <span className="text-caption text-emerald-400 block">Dzinja</span>
                   <span className="text-sm font-bold text-white font-mono">4.2 kWh/m²</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-caption text-amber-400 block font-mono">Chilimwe</span>
+                  <span className="text-caption text-amber-400 block">Chilimwe</span>
                   <span className="text-sm font-bold text-white font-mono">6.4 kWh/m²</span>
                 </div>
               </div>
@@ -192,17 +199,17 @@ export function SeasonalNdviSplitModal({
             </div>
 
             <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 flex flex-col gap-1.5">
-              <span className="text-caption font-mono font-bold uppercase text-slate-400 flex items-center gap-1.5">
+              <span className="text-caption font-medium text-slate-400 flex items-center gap-1.5">
                 <Layers size={12} className="text-emerald-400" /> Road Accessibility
               </span>
               <div className="flex items-baseline justify-between mt-1">
                 <div>
-                  <span className="text-caption text-emerald-400 block font-mono">Dzinja</span>
-                  <span className="text-sm font-bold text-rose-400 font-mono">4x4 Mud Risk</span>
+                  <span className="text-caption text-emerald-400 block">Dzinja</span>
+                  <span className="text-sm font-bold text-rose-400">4x4 Mud Risk</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-caption text-amber-400 block font-mono">Chilimwe</span>
-                  <span className="text-sm font-bold text-emerald-400 font-mono">All-Weather</span>
+                  <span className="text-caption text-amber-400 block">Chilimwe</span>
+                  <span className="text-sm font-bold text-emerald-400">All-Weather</span>
                 </div>
               </div>
               <span className="text-caption text-slate-500 mt-1">Check feeder bridges before rains start.</span>
@@ -213,12 +220,12 @@ export function SeasonalNdviSplitModal({
 
         {/* Footer */}
         <div className="p-4 border-t border-slate-800 bg-slate-950 flex items-center justify-between">
-          <span className="text-xs text-slate-400 font-mono">
+          <span className="text-xs text-slate-400">
             {districtName} District • Annual Rainfall {districtRainfall} mm
           </span>
           <button
             onClick={onClose}
-            className="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono font-bold text-xs uppercase cursor-pointer transition-all"
+            className="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs cursor-pointer transition-all"
           >
             Back to Map
           </button>

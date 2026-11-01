@@ -76,10 +76,10 @@ export function CompactRegionPicker({
         <button
           onClick={() => setIsOpen(!isOpen)}
           className={cn(
-            "h-10 px-3.5 rounded-2xl font-mono text-xs font-bold transition-all flex items-center gap-2 border shadow-2xl backdrop-blur-2xl cursor-pointer select-none",
+            "h-10 px-3.5 rounded-[var(--radius-card)] text-xs font-medium transition-all flex items-center gap-2 border shadow-2xl backdrop-blur-2xl cursor-pointer select-none",
             isOpen
-              ? "bg-amber-400 text-stone-950 border-amber-300 font-black shadow-amber-500/20"
-              : "bg-[#07140D]/92 text-stone-100 border-emerald-500/25 hover:border-amber-400/50 hover:bg-[#0B2216]"
+              ? "bg-amber-400 text-stone-950 border-amber-300 font-bold shadow-amber-500/20"
+              : "bg-[var(--ground)]/90 text-stone-100 border-emerald-500/25 hover:border-amber-400/50 hover:bg-[var(--moss-deep)]"
           )}
           title="Change Region or District"
         >
@@ -94,9 +94,9 @@ export function CompactRegionPicker({
         <button
           onClick={() => onToggleMode(activeMode === 'regional' ? 'parcels' : 'regional')}
           className={cn(
-            "h-10 px-2.5 rounded-2xl font-mono text-caption font-bold transition-all hidden sm:flex items-center gap-1.5 border shadow-2xl backdrop-blur-2xl cursor-pointer select-none",
+            "h-10 px-2.5 rounded-[var(--radius-card)] text-caption font-medium transition-all hidden sm:flex items-center gap-1.5 border shadow-2xl backdrop-blur-2xl cursor-pointer select-none",
             activeMode === 'regional'
-              ? "bg-[#07140D]/92 text-amber-300 border-amber-500/30 hover:border-amber-400"
+              ? "bg-[var(--ground)]/90 text-amber-300 border-amber-500/30 hover:border-amber-400"
               : "bg-emerald-950/92 text-emerald-300 border-emerald-500/40 hover:border-emerald-400"
           )}
           title="Toggle between Climate Zones and Verified Agro Stations"
@@ -123,13 +123,13 @@ export function CompactRegionPicker({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.96 }}
             transition={{ duration: 0.16 }}
-            className="mt-2 w-[calc(100vw-2rem)] sm:w-96 md:w-[440px] max-h-[80vh] overflow-y-auto bg-[#07140D]/96 backdrop-blur-2xl border border-emerald-500/30 rounded-3xl p-4 shadow-2xl flex flex-col gap-4 text-white"
+            className="mt-2 w-[calc(100vw-2rem)] sm:w-96 md:w-[440px] max-h-[80vh] overflow-y-auto bg-[var(--ground)]/95 backdrop-blur-2xl border border-emerald-500/30 rounded-[var(--radius-sheet)] p-4 shadow-2xl flex flex-col gap-4 text-white"
           >
             {/* Header & Reset */}
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div>
                 <h4 className="serif text-base font-bold text-white">Geographic Focus</h4>
-                <p className="text-caption font-mono text-slate-400">Select regional territory or district</p>
+                <p className="text-caption text-slate-400">Select regional territory or district</p>
               </div>
               <div className="flex items-center gap-1.5">
                 {(activeDistrict || activeFocusRegion !== 'all') && (
@@ -139,7 +139,7 @@ export function CompactRegionPicker({
                       onSelectRegion('all');
                       setIsOpen(false);
                     }}
-                    className="text-xs font-mono text-amber-400 hover:text-amber-300 px-2 py-1 rounded-lg bg-white/5 border border-white/10 flex items-center gap-1 cursor-pointer transition-colors"
+                    className="text-xs text-amber-400 hover:text-amber-300 px-2 py-1 rounded-lg bg-white/5 border border-white/10 flex items-center gap-1 cursor-pointer transition-colors"
                   >
                     <RotateCcw size={11} />
                     <span>All Malawi</span>
@@ -156,7 +156,7 @@ export function CompactRegionPicker({
 
             {/* Region Selector Tabs */}
             <div className="flex flex-col gap-1.5">
-              <span className="text-caption font-mono font-bold uppercase tracking-wider text-slate-400">
+              <span className="text-caption font-medium text-slate-400">
                 Macro Geographic Region:
               </span>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
@@ -172,9 +172,9 @@ export function CompactRegionPicker({
                         setIsOpen(false);
                       }}
                       className={cn(
-                        "py-2 px-2.5 rounded-xl border text-center font-mono text-xs font-bold transition-all cursor-pointer",
+                        "py-2 px-2.5 rounded-xl border text-center text-xs font-medium transition-all cursor-pointer",
                         isSelected
-                          ? "bg-amber-500 text-slate-950 border-amber-300 shadow font-black"
+                          ? "bg-amber-500 text-slate-950 border-amber-300 shadow font-bold"
                           : "bg-slate-900 border-white/10 text-slate-300 hover:border-white/30 hover:bg-slate-800"
                       )}
                     >
@@ -187,14 +187,14 @@ export function CompactRegionPicker({
 
             {/* Mode Switcher */}
             <div className="flex flex-col gap-1.5">
-              <span className="text-caption font-mono font-bold uppercase tracking-wider text-slate-400">
+              <span className="text-caption font-medium text-slate-400">
                 Layer Mode:
               </span>
               <div className="grid grid-cols-2 gap-2">
                 <button
                   onClick={() => onToggleMode('regional')}
                   className={cn(
-                    "p-2 rounded-xl border text-left flex items-center gap-2 transition-all cursor-pointer font-mono text-xs",
+                    "p-2 rounded-xl border text-left flex items-center gap-2 transition-all cursor-pointer text-xs",
                     activeMode === 'regional'
                       ? "bg-amber-500/20 border-amber-500 text-amber-200"
                       : "bg-slate-900 border-white/10 text-slate-400 hover:text-slate-200 hover:bg-slate-800"
@@ -209,7 +209,7 @@ export function CompactRegionPicker({
                 <button
                   onClick={() => onToggleMode('parcels')}
                   className={cn(
-                    "p-2 rounded-xl border text-left flex items-center gap-2 transition-all cursor-pointer font-mono text-xs",
+                    "p-2 rounded-xl border text-left flex items-center gap-2 transition-all cursor-pointer text-xs",
                     activeMode === 'parcels'
                       ? "bg-emerald-500/20 border-emerald-500 text-emerald-200"
                       : "bg-slate-900 border-white/10 text-slate-400 hover:text-slate-200 hover:bg-slate-800"
@@ -227,7 +227,7 @@ export function CompactRegionPicker({
             {/* Districts List for Active Region */}
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <span className="text-caption font-mono font-bold uppercase tracking-wider text-slate-400">
+                <span className="text-caption font-medium text-slate-400">
                   {currentRegionSpec.label} Districts ({regionDistricts.length}):
                 </span>
                 {activeDistrict && (
@@ -236,7 +236,7 @@ export function CompactRegionPicker({
                       onSelectDistrict(null);
                       setIsOpen(false);
                     }}
-                    className="text-caption font-mono text-amber-400 hover:underline"
+                    className="text-caption text-amber-400 hover:underline"
                   >
                     Clear District Selection
                   </button>
@@ -259,7 +259,7 @@ export function CompactRegionPicker({
                           : "bg-slate-900/90 border-white/5 text-slate-300 hover:border-white/20 hover:bg-slate-800"
                       )}
                     >
-                      <span className="text-xs font-mono font-bold truncate">{d.name}</span>
+                      <span className="text-xs font-semibold truncate">{d.name}</span>
                       <span className="text-caption font-mono text-slate-400 truncate">
                         {d.rainfallAnnualMm}mm • Gr {d.feasibilityGrade}
                       </span>

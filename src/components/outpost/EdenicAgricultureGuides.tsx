@@ -38,7 +38,7 @@ export function EdenicAgricultureGuides({ className }: { className?: string }) {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-stone-200/80 dark:border-emerald-900/50">
         <div>
           <div className="flex items-center gap-2 text-xs text-stone-500 dark:text-stone-400">
-            <span className="font-bold tracking-widest text-emerald-800 dark:text-amber-300 uppercase">
+            <span className="font-semibold text-emerald-800 dark:text-amber-300">
               Pillar 3 Practical Skills
             </span>
             <span aria-hidden="true">·</span>
@@ -65,30 +65,30 @@ export function EdenicAgricultureGuides({ className }: { className?: string }) {
               type="button"
               onClick={() => setSelectedGuideId(guide.id)}
               className={cn(
-                'p-4 rounded-2xl text-left border transition-all flex flex-col justify-between gap-3 shadow-xs cursor-pointer group',
+                'p-4 rounded-[var(--radius-card)] text-left border transition-all flex flex-col justify-between gap-3 shadow-xs cursor-pointer group',
                 isSelected
                   ? 'bg-emerald-900 dark:bg-emerald-800 text-white border-emerald-950 dark:border-emerald-700 ring-2 ring-emerald-800/30'
-                  : 'bg-white dark:bg-[#0E1D14] hover:bg-stone-50 dark:hover:bg-emerald-950/60 border-stone-200 dark:border-emerald-900/60 text-stone-900 dark:text-stone-100'
+                  : 'bg-[var(--surface)] hover:bg-stone-50 dark:hover:bg-emerald-950/60 border-stone-200 dark:border-emerald-900/60 text-stone-900 dark:text-stone-100'
               )}
             >
               <div className="flex items-center justify-between gap-2">
                 <div
                   className={cn(
-                    'w-14 h-14 rounded-xl p-1.5 flex items-center justify-center border shrink-0 transition-transform group-hover:scale-105',
+                    'w-14 h-14 rounded-[var(--radius-control)] p-1.5 flex items-center justify-center border shrink-0 transition-transform group-hover:scale-105',
                     isSelected
-                      ? 'bg-[#07150E] border-emerald-500/40'
-                      : 'bg-[#FAF6EE] dark:bg-[#07150E] border-stone-200/80 dark:border-emerald-900/60'
+                      ? 'bg-[var(--ground)] border-emerald-500/40'
+                      : 'bg-[var(--surface)] border-stone-200/80 dark:border-emerald-900/60'
                   )}
                 >
                   <CountryIcon name={iconName} className="w-full h-full object-contain" />
                 </div>
                 <span
                   className={cn(
-                    'text-caption font-mono font-bold uppercase',
+                    'text-caption font-semibold',
                     isSelected ? 'text-amber-300' : 'text-stone-500 dark:text-stone-400'
                   )}
                 >
-                  MANUAL
+                  Manual
                 </span>
               </div>
 
@@ -127,12 +127,12 @@ export function EdenicAgricultureGuides({ className }: { className?: string }) {
       </div>
 
       {/* Active Field Manual Display Card */}
-      <div className="rounded-3xl bg-white dark:bg-[#0E1D14] border border-stone-200/90 dark:border-emerald-900/60 shadow-xs p-6 sm:p-8 md:p-10 flex flex-col gap-8">
+      <div className="rounded-[var(--radius-sheet)] bg-[var(--surface)] border border-stone-200/90 dark:border-emerald-900/60 shadow-xs p-6 sm:p-8 md:p-10 flex flex-col gap-8">
         {/* Title, Subtitle, Scriptural Principle + Artisan Illustration Plate */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center pb-6 border-b border-stone-200/80 dark:border-emerald-900/40">
           <div className="lg:col-span-8 flex flex-col gap-4">
             <div>
-              <span className="text-xs font-bold text-emerald-800 dark:text-amber-300 uppercase tracking-widest">
+              <span className="text-xs font-medium text-emerald-800 dark:text-amber-300">
                 Manual Reference: {activeGuide.counselReference}
               </span>
               <h3 className="serif text-2xl sm:text-3xl font-bold text-stone-900 dark:text-stone-50 mt-1">
@@ -142,11 +142,11 @@ export function EdenicAgricultureGuides({ className }: { className?: string }) {
             </div>
 
             {/* Scriptural Anchor */}
-            <div className="p-4 rounded-2xl bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200/70 dark:border-amber-800/50 flex items-start gap-3">
+            <div className="p-4 rounded-[var(--radius-card)] bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200/70 dark:border-amber-800/50 flex items-start gap-3">
               <BookOpen size={18} className="text-amber-800 dark:text-amber-400 mt-0.5 shrink-0" />
               <div>
-                <span className="text-caption font-mono font-bold uppercase text-amber-900 dark:text-amber-300 block">
-                  BIBLICAL PRINCIPLE
+                <span className="text-caption font-semibold text-amber-900 dark:text-amber-300 block">
+                  Biblical principle
                 </span>
                 <p className="serif text-xs sm:text-sm text-stone-800 dark:text-stone-200 italic leading-relaxed mt-0.5">
                   &ldquo;{activeGuide.scripturalPrinciple}&rdquo;
@@ -155,19 +155,19 @@ export function EdenicAgricultureGuides({ className }: { className?: string }) {
             </div>
           </div>
 
-          <div className="lg:col-span-4 rounded-2xl bg-[#07150E] border border-emerald-900/70 p-1 flex flex-col relative overflow-hidden min-h-[190px] group shadow-inner">
+          <div className="lg:col-span-4 rounded-[var(--radius-card)] bg-[var(--ground)] border border-emerald-900/70 p-1 flex flex-col relative overflow-hidden min-h-[190px] group shadow-inner">
             <img
               src={COUNTRY_IMAGES.edenicDeepPlantingPit}
               alt="Edenic Agroforestry Deep Planting Pit and Living Soil Strata"
               loading="lazy"
               decoding="async"
               referrerPolicy="no-referrer"
-              className="w-full h-44 object-cover rounded-xl opacity-90 group-hover:scale-105 transition-transform duration-500"
+              className="w-full h-44 object-cover rounded-[var(--radius-control)] opacity-90 group-hover:scale-105 transition-transform duration-500"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent rounded-xl pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent rounded-[var(--radius-control)] pointer-events-none" />
             <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-caption font-mono font-bold text-amber-300">
               <span>Deep Strata · 3×3×3ft</span>
-              <span className="text-emerald-300 font-semibold">No-Chemical Protocol</span>
+              <span className="text-emerald-300 font-semibold font-sans">No-Chemical Protocol</span>
             </div>
           </div>
         </div>
@@ -191,7 +191,7 @@ export function EdenicAgricultureGuides({ className }: { className?: string }) {
             {activeGuide.steps.map((step) => (
               <div
                 key={step.stepNumber}
-                className="p-5 rounded-2xl bg-[#FAF8F5] dark:bg-[#14281D] border border-stone-200/80 dark:border-emerald-900/60 flex flex-col justify-between gap-3 shadow-2xs"
+                className="p-5 rounded-[var(--radius-card)] bg-[var(--ground)] border border-stone-200/80 dark:border-emerald-900/60 flex flex-col justify-between gap-3 shadow-2xs"
               >
                 <div>
                   <div className="flex items-center gap-2 mb-1.5">
@@ -207,7 +207,7 @@ export function EdenicAgricultureGuides({ className }: { className?: string }) {
                   </p>
                 </div>
 
-                <div className="p-3 rounded-xl bg-white dark:bg-[#0E1D14] border border-stone-200/90 dark:border-emerald-900/60 text-xs text-emerald-950 dark:text-stone-200 font-medium flex items-start gap-2">
+                <div className="p-3 rounded-[var(--radius-control)] bg-[var(--surface)] border border-stone-200/90 dark:border-emerald-900/60 text-xs text-emerald-950 dark:text-stone-200 font-medium flex items-start gap-2">
                   <Sparkles size={14} className="text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
                   <div>
                     <strong className="text-emerald-900 dark:text-amber-300">Practical Field Tip:</strong>{' '}
@@ -222,9 +222,9 @@ export function EdenicAgricultureGuides({ className }: { className?: string }) {
         {/* Common Pitfalls & Spiritual Object Lesson */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-stone-200/80 dark:border-emerald-900/40">
           {/* Common Mistakes */}
-          <div className="p-5 rounded-2xl bg-rose-50/50 dark:bg-rose-950/30 border border-rose-200/60 dark:border-rose-800/50 flex flex-col gap-3">
-            <h5 className="text-xs font-bold uppercase tracking-wider text-rose-900 dark:text-rose-300 flex items-center gap-2">
-              <AlertCircle size={15} className="text-rose-700 dark:text-rose-400" /> Common Pitfalls to Avoid
+          <div className="p-5 rounded-[var(--radius-card)] bg-rose-50/50 dark:bg-rose-950/30 border border-rose-200/60 dark:border-rose-800/50 flex flex-col gap-3">
+            <h5 className="text-xs font-semibold text-rose-900 dark:text-rose-300 flex items-center gap-2">
+              <AlertCircle size={15} className="text-rose-700 dark:text-rose-400" /> Common pitfalls to avoid
             </h5>
             <ul className="flex flex-col gap-2 text-xs text-stone-800 dark:text-stone-200">
               {activeGuide.commonMistakes.map((mistake, idx) => (
@@ -237,9 +237,9 @@ export function EdenicAgricultureGuides({ className }: { className?: string }) {
           </div>
 
           {/* Spiritual Object Lesson */}
-          <div className="p-5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/40 border border-emerald-200/60 dark:border-emerald-800/50 flex flex-col gap-2">
-            <h5 className="text-xs font-bold uppercase tracking-wider text-emerald-900 dark:text-emerald-300 flex items-center gap-2">
-              <CheckCircle2 size={15} className="text-emerald-800 dark:text-emerald-400" /> Spiritual Object Lesson
+          <div className="p-5 rounded-[var(--radius-card)] bg-emerald-50/50 dark:bg-emerald-950/40 border border-emerald-200/60 dark:border-emerald-800/50 flex flex-col gap-2">
+            <h5 className="text-xs font-semibold text-emerald-900 dark:text-emerald-300 flex items-center gap-2">
+              <CheckCircle2 size={15} className="text-emerald-800 dark:text-emerald-400" /> Spiritual object lesson
             </h5>
             <p className="serif text-xs sm:text-sm text-stone-800 dark:text-stone-200 italic leading-relaxed">
               &ldquo;{activeGuide.objectLesson}&rdquo;

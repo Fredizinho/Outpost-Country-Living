@@ -9,6 +9,7 @@ import { ActionableTask, TaskDomain } from '@/data/actionableAlmanacData';
 import { isSeasonalTaskCompleted, toggleCompletedSeasonalTask } from '@/lib/offlineStorage';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { ALMANAC_THEME } from '@/theme';
 
 interface ActionableTaskCardProps {
   task: ActionableTask;
@@ -59,12 +60,13 @@ export function ActionableTaskCard({
     <motion.div
       layout
       className={cn(
-        "rounded-[2rem] border transition-all duration-300 relative overflow-hidden flex flex-col justify-between text-white backdrop-blur-md shadow-xl",
+        "rounded-[var(--radius-card)] border transition-all duration-300 relative overflow-hidden flex flex-col justify-between text-white backdrop-blur-md shadow-xl",
         completed 
-          ? "bg-[#0d1f14]/80 border-emerald-500/50 opacity-90" 
+          ? "border-emerald-500/50 opacity-90" 
           : "bg-white/5 border-amber-500/25 hover:border-amber-500/50 hover:bg-white/[0.07]",
         className
       )}
+      style={completed ? { backgroundColor: `${ALMANAC_THEME.cardDark}cc` } : undefined}
     >
       {/* Top Main Section */}
       <div className="p-5 sm:p-6 flex flex-col gap-4">
@@ -73,7 +75,7 @@ export function ActionableTaskCard({
         <div className="flex flex-wrap items-center justify-between gap-2.5">
           <div className="flex flex-wrap items-center gap-2 text-caption font-mono">
             {/* Domain Tag */}
-            <span className={cn("font-bold uppercase px-2 py-0.5 rounded-md border flex items-center gap-1", domainStyle.bg, domainStyle.text, domainStyle.border)}>
+            <span className={cn("font-bold capitalize px-2 py-0.5 rounded-md border flex items-center gap-1", domainStyle.bg, domainStyle.text, domainStyle.border)}>
               <DomainIcon size={11} />
               <span>{task.domain.replace('-', ' ')}</span>
             </span>
@@ -88,16 +90,16 @@ export function ActionableTaskCard({
             {task.priority === 'urgent' && (
               <>
                 <span className="text-stone-500">·</span>
-                <span className="font-bold uppercase px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1">
+                <span className="font-bold px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1">
                   <AlertTriangle size={11} className="text-amber-400" />
-                  <span>Urgent Window</span>
+                  <span>Urgent window</span>
                 </span>
               </>
             )}
           </div>
 
           {/* Readiness Points Reward */}
-          <span className="text-caption font-mono font-bold uppercase px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-300 border border-amber-500/30">
+          <span className="text-caption font-mono font-bold px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-300 border border-amber-500/30">
             +{task.readinessPoints} pts readiness
           </span>
         </div>
@@ -108,8 +110,8 @@ export function ActionableTaskCard({
             onClick={handleCheckboxClick}
             className="mt-1 w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-all border select-none active:scale-90"
             style={{
-              backgroundColor: completed ? '#10b981' : 'rgba(255,255,255,0.08)',
-              borderColor: completed ? '#059669' : 'rgba(255,255,255,0.2)'
+              backgroundColor: completed ? ALMANAC_THEME.emerald500 : 'rgba(255,255,255,0.08)',
+              borderColor: completed ? ALMANAC_THEME.emerald600 : 'rgba(255,255,255,0.2)'
             }}
             title={completed ? 'Mark as pending' : 'Mark task completed'}
           >
@@ -117,10 +119,13 @@ export function ActionableTaskCard({
           </button>
 
           <div className="flex flex-col gap-1.5 flex-1">
-            <h4 className={cn(
-              "serif text-lg sm:text-xl font-bold leading-snug transition-all",
-              completed ? "line-through text-emerald-300/60" : "text-[#FAF8F5]"
-            )}>
+            <h4 
+              className={cn(
+                "serif text-lg sm:text-xl font-bold leading-snug transition-all",
+                completed && "line-through text-emerald-300/60"
+              )}
+              style={!completed ? { color: ALMANAC_THEME.paperCream } : undefined}
+            >
               {task.title}
             </h4>
 
@@ -157,7 +162,7 @@ export function ActionableTaskCard({
           {task.calculatorLink && (
             <Link
               to={`/calculators?tab=${task.calculatorLink.tab}`}
-              className="bg-amber-500 hover:bg-amber-400 text-slate-950 text-caption font-mono font-bold uppercase px-3 py-1.5 rounded-xl transition-all shadow-xs flex items-center gap-1.5"
+              className="bg-amber-500 hover:bg-amber-400 text-slate-950 text-caption font-bold px-3 py-1.5 rounded-xl transition-all shadow-xs flex items-center gap-1.5"
               title={task.calculatorLink.tooltip}
             >
               <Wrench size={12} />
@@ -169,7 +174,7 @@ export function ActionableTaskCard({
           {task.fieldGuideLink && (
             <Link
               to={`/how/${task.fieldGuideLink.skillId}`}
-              className="bg-white/10 hover:bg-white/15 text-emerald-200 text-caption font-mono font-bold uppercase px-3 py-1.5 rounded-xl border border-white/15 transition-all flex items-center gap-1.5"
+              className="bg-white/10 hover:bg-white/15 text-emerald-200 text-caption font-bold px-3 py-1.5 rounded-xl border border-white/15 transition-all flex items-center gap-1.5"
             >
               <BookOpen size={12} className="text-emerald-400" />
               <span>Manual: {task.fieldGuideLink.guideTitle}</span>
@@ -187,8 +192,8 @@ export function ActionableTaskCard({
           <span className="font-serif text-amber-200 text-sm font-semibold">
             {isDrawerOpen ? 'Close Guide' : 'Field Steps'}
           </span>
-          <span className="font-mono text-caption text-amber-400/80 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
-            {task.howToExecute.steps.length} Steps
+          <span className="text-caption text-amber-400/80 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+            <span className="font-mono">{task.howToExecute.steps.length}</span> steps
           </span>
           <ChevronDown 
             size={14} 
@@ -220,8 +225,8 @@ export function ActionableTaskCard({
                     <Sparkles size={14} className="text-amber-400" />
                     Key Farming Steps
                   </span>
-                  <span className="font-mono text-caption text-amber-400/80 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
-                    Execution Order
+                  <span className="text-caption text-amber-400/80 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                    Execution order
                   </span>
                 </div>
 
@@ -255,16 +260,16 @@ export function ActionableTaskCard({
                     <Wrench size={14} className="text-amber-400" />
                     Required Equipment & Metrics
                   </span>
-                  <span className="font-mono text-caption text-amber-400/80 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                  <span className="text-caption text-amber-400/80 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
                     Specs
                   </span>
                 </div>
 
-                <div className="flex flex-col gap-2.5 font-mono text-xs">
+                <div className="flex flex-col gap-2.5 text-xs">
                   {/* Tools List */}
                   <div className="bg-slate-900/80 p-3 rounded-xl border border-white/10 flex flex-col gap-1.5">
-                    <span className="text-caption uppercase text-slate-400 tracking-wider font-bold">
-                      Tools & Materials:
+                    <span className="text-caption text-slate-400 font-bold">
+                      Tools & materials:
                     </span>
                     <div className="flex flex-wrap gap-1.5 text-caption text-emerald-200 font-medium">
                       {task.howToExecute.toolsNeeded.map((t, idx) => (
@@ -278,20 +283,20 @@ export function ActionableTaskCard({
                   {/* Timing & Season Metrics */}
                   <div className="grid grid-cols-2 gap-2">
                     <div className="bg-slate-900/80 p-2.5 rounded-xl border border-white/10">
-                      <span className="text-caption uppercase text-slate-400 block mb-0.5">Optimal Window</span>
+                      <span className="text-caption text-slate-400 block mb-0.5">Optimal window</span>
                       <span className="text-amber-300 font-bold text-caption truncate block">{task.howToExecute.timingWindow}</span>
                     </div>
                     <div className="bg-slate-900/80 p-2.5 rounded-xl border border-white/10">
-                      <span className="text-caption uppercase text-slate-400 block mb-0.5">Readiness Pts</span>
-                      <span className="text-emerald-300 font-bold text-caption">+{task.readinessPoints} Readiness</span>
+                      <span className="text-caption text-slate-400 block mb-0.5">Readiness pts</span>
+                      <span className="text-emerald-300 font-bold text-caption">+<span className="font-mono">{task.readinessPoints}</span> readiness</span>
                     </div>
                   </div>
 
                   {/* Pro-Tip Metric Box */}
                   {task.howToExecute.malawiProTip && (
                     <div className="bg-amber-950/30 p-2.5 rounded-xl border border-amber-500/20 text-caption leading-relaxed text-amber-200/90 font-sans">
-                      <span className="font-mono text-caption uppercase tracking-wider text-amber-400 font-bold block mb-1">
-                        Malawi Field Metric / Pro-Tip:
+                      <span className="text-caption text-amber-400 font-bold block mb-1">
+                        Malawi field metric / pro-tip:
                       </span>
                       {task.howToExecute.malawiProTip}
                     </div>
@@ -304,9 +309,9 @@ export function ActionableTaskCard({
             <div className="pt-2 border-t border-white/10">
               <Link
                 to={task.fieldGuideLink ? `/how/${task.fieldGuideLink.skillId}` : (task.calculatorLink ? `/calculators?tab=${task.calculatorLink.tab}` : `/skills`)}
-                className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-mono font-bold text-xs uppercase tracking-wider py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md active:scale-98 cursor-pointer"
+                className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md active:scale-98 cursor-pointer"
               >
-                <span>[ LAUNCH MASTERCLASS GUIDE ]</span>
+                <span>Launch masterclass guide</span>
                 <ArrowRight size={14} className="text-slate-950" />
               </Link>
             </div>

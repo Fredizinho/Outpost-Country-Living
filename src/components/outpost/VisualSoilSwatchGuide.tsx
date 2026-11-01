@@ -1,5 +1,6 @@
 import React from 'react';
 import { Hand, Droplets, Sprout } from 'lucide-react';
+import { MALAWI_SOIL_SWATCH_THEME } from '@/theme';
 
 export interface SoilSwatchItem {
   id: string;
@@ -19,8 +20,8 @@ export const MALAWI_SOIL_SWATCHES: SoilSwatchItem[] = [
     chichewaName: 'Katondo',
     englishName: 'Red Plateau Clay-Loam',
     faoClass: 'Chromic Luvisols / Lixisols',
-    hexColor: '#9A3412',
-    accentColor: '#F97316',
+    hexColor: MALAWI_SOIL_SWATCH_THEME.katondo.base,
+    accentColor: MALAWI_SOIL_SWATCH_THEME.katondo.accent,
     handRibbonTest: 'Forms a firm 4–5 cm ribbon when squeezed wet between thumb and forefinger; stains palm brick-red.',
     drainageSpeed: 'Moderate (crusts on top if left bare in sun)',
     bestFix: 'Keep covered with 15 cm dry grass mulch (Udzu wofunda) and add compost (Manyowa) + wood ash (Phulusa).'
@@ -30,8 +31,8 @@ export const MALAWI_SOIL_SWATCHES: SoilSwatchItem[] = [
     chichewaName: 'Makande',
     englishName: 'Black Cracking Valley Clay',
     faoClass: 'Pellic Vertisols',
-    hexColor: '#27272A',
-    accentColor: '#A1A1AA',
+    hexColor: MALAWI_SOIL_SWATCH_THEME.makande.base,
+    accentColor: MALAWI_SOIL_SWATCH_THEME.makande.accent,
     handRibbonTest: 'Sticky like modeling clay when wet (forms a 7+ cm ribbon); opens deep cracks in September–October.',
     drainageSpeed: 'Slow (holds water long into dry season)',
     bestFix: 'Never plow when soaking wet. Mix in coarse river sand, rice husks, and heavy organic compost.'
@@ -41,8 +42,8 @@ export const MALAWI_SOIL_SWATCHES: SoilSwatchItem[] = [
     chichewaName: 'Mchenga',
     englishName: 'Lakeshore & Plain Sandy Soil',
     faoClass: 'Arenosols / Fluvisols',
-    hexColor: '#D97706',
-    accentColor: '#FBBF24',
+    hexColor: MALAWI_SOIL_SWATCH_THEME.mchenga.base,
+    accentColor: MALAWI_SOIL_SWATCH_THEME.mchenga.accent,
     handRibbonTest: 'Feels gritty; crumbles immediately and cannot form a ribbon when squeezed in your hand.',
     drainageSpeed: 'Very Fast (water and nutrients leach quickly)',
     bestFix: 'Line planting pits with crushed charcoal (Makala / Biochar) and rich animal/plant compost to trap moisture.'
@@ -52,8 +53,8 @@ export const MALAWI_SOIL_SWATCHES: SoilSwatchItem[] = [
     chichewaName: 'Chidothe / Dothi lakuda',
     englishName: 'Dark Forest & Dambo Humus Loam',
     faoClass: 'Humic Nitisols / Gleysols',
-    hexColor: '#3E2723',
-    accentColor: '#10B981',
+    hexColor: MALAWI_SOIL_SWATCH_THEME.chidothe.base,
+    accentColor: MALAWI_SOIL_SWATCH_THEME.chidothe.accent,
     handRibbonTest: 'Feels soft, spongy, and earthy like a forest floor; forms a short 2–3 cm crumbly ribbon.',
     drainageSpeed: 'Ideal Balanced Sponge (retains moisture while breathing)',
     bestFix: 'Protect with living legume cover crops (Khobwe / Kalongonda) and contour Vetiver grass strips.'
@@ -62,17 +63,17 @@ export const MALAWI_SOIL_SWATCHES: SoilSwatchItem[] = [
 
 export function VisualSoilSwatchGuide() {
   return (
-    <div className="mt-6 pt-6 border-t border-stone-200/80 dark:border-emerald-900/50 flex flex-col gap-4">
+    <div className="mt-6 pt-6 border-t border-[var(--border)] flex flex-col gap-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-800 dark:text-amber-300">
-            Visual Hand-Test Guide · Chichewa Soil Swatches
+          <span className="text-xs font-sans font-semibold text-[var(--accent)]">
+            Visual hand-test guide · Chichewa soil swatches
           </span>
-          <h4 className="font-display text-lg font-bold text-stone-900 dark:text-white">
+          <h4 className="font-serif text-lg font-bold text-[var(--ink)]">
             Identify Your Soil by Color &amp; Wet-Hand Squeeze Test
           </h4>
         </div>
-        <span className="text-xs text-stone-500 dark:text-stone-400">
+        <span className="text-xs text-[var(--ink-muted)]">
           Take 1 handful of moist soil at 15 cm depth and squeeze between thumb and finger
         </span>
       </div>
@@ -81,12 +82,12 @@ export function VisualSoilSwatchGuide() {
         {MALAWI_SOIL_SWATCHES.map((swatch) => (
           <div
             key={swatch.id}
-            className="p-4 rounded-2xl bg-stone-50 dark:bg-[#08150D] border border-stone-200/90 dark:border-emerald-900/60 flex flex-col justify-between gap-3"
+            className="p-4 rounded-[var(--radius-card)] bg-[var(--ground)] border border-[var(--border)] flex flex-col justify-between gap-3"
           >
             <div className="flex flex-col gap-2.5">
               <div className="flex items-center gap-3">
                 <div
-                  className="w-11 h-11 rounded-xl shrink-0 border-2 border-white/30 shadow-inner flex items-center justify-center"
+                  className="w-11 h-11 rounded-[var(--radius-control)] shrink-0 border-2 border-white/30 shadow-inner flex items-center justify-center"
                   style={{ backgroundColor: swatch.hexColor }}
                   title={`${swatch.chichewaName} color swatch`}
                 >
@@ -96,36 +97,36 @@ export function VisualSoilSwatchGuide() {
                   />
                 </div>
                 <div>
-                  <span className="text-xs font-mono font-bold text-emerald-800 dark:text-amber-300 block">
+                  <span className="text-xs font-sans font-semibold text-[var(--moss)] dark:text-[var(--gold)] block">
                     {swatch.chichewaName}
                   </span>
-                  <h5 className="font-display text-sm font-bold text-stone-900 dark:text-white leading-tight">
+                  <h5 className="font-serif text-sm font-bold text-[var(--ink)] leading-tight">
                     {swatch.englishName}
                   </h5>
-                  <span className="text-caption text-stone-500 dark:text-stone-400 font-mono">
+                  <span className="text-caption text-[var(--ink-muted)] font-mono">
                     Technical: FAO {swatch.faoClass}
                   </span>
                 </div>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-white dark:bg-stone-900/80 border border-stone-200/70 dark:border-emerald-950 text-xs text-stone-700 dark:text-stone-200 leading-relaxed">
-                <span className="font-bold text-stone-900 dark:text-amber-200 flex items-center gap-1 mb-0.5">
+              <div className="p-2.5 rounded-[var(--radius-control)] bg-[var(--surface)] border border-[var(--border)] text-xs text-[var(--ink)] leading-relaxed">
+                <span className="font-semibold text-[var(--accent)] flex items-center gap-1 mb-0.5">
                   <Hand size={12} /> Hand Squeeze Test:
                 </span>
                 {swatch.handRibbonTest}
               </div>
             </div>
 
-            <div className="flex flex-col gap-1.5 pt-2 border-t border-stone-200/60 dark:border-emerald-900/40 text-xs">
-              <div className="text-stone-600 dark:text-stone-300">
-                <strong className="text-stone-900 dark:text-white inline-flex items-center gap-1">
-                  <Droplets size={11} className="text-sky-600 dark:text-sky-400" /> Drainage:
+            <div className="flex flex-col gap-1.5 pt-2 border-t border-[var(--border)] text-xs">
+              <div className="text-[var(--ink-muted)]">
+                <strong className="text-[var(--ink)] inline-flex items-center gap-1">
+                  <Droplets size={11} className="text-[var(--info)]" /> Drainage:
                 </strong>{' '}
                 {swatch.drainageSpeed}
               </div>
-              <div className="text-emerald-900 dark:text-emerald-300">
+              <div className="text-[var(--success)]">
                 <strong className="inline-flex items-center gap-1">
-                  <Sprout size={11} /> Best Fix:
+                  <Sprout size={11} /> Best fix:
                 </strong>{' '}
                 {swatch.bestFix}
               </div>

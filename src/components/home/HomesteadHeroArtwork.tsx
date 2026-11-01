@@ -84,7 +84,7 @@ export function HomesteadHeroArtwork() {
   const [showHotspots, setShowHotspots] = useState(true);
 
   return (
-    <div className="relative w-full rounded-[2.5rem] overflow-hidden border border-amber-500/30 shadow-[0_30px_80px_rgba(0,0,0,0.7)] bg-[#041d10] group">
+    <div className="relative w-full rounded-[var(--radius-sheet)] overflow-hidden border border-amber-500/30 shadow-[0_30px_80px_rgba(0,0,0,0.7)] bg-[var(--ground-dark)] group">
       
       {/* High-Resolution Photo Background */}
       <div className="relative w-full h-[380px] sm:h-[440px] md:h-[500px] overflow-hidden">
@@ -101,15 +101,15 @@ export function HomesteadHeroArtwork() {
         </span>
 
         {/* Cinematic Vignette & Atmospheric Grading Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#041209] via-[#041209]/40 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#041209]/85 via-transparent to-[#041209]/85" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--ground-dark)] via-[var(--ground-dark)]/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--ground-dark)]/85 via-transparent to-[var(--ground-dark)]/85" />
         <div className="absolute inset-0 bg-radial-at-c from-transparent via-black/20 to-black/60 pointer-events-none" />
 
         {/* Top Header Floating Label Bar */}
         <div className="absolute top-4 left-4 right-4 sm:top-6 sm:left-6 sm:right-6 flex items-center justify-between z-20 pointer-events-none">
           <div className="flex items-center gap-2.5 bg-slate-950/85 backdrop-blur-xl border border-amber-500/35 px-4 py-1.5 rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.6)] pointer-events-auto">
             <span className="w-2 h-2 rounded-full bg-emerald-400" />
-            <span className="text-caption sm:text-xs font-mono font-black uppercase tracking-wider bg-gradient-to-r from-amber-200 via-amber-300 to-amber-400 bg-clip-text text-transparent">
+            <span className="text-caption sm:text-xs font-semibold bg-gradient-to-r from-amber-200 via-amber-300 to-amber-400 bg-clip-text text-transparent">
               Malawi Highland Homestead Archetype
             </span>
           </div>
@@ -185,14 +185,14 @@ export function HomesteadHeroArtwork() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
-              className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 bg-slate-950/92 backdrop-blur-2xl border border-amber-500/40 p-4 sm:p-6 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] z-30 flex flex-col md:flex-row md:items-center justify-between gap-4"
+              className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 bg-slate-950/92 backdrop-blur-2xl border border-amber-500/40 p-4 sm:p-6 rounded-card shadow-[0_20px_60px_rgba(0,0,0,0.8)] z-30 flex flex-col md:flex-row md:items-center justify-between gap-4"
             >
               <div className="flex flex-col gap-2 min-w-0">
                 <div className="flex items-center gap-2.5 flex-wrap">
-                  <span className="text-caption font-mono uppercase px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-black border border-amber-500/40 tracking-wider">
+                  <span className="text-caption font-semibold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">
                     {activeHotspot.category}
                   </span>
-                  <span className="text-base sm:text-lg font-bold font-serif text-[#FAF8F5] truncate">
+                  <span className="text-base sm:text-lg font-bold font-serif text-[var(--paper-cream)] truncate">
                     {activeHotspot.title}
                   </span>
                 </div>

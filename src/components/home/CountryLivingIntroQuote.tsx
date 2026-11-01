@@ -82,7 +82,7 @@ export function CountryLivingIntroQuote({ forceShow = false, onClose }: CountryL
           onClick={(e) => e.stopPropagation()}
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
-          className="relative max-w-2xl w-full rounded-3xl bg-[#FAF7F0] dark:bg-[#0B1911] p-7 sm:p-10 border border-stone-200 dark:border-emerald-800/60 shadow-2xl text-stone-900 dark:text-stone-100 overflow-hidden"
+          className="relative max-w-2xl w-full rounded-[var(--radius-sheet)] bg-[var(--ground)] dark:bg-[var(--ground-dark)] p-7 sm:p-10 border border-stone-200 dark:border-emerald-800/60 shadow-2xl text-stone-900 dark:text-stone-100 overflow-hidden"
         >
           {/* Top progress indicator bar */}
           <div className="absolute top-0 left-0 right-0 h-1 bg-stone-200 dark:bg-emerald-950">
@@ -95,7 +95,7 @@ export function CountryLivingIntroQuote({ forceShow = false, onClose }: CountryL
           {/* Controls */}
           <div className="absolute top-4 right-4 flex items-center gap-3">
             {isPaused && (
-              <span className="inline-flex items-center gap-1 text-xs font-mono text-stone-500 dark:text-stone-400">
+              <span className="inline-flex items-center gap-1 text-xs font-medium text-stone-500 dark:text-stone-400">
                 <Pause size={11} /> Paused
               </span>
             )}
@@ -110,7 +110,7 @@ export function CountryLivingIntroQuote({ forceShow = false, onClose }: CountryL
 
           {/* Content */}
           <div className="flex flex-col items-center text-center gap-5 pt-2">
-            <div className="flex items-center gap-2 text-xs font-mono text-emerald-800 dark:text-emerald-400">
+            <div className="flex items-center gap-2 text-xs font-medium text-emerald-800 dark:text-emerald-400">
               <span>Spirit of Prophecy Counsel</span>
               <span aria-hidden="true">·</span>
               <span>Country Living Sanctuary</span>

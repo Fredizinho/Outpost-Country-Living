@@ -850,7 +850,7 @@ export function MalawiAgriWeatherForecast({ embedded = false }: { embedded?: boo
       aria-label="Malawi Localized Agricultural Weather Forecast"
       className={embedded ? 'w-full pt-2' : 'max-w-6xl mx-auto px-4 sm:px-6 pt-14 sm:pt-18'}
     >
-      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#0D1D13] border border-stone-200/90 dark:border-emerald-900/60 shadow-sm relative overflow-hidden">
+      <div className="p-6 sm:p-8 rounded-[var(--radius-sheet)] bg-white dark:bg-[var(--ground-dark)] border border-stone-200/90 dark:border-emerald-900/60 shadow-sm relative overflow-hidden">
         {/* Section Top Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-5 pb-6 border-b border-stone-200/80 dark:border-emerald-950/80 relative z-10">
           <div>
@@ -1139,7 +1139,7 @@ export function MalawiAgriWeatherForecast({ embedded = false }: { embedded?: boo
         </div>
 
         {/* 4. Active Day Homestead Farming Action */}
-        <div className="mt-5 p-4 sm:p-5 rounded-2xl bg-amber-50/80 dark:bg-[#102217] border border-amber-200/90 dark:border-emerald-800/60 relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="mt-5 p-4 sm:p-5 rounded-card bg-amber-50/80 dark:bg-[var(--surface-dark)] border border-amber-200/90 dark:border-emerald-800/60 relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-start gap-3.5">
             <div className="w-10 h-10 rounded-xl bg-amber-200/80 dark:bg-emerald-900/80 border border-amber-300/80 dark:border-emerald-700/60 flex items-center justify-center shrink-0 text-amber-900 dark:text-amber-200">
               <Sprout size={18} />

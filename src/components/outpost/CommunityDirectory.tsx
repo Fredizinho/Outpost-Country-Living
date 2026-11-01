@@ -128,7 +128,7 @@ export function CommunityDirectory({ className }: { className?: string }) {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-stone-200/80 dark:border-emerald-900/40">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold tracking-wider text-emerald-800 dark:text-amber-300 uppercase bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-md">
+            <span className="text-xs font-semibold text-emerald-800 dark:text-amber-300 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-[var(--radius-control)]">
               Pillar 4 Fellowship
             </span>
             <span className="text-stone-300 dark:text-stone-600">•</span>
@@ -145,23 +145,23 @@ export function CommunityDirectory({ className }: { className?: string }) {
         <button
           type="button"
           onClick={() => setShowAddModal(true)}
-          className="self-start md:self-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-800 dark:bg-emerald-700 hover:bg-emerald-900 dark:hover:bg-emerald-600 text-white text-xs font-semibold shadow-xs transition-all cursor-pointer"
+          className="self-start md:self-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-[var(--radius-control)] bg-emerald-800 dark:bg-emerald-700 hover:bg-emerald-900 dark:hover:bg-emerald-600 text-white text-xs font-semibold shadow-xs transition-all cursor-pointer"
         >
           <Plus size={15} />
-          <span>Add Personal Contact / Circle</span>
+          <span>Add personal contact or circle</span>
         </button>
       </div>
 
       {/* Transparency Notice on Template Examples vs Personal Contacts */}
-      <div className="rounded-2xl border border-amber-300/70 dark:border-amber-700/40 bg-amber-50/70 dark:bg-amber-950/25 px-4 py-3 text-xs text-stone-700 dark:text-stone-300 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div className="rounded-[var(--radius-card)] border border-amber-300/70 dark:border-amber-700/40 bg-amber-50/70 dark:bg-amber-950/25 px-4 py-3 text-xs text-stone-700 dark:text-stone-300 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <p className="leading-relaxed">
           <strong className="font-bold text-amber-900 dark:text-amber-300">Directory Data Notice:</strong>{' '}
-          The 6 pre-loaded cards marked <span className="font-mono font-semibold text-amber-900 dark:text-amber-300">[Illustrative Template]</span> show how regional guilds can be structured across Malawi. Contacts you add via <strong>Add Personal Contact / Circle</strong> are saved privately to your device vault ({userEntries.length} personal {userEntries.length === 1 ? 'entry' : 'entries'} saved).
+          The 6 pre-loaded cards marked <span className="font-medium text-amber-900 dark:text-amber-300">[Illustrative Template]</span> show how regional guilds can be structured across Malawi. Contacts you add via <strong>Add Personal Contact / Circle</strong> are saved privately to your device vault ({userEntries.length} personal {userEntries.length === 1 ? 'entry' : 'entries'} saved).
         </p>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-[#FAF8F5] dark:bg-[#0E1D14] border border-stone-200/90 dark:border-emerald-900/60 rounded-2xl p-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+      <div className="bg-[var(--ground)] border border-stone-200/90 dark:border-emerald-900/60 rounded-[var(--radius-card)] p-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         {/* Search */}
         <div className="relative flex-1">
           <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
@@ -170,7 +170,7 @@ export function CommunityDirectory({ className }: { className?: string }) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by district, skill, contact, or seed type..."
-            className="w-full pl-9 pr-4 py-2 text-xs sm:text-sm rounded-xl border border-stone-200 dark:border-emerald-900/60 bg-white dark:bg-[#14281D] focus:outline-none focus:ring-2 focus:ring-emerald-800 text-stone-900 dark:text-stone-100 placeholder:text-stone-400 dark:placeholder:text-stone-500"
+            className="w-full pl-9 pr-4 py-2 text-xs sm:text-sm rounded-[var(--radius-control)] border border-stone-200 dark:border-emerald-900/60 bg-[var(--surface)] focus:outline-none focus:ring-2 focus:ring-emerald-800 text-stone-900 dark:text-stone-100 placeholder:text-stone-400 dark:placeholder:text-stone-500"
           />
         </div>
 
@@ -182,10 +182,10 @@ export function CommunityDirectory({ className }: { className?: string }) {
               type="button"
               onClick={() => setSelectedRegion(reg)}
               className={cn(
-                "px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all cursor-pointer",
+                "px-3 py-1.5 rounded-[var(--radius-control)] text-xs font-medium whitespace-nowrap transition-all cursor-pointer",
                 selectedRegion === reg
                   ? "bg-emerald-800 dark:bg-emerald-700 text-white font-semibold"
-                  : "bg-white dark:bg-[#14281D] border border-stone-200 dark:border-emerald-900/60 text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-emerald-950/60"
+                  : "bg-[var(--surface)] border border-stone-200 dark:border-emerald-900/60 text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-emerald-950/60"
               )}
             >
               {reg === 'All' ? 'All Malawi' : `${reg} Region`}
@@ -202,10 +202,10 @@ export function CommunityDirectory({ className }: { className?: string }) {
             type="button"
             onClick={() => setSelectedRole(role)}
             className={cn(
-              "px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap border transition-all cursor-pointer",
+              "px-3.5 py-1.5 rounded-[var(--radius-control)] text-xs font-medium whitespace-nowrap border transition-all cursor-pointer",
               selectedRole === role
                 ? "bg-emerald-900 dark:bg-emerald-800 text-white border-emerald-950 dark:border-emerald-700 font-semibold shadow-xs"
-                : "bg-white dark:bg-[#0E1D14] text-stone-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-emerald-950/60 border-stone-200 dark:border-emerald-900/60"
+                : "bg-[var(--surface)] text-stone-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-emerald-950/60 border-stone-200 dark:border-emerald-900/60"
             )}
           >
             {role}
@@ -218,22 +218,22 @@ export function CommunityDirectory({ className }: { className?: string }) {
         {filteredEntries.map((entry) => (
           <div
             key={entry.id}
-            className="rounded-2xl border border-stone-200/90 dark:border-emerald-900/60 bg-white dark:bg-[#0E1D14] p-5 sm:p-6 flex flex-col justify-between gap-4 shadow-xs hover:border-stone-400/80 dark:hover:border-emerald-700/80 transition-all"
+            className="rounded-[var(--radius-card)] border border-stone-200/90 dark:border-emerald-900/60 bg-[var(--surface)] p-5 sm:p-6 flex flex-col justify-between gap-4 shadow-xs hover:border-stone-400/80 dark:hover:border-emerald-700/80 transition-all"
           >
             <div className="flex flex-col gap-3">
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <div className="flex flex-wrap items-center gap-1.5">
-                    <span className="text-caption font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded">
+                    <span className="text-caption font-semibold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-[var(--radius-control)]">
                       {entry.primaryRole}
                     </span>
                     {entry.isTemplateExample ? (
-                      <span className="text-caption font-mono font-semibold text-amber-900 dark:text-amber-300 bg-amber-100/80 dark:bg-amber-950/60 px-1.5 py-0.5 rounded">
-                        Illustrative Template
+                      <span className="text-caption font-medium text-amber-900 dark:text-amber-300 bg-amber-100/80 dark:bg-amber-950/60 px-1.5 py-0.5 rounded-[var(--radius-control)]">
+                        Illustrative template
                       </span>
                     ) : (
-                      <span className="text-caption font-mono font-semibold text-emerald-900 dark:text-emerald-200 bg-emerald-100/80 dark:bg-emerald-900/60 px-1.5 py-0.5 rounded">
-                        Saved Contact
+                      <span className="text-caption font-medium text-emerald-900 dark:text-emerald-200 bg-emerald-100/80 dark:bg-emerald-900/60 px-1.5 py-0.5 rounded-[var(--radius-control)]">
+                        Saved contact
                       </span>
                     )}
                     <span className="text-stone-300 dark:text-stone-600">•</span>
@@ -252,12 +252,12 @@ export function CommunityDirectory({ className }: { className?: string }) {
                       type="button"
                       onClick={() => handleDeleteUserEntry(entry.id)}
                       title="Remove saved contact"
-                      className="p-1.5 rounded-lg text-stone-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
+                      className="p-1.5 rounded-[var(--radius-control)] text-stone-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
                     >
                       <X size={14} />
                     </button>
                   )}
-                  <div className="w-8 h-8 rounded-xl bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 flex items-center justify-center shrink-0">
+                  <div className="w-8 h-8 rounded-[var(--radius-control)] bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 flex items-center justify-center shrink-0">
                     {entry.primaryRole === 'Seed Savers' && <Sprout size={16} className="text-emerald-700 dark:text-emerald-400" />}
                     {entry.primaryRole === 'Organic Growers' && <Sprout size={16} className="text-emerald-700 dark:text-emerald-400" />}
                     {entry.primaryRole === 'Natural Builders' && <Hammer size={16} className="text-amber-700 dark:text-amber-400" />}
@@ -273,9 +273,9 @@ export function CommunityDirectory({ className }: { className?: string }) {
               </p>
 
               {/* Offerings & Needs */}
-              <div className="p-3 rounded-xl bg-[#FAF8F5] dark:bg-[#14281D] border border-stone-200/80 dark:border-emerald-900/60 flex flex-col gap-1.5 text-xs">
-                <span className="text-caption uppercase font-bold text-stone-500 dark:text-stone-400">
-                  Shared Offerings & Needs:
+              <div className="p-3 rounded-[var(--radius-control)] bg-[var(--ground)] border border-stone-200/80 dark:border-emerald-900/60 flex flex-col gap-1.5 text-xs">
+                <span className="text-caption font-semibold text-stone-500 dark:text-stone-400">
+                  Shared offerings & needs:
                 </span>
                 <ul className="flex flex-col gap-1">
                   {entry.offeringsOrNeeds.map((item, idx) => (
@@ -311,11 +311,11 @@ export function CommunityDirectory({ className }: { className?: string }) {
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.96 }}
-              className="w-full max-w-lg rounded-3xl bg-white dark:bg-[#0E1D14] border border-stone-200 dark:border-emerald-900/60 p-6 sm:p-8 shadow-2xl flex flex-col gap-5 max-h-[90vh] overflow-y-auto text-stone-900 dark:text-stone-100"
+              className="w-full max-w-lg rounded-[var(--radius-sheet)] bg-[var(--surface)] border border-stone-200 dark:border-emerald-900/60 p-6 sm:p-8 shadow-2xl flex flex-col gap-5 max-h-[90vh] overflow-y-auto text-stone-900 dark:text-stone-100"
             >
               <div className="flex items-center justify-between pb-3 border-b border-stone-100 dark:border-emerald-900/40">
                 <div>
-                  <span className="text-caption font-bold uppercase tracking-wider text-emerald-800 dark:text-amber-300">
+                  <span className="text-caption font-semibold text-emerald-800 dark:text-amber-300">
                     Community Registry
                   </span>
                   <h3 className="serif text-xl font-bold text-stone-900 dark:text-stone-50">
@@ -325,7 +325,7 @@ export function CommunityDirectory({ className }: { className?: string }) {
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="p-1.5 rounded-xl text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-emerald-950/60 cursor-pointer"
+                  className="p-1.5 rounded-[var(--radius-control)] text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-emerald-950/60 cursor-pointer"
                 >
                   <X size={18} />
                 </button>
@@ -342,7 +342,7 @@ export function CommunityDirectory({ className }: { className?: string }) {
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     placeholder="e.g. Dedza Highland Seed Savers or Mchinji Family Retreat"
-                    className="w-full p-2.5 rounded-xl border border-stone-300 dark:border-emerald-900/60 bg-white dark:bg-[#14281D] text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-800"
+                    className="w-full p-2.5 rounded-[var(--radius-control)] border border-stone-300 dark:border-emerald-900/60 bg-[var(--surface)] text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-800"
                   />
                 </div>
 
@@ -355,7 +355,7 @@ export function CommunityDirectory({ className }: { className?: string }) {
                       value={formData.contactPerson}
                       onChange={(e) => setFormData({ ...formData, contactPerson: e.target.value })}
                       placeholder="Brother/Sister Name"
-                      className="w-full p-2.5 rounded-xl border border-stone-300 dark:border-emerald-900/60 bg-white dark:bg-[#14281D] text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-800"
+                      className="w-full p-2.5 rounded-[var(--radius-control)] border border-stone-300 dark:border-emerald-900/60 bg-[var(--surface)] text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-800"
                     />
                   </div>
                   <div>
@@ -366,7 +366,7 @@ export function CommunityDirectory({ className }: { className?: string }) {
                       value={formData.district}
                       onChange={(e) => setFormData({ ...formData, district: e.target.value })}
                       placeholder="e.g. Dedza, Zomba, Rumphi"
-                      className="w-full p-2.5 rounded-xl border border-stone-300 dark:border-emerald-900/60 bg-white dark:bg-[#14281D] text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-800"
+                      className="w-full p-2.5 rounded-[var(--radius-control)] border border-stone-300 dark:border-emerald-900/60 bg-[var(--surface)] text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-800"
                     />
                   </div>
                 </div>
@@ -377,7 +377,7 @@ export function CommunityDirectory({ className }: { className?: string }) {
                     <select
                       value={formData.region}
                       onChange={(e) => setFormData({ ...formData, region: e.target.value as any })}
-                      className="w-full p-2.5 rounded-xl border border-stone-300 dark:border-emerald-900/60 bg-white dark:bg-[#14281D] text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-800"
+                      className="w-full p-2.5 rounded-[var(--radius-control)] border border-stone-300 dark:border-emerald-900/60 bg-[var(--surface)] text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-800"
                     >
                       <option value="Central">Central Region</option>
                       <option value="Northern">Northern Region</option>
@@ -390,7 +390,7 @@ export function CommunityDirectory({ className }: { className?: string }) {
                     <select
                       value={formData.primaryRole}
                       onChange={(e) => setFormData({ ...formData, primaryRole: e.target.value as any })}
-                      className="w-full p-2.5 rounded-xl border border-stone-300 dark:border-emerald-900/60 bg-white dark:bg-[#14281D] text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-800"
+                      className="w-full p-2.5 rounded-[var(--radius-control)] border border-stone-300 dark:border-emerald-900/60 bg-[var(--surface)] text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-800"
                     >
                       <option value="Seed Savers">Seed Savers</option>
                       <option value="Organic Growers">Organic Growers</option>
@@ -411,7 +411,7 @@ export function CommunityDirectory({ className }: { className?: string }) {
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     placeholder="Describe your property, crops, trades, or what fellowship you offer..."
-                    className="w-full p-2.5 rounded-xl border border-stone-300 dark:border-emerald-900/60 bg-white dark:bg-[#14281D] text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-800"
+                    className="w-full p-2.5 rounded-[var(--radius-control)] border border-stone-300 dark:border-emerald-900/60 bg-[var(--surface)] text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-800"
                   />
                 </div>
 
@@ -424,7 +424,7 @@ export function CommunityDirectory({ className }: { className?: string }) {
                     value={formData.offerings}
                     onChange={(e) => setFormData({ ...formData, offerings: e.target.value })}
                     placeholder="e.g.&#10;Offer: Heirloom bean seeds&#10;Need: Experienced solar installer"
-                    className="w-full p-2.5 rounded-xl border border-stone-300 dark:border-emerald-900/60 bg-white dark:bg-[#14281D] text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-800"
+                    className="w-full p-2.5 rounded-[var(--radius-control)] border border-stone-300 dark:border-emerald-900/60 bg-[var(--surface)] text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-800"
                   />
                 </div>
 
@@ -437,7 +437,7 @@ export function CommunityDirectory({ className }: { className?: string }) {
                     value={formData.contactChannel}
                     onChange={(e) => setFormData({ ...formData, contactChannel: e.target.value })}
                     placeholder="e.g. Meets for Sabbath worship at Linthipe, or WhatsApp / phone"
-                    className="w-full p-2.5 rounded-xl border border-stone-300 dark:border-emerald-900/60 bg-white dark:bg-[#14281D] text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-800"
+                    className="w-full p-2.5 rounded-[var(--radius-control)] border border-stone-300 dark:border-emerald-900/60 bg-[var(--surface)] text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-800"
                   />
                 </div>
 
@@ -445,13 +445,13 @@ export function CommunityDirectory({ className }: { className?: string }) {
                   <button
                     type="button"
                     onClick={() => setShowAddModal(false)}
-                    className="px-4 py-2 rounded-xl text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-emerald-950/60 font-semibold cursor-pointer"
+                    className="px-4 py-2 rounded-[var(--radius-control)] text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-emerald-950/60 font-semibold cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white font-semibold cursor-pointer"
+                    className="px-5 py-2 rounded-[var(--radius-control)] bg-emerald-800 hover:bg-emerald-900 text-white font-semibold cursor-pointer"
                   >
                     Save to Directory
                   </button>

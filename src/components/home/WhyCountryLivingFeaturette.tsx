@@ -92,7 +92,7 @@ export function WhyCountryLivingFeaturette({ className = '' }: { className?: str
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1, duration: 0.4 }}
-              className="backdrop-blur-xl bg-gradient-to-br from-[#0B2316]/95 via-[#0E2A1B]/90 to-[#07180E]/95 border border-amber-500/30 hover:border-amber-500/60 rounded-[2.5rem] p-7 md:p-8 flex flex-col justify-between gap-6 shadow-[0_16px_50px_rgba(0,0,0,0.5)] relative overflow-hidden group transition-all duration-300 hover:-translate-y-1.5"
+              className="backdrop-blur-xl bg-gradient-to-br from-[var(--ground-dark)]/95 via-stone-950/90 to-[var(--ground-dark)]/95 border border-amber-500/30 hover:border-amber-500/60 rounded-[var(--radius-sheet)] p-7 md:p-8 flex flex-col justify-between gap-6 shadow-[0_16px_50px_rgba(0,0,0,0.5)] relative overflow-hidden group transition-all duration-300 hover:-translate-y-1.5"
             >
               {/* Soft Ambient Background Glow */}
               <div className={`absolute top-0 right-0 w-56 h-56 bg-gradient-to-bl ${pillar.accentColor} rounded-full -mr-20 -mt-20 pointer-events-none blur-3xl group-hover:scale-150 transition-transform duration-700`} />
@@ -100,18 +100,18 @@ export function WhyCountryLivingFeaturette({ className = '' }: { className?: str
               <div className="flex flex-col gap-5 relative z-10">
                 {/* Badge & Vector Icon Row */}
                 <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-mono font-black uppercase tracking-wider text-amber-300 bg-amber-500/15 border border-amber-500/35 px-3.5 py-1 rounded-xl shadow-xs">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-300 bg-amber-500/15 border border-amber-500/35 px-3.5 py-1 rounded-control shadow-xs">
                     <IconComponent size={13} className="text-amber-400" />
                     <span>{pillar.badge}</span>
                   </span>
-                  <div className="w-11 h-11 rounded-2xl bg-black/50 border border-amber-500/25 flex items-center justify-center text-amber-400 shadow-inner group-hover:border-amber-400/50 group-hover:bg-amber-500/10 transition-colors">
+                  <div className="w-11 h-11 rounded-card bg-black/50 border border-amber-500/25 flex items-center justify-center text-amber-400 shadow-inner group-hover:border-amber-400/50 group-hover:bg-amber-500/10 transition-colors">
                     <IconComponent size={22} />
                   </div>
                 </div>
 
                 {/* Title & Core Copy */}
                 <div className="flex flex-col gap-2">
-                  <h3 className="serif text-2xl md:text-3xl font-extrabold text-[#FAF8F5] group-hover:text-amber-200 transition-colors flex items-center gap-2">
+                  <h3 className="serif text-2xl md:text-3xl font-extrabold text-[var(--paper-cream)] group-hover:text-amber-200 transition-colors flex items-center gap-2">
                     {pillar.title}
                   </h3>
                   <p className="text-sm text-emerald-100/90 leading-relaxed font-medium">
@@ -122,7 +122,7 @@ export function WhyCountryLivingFeaturette({ className = '' }: { className?: str
                 {/* Highlights List */}
                 <div className="flex flex-col gap-2.5 pt-2 border-t border-amber-500/15">
                   {pillar.highlights.map((item, hIdx) => (
-                    <div key={hIdx} className="flex items-center gap-2 text-xs font-mono text-emerald-200">
+                    <div key={hIdx} className="flex items-center gap-2 text-xs font-medium text-emerald-200">
                       <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0 shadow-[0_0_8px_rgba(245,158,11,0.8)]" />
                       <span>{item}</span>
                     </div>

@@ -18,6 +18,7 @@ import { MALAWI_DISTRICTS, MalawiDistrictSpec } from '@/data/malawiDistrictData'
 import { MALAWI_ELEVATION_CONTOURS } from '@/data/malawiContourData';
 import { MALAWI_LAKES } from '@/data/malawiVectorBasemapData';
 import { cn } from '@/lib/utils';
+import { DISTRICT_CANVAS_THEME } from '@/theme';
 
 interface DesktopDistrictMapScreenProps {
   onToggleFullGis?: () => void;
@@ -142,22 +143,22 @@ export function DesktopDistrictMapScreen({
   };
 
   return (
-    <div className="w-full h-full flex flex-col md:flex-row bg-[#F6F1E7] dark:bg-[#0F1813] text-[#1F2A22] dark:text-[#EBF2EC] font-chrome overflow-hidden select-none transition-colors duration-200">
+    <div className="w-full h-full flex flex-col md:flex-row bg-[var(--ground)] dark:bg-[var(--ground)] text-[var(--ink)] dark:text-[var(--ink)] font-chrome overflow-hidden select-none transition-colors duration-200">
       
       {/* ====================================================================
           1. LEFT COLUMN: LAYERS (Matches District map@1x.png)
       ==================================================================== */}
-      <aside className="w-full md:w-[230px] shrink-0 border-b md:border-b-0 md:border-r border-[#E4DCCB] dark:border-[#283C30] p-4 flex flex-col gap-4 bg-[#F6F1E7] dark:bg-[#121C16] transition-colors duration-200">
+      <aside className="w-full md:w-[230px] shrink-0 border-b md:border-b-0 md:border-r border-[var(--sand)] dark:border-[var(--sand)] p-4 flex flex-col gap-4 bg-[var(--ground)] dark:bg-[var(--surface)] transition-colors duration-200">
         <div>
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-[#5A6458] dark:text-[#8E9E92]">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--ink-muted)] dark:text-[var(--ink-muted)]">
             Layers
           </h3>
         </div>
 
         <div className="flex flex-col gap-2">
           {/* Water sources */}
-          <div className="flex items-center justify-between py-1.5 px-2.5 rounded-control bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] hover:border-[#C8BFAC] dark:hover:border-[#3E5848] text-xs transition-colors duration-200">
-            <span className="text-[#1F2A22] dark:text-[#EBF2EC] font-normal">Water sources</span>
+          <div className="flex items-center justify-between py-1.5 px-2.5 rounded-control bg-[var(--surface)] dark:bg-[var(--surface)] border border-[var(--sand)] dark:border-[var(--sand)] hover:border-[var(--sand)] text-xs transition-colors duration-200">
+            <span className="text-[var(--ink)] dark:text-[var(--ink)] font-normal">Water sources</span>
             <button
               type="button"
               onClick={() => handleToggleLayer('waterSources')}
@@ -165,7 +166,7 @@ export function DesktopDistrictMapScreen({
               aria-checked={layers.waterSources}
               className={cn(
                 'w-8 h-4 rounded-full transition-colors duration-200 relative cursor-pointer',
-                layers.waterSources ? 'bg-[#3F6B4E] dark:bg-[#4E8761]' : 'bg-[#E4DCCB] dark:bg-[#283C30]'
+                layers.waterSources ? 'bg-[var(--moss)]' : 'bg-[var(--sand)]'
               )}
             >
               <span
@@ -178,8 +179,8 @@ export function DesktopDistrictMapScreen({
           </div>
 
           {/* Arable land and soils */}
-          <div className="flex items-center justify-between py-1.5 px-2.5 rounded-control bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] hover:border-[#C8BFAC] dark:hover:border-[#3E5848] text-xs transition-colors duration-200">
-            <span className="text-[#1F2A22] dark:text-[#EBF2EC] font-normal">Arable land and soils</span>
+          <div className="flex items-center justify-between py-1.5 px-2.5 rounded-control bg-[var(--surface)] dark:bg-[var(--surface)] border border-[var(--sand)] dark:border-[var(--sand)] hover:border-[var(--sand)] text-xs transition-colors duration-200">
+            <span className="text-[var(--ink)] dark:text-[var(--ink)] font-normal">Arable land and soils</span>
             <button
               type="button"
               onClick={() => handleToggleLayer('arableLand')}
@@ -187,7 +188,7 @@ export function DesktopDistrictMapScreen({
               aria-checked={layers.arableLand}
               className={cn(
                 'w-8 h-4 rounded-full transition-colors duration-200 relative cursor-pointer',
-                layers.arableLand ? 'bg-[#3F6B4E] dark:bg-[#4E8761]' : 'bg-[#E4DCCB] dark:bg-[#283C30]'
+                layers.arableLand ? 'bg-[var(--moss)]' : 'bg-[var(--sand)]'
               )}
             >
               <span
@@ -200,8 +201,8 @@ export function DesktopDistrictMapScreen({
           </div>
 
           {/* Community settlements (Active green pill in reference) */}
-          <div className="flex items-center justify-between py-1.5 px-2.5 rounded-control bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] hover:border-[#C8BFAC] dark:hover:border-[#3E5848] text-xs transition-colors duration-200">
-            <span className="text-[#1F2A22] dark:text-[#EBF2EC] font-medium">Community settlements</span>
+          <div className="flex items-center justify-between py-1.5 px-2.5 rounded-control bg-[var(--surface)] dark:bg-[var(--surface)] border border-[var(--sand)] dark:border-[var(--sand)] hover:border-[var(--sand)] text-xs transition-colors duration-200">
+            <span className="text-[var(--ink)] dark:text-[var(--ink)] font-medium">Community settlements</span>
             <button
               type="button"
               onClick={() => handleToggleLayer('communitySettlements')}
@@ -209,7 +210,7 @@ export function DesktopDistrictMapScreen({
               aria-checked={layers.communitySettlements}
               className={cn(
                 'w-8 h-4 rounded-full transition-colors duration-200 relative cursor-pointer',
-                layers.communitySettlements ? 'bg-[#3F6B4E] dark:bg-[#4E8761]' : 'bg-[#E4DCCB] dark:bg-[#283C30]'
+                layers.communitySettlements ? 'bg-[var(--moss)]' : 'bg-[var(--sand)]'
               )}
             >
               <span
@@ -222,8 +223,8 @@ export function DesktopDistrictMapScreen({
           </div>
 
           {/* Rainfall */}
-          <div className="flex items-center justify-between py-1.5 px-2.5 rounded-control bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] hover:border-[#C8BFAC] dark:hover:border-[#3E5848] text-xs transition-colors duration-200">
-            <span className="text-[#1F2A22] dark:text-[#EBF2EC] font-normal">Rainfall</span>
+          <div className="flex items-center justify-between py-1.5 px-2.5 rounded-control bg-[var(--surface)] dark:bg-[var(--surface)] border border-[var(--sand)] dark:border-[var(--sand)] hover:border-[var(--sand)] text-xs transition-colors duration-200">
+            <span className="text-[var(--ink)] dark:text-[var(--ink)] font-normal">Rainfall</span>
             <button
               type="button"
               onClick={() => handleToggleLayer('rainfall')}
@@ -231,7 +232,7 @@ export function DesktopDistrictMapScreen({
               aria-checked={layers.rainfall}
               className={cn(
                 'w-8 h-4 rounded-full transition-colors duration-200 relative cursor-pointer',
-                layers.rainfall ? 'bg-[#3F6B4E] dark:bg-[#4E8761]' : 'bg-[#E4DCCB] dark:bg-[#283C30]'
+                layers.rainfall ? 'bg-[var(--moss)]' : 'bg-[var(--sand)]'
               )}
             >
               <span
@@ -244,8 +245,8 @@ export function DesktopDistrictMapScreen({
           </div>
 
           {/* Elevation */}
-          <div className="flex items-center justify-between py-1.5 px-2.5 rounded-control bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] hover:border-[#C8BFAC] dark:hover:border-[#3E5848] text-xs transition-colors duration-200">
-            <span className="text-[#1F2A22] dark:text-[#EBF2EC] font-normal">Elevation</span>
+          <div className="flex items-center justify-between py-1.5 px-2.5 rounded-control bg-[var(--surface)] dark:bg-[var(--surface)] border border-[var(--sand)] dark:border-[var(--sand)] hover:border-[var(--sand)] text-xs transition-colors duration-200">
+            <span className="text-[var(--ink)] dark:text-[var(--ink)] font-normal">Elevation</span>
             <button
               type="button"
               onClick={() => handleToggleLayer('elevation')}
@@ -253,7 +254,7 @@ export function DesktopDistrictMapScreen({
               aria-checked={layers.elevation}
               className={cn(
                 'w-8 h-4 rounded-full transition-colors duration-200 relative cursor-pointer',
-                layers.elevation ? 'bg-[#3F6B4E] dark:bg-[#4E8761]' : 'bg-[#E4DCCB] dark:bg-[#283C30]'
+                layers.elevation ? 'bg-[var(--moss)]' : 'bg-[var(--sand)]'
               )}
             >
               <span
@@ -268,11 +269,11 @@ export function DesktopDistrictMapScreen({
 
         {/* Optional switch to deep GIS / Leaflet engine */}
         {onToggleFullGis && (
-          <div className="mt-auto pt-4 border-t border-[#E4DCCB] dark:border-[#283C30]">
+          <div className="mt-auto pt-4 border-t border-[var(--sand)] dark:border-[var(--sand)]">
             <button
               type="button"
               onClick={onToggleFullGis}
-              className="w-full py-1.5 px-2.5 rounded-control border border-[#E4DCCB] dark:border-[#283C30] hover:border-[#1F2A22] dark:hover:border-white bg-[#FFFDF8] dark:bg-[#17241C] text-[12px] text-[#5A6458] dark:text-[#8E9E92] hover:text-[#1F2A22] dark:hover:text-[#EBF2EC] flex items-center justify-center gap-1.5 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
+              className="w-full py-1.5 px-2.5 rounded-control border border-[var(--sand)] dark:border-[var(--sand)] hover:border-[var(--ink)] dark:hover:border-white bg-[var(--surface)] dark:bg-[var(--surface)] text-[12px] text-[var(--ink-muted)] dark:text-[var(--ink-muted)] hover:text-[var(--ink)] dark:hover:text-[var(--ink)] flex items-center justify-center gap-1.5 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
             >
               <Maximize2 size={12} />
               <span>Deep GIS Satellite Map</span>
@@ -284,15 +285,15 @@ export function DesktopDistrictMapScreen({
       {/* ====================================================================
           2. CENTER MAP AREA (Matches District map@1x.png)
       ==================================================================== */}
-      <main className="flex-1 flex flex-col min-w-0 bg-[#F6F1E7] dark:bg-[#0F1813] relative transition-colors duration-200">
+      <main className="flex-1 flex flex-col min-w-0 bg-[var(--ground)] dark:bg-[var(--ground)] relative transition-colors duration-200">
         
         {/* Top Control Bar: "Map", "Stations", "Soil guide", "Dedza district ▾" */}
-        <div className="h-12 border-b border-[#E4DCCB] dark:border-[#283C30] px-4 flex items-center justify-between gap-2 bg-[#F6F1E7]/80 dark:bg-[#0F1813]/80 backdrop-blur-xs z-20 transition-colors duration-200">
+        <div className="h-12 border-b border-[var(--sand)] dark:border-[var(--sand)] px-4 flex items-center justify-between gap-2 bg-[var(--ground)]/80 dark:bg-[var(--ground)]/80 backdrop-blur-xs z-20 transition-colors duration-200">
           <div className="flex items-center gap-1.5">
             {/* "Map" button: styled as primary terracotta button in reference */}
             <button
               type="button"
-              className="px-3.5 py-1.5 rounded-control bg-[#B4531F] text-white text-xs font-medium shadow-2xs hover:bg-[#9c4518] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+              className="px-3.5 py-1.5 rounded-control bg-[var(--clay)] text-white text-xs font-medium shadow-2xs hover:bg-[var(--clay-deep)] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
             >
               Map
             </button>
@@ -304,8 +305,8 @@ export function DesktopDistrictMapScreen({
               className={cn(
                 'px-3 py-1.5 rounded-control text-xs font-medium transition-all duration-200 cursor-pointer border',
                 layers.communitySettlements
-                  ? 'bg-[#FFFDF8] dark:bg-[#17241C] border-[#E4DCCB] dark:border-[#283C30] text-[#1F2A22] dark:text-[#EBF2EC]'
-                  : 'border-transparent hover:border-[#E4DCCB] dark:hover:border-[#283C30] text-[#5A6458] dark:text-[#8E9E92] hover:text-[#1F2A22] dark:hover:text-[#EBF2EC]'
+                  ? 'bg-[var(--surface)] dark:bg-[var(--surface)] border-[var(--sand)] dark:border-[var(--sand)] text-[var(--ink)] dark:text-[var(--ink)]'
+                  : 'border-transparent hover:border-[var(--sand)] dark:hover:border-[var(--sand)] text-[var(--ink-muted)] dark:text-[var(--ink-muted)] hover:text-[var(--ink)] dark:hover:text-[var(--ink)]'
               )}
             >
               Stations
@@ -315,7 +316,7 @@ export function DesktopDistrictMapScreen({
             <button
               type="button"
               onClick={onOpenSoilScience}
-              className="px-3 py-1.5 rounded-control border border-transparent hover:border-[#E4DCCB] dark:hover:border-[#283C30] text-xs font-medium text-[#5A6458] dark:text-[#8E9E92] hover:text-[#1F2A22] dark:hover:text-[#EBF2EC] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+              className="px-3 py-1.5 rounded-control border border-transparent hover:border-[var(--sand)] dark:hover:border-[var(--sand)] text-xs font-medium text-[var(--ink-muted)] dark:text-[var(--ink-muted)] hover:text-[var(--ink)] dark:hover:text-[var(--ink)] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
             >
               Soil guide
             </button>
@@ -326,26 +327,26 @@ export function DesktopDistrictMapScreen({
             <button
               type="button"
               onClick={() => setIsDropdownOpen((prev) => !prev)}
-              className="px-3 py-1.5 rounded-control bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] hover:border-[#1F2A22] dark:hover:border-white text-xs font-medium text-[#1F2A22] dark:text-[#EBF2EC] flex items-center gap-1.5 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-2xs"
+              className="px-3 py-1.5 rounded-control bg-[var(--surface)] dark:bg-[var(--surface)] border border-[var(--sand)] dark:border-[var(--sand)] hover:border-[var(--ink)] dark:hover:border-white text-xs font-medium text-[var(--ink)] dark:text-[var(--ink)] flex items-center gap-1.5 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-2xs"
             >
               <span>{selectedDistrict.name} district</span>
-              <ChevronDown size={13} className="text-[#5A6458] dark:text-[#8E9E92]" />
+              <ChevronDown size={13} className="text-[var(--ink-muted)] dark:text-[var(--ink-muted)]" />
             </button>
 
             {isDropdownOpen && (
-              <div className="absolute right-0 top-full mt-1 w-48 max-h-64 overflow-y-auto rounded-card bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] shadow-lg z-50 py-1 text-xs">
+              <div className="absolute right-0 top-full mt-1 w-48 max-h-64 overflow-y-auto rounded-card bg-[var(--surface)] dark:bg-[var(--surface)] border border-[var(--sand)] dark:border-[var(--sand)] shadow-lg z-50 py-1 text-xs">
                 {MALAWI_DISTRICTS.map((d) => (
                   <button
                     key={d.id}
                     type="button"
                     onClick={() => handleSelectDistrict(d.id)}
                     className={cn(
-                      'w-full text-left px-3 py-1.5 flex items-center justify-between hover:bg-[#F6F1E7] dark:hover:bg-[#1F3025] transition-colors cursor-pointer',
-                      d.id === selectedDistrictId ? 'font-medium text-[#B4531F] bg-[#F6F1E7] dark:bg-[#1F3025]' : 'text-[#1F2A22] dark:text-[#EBF2EC]'
+                      'w-full text-left px-3 py-1.5 flex items-center justify-between hover:bg-[var(--ground)] dark:hover:bg-[var(--ground)] transition-colors cursor-pointer',
+                      d.id === selectedDistrictId ? 'font-medium text-[var(--clay)] bg-[var(--ground)] dark:bg-[var(--ground)]' : 'text-[var(--ink)] dark:text-[var(--ink)]'
                     )}
                   >
                     <span>{d.name}</span>
-                    {d.id === selectedDistrictId && <Check size={12} className="text-[#B4531F]" />}
+                    {d.id === selectedDistrictId && <Check size={12} className="text-[var(--clay)]" />}
                   </button>
                 ))}
               </div>
@@ -365,8 +366,8 @@ export function DesktopDistrictMapScreen({
             {lakeMalawiPath && (
               <path
                 d={lakeMalawiPath}
-                fill="#C8DCE4"
-                stroke="#A8C4CE"
+                fill={DISTRICT_CANVAS_THEME.lakeBlue}
+                stroke={DISTRICT_CANVAS_THEME.lakeBlueDeep}
                 strokeWidth="0.8"
                 className="opacity-70 dark:opacity-40"
               />
@@ -380,7 +381,7 @@ export function DesktopDistrictMapScreen({
                     key={i}
                     d={c.pathData}
                     fill="none"
-                    stroke="#8B7D6B"
+                    stroke={DISTRICT_CANVAS_THEME.parchmentMuted}
                     strokeWidth="0.6"
                     strokeDasharray="2, 2"
                   />
@@ -395,11 +396,11 @@ export function DesktopDistrictMapScreen({
                 <path
                   key={d.id}
                   d={d.pathData}
-                  fill={isSelected ? '#EFE7D8' : '#F6F1E7'}
-                  stroke={isSelected ? '#1F2A22' : '#E4DCCB'}
+                  fill={isSelected ? DISTRICT_CANVAS_THEME.parchmentWarm : DISTRICT_CANVAS_THEME.ground}
+                  stroke={isSelected ? DISTRICT_CANVAS_THEME.ink : DISTRICT_CANVAS_THEME.sand}
                   strokeWidth={isSelected ? '1.5' : '0.8'}
                   onClick={() => handleSelectDistrict(d.id)}
-                  className="cursor-pointer transition-colors duration-200 hover:fill-[#EDE6D6] dark:fill-[#121E17] dark:stroke-[#283C30] dark:hover:fill-[#1A2C21]"
+                  className="cursor-pointer transition-colors duration-200 hover:fill-[var(--sand)] dark:fill-[var(--surface)] dark:stroke-[var(--sand)] dark:hover:fill-[var(--surface)]"
                 />
               );
             })}
@@ -419,7 +420,7 @@ export function DesktopDistrictMapScreen({
                     cy={m.cy}
                     r={isSelected ? 16 : 13}
                     fill="none"
-                    stroke={isSelected ? '#B4531F' : '#5A6458'}
+                    stroke={isSelected ? DISTRICT_CANVAS_THEME.clay : DISTRICT_CANVAS_THEME.inkMuted}
                     strokeWidth={isSelected ? '1.5' : '1'}
                     strokeDasharray="3, 3"
                     className="transition-all duration-200 group-hover:scale-110"
@@ -430,7 +431,7 @@ export function DesktopDistrictMapScreen({
                     cx={m.cx}
                     cy={m.cy}
                     r={isSelected ? 3.5 : 2.5}
-                    fill={isSelected ? '#B4531F' : '#1F2A22'}
+                    fill={isSelected ? DISTRICT_CANVAS_THEME.clay : DISTRICT_CANVAS_THEME.ink}
                     className="transition-colors duration-200"
                   />
 
@@ -438,11 +439,11 @@ export function DesktopDistrictMapScreen({
                   <text
                     x={m.cx + (isSelected ? 20 : 16)}
                     y={m.cy + 4}
-                    fill={isSelected ? '#1F2A22' : '#5A6458'}
+                    fill={isSelected ? DISTRICT_CANVAS_THEME.ink : DISTRICT_CANVAS_THEME.inkMuted}
                     fontSize={isSelected ? '12px' : '10.5px'}
                     fontFamily="Segoe UI Variable, system-ui, sans-serif"
                     fontWeight={isSelected ? '600' : '500'}
-                    className="transition-all duration-200 dark:fill-[#EBF2EC]"
+                    className="transition-all duration-200 dark:fill-white"
                   >
                     {m.name}
                   </text>
@@ -453,7 +454,7 @@ export function DesktopDistrictMapScreen({
 
           {/* Bottom Map Disclaimer Text (from reference design) */}
           <div className="absolute bottom-2 left-4 right-4 text-center pointer-events-none">
-            <p className="text-[11px] text-[#5A6458]/80 dark:text-[#8E9E92]/80 font-normal">
+            <p className="text-[11px] text-[var(--ink-muted)] dark:text-[var(--ink-muted)] font-normal">
               Malawi Department of Climate Change &amp; Meteorological Services (DCCMS) · National Water Resources Authority · Surveyed 2024
             </p>
           </div>
@@ -463,14 +464,14 @@ export function DesktopDistrictMapScreen({
       {/* ====================================================================
           3. RIGHT INSPECTOR (Matches District map@1x.png)
       ==================================================================== */}
-      <aside className="w-full md:w-[280px] shrink-0 border-t md:border-t-0 md:border-l border-[#E4DCCB] dark:border-[#283C30] p-5 flex flex-col gap-5 bg-[#F6F1E7] dark:bg-[#121C16] transition-colors duration-200">
+      <aside className="w-full md:w-[280px] shrink-0 border-t md:border-t-0 md:border-l border-[var(--sand)] dark:border-[var(--sand)] p-5 flex flex-col gap-5 bg-[var(--ground)] dark:bg-[var(--surface)] transition-colors duration-200">
         
         {/* District Title & Subtitle */}
         <div className="flex flex-col gap-1">
-          <h2 className="font-serif text-2xl font-bold text-[#1F2A22] dark:text-[#EBF2EC] leading-tight">
+          <h2 className="font-serif text-2xl font-bold text-[var(--ink)] dark:text-[var(--ink)] leading-tight">
             {selectedDistrict.name}
           </h2>
-          <p className="text-xs text-[#5A6458] dark:text-[#8E9E92]">
+          <p className="text-xs text-[var(--ink-muted)] dark:text-[var(--ink-muted)]">
             {selectedDistrict.region} region
           </p>
         </div>
@@ -478,53 +479,53 @@ export function DesktopDistrictMapScreen({
         {/* Statistics Pills with "Estimate" badges */}
         <div className="flex flex-col gap-2.5">
           {/* Rainfall */}
-          <div className="p-3 rounded-card bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] flex items-center justify-between transition-all duration-200 hover:border-[#C8BFAC] dark:hover:border-[#3E5848]">
+          <div className="p-3 rounded-card bg-[var(--surface)] dark:bg-[var(--surface)] border border-[var(--sand)] dark:border-[var(--sand)] flex items-center justify-between transition-all duration-200 hover:border-[var(--sand)]">
             <div className="flex flex-col">
-              <span className="text-[11px] text-[#5A6458] dark:text-[#8E9E92]">Annual rainfall</span>
-              <span className="text-sm font-semibold text-[#1F2A22] dark:text-[#EBF2EC]">
+              <span className="text-[11px] text-[var(--ink-muted)] dark:text-[var(--ink-muted)]">Annual rainfall</span>
+              <span className="text-sm font-semibold text-[var(--ink)] dark:text-[var(--ink)]">
                 {selectedDistrict.rainfallAnnualMm.toLocaleString()} mm
               </span>
             </div>
-            <span className="text-[10px] font-medium text-[#5A6458] dark:text-[#8E9E92] bg-[#F6F1E7] dark:bg-[#121C16] px-2 py-0.5 rounded-full border border-[#E4DCCB] dark:border-[#283C30]">
+            <span className="text-[10px] font-medium text-[var(--ink-muted)] dark:text-[var(--ink-muted)] bg-[var(--ground)] dark:bg-[var(--ground)] px-2 py-0.5 rounded-full border border-[var(--sand)] dark:border-[var(--sand)]">
               Estimate
             </span>
           </div>
 
           {/* Elevation */}
-          <div className="p-3 rounded-card bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] flex items-center justify-between transition-all duration-200 hover:border-[#C8BFAC] dark:hover:border-[#3E5848]">
+          <div className="p-3 rounded-card bg-[var(--surface)] dark:bg-[var(--surface)] border border-[var(--sand)] dark:border-[var(--sand)] flex items-center justify-between transition-all duration-200 hover:border-[var(--sand)]">
             <div className="flex flex-col">
-              <span className="text-[11px] text-[#5A6458] dark:text-[#8E9E92]">Elevation</span>
-              <span className="text-sm font-semibold text-[#1F2A22] dark:text-[#EBF2EC]">
+              <span className="text-[11px] text-[var(--ink-muted)] dark:text-[var(--ink-muted)]">Elevation</span>
+              <span className="text-sm font-semibold text-[var(--ink)] dark:text-[var(--ink)]">
                 {selectedDistrict.elevationRange ? selectedDistrict.elevationRange.split(' ')[0] : '1,600 m'}
               </span>
             </div>
-            <span className="text-[10px] font-medium text-[#5A6458] dark:text-[#8E9E92] bg-[#F6F1E7] dark:bg-[#121C16] px-2 py-0.5 rounded-full border border-[#E4DCCB] dark:border-[#283C30]">
+            <span className="text-[10px] font-medium text-[var(--ink-muted)] dark:text-[var(--ink-muted)] bg-[var(--ground)] dark:bg-[var(--ground)] px-2 py-0.5 rounded-full border border-[var(--sand)] dark:border-[var(--sand)]">
               Estimate
             </span>
           </div>
 
           {/* Aquifer depth */}
-          <div className="p-3 rounded-card bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] flex items-center justify-between transition-all duration-200 hover:border-[#C8BFAC] dark:hover:border-[#3E5848]">
+          <div className="p-3 rounded-card bg-[var(--surface)] dark:bg-[var(--surface)] border border-[var(--sand)] dark:border-[var(--sand)] flex items-center justify-between transition-all duration-200 hover:border-[var(--sand)]">
             <div className="flex flex-col">
-              <span className="text-[11px] text-[#5A6458] dark:text-[#8E9E92]">Aquifer depth</span>
-              <span className="text-sm font-semibold text-[#1F2A22] dark:text-[#EBF2EC]">
+              <span className="text-[11px] text-[var(--ink-muted)] dark:text-[var(--ink-muted)]">Aquifer depth</span>
+              <span className="text-sm font-semibold text-[var(--ink)] dark:text-[var(--ink)]">
                 {selectedDistrict.aquiferDepth.split('(')[0].trim()}
               </span>
             </div>
-            <span className="text-[10px] font-medium text-[#5A6458] dark:text-[#8E9E92] bg-[#F6F1E7] dark:bg-[#121C16] px-2 py-0.5 rounded-full border border-[#E4DCCB] dark:border-[#283C30]">
+            <span className="text-[10px] font-medium text-[var(--ink-muted)] dark:text-[var(--ink-muted)] bg-[var(--ground)] dark:bg-[var(--ground)] px-2 py-0.5 rounded-full border border-[var(--sand)] dark:border-[var(--sand)]">
               Estimate
             </span>
           </div>
 
           {/* Solar potential */}
-          <div className="p-3 rounded-card bg-[#FFFDF8] dark:bg-[#17241C] border border-[#E4DCCB] dark:border-[#283C30] flex items-center justify-between transition-all duration-200 hover:border-[#C8BFAC] dark:hover:border-[#3E5848]">
+          <div className="p-3 rounded-card bg-[var(--surface)] dark:bg-[var(--surface)] border border-[var(--sand)] dark:border-[var(--sand)] flex items-center justify-between transition-all duration-200 hover:border-[var(--sand)]">
             <div className="flex flex-col">
-              <span className="text-[11px] text-[#5A6458] dark:text-[#8E9E92]">Solar potential</span>
-              <span className="text-sm font-semibold text-[#1F2A22] dark:text-[#EBF2EC]">
+              <span className="text-[11px] text-[var(--ink-muted)] dark:text-[var(--ink-muted)]">Solar potential</span>
+              <span className="text-sm font-semibold text-[var(--ink)] dark:text-[var(--ink)]">
                 {selectedDistrict.solarKwhDay} kWh/m²
               </span>
             </div>
-            <span className="text-[10px] font-medium text-[#5A6458] dark:text-[#8E9E92] bg-[#F6F1E7] dark:bg-[#121C16] px-2 py-0.5 rounded-full border border-[#E4DCCB] dark:border-[#283C30]">
+            <span className="text-[10px] font-medium text-[var(--ink-muted)] dark:text-[var(--ink-muted)] bg-[var(--ground)] dark:bg-[var(--ground)] px-2 py-0.5 rounded-full border border-[var(--sand)] dark:border-[var(--sand)]">
               Estimate
             </span>
           </div>
@@ -536,7 +537,7 @@ export function DesktopDistrictMapScreen({
           <button
             type="button"
             onClick={() => navigate('/skills/ram-pump')}
-            className="w-full py-2.5 px-3 rounded-control bg-[#B4531F] hover:bg-[#9c4518] text-white text-xs font-semibold shadow-2xs transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-1.5 cursor-pointer"
+            className="w-full py-2.5 px-3 rounded-control bg-[var(--clay)] hover:bg-[var(--clay-deep)] text-white text-xs font-semibold shadow-2xs transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-1.5 cursor-pointer"
           >
             <span>Open water guide</span>
             <ArrowRight size={13} />
@@ -546,12 +547,12 @@ export function DesktopDistrictMapScreen({
           <button
             type="button"
             onClick={handleAddToComparison}
-            className="w-full py-2 px-3 rounded-control border border-[#E4DCCB] dark:border-[#283C30] hover:border-[#1F2A22] dark:hover:border-white bg-[#FFFDF8] dark:bg-[#17241C] hover:bg-[#F6F1E7] dark:hover:bg-[#1F3025] text-xs font-medium text-[#1F2A22] dark:text-[#EBF2EC] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-1.5 cursor-pointer"
+            className="w-full py-2 px-3 rounded-control border border-[var(--sand)] dark:border-[var(--sand)] hover:border-[var(--ink)] dark:hover:border-white bg-[var(--surface)] dark:bg-[var(--surface)] hover:bg-[var(--ground)] dark:hover:bg-[var(--ground)] text-xs font-medium text-[var(--ink)] dark:text-[var(--ink)] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-1.5 cursor-pointer"
           >
             {isAddedToComparison ? (
               <>
-                <Check size={13} className="text-[#3F6B4E] dark:text-[#4E8761]" />
-                <span className="text-[#3F6B4E] dark:text-[#4E8761]">Added to comparison</span>
+                <Check size={13} className="text-[var(--moss)]" />
+                <span className="text-[var(--moss)]">Added to comparison</span>
               </>
             ) : (
               <span>Add to site comparison</span>

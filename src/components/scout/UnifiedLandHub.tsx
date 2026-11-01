@@ -31,7 +31,7 @@ export function UnifiedLandHub({ defaultTab = 'scout' }: UnifiedLandHubProps) {
   };
 
   return (
-    <div className="w-full h-full relative flex flex-col text-[#1F2A22] bg-[#F6F1E7] font-chrome" id="malawi-regional-parcel-scout-module">
+    <div className="w-full h-full relative flex flex-col text-[var(--ink)] bg-[var(--ground)] font-chrome" id="malawi-regional-parcel-scout-module">
       {/* Primary Tab Content */}
       {activeTab === 'scout' && (
         <section className="w-full h-full flex-1">
@@ -83,16 +83,16 @@ export function UnifiedLandHub({ defaultTab = 'scout' }: UnifiedLandHubProps) {
 
       {activeTab === 'comparison' && (
         <section className="w-full max-w-7xl mx-auto pt-8 px-4 sm:px-6 pb-8 flex flex-col gap-4">
-          <div className="bg-[#FFFDF8] border border-[#E4DCCB] rounded-card p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[#1F2A22] shadow-2xs">
+          <div className="bg-[var(--surface)] border border-[var(--sand)] rounded-card p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[var(--ink)] shadow-2xs">
             <div>
-              <h2 className="font-serif text-xl font-bold text-[#1F2A22]">District Comparative Analytics</h2>
-              <p className="text-xs text-[#5A6458] mt-1">
+              <h2 className="font-serif text-xl font-bold text-[var(--ink)]">District Comparative Analytics</h2>
+              <p className="text-xs text-[var(--ink-muted)] mt-1">
                 Compare population density per km², rainfall gradients, and aquifer drill depth metrics across all 28 districts of Malawi.
               </p>
             </div>
             <button
               onClick={() => handleTabChange('scout')}
-              className="px-3.5 py-1.5 rounded-control bg-[#FFFDF8] hover:bg-[#F6F1E7] border border-[#E4DCCB] text-[#1F2A22] font-chrome font-medium text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="px-3.5 py-1.5 rounded-control bg-[var(--surface)] hover:bg-[var(--ground)] border border-[var(--sand)] text-[var(--ink)] font-chrome font-medium text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <Globe size={13} />
               <span>Back to Map</span>
@@ -111,7 +111,7 @@ export function UnifiedLandHub({ defaultTab = 'scout' }: UnifiedLandHubProps) {
           <div className="flex justify-end">
             <button
               onClick={() => handleTabChange('scout')}
-              className="px-3.5 py-1.5 rounded-control bg-[#FFFDF8] hover:bg-[#F6F1E7] border border-[#E4DCCB] text-[#1F2A22] font-chrome font-medium text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="px-3.5 py-1.5 rounded-control bg-[var(--surface)] hover:bg-[var(--ground)] border border-[var(--sand)] text-[var(--ink)] font-chrome font-medium text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <Globe size={13} />
               <span>Back to Map</span>

@@ -4,6 +4,7 @@ import { CloudRain, Wheat, Layers, Sun, Sparkles } from 'lucide-react';
 import { SeasonalTag } from '@/data/skillsAndSeasons';
 import { CountryIcon, CountryIconName } from '@/components/icons/CountryIcons';
 import { cn } from '@/lib/utils';
+import { ALMANAC_THEME } from '@/theme';
 
 interface SeasonGaugeDialProps {
   activeSeason: SeasonalTag;
@@ -35,8 +36,8 @@ const PHASES: SeasonPhaseSegment[] = [
     monthsRange: 'Months 9 – 10',
     startAngle: 240,
     endAngle: 300,
-    colorHex: '#d97706',
-    accentHex: '#fbbf24',
+    colorHex: ALMANAC_THEME.amber600,
+    accentHex: ALMANAC_THEME.amber400,
     icon: Sun,
   },
   {
@@ -48,8 +49,8 @@ const PHASES: SeasonPhaseSegment[] = [
     monthsRange: 'Months 11 – 3',
     startAngle: 300,
     endAngle: 450,
-    colorHex: '#059669',
-    accentHex: '#34d399',
+    colorHex: ALMANAC_THEME.emerald600,
+    accentHex: ALMANAC_THEME.mintEmerald,
     icon: CloudRain,
   },
   {
@@ -61,8 +62,8 @@ const PHASES: SeasonPhaseSegment[] = [
     monthsRange: 'Months 4 – 6',
     startAngle: 90,
     endAngle: 180,
-    colorHex: '#b45309',
-    accentHex: '#f59e0b',
+    colorHex: ALMANAC_THEME.amber700,
+    accentHex: ALMANAC_THEME.amber500,
     icon: Wheat,
   },
   {
@@ -74,8 +75,8 @@ const PHASES: SeasonPhaseSegment[] = [
     monthsRange: 'Months 7 – 8',
     startAngle: 180,
     endAngle: 240,
-    colorHex: '#0284c7',
-    accentHex: '#38bdf8',
+    colorHex: ALMANAC_THEME.sky600,
+    accentHex: ALMANAC_THEME.sky400,
     icon: Layers,
   },
 ];
@@ -84,7 +85,10 @@ export function SeasonGaugeDial({ activeSeason, onSelectSeason, className }: Sea
   const activeSegment = PHASES.find(p => p.key === activeSeason) || PHASES[0];
 
   return (
-    <div className={cn("bg-[#0d1811] text-white p-6 md:p-8 rounded-[2.5rem] border border-amber-500/25 shadow-2xl relative overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-center gap-8", className)}>
+    <div 
+      className={cn("text-white p-6 md:p-8 rounded-[var(--radius-card)] border border-amber-500/25 shadow-2xl relative overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-center gap-8", className)}
+      style={{ backgroundColor: ALMANAC_THEME.dialDark }}
+    >
       {/* Background Ambient Glow */}
       <div 
         className="absolute w-96 h-96 rounded-full blur-3xl opacity-20 pointer-events-none -right-20 -top-20 transition-all duration-700"
@@ -94,15 +98,18 @@ export function SeasonGaugeDial({ activeSeason, onSelectSeason, className }: Sea
       {/* Left Text & Active Indicator (5 Cols) */}
       <div className="lg:col-span-5 flex flex-col gap-3 relative z-10">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-caption font-mono font-black uppercase tracking-widest px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1.5">
+          <span className="text-caption font-bold px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1.5">
             <Sparkles size={12} className="text-amber-400" />
-            <span>{activeSegment.chichewaName} Season</span>
+            <span>{activeSegment.chichewaName} season</span>
           </span>
           <span className="text-emerald-400/60 text-xs">•</span>
-          <span className="text-xs font-mono text-emerald-200/80">365-Day Agricultural Wheel</span>
+          <span className="text-xs text-emerald-200/80">365-day agricultural wheel</span>
         </div>
 
-        <h3 className="serif text-3xl sm:text-4xl font-extrabold text-[#FAF8F5] leading-tight">
+        <h3 
+          className="serif text-3xl sm:text-4xl font-extrabold leading-tight"
+          style={{ color: ALMANAC_THEME.paperCream }}
+        >
           {activeSegment.label}
         </h3>
 
@@ -147,8 +154,11 @@ export function SeasonGaugeDial({ activeSeason, onSelectSeason, className }: Sea
 
       {/* Center: Panoramic Season Lithograph Illustration (4 Cols) */}
       <div className="lg:col-span-4 relative z-10 flex flex-col gap-2">
-        <div className="rounded-3xl bg-[#07130C] border border-emerald-800/60 p-4 flex flex-col items-center justify-center relative overflow-hidden shadow-inner min-h-[210px]">
-          <div className="absolute top-3 left-3.5 right-3.5 flex items-center justify-between text-caption font-mono uppercase tracking-widest text-emerald-400/80">
+        <div 
+          className="rounded-[var(--radius-card)] border border-emerald-800/60 p-4 flex flex-col items-center justify-center relative overflow-hidden shadow-inner min-h-[210px]"
+          style={{ backgroundColor: ALMANAC_THEME.dialCenterDark }}
+        >
+          <div className="absolute top-3 left-3.5 right-3.5 flex items-center justify-between text-caption text-emerald-400/80">
             <span>Malawi Almanac Plate</span>
             <span className="text-amber-300 font-bold">{activeSegment.chichewaName}</span>
           </div>
@@ -158,7 +168,7 @@ export function SeasonGaugeDial({ activeSeason, onSelectSeason, className }: Sea
               className="w-full h-36 object-contain drop-shadow-md transition-all duration-300"
             />
           </div>
-          <span className="text-caption font-mono text-emerald-200/80 text-center">
+          <span className="text-caption text-emerald-200/80 text-center">
             {activeSegment.label} ({activeSegment.shortMonths})
           </span>
         </div>
@@ -185,7 +195,7 @@ export function SeasonGaugeDial({ activeSeason, onSelectSeason, className }: Sea
               cy="120"
               r="95"
               fill="none"
-              stroke="#d97706"
+              stroke={ALMANAC_THEME.amber600}
               strokeWidth={activeSeason === 'Hot Dry Preparation' ? '22' : '16'}
               strokeDasharray="99.5 596.9"
               strokeDashoffset="-398"
@@ -199,7 +209,7 @@ export function SeasonGaugeDial({ activeSeason, onSelectSeason, className }: Sea
               cy="120"
               r="95"
               fill="none"
-              stroke="#059669"
+              stroke={ALMANAC_THEME.emerald600}
               strokeWidth={activeSeason === 'Rainy Planting' ? '22' : '16'}
               strokeDasharray="248.7 596.9"
               strokeDashoffset="-497.5"
@@ -213,7 +223,7 @@ export function SeasonGaugeDial({ activeSeason, onSelectSeason, className }: Sea
               cy="120"
               r="95"
               fill="none"
-              stroke="#b45309"
+              stroke={ALMANAC_THEME.amber700}
               strokeWidth={activeSeason === 'Harvest & Storage' ? '22' : '16'}
               strokeDasharray="149.2 596.9"
               strokeDashoffset="-149.2"
@@ -227,7 +237,7 @@ export function SeasonGaugeDial({ activeSeason, onSelectSeason, className }: Sea
               cy="120"
               r="95"
               fill="none"
-              stroke="#0284c7"
+              stroke={ALMANAC_THEME.sky600}
               strokeWidth={activeSeason === 'Cold Dry Season' ? '22' : '16'}
               strokeDasharray="99.5 596.9"
               strokeDashoffset="-298.5"

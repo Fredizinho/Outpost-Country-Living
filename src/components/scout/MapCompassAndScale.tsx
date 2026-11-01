@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Compass } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { OUTPOST_SCHEMATIC_THEME } from '@/theme';
 
 export interface MapCompassAndScaleProps {
   currentZoom?: number;
@@ -75,11 +76,11 @@ export function MapCompassAndScale({
           {/* Compass Needle (Red North, Silver South) */}
           <svg className="w-5 h-5 drop-shadow-[0_0_4px_rgba(244,63,94,0.6)]" viewBox="0 0 24 24" fill="none">
             {/* North pointer (Red) */}
-            <polygon points="12,2 8,12 12,10 16,12" fill="#f43f5e" />
+            <polygon points="12,2 8,12 12,10 16,12" fill={OUTPOST_SCHEMATIC_THEME.hotPhaseStroke} />
             {/* South pointer (Slate) */}
-            <polygon points="12,22 8,12 12,14 16,12" fill="#94a3b8" />
+            <polygon points="12,22 8,12 12,14 16,12" fill={OUTPOST_SCHEMATIC_THEME.slateMuted} />
             {/* Center Pivot */}
-            <circle cx="12" cy="12" r="1.5" fill="#020617" stroke="#ffffff" strokeWidth="1" />
+            <circle cx="12" cy="12" r="1.5" fill={OUTPOST_SCHEMATIC_THEME.cardBg} stroke={OUTPOST_SCHEMATIC_THEME.white} strokeWidth="1" />
           </svg>
         </div>
       </div>

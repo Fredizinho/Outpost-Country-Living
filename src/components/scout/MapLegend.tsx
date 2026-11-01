@@ -32,7 +32,7 @@ export function MapLegend({ isAutoHidden = false, onWakeUp }: MapLegendProps) {
             {/* Header */}
             <div className="flex items-center justify-between border-b border-white/10 pb-2">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
                 <h4 className="serif font-bold text-sm text-white tracking-wide">Cartographic Legend</h4>
               </div>
               <button
@@ -46,7 +46,7 @@ export function MapLegend({ isAutoHidden = false, onWakeUp }: MapLegendProps) {
 
             {/* Section 1: Groundwater & Water Reliability */}
             <div className="flex flex-col gap-1.5">
-              <span className="text-caption uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1.5">
+              <span className="text-caption font-semibold text-slate-400 flex items-center gap-1.5">
                 <Droplets size={11} className="text-sky-400" />
                 <span>Groundwater & Aquifer Table</span>
               </span>
@@ -71,13 +71,13 @@ export function MapLegend({ isAutoHidden = false, onWakeUp }: MapLegendProps) {
 
             {/* Section 2: Differentiated Boundaries & Vectors */}
             <div className="flex flex-col gap-1.5 border-t border-white/10 pt-2">
-              <span className="text-caption uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1.5">
+              <span className="text-caption font-semibold text-slate-400 flex items-center gap-1.5">
                 <ShieldCheck size={11} className="text-emerald-400" />
                 <span>Boundaries & Tenure Vectors</span>
               </span>
               <div className="flex flex-col gap-1.5 text-caption pl-1">
                 <div className="flex items-center gap-2">
-                  <span className="w-5 h-1 rounded bg-cyan-400 shadow-[0_0_8px_#22d3ee] shrink-0" />
+                  <span className="w-5 h-1 rounded bg-cyan-400 shadow-sm shrink-0" />
                   <span className="text-cyan-300 font-bold">Thick Cyan Glow:</span>
                   <span className="text-slate-300">National & District Borders</span>
                 </div>
@@ -101,7 +101,7 @@ export function MapLegend({ isAutoHidden = false, onWakeUp }: MapLegendProps) {
 
             {/* Section 3: Topographic Contours & Ridges */}
             <div className="flex flex-col gap-1.5 border-t border-white/10 pt-2">
-              <span className="text-caption uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1.5">
+              <span className="text-caption font-semibold text-slate-400 flex items-center gap-1.5">
                 <Mountain size={11} className="text-amber-400" />
                 <span>Topography & Elevation</span>
               </span>
@@ -121,7 +121,7 @@ export function MapLegend({ isAutoHidden = false, onWakeUp }: MapLegendProps) {
 
             {/* Section 4: Thematic Layers & Settlements */}
             <div className="flex flex-col gap-1.5 border-t border-white/10 pt-2">
-              <span className="text-caption uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1.5">
+              <span className="text-caption font-semibold text-slate-400 flex items-center gap-1.5">
                 <MapPin size={11} className="text-amber-400" />
                 <span>Thematic Settlements & Soil</span>
               </span>
@@ -151,7 +151,7 @@ export function MapLegend({ isAutoHidden = false, onWakeUp }: MapLegendProps) {
             {/* Section 5: District Badges & Clusters */}
             <div className="flex flex-col gap-2 border-t border-white/10 pt-2 text-caption">
               <div className="flex items-center justify-between">
-                <span className="text-caption uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1.5">
+                <span className="text-caption font-semibold text-slate-400 flex items-center gap-1.5">
                   <Compass size={11} className="text-amber-400" />
                   <span>District Centroid Badges</span>
                 </span>

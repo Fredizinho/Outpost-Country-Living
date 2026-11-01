@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { MessageSquare, Search, ShieldCheck, Users, Compass, Sprout } from 'lucide-react';
+import { MessageSquare, Search, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface ChichewaPhraseItem {
@@ -60,43 +60,45 @@ const CHICHEWA_FIELD_PHRASES: ChichewaPhraseItem[] = [
   {
     id: 'phr-6',
     category: 'Water & Soil Scouting',
-    chichewa: 'Dothi lofiira lachonde (Katondo) ndi dambo losunga chinyezi.',
-    phonetic: 'Doh-thee loh-fee-ee-rah lah-chohn-deh (Kah-tohn-doh) ndee dahm-boh loh-soon-gah chee-nyeh-zee.',
-    englishMeaning: 'Fertile red clay-loam upland soil (Katondo) and moisture-retaining valley soil (Dambo).',
+    chichewa: 'Kodi pansi pano pali madzi a dambo kapena dongo lofiira la Katondo?',
+    phonetic: 'Koh-dee pahn-see pah-noh pah-lee mah-dzee ah dahm-boh kah-peh-nah dohn-goh loh-fee-ee-rah lah Kah-tohn-doh?',
+    englishMeaning: 'Is there dambo sub-surface water or fertile Katondo red clay loam here?',
     culturalContext:
-      'An ideal Malawi outpost parcel combines upland Katondo soil for orchards/rainfed maize and a lower Dambo margin for dry-season Dimba gardening.',
+      'Dambo land provides year-round moisture for green vegetables (Dimba), while Katondo red loam supports perennial fruit trees without waterlogging.',
   },
   {
     id: 'phr-7',
     category: 'Seeds & Fellowship',
-    chichewa: 'Tikufuna mbewu za makolo zosinthika (OPV) monga chimanga, nzama, ndi khobwe.',
-    phonetic: 'Tee-koo-foo-nah mbeh-woo zah mah-koh-loh zoh-seen-thee-kah mohn-gah chee-mahn-gah, nzah-mah, ndee khoh-bweh.',
-    englishMeaning: 'We are looking for open-pollinated heirloom seeds (OPV) such as local maize, Bambara groundnuts, and cowpeas.',
+    chichewa: 'Tabweretsa mbewu zachilengedwe za mtedza wa Nzama ndi Nkhwani kuti tigawane.',
+    phonetic: 'Tah-bweh-ret-sah mbeh-woo zah-chee-len-ged-weh zah mtehd-zah wah N-zah-mah ndee N-khwah-nee koo-tee tee-gah-wah-neh.',
+    englishMeaning: 'We have brought heirloom Bambara groundnuts and pumpkin seeds to share with the village.',
     culturalContext:
-      'Helps connect with local seed-saving grandmothers and extension officers who preserve non-hybrid varieties.',
+      'Sharing seeds immediately cements friendship and signals mutual agricultural cooperation with rural neighbors.',
   },
   {
     id: 'phr-8',
     category: 'Seeds & Fellowship',
-    chichewa: 'Zikomo kwambiri, Mulungu adalitse mudzi uno ndi mabanja anu.',
-    phonetic: 'Zee-koh-moh kwahm-bee-ree, Moo-loon-goo ah-dah-lee-tseh moo-dzee oo-noh ndee mah-bahn-jah ah-noo.',
-    englishMeaning: 'Thank you very much; may God bless this village and your families.',
+    chichewa: 'Mulungu akudalitseni kwambiri chifukwa cha mtima wanu wachikondi ndi kulandira alendo.',
+    phonetic: 'Moo-loon-goo ah-koo-dah-leet-seh-nee kwahm-bee-ree chee-foo-kwah chah mtee-mah wah-noo wah-chee-kohn-dee ndee koo-lahn-dee-rah ah-len-doh.',
+    englishMeaning: 'May God richly bless you for your generous heart and warm hospitality.',
     culturalContext:
-      'A warm, respectful closing blessing when concluding a meeting with the Village Headman and Customary Land Committee.',
+      'The traditional parting blessing after meetings with village elders, expressing genuine Christian gratitude.',
   },
 ];
 
 export function ChichewaFieldPhrasebook() {
   const [selectedCat, setSelectedCat] = useState<string>('All');
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState<string>('');
 
-  const categories = [
-    'All',
-    'Chief & Village Protocol',
-    'Land & Boundaries',
-    'Water & Soil Scouting',
-    'Seeds & Fellowship',
-  ];
+  const categories = useMemo(() => {
+    return [
+      'All',
+      'Chief & Village Protocol',
+      'Land & Boundaries',
+      'Water & Soil Scouting',
+      'Seeds & Fellowship',
+    ];
+  }, []);
 
   const filteredPhrases = useMemo(() => {
     return CHICHEWA_FIELD_PHRASES.filter((item) => {
@@ -113,46 +115,46 @@ export function ChichewaFieldPhrasebook() {
   }, [selectedCat, query]);
 
   return (
-    <section className="p-6 sm:p-8 rounded-3xl bg-[#0B2517] text-white border border-emerald-800 shadow-xl flex flex-col gap-6">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-emerald-800/80 pb-5">
+    <section className="p-6 sm:p-8 rounded-[var(--radius-sheet)] bg-[var(--surface)] text-[var(--ink)] border border-[var(--border)] shadow-xs flex flex-col gap-6">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-[var(--border)] pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-amber-300">
+          <div className="flex items-center gap-2 text-xs font-sans font-semibold text-[var(--accent)]">
             <MessageSquare size={14} />
-            <span>Malawi Cultural Protocol & Phonetic Field Guide</span>
+            <span>Malawi cultural protocol &amp; phonetic field guide</span>
           </div>
-          <h3 className="serif text-2xl sm:text-3xl font-bold text-white mt-1">
-            Chichewa Chief (<em>Mfumu</em>) Etiquette & Land Scouting Phrasebook
+          <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[var(--ink)] mt-1">
+            Chichewa Chief (<em>Mfumu</em>) Etiquette &amp; Land Scouting Phrasebook
           </h3>
-          <p className="text-xs sm:text-sm text-emerald-100/80 max-w-3xl mt-1">
+          <p className="text-xs sm:text-sm text-[var(--ink-muted)] max-w-3xl mt-1">
             Essential Chichewa expressions with phonetic pronunciation and cultural etiquette for visiting a Village Headman (<em>Nyakwawa</em>), verifying <em>Mwini Mbumba</em> clan consent, and scouting perennial water.
           </p>
         </div>
 
         {/* Search Input */}
         <div className="relative w-full md:w-72">
-          <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-amber-300" />
+          <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--accent)]" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search Chichewa or English..."
-            className="w-full pl-9 pr-3 py-2 rounded-xl bg-[#06180E] border border-emerald-700/70 text-xs text-white placeholder:text-emerald-200/40 focus:outline-none focus:border-amber-400"
+            className="w-full pl-9 pr-3 py-2 rounded-[var(--radius-control)] bg-[var(--ground)] border border-[var(--border)] text-xs text-[var(--ink)] placeholder:text-[var(--ink-muted)] focus:outline-none focus:border-[var(--accent)] font-sans"
           />
         </div>
       </div>
 
       {/* Interactive Category Tabs */}
-      <div className="flex flex-wrap items-center gap-1.5 bg-[#06180E] p-1.5 rounded-2xl border border-emerald-800/80 self-start">
+      <div className="flex flex-wrap items-center gap-1.5 bg-[var(--ground)] p-1.5 rounded-[var(--radius-control)] border border-[var(--border)] self-start">
         {categories.map((cat) => (
           <button
             key={cat}
             type="button"
             onClick={() => setSelectedCat(cat)}
             className={cn(
-              'px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer',
+              'px-3 py-1.5 rounded-[var(--radius-control)] text-xs font-sans font-semibold transition-all cursor-pointer',
               selectedCat === cat
-                ? 'bg-amber-400 text-stone-950 shadow-xs'
-                : 'text-emerald-200/80 hover:text-white'
+                ? 'bg-[var(--accent)] text-white shadow-xs'
+                : 'text-[var(--ink-muted)] hover:text-[var(--ink)]'
             )}
           >
             {cat}
@@ -165,29 +167,29 @@ export function ChichewaFieldPhrasebook() {
         {filteredPhrases.map((p) => (
           <div
             key={p.id}
-            className="p-5 rounded-2xl bg-[#06180E] border border-emerald-800/80 hover:border-amber-400/50 transition-all flex flex-col justify-between gap-3"
+            className="p-5 rounded-[var(--radius-card)] bg-[var(--ground)] border border-[var(--border)] hover:border-[var(--accent)] transition-all flex flex-col justify-between gap-3"
           >
             <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between gap-2 text-caption font-mono uppercase tracking-wider text-amber-300">
+              <div className="flex items-center justify-between gap-2 text-caption font-sans font-semibold text-[var(--accent)]">
                 <span>{p.category}</span>
-                <span className="text-emerald-300">Chichewa Standard</span>
+                <span className="text-[var(--success)] font-medium">Chichewa Standard</span>
               </div>
 
-              <p className="serif text-lg sm:text-xl font-bold text-white leading-snug">
+              <p className="font-serif text-lg sm:text-xl font-bold text-[var(--ink)] leading-snug">
                 “{p.chichewa}”
               </p>
 
-              <p className="text-xs font-mono text-amber-200/90 bg-black/30 px-3 py-1.5 rounded-lg border border-white/5">
+              <p className="text-xs font-sans italic text-[var(--ink-muted)] bg-[var(--surface)] px-3 py-1.5 rounded-[var(--radius-control)] border border-[var(--border)]">
                 Pronunciation: {p.phonetic}
               </p>
 
-              <p className="text-xs sm:text-sm font-semibold text-emerald-200 mt-1">
+              <p className="text-xs sm:text-sm font-semibold text-[var(--moss)] dark:text-[var(--gold)] mt-1">
                 Meaning: “{p.englishMeaning}”
               </p>
             </div>
 
-            <div className="pt-3 border-t border-emerald-900/80 text-xs text-stone-300 leading-relaxed flex items-start gap-2">
-              <ShieldCheck size={14} className="text-amber-400 shrink-0 mt-0.5" />
+            <div className="pt-3 border-t border-[var(--border)] text-xs text-[var(--ink-muted)] leading-relaxed flex items-start gap-2">
+              <ShieldCheck size={14} className="text-[var(--accent)] shrink-0 mt-0.5" />
               <span>{p.culturalContext}</span>
             </div>
           </div>

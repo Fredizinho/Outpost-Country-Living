@@ -36,6 +36,7 @@ import {
   DistrictClimateData,
   CLIMATE_MONTHS,
 } from '@/data/climateTelemetryData';
+import { ALMANAC_THEME } from '@/theme';
 
 export interface RegionalClimateChartProps {
   initialDistrict?: string;
@@ -195,14 +196,15 @@ export function RegionalClimateChart({
   return (
     <div
       className={cn(
-        'rounded-3xl bg-white dark:bg-[#0A160F] border border-stone-200/90 dark:border-emerald-900/60 p-5 sm:p-7 md:p-8 flex flex-col gap-6 shadow-sm text-stone-900 dark:text-stone-100 transition-colors',
+        'rounded-[var(--radius-card)] bg-white border border-stone-200/90 dark:border-emerald-900/60 p-5 sm:p-7 md:p-8 flex flex-col gap-6 shadow-sm text-stone-900 dark:text-stone-100 transition-colors',
         className
       )}
+      style={{ backgroundColor: undefined }}
     >
       {/* Header & Controls Bar */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-stone-200/80 dark:border-emerald-900/50">
         <div className="flex flex-col gap-1">
-          <div className="flex flex-wrap items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-emerald-800 dark:text-amber-300">
+          <div className="flex flex-wrap items-center gap-2 text-xs font-bold text-emerald-800 dark:text-amber-300">
             <span className="flex items-center gap-1.5">
               <CloudRain size={14} />
               <span>DCCMS Meteorological Hydro-Thermal Analytics</span>
@@ -226,7 +228,7 @@ export function RegionalClimateChart({
             type="button"
             onClick={() => setViewMode('combined')}
             className={cn(
-              'px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold uppercase transition-all cursor-pointer flex items-center gap-1.5',
+              'px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5',
               viewMode === 'combined'
                 ? 'bg-emerald-950 dark:bg-amber-500 text-amber-300 dark:text-stone-950 shadow-xs'
                 : 'text-stone-700 dark:text-stone-300 hover:text-emerald-900 dark:hover:text-amber-200'
@@ -239,7 +241,7 @@ export function RegionalClimateChart({
             type="button"
             onClick={() => setViewMode('rainfall')}
             className={cn(
-              'px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold uppercase transition-all cursor-pointer flex items-center gap-1.5',
+              'px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5',
               viewMode === 'rainfall'
                 ? 'bg-emerald-950 dark:bg-amber-500 text-amber-300 dark:text-stone-950 shadow-xs'
                 : 'text-stone-700 dark:text-stone-300 hover:text-emerald-900 dark:hover:text-amber-200'
@@ -252,7 +254,7 @@ export function RegionalClimateChart({
             type="button"
             onClick={() => setViewMode('temperature')}
             className={cn(
-              'px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold uppercase transition-all cursor-pointer flex items-center gap-1.5',
+              'px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5',
               viewMode === 'temperature'
                 ? 'bg-emerald-950 dark:bg-amber-500 text-amber-300 dark:text-stone-950 shadow-xs'
                 : 'text-stone-700 dark:text-stone-300 hover:text-emerald-900 dark:hover:text-amber-200'
@@ -266,8 +268,8 @@ export function RegionalClimateChart({
 
       {/* Regional Selector Pills */}
       <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between text-xs font-mono font-bold uppercase text-stone-600 dark:text-stone-300">
-          <span>Select Agro-Ecological Region / District:</span>
+        <div className="flex items-center justify-between text-xs font-bold text-stone-600 dark:text-stone-300">
+          <span>Select agro-ecological region / district:</span>
           <span className="text-caption text-emerald-800 dark:text-amber-300">
             {primaryData.elevationRangeMeters} · {primaryData.region} Malawi
           </span>
@@ -284,7 +286,7 @@ export function RegionalClimateChart({
                   'p-2.5 rounded-xl text-left border transition-all flex flex-col justify-between gap-1 shadow-2xs cursor-pointer',
                   active
                     ? 'bg-emerald-900 dark:bg-emerald-800/90 text-white border-emerald-950 dark:border-emerald-600 ring-2 ring-emerald-700/40'
-                    : 'bg-stone-50 dark:bg-[#0E1E14] text-stone-800 dark:text-stone-200 border-stone-200/90 dark:border-emerald-900/50 hover:border-emerald-600/60'
+                    : 'bg-stone-50 dark:bg-[var(--ground)] text-stone-800 dark:text-stone-200 border-stone-200/90 dark:border-emerald-900/50 hover:border-emerald-600/60'
                 )}
               >
                 <div className="text-xs font-bold leading-tight truncate">{reg.name}</div>
@@ -302,62 +304,62 @@ export function RegionalClimateChart({
 
       {/* 4 Summary Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <div className="p-4 rounded-2xl bg-stone-50 dark:bg-[#0F2217] border border-stone-200/90 dark:border-emerald-900/60 flex flex-col justify-between gap-1 shadow-2xs">
-          <span className="text-caption font-mono font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 flex items-center gap-1">
+        <div className="p-4 rounded-2xl bg-stone-50 dark:bg-[var(--ground)] border border-stone-200/90 dark:border-emerald-900/60 flex flex-col justify-between gap-1 shadow-2xs">
+          <span className="text-caption font-bold text-stone-500 dark:text-stone-400 flex items-center gap-1">
             <CloudRain size={12} className="text-emerald-700 dark:text-emerald-400" />
-            <span>Annual Rainfall</span>
+            <span>Annual rainfall</span>
           </span>
           <div className="text-2xl font-black text-emerald-950 dark:text-amber-300 tabular-nums my-0.5">
-            {totalAnnualRain.toLocaleString()} <span className="text-xs font-normal text-stone-500 dark:text-stone-400">mm/yr</span>
+            <span className="font-mono">{totalAnnualRain.toLocaleString()}</span> <span className="text-xs font-normal text-stone-500 dark:text-stone-400">mm/yr</span>
           </div>
           <span className="text-caption text-stone-600 dark:text-stone-300 font-medium">
-            Wet Season: {primaryData.wetSeasonMonths}
+            Wet season: {primaryData.wetSeasonMonths}
           </span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-stone-50 dark:bg-[#0F2217] border border-stone-200/90 dark:border-emerald-900/60 flex flex-col justify-between gap-1 shadow-2xs">
-          <span className="text-caption font-mono font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 flex items-center gap-1">
+        <div className="p-4 rounded-2xl bg-stone-50 dark:bg-[var(--ground)] border border-stone-200/90 dark:border-emerald-900/60 flex flex-col justify-between gap-1 shadow-2xs">
+          <span className="text-caption font-bold text-stone-500 dark:text-stone-400 flex items-center gap-1">
             <TrendingUp size={12} className="text-cyan-700 dark:text-cyan-400" />
-            <span>Peak Month</span>
+            <span>Peak month</span>
           </span>
           <div className="text-2xl font-black text-cyan-900 dark:text-cyan-300 tabular-nums my-0.5">
-            {peakRainMonth.month} ({peakRainMonth.mm} <span className="text-xs font-normal text-stone-500 dark:text-stone-400">mm</span>)
+            {peakRainMonth.month} (<span className="font-mono">{peakRainMonth.mm}</span> <span className="text-xs font-normal text-stone-500 dark:text-stone-400">mm</span>)
           </div>
           <span className="text-caption text-stone-600 dark:text-stone-300 font-medium">
             Requires contour swales &amp; silt traps
           </span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-stone-50 dark:bg-[#0F2217] border border-stone-200/90 dark:border-emerald-900/60 flex flex-col justify-between gap-1 shadow-2xs">
-          <span className="text-caption font-mono font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 flex items-center gap-1">
+        <div className="p-4 rounded-2xl bg-stone-50 dark:bg-[var(--ground)] border border-stone-200/90 dark:border-emerald-900/60 flex flex-col justify-between gap-1 shadow-2xs">
+          <span className="text-caption font-bold text-stone-500 dark:text-stone-400 flex items-center gap-1">
             <Thermometer size={12} className="text-amber-700 dark:text-amber-400" />
-            <span>Thermal Range &amp; Frost</span>
+            <span>Thermal range &amp; frost</span>
           </span>
           <div className="text-2xl font-black text-amber-900 dark:text-amber-300 tabular-nums my-0.5">
-            {winterMinimum}°C – {summerMaximum}°C
+            <span className="font-mono">{winterMinimum}°C – {summerMaximum}°C</span>
           </div>
           <span className={cn('text-caption font-bold inline-flex items-center gap-1.5', winterMinimum <= 5 ? 'text-amber-700 dark:text-amber-300' : 'text-emerald-700 dark:text-emerald-400')}>
             {winterMinimum <= 5 ? (
               <>
                 <AlertTriangle size={16} strokeWidth={1.75} className="shrink-0 text-amber-500" />
-                <span>Ground Frost Watch (Jun–Jul)</span>
+                <span>Ground frost watch (Jun–Jul)</span>
               </>
             ) : (
               <>
                 <CheckCircle2 size={16} strokeWidth={1.75} className="shrink-0 text-emerald-500" />
-                <span>100% Frost-Free All Year</span>
+                <span>100% frost-free all year</span>
               </>
             )}
           </span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-stone-50 dark:bg-[#0F2217] border border-stone-200/90 dark:border-emerald-900/60 flex flex-col justify-between gap-1 shadow-2xs">
-          <span className="text-caption font-mono font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 flex items-center gap-1">
+        <div className="p-4 rounded-2xl bg-stone-50 dark:bg-[var(--ground)] border border-stone-200/90 dark:border-emerald-900/60 flex flex-col justify-between gap-1 shadow-2xs">
+          <span className="text-caption font-bold text-stone-500 dark:text-stone-400 flex items-center gap-1">
             <Droplets size={12} className="text-blue-700 dark:text-blue-400" />
-            <span>100m² Roof Yield</span>
+            <span>100m² roof yield</span>
           </span>
           <div className="text-2xl font-black text-blue-900 dark:text-blue-300 tabular-nums my-0.5">
-            {rainWaterCapturePer100m2.toLocaleString()} <span className="text-xs font-normal text-stone-500 dark:text-stone-400">Liters</span>
+            <span className="font-mono">{rainWaterCapturePer100m2.toLocaleString()}</span> <span className="text-xs font-normal text-stone-500 dark:text-stone-400">liters</span>
           </div>
           <span className="text-caption text-stone-600 dark:text-stone-300 font-medium">
             Calculated at 85% runoff efficiency
@@ -366,29 +368,32 @@ export function RegionalClimateChart({
       </div>
 
       {/* Main Interactive Recharts Canvas */}
-      <div className="w-full bg-[#05130A] rounded-3xl p-4 sm:p-6 border border-emerald-900/80 shadow-inner flex flex-col gap-4">
+      <div 
+        className="w-full rounded-[var(--radius-card)] p-4 sm:p-6 border border-emerald-900/80 shadow-inner flex flex-col gap-4"
+        style={{ backgroundColor: ALMANAC_THEME.chartPanelDark }}
+      >
         {/* Chart Header Bar with Direct Series Labels & Honesty Badges (<= 4 series) */}
         <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-emerald-200/90 pb-2 border-b border-emerald-900/60">
           <div className="flex flex-wrap items-center gap-3">
             <span className="flex items-center gap-1.5 font-bold text-white">
-              <span className="w-3 h-3 rounded-sm bg-[#15803D] inline-block shadow-xs" />
+              <span className="w-3 h-3 rounded-sm inline-block shadow-xs" style={{ backgroundColor: ALMANAC_THEME.forestGreen }} />
               <span>Rainfall (mm)</span>
             </span>
             {(viewMode === 'combined' || viewMode === 'temperature') && (
               <>
-                <span className="flex items-center gap-1.5 font-bold text-[#f59e0b]">
-                  <span className="w-3 h-1 bg-[#C85A32] rounded-full inline-block" />
+                <span className="flex items-center gap-1.5 font-bold text-amber-500">
+                  <span className="w-3 h-1 rounded-full inline-block" style={{ backgroundColor: ALMANAC_THEME.terracotta }} />
                   <span>Max Temp (°C)</span>
                 </span>
-                <span className="flex items-center gap-1.5 font-bold text-[#38bdf8]">
-                  <span className="w-3 h-1 bg-[#0284C7] rounded-full inline-block" />
+                <span className="flex items-center gap-1.5 font-bold text-sky-400">
+                  <span className="w-3 h-1 rounded-full inline-block" style={{ backgroundColor: ALMANAC_THEME.sky600 }} />
                   <span>Min Temp (°C)</span>
                 </span>
               </>
             )}
           </div>
           <div className="flex items-center gap-2 text-caption text-stone-300">
-            <span className="inline-block w-4 border-t-2 border-dashed border-[#FBBF24]" />
+            <span className="inline-block w-4 border-t-2 border-dashed border-amber-400" />
             <span className="px-2 py-0.5 rounded-control bg-amber-500/15 border border-amber-500/30 text-amber-200 font-mono text-caption">
               Honesty Badge: 25mm Modelled Sowing Trigger
             </span>
@@ -405,21 +410,21 @@ export function RegionalClimateChart({
               <defs>
                 {/* Rainfall Bar Gradient using Token Palette Forest Green */}
                 <linearGradient id="rainGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#15803D" stopOpacity={0.95} />
-                  <stop offset="60%" stopColor="#166534" stopOpacity={0.85} />
-                  <stop offset="100%" stopColor="#052e16" stopOpacity={0.65} />
+                  <stop offset="0%" stopColor={ALMANAC_THEME.forestGreen} stopOpacity={0.95} />
+                  <stop offset="60%" stopColor={ALMANAC_THEME.forestDeep} stopOpacity={0.85} />
+                  <stop offset="100%" stopColor={ALMANAC_THEME.forestDarkest} stopOpacity={0.65} />
                 </linearGradient>
 
                 {/* Dry Season Below 25mm Gradient using Token Terracotta/Amber */}
                 <linearGradient id="drySeasonGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#C85A32" stopOpacity={0.9} />
-                  <stop offset="100%" stopColor="#782A15" stopOpacity={0.6} />
+                  <stop offset="0%" stopColor={ALMANAC_THEME.terracotta} stopOpacity={0.9} />
+                  <stop offset="100%" stopColor={ALMANAC_THEME.terracottaDeep} stopOpacity={0.6} />
                 </linearGradient>
 
                 {/* Thermal Diurnal Area Gradient */}
                 <linearGradient id="thermalBand" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#D97706" stopOpacity={0.25} />
-                  <stop offset="100%" stopColor="#0284C7" stopOpacity={0.06} />
+                  <stop offset="0%" stopColor={ALMANAC_THEME.amber600} stopOpacity={0.25} />
+                  <stop offset="100%" stopColor={ALMANAC_THEME.sky600} stopOpacity={0.06} />
                 </linearGradient>
               </defs>
 
@@ -427,7 +432,7 @@ export function RegionalClimateChart({
 
               <XAxis
                 dataKey="month"
-                stroke="#A7F3D0"
+                stroke={ALMANAC_THEME.mintSoft}
                 fontSize={12}
                 fontFamily="inherit"
                 tickLine={false}
@@ -436,7 +441,7 @@ export function RegionalClimateChart({
               {/* Left Y-Axis: Rainfall mm (Strict 12px min) */}
               <YAxis
                 yAxisId="left"
-                stroke="#6EE7B7"
+                stroke={ALMANAC_THEME.emeraldText}
                 fontSize={12}
                 fontFamily="inherit"
                 domain={[0, (dataMax: number) => Math.max(350, Math.ceil(dataMax / 50) * 50)]}
@@ -449,7 +454,7 @@ export function RegionalClimateChart({
                 <YAxis
                   yAxisId="right"
                   orientation="right"
-                  stroke="#FDE68A"
+                  stroke={ALMANAC_THEME.amberLight}
                   fontSize={12}
                   fontFamily="inherit"
                   domain={[0, 45]}
@@ -462,12 +467,12 @@ export function RegionalClimateChart({
               <ReferenceLine
                 yAxisId="left"
                 y={25}
-                stroke="#FBBF24"
+                stroke={ALMANAC_THEME.amber400}
                 strokeDasharray="5 5"
                 strokeWidth={1.75}
                 label={{
                   value: '25mm Sowing Trigger',
-                  fill: '#FDE047',
+                  fill: ALMANAC_THEME.amberBright,
                   fontSize: 12,
                   fontFamily: 'inherit',
                   position: 'insideBottomRight',
@@ -479,12 +484,12 @@ export function RegionalClimateChart({
                 <ReferenceLine
                   yAxisId="right"
                   y={5}
-                  stroke="#38BDF8"
+                  stroke={ALMANAC_THEME.sky400}
                   strokeDasharray="4 4"
                   strokeWidth={1.5}
                   label={{
                     value: '5°C Ground Frost Risk',
-                    fill: '#7DD3FC',
+                    fill: ALMANAC_THEME.sky300,
                     fontSize: 12,
                     fontFamily: 'inherit',
                     position: 'insideTopLeft',
@@ -508,14 +513,14 @@ export function RegionalClimateChart({
                           </span>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-2 text-caption font-mono">
+                        <div className="grid grid-cols-2 gap-2 text-caption">
                           <div>
-                            <span className="text-stone-400 block text-caption uppercase">Rainfall:</span>
-                            <span className="font-bold text-emerald-400 text-sm">{data.rainfall} mm</span>
+                            <span className="text-stone-400 block text-caption">Rainfall:</span>
+                            <span className="font-bold text-emerald-400 text-sm font-mono">{data.rainfall} mm</span>
                           </div>
                           <div>
-                            <span className="text-stone-400 block text-caption uppercase">Temp Range:</span>
-                            <span className="font-bold text-amber-300 text-sm">{data.tempMin}°C – {data.tempMax}°C</span>
+                            <span className="text-stone-400 block text-caption">Temp range:</span>
+                            <span className="font-bold text-amber-300 text-sm font-mono">{data.tempMin}°C – {data.tempMax}°C</span>
                           </div>
                         </div>
 
@@ -563,20 +568,20 @@ export function RegionalClimateChart({
                     type="monotone"
                     dataKey="tempMax"
                     name="Daily Max Temp"
-                    stroke="#F59E0B"
+                    stroke={ALMANAC_THEME.amber500}
                     strokeWidth={2.5}
-                    dot={{ fill: '#F59E0B', r: 3.5 }}
-                    activeDot={{ r: 6, fill: '#FEF08A' }}
+                    dot={{ fill: ALMANAC_THEME.amber500, r: 3.5 }}
+                    activeDot={{ r: 6, fill: ALMANAC_THEME.goldSoft }}
                   />
                   <Line
                     yAxisId="right"
                     type="monotone"
                     dataKey="tempMin"
                     name="Nightly Min Temp"
-                    stroke="#38BDF8"
+                    stroke={ALMANAC_THEME.sky400}
                     strokeWidth={2.5}
-                    dot={{ fill: '#38BDF8', r: 3.5 }}
-                    activeDot={{ r: 6, fill: '#BAE6FD' }}
+                    dot={{ fill: ALMANAC_THEME.sky400, r: 3.5 }}
+                    activeDot={{ r: 6, fill: ALMANAC_THEME.sky100 }}
                   />
                 </>
               )}

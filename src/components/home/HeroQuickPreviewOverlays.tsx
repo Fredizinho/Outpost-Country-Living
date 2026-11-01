@@ -128,7 +128,7 @@ export function HeroQuickPreviewOverlays({
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.16 }}
           >
-            <div className="p-4 sm:p-5 rounded-2xl bg-[#071821] border border-sky-500/40 shadow-lg flex flex-col gap-3 text-stone-100">
+            <div className="p-4 sm:p-5 rounded-card bg-slate-950 border border-sky-500/40 shadow-lg flex flex-col gap-3 text-stone-100">
               <div className="flex items-start justify-between gap-3 border-b border-sky-500/20 pb-2.5">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-xl bg-sky-500/15 border border-sky-400/30 flex items-center justify-center text-sky-300 shrink-0">
@@ -229,7 +229,7 @@ export function HeroQuickPreviewOverlays({
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.16 }}
           >
-            <div className="p-4 sm:p-5 rounded-2xl bg-[#071B11] border border-emerald-500/40 shadow-lg flex flex-col gap-3 text-stone-100">
+            <div className="p-4 sm:p-5 rounded-card bg-emerald-950 border border-emerald-500/40 shadow-lg flex flex-col gap-3 text-stone-100">
               <div className="flex items-start justify-between gap-3 border-b border-emerald-500/20 pb-2.5">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-400/30 flex items-center justify-center text-emerald-300 shrink-0">
@@ -339,7 +339,7 @@ export function HeroQuickPreviewOverlays({
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.16 }}
           >
-            <div className="p-4 sm:p-5 rounded-2xl bg-[#1C1408] border border-amber-500/40 shadow-lg flex flex-col gap-3 text-stone-100">
+            <div className="p-4 sm:p-5 rounded-card bg-amber-950 border border-amber-500/40 shadow-lg flex flex-col gap-3 text-stone-100">
               <div className="flex items-start justify-between gap-3 border-b border-amber-500/20 pb-2.5">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-400/30 flex items-center justify-center text-amber-300 shrink-0">
@@ -440,7 +440,7 @@ export function HeroQuickPreviewOverlays({
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.16 }}
           >
-            <div className="p-4 sm:p-5 rounded-2xl bg-[#061A19] border border-teal-500/40 shadow-lg flex flex-col gap-3 text-stone-100">
+            <div className="p-4 sm:p-5 rounded-card bg-teal-950 border border-teal-500/40 shadow-lg flex flex-col gap-3 text-stone-100">
               <div className="flex items-start justify-between gap-3 border-b border-teal-500/20 pb-2.5">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-xl bg-teal-500/15 border border-teal-400/30 flex items-center justify-center text-teal-300 shrink-0">

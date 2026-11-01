@@ -1,8 +1,8 @@
 import React from 'react';
 import { COUNTRY_IMAGES } from '@/assets/images';
-import { Layers, CheckCircle2, ArrowRight, Wrench } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { StandardDiagram, DiagramSymbolsDefs } from '@/components/common/StandardDiagram';
+import { Layers, ArrowRight, Wrench } from 'lucide-react';
+import { StandardDiagram } from '@/components/common/StandardDiagram';
+import { OUTPOST_SCHEMATIC_THEME } from '@/theme';
 
 interface SkillStepVectorDiagramProps {
   skillId: string;
@@ -24,7 +24,6 @@ export function SkillStepVectorDiagram({
   const idLower = skillId.toLowerCase();
   const catLower = category.toLowerCase();
 
-  // Map skill ID / category to domain-specific reference image and blueprint schematic
   const visualConfig = (() => {
     if (
       idLower.includes('tree') ||
@@ -102,51 +101,53 @@ export function SkillStepVectorDiagram({
     }
     if (
       idLower.includes('hydrotherapy') ||
-      idLower.includes('poultice') ||
-      idLower.startsWith('hc-') ||
-      idLower.includes('remedies') ||
-      idLower.includes('first-aid') ||
-      idLower.startsWith('fa-') ||
-      catLower.includes('medical') ||
-      catLower.includes('health')
+      idLower.includes('remedy') ||
+      idLower.startsWith('hr-') ||
+      idLower.includes('poultice')
     ) {
       return {
-        image: COUNTRY_IMAGES.natureSymbols,
-        imageCaption: 'Natural Remedies, Charcoal Poultices & Contrast Hydrotherapy',
-        diagramTitle: 'Contrast Hydrotherapy Vascular Wave & 4-Layer Charcoal Poultice',
+        image: COUNTRY_IMAGES.sanitariumNaturalDispensary,
+        imageCaption: 'Contrast Hydrotherapy & Activated Charcoal Poultice Protocol',
+        diagramTitle: 'Vascular Response Waves & 4-Layer Charcoal Matrix Cross-Section',
         diagramType: 'hydrotherapy' as const,
       };
     }
     if (
-      idLower.includes('plant-protein') ||
-      idLower.includes('oil-press') ||
-      idLower.startsWith('pp-') ||
-      idLower.includes('nut-milk')
+      idLower.includes('oil') ||
+      idLower.includes('tofu') ||
+      idLower.includes('protein') ||
+      idLower.includes('milk') ||
+      idLower.startsWith('po-')
     ) {
       return {
-        image: COUNTRY_IMAGES.permacultureGarden,
-        imageCaption: 'Mechanical Ram-Press Cold Extraction & Soy Trypsin Inactivation',
-        diagramTitle: 'Manual Ram-Press Screw Oil Extractor & Soy Coagulation Vat',
+        image: COUNTRY_IMAGES.buyingSelling,
+        imageCaption: 'Manual Ram-Press Cold Extraction & Fresh Soy Coagulation',
+        diagramTitle: 'Continuous Cold Press Screw & Curd Coagulation Profile',
         diagramType: 'plant-press' as const,
       };
     }
-    if (idLower.includes('seed') || idLower.startsWith('sv-') || idLower.includes('heirloom')) {
+    if (
+      idLower.includes('seed') ||
+      idLower.includes('vault') ||
+      idLower.startsWith('sv-') ||
+      idLower.includes('bank')
+    ) {
       return {
-        image: COUNTRY_IMAGES.buyingSelling,
-        imageCaption: 'Hermetic Seed Storage & Germination Viability Assay',
-        diagramTitle: 'Airtight Glass/PICS Seed Canister (<8% Moisture) & 10-Seed Assay',
+        image: COUNTRY_IMAGES.permacultureGarden,
+        imageCaption: 'Hermetic Non-GMO Seed Vault & 10-Seed Germination Assay',
+        diagramTitle: 'Hermetic Glass Desiccant Vault & Moisture Test Benchmark',
         diagramType: 'seed-vault' as const,
       };
     }
     if (
+      idLower.includes('soil') ||
       idLower.includes('broadfork') ||
-      idLower.startsWith('bf-') ||
-      idLower.includes('no-till') ||
-      idLower.includes('soil-science')
+      idLower.startsWith('sb-') ||
+      idLower.includes('aeration')
     ) {
       return {
-        image: COUNTRY_IMAGES.permacultureGarden,
-        imageCaption: 'Broadfork Deep 30cm Aeration Without Subsoil Microbial Inversion',
+        image: COUNTRY_IMAGES.edenicDeepPlantingPit,
+        imageCaption: 'Deep U-Bar Broadfork Aeration & Living Fungal Profile',
         diagramTitle: 'U-Bar Broadfork Tine Fracturing & Living Soil Profile Strata',
         diagramType: 'broadfork-soil' as const,
       };
@@ -214,27 +215,27 @@ export function SkillStepVectorDiagram({
   })();
 
   return (
-    <div className="rounded-3xl bg-[#07160E] border border-emerald-900/70 p-5 sm:p-7 text-white flex flex-col gap-6 shadow-lg">
+    <div className="rounded-[var(--radius-sheet)] bg-[var(--ground)] border border-emerald-900/70 p-5 sm:p-7 text-white flex flex-col gap-6 shadow-lg">
       {/* Top Header */}
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-emerald-900/60 pb-3.5">
         <div className="flex items-center gap-2">
-          <span className="px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-caption font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
+          <span className="px-2.5 py-1 rounded-[var(--radius-control)] bg-amber-500/15 border border-amber-500/30 text-amber-300 text-caption font-semibold flex items-center gap-1.5">
             <Layers size={12} />
-            <span>Visual Skill Schematic &amp; Step Flow</span>
+            <span>Visual skill schematic and step flow</span>
           </span>
           <span className="text-xs font-bold text-emerald-100 hidden sm:inline">
             {visualConfig.diagramTitle}
           </span>
         </div>
-        <span className="text-caption font-mono text-emerald-300 bg-emerald-950/80 px-2.5 py-1 rounded-lg border border-emerald-800">
-          {steps.length} Sequential Steps
+        <span className="text-caption font-medium text-emerald-300 bg-emerald-950/80 px-2.5 py-1 rounded-[var(--radius-control)] border border-emerald-800">
+          {steps.length} sequential steps
         </span>
       </div>
 
       {/* Middle Row: Ready Reference Image + Enhanced Vector Blueprint Diagram */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
         {/* Left: Ready Image (4 cols) */}
-        <div className="lg:col-span-4 relative rounded-2xl overflow-hidden border border-emerald-800/60 h-48 sm:h-56 bg-stone-950">
+        <div className="lg:col-span-4 relative rounded-[var(--radius-card)] overflow-hidden border border-emerald-800/60 h-48 sm:h-56 bg-stone-950">
           <img
             src={visualConfig.image}
             alt={title}
@@ -243,7 +244,7 @@ export function SkillStepVectorDiagram({
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
           <div className="absolute bottom-0 inset-x-0 p-4">
-            <span className="text-caption font-mono uppercase tracking-widest text-amber-300 font-bold block">
+            <span className="text-caption text-amber-300 font-semibold block">
               {category} Reference
             </span>
             <p className="text-xs sm:text-sm font-bold text-white leading-snug mt-0.5">
@@ -253,181 +254,143 @@ export function SkillStepVectorDiagram({
         </div>
 
         {/* Right: Domain SVG Vector Schematic (8 cols) */}
-        <div className="lg:col-span-8 bg-[#040E09] rounded-2xl p-3 sm:p-4 border border-emerald-900/80 overflow-hidden">
-          {/* 1. ELLEN G. WHITE 3x3x3FT TREE PLANTING PIT SCHEMATIC */}
-          {visualConfig.diagramType === 'tree-pit' && (
-            <StandardDiagram type="planting-pit" />
-          )}
+        <div className="lg:col-span-8 bg-[var(--ground)] rounded-[var(--radius-card)] p-3 sm:p-4 border border-emerald-900/80 overflow-hidden">
+          {visualConfig.diagramType === 'tree-pit' && <StandardDiagram type="planting-pit" />}
+          {visualConfig.diagramType === 'ridge-spacing' && <StandardDiagram type="ridge-spacing" />}
+          {visualConfig.diagramType === 'water-swale' && <StandardDiagram type="swale" />}
+          {visualConfig.diagramType === 'roof-tank' && <StandardDiagram type="roof-tank" />}
+          {visualConfig.diagramType === 'zeer-pot' && <StandardDiagram type="zeer-pot" />}
 
-          {/* 2. SASAKAWA CONTOUR RIDGE SPACING */}
-          {visualConfig.diagramType === 'ridge-spacing' && (
-            <StandardDiagram type="ridge-spacing" />
-          )}
-
-          {/* 3. A-FRAME CONTOUR SWALE & WATER RETENTION */}
-          {visualConfig.diagramType === 'water-swale' && (
-            <StandardDiagram type="swale" />
-          )}
-
-          {/* 4. ROOF CATCHMENT & WATER STORAGE TANK */}
-          {visualConfig.diagramType === 'roof-tank' && (
-            <StandardDiagram type="roof-tank" />
-          )}
-
-          {/* 5. ZEER POT DUAL-CLAY EVAPORATIVE REFRIGERATOR */}
-          {visualConfig.diagramType === 'zeer-pot' && (
-            <StandardDiagram type="zeer-pot" />
-          )}
-
-
-          {/* 4. WHOLESOME BREADMAKING & STONE QUERN MILLING */}
+          {/* BREADMAKING & STONE QUERN MILLING */}
           {visualConfig.diagramType === 'bread-milling' && (
             <svg viewBox="0 0 600 210" className="w-full h-auto select-none" role="img" aria-label="Stone quern milling and cob bread oven cross section">
-              <rect x="0" y="0" width="600" height="210" rx="10" fill="#07170F" />
-              {/* Rotary Quern Stone Mill */}
-              <rect x="30" y="90" width="120" height="25" rx="4" fill="#57534E" stroke="#A8A29E" strokeWidth="1.5" />
-              <text x="90" y="106" textAnchor="middle" fill="#FFFFFF" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="0" y="0" width="600" height="210" rx="10" fill={OUTPOST_SCHEMATIC_THEME.canvasBg} />
+              <rect x="30" y="90" width="120" height="25" rx="4" fill={OUTPOST_SCHEMATIC_THEME.stoneQuernRunner} stroke={OUTPOST_SCHEMATIC_THEME.stoneQuernStroke} strokeWidth="1.5" />
+              <text x="90" y="106" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.white} fontSize="12" fontWeight="bold">
                 Runner Stone
               </text>
-              <rect x="25" y="115" width="130" height="30" rx="4" fill="#44403C" stroke="#78716C" strokeWidth="1.5" />
-              <text x="90" y="133" textAnchor="middle" fill="#D6D3D1" fontSize="12" fontFamily="monospace">
+              <rect x="25" y="115" width="130" height="30" rx="4" fill={OUTPOST_SCHEMATIC_THEME.stoneQuernBed} stroke={OUTPOST_SCHEMATIC_THEME.stoneQuernBedStroke} strokeWidth="1.5" />
+              <text x="90" y="133" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.stoneDryingText} fontSize="12">
                 Bed Stone
               </text>
-              {/* Hopper Funnel */}
-              <polygon points="65,45 115,45 95,90 85,90" fill="#78350F" stroke="#D97706" strokeWidth="1.2" />
-              <text x="90" y="40" textAnchor="middle" fill="#FDE68A" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <polygon points="65,45 115,45 95,90 85,90" fill={OUTPOST_SCHEMATIC_THEME.earthBrown} stroke={OUTPOST_SCHEMATIC_THEME.amberWarm} strokeWidth="1.2" />
+              <text x="90" y="40" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.amberLight} fontSize="12" fontWeight="bold">
                 Whole Grain Hopper
               </text>
 
-              {/* Cob Oven Thermal Mass Cross Section */}
-              <path d="M 180 150 Q 240 50 300 150 Z" fill="#78350F" stroke="#F59E0B" strokeWidth="2" />
-              {/* Interior Baking Hearth */}
-              <path d="M 195 150 Q 240 75 285 150 Z" fill="#1C1917" />
-              {/* Glowing Loaf */}
-              <ellipse cx="240" cy="142" rx="24" ry="10" fill="#D97706" stroke="#FEF08A" strokeWidth="1" />
-              <text x="240" y="115" textAnchor="middle" fill="#FEF08A" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <path d="M 180 150 Q 240 50 300 150 Z" fill={OUTPOST_SCHEMATIC_THEME.earthBrown} stroke={OUTPOST_SCHEMATIC_THEME.goldWarm} strokeWidth="2" />
+              <path d="M 195 150 Q 240 75 285 150 Z" fill={OUTPOST_SCHEMATIC_THEME.hearthDark} />
+              <ellipse cx="240" cy="142" rx="24" ry="10" fill={OUTPOST_SCHEMATIC_THEME.amberWarm} stroke={OUTPOST_SCHEMATIC_THEME.goldSoft} strokeWidth="1" />
+              <text x="240" y="115" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.goldSoft} fontSize="12" fontWeight="bold" fontFamily="monospace">
                 210°C Hearth
               </text>
-              <text x="240" y="165" textAnchor="middle" fill="#F59E0B" fontSize="12" fontFamily="monospace">
+              <text x="240" y="165" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.goldWarm} fontSize="12">
                 Retained Thermal Heat
               </text>
 
-              {/* Right Spec Card */}
-              <rect x="330" y="25" width="250" height="165" rx="8" fill="#0F172A" stroke="#F59E0B" />
-              <text x="455" y="48" textAnchor="middle" fill="#FBBF24" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="330" y="25" width="250" height="165" rx="8" fill={OUTPOST_SCHEMATIC_THEME.cardBg} stroke={OUTPOST_SCHEMATIC_THEME.goldWarm} />
+              <text x="455" y="48" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.goldBright} fontSize="12" fontWeight="bold">
                 STAFF OF LIFE PROTOCOL
               </text>
-              <text x="345" y="74" fill="#FEF3C7" fontSize="12" fontFamily="monospace">• Mill: Fresh grind right before dough</text>
-              <text x="345" y="96" fill="#A7F3D0" fontSize="12" fontFamily="monospace">• Ferment: 18-hr wild sourdough sponge</text>
-              <text x="345" y="118" fill="#BAE6FD" fontSize="12" fontFamily="monospace">• Zero Chemicals: No soda, saleratus, lard</text>
-              <text x="345" y="140" fill="#FDE68A" fontSize="12" fontFamily="monospace">• Hearth: Cob oven high radiant heat</text>
-              <text x="345" y="162" fill="#F8FAFC" fontSize="12" fontFamily="monospace">• Zwieback: Twice-baked for digestion</text>
+              <text x="345" y="74" fill={OUTPOST_SCHEMATIC_THEME.goldLight} fontSize="12">• Mill: Fresh grind right before dough</text>
+              <text x="345" y="96" fill={OUTPOST_SCHEMATIC_THEME.emeraldMint} fontSize="12">• Ferment: 18-hr wild sourdough sponge</text>
+              <text x="345" y="118" fill={OUTPOST_SCHEMATIC_THEME.waterSkyLight} fontSize="12">• Zero Chemicals: No soda, saleratus, lard</text>
+              <text x="345" y="140" fill={OUTPOST_SCHEMATIC_THEME.amberLight} fontSize="12">• Hearth: Cob oven high radiant heat</text>
+              <text x="345" y="162" fill={OUTPOST_SCHEMATIC_THEME.slateLight} fontSize="12">• Zwieback: Twice-baked for digestion</text>
             </svg>
           )}
 
-          {/* 5. CONTRAST HYDROTHERAPY & CHARCOAL POULTICE */}
+          {/* HYDROTHERAPY & CHARCOAL POULTICE */}
           {visualConfig.diagramType === 'hydrotherapy' && (
             <svg viewBox="0 0 600 210" className="w-full h-auto select-none" role="img" aria-label="Contrast hydrotherapy and charcoal poultice schematic">
-              <rect x="0" y="0" width="600" height="210" rx="10" fill="#07170F" />
-              {/* Contrast Cycle Boxes */}
-              <rect x="25" y="40" width="135" height="130" rx="10" fill="#450A0A" stroke="#F87171" strokeWidth="2" />
-              <text x="92" y="70" textAnchor="middle" fill="#FCA5A5" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="0" y="0" width="600" height="210" rx="10" fill={OUTPOST_SCHEMATIC_THEME.canvasBg} />
+              <rect x="25" y="40" width="135" height="130" rx="10" fill={OUTPOST_SCHEMATIC_THEME.hotPhaseRed} stroke={OUTPOST_SCHEMATIC_THEME.hotPhaseStroke} strokeWidth="2" />
+              <text x="92" y="70" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.hotPhaseText} fontSize="12" fontWeight="bold">
                 HOT PHASE (3 MIN)
               </text>
-              <text x="92" y="96" textAnchor="middle" fill="#FFFFFF" fontSize="13" fontWeight="bold" fontFamily="monospace">
+              <text x="92" y="96" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.white} fontSize="13" fontWeight="bold" fontFamily="monospace">
                 40°C – 43°C
               </text>
-              <text x="92" y="120" textAnchor="middle" fill="#FECACA" fontSize="12" fontFamily="monospace">
+              <text x="92" y="120" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.hotPhasePale} fontSize="12">
                 Vasodilation &amp;
               </text>
-              <text x="92" y="136" textAnchor="middle" fill="#FECACA" fontSize="12" fontFamily="monospace">
+              <text x="92" y="136" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.hotPhasePale} fontSize="12">
                 White Cell Surge
               </text>
 
-              <rect x="175" y="40" width="135" height="130" rx="10" fill="#082F49" stroke="#38BDF8" strokeWidth="2" />
-              <text x="242" y="70" textAnchor="middle" fill="#7DD3FC" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="175" y="40" width="135" height="130" rx="10" fill={OUTPOST_SCHEMATIC_THEME.coldPhaseBlue} stroke={OUTPOST_SCHEMATIC_THEME.waterSky} strokeWidth="2" />
+              <text x="242" y="70" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.waterSkyMuted} fontSize="12" fontWeight="bold">
                 COLD (30 SEC)
               </text>
-              <text x="242" y="96" textAnchor="middle" fill="#FFFFFF" fontSize="13" fontWeight="bold" fontFamily="monospace">
+              <text x="242" y="96" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.white} fontSize="13" fontWeight="bold" fontFamily="monospace">
                 12°C – 16°C
               </text>
-              <text x="242" y="120" textAnchor="middle" fill="#BAE6FD" fontSize="12" fontFamily="monospace">
+              <text x="242" y="120" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.waterSkyLight} fontSize="12">
                 Tonic Vascular Pump
               </text>
-              <text x="242" y="136" textAnchor="middle" fill="#BAE6FD" fontSize="12" fontFamily="monospace">
+              <text x="242" y="136" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.waterSkyLight} fontSize="12">
                 Repeat × 3 Cycles
               </text>
 
-              {/* Charcoal Poultice Stack */}
-              <rect x="330" y="25" width="250" height="165" rx="8" fill="#0F172A" stroke="#10B981" />
-              <text x="455" y="48" textAnchor="middle" fill="#34D399" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="330" y="25" width="250" height="165" rx="8" fill={OUTPOST_SCHEMATIC_THEME.cardBg} stroke={OUTPOST_SCHEMATIC_THEME.emeraldBright} />
+              <text x="455" y="48" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.emeraldStroke} fontSize="12" fontWeight="bold">
                 4-LAYER CHARCOAL POULTICE
               </text>
-              <text x="345" y="74" fill="#FEF3C7" fontSize="12" fontFamily="monospace">• Core: 1:1 hardwood charcoal + flaxseed</text>
-              <text x="345" y="96" fill="#A7F3D0" fontSize="12" fontFamily="monospace">• Inner: Thin cotton muslin next to skin</text>
-              <text x="345" y="118" fill="#BAE6FD" fontSize="12" fontFamily="monospace">• Barrier: Plastic wrap to hold moisture</text>
-              <text x="345" y="140" fill="#FDE68A" fontSize="12" fontFamily="monospace">• Outer: Warm wool flannel insulation</text>
-              <text x="345" y="162" fill="#F8FAFC" fontSize="12" fontFamily="monospace">• Action: Adsorbs venom, toxins &amp; sepsis</text>
+              <text x="345" y="74" fill={OUTPOST_SCHEMATIC_THEME.goldLight} fontSize="12">• Core: 1:1 hardwood charcoal + flaxseed</text>
+              <text x="345" y="96" fill={OUTPOST_SCHEMATIC_THEME.emeraldMint} fontSize="12">• Inner: Thin cotton muslin next to skin</text>
+              <text x="345" y="118" fill={OUTPOST_SCHEMATIC_THEME.waterSkyLight} fontSize="12">• Barrier: Plastic wrap to hold moisture</text>
+              <text x="345" y="140" fill={OUTPOST_SCHEMATIC_THEME.amberLight} fontSize="12">• Outer: Warm wool flannel insulation</text>
+              <text x="345" y="162" fill={OUTPOST_SCHEMATIC_THEME.slateLight} fontSize="12">• Action: Adsorbs venom, toxins &amp; sepsis</text>
             </svg>
           )}
 
-          {/* 6. RAM-PRESS COLD OIL EXTRACTION & SOY MILK */}
+          {/* RAM-PRESS OIL EXTRACTION */}
           {visualConfig.diagramType === 'plant-press' && (
             <svg viewBox="0 0 600 210" className="w-full h-auto select-none" role="img" aria-label="Manual ram press and plant milk extraction diagram">
-              <rect x="0" y="0" width="600" height="210" rx="10" fill="#07170F" />
-              {/* Ram Press Cylinder */}
-              <rect x="50" y="70" width="180" height="55" rx="6" fill="#1E293B" stroke="#94A3B8" strokeWidth="2" />
-              {/* Threaded Ram Screw & Handle */}
-              <line x1="15" y1="97" x2="130" y2="97" stroke="#CBD5E1" strokeWidth="6" />
-              <circle cx="15" cy="97" r="14" fill="#475569" stroke="#94A3B8" strokeWidth="2" />
-              {/* Perforated Oil Drain Plate */}
-              <line x1="180" y1="125" x2="180" y2="155" stroke="#FDE047" strokeWidth="3" strokeDasharray="3 3" />
-              {/* Oil Beaker */}
-              <path d="M 160 155 L 200 155 L 195 185 L 165 185 Z" fill="#EAB308" opacity="0.85" stroke="#CA8A04" strokeWidth="1.5" />
-              <text x="180" y="198" textAnchor="middle" fill="#FEF08A" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="0" y="0" width="600" height="210" rx="10" fill={OUTPOST_SCHEMATIC_THEME.canvasBg} />
+              <rect x="50" y="70" width="180" height="55" rx="6" fill={OUTPOST_SCHEMATIC_THEME.slateDark} stroke={OUTPOST_SCHEMATIC_THEME.slateMuted} strokeWidth="2" />
+              <line x1="15" y1="97" x2="130" y2="97" stroke={OUTPOST_SCHEMATIC_THEME.slateBorder} strokeWidth="6" />
+              <circle cx="15" cy="97" r="14" fill={OUTPOST_SCHEMATIC_THEME.darkSlateGutter} stroke={OUTPOST_SCHEMATIC_THEME.slateMuted} strokeWidth="2" />
+              <line x1="180" y1="125" x2="180" y2="155" stroke={OUTPOST_SCHEMATIC_THEME.amberPale} strokeWidth="3" strokeDasharray="3 3" />
+              <path d="M 160 155 L 200 155 L 195 185 L 165 185 Z" fill={OUTPOST_SCHEMATIC_THEME.goldWarm} opacity="0.85" stroke={OUTPOST_SCHEMATIC_THEME.amberWarm} strokeWidth="1.5" />
+              <text x="180" y="198" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.goldSoft} fontSize="12" fontWeight="bold">
                 Cold Pressed Oil
               </text>
-              <text x="135" y="60" textAnchor="middle" fill="#F8FAFC" fontSize="12" fontWeight="bold" fontFamily="monospace">
-                Manual Screw Compression (Sunflower / Moringa)
+              <text x="135" y="60" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.slateLight} fontSize="12" fontWeight="bold">
+                Manual Screw Compression
               </text>
 
-              {/* Right Spec Card */}
-              <rect x="330" y="25" width="250" height="165" rx="8" fill="#0F172A" stroke="#EAB308" />
-              <text x="455" y="48" textAnchor="middle" fill="#FACC15" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="330" y="25" width="250" height="165" rx="8" fill={OUTPOST_SCHEMATIC_THEME.cardBg} stroke={OUTPOST_SCHEMATIC_THEME.goldWarm} />
+              <text x="455" y="48" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.yellowDot} fontSize="12" fontWeight="bold">
                 HOMESTEAD OIL &amp; PROTEIN
               </text>
-              <text x="345" y="74" fill="#FEF3C7" fontSize="12" fontFamily="monospace">• Sunflower/Moringa: 35–40% oil yield</text>
-              <text x="345" y="96" fill="#A7F3D0" fontSize="12" fontFamily="monospace">• Press: Cold physical ram extraction</text>
-              <text x="345" y="118" fill="#BAE6FD" fontSize="12" fontFamily="monospace">• By-Product: High-protein press cake</text>
-              <text x="345" y="140" fill="#FDE68A" fontSize="12" fontFamily="monospace">• Soy Milk: Simmer 20 min (kill trypsin)</text>
-              <text x="345" y="162" fill="#F8FAFC" fontSize="12" fontFamily="monospace">• Tofu: Coagulate with lemon juice / nigari</text>
+              <text x="345" y="74" fill={OUTPOST_SCHEMATIC_THEME.goldLight} fontSize="12">• Sunflower/Moringa: 35–40% oil yield</text>
+              <text x="345" y="96" fill={OUTPOST_SCHEMATIC_THEME.emeraldMint} fontSize="12">• Press: Cold physical ram extraction</text>
+              <text x="345" y="118" fill={OUTPOST_SCHEMATIC_THEME.waterSkyLight} fontSize="12">• By-Product: High-protein press cake</text>
+              <text x="345" y="140" fill={OUTPOST_SCHEMATIC_THEME.amberLight} fontSize="12">• Soy Milk: Simmer 20 min (kill trypsin)</text>
+              <text x="345" y="162" fill={OUTPOST_SCHEMATIC_THEME.slateLight} fontSize="12">• Tofu: Coagulate with lemon juice / nigari</text>
             </svg>
           )}
 
-          {/* 7. HERMETIC SEED VAULT & GERMINATION ASSAY */}
+          {/* HERMETIC SEED VAULT */}
           {visualConfig.diagramType === 'seed-vault' && (
             <svg viewBox="0 0 600 210" className="w-full h-auto select-none" role="img" aria-label="Hermetic seed vault and germination assay diagram">
-              <rect x="0" y="0" width="600" height="210" rx="10" fill="#07170F" />
-              {/* Glass Seed Jar with Hermetic Seal */}
-              <rect x="40" y="45" width="100" height="120" rx="12" fill="#0F172A" stroke="#38BDF8" strokeWidth="2" />
-              <rect x="55" y="32" width="70" height="15" rx="3" fill="#334155" stroke="#94A3B8" strokeWidth="1.5" />
-              {/* Seeds Inside Jar */}
-              <rect x="45" y="80" width="90" height="80" fill="#78350F" opacity="0.6" rx="6" />
-              <text x="90" y="120" textAnchor="middle" fill="#FEF3C7" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="0" y="0" width="600" height="210" rx="10" fill={OUTPOST_SCHEMATIC_THEME.canvasBg} />
+              <rect x="40" y="45" width="100" height="120" rx="12" fill={OUTPOST_SCHEMATIC_THEME.cardBg} stroke={OUTPOST_SCHEMATIC_THEME.waterSky} strokeWidth="2" />
+              <rect x="55" y="32" width="70" height="15" rx="3" fill={OUTPOST_SCHEMATIC_THEME.slateDark} stroke={OUTPOST_SCHEMATIC_THEME.slateMuted} strokeWidth="1.5" />
+              <rect x="45" y="80" width="90" height="80" fill={OUTPOST_SCHEMATIC_THEME.earthBrown} opacity="0.6" rx="6" />
+              <text x="90" y="120" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.goldLight} fontSize="12" fontWeight="bold">
                 Heirloom Seeds
               </text>
-              {/* Bottom Desiccant Layer (Dry Wood Ash / Silica) */}
-              <rect x="45" y="148" width="90" height="14" fill="#64748B" rx="3" />
-              <text x="90" y="159" textAnchor="middle" fill="#F8FAFC" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="45" y="148" width="90" height="14" fill={OUTPOST_SCHEMATIC_THEME.slateLine} rx="3" />
+              <text x="90" y="159" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.slateLight} fontSize="12" fontWeight="bold">
                 Dry Wood Ash Desiccant
               </text>
 
-              {/* 10-Seed Germination Assay Grid */}
-              <rect x="170" y="45" width="120" height="120" rx="10" fill="#14532D" stroke="#22C55E" strokeWidth="1.5" />
-              <text x="230" y="65" textAnchor="middle" fill="#86EFAC" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="170" y="45" width="120" height="120" rx="10" fill={OUTPOST_SCHEMATIC_THEME.deepForest} stroke={OUTPOST_SCHEMATIC_THEME.emeraldLight} strokeWidth="1.5" />
+              <text x="230" y="65" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.emeraldLight} fontSize="12" fontWeight="bold">
                 10-Seed Paper Assay
               </text>
-              {/* 10 Seeds with Sprouting Radicles */}
               {[
                 [195, 85], [230, 85], [265, 85],
                 [195, 110], [230, 110], [265, 110],
@@ -435,274 +398,243 @@ export function SkillStepVectorDiagram({
                 [230, 155]
               ].map(([cx, cy], i) => (
                 <g key={i}>
-                  <circle cx={cx} cy={cy} r={4} fill="#FEF08A" />
-                  <path d={`M ${cx} ${cy} Q ${cx - 6} ${cy - 8} ${cx - 8} ${cy - 12}`} stroke="#4ADE80" strokeWidth="1.5" fill="none" />
+                  <circle cx={cx} cy={cy} r={4} fill={OUTPOST_SCHEMATIC_THEME.goldSoft} />
+                  <path d={`M ${cx} ${cy} Q ${cx - 6} ${cy - 8} ${cx - 8} ${cy - 12}`} stroke={OUTPOST_SCHEMATIC_THEME.emeraldStroke} strokeWidth="1.5" fill="none" />
                 </g>
               ))}
 
-              {/* Right Spec Card */}
-              <rect x="330" y="25" width="250" height="165" rx="8" fill="#0F172A" stroke="#22C55E" />
-              <text x="455" y="48" textAnchor="middle" fill="#4ADE80" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="330" y="25" width="250" height="165" rx="8" fill={OUTPOST_SCHEMATIC_THEME.cardBg} stroke={OUTPOST_SCHEMATIC_THEME.emeraldLight} />
+              <text x="455" y="48" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.emeraldStroke} fontSize="12" fontWeight="bold">
                 SEED VAULT PROTOCOL
               </text>
-              <text x="345" y="74" fill="#FEF3C7" fontSize="12" fontFamily="monospace">• Moisture: Must be &lt; 8% before sealing</text>
-              <text x="345" y="96" fill="#A7F3D0" fontSize="12" fontFamily="monospace">• Test: Shatters on hammer blow (not dent)</text>
-              <text x="345" y="118" fill="#BAE6FD" fontSize="12" fontFamily="monospace">• Pest Defense: 10% sieved wood ash</text>
-              <text x="345" y="140" fill="#FDE68A" fontSize="12" fontFamily="monospace">• Target: 90%+ germination rate</text>
-              <text x="345" y="162" fill="#F8FAFC" fontSize="12" fontFamily="monospace">• Storage: Hermetic cool dark location</text>
+              <text x="345" y="74" fill={OUTPOST_SCHEMATIC_THEME.goldLight} fontSize="12">• Moisture: Must be &lt; 8% before sealing</text>
+              <text x="345" y="96" fill={OUTPOST_SCHEMATIC_THEME.emeraldMint} fontSize="12">• Test: Shatters on hammer blow (not dent)</text>
+              <text x="345" y="118" fill={OUTPOST_SCHEMATIC_THEME.waterSkyLight} fontSize="12">• Pest Defense: 10% sieved wood ash</text>
+              <text x="345" y="140" fill={OUTPOST_SCHEMATIC_THEME.amberLight} fontSize="12">• Target: 90%+ germination rate</text>
+              <text x="345" y="162" fill={OUTPOST_SCHEMATIC_THEME.slateLight} fontSize="12">• Storage: Hermetic cool dark location</text>
             </svg>
           )}
 
-          {/* 8. BROADFORK DEEP LIVING SOIL AERATION */}
+          {/* BROADFORK LIVING SOIL */}
           {visualConfig.diagramType === 'broadfork-soil' && (
             <svg viewBox="0 0 600 210" className="w-full h-auto select-none" role="img" aria-label="Broadfork soil aeration and microbial profile diagram">
-              <rect x="0" y="0" width="600" height="210" rx="10" fill="#07170F" />
-              {/* Broadfork Tool */}
-              <rect x="110" y="20" width="6" height="70" fill="#94A3B8" />
-              <rect x="150" y="20" width="6" height="70" fill="#94A3B8" />
-              <rect x="100" y="18" width="66" height="6" fill="#D97706" />
-              <rect x="95" y="88" width="76" height="8" fill="#475569" />
-              {/* 5 Forged Tines Penetrating 30cm */}
+              <rect x="0" y="0" width="600" height="210" rx="10" fill={OUTPOST_SCHEMATIC_THEME.canvasBg} />
+              <rect x="110" y="20" width="6" height="70" fill={OUTPOST_SCHEMATIC_THEME.slateMuted} />
+              <rect x="150" y="20" width="6" height="70" fill={OUTPOST_SCHEMATIC_THEME.slateMuted} />
+              <rect x="100" y="18" width="66" height="6" fill={OUTPOST_SCHEMATIC_THEME.amberWarm} />
+              <rect x="95" y="88" width="76" height="8" fill={OUTPOST_SCHEMATIC_THEME.darkSlateGutter} />
               {[100, 115, 133, 150, 165].map((tx, i) => (
-                <line key={i} x1={tx} y1={96} x2={tx} y2={155} stroke="#E2E8F0" strokeWidth="2.5" />
+                <line key={i} x1={tx} y1={96} x2={tx} y2={155} stroke={OUTPOST_SCHEMATIC_THEME.slateLight} strokeWidth="2.5" />
               ))}
 
-              {/* Soil Strata Layers */}
-              {/* O Horizon: 5cm God's Blanket Mulch */}
-              <rect x="25" y="90" width="280" height="15" fill="#78350F" opacity="0.8" />
-              <text x="40" y="101" fill="#FEF3C7" fontSize="12" fontWeight="bold" fontFamily="monospace">O: 5cm Mulch</text>
+              <rect x="25" y="90" width="280" height="15" fill={OUTPOST_SCHEMATIC_THEME.earthBrown} opacity="0.8" />
+              <text x="40" y="101" fill={OUTPOST_SCHEMATIC_THEME.goldLight} fontSize="12" fontWeight="bold">O: 5cm Mulch</text>
 
-              {/* A Horizon: 25cm Topsoil Living Biological Matrix */}
-              <rect x="25" y="105" width="280" height="50" fill="#3E2723" opacity="0.9" />
-              <text x="40" y="132" fill="#86EFAC" fontSize="12" fontWeight="bold" fontFamily="monospace">A: Living Aerobic Zone</text>
+              <rect x="25" y="105" width="280" height="50" fill={OUTPOST_SCHEMATIC_THEME.earthDeep} opacity="0.9" />
+              <text x="40" y="132" fill={OUTPOST_SCHEMATIC_THEME.emeraldLight} fontSize="12" fontWeight="bold">A: Living Aerobic Zone</text>
 
-              {/* B Horizon: Subsoil (Aerated, Not Inverted) */}
-              <rect x="25" y="155" width="280" height="40" fill="#1C1917" />
-              <text x="40" y="178" fill="#CBD5E1" fontSize="12" fontFamily="monospace">B: Subsoil (Never Inverted)</text>
+              <rect x="25" y="155" width="280" height="40" fill={OUTPOST_SCHEMATIC_THEME.hearthDark} />
+              <text x="40" y="178" fill={OUTPOST_SCHEMATIC_THEME.slateBorder} fontSize="12">B: Subsoil (Never Inverted)</text>
 
-              {/* Right Spec Card */}
-              <rect x="330" y="25" width="250" height="165" rx="8" fill="#0F172A" stroke="#10B981" />
-              <text x="455" y="48" textAnchor="middle" fill="#34D399" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="330" y="25" width="250" height="165" rx="8" fill={OUTPOST_SCHEMATIC_THEME.cardBg} stroke={OUTPOST_SCHEMATIC_THEME.emeraldBright} />
+              <text x="455" y="48" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.emeraldStroke} fontSize="12" fontWeight="bold">
                 NO-TILL BROADFORK METHOD
               </text>
-              <text x="345" y="74" fill="#FEF3C7" fontSize="12" fontFamily="monospace">• Depth: 30cm deep oxygen penetration</text>
-              <text x="345" y="96" fill="#A7F3D0" fontSize="12" fontFamily="monospace">• Spacing: Pull back every 20cm step</text>
-              <text x="345" y="118" fill="#BAE6FD" fontSize="12" fontFamily="monospace">• Biology: Protects fungal mycorrhizae</text>
-              <text x="345" y="140" fill="#FDE68A" fontSize="12" fontFamily="monospace">• Weed Seeds: Stays dormant in deep subsoil</text>
-              <text x="345" y="162" fill="#F8FAFC" fontSize="12" fontFamily="monospace">• Water: Multiplies absorption by 400%</text>
+              <text x="345" y="74" fill={OUTPOST_SCHEMATIC_THEME.goldLight} fontSize="12">• Depth: 30cm deep oxygen penetration</text>
+              <text x="345" y="96" fill={OUTPOST_SCHEMATIC_THEME.emeraldMint} fontSize="12">• Spacing: Pull back every 20cm step</text>
+              <text x="345" y="118" fill={OUTPOST_SCHEMATIC_THEME.waterSkyLight} fontSize="12">• Biology: Protects fungal mycorrhizae</text>
+              <text x="345" y="140" fill={OUTPOST_SCHEMATIC_THEME.amberLight} fontSize="12">• Weed Seeds: Stays dormant in deep subsoil</text>
+              <text x="345" y="162" fill={OUTPOST_SCHEMATIC_THEME.slateLight} fontSize="12">• Water: Multiplies absorption by 400%</text>
             </svg>
           )}
 
-          {/* 9. COMPRESSED EARTH BLOCK (CEB) & STONE FOUNDATION */}
+          {/* COMPRESSED EARTH BLOCK */}
           {visualConfig.diagramType === 'earth-block' && (
             <svg viewBox="0 0 600 210" className="w-full h-auto select-none" role="img" aria-label="Pressed earth block wall and stone foundation cross-section">
-              <rect x="0" y="0" width="600" height="210" rx="10" fill="#07170F" />
-              {/* Ground Level */}
-              <line x1="20" y1="145" x2="330" y2="145" stroke="#A16207" strokeWidth="2.5" />
-              {/* 60cm Stone Rubble Foundation */}
-              <rect x="100" y="130" width="110" height="65" fill="#475569" stroke="#94A3B8" strokeWidth="2" />
-              <text x="155" y="168" textAnchor="middle" fill="#F8FAFC" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="0" y="0" width="600" height="210" rx="10" fill={OUTPOST_SCHEMATIC_THEME.canvasBg} />
+              <line x1="20" y1="145" x2="330" y2="145" stroke={OUTPOST_SCHEMATIC_THEME.groundGold} strokeWidth="2.5" />
+              <rect x="100" y="130" width="110" height="65" fill={OUTPOST_SCHEMATIC_THEME.darkSlateGutter} stroke={OUTPOST_SCHEMATIC_THEME.slateMuted} strokeWidth="2" />
+              <text x="155" y="168" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.slateLight} fontSize="12" fontWeight="bold">
                 60cm Stone Trench
               </text>
-              {/* Waterproof DPC Membrane */}
-              <line x1="90" y1="128" x2="220" y2="128" stroke="#38BDF8" strokeWidth="4" />
-              <text x="50" y="128" textAnchor="middle" fill="#38BDF8" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <line x1="90" y1="128" x2="220" y2="128" stroke={OUTPOST_SCHEMATIC_THEME.waterSky} strokeWidth="4" />
+              <text x="50" y="128" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.waterSky} fontSize="12" fontWeight="bold">
                 DPC Plastic →
               </text>
-              {/* Pressed Earth Block Wall */}
-              <rect x="115" y="52" width="80" height="76" fill="#9A3412" stroke="#F97316" strokeWidth="2" />
-              <text x="155" y="94" textAnchor="middle" fill="#FFEDD5" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="115" y="52" width="80" height="76" fill={OUTPOST_SCHEMATIC_THEME.orangeRust} stroke={OUTPOST_SCHEMATIC_THEME.orangeRust} strokeWidth="2" />
+              <text x="155" y="94" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.goldLight} fontSize="12" fontWeight="bold">
                 CEB Earth Wall
               </text>
-              {/* Wide 1m Roof Overhang */}
-              <polygon points="45,62 155,18 265,62" fill="#334155" stroke="#FBBF24" strokeWidth="2" />
-              <text x="75" y="78" textAnchor="middle" fill="#FDE047" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <polygon points="45,62 155,18 265,62" fill={OUTPOST_SCHEMATIC_THEME.slateDark} stroke={OUTPOST_SCHEMATIC_THEME.goldBright} strokeWidth="2" />
+              <text x="75" y="78" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.amberPale} fontSize="12" fontWeight="bold">
                 ↔ 1.0m Overhang
               </text>
 
-              {/* Right Specs */}
-              <rect x="330" y="25" width="250" height="165" rx="8" fill="#0F172A" stroke="#F97316" />
-              <text x="455" y="48" textAnchor="middle" fill="#FB923C" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="330" y="25" width="250" height="165" rx="8" fill={OUTPOST_SCHEMATIC_THEME.cardBg} stroke={OUTPOST_SCHEMATIC_THEME.orangeRust} />
+              <text x="455" y="48" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.orangeRust} fontSize="12" fontWeight="bold">
                 EARTH BLOCK MIX (7:2:1)
               </text>
-              <text x="345" y="74" fill="#FFFFFF" fontSize="12" fontFamily="monospace">• 70% Coarse Sand / Gritty Loam</text>
-              <text x="345" y="96" fill="#FDE68A" fontSize="12" fontFamily="monospace">• 20% Subsoil Clay Binder</text>
-              <text x="345" y="118" fill="#A7F3D0" fontSize="12" fontFamily="monospace">• 8–10% Cement or Hydraulic Lime</text>
-              <text x="345" y="140" fill="#BAE6FD" fontSize="12" fontFamily="monospace">• Compaction: 15–20 MPa manual press</text>
-              <text x="345" y="162" fill="#F8FAFC" fontSize="12" fontFamily="monospace">• Cure: Wet under tarp shade 21 days</text>
+              <text x="345" y="74" fill={OUTPOST_SCHEMATIC_THEME.white} fontSize="12">• 70% Coarse Sand / Gritty Loam</text>
+              <text x="345" y="96" fill={OUTPOST_SCHEMATIC_THEME.amberLight} fontSize="12">• 20% Subsoil Clay Binder</text>
+              <text x="345" y="118" fill={OUTPOST_SCHEMATIC_THEME.emeraldMint} fontSize="12">• 8–10% Cement or Hydraulic Lime</text>
+              <text x="345" y="140" fill={OUTPOST_SCHEMATIC_THEME.waterSkyLight} fontSize="12">• Compaction: 15–20 MPa manual press</text>
+              <text x="345" y="162" fill={OUTPOST_SCHEMATIC_THEME.slateLight} fontSize="12">• Cure: Wet under tarp shade 21 days</text>
             </svg>
           )}
 
-          {/* 10. 5-LAYER BIOSAND FILTER & SOLAR MICRO-GRID */}
+          {/* BIOSAND FILTER */}
           {visualConfig.diagramType === 'water-energy' && (
             <svg viewBox="0 0 600 210" className="w-full h-auto select-none" role="img" aria-label="Biosand water filter 5-layer cross-section">
-              <rect x="0" y="0" width="600" height="210" rx="10" fill="#07170F" />
-              {/* Filter Column */}
-              <rect x="40" y="20" width="160" height="175" rx="6" fill="#1E293B" stroke="#38BDF8" strokeWidth="2" />
-              {/* Layer 1: Diffuser & Standing Water */}
-              <rect x="44" y="25" width="152" height="25" fill="#0284C7" opacity="0.5" />
-              <text x="120" y="41" textAnchor="middle" fill="#E0F2FE" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="0" y="0" width="600" height="210" rx="10" fill={OUTPOST_SCHEMATIC_THEME.canvasBg} />
+              <rect x="40" y="20" width="160" height="175" rx="6" fill={OUTPOST_SCHEMATIC_THEME.slateDark} stroke={OUTPOST_SCHEMATIC_THEME.waterSky} strokeWidth="2" />
+              <rect x="44" y="25" width="152" height="25" fill={OUTPOST_SCHEMATIC_THEME.deepWater} opacity="0.5" />
+              <text x="120" y="41" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.waterSkyPale} fontSize="12" fontWeight="bold">
                 1. 5cm Biolayer (Schmutzdecke)
               </text>
-              {/* Layer 2: Fine Silica Sand */}
-              <rect x="44" y="50" width="152" height="75" fill="#D97706" opacity="0.85" />
-              <text x="120" y="92" textAnchor="middle" fill="#FEF9C3" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="44" y="50" width="152" height="75" fill={OUTPOST_SCHEMATIC_THEME.amberWarm} opacity="0.85" />
+              <text x="120" y="92" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.goldSoft} fontSize="12" fontWeight="bold">
                 2. 45cm Washed Silica Sand
               </text>
-              {/* Layer 3: Activated Charcoal */}
-              <rect x="44" y="125" width="152" height="22" fill="#18181B" />
-              <text x="120" y="140" textAnchor="middle" fill="#A7F3D0" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="44" y="125" width="152" height="22" fill={OUTPOST_SCHEMATIC_THEME.slateDark} />
+              <text x="120" y="140" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.emeraldMint} fontSize="12" fontWeight="bold">
                 3. Crushed Hardwood Charcoal
               </text>
-              {/* Layer 4: Coarse Sand & Pea Gravel */}
-              <rect x="44" y="147" width="152" height="44" fill="#64748B" />
-              <text x="120" y="173" textAnchor="middle" fill="#F8FAFC" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="44" y="147" width="152" height="44" fill={OUTPOST_SCHEMATIC_THEME.slateLine} />
+              <text x="120" y="173" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.slateLight} fontSize="12" fontWeight="bold">
                 4. 15cm Gravel Underbed
               </text>
-              {/* Rising Outlet Weir Pipe */}
-              <path d="M 200 175 L 245 175 L 245 45 L 290 45" stroke="#38BDF8" strokeWidth="5" fill="none" />
-              <text x="245" y="35" textAnchor="middle" fill="#38BDF8" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <path d="M 200 175 L 245 175 L 245 45 L 290 45" stroke={OUTPOST_SCHEMATIC_THEME.waterSky} strokeWidth="5" fill="none" />
+              <text x="245" y="35" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.waterSky} fontSize="12" fontWeight="bold">
                 High-Weir
               </text>
 
-              {/* Right Spec Card */}
-              <rect x="330" y="25" width="250" height="165" rx="8" fill="#0F172A" stroke="#38BDF8" />
-              <text x="455" y="48" textAnchor="middle" fill="#38BDF8" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="330" y="25" width="250" height="165" rx="8" fill={OUTPOST_SCHEMATIC_THEME.cardBg} stroke={OUTPOST_SCHEMATIC_THEME.waterSky} />
+              <text x="455" y="48" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.waterSky} fontSize="12" fontWeight="bold">
                 BIOSAND FILTRATION PURITY
               </text>
-              <text x="345" y="74" fill="#FEF3C7" fontSize="12" fontFamily="monospace">• Weir: Keeps sand submerged 24/7</text>
-              <text x="345" y="96" fill="#A7F3D0" fontSize="12" fontFamily="monospace">• Bio-Layer: Consumes parasites &amp; worms</text>
-              <text x="345" y="118" fill="#BAE6FD" fontSize="12" fontFamily="monospace">• Efficiency: 98% bacteria &amp; turbidity</text>
-              <text x="345" y="140" fill="#FDE68A" fontSize="12" fontFamily="monospace">• Charcoal: Adsorbs pesticides &amp; odor</text>
-              <text x="345" y="162" fill="#F8FAFC" fontSize="12" fontFamily="monospace">• Flow: 15–30 Liters per hour gravity</text>
+              <text x="345" y="74" fill={OUTPOST_SCHEMATIC_THEME.goldLight} fontSize="12">• Weir: Keeps sand submerged 24/7</text>
+              <text x="345" y="96" fill={OUTPOST_SCHEMATIC_THEME.emeraldMint} fontSize="12">• Bio-Layer: Consumes parasites &amp; worms</text>
+              <text x="345" y="118" fill={OUTPOST_SCHEMATIC_THEME.waterSkyLight} fontSize="12">• Efficiency: 98% bacteria &amp; turbidity</text>
+              <text x="345" y="140" fill={OUTPOST_SCHEMATIC_THEME.amberLight} fontSize="12">• Charcoal: Adsorbs pesticides &amp; odor</text>
+              <text x="345" y="162" fill={OUTPOST_SCHEMATIC_THEME.slateLight} fontSize="12">• Flow: 15–30 Liters per hour gravity</text>
             </svg>
           )}
 
-          {/* 11. INDIRECT SOLAR CABINET DEHYDRATOR */}
+          {/* SOLAR DEHYDRATOR */}
           {visualConfig.diagramType === 'preservation' && (
             <svg viewBox="0 0 600 210" className="w-full h-auto select-none" role="img" aria-label="Indirect solar cabinet dehydrator airflow diagram">
-              <rect x="0" y="0" width="600" height="210" rx="10" fill="#07170F" />
-              {/* Sloped Solar Collector */}
-              <polygon points="25,175 195,115 195,135 25,195" fill="#18181B" stroke="#F59E0B" strokeWidth="2" />
-              <text x="110" y="135" textAnchor="middle" fill="#FDE047" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="0" y="0" width="600" height="210" rx="10" fill={OUTPOST_SCHEMATIC_THEME.canvasBg} />
+              <polygon points="25,175 195,115 195,135 25,195" fill={OUTPOST_SCHEMATIC_THEME.slateDark} stroke={OUTPOST_SCHEMATIC_THEME.goldWarm} strokeWidth="2" />
+              <text x="110" y="135" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.amberPale} fontSize="12" fontWeight="bold">
                 SOLAR: Black Collector (52°C)
               </text>
-              {/* Vertical Drying Cabinet */}
-              <rect x="195" y="30" width="120" height="155" rx="6" fill="#3E2723" stroke="#D97706" strokeWidth="2" />
+              <rect x="195" y="30" width="120" height="155" rx="6" fill={OUTPOST_SCHEMATIC_THEME.earthDeep} stroke={OUTPOST_SCHEMATIC_THEME.amberWarm} strokeWidth="2" />
               {[60, 95, 130].map((y, idx) => (
                 <g key={y}>
-                  <line x1="205" y1={y} x2="305" y2={y} stroke="#FDE68A" strokeWidth="2.5" strokeDasharray="5 3" />
-                  <text x="255" y={y - 5} textAnchor="middle" fill="#FEF9C3" fontSize="12" fontFamily="monospace">
+                  <line x1="205" y1={y} x2="305" y2={y} stroke={OUTPOST_SCHEMATIC_THEME.amberLight} strokeWidth="2.5" strokeDasharray="5 3" />
+                  <text x="255" y={y - 5} textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.goldSoft} fontSize="12">
                     Mesh Tray #{idx + 1}
                   </text>
                 </g>
               ))}
-              {/* Rising Warm Airflow Arrow */}
-              <path d="M 50 182 L 185 128 L 255 165 L 255 38" stroke="#F97316" strokeWidth="2.5" strokeDasharray="5 3" fill="none" />
+              <path d="M 50 182 L 185 128 L 255 165 L 255 38" stroke={OUTPOST_SCHEMATIC_THEME.orangeRust} strokeWidth="2.5" strokeDasharray="5 3" fill="none" />
 
-              {/* Right Spec Card */}
-              <rect x="330" y="25" width="250" height="165" rx="8" fill="#0F172A" stroke="#F59E0B" />
-              <text x="455" y="48" textAnchor="middle" fill="#FBBF24" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="330" y="25" width="250" height="165" rx="8" fill={OUTPOST_SCHEMATIC_THEME.cardBg} stroke={OUTPOST_SCHEMATIC_THEME.goldWarm} />
+              <text x="455" y="48" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.goldBright} fontSize="12" fontWeight="bold">
                 INDIRECT DRYING SPECS
               </text>
-              <text x="345" y="74" fill="#FEF3C7" fontSize="12" fontFamily="monospace">• Temperature: 48°C – 55°C</text>
-              <text x="345" y="96" fill="#A7F3D0" fontSize="12" fontFamily="monospace">• Shaded Cabinet: Blocks UV vitamin loss</text>
-              <text x="345" y="118" fill="#BAE6FD" fontSize="12" fontFamily="monospace">• Convection: Updraft removes moisture</text>
-              <text x="345" y="140" fill="#FDE68A" fontSize="12" fontFamily="monospace">• Blanching: 3-min steam before drying</text>
-              <text x="345" y="162" fill="#F8FAFC" fontSize="12" fontFamily="monospace">• Pack: PICS airtight bags + wood ash</text>
+              <text x="345" y="74" fill={OUTPOST_SCHEMATIC_THEME.goldLight} fontSize="12">• Temperature: 48°C – 55°C</text>
+              <text x="345" y="96" fill={OUTPOST_SCHEMATIC_THEME.emeraldMint} fontSize="12">• Shaded Cabinet: Blocks UV vitamin loss</text>
+              <text x="345" y="118" fill={OUTPOST_SCHEMATIC_THEME.waterSkyLight} fontSize="12">• Convection: Updraft removes moisture</text>
+              <text x="345" y="140" fill={OUTPOST_SCHEMATIC_THEME.amberLight} fontSize="12">• Blanching: 3-min steam before drying</text>
+              <text x="345" y="162" fill={OUTPOST_SCHEMATIC_THEME.slateLight} fontSize="12">• Pack: PICS airtight bags + wood ash</text>
             </svg>
           )}
 
-          {/* 12. 18-DAY BERKELEY THERMOPHILIC COMPOST PILE */}
+          {/* 18-DAY HOT COMPOST */}
           {visualConfig.diagramType === 'farming' && (
             <svg viewBox="0 0 600 210" className="w-full h-auto select-none" role="img" aria-label="Thermophilic compost and soil layering schematic">
-              <rect x="0" y="0" width="600" height="210" rx="10" fill="#07170F" />
-              {/* Compost Mound Layers */}
-              <path d="M 30 180 Q 165 20 300 180 Z" fill="#3E2723" stroke="#D97706" strokeWidth="2" />
-              {/* Inner 65C Core */}
-              <ellipse cx="165" cy="135" rx="65" ry="34" fill="#B45309" stroke="#FDE047" strokeWidth="1.5" strokeDasharray="4 2" />
-              <text x="165" y="132" textAnchor="middle" fill="#FEF08A" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="0" y="0" width="600" height="210" rx="10" fill={OUTPOST_SCHEMATIC_THEME.canvasBg} />
+              <path d="M 30 180 Q 165 20 300 180 Z" fill={OUTPOST_SCHEMATIC_THEME.earthDeep} stroke={OUTPOST_SCHEMATIC_THEME.amberWarm} strokeWidth="2" />
+              <ellipse cx="165" cy="135" rx="65" ry="34" fill={OUTPOST_SCHEMATIC_THEME.earthBrown} stroke={OUTPOST_SCHEMATIC_THEME.amberPale} strokeWidth="1.5" strokeDasharray="4 2" />
+              <text x="165" y="132" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.goldSoft} fontSize="12" fontWeight="bold">
                 55°C–65°C CORE
               </text>
-              <text x="165" y="148" textAnchor="middle" fill="#FFFFFF" fontSize="12" fontFamily="monospace">
+              <text x="165" y="148" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.white} fontSize="12">
                 30:1 Carbon : Nitrogen
               </text>
-              {/* Center Aeration Bamboo Pole */}
-              <rect x="162" y="25" width="6" height="155" fill="#84CC16" />
-              <text x="165" y="18" textAnchor="middle" fill="#A7F3D0" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="162" y="25" width="6" height="155" fill={OUTPOST_SCHEMATIC_THEME.emeraldMint} />
+              <text x="165" y="18" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.emeraldMint} fontSize="12" fontWeight="bold">
                 Bamboo Chimney
               </text>
 
-              {/* Right Spec Card */}
-              <rect x="330" y="25" width="250" height="165" rx="8" fill="#0F172A" stroke="#10B981" />
-              <text x="455" y="48" textAnchor="middle" fill="#34D399" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="330" y="25" width="250" height="165" rx="8" fill={OUTPOST_SCHEMATIC_THEME.cardBg} stroke={OUTPOST_SCHEMATIC_THEME.emeraldBright} />
+              <text x="455" y="48" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.emeraldStroke} fontSize="12" fontWeight="bold">
                 18-DAY HOT COMPOST TURNS
               </text>
-              <text x="345" y="74" fill="#FEF3C7" fontSize="12" fontFamily="monospace">• Top Cap: 10cm dry straw moisture blanket</text>
-              <text x="345" y="96" fill="#A7F3D0" fontSize="12" fontFamily="monospace">• Green: 30% fresh legume &amp; manure</text>
-              <text x="345" y="118" fill="#D6D3D1" fontSize="12" fontFamily="monospace">• Brown: 70% dry stalks, straw &amp; ash</text>
-              <text x="345" y="140" fill="#93C5FD" fontSize="12" fontFamily="monospace">• Turn Schedule: Days 4, 7, 10, 14, 18</text>
-              <text x="345" y="162" fill="#F8FAFC" fontSize="12" fontFamily="monospace">• Core Heat: Destroys pathogens &amp; weed seed</text>
+              <text x="345" y="74" fill={OUTPOST_SCHEMATIC_THEME.goldLight} fontSize="12">• Top Cap: 10cm dry straw moisture blanket</text>
+              <text x="345" y="96" fill={OUTPOST_SCHEMATIC_THEME.emeraldMint} fontSize="12">• Green: 30% fresh legume &amp; manure</text>
+              <text x="345" y="118" fill={OUTPOST_SCHEMATIC_THEME.stoneDryingText} fontSize="12">• Brown: 70% dry stalks, straw &amp; ash</text>
+              <text x="345" y="140" fill={OUTPOST_SCHEMATIC_THEME.waterPaleText} fontSize="12">• Turn Schedule: Days 4, 7, 10, 14, 18</text>
+              <text x="345" y="162" fill={OUTPOST_SCHEMATIC_THEME.slateLight} fontSize="12">• Core Heat: Destroys pathogens &amp; weed seed</text>
             </svg>
           )}
 
-          {/* 13. AVONDALE HEAD-HAND-HEART & WONDERBAG THERMAL POT */}
+          {/* AVONDALE EDUCATION & WONDERBAG */}
           {visualConfig.diagramType === 'education' && (
             <svg viewBox="0 0 600 210" className="w-full h-auto select-none" role="img" aria-label="Avondale daily study-work rhythm and fireless thermal cooker schematic">
-              <rect x="0" y="0" width="600" height="210" rx="10" fill="#07170F" />
-              {/* 3 Blocks of True Education */}
-              <rect x="15" y="40" width="95" height="130" rx="8" fill="#1E293B" stroke="#FBBF24" strokeWidth="1.5" />
-              <text x="62" y="66" textAnchor="middle" fill="#FDE047" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="0" y="0" width="600" height="210" rx="10" fill={OUTPOST_SCHEMATIC_THEME.canvasBg} />
+              <rect x="15" y="40" width="95" height="130" rx="8" fill={OUTPOST_SCHEMATIC_THEME.slateDark} stroke={OUTPOST_SCHEMATIC_THEME.goldBright} strokeWidth="1.5" />
+              <text x="62" y="66" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.amberPale} fontSize="12" fontWeight="bold" fontFamily="monospace">
                 05:30 – 11:30
               </text>
-              <text x="62" y="90" textAnchor="middle" fill="#FFFFFF" fontSize="12" fontWeight="bold">
+              <text x="62" y="90" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.white} fontSize="12" fontWeight="bold">
                 HEAD &amp; HEART
               </text>
-              <text x="62" y="112" textAnchor="middle" fill="#CBD5E1" fontSize="12" fontFamily="monospace">
+              <text x="62" y="112" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.slateBorder} fontSize="12">
                 Bible, Sciences,
               </text>
-              <text x="62" y="128" textAnchor="middle" fill="#CBD5E1" fontSize="12" fontFamily="monospace">
+              <text x="62" y="128" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.slateBorder} fontSize="12">
                 Physiology &amp; Math
               </text>
 
-              <rect x="118" y="40" width="95" height="130" rx="8" fill="#064E3B" stroke="#10B981" strokeWidth="1.5" />
-              <text x="165" y="66" textAnchor="middle" fill="#A7F3D0" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="118" y="40" width="95" height="130" rx="8" fill={OUTPOST_SCHEMATIC_THEME.deepForest} stroke={OUTPOST_SCHEMATIC_THEME.emeraldBright} strokeWidth="1.5" />
+              <text x="165" y="66" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.emeraldMint} fontSize="12" fontWeight="bold" fontFamily="monospace">
                 13:30 – 16:30
               </text>
-              <text x="165" y="90" textAnchor="middle" fill="#FFFFFF" fontSize="12" fontWeight="bold">
+              <text x="165" y="90" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.white} fontSize="12" fontWeight="bold">
                 HANDS &amp; TRADE
               </text>
-              <text x="165" y="112" textAnchor="middle" fill="#D1FAE5" fontSize="12" fontFamily="monospace">
+              <text x="165" y="112" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.mintPale} fontSize="12">
                 Agriculture, Wood,
               </text>
-              <text x="165" y="128" textAnchor="middle" fill="#D1FAE5" fontSize="12" fontFamily="monospace">
+              <text x="165" y="128" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.mintPale} fontSize="12">
                 Masonry &amp; Sewing
               </text>
 
-              <rect x="220" y="40" width="95" height="130" rx="8" fill="#3E2723" stroke="#F97316" strokeWidth="1.5" />
-              <text x="267" y="66" textAnchor="middle" fill="#FDBA74" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="220" y="40" width="95" height="130" rx="8" fill={OUTPOST_SCHEMATIC_THEME.earthDeep} stroke={OUTPOST_SCHEMATIC_THEME.orangeRust} strokeWidth="1.5" />
+              <text x="267" y="66" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.goldSoft} fontSize="12" fontWeight="bold">
                 SABBATH POT
               </text>
-              <text x="267" y="90" textAnchor="middle" fill="#FFFFFF" fontSize="12" fontWeight="bold">
+              <text x="267" y="90" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.white} fontSize="12" fontWeight="bold" fontFamily="monospace">
                 &gt;68°C / 8 HRS
               </text>
-              <text x="267" y="112" textAnchor="middle" fill="#FFEDD5" fontSize="12" fontFamily="monospace">
+              <text x="267" y="112" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.goldLight} fontSize="12">
                 Wonderbag Cooker
               </text>
-              <text x="267" y="128" textAnchor="middle" fill="#FFEDD5" fontSize="12" fontFamily="monospace">
+              <text x="267" y="128" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.goldLight} fontSize="12">
                 Zero Fire Kindled
               </text>
 
-              {/* Right Spec Card */}
-              <rect x="330" y="25" width="250" height="165" rx="8" fill="#0F172A" stroke="#FBBF24" />
-              <text x="455" y="48" textAnchor="middle" fill="#FDE047" fontSize="12" fontWeight="bold" fontFamily="monospace">
+              <rect x="330" y="25" width="250" height="165" rx="8" fill={OUTPOST_SCHEMATIC_THEME.cardBg} stroke={OUTPOST_SCHEMATIC_THEME.goldBright} />
+              <text x="455" y="48" textAnchor="middle" fill={OUTPOST_SCHEMATIC_THEME.amberPale} fontSize="12" fontWeight="bold">
                 AVONDALE TRUE EDUCATION
               </text>
-              <text x="345" y="74" fill="#FEF3C7" fontSize="12" fontFamily="monospace">• 40% Head: Spiritual &amp; intellectual</text>
-              <text x="345" y="96" fill="#A7F3D0" fontSize="12" fontFamily="monospace">• 40% Hand: Agriculture &amp; building crafts</text>
-              <text x="345" y="118" fill="#BAE6FD" fontSize="12" fontFamily="monospace">• 20% Heart: Health, melody &amp; service</text>
-              <text x="345" y="140" fill="#FDE68A" fontSize="12" fontFamily="monospace">• Student Plot: 5m × 5m personal garden</text>
-              <text x="345" y="162" fill="#F8FAFC" fontSize="12" fontFamily="monospace">• Preparation: Friday sunset readiness</text>
+              <text x="345" y="74" fill={OUTPOST_SCHEMATIC_THEME.goldLight} fontSize="12">• 40% Head: Spiritual &amp; intellectual</text>
+              <text x="345" y="96" fill={OUTPOST_SCHEMATIC_THEME.emeraldMint} fontSize="12">• 40% Hand: Agriculture &amp; building crafts</text>
+              <text x="345" y="118" fill={OUTPOST_SCHEMATIC_THEME.waterSkyLight} fontSize="12">• 20% Heart: Health, melody &amp; service</text>
+              <text x="345" y="140" fill={OUTPOST_SCHEMATIC_THEME.amberLight} fontSize="12">• Student Plot: 5m × 5m personal garden</text>
+              <text x="345" y="162" fill={OUTPOST_SCHEMATIC_THEME.slateLight} fontSize="12">• Preparation: Friday sunset readiness</text>
             </svg>
           )}
         </div>
@@ -712,11 +644,11 @@ export function SkillStepVectorDiagram({
       {!compact && steps.length > 0 && (
         <div className="pt-4 border-t border-emerald-900/60 flex flex-col gap-3">
           <div className="flex items-center justify-between">
-            <span className="text-caption font-mono uppercase tracking-wider text-amber-300 font-bold">
+            <span className="text-caption font-semibold text-amber-300">
               Step-by-Step Execution Flowchart
             </span>
             {toolsNeeded.length > 0 && (
-              <span className="text-caption font-mono text-emerald-300 flex items-center gap-1">
+              <span className="text-caption text-emerald-300 flex items-center gap-1">
                 <Wrench size={12} /> {toolsNeeded.slice(0, 3).join(' · ')}
               </span>
             )}
@@ -737,11 +669,11 @@ export function SkillStepVectorDiagram({
               return (
                 <div
                   key={idx}
-                  className="p-3.5 rounded-2xl bg-white/[0.04] border border-emerald-800/50 flex flex-col justify-between gap-2 relative"
+                  className="p-3.5 rounded-[var(--radius-card)] bg-white/[0.04] border border-emerald-800/50 flex flex-col justify-between gap-2 relative"
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <span className="px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 font-mono text-caption font-extrabold">
-                      STEP 0{idx + 1}
+                    <span className="px-2 py-0.5 rounded-[var(--radius-control)] bg-amber-500 text-slate-950 font-mono text-caption font-extrabold">
+                      Step {idx + 1}
                     </span>
                     {idx < 3 && (
                       <ArrowRight size={13} className="text-emerald-400 hidden lg:inline" />

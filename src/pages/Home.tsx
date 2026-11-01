@@ -676,7 +676,7 @@ Generated via Outpost Living Malawi (Avondale Model & DCCMS/FAO Standards)`;
     <div
       className={cn(
         'min-h-full flex flex-col pb-14 select-text transition-colors duration-200',
-        isField ? 'bg-black text-white' : 'bg-[#F6F1E7] dark:bg-[#0F1813] text-[#1F2A22] dark:text-[#EBF2EC]'
+        isField ? 'bg-black text-white' : 'bg-[var(--ground)] dark:bg-[var(--ground-dark)] text-[var(--ink)] dark:text-[var(--paper-cream)]'
       )}
     >
       {/* ====================================================================
@@ -695,11 +695,11 @@ Generated via Outpost Living Malawi (Avondale Model & DCCMS/FAO Standards)`;
       {/* ====================================================================
           EXTENDED ENCYCLOPEDIC MODULES DRAWER (Zero Content Loss)
       ==================================================================== */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 w-full mt-6 pt-6 border-t border-[#E4DCCB] dark:border-[#283C30]">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 w-full mt-6 pt-6 border-t border-[var(--sand)] dark:border-[var(--card-dark)]">
         <button
           type="button"
           onClick={() => setShowExtendedGuides((prev) => !prev)}
-          className="w-full py-2.5 px-4 rounded-[6px] border border-[#E4DCCB] dark:border-[#283C30] bg-[#FFFDF8] dark:bg-[#17241C] hover:bg-[#F6F1E7] dark:hover:bg-[#1F3025] flex items-center justify-between text-[13px] text-[var(--ink-muted)] dark:text-[#8E9E92] hover:text-[#1F2A22] dark:hover:text-[#EBF2EC] font-medium transition-all duration-200 cursor-pointer select-none"
+          className="w-full py-2.5 px-4 rounded-[6px] border border-[var(--sand)] dark:border-[var(--card-dark)] bg-[var(--surface)] dark:bg-[var(--ground-dark)] hover:bg-[var(--ground)] dark:hover:bg-[var(--surface-dark)] flex items-center justify-between text-[13px] text-[var(--ink-muted)] dark:text-[var(--ink-muted)] hover:text-[var(--ink)] dark:hover:text-[var(--paper-cream)] font-medium transition-all duration-200 cursor-pointer select-none"
         >
           <span>
             {showExtendedGuides

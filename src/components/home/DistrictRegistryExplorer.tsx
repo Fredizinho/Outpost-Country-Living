@@ -211,7 +211,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
       {activeViewMode === 'districts' && (
         <div className="flex flex-col gap-6">
           {/* Filter & Search Bar */}
-          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 bg-white dark:bg-[#0D1D13] p-4 rounded-2xl border border-stone-200/90 dark:border-emerald-900/60 shadow-2xs">
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 bg-white dark:bg-[var(--ground-dark)] p-4 rounded-card border border-stone-200/90 dark:border-emerald-900/60 shadow-2xs">
             {/* Region Tabs */}
             <div className="flex flex-wrap items-center gap-1.5">
               {(['All', 'Northern', 'Central', 'Southern'] as const).map((reg) => (
@@ -267,7 +267,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
             {/* Left: Scrollable 28-District Selector Table/Grid (5 cols) */}
             <div className="lg:col-span-5 flex flex-col gap-2 max-h-[660px] overflow-y-auto custom-scrollbar pr-1">
               {filteredDistricts.length === 0 ? (
-                <div className="p-8 rounded-2xl bg-white dark:bg-[#0D1D13] border border-stone-200 dark:border-emerald-900/50 text-center flex flex-col items-center gap-2">
+                <div className="p-8 rounded-card bg-white dark:bg-[var(--ground-dark)] border border-stone-200 dark:border-emerald-900/50 text-center flex flex-col items-center gap-2">
                   <p className="text-sm font-semibold text-stone-700 dark:text-stone-300">
                     No districts match "{searchQuery}"
                   </p>
@@ -292,10 +292,10 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                       type="button"
                       onClick={() => setActiveDistrictId(dist.id)}
                       className={cn(
-                        'w-full text-left p-4 rounded-2xl border transition-all cursor-pointer flex flex-col gap-2',
+                        'w-full text-left p-4 rounded-card border transition-all cursor-pointer flex flex-col gap-2',
                         isSelected
                           ? 'bg-emerald-950 text-white border-emerald-600 shadow-md'
-                          : 'bg-white dark:bg-[#0D1D13] text-stone-800 dark:text-stone-100 border-stone-200/90 dark:border-emerald-900/50 hover:border-emerald-600/50'
+                          : 'bg-white dark:bg-[var(--ground-dark)] text-stone-800 dark:text-stone-100 border-stone-200/90 dark:border-emerald-900/50 hover:border-emerald-600/50'
                       )}
                     >
                       <div className="flex items-center justify-between gap-2">
@@ -366,7 +366,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
             </div>
 
             {/* Right: Active District Full Telemetry & Planting Pit Dossier (7 cols) */}
-            <div className="lg:col-span-7 bg-white dark:bg-[#0D1D13] rounded-3xl border border-stone-200/90 dark:border-emerald-900/60 p-6 sm:p-8 shadow-sm flex flex-col gap-6">
+            <div className="lg:col-span-7 bg-white dark:bg-[var(--ground-dark)] rounded-[var(--radius-sheet)] border border-stone-200/90 dark:border-emerald-900/60 p-6 sm:p-8 shadow-sm flex flex-col gap-6">
               {/* Top Dossier Header */}
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-5 border-b border-stone-200/80 dark:border-emerald-900/50">
                 <div className="flex flex-col gap-1">
@@ -413,7 +413,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
               {/* Unified 8-Cell Telemetry Matrix (DCCMS, FAO HWSD, AQUASTAT & Live ECMWF) */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 <div className="p-3 rounded-xl bg-stone-50 dark:bg-stone-900/70 border border-stone-200/70 dark:border-emerald-900/40">
-                  <span className="text-caption font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 block">
+                  <span className="text-caption font-medium text-stone-500 dark:text-stone-400 block">
                     DCCMS Rainfall
                   </span>
                   <span className="font-mono text-base font-bold text-stone-900 dark:text-white tabular-nums">
@@ -425,7 +425,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                 </div>
 
                 <div className="p-3 rounded-xl bg-stone-50 dark:bg-stone-900/70 border border-stone-200/70 dark:border-emerald-900/40">
-                  <span className="text-caption font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 block">
+                  <span className="text-caption font-medium text-stone-500 dark:text-stone-400 block">
                     FAO HWSD Soil pH
                   </span>
                   <span className="font-mono text-base font-bold text-stone-900 dark:text-white tabular-nums">
@@ -437,7 +437,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                 </div>
 
                 <div className="p-3 rounded-xl bg-stone-50 dark:bg-stone-900/70 border border-stone-200/70 dark:border-emerald-900/40">
-                  <span className="text-caption font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 block">
+                  <span className="text-caption font-medium text-stone-500 dark:text-stone-400 block">
                     AQUASTAT Aquifer
                   </span>
                   <span className="font-mono text-base font-bold text-stone-900 dark:text-white tabular-nums">
@@ -449,7 +449,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                 </div>
 
                 <div className="p-3 rounded-xl bg-stone-50 dark:bg-stone-900/70 border border-stone-200/70 dark:border-emerald-900/40">
-                  <span className="text-caption font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 block">
+                  <span className="text-caption font-medium text-stone-500 dark:text-stone-400 block">
                     Solar Insolation
                   </span>
                   <span className="font-mono text-base font-bold text-stone-900 dark:text-white tabular-nums">
@@ -561,24 +561,24 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                       <div className="flex flex-col gap-3.5">
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
                           <div className="p-2.5 rounded-xl bg-white dark:bg-stone-900 border border-stone-200/70 dark:border-emerald-900/40">
-                            <strong className="text-stone-900 dark:text-amber-300 block mb-0.5 text-caption uppercase tracking-wider font-mono">
-                              Climate & Comfort
+                            <strong className="text-stone-900 dark:text-amber-300 block mb-0.5 text-caption font-semibold">
+                              Climate & comfort
                             </strong>
                             <span className="text-stone-700 dark:text-stone-300 leading-relaxed">
                               {plain.climateFeel}
                             </span>
                           </div>
                           <div className="p-2.5 rounded-xl bg-white dark:bg-stone-900 border border-stone-200/70 dark:border-emerald-900/40">
-                            <strong className="text-stone-900 dark:text-amber-300 block mb-0.5 text-caption uppercase tracking-wider font-mono">
-                              Water Access
+                            <strong className="text-stone-900 dark:text-amber-300 block mb-0.5 text-caption font-semibold">
+                              Water access
                             </strong>
                             <span className="text-stone-700 dark:text-stone-300 leading-relaxed">
                               {plain.waterEase}
                             </span>
                           </div>
                           <div className="p-2.5 rounded-xl bg-white dark:bg-stone-900 border border-stone-200/70 dark:border-emerald-900/40">
-                            <strong className="text-stone-900 dark:text-amber-300 block mb-0.5 text-caption uppercase tracking-wider font-mono">
-                              Soil & Care
+                            <strong className="text-stone-900 dark:text-amber-300 block mb-0.5 text-caption font-semibold">
+                              Soil & care
                             </strong>
                             <span className="text-stone-700 dark:text-stone-300 leading-relaxed">
                               {plain.soilPlain}
@@ -588,7 +588,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-stone-200/70 dark:border-emerald-900/40">
                           <div>
-                            <span className="text-caption font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 block mb-1">
+                            <span className="text-caption font-medium text-stone-500 dark:text-stone-400 block mb-1">
                               Documented Staple & Orchard Crops
                             </span>
                             <p className="text-xs font-semibold text-stone-800 dark:text-stone-200 leading-relaxed">
@@ -596,7 +596,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                             </p>
                           </div>
                           <div>
-                            <span className="text-caption font-mono uppercase tracking-wider text-stone-500 dark:text-stone-400 block mb-1">
+                            <span className="text-caption font-medium text-stone-500 dark:text-stone-400 block mb-1">
                               Traditional Authorities (TLMA Jurisdictions)
                             </span>
                             <p className="text-xs font-semibold text-stone-800 dark:text-stone-200 leading-relaxed">
@@ -612,7 +612,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                       <div className="p-3.5 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-800/50 flex flex-col gap-1.5">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="text-caption font-mono font-bold uppercase tracking-wider text-emerald-900 dark:text-emerald-300">
+                          <span className="text-caption font-semibold text-emerald-900 dark:text-emerald-300">
                             FAO HWSD v2.0 Soil Prescription
                           </span>
                           <span className="text-caption font-mono text-stone-600 dark:text-stone-400">
@@ -762,7 +762,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
           {Object.values(PLANTING_PIT_SPECS).map((pit) => (
             <div
               key={pit.id}
-              className="p-6 rounded-3xl bg-white dark:bg-[#0D1D13] border border-stone-200/90 dark:border-emerald-900/60 shadow-2xs flex flex-col justify-between gap-4"
+              className="p-6 rounded-card bg-white dark:bg-[var(--ground-dark)] border border-stone-200/90 dark:border-emerald-900/60 shadow-2xs flex flex-col justify-between gap-4"
             >
               <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between gap-2 text-xs text-stone-500 dark:text-stone-400 font-mono tabular-nums">
@@ -824,7 +824,7 @@ export function DistrictRegistryExplorer({ embedded = false }: { embedded?: bool
           {SOIL_TYPES_REGISTRY.map((soil) => (
             <div
               key={soil.id}
-              className="p-6 rounded-3xl bg-white dark:bg-[#0D1D13] border border-stone-200/90 dark:border-emerald-900/60 shadow-2xs flex flex-col justify-between gap-4"
+              className="p-6 rounded-card bg-white dark:bg-[var(--ground-dark)] border border-stone-200/90 dark:border-emerald-900/60 shadow-2xs flex flex-col justify-between gap-4"
             >
               <div className="flex flex-col gap-2.5">
                 <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-stone-500 dark:text-stone-400 tabular-nums">

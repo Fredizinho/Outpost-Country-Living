@@ -35,7 +35,7 @@ export function OutpostCenterBlueprints({ className }: { className?: string }) {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-stone-200/80 dark:border-emerald-900/40">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold tracking-wider text-emerald-800 dark:text-amber-300 uppercase bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-md">
+            <span className="text-xs font-semibold text-emerald-800 dark:text-amber-300 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-[var(--radius-control)]">
               Pillar 4 Mission
             </span>
             <span className="text-stone-300 dark:text-stone-600">•</span>
@@ -62,23 +62,23 @@ export function OutpostCenterBlueprints({ className }: { className?: string }) {
               type="button"
               onClick={() => setSelectedBlueprintId(bp.id)}
               className={cn(
-                "p-4 rounded-2xl text-left border transition-all flex flex-col justify-between gap-3 shadow-xs cursor-pointer group",
+                "p-4 rounded-[var(--radius-card)] text-left border transition-all flex flex-col justify-between gap-3 shadow-xs cursor-pointer group",
                 isSelected
                   ? "bg-emerald-900 dark:bg-emerald-800 text-white border-emerald-950 dark:border-emerald-700 ring-2 ring-emerald-800/30"
-                  : "bg-white dark:bg-[#0E1D14] hover:bg-stone-50 dark:hover:bg-emerald-950/60 border-stone-200 dark:border-emerald-900/60 text-stone-900 dark:text-stone-100"
+                  : "bg-[var(--surface)] hover:bg-stone-50 dark:hover:bg-emerald-950/60 border-stone-200 dark:border-emerald-900/60 text-stone-900 dark:text-stone-100"
               )}
             >
               <div className="flex items-center justify-between gap-2">
                 <div className={cn(
-                  "w-14 h-14 rounded-xl p-1.5 flex items-center justify-center border shrink-0 transition-transform group-hover:scale-105",
+                  "w-14 h-14 rounded-[var(--radius-control)] p-1.5 flex items-center justify-center border shrink-0 transition-transform group-hover:scale-105",
                   isSelected
-                    ? "bg-[#07150E] border-emerald-500/40"
-                    : "bg-[#FAF6EE] dark:bg-[#07150E] border-stone-200/80 dark:border-emerald-900/60"
+                    ? "bg-[var(--ground)] border-emerald-500/40"
+                    : "bg-[var(--surface)] border-stone-200/80 dark:border-emerald-900/60"
                 )}>
                   <CountryIcon name={iconName} className="w-full h-full object-contain" />
                 </div>
                 <span className={cn(
-                  "text-caption font-mono font-bold uppercase px-2 py-0.5 rounded",
+                  "text-caption font-semibold px-2 py-0.5 rounded-[var(--radius-control)]",
                   isSelected ? "bg-white/20 text-emerald-100" : "bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300"
                 )}>
                   {bp.type}
@@ -103,12 +103,12 @@ export function OutpostCenterBlueprints({ className }: { className?: string }) {
       </div>
 
       {/* Active Blueprint Detail Card */}
-      <div className="rounded-3xl bg-white dark:bg-[#0E1D14] border border-stone-200/90 dark:border-emerald-900/60 shadow-xs p-6 sm:p-8 md:p-10 flex flex-col gap-8">
+      <div className="rounded-[var(--radius-sheet)] bg-[var(--surface)] border border-stone-200/90 dark:border-emerald-900/60 shadow-xs p-6 sm:p-8 md:p-10 flex flex-col gap-8">
         {/* Title, Purpose, and Counsel Quote */}
         <div className="flex flex-col gap-4 pb-6 border-b border-stone-200/80 dark:border-emerald-900/40">
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
             <div>
-              <span className="text-caption font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded">
+              <span className="text-caption font-semibold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-[var(--radius-control)]">
                 {activeBlueprint.type} Operational Blueprint
               </span>
               <h3 className="serif text-2xl sm:text-3xl font-bold text-stone-900 dark:text-stone-50 mt-1">
@@ -119,23 +119,23 @@ export function OutpostCenterBlueprints({ className }: { className?: string }) {
               </p>
             </div>
 
-            <div className="p-3 rounded-xl bg-stone-50 dark:bg-[#14281D] border border-stone-200 dark:border-emerald-900/60 self-start text-xs">
+            <div className="p-3 rounded-[var(--radius-control)] bg-stone-50 dark:bg-[var(--ground)] border border-stone-200 dark:border-emerald-900/60 self-start text-xs">
               <span className="text-stone-500 dark:text-stone-400 block">Recommended Acreage:</span>
               <strong className="text-emerald-900 dark:text-amber-300 font-mono text-sm">{activeBlueprint.recommendedAcreage}</strong>
             </div>
           </div>
 
           {/* Spirit of Prophecy Foundation */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200/70 dark:border-amber-800/60 flex items-start gap-3">
+          <div className="p-4 sm:p-5 rounded-[var(--radius-card)] bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200/70 dark:border-amber-800/60 flex items-start gap-3">
             <BookOpen size={18} className="text-amber-800 dark:text-amber-400 mt-0.5 shrink-0" />
             <div>
-              <span className="text-caption font-mono font-bold uppercase text-amber-900 dark:text-amber-300 block">
-                SPIRIT OF PROPHECY COUNSEL
+              <span className="text-caption font-semibold text-amber-900 dark:text-amber-300 block">
+                Spirit of Prophecy Counsel
               </span>
               <p className="serif text-xs sm:text-sm text-stone-800 dark:text-stone-200 italic leading-relaxed mt-0.5">
                 "{activeBlueprint.counselQuote.text}"
               </p>
-              <span className="text-xs font-bold text-stone-700 dark:text-stone-300 block mt-1">
+              <span className="text-xs font-semibold text-stone-700 dark:text-stone-300 block mt-1">
                 — {activeBlueprint.counselQuote.source}
               </span>
             </div>
@@ -157,7 +157,7 @@ export function OutpostCenterBlueprints({ className }: { className?: string }) {
               {activeBlueprint.keyFeatures.map((feat, idx) => (
                 <div
                   key={idx}
-                  className="p-3.5 rounded-xl bg-[#FAF8F5] dark:bg-[#14281D] border border-stone-200/80 dark:border-emerald-900/60 flex items-start gap-3"
+                  className="p-3.5 rounded-[var(--radius-control)] bg-[var(--ground)] border border-stone-200/80 dark:border-emerald-900/60 flex items-start gap-3"
                 >
                   <span className="w-5 h-5 rounded-full bg-emerald-800 dark:bg-emerald-700 text-white text-caption font-mono font-bold flex items-center justify-center shrink-0 mt-0.5">
                     {idx + 1}
@@ -171,7 +171,7 @@ export function OutpostCenterBlueprints({ className }: { className?: string }) {
 
             {/* Operational Steps */}
             <div className="mt-4 pt-4 border-t border-stone-100 dark:border-emerald-900/40 flex flex-col gap-2">
-              <h5 className="text-xs font-bold uppercase tracking-wider text-stone-700 dark:text-stone-300">
+              <h5 className="text-xs font-semibold text-stone-700 dark:text-stone-300">
                 Action Steps for Establishment:
               </h5>
               <ul className="flex flex-col gap-1.5 text-xs text-stone-700 dark:text-stone-300">
@@ -186,7 +186,7 @@ export function OutpostCenterBlueprints({ className }: { className?: string }) {
           </div>
 
           {/* Daily Rhythm & Schedule */}
-          <div className="lg:col-span-5 flex flex-col gap-4 bg-[#FAF8F5] dark:bg-[#14281D] p-5 sm:p-6 rounded-2xl border border-stone-200 dark:border-emerald-900/60">
+          <div className="lg:col-span-5 flex flex-col gap-4 bg-[var(--ground)] p-5 sm:p-6 rounded-[var(--radius-card)] border border-stone-200 dark:border-emerald-900/60">
             <h4 className="text-sm sm:text-base font-bold text-stone-900 dark:text-stone-50 flex items-center gap-2">
               <Clock size={16} className="text-emerald-800 dark:text-emerald-400" /> Harmonious Daily Rhythm
             </h4>
@@ -200,7 +200,7 @@ export function OutpostCenterBlueprints({ className }: { className?: string }) {
                 return (
                   <div
                     key={idx}
-                    className="p-2.5 rounded-xl bg-white dark:bg-[#0E1D14] border border-stone-200 dark:border-emerald-900/60 text-xs flex flex-col gap-0.5"
+                    className="p-2.5 rounded-[var(--radius-control)] bg-[var(--surface)] border border-stone-200 dark:border-emerald-900/60 text-xs flex flex-col gap-0.5"
                   >
                     <span className="text-xs font-mono font-bold text-emerald-800 dark:text-amber-300">
                       {time}

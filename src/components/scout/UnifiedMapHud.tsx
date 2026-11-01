@@ -88,7 +88,7 @@ export function UnifiedMapHud({
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 20, scale: 0.95 }}
             transition={{ duration: 0.18 }}
-            className="flex items-center gap-2 bg-[#07140D]/95 backdrop-blur-2xl border border-emerald-500/35 rounded-2xl px-3 py-2 shadow-2xl text-white w-64 sm:w-72"
+            className="flex items-center gap-2 bg-[var(--ground)]/95 backdrop-blur-2xl border border-emerald-500/35 rounded-[var(--radius-card)] px-3 py-2 shadow-2xl text-white w-64 sm:w-72"
           >
             <Search size={15} className="text-emerald-400 shrink-0" />
             <input
@@ -119,7 +119,7 @@ export function UnifiedMapHud({
       </AnimatePresence>
 
       {/* Clean, Intuitive Control Dock */}
-      <div className="bg-[#07140D]/92 backdrop-blur-2xl border border-emerald-500/25 rounded-2xl p-1.5 shadow-2xl flex flex-col items-center gap-1.5 text-stone-200">
+      <div className="bg-[var(--ground)]/92 backdrop-blur-2xl border border-emerald-500/25 rounded-[var(--radius-card)] p-1.5 shadow-2xl flex flex-col items-center gap-1.5 text-stone-200">
         
         {/* 0. AI MAP SCOUT (Maps Grounded Assistant) */}
         {onOpenAiScout && (

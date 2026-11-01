@@ -14,6 +14,7 @@ import { MalawiDistrictSpec } from '@/data/malawiDistrictData';
 import { cn } from '@/lib/utils';
 import { CHART_PALETTE_6, CHART_TOKENS } from '@/lib/chartTokens';
 import { sheet, fadeUp } from '@/lib/motion';
+import { OUTPOST_SCHEMATIC_THEME } from '@/theme';
 
 export interface ResourceDensityBottomSheetProps {
   activeDistrict?: MalawiDistrictSpec | null;
@@ -86,7 +87,7 @@ export function ResourceDensityBottomSheet({
       {/* ------------------------------------------------------------- */}
       <div className={cn(
         "bg-slate-950/95 backdrop-blur-2xl text-white shadow-2xl transition-all",
-        isStandalone ? "border border-white/15 rounded-3xl" : "border-t border-x border-white/15 rounded-t-2xl"
+        isStandalone ? "border border-white/15 rounded-[var(--radius-sheet)]" : "border-t border-x border-white/15 rounded-t-2xl"
       )}>
         <div className="p-3 sm:px-5 flex items-center justify-between gap-3">
           
@@ -235,7 +236,7 @@ export function ResourceDensityBottomSheet({
               {/* Top Highlight Summary Cards */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div className="bg-slate-900/80 border border-white/10 p-3 rounded-xl flex flex-col justify-between">
-                  <span className="text-caption font-mono uppercase text-slate-400">Total Districts Listed</span>
+                  <span className="text-caption font-medium text-slate-400">Total Districts Listed</span>
                   <div className="flex items-baseline gap-1 mt-1">
                     <span className="text-xl font-bold font-mono text-white">{chartData.length}</span>
                     <span className="text-caption font-mono text-slate-400">districts</span>
@@ -244,27 +245,27 @@ export function ResourceDensityBottomSheet({
                 </div>
 
                 <div className="bg-slate-900/80 border border-white/10 p-3 rounded-xl flex flex-col justify-between">
-                  <span className="text-caption font-mono uppercase text-slate-400">Highest Space per Person</span>
+                  <span className="text-caption font-medium text-slate-400">Highest Space per Person</span>
                   <div className="flex items-baseline gap-1 mt-1">
-                    <span className="text-xl font-bold font-mono text-emerald-300">Rumphi</span>
+                    <span className="text-xl font-bold text-emerald-300">Rumphi</span>
                     <span className="text-caption font-mono text-slate-400">(48 / km²)</span>
                   </div>
                   <span className="text-caption text-slate-400 mt-1">Abundant free homestead land</span>
                 </div>
 
                 <div className="bg-slate-900/80 border border-white/10 p-3 rounded-xl flex flex-col justify-between">
-                  <span className="text-caption font-mono uppercase text-slate-400">Highest Annual Rainfall</span>
+                  <span className="text-caption font-medium text-slate-400">Highest Annual Rainfall</span>
                   <div className="flex items-baseline gap-1 mt-1">
-                    <span className="text-xl font-bold font-mono text-sky-300">Mulanje</span>
+                    <span className="text-xl font-bold text-sky-300">Mulanje</span>
                     <span className="text-caption font-mono text-slate-400">(1,800 mm)</span>
                   </div>
                   <span className="text-caption text-slate-400 mt-1">Chiperoni tea & fruit belt</span>
                 </div>
 
                 <div className="bg-slate-900/80 border border-white/10 p-3 rounded-xl flex flex-col justify-between">
-                  <span className="text-caption font-mono uppercase text-slate-400">Easiest Shallow Groundwater</span>
+                  <span className="text-caption font-medium text-slate-400">Easiest Shallow Groundwater</span>
                   <div className="flex items-baseline gap-1 mt-1">
-                    <span className="text-xl font-bold font-mono text-amber-300">Salima / Nkhotakota</span>
+                    <span className="text-xl font-bold text-amber-300">Salima / Nkhotakota</span>
                     <span className="text-caption font-mono text-slate-400">(8m - 12m)</span>
                   </div>
                   <span className="text-caption text-slate-400 mt-1">Low-cost solar pump wells</span>
@@ -290,14 +291,14 @@ export function ResourceDensityBottomSheet({
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(120, 113, 108, 0.2)" opacity={0.5} vertical={false} />
                       <XAxis 
                         dataKey="shortName" 
-                        stroke="#94a3b8" 
+                        stroke={OUTPOST_SCHEMATIC_THEME.slateMuted} 
                         fontSize={12} 
                         tickLine={false}
                         interval={0}
                         angle={-45}
                         textAnchor="end"
                       />
-                      <YAxis stroke="#94a3b8" fontSize={12} />
+                      <YAxis stroke={OUTPOST_SCHEMATIC_THEME.slateMuted} fontSize={12} />
                       <Tooltip 
                         content={({ active, payload }) => {
                           if (active && payload && payload.length) {
@@ -330,10 +331,10 @@ export function ResourceDensityBottomSheet({
                       <div className="flex flex-wrap items-center justify-between gap-2 px-1 pb-1 border-b border-white/10 text-xs font-mono">
                         <div className="flex items-center gap-3">
                           <span className="flex items-center gap-1.5 font-bold text-sky-300">
-                            <span className="w-3 h-3 rounded-sm bg-[#0284c7]" /> Annual Rainfall (mm)
+                            <span className="w-3 h-3 rounded-sm bg-sky-600" /> Annual Rainfall (mm)
                           </span>
                           <span className="flex items-center gap-1.5 font-bold text-emerald-400">
-                            <span className="w-4 border-t-2 border-dashed border-[#15803D]" /> Modelled Aquifer Depth (m)
+                            <span className="w-4 border-t-2 border-dashed border-emerald-600" /> Modelled Aquifer Depth (m)
                           </span>
                         </div>
                         <span className="text-caption font-mono text-amber-300 px-2 py-0.5 rounded-control bg-amber-500/15 border border-amber-500/30">
@@ -357,15 +358,15 @@ export function ResourceDensityBottomSheet({
                             <CartesianGrid strokeDasharray="3 3" stroke="rgba(120, 113, 108, 0.2)" opacity={0.5} vertical={false} />
                             <XAxis 
                               dataKey="shortName" 
-                              stroke="#94a3b8" 
+                              stroke={OUTPOST_SCHEMATIC_THEME.slateMuted} 
                               fontSize={12} 
                               tickLine={false}
                               interval={0}
                               angle={-45}
                               textAnchor="end"
                             />
-                            <YAxis yAxisId="left" stroke="#38bdf8" fontSize={12} unit="mm" />
-                            <YAxis yAxisId="right" orientation="right" stroke="#34d399" fontSize={12} unit="m" />
+                            <YAxis yAxisId="left" stroke={OUTPOST_SCHEMATIC_THEME.waterSky} fontSize={12} unit="mm" />
+                            <YAxis yAxisId="right" orientation="right" stroke={OUTPOST_SCHEMATIC_THEME.emeraldMint} fontSize={12} unit="m" />
                             <Tooltip 
                               content={({ active, payload }) => {
                                 if (active && payload && payload.length) {
@@ -393,7 +394,7 @@ export function ResourceDensityBottomSheet({
                       {/* Direct Series Labels for Solar (<= 4 series) */}
                       <div className="flex flex-wrap items-center justify-between gap-2 px-1 pb-1 border-b border-white/10 text-xs font-mono">
                         <div className="flex items-center gap-2 font-bold text-amber-300">
-                          <span className="w-3 h-3 rounded-sm bg-[#D97706]" /> Daily Solar Energy (kWh/m²/day)
+                          <span className="w-3 h-3 rounded-sm bg-amber-600" /> Daily Solar Energy (kWh/m²/day)
                         </div>
                         <span className="text-caption font-mono text-amber-300 px-2 py-0.5 rounded-control bg-amber-500/15 border border-amber-500/30">
                           Honesty Badge: NASA SSE Modelled Solar Telemetry (Dashed)
@@ -416,14 +417,14 @@ export function ResourceDensityBottomSheet({
                             <CartesianGrid strokeDasharray="3 3" stroke="rgba(120, 113, 108, 0.2)" opacity={0.5} vertical={false} />
                             <XAxis 
                               dataKey="shortName" 
-                              stroke="#94a3b8" 
+                              stroke={OUTPOST_SCHEMATIC_THEME.slateMuted} 
                               fontSize={12} 
                               tickLine={false}
                               interval={0}
                               angle={-45}
                               textAnchor="end"
                             />
-                            <YAxis stroke="#94a3b8" fontSize={12} unit=" hrs" />
+                            <YAxis stroke={OUTPOST_SCHEMATIC_THEME.slateMuted} fontSize={12} unit=" hrs" />
                             <Tooltip 
                               content={({ active, payload }) => {
                                 if (active && payload && payload.length) {

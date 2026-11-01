@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { TileLayerType } from './ScoutingMap';
+import { OUTPOST_SCHEMATIC_THEME } from '@/theme';
 
 export interface GisLayerDeckProps {
   isOpen: boolean;
@@ -136,7 +137,7 @@ export function GisLayerDeck({
       iconBg: 'bg-cyan-950/80 border-cyan-800/60',
       name: 'Living Rivers & Streams',
       desc: 'Year-round flowing rivers and streams for drinking water, gravity supply & garden irrigation',
-      color: '#06b6d4',
+      color: OUTPOST_SCHEMATIC_THEME.cyanGis,
       active: showRivers,
       toggle: () => setShowRivers(!showRivers)
     },
@@ -147,7 +148,7 @@ export function GisLayerDeck({
       iconBg: 'bg-emerald-950/80 border-emerald-800/60',
       name: 'Good Farming Soil (Katondo Red Loam)',
       desc: 'Rich, fertile red loam (pH 6.0–6.5) ideal for fruit orchards, family gardens, and staple crops',
-      color: '#10b981',
+      color: OUTPOST_SCHEMATIC_THEME.emeraldBright,
       active: showSoilPhLayer,
       toggle: () => setShowSoilPhLayer(!showSoilPhLayer)
     },
@@ -158,7 +159,7 @@ export function GisLayerDeck({
       iconBg: 'bg-sky-950/80 border-sky-800/60',
       name: 'High Rainfall Areas (1,000mm+)',
       desc: 'Highlight regions with abundant, dependable seasonal rains for self-sufficient farming',
-      color: '#38bdf8',
+      color: OUTPOST_SCHEMATIC_THEME.waterSky,
       active: showRainfallLayer,
       toggle: () => setShowRainfallLayer(!showRainfallLayer)
     },
@@ -169,7 +170,7 @@ export function GisLayerDeck({
       iconBg: 'bg-lime-950/80 border-lime-800/60',
       name: 'Homestead Plots & Outposts',
       desc: 'Verified rural homestead locations, mission training outposts, and agricultural parcels',
-      color: '#22c55e',
+      color: OUTPOST_SCHEMATIC_THEME.greenGis,
       active: showParcelBoundary,
       toggle: () => setShowParcelBoundary(!showParcelBoundary)
     },
@@ -180,7 +181,7 @@ export function GisLayerDeck({
       iconBg: 'bg-amber-950/80 border-amber-800/60',
       name: 'Highlands & Pure Air',
       desc: 'Elevated plateaus and mountain slopes with cool breezes, lower humidity, and fresh country air',
-      color: '#f59e0b',
+      color: OUTPOST_SCHEMATIC_THEME.goldWarm,
       active: showElevationLayer,
       toggle: () => setShowElevationLayer(!showElevationLayer)
     },
@@ -191,7 +192,7 @@ export function GisLayerDeck({
       iconBg: 'bg-teal-950/80 border-teal-800/60',
       name: 'District Boundaries',
       desc: 'Clear, readable border lines and administrative centers across Malawi’s 28 districts',
-      color: '#06b6d4',
+      color: OUTPOST_SCHEMATIC_THEME.cyanGis,
       active: showDistrictBoundaries,
       toggle: () => setShowDistrictBoundaries(!showDistrictBoundaries)
     },
@@ -202,7 +203,7 @@ export function GisLayerDeck({
       iconBg: 'bg-blue-950/80 border-blue-800/60',
       name: 'Valleys & Natural Runoff',
       desc: 'Natural watershed valleys where moisture gathers naturally during dry months',
-      color: '#0ea5e9',
+      color: OUTPOST_SCHEMATIC_THEME.deepWater,
       active: showCatchmentBasins,
       toggle: () => setShowCatchmentBasins(!showCatchmentBasins)
     },
@@ -213,7 +214,7 @@ export function GisLayerDeck({
       iconBg: 'bg-orange-950/80 border-orange-800/60',
       name: 'Warm vs Cool Growing Zones',
       desc: 'Shows high-altitude cool climates (Dedza, Viphya) compared to warmer valley floors',
-      color: '#f97316',
+      color: OUTPOST_SCHEMATIC_THEME.orangeRust,
       active: showClimateHeatmap,
       toggle: () => setShowClimateHeatmap(!showClimateHeatmap)
     },
@@ -224,7 +225,7 @@ export function GisLayerDeck({
       iconBg: 'bg-amber-950/80 border-amber-800/60',
       name: 'Community Settlements & Outposts',
       desc: 'Adventist mission centers, rural farming settlements, highland outposts, and agricultural bomas',
-      color: '#fbbf24',
+      color: OUTPOST_SCHEMATIC_THEME.goldBright,
       active: !!showCommunitySettlements,
       toggle: () => setShowCommunitySettlements(!showCommunitySettlements)
     }] : []),
@@ -250,7 +251,7 @@ export function GisLayerDeck({
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.96, opacity: 0, y: 8 }}
           transition={{ duration: 0.18 }}
-          className="relative z-10 w-full max-w-2xl max-h-[88vh] bg-stone-900/95 dark:bg-stone-950/95 backdrop-blur-2xl border border-stone-700/60 rounded-3xl p-5 sm:p-6 shadow-2xl flex flex-col gap-4 overflow-hidden text-stone-100"
+          className="relative z-10 w-full max-w-2xl max-h-[88vh] bg-stone-900/95 dark:bg-stone-950/95 backdrop-blur-2xl border border-stone-700/60 rounded-[var(--radius-sheet)] p-5 sm:p-6 shadow-2xl flex flex-col gap-4 overflow-hidden text-stone-100"
         >
           {/* Header */}
           <div className="flex items-start justify-between border-b border-stone-700/50 pb-3.5">

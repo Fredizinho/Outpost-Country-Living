@@ -5,6 +5,7 @@ import { MALAWI_ELEVATION_CONTOURS } from '@/data/malawiContourData';
 import { MALAWI_LAKES } from '@/data/malawiVectorBasemapData';
 import { Mountain, Droplets, Sprout, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { HOME_THEME } from '@/theme';
 
 export interface MalawiTopographicInteractiveMapProps {
   className?: string;
@@ -135,15 +136,15 @@ export function MalawiTopographicInteractiveMap({
 
           {/* Lake Malawi Azure Gradient */}
           <linearGradient id="lakeWaterGradient" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.45" />
-            <stop offset="50%" stopColor="#0284C7" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="#0369A1" stopOpacity="0.5" />
+            <stop offset="0%" stopColor={HOME_THEME.lakeBlueLight} stopOpacity="0.45" />
+            <stop offset="50%" stopColor={HOME_THEME.lakeBlue} stopOpacity="0.35" />
+            <stop offset="100%" stopColor={HOME_THEME.lakeBlueDeep} stopOpacity="0.5" />
           </linearGradient>
 
           {/* District Glow Gradient */}
           <radialGradient id="hoverDistrictGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#F59E0B" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="#10B981" stopOpacity="0" />
+            <stop offset="0%" stopColor={HOME_THEME.amberAccent} stopOpacity="0.4" />
+            <stop offset="100%" stopColor={HOME_THEME.forestEmerald} stopOpacity="0" />
           </radialGradient>
         </defs>
 
@@ -177,7 +178,7 @@ export function MalawiTopographicInteractiveMap({
             <path
               d={lakeMalawiPath}
               fill="url(#lakeWaterGradient)"
-              stroke="#38BDF8"
+              stroke={HOME_THEME.lakeBlueLight}
               strokeWidth="0.8"
               strokeOpacity="0.6"
               className="transition-opacity"
@@ -185,7 +186,7 @@ export function MalawiTopographicInteractiveMap({
             {/* Shimmer line */}
             <path
               d="M 220 180 Q 235 240 245 320 T 260 410"
-              stroke="#BAE6FD"
+              stroke={HOME_THEME.skyBorder}
               strokeWidth="0.7"
               strokeDasharray="4 6"
               strokeOpacity="0.5"

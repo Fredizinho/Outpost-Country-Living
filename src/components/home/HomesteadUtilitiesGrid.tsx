@@ -250,7 +250,7 @@ export function HomesteadUtilitiesGrid() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search tools & calculators..."
-            className="w-full pl-9 pr-8 py-2 text-xs rounded-xl bg-white dark:bg-[#0D1D13] border border-stone-200 dark:border-emerald-900/60 text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+            className="w-full pl-9 pr-8 py-2 text-xs rounded-xl bg-white dark:bg-[var(--ground-dark)] border border-stone-200 dark:border-emerald-900/60 text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-600"
           />
           {searchQuery && (
             <button
@@ -282,7 +282,7 @@ export function HomesteadUtilitiesGrid() {
             className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
               selectedCategory === tab.id
                 ? 'bg-emerald-800 text-white dark:bg-emerald-700'
-                : 'bg-white dark:bg-[#0D1D13] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-emerald-900/50 hover:border-emerald-600/50'
+                : 'bg-white dark:bg-[var(--ground-dark)] text-stone-700 dark:text-stone-300 border border-stone-200/80 dark:border-emerald-900/50 hover:border-emerald-600/50'
             }`}
           >
             {tab.label}
@@ -298,7 +298,7 @@ export function HomesteadUtilitiesGrid() {
             <Link
               key={item.id}
               to={item.route}
-              className="p-6 rounded-2xl bg-white dark:bg-[#0D1D13] border border-stone-200/90 dark:border-emerald-900/60 shadow-2xs hover:border-emerald-600/60 dark:hover:border-emerald-600/60 transition-colors flex flex-col justify-between gap-4 group"
+              className="p-6 rounded-card bg-white dark:bg-[var(--ground-dark)] border border-stone-200/90 dark:border-emerald-900/60 shadow-2xs hover:border-emerald-600/60 dark:hover:border-emerald-600/60 transition-colors flex flex-col justify-between gap-4 group"
             >
               <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between gap-2">
@@ -307,7 +307,7 @@ export function HomesteadUtilitiesGrid() {
                   >
                     <Icon size={18} />
                   </div>
-                  <div className="flex items-center gap-1.5 text-xs text-stone-500 dark:text-stone-400 font-mono">
+                  <div className="flex items-center gap-1.5 text-xs text-stone-500 dark:text-stone-400 font-medium">
                     <span>{item.categoryLabel}</span>
                     <span aria-hidden="true">·</span>
                     <span className="text-stone-700 dark:text-stone-300 font-medium">
@@ -344,7 +344,7 @@ export function HomesteadUtilitiesGrid() {
       </div>
 
       {filteredUtilities.length === 0 && (
-        <div className="text-center py-12 bg-white dark:bg-[#0D1D13] rounded-2xl border border-stone-200 dark:border-emerald-900/50">
+        <div className="text-center py-12 bg-white dark:bg-[var(--ground-dark)] rounded-card border border-stone-200 dark:border-emerald-900/50">
           <p className="text-sm text-stone-600 dark:text-stone-400">
             No utilities match "{searchQuery}". Try another keyword or reset the filter.
           </p>

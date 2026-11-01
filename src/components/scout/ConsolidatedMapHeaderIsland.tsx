@@ -120,18 +120,18 @@ export function ConsolidatedMapHeaderIsland({
         isField
           ? "bg-black text-white border-2 border-white"
           : isLight
-          ? "bg-[#FAF6F0]/95 text-[#1A1612] border-[#E3D8CC] shadow-raised"
+          ? "bg-[var(--ground)]/95 text-[var(--ink)] border-[var(--sand)] shadow-raised"
           : "bg-slate-950/90 text-white border-white/15"
       )}>
         
         {/* LEFT SECTION: GIS WORKSPACE INDICATOR */}
         <div className="flex items-center gap-2 shrink-0" ref={menuRef}>
           <div className={cn(
-            "flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-caption font-mono font-bold shrink-0 border",
+            "flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-caption font-medium shrink-0 border",
             isField
               ? "bg-black text-white border-white"
               : isLight
-              ? "bg-[#F3ECE2] text-[#1A1612] border-[#E3D8CC]"
+              ? "bg-[var(--surface)] text-[var(--ink)] border-[var(--sand)]"
               : "bg-amber-500/10 border-amber-500/30 text-amber-300"
           )}>
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
@@ -145,18 +145,18 @@ export function ConsolidatedMapHeaderIsland({
         </div>
 
         {/* CENTER SECTION: CONSOLIDATED MAP MODE TOGGLE DOCK */}
-        <div className="flex items-center gap-1 p-0.5 rounded-[6px] border border-[#E4DCCB] bg-[#F6F1E7] overflow-x-auto no-scrollbar shrink-1 text-[12.5px]">
+        <div className="flex items-center gap-1 p-0.5 rounded-[6px] border border-[var(--sand)] bg-[var(--ground)] overflow-x-auto no-scrollbar shrink-1 text-[12.5px]">
           <button
             onClick={() => onTabChange('scout')}
             className={cn(
               "px-3 py-1 rounded-[4px] font-medium transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer select-none",
               activeTab === 'scout'
-                ? "bg-[#B4531F] text-[#FFFDF8] font-semibold shadow-xs"
-                : "text-[#5A6458] hover:text-[#1F2A22] hover:bg-[#FFFDF8]"
+                ? "bg-[var(--clay)] text-[var(--surface)] font-semibold shadow-xs"
+                : "text-[var(--ink-muted)] hover:text-[var(--ink)] hover:bg-[var(--surface)]"
             )}
             title="Interactive GPS Map"
           >
-            <Compass size={13} className={activeTab === 'scout' ? "text-white" : "text-[#B4531F]"} />
+            <Compass size={13} className={activeTab === 'scout' ? "text-white" : "text-[var(--clay)]"} />
             <span>Map</span>
           </button>
 
@@ -165,8 +165,8 @@ export function ConsolidatedMapHeaderIsland({
             className={cn(
               "px-3 py-1 rounded-[4px] font-medium transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer select-none",
               activeTab === 'parcels'
-                ? "bg-[#B4531F] text-[#FFFDF8] font-semibold shadow-xs"
-                : "text-[#5A6458] hover:text-[#1F2A22] hover:bg-[#FFFDF8]"
+                ? "bg-[var(--clay)] text-[var(--surface)] font-semibold shadow-xs"
+                : "text-[var(--ink-muted)] hover:text-[var(--ink)] hover:bg-[var(--surface)]"
             )}
             title="28 Survey Stations Table"
           >
@@ -179,8 +179,8 @@ export function ConsolidatedMapHeaderIsland({
             className={cn(
               "px-3 py-1 rounded-[4px] font-medium transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer select-none",
               activeTab === 'comparison'
-                ? "bg-[#B4531F] text-[#FFFDF8] font-semibold shadow-xs"
-                : "text-[#5A6458] hover:text-[#1F2A22] hover:bg-[#FFFDF8]"
+                ? "bg-[var(--clay)] text-[var(--surface)] font-semibold shadow-xs"
+                : "text-[var(--ink-muted)] hover:text-[var(--ink)] hover:bg-[var(--surface)]"
             )}
             title="District Comparative Analytics"
           >
@@ -193,8 +193,8 @@ export function ConsolidatedMapHeaderIsland({
             className={cn(
               "px-3 py-1 rounded-[4px] font-medium transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer select-none",
               activeTab === 'soilScience'
-                ? "bg-[#B4531F] text-[#FFFDF8] font-semibold shadow-xs"
-                : "text-[#5A6458] hover:text-[#1F2A22] hover:bg-[#FFFDF8]"
+                ? "bg-[var(--clay)] text-[var(--surface)] font-semibold shadow-xs"
+                : "text-[var(--ink-muted)] hover:text-[var(--ink)] hover:bg-[var(--surface)]"
             )}
             title="Soil Science & Crops Guide"
           >
@@ -212,10 +212,10 @@ export function ConsolidatedMapHeaderIsland({
               onClick={() => {
                 window.dispatchEvent(new CustomEvent('outpost:open-ai-insights'));
               }}
-              className="h-8 px-2.5 rounded-xl bg-gradient-to-r from-emerald-600/30 via-teal-600/30 to-amber-600/30 hover:from-emerald-600/50 hover:to-amber-600/50 border border-emerald-400/50 text-emerald-200 hover:text-white text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm hover:shadow-emerald-500/20 active:scale-95"
+              className="h-8 px-2.5 rounded-xl bg-gradient-to-r from-emerald-600/30 via-teal-600/30 to-amber-600/30 hover:from-emerald-600/50 hover:to-amber-600/50 border border-emerald-400/50 text-emerald-200 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm hover:shadow-emerald-500/20 active:scale-95"
               title="Get Field Insights on visible map view & layers"
             >
-              <Sparkles size={13} className="text-amber-300 animate-pulse" />
+              <Sparkles size={13} className="text-amber-300" />
               <span className="hidden sm:inline">AI Insights</span>
             </button>
 

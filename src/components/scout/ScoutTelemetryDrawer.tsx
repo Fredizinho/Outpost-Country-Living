@@ -215,16 +215,16 @@ export function ScoutTelemetryDrawer({
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: '100%', opacity: 0 }}
       transition={{ type: 'spring', damping: 28, stiffness: 280 }}
-      className="absolute right-3 top-3 bottom-3 w-[calc(100%-1.5rem)] sm:w-[420px] lg:w-[460px] max-h-[calc(100%-1.5rem)] z-30 bg-[#FFFDF8] text-[#1F2A22] rounded-[10px] p-4 sm:p-5 shadow-xl border border-[#E4DCCB] flex flex-col gap-3.5 overflow-hidden pointer-events-auto font-chrome select-text"
+      className="absolute right-3 top-3 bottom-3 w-[calc(100%-1.5rem)] sm:w-[420px] lg:w-[460px] max-h-[calc(100%-1.5rem)] z-30 bg-[var(--surface)] text-[var(--ink)] rounded-[10px] p-4 sm:p-5 shadow-xl border border-[var(--sand)] flex flex-col gap-3.5 overflow-hidden pointer-events-auto font-chrome select-text"
       id="scout-telemetry-drawer-root"
     >
       {/* 1. DRAWER TOP HEADER */}
-      <div className="flex items-center justify-between border-b border-[#E4DCCB] pb-3 shrink-0">
+      <div className="flex items-center justify-between border-b border-[var(--sand)] pb-3 shrink-0">
         <div>
-          <h3 className="font-serif text-[22px] font-normal text-[#1F2A22] leading-tight">
+          <h3 className="font-serif text-[22px] font-normal text-[var(--ink)] leading-tight">
             {activeDistrict ? activeDistrict.name : currentRegionSpec.label}
           </h3>
-          <span className="text-[12px] text-[#5A6458] block mt-0.5">
+          <span className="text-[12px] text-[var(--ink-muted)] block mt-0.5">
             {activeDistrict ? `${activeDistrict.region} region` : currentRegionSpec.badge}
           </span>
         </div>
@@ -233,23 +233,23 @@ export function ScoutTelemetryDrawer({
           {onOpenAiScout && (
             <button
               onClick={onOpenAiScout}
-              className="px-2.5 py-1 rounded-[6px] bg-[#F6F1E7] hover:bg-[#E4DCCB] border border-[#E4DCCB] text-[#1F2A22] text-[12px] flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-[6px] bg-[var(--ground)] hover:bg-[var(--sand)] border border-[var(--sand)] text-[var(--ink)] text-[12px] flex items-center gap-1.5 transition-colors cursor-pointer"
               title="Open AI Map Scout with Google Maps Grounding"
             >
-              <Bot size={13} className="text-[#3F6B4E]" />
+              <Bot size={13} className="text-[var(--moss)]" />
               <span>AI Scout</span>
             </button>
           )}
           <button
             onClick={() => setMinimizedState(true)}
-            className="w-7 h-7 rounded-[6px] bg-[#F6F1E7] border border-[#E4DCCB] text-[#5A6458] hover:text-[#1F2A22] flex items-center justify-center transition-colors cursor-pointer"
+            className="w-7 h-7 rounded-[6px] bg-[var(--ground)] border border-[var(--sand)] text-[var(--ink-muted)] hover:text-[var(--ink)] flex items-center justify-center transition-colors cursor-pointer"
             title="Minimize to Ribbon"
           >
             <Minimize2 size={13} />
           </button>
           <button
             onClick={onClose}
-            className="w-7 h-7 rounded-[6px] bg-[#F6F1E7] border border-[#E4DCCB] text-[#5A6458] hover:text-[#1F2A22] flex items-center justify-center transition-colors cursor-pointer"
+            className="w-7 h-7 rounded-[6px] bg-[var(--ground)] border border-[var(--sand)] text-[var(--ink-muted)] hover:text-[var(--ink)] flex items-center justify-center transition-colors cursor-pointer"
             title="Close"
           >
             <X size={14} />
@@ -258,14 +258,14 @@ export function ScoutTelemetryDrawer({
       </div>
 
       {/* 2. DRAWER NAVIGATION TABS */}
-      <div className="bg-[#F6F1E7] border border-[#E4DCCB] p-0.5 rounded-[6px] grid grid-cols-4 gap-1 shrink-0 text-[12px]">
+      <div className="bg-[var(--ground)] border border-[var(--sand)] p-0.5 rounded-[6px] grid grid-cols-4 gap-1 shrink-0 text-[12px]">
         <button
           onClick={() => setDrawerTab('dossier')}
           className={cn(
             "py-1 px-2 rounded-[4px] font-medium transition-colors cursor-pointer text-center",
             drawerTab === 'dossier'
-              ? "bg-[#FFFDF8] text-[#1F2A22] shadow-xs font-semibold"
-              : "text-[#5A6458] hover:text-[#1F2A22]"
+              ? "bg-[var(--surface)] text-[var(--ink)] shadow-xs font-semibold"
+              : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
           )}
         >
           <span>Summary</span>
@@ -276,8 +276,8 @@ export function ScoutTelemetryDrawer({
           className={cn(
             "py-1 px-2 rounded-[4px] font-medium transition-colors cursor-pointer text-center",
             drawerTab === 'parcels'
-              ? "bg-[#FFFDF8] text-[#1F2A22] shadow-xs font-semibold"
-              : "text-[#5A6458] hover:text-[#1F2A22]"
+              ? "bg-[var(--surface)] text-[var(--ink)] shadow-xs font-semibold"
+              : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
           )}
         >
           <span>Parcels ({displayedParcels.length})</span>
@@ -288,8 +288,8 @@ export function ScoutTelemetryDrawer({
           className={cn(
             "py-1 px-2 rounded-[4px] font-medium transition-colors cursor-pointer text-center",
             drawerTab === 'soil'
-              ? "bg-[#FFFDF8] text-[#1F2A22] shadow-xs font-semibold"
-              : "text-[#5A6458] hover:text-[#1F2A22]"
+              ? "bg-[var(--surface)] text-[var(--ink)] shadow-xs font-semibold"
+              : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
           )}
         >
           <span>Soil & Crops</span>
@@ -300,8 +300,8 @@ export function ScoutTelemetryDrawer({
           className={cn(
             "py-1 px-2 rounded-[4px] font-medium transition-colors cursor-pointer text-center",
             drawerTab === 'layers'
-              ? "bg-[#FFFDF8] text-[#1F2A22] shadow-xs font-semibold"
-              : "text-[#5A6458] hover:text-[#1F2A22]"
+              ? "bg-[var(--surface)] text-[var(--ink)] shadow-xs font-semibold"
+              : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
           )}
         >
           <span>Layers</span>
@@ -669,10 +669,10 @@ export function ScoutTelemetryDrawer({
             </div>
 
             {/* DIRECT ACTION BUTTONS: One primary terracotta button per screen */}
-            <div className="flex flex-col gap-2 pt-3 border-t border-[#E4DCCB]">
+            <div className="flex flex-col gap-2 pt-3 border-t border-[var(--sand)]">
               <Link
                 to={`/skills/ram-pump`}
-                className="w-full h-9 px-4 rounded-[6px] bg-[#B4531F] hover:bg-[#9C4416] text-[#FFFDF8] font-medium text-[13px] shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full h-9 px-4 rounded-[6px] bg-[var(--clay)] hover:bg-[var(--clay-deep)] text-[var(--surface)] font-medium text-[13px] shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Droplets size={14} />
                 <span>Open water guide</span>
@@ -692,9 +692,9 @@ export function ScoutTelemetryDrawer({
                   slopePct: 4,
                   rainySeasonAccess: 'All-Weather'
                 } as unknown as ScoutParcelProperties))}
-                className="w-full h-9 px-4 rounded-[6px] border border-[#E4DCCB] hover:bg-[#F6F1E7] text-[#1F2A22] font-medium text-[13px] transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full h-9 px-4 rounded-[6px] border border-[var(--sand)] hover:bg-[var(--ground)] text-[var(--ink)] font-medium text-[13px] transition-colors flex items-center justify-center gap-2 cursor-pointer"
               >
-                <ShieldCheck size={14} className="text-[#3F6B4E]" />
+                <ShieldCheck size={14} className="text-[var(--moss)]" />
                 <span>Add to site comparison</span>
               </button>
             </div>

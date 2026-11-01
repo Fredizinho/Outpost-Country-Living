@@ -63,6 +63,7 @@ import { ThematicLayerControlPanel } from './ThematicLayerControlPanel';
 import { MapScoutAiDrawer } from './MapScoutAiDrawer';
 import { MapLegend } from './MapLegend';
 import { MapCompassAndScale } from './MapCompassAndScale';
+import { SCOUT_MAP_THEME } from '@/theme';
 import { isForceOfflineActive, isCacheStorageAvailable } from '@/lib/offlineTileManager';
 import { cn } from '@/lib/utils';
 import { getStoredBookmarkedParcels, saveStoredBookmarkedParcels } from '@/lib/offlineStorage';
@@ -1010,7 +1011,7 @@ export function ScoutingMap({
     // 1. Outer World Mask Polygon: Covers everything outside Malawi in deep forest cartographic obsidian
     const maskLatLngs = getMalawiInverseMaskLatLngs();
     const maskPolygon = L.polygon(maskLatLngs as unknown as L.LatLngExpression[][], {
-      fillColor: '#06110B', // Deep Forest Cartographic Obsidian
+      fillColor: SCOUT_MAP_THEME.mapCanvasDark, // Deep Forest Cartographic Obsidian
       fillOpacity: 1.0,
       stroke: false,
       interactive: false
@@ -1022,14 +1023,14 @@ export function ScoutingMap({
     borderRings.forEach((ring) => {
       // Outer subtle emerald aura glow
       const outerGlow = L.polyline(ring as L.LatLngTuple[], {
-        color: '#059669',
+        color: SCOUT_MAP_THEME.districtFill,
         weight: 7,
         opacity: 0.45,
         interactive: false
       });
       // Inner crisp illuminated border
       const sharpBorder = L.polyline(ring as L.LatLngTuple[], {
-        color: '#10b981',
+        color: SCOUT_MAP_THEME.contourThermal,
         weight: 2.4,
         opacity: 0.95,
         interactive: false
@@ -1064,20 +1065,20 @@ export function ScoutingMap({
     // 2. Lake Malawi, Lake Malombe, Lake Chilwa (and Lake Chiuta) in muted blue
     MALAWI_LAKES.forEach((lake) => {
       const lakePoly = L.polygon(lake.coordinates as L.LatLngTuple[], {
-        fillColor: '#1d4ed8',
+        fillColor: SCOUT_MAP_THEME.deepBlueDark,
         fillOpacity: 0.38,
-        color: '#3b82f6',
+        color: SCOUT_MAP_THEME.blueRiver,
         weight: 1.2,
       });
 
       lakePoly.bindTooltip(`
-        <div style="font-family: sans-serif; padding: 6px 8px; background: rgba(6, 17, 11, 0.95); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.45); border-radius: 8px; box-shadow: 0 8px 18px rgba(0,0,0,0.65);">
-          <div style="font-weight: 800; font-size: 11.5px; color: #60a5fa; display: flex; align-items: center; gap: 4px;">
-            <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#60a5fa;margin-right:4px;"></span>
+        <div style="font-family: sans-serif; padding: 6px 8px; background: rgba(6, 17, 11, 0.95); color: ${SCOUT_MAP_THEME.blueRiverLight}; border: 1px solid rgba(59, 130, 246, 0.45); border-radius: 8px; box-shadow: 0 8px 18px rgba(0,0,0,0.65);">
+          <div style="font-weight: 800; font-size: 11.5px; color: ${SCOUT_MAP_THEME.contourWaterStroke}; display: flex; align-items: center; gap: 4px;">
+            <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${SCOUT_MAP_THEME.contourWaterStroke};margin-right:4px;"></span>
             ${lake.name}
           </div>
-          <div style="font-size: 10px; color: #94a3b8; margin-top: 2px;">Depth: ${lake.waterDepthMeters}</div>
-          <div style="font-size: 10px; color: #7dd3fc;">Surface Area: ${lake.areaKm2.toLocaleString()} km²</div>
+          <div style="font-size: 10px; color: ${SCOUT_MAP_THEME.contourText}; margin-top: 2px;">Depth: ${lake.waterDepthMeters}</div>
+          <div style="font-size: 10px; color: ${SCOUT_MAP_THEME.waterTableBlue};">Surface Area: ${lake.areaKm2.toLocaleString()} km²</div>
         </div>
       `, { sticky: true });
 
@@ -1100,19 +1101,19 @@ export function ScoutingMap({
       MALAWI_HIGHWAYS.forEach((hwy) => {
         const isSpine = hwy.code === 'M1';
         const line = L.polyline(hwy.coordinates as L.LatLngTuple[], {
-          color: isSpine ? '#f59e0b' : '#94a3b8',
+          color: isSpine ? SCOUT_MAP_THEME.districtActiveStroke : SCOUT_MAP_THEME.contourText,
           weight: isSpine ? 3.5 : 2,
           opacity: isSpine ? 0.95 : 0.75,
           dashArray: isSpine ? undefined : '5, 4'
         });
 
         line.bindTooltip(`
-          <div style="font-family: monospace; padding: 5px; background: #020617; color: #fbbf24; border: 1px solid #f59e0b; border-radius: 8px; box-shadow: 0 8px 16px rgba(0,0,0,0.6);">
+          <div style="font-family: monospace; padding: 5px; background: ${SCOUT_MAP_THEME.tooltipBg}; color: ${SCOUT_MAP_THEME.districtActiveFill}; border: 1px solid ${SCOUT_MAP_THEME.districtActiveStroke}; border-radius: 8px; box-shadow: 0 8px 16px rgba(0,0,0,0.6);">
             <div style="font-weight: 800; font-size: 11px; display: flex; items-center; gap: 4px;">
-              <span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#f59e0b;margin-right:4px;"></span>
+              <span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${SCOUT_MAP_THEME.districtActiveStroke};margin-right:4px;"></span>
               ${hwy.name}
             </div>
-            <div style="font-size: 9px; color: #cbd5e1; margin-top: 2px;">${hwy.connectingBomas}</div>
+            <div style="font-size: 9px; color: ${SCOUT_MAP_THEME.slateMutedText}; margin-top: 2px;">${hwy.connectingBomas}</div>
           </div>
         `, { sticky: true });
 
@@ -1125,20 +1126,20 @@ export function ScoutingMap({
         const isCom = city.category === 'Commercial Hub' || city.category === 'Regional City';
         const marker = L.circleMarker(city.coordinates as L.LatLngTuple, {
           radius: isCap ? 7 : isCom ? 5.5 : 4,
-          fillColor: isCap ? '#f59e0b' : isCom ? '#10b981' : '#38bdf8',
-          color: '#020617',
+          fillColor: isCap ? SCOUT_MAP_THEME.districtActiveStroke : isCom ? SCOUT_MAP_THEME.contourThermal : SCOUT_MAP_THEME.contourWaterStroke,
+          color: SCOUT_MAP_THEME.tooltipBg,
           weight: 2,
           fillOpacity: 1
         });
 
         marker.bindTooltip(`
-          <div style="font-family: monospace; padding: 5px; background: #020617; color: #f8fafc; border: 1px solid rgba(255,255,255,0.25); border-radius: 8px; box-shadow: 0 8px 16px rgba(0,0,0,0.6);">
-            <div style="font-weight: 800; font-size: 11px; color: #fbbf24; display: flex; items-center; gap: 4px;">
-              <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#fbbf24;margin-right:4px;"></span>
+          <div style="font-family: monospace; padding: 5px; background: ${SCOUT_MAP_THEME.tooltipBg}; color: ${SCOUT_MAP_THEME.tooltipInk}; border: 1px solid rgba(255,255,255,0.25); border-radius: 8px; box-shadow: 0 8px 16px rgba(0,0,0,0.6);">
+            <div style="font-weight: 800; font-size: 11px; color: ${SCOUT_MAP_THEME.districtActiveFill}; display: flex; items-center; gap: 4px;">
+              <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${SCOUT_MAP_THEME.districtActiveFill};margin-right:4px;"></span>
               ${city.name}
             </div>
-            <div style="font-size: 9px; color: #94a3b8; margin-top: 2px;">${city.category} · ${city.elevationMeters}m height</div>
-            <div style="font-size: 9px; color: #34d399;">Market Day: ${city.marketDay}</div>
+            <div style="font-size: 9px; color: ${SCOUT_MAP_THEME.contourText}; margin-top: 2px;">${city.category} · ${city.elevationMeters}m height</div>
+            <div style="font-size: 9px; color: ${SCOUT_MAP_THEME.contourThermalText};">Market Day: ${city.marketDay}</div>
           </div>
         `, { sticky: true });
 
@@ -1159,10 +1160,10 @@ export function ScoutingMap({
     MALAWI_DISTRICTS.forEach((district) => {
       const climate = getDistrictClimateData(district.id);
       const isCurrentActive = activeDistrict?.name.toLowerCase() === district.name.toLowerCase();
-      const fillColor = climate.annualRainfallMm >= 1200 ? '#0284c7' : climate.annualRainfallMm >= 950 ? '#059669' : '#d97706';
+      const fillColor = climate.annualRainfallMm >= 1200 ? SCOUT_MAP_THEME.contourWater : climate.annualRainfallMm >= 950 ? SCOUT_MAP_THEME.districtFill : SCOUT_MAP_THEME.warmGold;
 
       const polygon = L.polygon(district.boundary as L.LatLngTuple[], {
-        color: isCurrentActive ? '#f59e0b' : '#38bdf8',
+        color: isCurrentActive ? SCOUT_MAP_THEME.districtActiveStroke : SCOUT_MAP_THEME.contourWaterStroke,
         weight: isCurrentActive ? 2.5 : 1,
         fillColor: fillColor,
         fillOpacity: isCurrentActive ? 0.38 : 0.2,
@@ -1170,21 +1171,21 @@ export function ScoutingMap({
       });
 
       polygon.bindTooltip(`
-        <div style="font-family: monospace; padding: 8px; background: #020617; color: #f8fafc; border-radius: 10px; border: 1px solid rgba(251, 191, 36, 0.5); box-shadow: 0 12px 24px -4px rgba(0,0,0,0.7);">
-          <div style="font-weight: 800; color: #fbbf24; font-size: 13px; margin-bottom: 3px;">${district.name} District</div>
-          <div style="font-size: 10px; color: #93c5fd; margin-bottom: 2px;">
-            <span style="color:#fb7185;margin-right:4px;">●</span><strong>Temp:</strong> ${climate.winterMinC}°C min to ${climate.summerMaxC}°C max
+        <div style="font-family: monospace; padding: 8px; background: ${SCOUT_MAP_THEME.tooltipBg}; color: ${SCOUT_MAP_THEME.tooltipInk}; border-radius: 10px; border: 1px solid rgba(251, 191, 36, 0.5); box-shadow: 0 12px 24px -4px rgba(0,0,0,0.7);">
+          <div style="font-weight: 800; color: ${SCOUT_MAP_THEME.districtActiveFill}; font-size: 13px; margin-bottom: 3px;">${district.name} District</div>
+          <div style="font-size: 10px; color: ${SCOUT_MAP_THEME.blueRiverLight}; margin-bottom: 2px;">
+            <span style="color:${SCOUT_MAP_THEME.roseRisk};margin-right:4px;">●</span><strong>Temp:</strong> ${climate.winterMinC}°C min to ${climate.summerMaxC}°C max
           </div>
-          <div style="font-size: 10px; color: #38bdf8; margin-bottom: 2px;">
-            <span style="color:#38bdf8;margin-right:4px;">●</span><strong>Rain:</strong> ${climate.annualRainfallMm} mm/yr (${climate.rainfallRangeMm})
+          <div style="font-size: 10px; color: ${SCOUT_MAP_THEME.contourWaterStroke}; margin-bottom: 2px;">
+            <span style="color:${SCOUT_MAP_THEME.contourWaterStroke};margin-right:4px;">●</span><strong>Rain:</strong> ${climate.annualRainfallMm} mm/yr (${climate.rainfallRangeMm})
           </div>
-          <div style="font-size: 10px; color: #fbbf24; margin-bottom: 2px;">
-            <span style="color:#fbbf24;margin-right:4px;">●</span><strong>Solar:</strong> ${climate.solarRadiationKwhM2Day} kWh/m²/day
+          <div style="font-size: 10px; color: ${SCOUT_MAP_THEME.districtActiveFill}; margin-bottom: 2px;">
+            <span style="color:${SCOUT_MAP_THEME.districtActiveFill};margin-right:4px;">●</span><strong>Solar:</strong> ${climate.solarRadiationKwhM2Day} kWh/m²/day
           </div>
-          <div style="font-size: 10px; color: #cbd5e1; margin-bottom: 2px;">
-            <span style="color:#34d399;margin-right:4px;">●</span><strong>Zone:</strong> ${climate.agroEcologicalClassification.split('(')[0]}
+          <div style="font-size: 10px; color: ${SCOUT_MAP_THEME.slateMutedText}; margin-bottom: 2px;">
+            <span style="color:${SCOUT_MAP_THEME.contourThermalText};margin-right:4px;">●</span><strong>Zone:</strong> ${climate.agroEcologicalClassification.split('(')[0]}
           </div>
-          <div style="font-size: 9px; color: #a7f3d0; margin-top: 4px; font-style: italic;">
+          <div style="font-size: 9px; color: ${SCOUT_MAP_THEME.contourThermalSub}; margin-top: 4px; font-style: italic;">
             ${climate.thermalBeltZone}
           </div>
         </div>
@@ -1218,10 +1219,10 @@ export function ScoutingMap({
       });
 
       polygon.bindTooltip(`
-        <div style="font-family: sans-serif; padding: 6px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid ${rain.color}; box-shadow: 0 8px 16px rgba(0,0,0,0.5);">
-          <div style="font-weight: 800; color: #38bdf8; font-size: 12px;">${rain.name}</div>
-          <div style="font-size: 10px; color: #cbd5e1; margin-top: 2px;">Zone: ${rain.zone}</div>
-          <div style="font-size: 10px; color: #34d399; font-weight: bold; margin-top: 2px;">Average Rainfall: ~${rain.rainfallMm} mm/year</div>
+        <div style="font-family: sans-serif; padding: 6px; background: ${SCOUT_MAP_THEME.tooltipBg}; color: ${SCOUT_MAP_THEME.tooltipInk}; border-radius: 8px; border: 1px solid ${rain.color}; box-shadow: 0 8px 16px rgba(0,0,0,0.5);">
+          <div style="font-weight: 800; color: ${SCOUT_MAP_THEME.contourWaterStroke}; font-size: 12px;">${rain.name}</div>
+          <div style="font-size: 10px; color: ${SCOUT_MAP_THEME.slateMutedText}; margin-top: 2px;">Zone: ${rain.zone}</div>
+          <div style="font-size: 10px; color: ${SCOUT_MAP_THEME.contourThermalText}; font-weight: bold; margin-top: 2px;">Average Rainfall: ~${rain.rainfallMm} mm/year</div>
         </div>
       `, { sticky: true });
 
@@ -1247,10 +1248,10 @@ export function ScoutingMap({
       });
 
       polygon.bindTooltip(`
-        <div style="font-family: sans-serif; padding: 6px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid ${soil.color}; box-shadow: 0 8px 16px rgba(0,0,0,0.5);">
-          <div style="font-weight: 800; color: #f87171; font-size: 12px;">${soil.name}</div>
-          <div style="font-size: 10px; color: #fbbf24; font-weight: bold; margin-top: 2px;">Optimal Range: ${soil.soilpH}</div>
-          <div style="font-size: 9px; color: #cbd5e1; max-width: 220px; margin-top: 2px;">${soil.characteristics}</div>
+        <div style="font-family: sans-serif; padding: 6px; background: ${SCOUT_MAP_THEME.tooltipBg}; color: ${SCOUT_MAP_THEME.tooltipInk}; border-radius: 8px; border: 1px solid ${soil.color}; box-shadow: 0 8px 16px rgba(0,0,0,0.5);">
+          <div style="font-weight: 800; color: ${SCOUT_MAP_THEME.roseRiskStroke}; font-size: 12px;">${soil.name}</div>
+          <div style="font-size: 10px; color: ${SCOUT_MAP_THEME.districtActiveFill}; font-weight: bold; margin-top: 2px;">Optimal Range: ${soil.soilpH}</div>
+          <div style="font-size: 9px; color: ${SCOUT_MAP_THEME.slateMutedText}; max-width: 220px; margin-top: 2px;">${soil.characteristics}</div>
         </div>
       `, { sticky: true });
 
@@ -1276,10 +1277,10 @@ export function ScoutingMap({
       });
 
       polygon.bindTooltip(`
-        <div style="font-family: sans-serif; padding: 6px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid ${elev.color}; box-shadow: 0 8px 16px rgba(0,0,0,0.5);">
-          <div style="font-weight: 800; color: #fbbf24; font-size: 12px;">${elev.name}</div>
-          <div style="font-size: 10px; color: #38bdf8; font-weight: bold; margin-top: 2px;">Elevation: ${elev.elevation}</div>
-          <div style="font-size: 9px; color: #cbd5e1; margin-top: 2px;">${elev.climate}</div>
+        <div style="font-family: sans-serif; padding: 6px; background: ${SCOUT_MAP_THEME.tooltipBg}; color: ${SCOUT_MAP_THEME.tooltipInk}; border-radius: 8px; border: 1px solid ${elev.color}; box-shadow: 0 8px 16px rgba(0,0,0,0.5);">
+          <div style="font-weight: 800; color: ${SCOUT_MAP_THEME.districtActiveFill}; font-size: 12px;">${elev.name}</div>
+          <div style="font-size: 10px; color: ${SCOUT_MAP_THEME.contourWaterStroke}; font-weight: bold; margin-top: 2px;">Elevation: ${elev.elevation}</div>
+          <div style="font-size: 9px; color: ${SCOUT_MAP_THEME.slateMutedText}; margin-top: 2px;">${elev.climate}</div>
         </div>
       `, { sticky: true });
 
@@ -1299,18 +1300,18 @@ export function ScoutingMap({
     MALAWI_CATCHMENT_BASINS.forEach((basin) => {
       const coords = basin.points.map(pt => [pt.lat, pt.lng] as L.LatLngTuple);
       const polygon = L.polygon(coords, {
-        color: basin.borderColor || '#0284c7',
+        color: basin.borderColor || SCOUT_MAP_THEME.contourWater,
         weight: 1.8,
-        fillColor: basin.color || '#38bdf8',
+        fillColor: basin.color || SCOUT_MAP_THEME.contourWaterStroke,
         fillOpacity: 0.16,
         dashArray: '5, 5'
       });
 
       polygon.bindTooltip(`
-        <div style="font-family: sans-serif; padding: 6px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid #0284c7; box-shadow: 0 8px 16px rgba(0,0,0,0.5);">
-          <div style="font-weight: 800; color: #38bdf8; font-size: 12px;">${basin.name}</div>
-          <div style="font-size: 10px; color: #94a3b8; margin-top: 2px;">Major Rivers: ${basin.majorRivers.join(', ')}</div>
-          <div style="font-size: 9px; color: #34d399; font-weight: bold; margin-top: 2px;">Drainage Area: ${basin.areaKm2.toLocaleString()} km²</div>
+        <div style="font-family: sans-serif; padding: 6px; background: ${SCOUT_MAP_THEME.tooltipBg}; color: ${SCOUT_MAP_THEME.tooltipInk}; border-radius: 8px; border: 1px solid ${SCOUT_MAP_THEME.contourWater}; box-shadow: 0 8px 16px rgba(0,0,0,0.5);">
+          <div style="font-weight: 800; color: ${SCOUT_MAP_THEME.contourWaterStroke}; font-size: 12px;">${basin.name}</div>
+          <div style="font-size: 10px; color: ${SCOUT_MAP_THEME.contourText}; margin-top: 2px;">Major Rivers: ${basin.majorRivers.join(', ')}</div>
+          <div style="font-size: 9px; color: ${SCOUT_MAP_THEME.contourThermalText}; font-weight: bold; margin-top: 2px;">Drainage Area: ${basin.areaKm2.toLocaleString()} km²</div>
         </div>
       `, { sticky: true });
 
@@ -1332,7 +1333,7 @@ export function ScoutingMap({
       
       // Layer 1: Geological depression shadow band
       const shadowBand = L.polyline(coords, {
-        color: '#1c1917',
+        color: SCOUT_MAP_THEME.hearthDark,
         weight: 12,
         opacity: 0.55,
         lineCap: 'square',
@@ -1342,7 +1343,7 @@ export function ScoutingMap({
 
       // Layer 2: Terracotta rock face scarp
       const scarpFace = L.polyline(coords, {
-        color: '#c2410c',
+        color: SCOUT_MAP_THEME.pinDefaultFill,
         weight: 4.5,
         opacity: 0.9,
         lineCap: 'round'
@@ -1351,7 +1352,7 @@ export function ScoutingMap({
 
       // Layer 3: Geological crest ridge highlight line
       const crestLine = L.polyline(coords, {
-        color: '#fed7aa',
+        color: SCOUT_MAP_THEME.pinDefaultText,
         weight: 1.6,
         opacity: 0.95,
         lineCap: 'round',
@@ -1359,14 +1360,14 @@ export function ScoutingMap({
       });
 
       crestLine.bindTooltip(`
-        <div style="font-family: inherit; padding: 10px 12px; background: #071A10; color: #f8fafc; border-radius: 16px; border: 1px solid #c85a32; box-shadow: 0 10px 25px rgba(0,0,0,0.65); min-width: 190px;">
-          <div style="font-weight: 800; color: #f59e0b; font-size: 13px; display: flex; align-items: center; gap: 6px;">
-            <span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#c85a32;"></span>
+        <div style="font-family: inherit; padding: 10px 12px; background: ${SCOUT_MAP_THEME.tooltipDarkEmerald}; color: ${SCOUT_MAP_THEME.tooltipInk}; border-radius: 16px; border: 1px solid ${SCOUT_MAP_THEME.terracotta}; box-shadow: 0 10px 25px rgba(0,0,0,0.65); min-width: 190px;">
+          <div style="font-weight: 800; color: ${SCOUT_MAP_THEME.districtActiveStroke}; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+            <span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${SCOUT_MAP_THEME.terracotta};"></span>
             ${scarp.name}
           </div>
-          <div style="font-size: 12px; color: #fde047; font-weight: bold; margin-top: 4px;">Geological Drop: ${scarp.dropElevationMeters}</div>
-          <div style="font-size: 12px; color: #d6d3d1; margin-top: 2px;">Terracing: ${scarp.swaleDesignSpec}</div>
-          <div style="font-size: 11px; color: #f59e0b; font-family: monospace; margin-top: 5px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.15);">Honesty: Geological Scarp Model</div>
+          <div style="font-size: 12px; color: ${SCOUT_MAP_THEME.brightAmber}; font-weight: bold; margin-top: 4px;">Geological Drop: ${scarp.dropElevationMeters}</div>
+          <div style="font-size: 12px; color: ${SCOUT_MAP_THEME.stoneDryingText}; margin-top: 2px;">Terracing: ${scarp.swaleDesignSpec}</div>
+          <div style="font-size: 11px; color: ${SCOUT_MAP_THEME.districtActiveStroke}; font-family: monospace; margin-top: 5px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.15);">Honesty: Geological Scarp Model</div>
         </div>
       `, { sticky: true });
 
@@ -1388,7 +1389,7 @@ export function ScoutingMap({
       
       // Layer 1: Ambient riparian moisture corridor halo
       const moistureHalo = L.polyline(coords, {
-        color: '#0891b2',
+        color: SCOUT_MAP_THEME.cyanAquifer,
         weight: 10,
         opacity: 0.22,
         lineCap: 'round',
@@ -1399,7 +1400,7 @@ export function ScoutingMap({
 
       // Layer 2: Main azure river flow channel
       const waterChannel = L.polyline(coords, {
-        color: '#06b6d4',
+        color: SCOUT_MAP_THEME.pinAgro,
         weight: 3.8,
         opacity: 0.85,
         lineCap: 'round',
@@ -1409,7 +1410,7 @@ export function ScoutingMap({
 
       // Layer 3: Crystalline central stream highlight
       const coreStream = L.polyline(coords, {
-        color: '#f0fdfa',
+        color: SCOUT_MAP_THEME.tealSpringLight,
         weight: 1.6,
         opacity: 0.95,
         lineCap: 'round',
@@ -1418,11 +1419,11 @@ export function ScoutingMap({
       });
 
       coreStream.bindTooltip(`
-        <div style="font-family: sans-serif; padding: 5px 8px; background: #020617; color: #22d3ee; border-radius: 8px; border: 1px solid #0891b2; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 16px rgba(6,182,212,0.35);">
-          <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#22d3ee;box-shadow:0 0 8px #22d3ee;"></span>
+        <div style="font-family: sans-serif; padding: 5px 8px; background: ${SCOUT_MAP_THEME.tooltipBg}; color: ${SCOUT_MAP_THEME.tealSpring}; border-radius: 8px; border: 1px solid ${SCOUT_MAP_THEME.cyanAquifer}; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 16px rgba(6,182,212,0.35);">
+          <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${SCOUT_MAP_THEME.tealSpring};box-shadow:0 0 8px ${SCOUT_MAP_THEME.tealSpring};"></span>
           <div>
             <div style="font-weight: 800; font-size: 11px; letter-spacing: 0.2px;">${river.name}</div>
-            <div style="font-size: 9px; color: #a5f3fc; margin-top: 1px;">Living Perennial Stream • Gravity Water Source</div>
+            <div style="font-size: 9px; color: ${SCOUT_MAP_THEME.cyanAquiferLight}; margin-top: 1px;">Living Perennial Stream • Gravity Water Source</div>
           </div>
         </div>
       `, { sticky: true });
@@ -1445,7 +1446,7 @@ export function ScoutingMap({
       
       // Layer 1: Territorial buffer corridor
       const buffer = L.polyline(coords, {
-        color: '#b45309',
+        color: SCOUT_MAP_THEME.amberDark,
         weight: 9,
         opacity: 0.16,
         lineCap: 'round',
@@ -1455,7 +1456,7 @@ export function ScoutingMap({
 
       // Layer 2: Warm golden Malire boundary thread
       const polyline = L.polyline(coords, {
-        color: '#f59e0b',
+        color: SCOUT_MAP_THEME.districtActiveStroke,
         weight: 2.4,
         opacity: 0.9,
         dashArray: '8, 8',
@@ -1466,7 +1467,7 @@ export function ScoutingMap({
 
       // Layer 3: Inner fine gold stitch
       const innerStitch = L.polyline(coords, {
-        color: '#fef08a',
+        color: SCOUT_MAP_THEME.softGold,
         weight: 1.1,
         opacity: 0.95,
         dashArray: '3, 13',
@@ -1474,14 +1475,14 @@ export function ScoutingMap({
       });
 
       innerStitch.bindTooltip(`
-        <div style="font-family: sans-serif; padding: 6px 8px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid #f59e0b; box-shadow: 0 8px 20px rgba(0,0,0,0.6);">
-          <div style="font-size: 10px; font-weight: 800; color: #f59e0b; text-transform: uppercase; display: flex; align-items: center; gap: 4px;">
-            <span style="display:inline-block;width:7px;height:7px;border-radius:2px;background:#f59e0b;margin-right:4px;"></span>
+        <div style="font-family: sans-serif; padding: 6px 8px; background: ${SCOUT_MAP_THEME.tooltipBg}; color: ${SCOUT_MAP_THEME.tooltipInk}; border-radius: 8px; border: 1px solid ${SCOUT_MAP_THEME.districtActiveStroke}; box-shadow: 0 8px 20px rgba(0,0,0,0.6);">
+          <div style="font-size: 10px; font-weight: 800; color: ${SCOUT_MAP_THEME.districtActiveStroke}; text-transform: uppercase; display: flex; align-items: center; gap: 4px;">
+            <span style="display:inline-block;width:7px;height:7px;border-radius:2px;background:${SCOUT_MAP_THEME.districtActiveStroke};margin-right:4px;"></span>
             Customary Malire (Ancestral Boundary)
           </div>
-          <div style="font-weight: 800; color: #f8fafc; font-size: 12px; margin-top: 3px;">${ta.traditionalAuthority} (${ta.district} District)</div>
-          <div style="font-size: 10px; color: #cbd5e1; margin-top: 2px;">Custodianship: ${ta.chiefTitle}</div>
-          <div style="font-size: 9px; color: #34d399; font-weight: bold; margin-top: 2px;">Tenure: ${ta.tenureType} • ${ta.description}</div>
+          <div style="font-weight: 800; color: ${SCOUT_MAP_THEME.tooltipInk}; font-size: 12px; margin-top: 3px;">${ta.traditionalAuthority} (${ta.district} District)</div>
+          <div style="font-size: 10px; color: ${SCOUT_MAP_THEME.slateMutedText}; margin-top: 2px;">Custodianship: ${ta.chiefTitle}</div>
+          <div style="font-size: 9px; color: ${SCOUT_MAP_THEME.contourThermalText}; font-weight: bold; margin-top: 2px;">Tenure: ${ta.tenureType} • ${ta.description}</div>
         </div>
       `, { sticky: true });
 
@@ -1507,7 +1508,7 @@ export function ScoutingMap({
       if (isHighland) {
         // Summit ridge emerald corridor
         const halo = L.polyline(coords, {
-          color: '#059669',
+          color: SCOUT_MAP_THEME.districtFill,
           weight: 7,
           opacity: 0.22,
           lineCap: 'round'
@@ -1515,22 +1516,22 @@ export function ScoutingMap({
         contoursLayerRef.current?.addLayer(halo);
 
         const ridge = L.polyline(coords, {
-          color: '#10b981',
+          color: SCOUT_MAP_THEME.contourThermal,
           weight: 2.4,
           opacity: 0.9,
           lineCap: 'round'
         });
         ridge.bindTooltip(`
-          <div style="font-family: sans-serif; padding: 5px 8px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid #10b981; box-shadow: 0 8px 20px rgba(0,0,0,0.6);">
-            <div style="font-weight: 800; color: #34d399; font-size: 11px;">⛰️ ${contour.name} (${contour.elevationMeters}m)</div>
-            <div style="font-size: 9px; color: #a7f3d0; margin-top: 2px;">Frost-Free Thermal Belt • ${contour.description}</div>
+          <div style="font-family: sans-serif; padding: 5px 8px; background: ${SCOUT_MAP_THEME.tooltipBg}; color: ${SCOUT_MAP_THEME.tooltipInk}; border-radius: 8px; border: 1px solid ${SCOUT_MAP_THEME.contourThermal}; box-shadow: 0 8px 20px rgba(0,0,0,0.6);">
+            <div style="font-weight: 800; color: ${SCOUT_MAP_THEME.contourThermalText}; font-size: 11px;">⛰️ ${contour.name} (${contour.elevationMeters}m)</div>
+            <div style="font-size: 9px; color: ${SCOUT_MAP_THEME.contourThermalSub}; margin-top: 2px;">Frost-Free Thermal Belt • ${contour.description}</div>
           </div>
         `, { sticky: true });
         contoursLayerRef.current?.addLayer(ridge);
       } else if (isDambo) {
         // Alluvial wetland corridor
         const buffer = L.polyline(coords, {
-          color: '#0284c7',
+          color: SCOUT_MAP_THEME.contourWater,
           weight: 7,
           opacity: 0.2,
           lineCap: 'round'
@@ -1538,21 +1539,21 @@ export function ScoutingMap({
         contoursLayerRef.current?.addLayer(buffer);
 
         const wetland = L.polyline(coords, {
-          color: '#38bdf8',
+          color: SCOUT_MAP_THEME.contourWaterStroke,
           weight: 2.0,
           opacity: 0.85,
           dashArray: '5, 5',
           lineCap: 'round'
         });
         wetland.bindTooltip(`
-          <div style="font-family: sans-serif; padding: 5px 8px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid #38bdf8; box-shadow: 0 8px 20px rgba(0,0,0,0.6);">
-            <div style="font-weight: 800; color: #38bdf8; font-size: 11px;">🌾 ${contour.name} (${contour.elevationMeters}m)</div>
-            <div style="font-size: 9px; color: #bae6fd; margin-top: 2px;">Alluvial Dambo Wetland • Year-Round Moisture</div>
+          <div style="font-family: sans-serif; padding: 5px 8px; background: ${SCOUT_MAP_THEME.tooltipBg}; color: ${SCOUT_MAP_THEME.tooltipInk}; border-radius: 8px; border: 1px solid ${SCOUT_MAP_THEME.contourWaterStroke}; box-shadow: 0 8px 20px rgba(0,0,0,0.6);">
+            <div style="font-weight: 800; color: ${SCOUT_MAP_THEME.contourWaterStroke}; font-size: 11px;">🌾 ${contour.name} (${contour.elevationMeters}m)</div>
+            <div style="font-size: 9px; color: ${SCOUT_MAP_THEME.contourWaterSub}; margin-top: 2px;">Alluvial Dambo Wetland • Year-Round Moisture</div>
           </div>
         `, { sticky: true });
         contoursLayerRef.current?.addLayer(wetland);
       } else {
-        const color = isIndex ? '#f59e0b' : '#64748b';
+        const color = isIndex ? SCOUT_MAP_THEME.contourIndex : SCOUT_MAP_THEME.contourNormal;
         const polyline = L.polyline(coords, {
           color: color,
           weight: isIndex ? 1.8 : 1.1,
@@ -1560,9 +1561,9 @@ export function ScoutingMap({
           lineCap: 'round'
         });
         polyline.bindTooltip(`
-          <div style="font-family: sans-serif; padding: 5px 8px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1px solid ${color}; box-shadow: 0 8px 20px rgba(0,0,0,0.6);">
+          <div style="font-family: sans-serif; padding: 5px 8px; background: ${SCOUT_MAP_THEME.tooltipBg}; color: ${SCOUT_MAP_THEME.tooltipInk}; border-radius: 8px; border: 1px solid ${color}; box-shadow: 0 8px 20px rgba(0,0,0,0.6);">
             <div style="font-weight: 800; color: ${color}; font-size: 11px;">${contour.name} (${contour.elevationMeters}m)</div>
-            <div style="font-size: 9px; color: #94a3b8; margin-top: 2px;">Zone: ${contour.zone} • ${contour.description}</div>
+            <div style="font-size: 9px; color: ${SCOUT_MAP_THEME.contourText}; margin-top: 2px;">Zone: ${contour.zone} • ${contour.description}</div>
           </div>
         `, { sticky: true });
         contoursLayerRef.current?.addLayer(polyline);
@@ -1588,17 +1589,17 @@ export function ScoutingMap({
       if (isSelected) {
         // Radiant luminous warm amber corridor for selected district
         const halo = L.polygon(district.boundary as L.LatLngTuple[], {
-          color: '#f59e0b',
+          color: SCOUT_MAP_THEME.districtActiveStroke,
           weight: 7,
           opacity: 0.35,
-          fillColor: '#f59e0b',
+          fillColor: SCOUT_MAP_THEME.districtActiveStroke,
           fillOpacity: 0.12,
           className: 'district-glow-selected'
         });
         districtsLayerRef.current?.addLayer(halo);
 
         const core = L.polygon(district.boundary as L.LatLngTuple[], {
-          color: '#fbbf24',
+          color: SCOUT_MAP_THEME.districtActiveFill,
           weight: 2.5,
           opacity: 1,
           fillColor: 'transparent',
@@ -1609,18 +1610,18 @@ export function ScoutingMap({
           handleFocusDistrict(dSpec || null);
         });
         core.bindTooltip(`
-          <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 8px 10px; background: rgba(6, 19, 12, 0.96); color: #f8fafc; border-radius: 10px; border: 1.5px solid #f59e0b; box-shadow: 0 10px 24px rgba(0,0,0,0.75);">
-            <div style="font-family: 'Fraunces', Georgia, serif; font-weight: 700; color: #fde68a; font-size: 13px;">${district.name} District (Selected)</div>
-            <div style="font-size: 10px; color: #d6d3d1; margin-top: 2px;">${district.region} Region · ${district.elevationRange}</div>
-            <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #34d399; font-weight: 700; margin-top: 3px;">Suitability Grade: ${district.feasibilityGrade}</div>
-            <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: #7dd3fc; margin-top: 1px;">Aquifer: ${district.aquiferDepth.split('(')[0]}</div>
+          <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 8px 10px; background: rgba(6, 19, 12, 0.96); color: ${SCOUT_MAP_THEME.tooltipInk}; border-radius: 10px; border: 1.5px solid ${SCOUT_MAP_THEME.districtActiveStroke}; box-shadow: 0 10px 24px rgba(0,0,0,0.75);">
+            <div style="font-family: 'Fraunces', Georgia, serif; font-weight: 700; color: ${SCOUT_MAP_THEME.districtSelectedText}; font-size: 13px;">${district.name} District (Selected)</div>
+            <div style="font-size: 10px; color: ${SCOUT_MAP_THEME.stoneDryingText}; margin-top: 2px;">${district.region} Region · ${district.elevationRange}</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: ${SCOUT_MAP_THEME.contourThermalText}; font-weight: 700; margin-top: 3px;">Suitability Grade: ${district.feasibilityGrade}</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: ${SCOUT_MAP_THEME.waterTableBlue}; margin-top: 1px;">Aquifer: ${district.aquiferDepth.split('(')[0]}</div>
           </div>
         `, { sticky: true });
         districtsLayerRef.current?.addLayer(core);
       } else {
         // Warm Botanical Emerald & Topographic Slate district borders (saving cyan strictly for water)
         const halo = L.polygon(district.boundary as L.LatLngTuple[], {
-          color: '#047857',
+          color: SCOUT_MAP_THEME.districtStroke,
           weight: 2.6,
           opacity: 0.22,
           fillColor: 'transparent',
@@ -1629,7 +1630,7 @@ export function ScoutingMap({
         districtsLayerRef.current?.addLayer(halo);
 
         const polygon = L.polygon(district.boundary as L.LatLngTuple[], {
-          color: '#34d399',
+          color: SCOUT_MAP_THEME.contourThermalText,
           weight: 1.15,
           opacity: 0.65,
           fillColor: 'transparent',
@@ -1641,11 +1642,11 @@ export function ScoutingMap({
           handleFocusDistrict(dSpec || null);
         });
         polygon.bindTooltip(`
-          <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 8px 10px; background: rgba(6, 19, 12, 0.96); color: #f8fafc; border-radius: 10px; border: 1px solid rgba(52, 211, 153, 0.45); box-shadow: 0 10px 24px rgba(0,0,0,0.75);">
-            <div style="font-family: 'Fraunces', Georgia, serif; font-weight: 700; color: #6ee7b7; font-size: 13px;">${district.name} District</div>
-            <div style="font-size: 10px; color: #d6d3d1; margin-top: 2px;">${district.region} Region · ${district.elevationRange}</div>
-            <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #fde68a; font-weight: 700; margin-top: 3px;">Suitability Grade: ${district.feasibilityGrade}</div>
-            <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: #7dd3fc; margin-top: 1px;">Aquifer: ${district.aquiferDepth.split('(')[0]}</div>
+          <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 8px 10px; background: rgba(6, 19, 12, 0.96); color: ${SCOUT_MAP_THEME.tooltipInk}; border-radius: 10px; border: 1px solid rgba(52, 211, 153, 0.45); box-shadow: 0 10px 24px rgba(0,0,0,0.75);">
+            <div style="font-family: 'Fraunces', Georgia, serif; font-weight: 700; color: ${SCOUT_MAP_THEME.districtSelectedEmerald}; font-size: 13px;">${district.name} District</div>
+            <div style="font-size: 10px; color: ${SCOUT_MAP_THEME.stoneDryingText}; margin-top: 2px;">${district.region} Region · ${district.elevationRange}</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: ${SCOUT_MAP_THEME.districtSelectedText}; font-weight: 700; margin-top: 3px;">Suitability Grade: ${district.feasibilityGrade}</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: ${SCOUT_MAP_THEME.waterTableBlue}; margin-top: 1px;">Aquifer: ${district.aquiferDepth.split('(')[0]}</div>
           </div>
         `, { sticky: true });
         districtsLayerRef.current?.addLayer(polygon);
@@ -1693,11 +1694,11 @@ export function ScoutingMap({
 
         // Full-text labels on hover
         badgeMarker.bindTooltip(`
-          <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 7px 10px; background: rgba(6, 19, 12, 0.96); color: #f8fafc; border-radius: 9px; border: 1.5px solid rgba(52, 211, 153, 0.45); box-shadow: 0 8px 20px rgba(0,0,0,0.75);">
-            <div style="font-weight: 700; color: #6ee7b7; font-size: 13px;">${district.name} District</div>
-            <div style="font-size: 10px; color: #d6d3d1; margin-top: 1px;">${district.region} Region · ${district.elevationRange}</div>
-            <div style="font-family: monospace; font-size: 10px; color: #fde68a; font-weight: 700; margin-top: 2px;">Suitability Grade: ${district.feasibilityGrade}</div>
-            <div style="font-family: monospace; font-size: 9.5px; color: #7dd3fc; margin-top: 1px;">Aquifer Depth: ${district.aquiferDepth.split('(')[0]}</div>
+          <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 7px 10px; background: rgba(6, 19, 12, 0.96); color: ${SCOUT_MAP_THEME.tooltipInk}; border-radius: 9px; border: 1.5px solid rgba(52, 211, 153, 0.45); box-shadow: 0 8px 20px rgba(0,0,0,0.75);">
+            <div style="font-weight: 700; color: ${SCOUT_MAP_THEME.districtSelectedEmerald}; font-size: 13px;">${district.name} District</div>
+            <div style="font-size: 10px; color: ${SCOUT_MAP_THEME.stoneDryingText}; margin-top: 1px;">${district.region} Region · ${district.elevationRange}</div>
+            <div style="font-family: monospace; font-size: 10px; color: ${SCOUT_MAP_THEME.districtSelectedText}; font-weight: 700; margin-top: 2px;">Suitability Grade: ${district.feasibilityGrade}</div>
+            <div style="font-family: monospace; font-size: 9.5px; color: ${SCOUT_MAP_THEME.waterTableBlue}; margin-top: 1px;">Aquifer Depth: ${district.aquiferDepth.split('(')[0]}</div>
           </div>
         `, { sticky: true });
 
@@ -1708,9 +1709,9 @@ export function ScoutingMap({
       if (isSelected && district.centroid) {
         const beaconCircle = L.circleMarker(district.centroid as L.LatLngTuple, {
           radius: 14,
-          color: '#f59e0b',
+          color: SCOUT_MAP_THEME.districtActiveStroke,
           weight: 3,
-          fillColor: '#fbbf24',
+          fillColor: SCOUT_MAP_THEME.districtActiveFill,
           fillOpacity: 0.8
         });
 
@@ -1733,12 +1734,12 @@ export function ScoutingMap({
       const isHighland = settlement.category === 'Highland Homestead Cluster';
       const isAgro = settlement.category === 'Agricultural Community Settlement';
 
-      const pinColor = isMission ? '#f59e0b' : isHighland ? '#10b981' : isAgro ? '#06b6d4' : '#fb923c';
+      const pinColor = isMission ? SCOUT_MAP_THEME.districtActiveStroke : isHighland ? SCOUT_MAP_THEME.contourThermal : isAgro ? SCOUT_MAP_THEME.pinAgro : SCOUT_MAP_THEME.pinDefault;
       const bgStyle = isMission 
-        ? 'background: #78350f; border-color: #f59e0b; color: #fef3c7;' 
+        ? `background: ${SCOUT_MAP_THEME.pinMissionFill}; border-color: ${SCOUT_MAP_THEME.districtActiveStroke}; color: ${SCOUT_MAP_THEME.pinMissionText};` 
         : isHighland 
-        ? 'background: #064e3b; border-color: #10b981; color: #ecfdf5;' 
-        : 'background: #164e63; border-color: #06b6d4; color: #cffafe;';
+        ? `background: ${SCOUT_MAP_THEME.pinHighlandFill}; border-color: ${SCOUT_MAP_THEME.contourThermal}; color: ${SCOUT_MAP_THEME.pinHighlandText};` 
+        : `background: ${SCOUT_MAP_THEME.pinAgroFill}; border-color: ${SCOUT_MAP_THEME.pinAgro}; color: ${SCOUT_MAP_THEME.pinAgroText};`;
 
       const iconEmoji = isMission ? '⛪' : isHighland ? '🏡' : isAgro ? '🌱' : '🏪';
 
@@ -1769,21 +1770,21 @@ export function ScoutingMap({
       const marker = L.marker(settlement.coordinates as L.LatLngTuple, { icon: settlementIcon });
 
       marker.bindTooltip(`
-        <div style="font-family: sans-serif; padding: 7px 9px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1.5px solid ${pinColor}; box-shadow: 0 10px 25px rgba(0,0,0,0.7); min-width: 190px;">
+        <div style="font-family: sans-serif; padding: 7px 9px; background: ${SCOUT_MAP_THEME.tooltipBg}; color: ${SCOUT_MAP_THEME.tooltipInk}; border-radius: 8px; border: 1.5px solid ${pinColor}; box-shadow: 0 10px 25px rgba(0,0,0,0.7); min-width: 190px;">
           <div style="font-weight: 800; color: ${pinColor}; font-size: 12px; display: flex; align-items: center; gap: 4px;">
             <span>${iconEmoji}</span>
             <span>${settlement.name}</span>
           </div>
-          <div style="font-size: 10px; color: #cbd5e1; margin-top: 2px;">
+          <div style="font-size: 10px; color: ${SCOUT_MAP_THEME.slateMutedText}; margin-top: 2px;">
             ${settlement.district} District • <strong>${settlement.elevationMeters}m ASL</strong>
           </div>
-          <div style="font-size: 9px; color: #fbbf24; font-weight: 600; margin-top: 2px;">
+          <div style="font-size: 9px; color: ${SCOUT_MAP_THEME.districtActiveFill}; font-weight: 600; margin-top: 2px;">
             ${settlement.category}
           </div>
-          <div style="font-size: 9px; color: #94a3b8; margin-top: 3px; line-height: 1.3;">
+          <div style="font-size: 9px; color: ${SCOUT_MAP_THEME.contourText}; margin-top: 3px; line-height: 1.3;">
             ${settlement.settlementDescription}
           </div>
-          <div style="font-size: 9px; color: #34d399; margin-top: 3px; font-weight: bold;">
+          <div style="font-size: 9px; color: ${SCOUT_MAP_THEME.contourThermalText}; margin-top: 3px; font-weight: bold;">
             Amenities: ${settlement.communityAmenities.slice(0, 3).join(', ')}
           </div>
         </div>
@@ -1931,9 +1932,9 @@ export function ScoutingMap({
         });
 
         clusterMarker.bindTooltip(`
-          <div style="font-family: sans-serif; padding: 7px 9px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1.5px solid ${hasVerified ? '#10b981' : '#f59e0b'}; box-shadow: 0 8px 18px rgba(0,0,0,0.7);">
-            <div style="font-weight: 800; color: ${hasVerified ? '#34d399' : '#fde68a'}; font-size: 12px;">${feats.length} Agricultural Plots</div>
-            <div style="font-size: 10px; color: #cbd5e1; margin-top: 2px;">District: ${distName} • Click to zoom to individual plots</div>
+          <div style="font-family: sans-serif; padding: 7px 9px; background: ${SCOUT_MAP_THEME.tooltipBg}; color: ${SCOUT_MAP_THEME.tooltipInk}; border-radius: 8px; border: 1.5px solid ${hasVerified ? SCOUT_MAP_THEME.contourThermal : SCOUT_MAP_THEME.districtActiveStroke}; box-shadow: 0 8px 18px rgba(0,0,0,0.7);">
+            <div style="font-weight: 800; color: ${hasVerified ? SCOUT_MAP_THEME.contourThermalText : SCOUT_MAP_THEME.districtSelectedText}; font-size: 12px;">${feats.length} Agricultural Plots</div>
+            <div style="font-size: 10px; color: ${SCOUT_MAP_THEME.slateMutedText}; margin-top: 2px;">District: ${distName} • Click to zoom to individual plots</div>
           </div>
         `, { sticky: true });
 
@@ -1953,10 +1954,10 @@ export function ScoutingMap({
       if (p.boundaryPolygon && p.boundaryPolygon.length > 0) {
         const latLngs = p.boundaryPolygon as L.LatLngTuple[];
         const boundaryPoly = L.polygon(latLngs, {
-          color: isSelected ? '#34d399' : '#ffffff',
+          color: isSelected ? SCOUT_MAP_THEME.contourThermalText : SCOUT_MAP_THEME.white,
           weight: isSelected ? 3.5 : 2.0,
           opacity: 0.95,
-          fillColor: '#10b981',
+          fillColor: SCOUT_MAP_THEME.contourThermal,
           fillOpacity: isSelected ? 0.45 : 0.22,
           dashArray: isSelected ? undefined : '4, 4'
         });
@@ -2054,9 +2055,9 @@ export function ScoutingMap({
         });
 
         clusterMarker.bindTooltip(`
-          <div style="font-family: sans-serif; padding: 7px 10px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1.5px solid ${hasVerified ? '#10b981' : '#f59e0b'}; box-shadow: 0 8px 18px rgba(0,0,0,0.7);">
-            <div style="font-weight: 800; color: ${hasVerified ? '#34d399' : '#fde68a'}; font-size: 12px;">${count} plots merged</div>
-            <div style="font-size: 10px; color: #cbd5e1; margin-top: 2px;">Click to zoom and expand individual plots</div>
+          <div style="font-family: sans-serif; padding: 7px 10px; background: ${SCOUT_MAP_THEME.tooltipBg}; color: ${SCOUT_MAP_THEME.tooltipInk}; border-radius: 8px; border: 1.5px solid ${hasVerified ? SCOUT_MAP_THEME.contourThermal : SCOUT_MAP_THEME.districtActiveStroke}; box-shadow: 0 8px 18px rgba(0,0,0,0.7);">
+            <div style="font-weight: 800; color: ${hasVerified ? SCOUT_MAP_THEME.contourThermalText : SCOUT_MAP_THEME.districtSelectedText}; font-size: 12px;">${count} plots merged</div>
+            <div style="font-size: 10px; color: ${SCOUT_MAP_THEME.slateMutedText}; margin-top: 2px;">Click to zoom and expand individual plots</div>
           </div>
         `, { sticky: true });
 
@@ -2074,8 +2075,8 @@ export function ScoutingMap({
         );
 
         const iconInnerSvg = isBookmarked
-          ? `<svg width="${isSelected ? '20' : '15'}" height="${isSelected ? '20' : '15'}" viewBox="0 0 24 24" fill="${isSelected ? '#022c22' : '#f59e0b'}" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
-          : `<svg width="${isSelected ? '20' : '15'}" height="${isSelected ? '20' : '15'}" viewBox="0 0 24 24" fill="none" stroke="${isSelected ? '#022c22' : isVerifiedSource ? '#34d399' : '#f59e0b'}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>`;
+          ? `<svg width="${isSelected ? '20' : '15'}" height="${isSelected ? '20' : '15'}" viewBox="0 0 24 24" fill="${isSelected ? SCOUT_MAP_THEME.emeraldSelectedDark : SCOUT_MAP_THEME.districtActiveStroke}" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
+          : `<svg width="${isSelected ? '20' : '15'}" height="${isSelected ? '20' : '15'}" viewBox="0 0 24 24" fill="none" stroke="${isSelected ? SCOUT_MAP_THEME.emeraldSelectedDark : isVerifiedSource ? SCOUT_MAP_THEME.contourThermalText : SCOUT_MAP_THEME.districtActiveStroke}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>`;
 
         const customIcon = L.divIcon({
           className: 'parcel-pin-container',
@@ -2098,14 +2099,14 @@ export function ScoutingMap({
         const marker = L.marker([cluster.lat, cluster.lng], { icon: customIcon });
 
         marker.bindTooltip(`
-          <div style="font-family: sans-serif; padding: 8px 10px; background: #020617; color: #f8fafc; border-radius: 8px; border: 1.5px solid ${isVerifiedSource ? '#10b981' : '#f59e0b'}; box-shadow: 0 10px 25px rgba(0,0,0,0.7); min-width: 175px;">
-            <div style="font-weight: 800; color: ${isVerifiedSource ? '#34d399' : '#fde68a'}; font-size: 13px;">${p.title}</div>
-            <div style="font-size: 10px; color: #cbd5e1; margin-top: 2px;">${p.district} • <strong>${p.acres} Acres (${p.hectares} ha)</strong></div>
-            <div style="font-size: 9px; color: #38bdf8; font-weight: bold; margin-top: 3px; display: flex; align-items: center; gap: 4px;">
-              <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#38bdf8;margin-right:4px;"></span>
+          <div style="font-family: sans-serif; padding: 8px 10px; background: ${SCOUT_MAP_THEME.tooltipBg}; color: ${SCOUT_MAP_THEME.tooltipInk}; border-radius: 8px; border: 1.5px solid ${isVerifiedSource ? SCOUT_MAP_THEME.contourThermal : SCOUT_MAP_THEME.districtActiveStroke}; box-shadow: 0 10px 25px rgba(0,0,0,0.7); min-width: 175px;">
+            <div style="font-weight: 800; color: ${isVerifiedSource ? SCOUT_MAP_THEME.contourThermalText : SCOUT_MAP_THEME.districtSelectedText}; font-size: 13px;">${p.title}</div>
+            <div style="font-size: 10px; color: ${SCOUT_MAP_THEME.slateMutedText}; margin-top: 2px;">${p.district} • <strong>${p.acres} Acres (${p.hectares} ha)</strong></div>
+            <div style="font-size: 9px; color: ${SCOUT_MAP_THEME.contourWaterStroke}; font-weight: bold; margin-top: 3px; display: flex; align-items: center; gap: 4px;">
+              <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${SCOUT_MAP_THEME.contourWaterStroke};margin-right:4px;"></span>
               Water: ${p.waterReliability.split('(')[0]}
             </div>
-            <div style="font-size: 9px; color: #f59e0b; margin-top: 1px;">Tenure: ${p.landTenure}</div>
+            <div style="font-size: 9px; color: ${SCOUT_MAP_THEME.districtActiveStroke}; margin-top: 1px;">Tenure: ${p.landTenure}</div>
           </div>
         `, { sticky: true });
 
@@ -2188,7 +2189,7 @@ export function ScoutingMap({
   }, [activeDistrict]);
 
   return (
-    <div className="w-full h-screen min-h-[600px] relative overflow-hidden shadow-2xl bg-[#06110B] flex flex-col" id="scouting-map-root">
+    <div className="w-full h-screen min-h-[600px] relative overflow-hidden shadow-2xl bg-[var(--ground)] flex flex-col" id="scouting-map-root">
       
       {/* ------------------------------------------------------------- */}
       {/* 1. COMPACT TOP-LEFT REGION PICKER & UNIFIED FLOATING HUD      */}
@@ -2231,7 +2232,7 @@ export function ScoutingMap({
           {/* Offline Status Notice (Discreet pill below picker) */}
           {(!isOnlineState || isForceOfflineState || tileStyle === 'offline-vector') && !isDetailsAutoHidden && (
             <div className="absolute top-16 left-3 z-20 bg-amber-950/90 border border-amber-500/50 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-lg flex items-center gap-2 pointer-events-auto text-xs text-amber-200">
-              <WifiOff size={13} className="text-amber-400 animate-pulse" />
+              <WifiOff size={13} className="text-amber-400" />
               <span className="font-mono text-caption">
                 <strong>Offline Vector Map:</strong> 28 districts available offline
               </span>
@@ -2277,7 +2278,7 @@ export function ScoutingMap({
       {/* ------------------------------------------------------------- */}
       <div className={cn("relative w-full h-full", viewMode !== 'map' && "hidden")}>
         {/* Leaflet DOM Canvas container */}
-        <div ref={mapContainerRef} className="w-full h-full z-0 bg-[#06110B]" />
+        <div ref={mapContainerRef} className="w-full h-full z-0 bg-[var(--ground)]" />
 
         {/* Bottom Floating Spotlight Card & Telemetry Pill */}
           <div className="absolute bottom-3 left-3 right-3 z-20 pointer-events-none flex flex-col sm:flex-row items-end justify-between gap-3">

@@ -4,19 +4,19 @@ import { StandardDiagramGallery, DiagramSymbolsDefs } from '@/components/common/
 
 export function FieldEngineeringDiagrams() {
   return (
-    <section className="p-6 sm:p-10 rounded-3xl bg-white dark:bg-[#0B1C12] border border-stone-200/90 dark:border-emerald-900/60 shadow-sm flex flex-col gap-6">
+    <section className="p-6 sm:p-10 rounded-[var(--radius-sheet)] bg-[var(--surface)] border border-[var(--border)] shadow-sm flex flex-col gap-6">
       {/* SVG Symbol Definitions container */}
       <DiagramSymbolsDefs />
 
-      <div className="flex flex-col gap-2 border-b border-stone-200/80 dark:border-emerald-900/50 pb-5">
-        <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#B4531F] dark:text-amber-300 font-bold">
+      <div className="flex flex-col gap-2 border-b border-[var(--border)] pb-5">
+        <div className="flex items-center gap-2 text-xs font-sans text-[var(--accent)] font-semibold">
           <Wrench size={14} />
-          <span>Standardized Field Schematics · Illustrated Cross-Sections</span>
+          <span>Standardized field schematics · Illustrated cross-sections</span>
         </div>
-        <h2 className="font-display text-2xl sm:text-3xl font-extrabold text-stone-900 dark:text-white">
+        <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[var(--ink)]">
           Step-by-Step Illustrated Homestead Blueprints
         </h2>
-        <p className="text-sm text-stone-600 dark:text-stone-300 max-w-3xl leading-relaxed">
+        <p className="text-sm text-[var(--ink-muted)] max-w-3xl leading-relaxed">
           Clear cross-sectional blueprints drawn with high-contrast labels (16+ units on 720-wide viewBox), leader lines, metric measurements with imperial equivalents in brackets, and sequential field steps.
         </p>
       </div>
